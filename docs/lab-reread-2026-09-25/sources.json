@@ -1,0 +1,5828 @@
+{
+  "read_on": "2026-09-25",
+  "pages": [
+    {
+      "file": "0.txt",
+      "url": "https://aisingapore.org/",
+      "final_url": null,
+      "status": "200",
+      "title": "Home - AI Singapore",
+      "chars": 8818,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ai-singapore",
+          "role": "site"
+        },
+        {
+          "lab": "lab-ai-singapore",
+          "role": "evidence",
+          "label": "AI Singapore's site for the national AI programme"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "1.txt",
+      "url": "https://github.com/aisingapore/sealion",
+      "final_url": null,
+      "status": "200",
+      "title": "GitHub - aisingapore/sealion: South-East Asia Large Language Models · GitHub",
+      "chars": 10731,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ai-singapore",
+          "role": "evidence",
+          "label": "SEA-LION repository: AI Singapore is a national programme supported by the National Research Foundation, Singapore and hosted by the National University of Singapore"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "2.txt",
+      "url": "https://github.com/aisingapore",
+      "final_url": null,
+      "status": "200",
+      "title": "AI Singapore · GitHub",
+      "chars": 2700,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ai-singapore",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "3.txt",
+      "url": "https://huggingface.co/aisingapore",
+      "final_url": null,
+      "status": "200",
+      "title": "aisingapore (AI Singapore)",
+      "chars": 3603,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ai-singapore",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "4.txt",
+      "url": "https://www.ai21.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "AI Systems Built for the Enterprise | AI21",
+      "chars": 2004,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ai21-labs",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "5.txt",
+      "url": "https://www.ai21.com/terms-policies/privacy-policy/",
+      "final_url": null,
+      "status": "200",
+      "title": "Privacy Policy | AI21",
+      "chars": 29836,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ai21-labs",
+          "role": "evidence",
+          "label": "Privacy policy naming AI21 Labs Ltd. as data controller, with its principal place of business in Tel Aviv, Israel"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "6.txt",
+      "url": "https://www.ai21.com/terms-of-service/",
+      "final_url": null,
+      "status": "200",
+      "title": "Terms of Service | AI21",
+      "chars": 28762,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ai21-labs",
+          "role": "evidence",
+          "label": "Terms of service: an agreement with AI21 Labs Ltd. governed by the laws of Israel"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "7.txt",
+      "url": "https://docs.ai21.com/docs/jamba-foundation-models",
+      "final_url": null,
+      "status": "200",
+      "title": "Jamba - AI21 Labs",
+      "chars": 8382,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ai21-labs",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "8.txt",
+      "url": "https://docs.ai21.com/changelog",
+      "final_url": null,
+      "status": "200",
+      "title": "Changelog - AI21 Labs",
+      "chars": 7681,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ai21-labs",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "9.txt",
+      "url": "https://www.ai21.com/blog/",
+      "final_url": null,
+      "status": "200",
+      "title": "Blog | AI21",
+      "chars": 2507,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ai21-labs",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "10.txt",
+      "url": "https://github.com/AI21Labs",
+      "final_url": null,
+      "status": "200",
+      "title": "AI21Labs - Organization · GitHub",
+      "chars": 2638,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ai21-labs",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "11.txt",
+      "url": "https://huggingface.co/ai21labs",
+      "final_url": null,
+      "status": "200",
+      "title": "ai21labs (AI21)",
+      "chars": 2717,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ai21-labs",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "12.txt",
+      "url": "https://www.aikido.dev/",
+      "final_url": null,
+      "status": "200",
+      "title": "Aikido Security | Secure everything your devs build, ship & run.",
+      "chars": 7722,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-aikido-security",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "13.txt",
+      "url": "https://www.aikido.dev/policies/terms",
+      "final_url": null,
+      "status": "200",
+      "title": "Terms of Use | Aikido Security",
+      "chars": 30182,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-aikido-security",
+          "role": "evidence",
+          "label": "Terms of use: Aikido Security BV, registered in Belgium with its registered office at Coupure Rechts 88, 9000 Gent"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "14.txt",
+      "url": "https://www.aikido.dev/company/press-kit",
+      "final_url": null,
+      "status": "200",
+      "title": "Press Kit | Aikido Security",
+      "chars": 5431,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-aikido-security",
+          "role": "evidence",
+          "label": "Press kit: founded in Ghent, Belgium, with its European headquarters at Keizer Karelstraat 15, Ghent"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "15.txt",
+      "url": "https://www.aikido.dev/category/news",
+      "final_url": null,
+      "status": "200",
+      "title": "Aikido Security",
+      "chars": 9283,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-aikido-security",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "16.txt",
+      "url": "https://huggingface.co/AikidoSec",
+      "final_url": null,
+      "status": "200",
+      "title": "AikidoSec (Aikido Security)",
+      "chars": 773,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-aikido-security",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "17.txt",
+      "url": "https://www.alibabagroup.com/",
+      "final_url": "https://www.alibabagroup.com/en-US/",
+      "status": "200",
+      "title": "Alibaba Group Official Website",
+      "chars": 2735,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-alibaba",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "18.txt",
+      "url": "https://www.sec.gov/Archives/edgar/data/0001577552/000119312526231755/baba-20260331.htm",
+      "final_url": null,
+      "status": "403",
+      "title": "SEC.gov | Your Request Originates from an Undeclared Automated Tool",
+      "chars": 2936,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-alibaba",
+          "role": "evidence",
+          "label": "Form 20-F for fiscal 2026: a Cayman Islands holding company whose major businesses have their principal executive offices in Hangzhou"
+        }
+      ],
+      "note": "Read in a headed browser (the first fetch got SEC's automated-tool block)."
+    },
+    {
+      "file": "19.txt",
+      "url": "https://www.alibabacloud.com/help/en/model-studio/models",
+      "final_url": null,
+      "status": "200",
+      "title": "Supported Models and Capabilities Overview - Model Studio - Alibaba Cloud_Alibaba Cloud Model Studio(Model Studio) - Alibaba Cloud Model Studio - Alibaba Cloud Documentation Center",
+      "chars": 5601,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-alibaba",
+          "role": "evidence",
+          "label": "Model Studio model list naming the Qwen series and third-party models"
+        },
+        {
+          "lab": "lab-alibaba",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "20.txt",
+      "url": "https://qwen.ai/research/",
+      "final_url": null,
+      "status": "200",
+      "title": "Qwen",
+      "chars": 4931,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-alibaba",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "21.txt",
+      "url": "https://github.com/QwenLM",
+      "final_url": null,
+      "status": "200",
+      "title": "Qwen · GitHub",
+      "chars": 2668,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-alibaba",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "22.txt",
+      "url": "https://huggingface.co/Qwen",
+      "final_url": null,
+      "status": "200",
+      "title": "Qwen (Qwen)",
+      "chars": 4248,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-alibaba",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "23.txt",
+      "url": "https://www.amazon.science/",
+      "final_url": null,
+      "status": "200",
+      "title": "Amazon Science homepage",
+      "chars": 9686,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-amazon",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "24.txt",
+      "url": "https://aws.amazon.com/privacy/",
+      "final_url": null,
+      "status": "200",
+      "title": "AWS Privacy Notice",
+      "chars": 54062,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-amazon",
+          "role": "evidence",
+          "label": "AWS privacy notice naming Amazon Web Services, Inc. at 410 Terry Avenue North, Seattle"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "25.txt",
+      "url": "https://kiro.dev/faq/",
+      "final_url": null,
+      "status": "200",
+      "title": "FAQs - Kiro",
+      "chars": 34925,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-amazon",
+          "role": "evidence",
+          "label": "Kiro FAQ stating that Kiro is built and operated by AWS"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "26.txt",
+      "url": "https://docs.aws.amazon.com/nova/latest/userguide/what-is-nova.html",
+      "final_url": null,
+      "status": "200",
+      "title": "What is Amazon Nova? - Amazon Nova",
+      "chars": 10644,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-amazon",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "27.txt",
+      "url": "https://aws.amazon.com/blogs/aws/",
+      "final_url": null,
+      "status": "200",
+      "title": "AWS News Blog",
+      "chars": 5826,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-amazon",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "28.txt",
+      "url": "https://github.com/strands-agents",
+      "final_url": null,
+      "status": "200",
+      "title": "strands-agents · GitHub",
+      "chars": 5315,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-amazon",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "29.txt",
+      "url": "https://www.amazon.science/publications/amazons-frontier-model-safety-framework",
+      "final_url": null,
+      "status": "200",
+      "title": "Amazon’s frontier model safety framework - Amazon Science",
+      "chars": 5459,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-amazon",
+          "role": "framework",
+          "label": "Amazon's Frontier Model Safety Framework"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "30.txt",
+      "url": "https://www.antgroup.com/en",
+      "final_url": null,
+      "status": "200",
+      "title": "Ant Group - Home",
+      "chars": 725,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ant-group",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "31.txt",
+      "url": "https://www.antgroup.com/en/about/our-offices",
+      "final_url": null,
+      "status": "200",
+      "title": "Ant Group - Our Offices",
+      "chars": 3429,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ant-group",
+          "role": "evidence",
+          "label": "Our Offices page listing Ant Group's Hangzhou offices at 77 Xueyuan Road"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "32.pdf.txt",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2020/1103/2020110302285.pdf",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 443,
+      "pdf_text": true,
+      "cited_by": [
+        {
+          "lab": "lab-ant-group",
+          "role": "evidence",
+          "label": "Hong Kong exchange filing naming Ant Group Co., Ltd., a joint stock company incorporated in the People's Republic of China"
+        }
+      ],
+      "note": "PDF text extracted with pypdf."
+    },
+    {
+      "file": "33.txt",
+      "url": "https://github.com/inclusionAI",
+      "final_url": null,
+      "status": "200",
+      "title": "inclusionAI · GitHub",
+      "chars": 3766,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ant-group",
+          "role": "evidence",
+          "label": "inclusionAI's GitHub profile: the series of open-source projects from Ant Group working towards artificial general intelligence"
+        },
+        {
+          "lab": "lab-ant-group",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "34.txt",
+      "url": "https://developer.ant-ling.com/en/docs/models/price",
+      "final_url": null,
+      "status": "200",
+      "title": "Pricing",
+      "chars": 3889,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ant-group",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "35.txt",
+      "url": "https://www.antgroup.com/en/news-media/press-releases",
+      "final_url": null,
+      "status": "200",
+      "title": "Ant Group - Press Releases",
+      "chars": 1675,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ant-group",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "36.txt",
+      "url": "https://huggingface.co/inclusionAI",
+      "final_url": null,
+      "status": "200",
+      "title": "inclusionAI (inclusionAI)",
+      "chars": 4949,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ant-group",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "37.txt",
+      "url": "https://www.anthropic.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "Home \\ Anthropic",
+      "chars": 3002,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-anthropic",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "38.txt",
+      "url": "https://www.anthropic.com/legal/privacy",
+      "final_url": null,
+      "status": "200",
+      "title": "Privacy Policy \\ Anthropic",
+      "chars": 41689,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-anthropic",
+          "role": "evidence",
+          "label": "Privacy policy: Anthropic PBC at 548 Market St, San Francisco, a company based and headquartered in the United States"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "39.txt",
+      "url": "https://www.anthropic.com/legal/commercial-terms",
+      "final_url": null,
+      "status": "200",
+      "title": "Commercial Terms of Service \\ Anthropic",
+      "chars": 25880,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-anthropic",
+          "role": "evidence",
+          "label": "Commercial terms naming Anthropic, PBC and Anthropic Ireland, Limited"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "40.txt",
+      "url": "https://www.anthropic.com/company",
+      "final_url": null,
+      "status": "200",
+      "title": "Company \\ Anthropic",
+      "chars": 7640,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-anthropic",
+          "role": "evidence",
+          "label": "Company page: the board is elected by stockholders and the Long-Term Benefit Trust"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "41.txt",
+      "url": "https://platform.claude.com/docs/en/about-claude/models/overview",
+      "final_url": "https://platform.claude.com/docs/en/models/overview",
+      "status": "200",
+      "title": "Models overview - Claude Platform Docs",
+      "chars": 4854,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-anthropic",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "42.txt",
+      "url": "https://www.anthropic.com/news",
+      "final_url": null,
+      "status": "200",
+      "title": "Newsroom \\ Anthropic",
+      "chars": 3401,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-anthropic",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "43.txt",
+      "url": "https://github.com/anthropics",
+      "final_url": null,
+      "status": "200",
+      "title": "Anthropic · GitHub",
+      "chars": 3391,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-anthropic",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "44.txt",
+      "url": "https://www.anthropic.com/responsible-scaling-policy",
+      "final_url": null,
+      "status": "200",
+      "title": "Anthropic’s Responsible Scaling Policy \\ Anthropic",
+      "chars": 24952,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-anthropic",
+          "role": "framework",
+          "label": "Responsible Scaling Policy (Version 3.4)"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "45.txt",
+      "url": "https://www.arcee.ai/",
+      "final_url": null,
+      "status": "200",
+      "title": "Arcee AI | Building Open Intelligence",
+      "chars": 2258,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-arcee-ai",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "46.txt",
+      "url": "https://www.arcee.ai/privacy-policy",
+      "final_url": null,
+      "status": "200",
+      "title": "Privacy Policy | Arcee AI | Building Open Intelligence",
+      "chars": 27257,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-arcee-ai",
+          "role": "evidence",
+          "label": "Privacy policy: the site is owned by Arcee AI, Inc., an open intelligence lab based in the U.S."
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "47.txt",
+      "url": "https://github.com/arcee-ai/mergekit/blob/main/CLA.md",
+      "final_url": null,
+      "status": "200",
+      "title": "mergekit/CLA.md at main · arcee-ai/mergekit · GitHub",
+      "chars": 9326,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-arcee-ai",
+          "role": "evidence",
+          "label": "MergeKit contributor agreement naming Arcee AI, Inc. under California law"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "48.txt",
+      "url": "https://www.arcee.ai/trinity",
+      "final_url": null,
+      "status": "200",
+      "title": "Trinity Models | Arcee AI | Building Open Intelligence",
+      "chars": 6653,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-arcee-ai",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "49.txt",
+      "url": "https://www.arcee.ai/blog",
+      "final_url": null,
+      "status": "200",
+      "title": "Blog | Arcee AI | Building Open Intelligence",
+      "chars": 1906,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-arcee-ai",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "50.txt",
+      "url": "https://github.com/arcee-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "Arcee AI · GitHub",
+      "chars": 2668,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-arcee-ai",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "51.txt",
+      "url": "https://huggingface.co/arcee-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "arcee-ai (Arcee AI)",
+      "chars": 3892,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-arcee-ai",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "52.txt",
+      "url": "https://www.bytedance.com/en/",
+      "final_url": null,
+      "status": "200",
+      "title": "ByteDance - Inspire Creativity, Enrich Life",
+      "chars": 6667,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "site"
+        },
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "ByteDance site: more than 150,000 employees based out of nearly 120 cities, with no headquarters named"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "53.txt",
+      "url": "https://www.bytedance.com/en/resources/offices",
+      "final_url": null,
+      "status": "200",
+      "title": "500: Internal Server Error",
+      "chars": 238,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "Offices page listing ByteDance offices by region"
+        }
+      ],
+      "note": "Every attempt (headless and headed, four times over two hours) returned ByteDance's own '500: Internal Server Error' page."
+    },
+    {
+      "file": "54.pdf.txt",
+      "url": "https://sf16-sg.tiktokcdn.com/obj/eden-sg/ptvaeh7vbozps/bytedance_official/ByteDance.com%20WebsiteGlobalEN06-2023revision1.pdf",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 47031,
+      "pdf_text": true,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "ByteDance.com privacy policy (2023 revision): the site is provided and controlled by ByteDance Ltd., Grand Cayman"
+        }
+      ],
+      "note": "PDF text extracted with pypdf."
+    },
+    {
+      "file": "55.txt",
+      "url": "https://docs.byteplus.com/en/docs/legal/docs-terms-of-service",
+      "final_url": null,
+      "status": "200",
+      "title": "Terms of Service--BytePlus Legal-Byteplus",
+      "chars": 19988,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "BytePlus documentation terms naming BytePlus Pte. Ltd., 1 Raffles Quay, Singapore"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "56.txt",
+      "url": "https://docs.volcengine.com/docs/82379/1104498",
+      "final_url": "https://docs.volcengine.com/docs/ark/volcengine-ark-platform-terms?lang=zh",
+      "status": "200",
+      "title": "火山方舟大模型服务平台专用条款 - 火山引擎",
+      "chars": 8607,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "Volcano Engine Ark agreement naming 北京火山引擎科技有限公司, reviewed for the Volcano Engine Ark record"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "57.txt",
+      "url": "https://github.com/ByteDance-Seed",
+      "final_url": null,
+      "status": "200",
+      "title": "ByteDance-Seed · GitHub",
+      "chars": 3213,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "ByteDance Seed's GitHub profile: labs across China, Singapore, and the U.S."
+        },
+        {
+          "lab": "lab-bytedance",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "58.txt",
+      "url": "https://seed.bytedance.com/en/models",
+      "final_url": null,
+      "status": "200",
+      "title": "Seed Models",
+      "chars": 2364,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "59.txt",
+      "url": "https://docs.byteplus.com/en/docs/ModelArk/1330310",
+      "final_url": null,
+      "status": "200",
+      "title": "Model list | ModelArk | BytePlus",
+      "chars": 28351,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "60.txt",
+      "url": "https://docs.byteplus.com/en/docs/ModelArk/1159178",
+      "final_url": null,
+      "status": "200",
+      "title": "Model releases | ModelArk | BytePlus",
+      "chars": 14307,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "61.txt",
+      "url": "https://seed.bytedance.com/en/blog",
+      "final_url": null,
+      "status": "200",
+      "title": "ByteDance Seed",
+      "chars": 611,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": "Loads, but shows the site's own 404 page. The site's 'Blog & Publication' nav link now goes to https://seed.bytedance.com/en/research (text in r14-seed-research.txt)."
+    },
+    {
+      "file": "62.txt",
+      "url": "https://github.com/bytedance",
+      "final_url": null,
+      "status": "200",
+      "title": "Bytedance Inc. · GitHub",
+      "chars": 2775,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "63.txt",
+      "url": "https://github.com/volcengine",
+      "final_url": null,
+      "status": "200",
+      "title": "Volcengine · GitHub",
+      "chars": 2522,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "64.txt",
+      "url": "https://huggingface.co/ByteDance-Seed",
+      "final_url": null,
+      "status": "200",
+      "title": "ByteDance-Seed (ByteDance Seed)",
+      "chars": 3429,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "65.txt",
+      "url": "https://cohere.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "Enterprise AI: Private, Secure, Customizable | Cohere",
+      "chars": 6200,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-cohere",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "66.txt",
+      "url": "https://cohere.com/saas-agreement",
+      "final_url": null,
+      "status": "200",
+      "title": "SaaS Agreement | Cohere",
+      "chars": 54251,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-cohere",
+          "role": "evidence",
+          "label": "SaaS agreement giving Cohere Inc.'s principal place of business at 171 John Street, Toronto"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "67.txt",
+      "url": "https://docs.cohere.com/docs/models",
+      "final_url": null,
+      "status": "200",
+      "title": "An Overview of Cohere's Models | Cohere",
+      "chars": 21795,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-cohere",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "68.txt",
+      "url": "https://docs.cohere.com/v2/changelog",
+      "final_url": null,
+      "status": "200",
+      "title": "Release Notes | Cohere",
+      "chars": 13503,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-cohere",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "69.txt",
+      "url": "https://cohere.com/blog",
+      "final_url": null,
+      "status": "200",
+      "title": "The Cohere Blog",
+      "chars": 7012,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-cohere",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "70.txt",
+      "url": "https://huggingface.co/CohereLabs",
+      "final_url": null,
+      "status": "200",
+      "title": "CohereLabs (Cohere Labs)",
+      "chars": 6081,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-cohere",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "71.pdf.txt",
+      "url": "https://cohere.com/security/the-cohere-secure-ai-frontier-model-framework-february-2025.pdf",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 48748,
+      "pdf_text": true,
+      "cited_by": [
+        {
+          "lab": "lab-cohere",
+          "role": "framework",
+          "label": "The Cohere Secure AI Frontier Model Framework (V1.0, February 2025)"
+        }
+      ],
+      "note": "PDF text extracted with pypdf."
+    },
+    {
+      "file": "72.txt",
+      "url": "https://www.deepseek.com/",
+      "final_url": "https://www.deepseek.com/en/",
+      "status": "200",
+      "title": "DeepSeek | Into the Unknown",
+      "chars": 1059,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-deepseek",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "73.txt",
+      "url": "https://cdn.deepseek.com/policies/en-US/deepseek-open-platform-terms-of-service.html",
+      "final_url": null,
+      "status": "200",
+      "title": "DeepSeek Open Platform Terms of Service",
+      "chars": 23048,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-deepseek",
+          "role": "evidence",
+          "label": "Open Platform terms naming Hangzhou DeepSeek Artificial Intelligence Co., Ltd. and its Hangzhou registered office"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "74.txt",
+      "url": "https://api-docs.deepseek.com/quick_start/pricing",
+      "final_url": "https://api-docs.deepseek.com/quick_start/pricing/",
+      "status": "200",
+      "title": "Models & Pricing | DeepSeek API Docs",
+      "chars": 2667,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-deepseek",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "75.txt",
+      "url": "https://api-docs.deepseek.com/updates",
+      "final_url": "https://api-docs.deepseek.com/updates/",
+      "status": "200",
+      "title": "Change Log | DeepSeek API Docs",
+      "chars": 15997,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-deepseek",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "76.txt",
+      "url": "https://github.com/deepseek-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "DeepSeek · GitHub",
+      "chars": 1850,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-deepseek",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "77.txt",
+      "url": "https://huggingface.co/deepseek-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "deepseek-ai (DeepSeek)",
+      "chars": 3623,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-deepseek",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "78.txt",
+      "url": "https://deepmind.google/",
+      "final_url": null,
+      "status": "200",
+      "title": "Google DeepMind",
+      "chars": 4047,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-google",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "79.txt",
+      "url": "https://policies.google.com/terms",
+      "final_url": null,
+      "status": "200",
+      "title": "Google Terms of Service – Privacy & Terms – Google",
+      "chars": 25537,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-google",
+          "role": "evidence",
+          "label": "Terms of service naming Google LLC at 1600 Amphitheatre Parkway, Mountain View"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "80.txt",
+      "url": "https://abc.xyz/investor/news/news-details/2026/Alphabet-Announces-Date-of-First-Quarter-2026-Financial-Results-Conference-Call-2026-18KYkWPpu7/default.aspx",
+      "final_url": null,
+      "status": "200",
+      "title": "Alphabet Investor Relations - Alphabet Announces Date of First Quarter 2026 Financial Results Conference Call",
+      "chars": 1250,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-google",
+          "role": "evidence",
+          "label": "Alphabet investor release: Alphabet is a collection of companies, the largest of which is Google"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "81.txt",
+      "url": "https://ai.google.dev/gemini-api/docs/models",
+      "final_url": null,
+      "status": "200",
+      "title": "Models  |  Gemini API  |  Google AI for Developers",
+      "chars": 16489,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-google",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "82.txt",
+      "url": "https://ai.google.dev/gemini-api/docs/changelog",
+      "final_url": null,
+      "status": "200",
+      "title": "Release notes  |  Gemini API  |  Google AI for Developers",
+      "chars": 45443,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-google",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "83.txt",
+      "url": "https://deepmind.google/blog/",
+      "final_url": null,
+      "status": "200",
+      "title": "News — Google DeepMind",
+      "chars": 3371,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-google",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "84.txt",
+      "url": "https://github.com/google-gemini",
+      "final_url": null,
+      "status": "200",
+      "title": "google-gemini · GitHub",
+      "chars": 2383,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-google",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "85.txt",
+      "url": "https://github.com/google",
+      "final_url": null,
+      "status": "200",
+      "title": "Google · GitHub",
+      "chars": 2365,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-google",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "86.txt",
+      "url": "https://huggingface.co/google",
+      "final_url": null,
+      "status": "200",
+      "title": "google (Google)",
+      "chars": 8008,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-google",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "87.txt",
+      "url": "https://deepmind.google/frontier-safety/",
+      "final_url": null,
+      "status": "200",
+      "title": "Frontier safety at Google DeepMind — Google DeepMind",
+      "chars": 3323,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-google",
+          "role": "framework",
+          "label": "Frontier Safety Framework"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "88.txt",
+      "url": "https://www.ibm.com/",
+      "final_url": "https://www.ibm.com/us-en",
+      "status": "200",
+      "title": "IBM",
+      "chars": 3997,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "89.txt",
+      "url": "https://www.sec.gov/Archives/edgar/data/51143/000155837023002376/ibm-20221231x10k.htm",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 98756,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "evidence",
+          "label": "Form 10-K: incorporated in New York, principal executive office at One New Orchard Road, Armonk"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "90.txt",
+      "url": "https://www.ibm.com/new/announcements/ibm-adds-open-source-projects-docling-beeaI-and-data-prep-kit-added-to-the-linux-foundation",
+      "final_url": null,
+      "status": "200",
+      "title": "IBM contributes key open-source projects to Linux Foundation to advance AI community participation",
+      "chars": 6820,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "evidence",
+          "label": "IBM announcement contributing BeeAI, Docling, and Data Prep Kit to the Linux Foundation"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "91.txt",
+      "url": "https://www.ibm.com/products/watsonx-orchestrate",
+      "final_url": null,
+      "status": "200",
+      "title": "IBM watsonx Orchestrate",
+      "chars": 8207,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "evidence",
+          "label": "watsonx Orchestrate product page"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "92.txt",
+      "url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/analyze-data/fm-models-ibm.html?context=wx",
+      "final_url": null,
+      "status": "200",
+      "title": "IBM foundation models — Docs | IBM watsonx",
+      "chars": 33629,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "93.txt",
+      "url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/whats-new.html?context=wx",
+      "final_url": "https://dataplatform.cloud.ibm.com/docs/common-error-page?code=500&context=wx&audience=wdp",
+      "status": "200",
+      "title": "IBM watsonx",
+      "chars": 147,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": "Every attempt (US and EU regions, headless and headed) redirected to IBM's error page 'Error 500 This page isn't available right now'. Without ?context=wx the page redirects to the Cloud Pak for Data as a Service context (r12-ibm-wn3.txt), a different product's release notes."
+    },
+    {
+      "file": "94.txt",
+      "url": "https://www.ibm.com/new/announcements",
+      "final_url": null,
+      "status": "200",
+      "title": "Announcements - What's New | IBM",
+      "chars": 5557,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "95.txt",
+      "url": "https://github.com/ibm-granite",
+      "final_url": null,
+      "status": "200",
+      "title": "IBM Granite · GitHub",
+      "chars": 4616,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "96.txt",
+      "url": "https://huggingface.co/ibm-granite",
+      "final_url": null,
+      "status": "200",
+      "title": "ibm-granite (IBM Granite)",
+      "chars": 5375,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "97.txt",
+      "url": "https://newsroom.ibm.com/blog-trustworthy-ai-at-scale-ibms-ai-safety-and-governance-framework",
+      "final_url": null,
+      "status": "200",
+      "title": "Trustworthy AI at scale: IBM’s AI Safety and Governance Framework",
+      "chars": 7951,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "framework",
+          "label": "Trustworthy AI at scale: IBM's AI Safety and Governance Framework"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "98.txt",
+      "url": "https://www.meituan.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "美团 - 帮大家吃得更好，生活更好",
+      "chars": 1346,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meituan",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "99.txt",
+      "url": "https://about.meituan.com/contact",
+      "final_url": "https://www.meituan.com/hotline",
+      "status": "200",
+      "title": "服务热线 - 美团",
+      "chars": 843,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meituan",
+          "role": "evidence",
+          "label": "Meituan contact page giving its address in Chaoyang District, Beijing"
+        }
+      ],
+      "note": "about.meituan.com/contact now redirects to https://www.meituan.com/hotline (a customer-service hotline page)."
+    },
+    {
+      "file": "100.pdf.txt",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042403596.pdf",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 459527,
+      "pdf_text": true,
+      "cited_by": [
+        {
+          "lab": "lab-meituan",
+          "role": "evidence",
+          "label": "Meituan 2025 annual report: incorporated in the Cayman Islands with limited liability"
+        }
+      ],
+      "note": "CAUTION: this HKEX document is NOT Meituan's report. Meituan's real 2025 annual report is https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042400179.pdf (text in meituan-ar-2025.pdf.txt)."
+    },
+    {
+      "file": "101.txt",
+      "url": "https://github.com/meituan-longcat/LongCat-2.0/blob/main/LICENSE",
+      "final_url": null,
+      "status": "200",
+      "title": "LongCat-2.0/LICENSE at main · meituan-longcat/LongCat-2.0 · GitHub",
+      "chars": 2138,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meituan",
+          "role": "evidence",
+          "label": "LongCat-2.0 licence: copyright Meituan"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "102.txt",
+      "url": "https://github.com/meituan-longcat",
+      "final_url": null,
+      "status": "200",
+      "title": "LongCat · GitHub",
+      "chars": 1797,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meituan",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "103.txt",
+      "url": "https://huggingface.co/meituan-longcat",
+      "final_url": null,
+      "status": "200",
+      "title": "meituan-longcat (LongCat)",
+      "chars": 5007,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meituan",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "104.txt",
+      "url": "https://ai.meta.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "AI at Meta: Meta AI Products, Models and Research",
+      "chars": 2891,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meta",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "105.txt",
+      "url": "https://www.meta.com/legal/privacy-policy/",
+      "final_url": null,
+      "status": "200",
+      "title": "Supplemental Meta Platforms Technologies Privacy Policy | Meta",
+      "chars": 40784,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meta",
+          "role": "evidence",
+          "label": "Privacy policy naming Meta Platforms, Inc. at 1 Meta Way, Menlo Park"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "106.txt",
+      "url": "https://huggingface.co/meta-models/Muse-Glimmer-30B",
+      "final_url": null,
+      "status": "200",
+      "title": "meta-models/Muse-Glimmer-30B · Hugging Face",
+      "chars": 22188,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meta",
+          "role": "evidence",
+          "label": "Muse Glimmer 30B model card published under the meta-models organization, reviewed for the model record"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "107.txt",
+      "url": "https://dev.meta.ai/docs/models",
+      "final_url": null,
+      "status": "200",
+      "title": "Models - Meta Model API",
+      "chars": 8831,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meta",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "108.txt",
+      "url": "https://ai.meta.com/blog/",
+      "final_url": null,
+      "status": "200",
+      "title": "AI at Meta Blog",
+      "chars": 1541,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meta",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "109.txt",
+      "url": "https://huggingface.co/meta-llama",
+      "final_url": null,
+      "status": "200",
+      "title": "meta-llama (Meta Llama)",
+      "chars": 6537,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meta",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "110.txt",
+      "url": "https://huggingface.co/meta-models",
+      "final_url": null,
+      "status": "200",
+      "title": "meta-models (Meta Inc.)",
+      "chars": 1868,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meta",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "111.pdf.txt",
+      "url": "https://ai.meta.com/static-resource/Meta_Advanced-AI-Scaling-Framework-v2",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 114472,
+      "pdf_text": true,
+      "cited_by": [
+        {
+          "lab": "lab-meta",
+          "role": "framework",
+          "label": "Advanced AI Scaling Framework (version 2)"
+        }
+      ],
+      "note": "PDF captured in a headed browser by following the link in Meta's blog post https://ai.meta.com/blog/scaling-how-we-build-test-advanced-ai/ (post text in r4-meta-scaling-blog.txt). Direct non-browser requests get HTTP 400."
+    },
+    {
+      "file": "112.txt",
+      "url": "https://microsoft.ai/",
+      "final_url": null,
+      "status": "200",
+      "title": "Home | Microsoft AI",
+      "chars": 7814,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-microsoft",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "113.txt",
+      "url": "https://www.microsoft.com/en-us/privacy/privacystatement",
+      "final_url": null,
+      "status": "200",
+      "title": "Microsoft Privacy Statement – Microsoft privacy",
+      "chars": 16384,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-microsoft",
+          "role": "evidence",
+          "label": "Privacy statement naming Microsoft Corporation, One Microsoft Way, Redmond"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "114.txt",
+      "url": "https://microsoft.ai/models/",
+      "final_url": null,
+      "status": "200",
+      "title": "Models | Microsoft AI",
+      "chars": 3454,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-microsoft",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "115.txt",
+      "url": "https://microsoft.ai/news/",
+      "final_url": "https://microsoft.ai/blog/",
+      "status": "200",
+      "title": "Blog | Microsoft AI",
+      "chars": 4420,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-microsoft",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "116.txt",
+      "url": "https://github.com/microsoft",
+      "final_url": null,
+      "status": "200",
+      "title": "Microsoft · GitHub",
+      "chars": 3362,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-microsoft",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "117.txt",
+      "url": "https://huggingface.co/microsoft",
+      "final_url": null,
+      "status": "200",
+      "title": "microsoft (Microsoft)",
+      "chars": 3983,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-microsoft",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "118.pdf.txt",
+      "url": "https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/microsoft/final/en-us/microsoft-brand/documents/Microsoft-Frontier-Governance-Framework.pdf",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 30030,
+      "pdf_text": true,
+      "cited_by": [
+        {
+          "lab": "lab-microsoft",
+          "role": "framework",
+          "label": "Frontier Governance Framework"
+        }
+      ],
+      "note": "PDF text extracted with pypdf."
+    },
+    {
+      "file": "119.txt",
+      "url": "https://www.minimax.io/",
+      "final_url": null,
+      "status": "200",
+      "title": "MiniMax",
+      "chars": 3865,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-minimax",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "120.pdf.txt",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/1231/2025123100025.pdf",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 1831812,
+      "pdf_text": true,
+      "cited_by": [
+        {
+          "lab": "lab-minimax",
+          "role": "evidence",
+          "label": "MiniMax Group Inc. global offering prospectus filed with the Hong Kong stock exchange"
+        }
+      ],
+      "note": "PDF text extracted with pypdf."
+    },
+    {
+      "file": "121.txt",
+      "url": "https://www.minimax.io/audio/doc/terms-of-service.html",
+      "final_url": null,
+      "status": "200",
+      "title": "MiniMax App and Web Terms of Service",
+      "chars": 29348,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-minimax",
+          "role": "evidence",
+          "label": "App and web terms of service naming Nanonoble Pte. Ltd. of Singapore"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "122.txt",
+      "url": "https://platform.minimax.io/docs/guides/text-generation",
+      "final_url": null,
+      "status": "200",
+      "title": "Model Invocation - MiniMax API Docs",
+      "chars": 5763,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-minimax",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "123.txt",
+      "url": "https://platform.minimax.io/docs/release-notes/models",
+      "final_url": null,
+      "status": "200",
+      "title": "Models - MiniMax API Docs",
+      "chars": 5103,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-minimax",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "124.txt",
+      "url": "https://www.minimax.io/news",
+      "final_url": null,
+      "status": "200",
+      "title": "MiniMax AI | AGI Research, Product Updates & Partner News | MiniMax",
+      "chars": 1696,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-minimax",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "125.txt",
+      "url": "https://github.com/MiniMax-AI",
+      "final_url": null,
+      "status": "200",
+      "title": "MiniMax · GitHub",
+      "chars": 2869,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-minimax",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "126.txt",
+      "url": "https://huggingface.co/MiniMaxAI",
+      "final_url": null,
+      "status": "200",
+      "title": "MiniMaxAI (MiniMax)",
+      "chars": 4596,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-minimax",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "127.txt",
+      "url": "https://mistral.ai/",
+      "final_url": null,
+      "status": "200",
+      "title": "Frontier AI LLMs, assistants, agents, services | Mistral",
+      "chars": 5965,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mistral-ai",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "128.txt",
+      "url": "https://legal.mistral.ai/terms/commercial-terms-of-service",
+      "final_url": "https://legal.mistral.ai/terms/commercial-terms-of-service/",
+      "status": "200",
+      "title": "Commercial Terms of Service",
+      "chars": 44150,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mistral-ai",
+          "role": "evidence",
+          "label": "Commercial terms: Mistral AI, a French simplified joint-stock company, 15 rue des Halles, Paris"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "129.txt",
+      "url": "https://docs.mistral.ai/models/overview",
+      "final_url": "https://docs.mistral.ai/models",
+      "status": "200",
+      "title": null,
+      "chars": 133,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mistral-ai",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": "Redirects to https://docs.mistral.ai/models ."
+    },
+    {
+      "file": "130.txt",
+      "url": "https://mistral.ai/news/",
+      "final_url": null,
+      "status": "200",
+      "title": "Latest news | Mistral",
+      "chars": 3437,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mistral-ai",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "131.txt",
+      "url": "https://huggingface.co/mistralai",
+      "final_url": null,
+      "status": "200",
+      "title": "mistralai (Mistral AI_)",
+      "chars": 3785,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mistral-ai",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "132.txt",
+      "url": "https://www.mixedbread.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "Mixedbread - Make your agents work on your data",
+      "chars": 6193,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mixedbread-ai",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "133.txt",
+      "url": "https://www.mixedbread.com/pages/terms",
+      "final_url": null,
+      "status": "200",
+      "title": "Terms & Conditions - Mixedbread",
+      "chars": 11663,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mixedbread-ai",
+          "role": "evidence",
+          "label": "Terms and conditions: an agreement with mixedbread ai inc. governed by Delaware law"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "134.txt",
+      "url": "https://www.mixedbread.com/pages/privacy",
+      "final_url": null,
+      "status": "200",
+      "title": "Privacy Policy - Mixedbread",
+      "chars": 9685,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mixedbread-ai",
+          "role": "evidence",
+          "label": "Privacy policy naming mixedbread ai inc."
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "135.txt",
+      "url": "https://www.mixedbread.com/changelog",
+      "final_url": "https://www.mixedbread.com/docs/changelog",
+      "status": "200",
+      "title": "Changelog - Mixedbread",
+      "chars": 18859,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mixedbread-ai",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "136.txt",
+      "url": "https://www.mixedbread.com/blog",
+      "final_url": null,
+      "status": "200",
+      "title": "Blog - Mixedbread",
+      "chars": 9910,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mixedbread-ai",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "137.txt",
+      "url": "https://github.com/mixedbread-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "Mixedbread · GitHub",
+      "chars": 2667,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mixedbread-ai",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "138.txt",
+      "url": "https://huggingface.co/mixedbread-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "mixedbread-ai (Mixedbread)",
+      "chars": 3680,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mixedbread-ai",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "139.txt",
+      "url": "https://www.moonshot.ai/",
+      "final_url": null,
+      "status": "200",
+      "title": "Moonshot AI",
+      "chars": 1630,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-moonshot-ai",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "140.txt",
+      "url": "https://platform.kimi.ai/docs/agreement/userprivacy",
+      "final_url": null,
+      "status": "200",
+      "title": "Kimi OpenPlatform Privacy Policy - Kimi API Platform",
+      "chars": 22999,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-moonshot-ai",
+          "role": "evidence",
+          "label": "Kimi API platform privacy policy naming Beijing Moonshot Technology and its Haidian, Beijing contact address"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "141.txt",
+      "url": "https://platform.kimi.ai/docs/models",
+      "final_url": null,
+      "status": "200",
+      "title": "Model List - Kimi API Platform",
+      "chars": 3732,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-moonshot-ai",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "142.txt",
+      "url": "https://www.kimi.com/en/blog/",
+      "final_url": null,
+      "status": "200",
+      "title": "Kimi Research Blog | Moonshot AI",
+      "chars": 1268,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-moonshot-ai",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "143.txt",
+      "url": "https://huggingface.co/moonshotai",
+      "final_url": null,
+      "status": "200",
+      "title": "moonshotai (Moonshot AI)",
+      "chars": 2829,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-moonshot-ai",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "144.txt",
+      "url": "https://motiftech.io/",
+      "final_url": "https://motiftech.io/en/",
+      "status": "200",
+      "title": "Motif Technologies",
+      "chars": 661,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-motif-technologies",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "145.txt",
+      "url": "https://motiftech.io/en/contact/",
+      "final_url": null,
+      "status": "200",
+      "title": "Motif Technologies",
+      "chars": 914,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-motif-technologies",
+          "role": "evidence",
+          "label": "Contact page giving its address at 396 Seocho-daero, Seoul"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "146.txt",
+      "url": "https://huggingface.co/Motif-Technologies/Motif-3/blob/main/LICENSE.md",
+      "final_url": null,
+      "status": "200",
+      "title": "LICENSE.md · Motif-Technologies/Motif-3 at main",
+      "chars": 4607,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-motif-technologies",
+          "role": "evidence",
+          "label": "Motif 3 licence naming Motif Technologies Corp."
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "147.txt",
+      "url": "https://motiftech.io/en/news/",
+      "final_url": null,
+      "status": "200",
+      "title": "Motif Technologies",
+      "chars": 1447,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-motif-technologies",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "148.txt",
+      "url": "https://github.com/MotifTechnologies",
+      "final_url": null,
+      "status": "200",
+      "title": "Motif Technologies · GitHub",
+      "chars": 2526,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-motif-technologies",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "149.txt",
+      "url": "https://huggingface.co/Motif-Technologies",
+      "final_url": null,
+      "status": "200",
+      "title": "Motif-Technologies (Motif Technologies)",
+      "chars": 2546,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-motif-technologies",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "150.txt",
+      "url": "https://www.nvidia.com/",
+      "final_url": "https://www.nvidia.com/en-us/",
+      "status": "200",
+      "title": "World Leader in Artificial Intelligence Computing | NVIDIA",
+      "chars": 18138,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-nvidia",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "151.txt",
+      "url": "https://www.nvidia.com/en-us/about-nvidia/privacy-policy/",
+      "final_url": null,
+      "status": "200",
+      "title": "NVIDIA Privacy Policy",
+      "chars": 30082,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-nvidia",
+          "role": "evidence",
+          "label": "Privacy policy naming NVIDIA Corporation at 2788 San Tomas Expressway, Santa Clara"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "152.txt",
+      "url": "https://developer.nvidia.com/topics/ai/nemotron",
+      "final_url": null,
+      "status": "200",
+      "title": "Nemotron AI Models | NVIDIA Developer",
+      "chars": 19488,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-nvidia",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "153.txt",
+      "url": "https://nvidianews.nvidia.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "Home | NVIDIA Newsroom",
+      "chars": 3609,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-nvidia",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "154.txt",
+      "url": "https://github.com/NVIDIA",
+      "final_url": null,
+      "status": "200",
+      "title": "NVIDIA Corporation · GitHub",
+      "chars": 3360,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-nvidia",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "155.txt",
+      "url": "https://huggingface.co/nvidia",
+      "final_url": null,
+      "status": "200",
+      "title": "nvidia (NVIDIA)",
+      "chars": 23846,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-nvidia",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "156.pdf.txt",
+      "url": "https://images.nvidia.com/content/pdf/NVIDIA-Frontier-AI-Risk-Assessment.pdf",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 45379,
+      "pdf_text": true,
+      "cited_by": [
+        {
+          "lab": "lab-nvidia",
+          "role": "framework",
+          "label": "Frontier AI Risk Assessment"
+        }
+      ],
+      "note": "PDF text extracted with pypdf."
+    },
+    {
+      "file": "157.txt",
+      "url": "https://openai.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "OpenAI | Research & Deployment",
+      "chars": 2973,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openai",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "158.txt",
+      "url": "https://openai.com/policies/row-privacy-policy/",
+      "final_url": null,
+      "status": "403",
+      "title": "Just a moment...",
+      "chars": 0,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openai",
+          "role": "evidence",
+          "label": "Privacy policy naming OpenAI OpCo, LLC at 1455 Third Street, San Francisco"
+        }
+      ],
+      "note": "Read in a headed browser (Cloudflare blocked headless)."
+    },
+    {
+      "file": "159.txt",
+      "url": "https://openai.com/our-structure/",
+      "final_url": null,
+      "status": "200",
+      "title": "Our Structure | OpenAI",
+      "chars": 5784,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openai",
+          "role": "evidence",
+          "label": "Structure page: the OpenAI Foundation controls OpenAI Group PBC"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "160.txt",
+      "url": "https://developers.openai.com/api/docs/models",
+      "final_url": null,
+      "status": "200",
+      "title": "Models | OpenAI API",
+      "chars": 4292,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openai",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "161.txt",
+      "url": "https://openai.com/news/",
+      "final_url": null,
+      "status": "403",
+      "title": "Just a moment...",
+      "chars": 0,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openai",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": "Read in a headed browser (Cloudflare blocked headless)."
+    },
+    {
+      "file": "162.txt",
+      "url": "https://github.com/openai",
+      "final_url": null,
+      "status": "200",
+      "title": "OpenAI · GitHub",
+      "chars": 2622,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openai",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "163.txt",
+      "url": "https://huggingface.co/openai",
+      "final_url": null,
+      "status": "200",
+      "title": "openai (OpenAI)",
+      "chars": 4684,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openai",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "164.pdf.txt",
+      "url": "https://cdn.openai.com/pdf/18a02b5d-6b67-4cec-ab64-68cdfbddebcd/preparedness-framework-v2.pdf",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 67222,
+      "pdf_text": true,
+      "cited_by": [
+        {
+          "lab": "lab-openai",
+          "role": "framework",
+          "label": "Preparedness Framework (Version 2)"
+        }
+      ],
+      "note": "PDF text extracted with pypdf."
+    },
+    {
+      "file": "165.txt",
+      "url": "https://www.openbmb.cn/en/",
+      "final_url": null,
+      "status": "200",
+      "title": "OpenBMB · Big Model for Everyone",
+      "chars": 450,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openbmb",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "166.txt",
+      "url": "https://www.openbmb.org/en/about-us",
+      "final_url": null,
+      "status": "502",
+      "title": null,
+      "chars": 23,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openbmb",
+          "role": "evidence",
+          "label": "About page: OpenBMB is founded and supported by THUNLP and ModelBest Inc."
+        }
+      ],
+      "note": "www.openbmb.org does not respond ('upstream request failed', 3 attempts). The OpenBMB site now lives at openbmb.cn: https://www.openbmb.cn/en/about-us is a 404, and the About page linked from the site nav is https://www.openbmb.cn/en/about (text, with milestone list expanded and logo alt text, in r7-openbmb-about.txt)."
+    },
+    {
+      "file": "167.txt",
+      "url": "https://github.com/OpenBMB/MiniCPM",
+      "final_url": null,
+      "status": "200",
+      "title": "GitHub - OpenBMB/MiniCPM: MiniCPM5: SOTA on-device LLMs, small yet powerful. · GitHub",
+      "chars": 16621,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openbmb",
+          "role": "evidence",
+          "label": "MiniCPM repository crediting Modelbest Inc., THUNLP, and the Gaoling School of Artificial Intelligence"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "168.txt",
+      "url": "https://github.com/OpenBMB",
+      "final_url": null,
+      "status": "200",
+      "title": "OpenBMB · GitHub",
+      "chars": 2844,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openbmb",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "169.txt",
+      "url": "https://huggingface.co/openbmb",
+      "final_url": null,
+      "status": "200",
+      "title": "openbmb (OpenBMB)",
+      "chars": 4302,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openbmb",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "170.txt",
+      "url": "https://deep-reinforce.com/",
+      "final_url": "https://ornith.ai/",
+      "status": "200",
+      "title": "Ornith AI",
+      "chars": 4767,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ornith-ai",
+          "role": "site"
+        },
+        {
+          "lab": "lab-ornith-ai",
+          "role": "evidence",
+          "label": "Company site at deep-reinforce.com, titled Ornith AI"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "171.txt",
+      "url": "https://ornith.ai/ornith_1_5.html",
+      "final_url": null,
+      "status": "200",
+      "title": "Ornith-1.5: From Self-Scaffolding to Self-Improvement | Ornith Blog",
+      "chars": 12801,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ornith-ai",
+          "role": "evidence",
+          "label": "Ornith-1.5 announcement on ornith.ai"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "172.txt",
+      "url": "https://github.com/ornith-ai/Ornith-1",
+      "final_url": null,
+      "status": "200",
+      "title": "GitHub - ornith-ai/Ornith-1 · GitHub",
+      "chars": 17388,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ornith-ai",
+          "role": "evidence",
+          "label": "Ornith-1 repository, renamed from the DeepReinforce organization"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "173.txt",
+      "url": "https://github.com/ornith-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "Ornith · GitHub",
+      "chars": 1945,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ornith-ai",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "174.txt",
+      "url": "https://huggingface.co/ornith-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "ornith-ai (Ornith)",
+      "chars": 3167,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ornith-ai",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "175.txt",
+      "url": "https://www.perplexity.ai/",
+      "final_url": null,
+      "status": "200",
+      "title": "Perplexity",
+      "chars": 1173,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-perplexity",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "176.txt",
+      "url": "https://www.perplexity.ai/hub/legal/perplexity-api-terms-of-service",
+      "final_url": null,
+      "status": "200",
+      "title": "Perplexity API Terms of Service",
+      "chars": 34287,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-perplexity",
+          "role": "evidence",
+          "label": "API terms: a contract with Perplexity AI, Inc., reviewed for the Perplexity API record"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "177.txt",
+      "url": "https://www.perplexity.ai/hub/careers",
+      "final_url": null,
+      "status": "403",
+      "title": "Just a moment...",
+      "chars": 265,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-perplexity",
+          "role": "evidence",
+          "label": "Careers page: San Francisco is Perplexity's home base"
+        }
+      ],
+      "note": "UNREADABLE: Cloudflare 'Just a moment...' challenge on every attempt, headless and headed; perplexity.ai/hub/about and /hub/legal/privacy-policy are challenged too. Perplexity's terms of service DID load: https://www.perplexity.ai/hub/legal/terms-of-service (text in r12-pplx-terms.txt)."
+    },
+    {
+      "file": "178.txt",
+      "url": "https://docs.perplexity.ai/docs/agent-api/models",
+      "final_url": null,
+      "status": "200",
+      "title": "Agent API Models - Perplexity",
+      "chars": 8056,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-perplexity",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "179.txt",
+      "url": "https://docs.perplexity.ai/docs/resources/changelog",
+      "final_url": null,
+      "status": "200",
+      "title": "Changelog - Perplexity",
+      "chars": 40035,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-perplexity",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "180.txt",
+      "url": "https://www.perplexity.ai/hub/blog",
+      "final_url": null,
+      "status": "200",
+      "title": "Perplexity Blog",
+      "chars": 4835,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-perplexity",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "181.txt",
+      "url": "https://github.com/perplexityai",
+      "final_url": null,
+      "status": "200",
+      "title": "Perplexity · GitHub",
+      "chars": 2156,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-perplexity",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "182.txt",
+      "url": "https://huggingface.co/perplexity-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "perplexity-ai (Perplexity)",
+      "chars": 3082,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-perplexity",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "183.txt",
+      "url": "https://poolside.ai/",
+      "final_url": null,
+      "status": "200",
+      "title": "Poolside",
+      "chars": 2718,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-poolside",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "184.txt",
+      "url": "https://poolside.ai/government",
+      "final_url": null,
+      "status": "200",
+      "title": "Government — Poolside",
+      "chars": 8093,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-poolside",
+          "role": "evidence",
+          "label": "Government page: Poolside is a U.S.-based AI company"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "185.txt",
+      "url": "https://poolside.ai/legal/eula",
+      "final_url": null,
+      "status": "200",
+      "title": "Poolside Terms of Use — Poolside",
+      "chars": 31884,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-poolside",
+          "role": "evidence",
+          "label": "Terms naming Poolside, Inc., a Delaware corporation with offices in San Francisco, reviewed for the Poolside API record"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "186.txt",
+      "url": "https://docs.poolside.ai/get-started/supported-models",
+      "final_url": null,
+      "status": "200",
+      "title": "Supported models - Poolside",
+      "chars": 3382,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-poolside",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "187.txt",
+      "url": "https://docs.poolside.ai/release-notes/models",
+      "final_url": null,
+      "status": "200",
+      "title": "Model release notes - Poolside",
+      "chars": 11626,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-poolside",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "188.txt",
+      "url": "https://poolside.ai/blog",
+      "final_url": null,
+      "status": "200",
+      "title": "Blog — Poolside",
+      "chars": 4814,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-poolside",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "189.txt",
+      "url": "https://github.com/poolsideai",
+      "final_url": null,
+      "status": "200",
+      "title": "Poolside · GitHub",
+      "chars": 4163,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-poolside",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "190.txt",
+      "url": "https://huggingface.co/poolside",
+      "final_url": null,
+      "status": "200",
+      "title": "poolside (Poolside)",
+      "chars": 3801,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-poolside",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "191.txt",
+      "url": "https://www.stepfun.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "阶跃星辰",
+      "chars": 1827,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-stepfun",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "192.txt",
+      "url": "https://platform.stepfun.com/legal/privacy-policy.html",
+      "final_url": null,
+      "status": "200",
+      "title": "隐私政策",
+      "chars": 8849,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-stepfun",
+          "role": "evidence",
+          "label": "Platform privacy policy giving the registered address in Xuhui District, Shanghai"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "193.curl.txt",
+      "url": "https://platform.stepfun.com/docs/zh/agreement/userservice",
+      "final_url": null,
+      "status": "200 (curl)",
+      "title": "StepFun 开放平台用户协议",
+      "chars": 10829,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-stepfun",
+          "role": "evidence",
+          "label": "Mainland platform user agreement naming the Shanghai operating entity, reviewed for the StepFun Open Platform record"
+        }
+      ],
+      "note": "Read with curl; the text is the page's visible text."
+    },
+    {
+      "file": "193.txt",
+      "url": "https://platform.stepfun.com/docs/zh/agreement/userservice",
+      "final_url": null,
+      "status": "502",
+      "title": null,
+      "chars": 23,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-stepfun",
+          "role": "evidence",
+          "label": "Mainland platform user agreement naming the Shanghai operating entity, reviewed for the StepFun Open Platform record"
+        }
+      ],
+      "note": "Read with curl; the text is the page's visible text."
+    },
+    {
+      "file": "194.txt",
+      "url": "https://platform.stepfun.ai/docs/en/agreement/userservice",
+      "final_url": null,
+      "status": "200",
+      "title": "Terms of Service - StepFun Documentation",
+      "chars": 32590,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-stepfun",
+          "role": "evidence",
+          "label": "International platform terms naming StepFun Technology (HK) Limited, reviewed for the international platform record"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "195.txt",
+      "url": "https://platform.stepfun.com/docs/zh/guides/pricing/details",
+      "final_url": null,
+      "status": "200",
+      "title": "定价与限速 - StepFun 开放平台文档中心",
+      "chars": 3109,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-stepfun",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "196.txt",
+      "url": "https://github.com/stepfun-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "stepfun-ai · GitHub",
+      "chars": 2298,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-stepfun",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "197.txt",
+      "url": "https://huggingface.co/stepfun-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "stepfun-ai (StepFun)",
+      "chars": 4188,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-stepfun",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "198.txt",
+      "url": "https://www.swiss-ai.org/",
+      "final_url": null,
+      "status": "200",
+      "title": "Home | Swiss AI",
+      "chars": 1966,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-swiss-ai-initiative",
+          "role": "site"
+        },
+        {
+          "lab": "lab-swiss-ai-initiative",
+          "role": "evidence",
+          "label": "Swiss AI Initiative site: the first initiative of the Swiss National AI Institute, seeded with CSCS compute and an ETH Domain grant"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "199.txt",
+      "url": "https://www.swiss-ai.org/team-3",
+      "final_url": "https://www.swiss-ai.org/org",
+      "status": "200",
+      "title": "Organization | Swiss AI",
+      "chars": 830,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-swiss-ai-initiative",
+          "role": "evidence",
+          "label": "Organization page: co-led by ETH Zurich and EPFL"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "200.txt",
+      "url": "https://github.com/swiss-ai/www-apertus",
+      "final_url": null,
+      "status": "200",
+      "title": "GitHub - swiss-ai/www-apertus: The website & public documentation area of the Apertus LLM · GitHub",
+      "chars": 7590,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-swiss-ai-initiative",
+          "role": "evidence",
+          "label": "Source of the Apertus site: developed by the Swiss AI Initiative with EPFL, ETH Zurich, and CSCS; the sites belong to EPFL"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "201.txt",
+      "url": "https://apertus-ai.org/pages/documentation/",
+      "final_url": null,
+      "status": "200",
+      "title": "Apertus AI",
+      "chars": 1275,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-swiss-ai-initiative",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "202.txt",
+      "url": "https://github.com/swiss-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "Swiss AI · GitHub",
+      "chars": 2110,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-swiss-ai-initiative",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "203.txt",
+      "url": "https://huggingface.co/swiss-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "swiss-ai (Swiss AI Initiative)",
+      "chars": 3257,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-swiss-ai-initiative",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "204.txt",
+      "url": "https://www.tencent.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "Home - Tencent",
+      "chars": 2490,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-tencent",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "205.txt",
+      "url": "https://www.tencent.com/en-us/articles/80116.html",
+      "final_url": null,
+      "status": "200",
+      "title": "Tencent Headquarters Moves to Tencent Building - Tencent 腾讯",
+      "chars": 2833,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-tencent",
+          "role": "evidence",
+          "label": "Tencent article on its headquarters moving into Tencent Building, Shenzhen"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "206.pdf.txt",
+      "url": "https://static.www.tencent.com/uploads/2022/04/07/7c31a327fb1c068906b70ba7ebede899.PDF",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 680942,
+      "pdf_text": true,
+      "cited_by": [
+        {
+          "lab": "lab-tencent",
+          "role": "evidence",
+          "label": "Tencent Holdings Limited 2021 annual report: incorporated in the Cayman Islands with limited liability"
+        }
+      ],
+      "note": "PDF text extracted with pypdf."
+    },
+    {
+      "file": "207.txt",
+      "url": "https://github.com/Tencent-Hunyuan/Hy3",
+      "final_url": null,
+      "status": "200",
+      "title": "GitHub - Tencent-Hunyuan/Hy3: Hy3 (295B A21B), a leading reasoning and agent model in its size, with great cost efficiency. · GitHub",
+      "chars": 8451,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-tencent",
+          "role": "evidence",
+          "label": "Hy3 repository licence: copyright Tencent"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "208.txt",
+      "url": "https://github.com/Tencent-Hunyuan",
+      "final_url": null,
+      "status": "200",
+      "title": "Tencent-Hunyuan · GitHub",
+      "chars": 2565,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-tencent",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "209.txt",
+      "url": "https://huggingface.co/tencent",
+      "final_url": null,
+      "status": "200",
+      "title": "tencent (Tencent)",
+      "chars": 3502,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-tencent",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "210.txt",
+      "url": "https://thinkingmachines.ai/",
+      "final_url": null,
+      "status": "200",
+      "title": "Thinking Machines Lab",
+      "chars": 4826,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-thinking-machines-lab",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "211.txt",
+      "url": "https://thinkingmachines.ai/legal/privacy/",
+      "final_url": null,
+      "status": "200",
+      "title": "Privacy notice - Thinking Machines Lab",
+      "chars": 12300,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-thinking-machines-lab",
+          "role": "evidence",
+          "label": "Privacy notice: Thinking Machines Lab, Inc. is an artificial intelligence research and product company"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "212.txt",
+      "url": "https://thinkingmachines.ai/legal/terms/",
+      "final_url": null,
+      "status": "200",
+      "title": "Service Terms of Use - Thinking Machines Lab",
+      "chars": 58783,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-thinking-machines-lab",
+          "role": "evidence",
+          "label": "Service terms of use, with court disputes in San Francisco"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "213.txt",
+      "url": "https://tinker-docs.thinkingmachines.ai/tinker/models/",
+      "final_url": null,
+      "status": "200",
+      "title": "Models & Pricing - Tinker Documentation",
+      "chars": 9538,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-thinking-machines-lab",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "214.txt",
+      "url": "https://thinkingmachines.ai/news/",
+      "final_url": null,
+      "status": "200",
+      "title": "News - Thinking Machines Lab",
+      "chars": 1095,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-thinking-machines-lab",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "215.txt",
+      "url": "https://github.com/thinking-machines-lab",
+      "final_url": null,
+      "status": "200",
+      "title": "Thinking Machines · GitHub",
+      "chars": 1810,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-thinking-machines-lab",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "216.txt",
+      "url": "https://huggingface.co/thinkingmachines",
+      "final_url": null,
+      "status": "200",
+      "title": "thinkingmachines (Thinking Machines Lab)",
+      "chars": 2068,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-thinking-machines-lab",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "217.txt",
+      "url": "https://www.trendyol.com/",
+      "final_url": "https://www.trendyol.com/en/select-country",
+      "status": "200",
+      "title": "Online Alışveriş Sitesi, Türkiye'nin Trend Yolu | Trendyol",
+      "chars": 443,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-trendyol",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "218.txt",
+      "url": "https://www.trendyol.com/en/imprint",
+      "final_url": "https://www.trendyol.com/en/select-country?cb=%2Fen%2Fimprint",
+      "status": "200",
+      "title": "Online Alışveriş Sitesi, Türkiye'nin Trend Yolu | Trendyol",
+      "chars": 443,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-trendyol",
+          "role": "evidence",
+          "label": "Imprint giving the Trendyol Campus address in Maslak, Sarıyer, Istanbul"
+        }
+      ],
+      "note": "UNREADABLE from this network location: every trendyol.com URL redirects to a country picker; after choosing Türkiye, /en/imprint still redirects there. With Türkiye chosen, the contact page https://www.trendyol.com/iletisim (r20-trendyol-iletisim.txt) and the about page https://www.trendyol.com/s/meet-us (r20-trendyol-meet-us.txt) load."
+    },
+    {
+      "file": "219.txt",
+      "url": "https://github.com/Trendyol/trendyol.github.io",
+      "final_url": null,
+      "status": "200",
+      "title": "GitHub - Trendyol/trendyol.github.io: This repository contains the source of the http://trendyol.github.io · GitHub",
+      "chars": 2069,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-trendyol",
+          "role": "evidence",
+          "label": "Trendyol Tech site source, copyright DSM Grup Danışmanlık İletişim ve Satış Tic. A.Ş."
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "220.txt",
+      "url": "https://huggingface.co/Trendyol",
+      "final_url": null,
+      "status": "200",
+      "title": "Trendyol (Trendyol)",
+      "chars": 2318,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-trendyol",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "221.txt",
+      "url": "https://typesafe.ai/",
+      "final_url": null,
+      "status": "200",
+      "title": "Home - TypeSafe AI",
+      "chars": 4923,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-typesafe-ai",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "222.txt",
+      "url": "https://typesafe.ai/legal/terms",
+      "final_url": null,
+      "status": "200",
+      "title": "Terms of use - TypeSafe AI",
+      "chars": 21221,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-typesafe-ai",
+          "role": "evidence",
+          "label": "Terms of use: the site is offered by TypeSafe AI, Inc., 255 California St, San Francisco"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "223.txt",
+      "url": "https://typesafe.ai/team",
+      "final_url": null,
+      "status": "200",
+      "title": "Team - TypeSafe AI",
+      "chars": 3304,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-typesafe-ai",
+          "role": "evidence",
+          "label": "Team page naming its San Francisco office"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "224.txt",
+      "url": "https://typesafe.ai/legal/mca",
+      "final_url": null,
+      "status": "200",
+      "title": "Master customer agreement - TypeSafe AI",
+      "chars": 41961,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-typesafe-ai",
+          "role": "evidence",
+          "label": "Master customer agreement, reviewed for the Jev 1.13 record"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "225.txt",
+      "url": "https://docs.typesafe.ai/models",
+      "final_url": null,
+      "status": "200",
+      "title": "Models - TypeSafe AI",
+      "chars": 5295,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-typesafe-ai",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "226.txt",
+      "url": "https://github.com/typesafe-ai",
+      "final_url": null,
+      "status": "200",
+      "title": "TypeSafe · GitHub",
+      "chars": 2531,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-typesafe-ai",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "227.txt",
+      "url": "https://www.upstage.ai/",
+      "final_url": null,
+      "status": "200",
+      "title": "Upstage AI - Building intelligence for the future of work",
+      "chars": 5972,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-upstage",
+          "role": "site"
+        },
+        {
+          "lab": "lab-upstage",
+          "role": "evidence",
+          "label": "Site footer business information: Upstage Co., Ltd., Teheran-ro 7-gil, Gangnam-gu, Seoul (read through the site capture in Upstage's own cookbook repository)"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "228.txt",
+      "url": "https://www.upstage.ai/terms-of-service",
+      "final_url": null,
+      "status": "200",
+      "title": "Terms of Service",
+      "chars": 49255,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-upstage",
+          "role": "evidence",
+          "label": "Terms of service, reviewed for the Solar Pro 2 record"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "229.txt",
+      "url": "https://console.upstage.ai/docs/models",
+      "final_url": null,
+      "status": "200",
+      "title": "Models | Upstage Solar and Document AI Catalog",
+      "chars": 2345,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-upstage",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "230.txt",
+      "url": "https://www.upstage.ai/blog",
+      "final_url": null,
+      "status": "200",
+      "title": "The Upstage Blog | Upstage AI",
+      "chars": 11528,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-upstage",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "231.txt",
+      "url": "https://github.com/UpstageAI",
+      "final_url": null,
+      "status": "200",
+      "title": "Upstage · GitHub",
+      "chars": 2269,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-upstage",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "232.txt",
+      "url": "https://huggingface.co/upstage",
+      "final_url": null,
+      "status": "200",
+      "title": "upstage (upstage)",
+      "chars": 3437,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-upstage",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "233.txt",
+      "url": "https://vispark.in/",
+      "final_url": null,
+      "status": "200",
+      "title": "Vispark - Everything you Need",
+      "chars": 3980,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-vispark",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "234.txt",
+      "url": "https://vispark.in/about",
+      "final_url": null,
+      "status": "200",
+      "title": "About Vispark - Our Story & Mission",
+      "chars": 3634,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-vispark",
+          "role": "evidence",
+          "label": "About page: Vispark is an Indian tech company offering Vision AI, music streaming, cloud services, and payments"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "235.txt",
+      "url": "https://vispark.in/ai",
+      "final_url": null,
+      "status": "200",
+      "title": "Vision AI by Vispark - India's Foundational Model",
+      "chars": 2110,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-vispark",
+          "role": "evidence",
+          "label": "Vision AI page: India's foundational model"
+        },
+        {
+          "lab": "lab-vispark",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "236.txt",
+      "url": "https://blog.vispark.in/",
+      "final_url": null,
+      "status": "200",
+      "title": "Vispark Blog",
+      "chars": 2685,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-vispark",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "237.txt",
+      "url": "https://vivgrid.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "Vivgrid — The Managed Skills Platform for AI Agents",
+      "chars": 2516,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-vivgrid",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "238.txt",
+      "url": "https://www.vivgrid.com/privacy",
+      "final_url": null,
+      "status": "502",
+      "title": null,
+      "chars": 23,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-vivgrid",
+          "role": "evidence",
+          "label": "Privacy policy: Allegro US, LLC (Vivgrid)"
+        }
+      ],
+      "note": "www.vivgrid.com does not respond ('upstream request failed'); the same page at https://vivgrid.com/privacy loads (this text)."
+    },
+    {
+      "file": "239.txt",
+      "url": "https://github.com/vivgrid/viv/blob/main/LICENSE",
+      "final_url": null,
+      "status": "200",
+      "title": "viv/LICENSE at main · vivgrid/viv · GitHub",
+      "chars": 13154,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-vivgrid",
+          "role": "evidence",
+          "label": "Viv SDK licence: copyright Allegro US, LLC"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "240.txt",
+      "url": "https://github.com/vivgrid",
+      "final_url": null,
+      "status": "200",
+      "title": "Vivgrid · GitHub",
+      "chars": 1428,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-vivgrid",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "241.txt",
+      "url": "https://writer.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "WRITER - The enterprise AI platform for agentic work",
+      "chars": 5426,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-writer",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "242.txt",
+      "url": "https://writer.com/legal/platform-services/",
+      "final_url": null,
+      "status": "200",
+      "title": "Writer platform services agreement | Legal hub",
+      "chars": 34710,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-writer",
+          "role": "evidence",
+          "label": "Platform services agreement: notices to Writer, Inc., 111 Maiden Lane, San Francisco, under California law"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "243.txt",
+      "url": "https://writer.com/legal/privacy/",
+      "final_url": null,
+      "status": "200",
+      "title": "Writer privacy policy | Legal hub",
+      "chars": 27912,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-writer",
+          "role": "evidence",
+          "label": "Privacy policy giving the San Francisco mailing address"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "244.txt",
+      "url": "https://dev.writer.com/home/models-overview",
+      "final_url": null,
+      "status": "200",
+      "title": "Choose a model - Writer AI Studio",
+      "chars": 7031,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-writer",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "245.txt",
+      "url": "https://writer.com/newsroom/",
+      "final_url": null,
+      "status": "200",
+      "title": "WRITER Newsroom | Press Releases",
+      "chars": 14800,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-writer",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "246.txt",
+      "url": "https://github.com/writer",
+      "final_url": null,
+      "status": "200",
+      "title": "Writer · GitHub",
+      "chars": 2585,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-writer",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "247.txt",
+      "url": "https://huggingface.co/Writer",
+      "final_url": null,
+      "status": "200",
+      "title": "Writer (Writer)",
+      "chars": 2832,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-writer",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "248.txt",
+      "url": "https://x.ai/",
+      "final_url": null,
+      "status": "200",
+      "title": "SpaceXAI",
+      "chars": 3557,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "249.txt",
+      "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
+      "final_url": null,
+      "status": "200",
+      "title": "Space Exploration Technologies - S-1",
+      "chars": 9082,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "evidence",
+          "label": "SpaceX Form S-1: the xAI merger closed on 2 February 2026, making xAI a wholly owned subsidiary"
+        }
+      ],
+      "note": "Full text of the S-1 HTML (1.49M chars). Use Grep on it."
+    },
+    {
+      "file": "250.txt",
+      "url": "https://www.sec.gov/Archives/edgar/data/0001181412/000162828026036936/exhibit21-sx1.htm",
+      "final_url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/exhibit21-sx1.htm",
+      "status": "200",
+      "title": "Exhibit 2.1 - S-1",
+      "chars": 6444,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "evidence",
+          "label": "SpaceX Form S-1 Exhibit 21 listing X.AI LLC (Nevada) among its subsidiaries"
+        }
+      ],
+      "note": "CAUTION: exhibit21-sx1.htm is Exhibit 2.1 (the merger agreement). The filing's Exhibit 21.1, the list of significant subsidiaries, is https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/exhibit211-sx1.htm (text in r11-ex211.txt)."
+    },
+    {
+      "file": "251.txt",
+      "url": "https://x.ai/legal/privacy-policy",
+      "final_url": null,
+      "status": "200",
+      "title": "Privacy Policy | SpaceXAI",
+      "chars": 27423,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "evidence",
+          "label": "Privacy policy naming SpaceXAI LLC"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "252.txt",
+      "url": "https://docs.x.ai/developers/models",
+      "final_url": null,
+      "status": "200",
+      "title": "Grok Models & Pricing | SpaceXAI Docs",
+      "chars": 4297,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "253.txt",
+      "url": "https://docs.x.ai/developers/release-notes",
+      "final_url": null,
+      "status": "200",
+      "title": "Release Notes | SpaceXAI Docs",
+      "chars": 17272,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "254.txt",
+      "url": "https://x.ai/news",
+      "final_url": null,
+      "status": "403",
+      "title": "Attention Required! | Cloudflare",
+      "chars": 681,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": "Read in a headed browser (Cloudflare blocked headless)."
+    },
+    {
+      "file": "255.pdf.txt",
+      "url": "https://media.x.ai/v1/website/xai-frontier-artificial-intelligence-framework-30-june-2026-99c40684.pdf",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 26550,
+      "pdf_text": true,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "framework",
+          "label": "xAI Frontier Artificial Intelligence Framework (effective 30 June 2026)"
+        }
+      ],
+      "note": "PDF text extracted with pypdf."
+    },
+    {
+      "file": "256.txt",
+      "url": "https://www.mi.com/global/",
+      "final_url": null,
+      "status": "200",
+      "title": "Xiaomi Global",
+      "chars": 2797,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xiaomi",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "257.txt",
+      "url": "https://ir.mi.com/investor-resources/ir-contacts",
+      "final_url": null,
+      "status": "502",
+      "title": null,
+      "chars": 23,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xiaomi",
+          "role": "evidence",
+          "label": "Investor relations contacts giving the Xiaomi Campus address in Haidian District, Beijing"
+        }
+      ],
+      "note": "Read in a headed browser."
+    },
+    {
+      "file": "258.pdf.txt",
+      "url": "https://ir.mi.com/system/files-encrypted/nasdaq_kms/assets/2026/04/28/5-29-08/Xiaomi%202025%20AR_EN.pdf",
+      "final_url": null,
+      "status": "403",
+      "title": null,
+      "chars": 946389,
+      "pdf_text": true,
+      "cited_by": [
+        {
+          "lab": "lab-xiaomi",
+          "role": "evidence",
+          "label": "Xiaomi Corporation 2025 annual report: incorporated in the Cayman Islands with limited liability"
+        }
+      ],
+      "note": "PDF fetched in a browser from the ir.mi.com origin (curl got 403)."
+    },
+    {
+      "file": "259.txt",
+      "url": "https://github.com/XiaomiMiMo/MiMo/blob/main/LICENSE",
+      "final_url": null,
+      "status": "200",
+      "title": "MiMo/LICENSE at main · XiaomiMiMo/MiMo · GitHub",
+      "chars": 13118,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xiaomi",
+          "role": "evidence",
+          "label": "MiMo repository licence: copyright Xiaomi Corporation"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "260.txt",
+      "url": "https://github.com/XiaomiMiMo",
+      "final_url": null,
+      "status": "200",
+      "title": "Xiaomi MiMo · GitHub",
+      "chars": 2413,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xiaomi",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "261.txt",
+      "url": "https://huggingface.co/XiaomiMiMo",
+      "final_url": null,
+      "status": "200",
+      "title": "XiaomiMiMo (Xiaomi MiMo)",
+      "chars": 3064,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xiaomi",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "262.txt",
+      "url": "https://z.ai/",
+      "final_url": "https://chat.z.ai/",
+      "status": "200",
+      "title": "Z.ai - Advanced AI Chatbot & Agent powered by GLM-5.3-Flash",
+      "chars": 393,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-z-ai",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "263.txt",
+      "url": "https://docs.z.ai/legal-agreement/terms-of-use",
+      "final_url": null,
+      "status": "200",
+      "title": "Terms of Use - Overview - Z.AI DEVELOPER DOCUMENT",
+      "chars": 53173,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-z-ai",
+          "role": "evidence",
+          "label": "Z.ai terms of use naming Jingsheng Hengxing Technology Pte. Ltd. of Singapore"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "264.txt",
+      "url": "https://docs.bigmodel.cn/cn/terms/user-agreement",
+      "final_url": null,
+      "status": "200",
+      "title": "用户协议 - 智谱AI开放文档",
+      "chars": 15577,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-z-ai",
+          "role": "evidence",
+          "label": "BigModel user agreement naming 北京智谱华章科技股份有限公司, reviewed for the Zhipu AI Open Platform record"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "265.txt",
+      "url": "https://docs.z.ai/guides/overview/overview",
+      "final_url": null,
+      "status": "200",
+      "title": "Overview - Overview - Z.AI DEVELOPER DOCUMENT",
+      "chars": 2344,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-z-ai",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "266.txt",
+      "url": "https://docs.z.ai/release-notes/new-released",
+      "final_url": null,
+      "status": "200",
+      "title": "New Released - Overview - Z.AI DEVELOPER DOCUMENT",
+      "chars": 8600,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-z-ai",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "267.txt",
+      "url": "https://github.com/zai-org",
+      "final_url": null,
+      "status": "200",
+      "title": "Z.ai · GitHub",
+      "chars": 2186,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-z-ai",
+          "role": "channel",
+          "kind": "github"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "268.txt",
+      "url": "https://huggingface.co/zai-org",
+      "final_url": null,
+      "status": "200",
+      "title": "zai-org (Z.ai)",
+      "chars": 4366,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-z-ai",
+          "role": "channel",
+          "kind": "hugging_face"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "meituan-ar-2025.pdf.txt",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042400179.pdf",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 794248,
+      "pdf_text": true,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r10-s1-index.txt",
+      "url": null,
+      "final_url": null,
+      "status": null,
+      "title": null,
+      "chars": 5692,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r11-ex211.txt",
+      "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/exhibit211-sx1.htm",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 248,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r11-s1.full.txt",
+      "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
+      "final_url": null,
+      "status": "200 (full HTML text)",
+      "title": null,
+      "chars": 1491904,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "evidence",
+          "label": "SpaceX Form S-1: the xAI merger closed on 2 February 2026, making xAI a wholly owned subsidiary"
+        }
+      ],
+      "note": "Full text of the S-1 HTML (1.49M chars). Use Grep on it."
+    },
+    {
+      "file": "r11-s1.txt",
+      "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 9082,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "evidence",
+          "label": "SpaceX Form S-1: the xAI merger closed on 2 February 2026, making xAI a wholly owned subsidiary"
+        }
+      ],
+      "note": "Full text of the S-1 HTML (1.49M chars). Use Grep on it."
+    },
+    {
+      "file": "r12-bd-offices-zh.txt",
+      "url": "https://www.bytedance.com/zh/resources/offices",
+      "final_url": "https://www.bytedance.com/zh/",
+      "status": "200",
+      "title": "字节跳动",
+      "chars": 2231,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r12-bd-offices2.txt",
+      "url": "https://www.bytedance.com/en/resources/offices",
+      "final_url": null,
+      "status": "200",
+      "title": "500: Internal Server Error",
+      "chars": 238,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "Offices page listing ByteDance offices by region"
+        }
+      ],
+      "note": "Every attempt (headless and headed, four times over two hours) returned ByteDance's own '500: Internal Server Error' page."
+    },
+    {
+      "file": "r12-ibm-wn2.txt",
+      "url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/whats-new.html?context=wx&audience=wdp",
+      "final_url": "https://dataplatform.cloud.ibm.com/docs/common-error-page?code=500&context=wx&audience=wdp",
+      "status": "200",
+      "title": "IBM watsonx",
+      "chars": 147,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r12-ibm-wn3.txt",
+      "url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/whats-new.html",
+      "final_url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/whats-new.html?context=cpdaas",
+      "status": "200",
+      "title": "What's new - Docs | IBM Cloud Pak for Data as a Service",
+      "chars": 101533,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r12-ibm-wn4.txt",
+      "url": "https://www.ibm.com/docs/en/watsonx/saas?topic=whats-new",
+      "final_url": "https://www.ibm.com/docs/en/watsonx/saas",
+      "status": "200",
+      "title": "IBM Documentation",
+      "chars": 686,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r12-pplx-about.txt",
+      "url": "https://www.perplexity.ai/hub/about",
+      "final_url": null,
+      "status": "403",
+      "title": "Just a moment...",
+      "chars": 265,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r12-pplx-careers.txt",
+      "url": "https://www.perplexity.ai/hub/careers",
+      "final_url": null,
+      "status": "403",
+      "title": "Just a moment...",
+      "chars": 265,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-perplexity",
+          "role": "evidence",
+          "label": "Careers page: San Francisco is Perplexity's home base"
+        }
+      ],
+      "note": "UNREADABLE: Cloudflare 'Just a moment...' challenge on every attempt, headless and headed; perplexity.ai/hub/about and /hub/legal/privacy-policy are challenged too. Perplexity's terms of service DID load: https://www.perplexity.ai/hub/legal/terms-of-service (text in r12-pplx-terms.txt)."
+    },
+    {
+      "file": "r12-pplx-privacy.txt",
+      "url": "https://www.perplexity.ai/hub/legal/privacy-policy",
+      "final_url": "https://www.perplexity.ai/hub/legal/privacy-notice",
+      "status": "403",
+      "title": "Just a moment...",
+      "chars": 265,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r12-pplx-terms.txt",
+      "url": "https://www.perplexity.ai/hub/legal/terms-of-service",
+      "final_url": null,
+      "status": "200",
+      "title": "Perplexity Terms of Service",
+      "chars": 57444,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r13-ibm-wx-fra.txt",
+      "url": "https://eu-de.dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/whats-new.html?context=wx",
+      "final_url": "https://eu-de.dataplatform.cloud.ibm.com/docs/common-error-page?code=500&context=wx&audience=wdp",
+      "status": "200",
+      "title": "IBM watsonx",
+      "chars": 147,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r13-ibm-wx-us.txt",
+      "url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/whats-new.html?context=wx",
+      "final_url": "https://dataplatform.cloud.ibm.com/docs/common-error-page?code=500&context=wx&audience=wdp",
+      "status": "200",
+      "title": "IBM watsonx",
+      "chars": 147,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": "Every attempt (US and EU regions, headless and headed) redirected to IBM's error page 'Error 500 This page isn't available right now'. Without ?context=wx the page redirects to the Cloud Pak for Data as a Service context (r12-ibm-wn3.txt), a different product's release notes."
+    },
+    {
+      "file": "r13-meituan-home.txt",
+      "url": "https://www.meituan.com/",
+      "final_url": null,
+      "status": "200",
+      "title": "美团 - 帮大家吃得更好，生活更好",
+      "chars": 1346,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meituan",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "r13-meituan-ir.txt",
+      "url": "https://www.meituan.com/en-US/investor",
+      "final_url": "https://www.meituan.com/en-US/404",
+      "status": "404",
+      "title": null,
+      "chars": 367,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r13-seed-home.txt",
+      "url": "https://seed.bytedance.com/en/",
+      "final_url": null,
+      "status": "200",
+      "title": "ByteDance Seed",
+      "chars": 3186,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r13-trendyol-after.txt",
+      "url": null,
+      "final_url": "https://www.trendyol.com/en/select-country?cb=%2Fen%2Fimprint",
+      "status": null,
+      "title": null,
+      "chars": 831,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r13-trendyol-select.txt",
+      "url": "https://www.trendyol.com/en/select-country?cb=%2Fen%2Fimprint",
+      "final_url": null,
+      "status": "200",
+      "title": "Online Alışveriş Sitesi, Türkiye'nin Trend Yolu | Trendyol",
+      "chars": 831,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r14-meituan-ir.txt",
+      "url": "https://www.meituan.com/investor-relations",
+      "final_url": null,
+      "status": null,
+      "title": null,
+      "chars": 4833,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r14-seed-research.txt",
+      "url": "https://seed.bytedance.com/en/research",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 2530,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r16-trendyol.txt",
+      "url": "https://www.trendyol.com/en/imprint",
+      "final_url": "https://www.trendyol.com/en/select-country?cb=%2Fen%2Fimprint",
+      "status": null,
+      "title": null,
+      "chars": 443,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-trendyol",
+          "role": "evidence",
+          "label": "Imprint giving the Trendyol Campus address in Maslak, Sarıyer, Istanbul"
+        }
+      ],
+      "note": "UNREADABLE from this network location: every trendyol.com URL redirects to a country picker; after choosing Türkiye, /en/imprint still redirects there. With Türkiye chosen, the contact page https://www.trendyol.com/iletisim (r20-trendyol-iletisim.txt) and the about page https://www.trendyol.com/s/meet-us (r20-trendyol-meet-us.txt) load."
+    },
+    {
+      "file": "r17-trendyol.txt",
+      "url": "https://www.trendyol.com/en/imprint",
+      "final_url": "https://www.trendyol.com/en/select-country?cb=%2Fen%2Fimprint",
+      "status": null,
+      "title": null,
+      "chars": 430,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-trendyol",
+          "role": "evidence",
+          "label": "Imprint giving the Trendyol Campus address in Maslak, Sarıyer, Istanbul"
+        }
+      ],
+      "note": "UNREADABLE from this network location: every trendyol.com URL redirects to a country picker; after choosing Türkiye, /en/imprint still redirects there. With Türkiye chosen, the contact page https://www.trendyol.com/iletisim (r20-trendyol-iletisim.txt) and the about page https://www.trendyol.com/s/meet-us (r20-trendyol-meet-us.txt) load."
+    },
+    {
+      "file": "r19-trendyol-en-imprint.txt",
+      "url": "https://www.trendyol.com/en/imprint",
+      "final_url": "https://www.trendyol.com/en/select-country?cb=%2Fen%2Fimprint",
+      "status": "200",
+      "title": null,
+      "chars": 831,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-trendyol",
+          "role": "evidence",
+          "label": "Imprint giving the Trendyol Campus address in Maslak, Sarıyer, Istanbul"
+        }
+      ],
+      "note": "UNREADABLE from this network location: every trendyol.com URL redirects to a country picker; after choosing Türkiye, /en/imprint still redirects there. With Türkiye chosen, the contact page https://www.trendyol.com/iletisim (r20-trendyol-iletisim.txt) and the about page https://www.trendyol.com/s/meet-us (r20-trendyol-meet-us.txt) load."
+    },
+    {
+      "file": "r19-trendyol-iletisim.txt",
+      "url": "https://www.trendyol.com/iletisim",
+      "final_url": "https://www.trendyol.com/en/select-country?cb=%2Filetisim",
+      "status": "200",
+      "title": null,
+      "chars": 443,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r2-129.txt",
+      "url": "https://docs.mistral.ai/models/overview",
+      "final_url": "https://docs.mistral.ai/models",
+      "status": "200",
+      "title": "Mistral Docs",
+      "chars": 9009,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-mistral-ai",
+          "role": "channel",
+          "kind": "model_catalog"
+        }
+      ],
+      "note": "Redirects to https://docs.mistral.ai/models ."
+    },
+    {
+      "file": "r2-158.txt",
+      "url": "https://openai.com/policies/row-privacy-policy/",
+      "final_url": null,
+      "status": "200",
+      "title": "Privacy policy | OpenAI",
+      "chars": 28936,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openai",
+          "role": "evidence",
+          "label": "Privacy policy naming OpenAI OpCo, LLC at 1455 Third Street, San Francisco"
+        }
+      ],
+      "note": "Read in a headed browser (Cloudflare blocked headless)."
+    },
+    {
+      "file": "r2-161.txt",
+      "url": "https://openai.com/news/",
+      "final_url": null,
+      "status": "200",
+      "title": "OpenAI News | OpenAI",
+      "chars": 2228,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openai",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": "Read in a headed browser (Cloudflare blocked headless)."
+    },
+    {
+      "file": "r2-166.txt",
+      "url": "https://www.openbmb.org/en/about-us",
+      "final_url": null,
+      "status": "502",
+      "title": null,
+      "chars": 23,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openbmb",
+          "role": "evidence",
+          "label": "About page: OpenBMB is founded and supported by THUNLP and ModelBest Inc."
+        }
+      ],
+      "note": "www.openbmb.org does not respond ('upstream request failed', 3 attempts). The OpenBMB site now lives at openbmb.cn: https://www.openbmb.cn/en/about-us is a 404, and the About page linked from the site nav is https://www.openbmb.cn/en/about (text, with milestone list expanded and logo alt text, in r7-openbmb-about.txt)."
+    },
+    {
+      "file": "r2-166cn.txt",
+      "url": "https://www.openbmb.cn/en/about-us",
+      "final_url": null,
+      "status": "200",
+      "title": "OpenBMB · Big Model for Everyone",
+      "chars": 33,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r2-177.txt",
+      "url": "https://www.perplexity.ai/hub/careers",
+      "final_url": null,
+      "status": "403",
+      "title": "Just a moment...",
+      "chars": 265,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-perplexity",
+          "role": "evidence",
+          "label": "Careers page: San Francisco is Perplexity's home base"
+        }
+      ],
+      "note": "UNREADABLE: Cloudflare 'Just a moment...' challenge on every attempt, headless and headed; perplexity.ai/hub/about and /hub/legal/privacy-policy are challenged too. Perplexity's terms of service DID load: https://www.perplexity.ai/hub/legal/terms-of-service (text in r12-pplx-terms.txt)."
+    },
+    {
+      "file": "r2-238.txt",
+      "url": "https://vivgrid.com/privacy",
+      "final_url": null,
+      "status": "200",
+      "title": "Privacy Policy – Vivgrid | User Data Protection & Security | Vivgrid",
+      "chars": 3945,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r2-254.txt",
+      "url": "https://x.ai/news",
+      "final_url": null,
+      "status": "200",
+      "title": "News: Research, Product & Company Updates | SpaceXAI",
+      "chars": 12385,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": "Read in a headed browser (Cloudflare blocked headless)."
+    },
+    {
+      "file": "r2-257.txt",
+      "url": "https://ir.mi.com/investor-resources/ir-contacts",
+      "final_url": null,
+      "status": "200",
+      "title": "IR Contacts | Xiaomi Corporation",
+      "chars": 524,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xiaomi",
+          "role": "evidence",
+          "label": "Investor relations contacts giving the Xiaomi Campus address in Haidian District, Beijing"
+        }
+      ],
+      "note": "Read in a headed browser."
+    },
+    {
+      "file": "r2-53.txt",
+      "url": "https://www.bytedance.com/en/resources/offices",
+      "final_url": null,
+      "status": "200",
+      "title": "500: Internal Server Error",
+      "chars": 238,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "Offices page listing ByteDance offices by region"
+        }
+      ],
+      "note": "Every attempt (headless and headed, four times over two hours) returned ByteDance's own '500: Internal Server Error' page."
+    },
+    {
+      "file": "r2-93.txt",
+      "url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/whats-new.html?context=wx",
+      "final_url": "https://dataplatform.cloud.ibm.com/docs/common-error-page?code=500&context=wx&audience=wdp",
+      "status": "200",
+      "title": "IBM watsonx",
+      "chars": 147,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": "Every attempt (US and EU regions, headless and headed) redirected to IBM's error page 'Error 500 This page isn't available right now'. Without ?context=wx the page redirects to the Cloud Pak for Data as a Service context (r12-ibm-wn3.txt), a different product's release notes."
+    },
+    {
+      "file": "r20-trendyol-en-imprint.txt",
+      "url": "https://www.trendyol.com/en/imprint",
+      "final_url": "https://www.trendyol.com/en/select-country?cb=%2Fen%2Fimprint",
+      "status": "200",
+      "title": null,
+      "chars": 430,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-trendyol",
+          "role": "evidence",
+          "label": "Imprint giving the Trendyol Campus address in Maslak, Sarıyer, Istanbul"
+        }
+      ],
+      "note": "UNREADABLE from this network location: every trendyol.com URL redirects to a country picker; after choosing Türkiye, /en/imprint still redirects there. With Türkiye chosen, the contact page https://www.trendyol.com/iletisim (r20-trendyol-iletisim.txt) and the about page https://www.trendyol.com/s/meet-us (r20-trendyol-meet-us.txt) load."
+    },
+    {
+      "file": "r20-trendyol-iletisim.txt",
+      "url": "https://www.trendyol.com/iletisim",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 1981,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r20-trendyol-imprint-tr.txt",
+      "url": "https://www.trendyol.com/imprint",
+      "final_url": "https://www.trendyol.com/en/select-country?cb=%2Fimprint",
+      "status": "200",
+      "title": null,
+      "chars": 443,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r20-trendyol-meet-us.txt",
+      "url": "https://www.trendyol.com/s/meet-us",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 5310,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r3-alibaba-ir.txt",
+      "url": "https://www.alibabagroup.com/en-US/ir-financial-reports-financial-results",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 2513,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r3-bd-home.txt",
+      "url": "https://www.bytedance.com/en/",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 6667,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "site"
+        },
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "ByteDance site: more than 150,000 employees based out of nearly 120 cities, with no headquarters named"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "r3-bd-offices.txt",
+      "url": "https://www.bytedance.com/en/resources/offices",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 238,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "Offices page listing ByteDance offices by region"
+        }
+      ],
+      "note": "Every attempt (headless and headed, four times over two hours) returned ByteDance's own '500: Internal Server Error' page."
+    },
+    {
+      "file": "r3-ibm-wn.txt",
+      "url": "https://dataplatform.cloud.ibm.com/docs/content/wsj/getting-started/whats-new.html?context=wx",
+      "final_url": "https://dataplatform.cloud.ibm.com/docs/common-error-page?code=500&context=wx&audience=wdp",
+      "status": "200",
+      "title": null,
+      "chars": 147,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-ibm",
+          "role": "channel",
+          "kind": "release_notes"
+        }
+      ],
+      "note": "Every attempt (US and EU regions, headless and headed) redirected to IBM's error page 'Error 500 This page isn't available right now'. Without ?context=wx the page redirects to the Cloud Pak for Data as a Service context (r12-ibm-wn3.txt), a different product's release notes."
+    },
+    {
+      "file": "r3-meta-blog.txt",
+      "url": "https://ai.meta.com/blog/",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 1541,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-meta",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "r3-meta-frontier.txt",
+      "url": "https://ai.meta.com/static-resource/meta-frontier-ai-framework/",
+      "final_url": null,
+      "status": "500",
+      "title": null,
+      "chars": 113,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r3-meta-rai.txt",
+      "url": "https://ai.meta.com/responsible-ai/",
+      "final_url": "https://ai.meta.com/blog/responsible-ai-connect-2024/",
+      "status": "200",
+      "title": null,
+      "chars": 7032,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r3-openbmb-cn-en.txt",
+      "url": "https://www.openbmb.cn/en/about-us",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 33,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r3-openbmb-cn.txt",
+      "url": "https://www.openbmb.cn/about-us",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 16,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r3-openbmb-org.txt",
+      "url": "https://www.openbmb.org/en/about-us",
+      "final_url": null,
+      "status": "502",
+      "title": null,
+      "chars": 23,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openbmb",
+          "role": "evidence",
+          "label": "About page: OpenBMB is founded and supported by THUNLP and ModelBest Inc."
+        }
+      ],
+      "note": "www.openbmb.org does not respond ('upstream request failed', 3 attempts). The OpenBMB site now lives at openbmb.cn: https://www.openbmb.cn/en/about-us is a 404, and the About page linked from the site nav is https://www.openbmb.cn/en/about (text, with milestone list expanded and logo alt text, in r7-openbmb-about.txt)."
+    },
+    {
+      "file": "r3-xiaomi-ir.txt",
+      "url": "https://ir.mi.com/financial-information/annual-reports",
+      "final_url": null,
+      "status": "404",
+      "title": null,
+      "chars": 469,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r4-alibaba-sec.txt",
+      "url": "https://www.alibabagroup.com/en-US/ir-filings-sec",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 3281,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r4-bd-contact.txt",
+      "url": "https://www.bytedance.com/en/contact",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 300,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r4-bd-offices.txt",
+      "url": "https://www.bytedance.com/en/resources/offices",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 238,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "Offices page listing ByteDance offices by region"
+        }
+      ],
+      "note": "Every attempt (headless and headed, four times over two hours) returned ByteDance's own '500: Internal Server Error' page."
+    },
+    {
+      "file": "r4-meta-scaling-blog.txt",
+      "url": "https://ai.meta.com/blog/scaling-how-we-build-test-advanced-ai/",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 6148,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r4-openbmb-cn-en.txt",
+      "url": "https://www.openbmb.cn/en/about-us",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 33,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r5-bd-home.txt",
+      "url": "https://www.bytedance.com/en/",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 6667,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "site"
+        },
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "ByteDance site: more than 150,000 employees based out of nearly 120 cities, with no headquarters named"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "r5-meta-blog2.txt",
+      "url": "https://ai.meta.com/blog/scaling-how-we-build-test-advanced-ai/",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 6148,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r5-openbmb-home.txt",
+      "url": "https://www.openbmb.cn/en/",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 450,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openbmb",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "r5-sec-baba.txt",
+      "url": "https://www.sec.gov/Archives/edgar/data/0001577552/000119312526231755/baba-20260331.htm",
+      "final_url": "https://www.sec.gov/Archives/edgar/data/1577552/000119312526231755/baba-20260331.htm",
+      "status": "200",
+      "title": null,
+      "chars": 1378822,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-alibaba",
+          "role": "evidence",
+          "label": "Form 20-F for fiscal 2026: a Cayman Islands holding company whose major businesses have their principal executive offices in Hangzhou"
+        }
+      ],
+      "note": "Read in a headed browser (the first fetch got SEC's automated-tool block)."
+    },
+    {
+      "file": "r5-sec-spacex-s1.txt",
+      "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 9082,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "evidence",
+          "label": "SpaceX Form S-1: the xAI merger closed on 2 February 2026, making xAI a wholly owned subsidiary"
+        }
+      ],
+      "note": "Full text of the S-1 HTML (1.49M chars). Use Grep on it."
+    },
+    {
+      "file": "r6-bd-home.txt",
+      "url": "https://www.bytedance.com/en/",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 6667,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-bytedance",
+          "role": "site"
+        },
+        {
+          "lab": "lab-bytedance",
+          "role": "evidence",
+          "label": "ByteDance site: more than 150,000 employees based out of nearly 120 cities, with no headquarters named"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "r6-meta-blog3.txt",
+      "url": "https://ai.meta.com/blog/scaling-how-we-build-test-advanced-ai/",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 6148,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r6-openbmb-about.txt",
+      "url": "https://www.openbmb.cn/en/about",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 1864,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "r7-openbmb-about.txt",
+      "url": "https://www.openbmb.cn/en/about",
+      "final_url": null,
+      "status": "200",
+      "title": null,
+      "chars": 8335,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "retry-0.txt",
+      "url": "https://openai.com/policies/row-privacy-policy/",
+      "final_url": null,
+      "status": "403",
+      "title": "Just a moment...",
+      "chars": 0,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openai",
+          "role": "evidence",
+          "label": "Privacy policy naming OpenAI OpCo, LLC at 1455 Third Street, San Francisco"
+        }
+      ],
+      "note": "Read in a headed browser (Cloudflare blocked headless)."
+    },
+    {
+      "file": "retry-1.txt",
+      "url": "https://openai.com/news/",
+      "final_url": null,
+      "status": "403",
+      "title": "Just a moment...",
+      "chars": 0,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openai",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": "Read in a headed browser (Cloudflare blocked headless)."
+    },
+    {
+      "file": "retry-2.txt",
+      "url": "https://www.perplexity.ai/hub/careers",
+      "final_url": null,
+      "status": "403",
+      "title": "Just a moment...",
+      "chars": 265,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-perplexity",
+          "role": "evidence",
+          "label": "Careers page: San Francisco is Perplexity's home base"
+        }
+      ],
+      "note": "UNREADABLE: Cloudflare 'Just a moment...' challenge on every attempt, headless and headed; perplexity.ai/hub/about and /hub/legal/privacy-policy are challenged too. Perplexity's terms of service DID load: https://www.perplexity.ai/hub/legal/terms-of-service (text in r12-pplx-terms.txt)."
+    },
+    {
+      "file": "retry-3.txt",
+      "url": "https://x.ai/news",
+      "final_url": null,
+      "status": "200",
+      "title": "News: Research, Product & Company Updates | SpaceXAI",
+      "chars": 12385,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xai",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": "Read in a headed browser (Cloudflare blocked headless)."
+    },
+    {
+      "file": "retry-4.txt",
+      "url": "https://ir.mi.com/investor-resources/ir-contacts",
+      "final_url": null,
+      "status": "502",
+      "title": null,
+      "chars": 23,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-xiaomi",
+          "role": "evidence",
+          "label": "Investor relations contacts giving the Xiaomi Campus address in Haidian District, Beijing"
+        }
+      ],
+      "note": "Read in a headed browser."
+    },
+    {
+      "file": "retry-5.txt",
+      "url": "https://www.openbmb.org/en/about-us",
+      "final_url": null,
+      "status": "502",
+      "title": null,
+      "chars": 23,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-openbmb",
+          "role": "evidence",
+          "label": "About page: OpenBMB is founded and supported by THUNLP and ModelBest Inc."
+        }
+      ],
+      "note": "www.openbmb.org does not respond ('upstream request failed', 3 attempts). The OpenBMB site now lives at openbmb.cn: https://www.openbmb.cn/en/about-us is a 404, and the About page linked from the site nav is https://www.openbmb.cn/en/about (text, with milestone list expanded and logo alt text, in r7-openbmb-about.txt)."
+    },
+    {
+      "file": "retry-6.txt",
+      "url": "https://www.openbmb.cn/en/about-us",
+      "final_url": null,
+      "status": "200",
+      "title": "OpenBMB · Big Model for Everyone",
+      "chars": 33,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "retry-7.txt",
+      "url": "https://www.vivgrid.com/privacy",
+      "final_url": "https://vivgrid.com/privacy",
+      "status": "200",
+      "title": null,
+      "chars": 129,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-vivgrid",
+          "role": "evidence",
+          "label": "Privacy policy: Allegro US, LLC (Vivgrid)"
+        }
+      ],
+      "note": "www.vivgrid.com does not respond ('upstream request failed'); the same page at https://vivgrid.com/privacy loads (this text)."
+    },
+    {
+      "file": "retry-8.txt",
+      "url": "https://vivgrid.com/privacy",
+      "final_url": null,
+      "status": "200",
+      "title": "Privacy Policy – Vivgrid | User Data Protection & Security | Vivgrid",
+      "chars": 3945,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "retry-9.txt",
+      "url": "https://www.sec.gov/Archives/edgar/data/0001577552/000119312526231755/baba-20260331.htm",
+      "final_url": null,
+      "status": "403",
+      "title": "SEC.gov | Your Request Originates from an Undeclared Automated Tool",
+      "chars": 2936,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-alibaba",
+          "role": "evidence",
+          "label": "Form 20-F for fiscal 2026: a Cayman Islands holding company whose major businesses have their principal executive offices in Hangzhou"
+        }
+      ],
+      "note": "Read in a headed browser (the first fetch got SEC's automated-tool block)."
+    },
+    {
+      "file": "x1-aikido-altar.txt",
+      "url": "https://www.aikido.dev/blog/aikido-altar-open-weight-ai-sovereign-security",
+      "final_url": null,
+      "status": "200",
+      "title": "Aikido Altar: open-weight AI for sovereign security",
+      "chars": 16773,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "x1-arcee-home.txt",
+      "url": "https://www.arcee.ai/",
+      "final_url": null,
+      "status": "200",
+      "title": "Arcee AI | Building Open Intelligence",
+      "chars": 2258,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-arcee-ai",
+          "role": "site"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "x1-mistral-chat.txt",
+      "url": "https://chat.mistral.ai/",
+      "final_url": "https://chat.mistral.ai/chat",
+      "status": "403",
+      "title": "Just a moment...",
+      "chars": 263,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "x1-mistral-lechat.txt",
+      "url": "https://mistral.ai/products/le-chat",
+      "final_url": "https://mistral.ai/products/vibe/",
+      "status": "200",
+      "title": "Mistral Vibe (formerly Le Chat) - AI chat and coding agent",
+      "chars": 7568,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "x1-trendyol-asure.txt",
+      "url": "https://huggingface.co/Trendyol/Trendyol-LLM-Asure-12B",
+      "final_url": null,
+      "status": "200",
+      "title": "Trendyol/Trendyol-LLM-Asure-12B · Hugging Face",
+      "chars": 10788,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "x1-vertex-docs.txt",
+      "url": "https://cloud.google.com/vertex-ai/generative-ai/docs",
+      "final_url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models",
+      "status": "200",
+      "title": "Overview of models on Agent Platform  |  Gemini Enterprise Agent Platform  |  Google Cloud Documentation",
+      "chars": 5419,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "x1-writer-newsroom.txt",
+      "url": "https://writer.com/newsroom/",
+      "final_url": null,
+      "status": "200",
+      "title": "WRITER Newsroom | Press Releases",
+      "chars": 14800,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-writer",
+          "role": "channel",
+          "kind": "news"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "x2-ms-privacy.txt",
+      "url": "https://www.microsoft.com/en-us/privacy/privacystatement",
+      "final_url": null,
+      "status": "200",
+      "title": "Microsoft Privacy Statement – Microsoft privacy",
+      "chars": 234494,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-microsoft",
+          "role": "evidence",
+          "label": "Privacy statement naming Microsoft Corporation, One Microsoft Way, Redmond"
+        }
+      ],
+      "note": null
+    },
+    {
+      "file": "x2-vispark-2.txt",
+      "url": "https://vispark.in/privacy",
+      "final_url": null,
+      "status": "200",
+      "title": "Privacy Policy - Vispark",
+      "chars": 4911,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "x2-vispark-3.txt",
+      "url": "https://vispark.in/terms",
+      "final_url": null,
+      "status": "200",
+      "title": "Terms of Service - Vispark",
+      "chars": 9242,
+      "pdf_text": false,
+      "cited_by": [],
+      "note": null
+    },
+    {
+      "file": "x2-vispark-home.txt",
+      "url": "https://vispark.in/",
+      "final_url": null,
+      "status": "200",
+      "title": "Vispark - Everything you Need",
+      "chars": 3980,
+      "pdf_text": false,
+      "cited_by": [
+        {
+          "lab": "lab-vispark",
+          "role": "site"
+        }
+      ],
+      "note": null
+    }
+  ]
+}

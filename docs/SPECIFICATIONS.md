@@ -39,7 +39,7 @@ Then choose the single integration scope that best answers “what boundary does
 5. Relate records only when the relationship aids navigation. A relationship is not a compatibility claim.
 6. Run synchronization, validation, all tests, and the specification browser checks in [`WEB.md`](WEB.md).
 
-Specifications are never scored, sorted by popularity, or assigned a system family. See [ADR 008](adr/008-specifications-are-unscored-artifacts.md).
+Specifications are never scored, sorted by popularity, or assigned a system family. Star counts are descriptive live metadata on cards for records with a repository, refreshed from GitHub alongside systems and runtimes; they never enter a score and the scope stays alphabetical with no stars sort. See [ADR 008](adr/008-specifications-are-unscored-artifacts.md).
 
 ## Current coverage
 

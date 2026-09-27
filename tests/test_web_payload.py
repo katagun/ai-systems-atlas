@@ -199,7 +199,13 @@ class WebPayloadTests(unittest.TestCase):
                 details[record_id]["source_metadata"],
             )
             self.assertEqual(
-                {"family", "modalities", "reported_open_weights", "reported_license"},
+                {
+                    "family",
+                    "modalities",
+                    "reported_open_weights",
+                    "reported_license",
+                    "release_date",
+                },
                 set(entry["source_metadata"]),
             )
 
@@ -216,6 +222,10 @@ class WebPayloadTests(unittest.TestCase):
                         continue
                     items = value if isinstance(value, list) else [value]
                     for item in items:
+                        # A robot's named_models entry is indexed by its name
+                        # alone (searchable_text), never as the whole dict.
+                        if isinstance(item, dict):
+                            item = item["name"]
                         self.assertIn(
                             str(item).lower(),
                             text,

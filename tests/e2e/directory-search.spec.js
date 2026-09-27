@@ -65,6 +65,9 @@ test("the atlas orbital field spans the five landscape nodes", async ({ page }) 
   await expect(page.locator(".atlas-map .map-node")).toHaveCount(5);
   await expect(page.locator(".atlas-map .map-orbit")).toHaveCount(5);
   await expect(page.locator(".atlas-map .map-orbit").first()).toBeVisible();
+
+  // Every node is labelled; a colour legend could only disagree with them.
+  await expect(page.locator(".atlas-map .map-legend")).toHaveCount(0);
 });
 
 test("superseded systems leave the active view and link to their successor", async ({ page }) => {
@@ -206,7 +209,7 @@ test("the unified directory distinguishes and opens systems and inference servic
   await expect(serviceCard).toHaveCount(1);
   await expect(serviceCard.locator(".family-label")).toContainText("Inference service · Direct model API");
   await expect(serviceCard.locator(".score-ring")).toHaveCount(0);
-  await serviceCard.getByRole("button", { name: "View details →" }).click();
+  await serviceCard.getByRole("button", { name: /^View details for / }).click();
   await expect(page.locator("#inference-dialog")).toContainText("Inference-service score");
   await page.locator("#inference-dialog .dialog-close").click();
 
@@ -214,7 +217,7 @@ test("the unified directory distinguishes and opens systems and inference servic
   const systemCard = page.locator("#all-directory-grid .project-card");
   await expect(systemCard).toHaveCount(1);
   await expect(systemCard.locator(".family-label")).toContainText("System · Agent system");
-  await systemCard.getByRole("button", { name: "View details →" }).click();
+  await systemCard.getByRole("button", { name: /^View details for / }).click();
   await expect(page.locator("#project-dialog")).toContainText("Kilo Code");
 });
 
@@ -241,7 +244,7 @@ test("vendor instruction conventions are searchable and inspectable", async ({ p
   }
 
   await page.locator("#specification-search").fill("GEMINI.md");
-  await page.getByRole("button", { name: "View details →" }).click();
+  await page.getByRole("button", { name: /^View details for / }).click();
   await expect(page.locator("#specification-dialog")).toContainText("Gemini CLI");
   await expect(page.locator("#specification-dialog")).toContainText("Specifications are classified, not scored");
 });
@@ -256,7 +259,7 @@ test("new protocol layers are searchable and keep their boundaries distinct", as
   }
 
   await page.locator("#specification-search").fill("OASF");
-  await page.getByRole("button", { name: "View details →" }).click();
+  await page.getByRole("button", { name: /^View details for / }).click();
   await expect(page.locator("#specification-dialog")).toContainText("Metadata schema");
   await expect(page.locator("#specification-dialog")).toContainText("Agent identity and discovery");
 });
@@ -296,7 +299,7 @@ test("inference services combine filters and expose the dedicated service score"
   await expect(page.locator("#inference-grid .project-card h2")).toHaveText("Amazon Bedrock");
   await expect(page.locator("#inference-grid .score-ring")).toHaveText("8.9");
 
-  await page.getByRole("button", { name: "View details →" }).click();
+  await page.getByRole("button", { name: /^View details for / }).click();
   await expect(page.locator("#inference-dialog")).toContainText("Service boundary");
   await expect(page.locator("#inference-dialog")).toContainText("Governing terms");
   await expect(page.locator("#inference-dialog")).toContainText("Inference-service score");
@@ -349,7 +352,8 @@ test("the Memory, Agents, and Assistants chips jump straight into their filtered
 
   await page.getByRole("button", { name: /^Memory / }).click();
   await expect(page).toHaveURL(/collection=systems/);
-  await expect(page.getByRole("button", { name: /^Systems / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: /^Systems / })).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator('.collection-switcher [aria-pressed="true"]')).toHaveCount(1);
   await expect(page.getByRole("button", { name: /^Memory / })).toHaveAttribute("aria-pressed", "true");
   await expect(page.getByRole("button", { name: /^Agents / })).toHaveAttribute("aria-pressed", "false");
   await expect(page.locator("#family-filter")).toHaveValue("memory_system");
@@ -459,7 +463,7 @@ test("Perplexity assistant, Computer, and API remain distinct directory records"
 
   const assistantCard = cards.filter({ has: page.getByRole("heading", { name: "Perplexity", exact: true }) });
   await expect(assistantCard.locator(".family-label")).toContainText("System · Assistant system");
-  await assistantCard.getByRole("button", { name: "View details →" }).click();
+  await assistantCard.getByRole("button", { name: /^View details for / }).click();
   await expect(page.locator("#project-dialog")).toContainText("Assistant-system score");
   await expect(page.locator("#project-dialog")).toContainText("Multi-provider");
 });
@@ -487,7 +491,8 @@ test("finder offers assistant outcomes and preserves the selected role", async (
   await expect(page.locator(".finder-results h3").filter({ hasText: /^T3 Chat$/ })).toHaveCount(1);
   await expect(page.locator(".finder-result").filter({ hasText: "T3 Chat" }).locator(".card-monogram")).toHaveText("T");
   await page.getByRole("button", { name: "Browse matches →" }).click();
-  await expect(page.getByRole("button", { name: /^Systems / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByRole("button", { name: /^Systems / })).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator('.collection-switcher [aria-pressed="true"]')).toHaveCount(1);
   await expect(page).toHaveURL(/collection=systems/);
   await expect(page.locator("#family-filter")).toHaveValue("assistant_system");
   await expect(page.locator("#role-filter")).toHaveValue("multi_model_chat_client");
@@ -670,4 +675,37 @@ test("the systems deployment filter reaches systems installed into a host agent"
   await page.locator("#deployment-filter").selectOption("host_pack");
   const names = page.locator("#project-grid .project-card h2");
   await expect(names.filter({ hasText: /^Superpowers$/ })).toHaveCount(1);
+});
+
+test("every family chip counts exactly the systems it lists", async ({ page }) => {
+  await page.goto("/");
+  // Memory goes first, so Systems has a family to clear.
+  for (const name of ["Memory", "Systems", "Agents", "Assistants"]) {
+    const chip = page.getByRole("button", { name: new RegExp(`^${name} \\d`) });
+    const count = Number((await chip.locator("strong").textContent()).trim());
+    await chip.click();
+    await expect(page.locator("#result-count")).toContainText(new RegExp(`^${count} projects?\\b`));
+    await expect(page.locator('.collection-switcher [aria-pressed="true"]')).toHaveCount(1);
+    await expect(chip).toHaveAttribute("aria-pressed", "true");
+  }
+});
+
+test("the Systems chip lists every active system after a Finder handoff", async ({ page }) => {
+  // Straight from the handoff, and by way of All, which keeps the family.
+  for (const via of [[], ["All"]]) {
+    await page.goto("/?view=finder");
+    for (const value of ["agent_system", "coding", "balanced"]) {
+      await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
+    }
+    await page.locator("[data-finder-directory]").click();
+    await expect(page.locator("#result-count")).toContainText("Finder match");
+    for (const name of via) await page.getByRole("button", { name: new RegExp(`^${name} \\d`) }).click();
+    const systems = page.getByRole("button", { name: /^Systems \d/ });
+    const count = Number((await systems.locator("strong").textContent()).trim());
+    await systems.click();
+    await expect(page.locator("#result-count")).toHaveText(`${count} projects · Scores hidden across families`);
+    await expect(page.locator('.collection-switcher [aria-pressed="true"]')).toHaveCount(1);
+    await expect(systems).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator("#finder-roles-chip")).toBeHidden();
+  }
 });

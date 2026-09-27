@@ -90,7 +90,7 @@ The refresh is transactional at the repository level:
 
 Transport failures preserve existing project metadata. `404` and `410` are conclusive and mark a GitHub-hosted project `removed`. Partial official-feed failures are warnings; an all-source failure aborts before writes. Official discovery never fetches article pages; attention-source discovery must, and does so through the hardened arbitrary-host path — see [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md). Automated refreshes never edit editorial fields.
 
-The same run also refreshes GitHub star counts for `directory/local-runtimes.json` records that carry a `repo`. This is a separate, lower-stakes pass: it only ever updates `stars` and `stars_verified_at`, it does not participate in the 80% success gate or license-drift machinery above, and a per-repository failure is a warning that leaves the existing value in place rather than an aborting condition. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md). `directory/packs.json`, `directory/labs.json`, and `directory/robots.json` carry no stars and are never touched by this pass.
+The same run also refreshes GitHub star counts for `directory/local-runtimes.json`, `directory/packs.json`, and `directory/specifications.json` records that carry a `repo`. This is a separate, lower-stakes pass: it only ever updates `stars` and `stars_verified_at`, it does not participate in the 80% success gate or license-drift machinery above, and a per-repository failure is a warning that leaves the existing value in place rather than an aborting condition. See [`LOCAL_RUNTIMES.md`](LOCAL_RUNTIMES.md). `directory/labs.json` and `directory/robots.json` carry no stars and are never touched by this pass.
 
 models.dev discovery is a separate fail-closed import:
 
@@ -219,6 +219,29 @@ For each URL the import keeps an entry found in only one cache, prefers the entr
 after a strictly newer human review of every reference, and otherwise keeps the most
 recently checked entry. When two baselines agree it keeps any open drift; when they disagree
 without a newer review it opens terms drift, so a person decides which page is right.
+
+## Reading a cited page directly
+
+Quote a page only after reading it yourself. A search-engine extract is a lead, not a read: the
+2026-09-25 lab re-read ([`LAB_REREAD_2026-09-25.md`](LAB_REREAD_2026-09-25.md)) found labels no
+page supported, and a filing cited as one company's annual report that was another's. Read each
+page as a browser shows it:
+
+```bash
+node scripts/read_page.mjs --out page-reads <url>...
+xvfb-run -a node scripts/read_page.mjs --headed --out page-reads <url>   # pages that render only in a full browser
+node scripts/read_page.mjs --full-text --out page-reads <url>            # text in collapsed sections and long filings
+xvfb-run -a node scripts/read_page.mjs --headed --from <page> <pdf-url>  # a document served only from its host's own link
+```
+
+Each page is saved as text headed by its URL, final URL, status, and title, and a PDF is saved
+as a file for text extraction, for example with `uv run --with pypdf`. The browser uses
+`HTTPS_PROXY` when it is set, and `CHROMIUM_PATH` names the browser binary where Playwright's
+own download is absent. SEC EDGAR asks automated clients to declare themselves, so pass
+`--user-agent` with a maintainer contact rather than reading EDGAR anonymously. The script never
+solves a challenge or disguises the browser: when a page stays behind a bot check or an error,
+record it as unreadable and cite a first-party page that can be read, as the lab re-read did for
+Perplexity's careers page and ByteDance's offices page.
 
 ## The two-fetch rule for a robot's evidence
 

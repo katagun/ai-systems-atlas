@@ -257,6 +257,7 @@ class RouteTests(unittest.TestCase):
             ),
             "router": listing_row("openrouter/auto"),
             "cloaked model": listing_row("OpenRouter/sonoma-sky-alpha"),
+            "stealth program": listing_row("stealth/space-bunny-alpha"),
             "image only": listing_row(
                 "acme/painter",
                 architecture={"input_modalities": ["text"], "output_modalities": []},
@@ -341,6 +342,14 @@ class MatchingTests(unittest.TestCase):
         )
         self.assertEqual(
             "meta/llama-3.3", with_models_dev_author("Meta-Llama/llama-3.3")
+        )
+        # OpenRouter lists ByteDance under both names; models.dev has only bytedance-seed.
+        self.assertEqual(
+            "bytedance-seed/ui-tars-1.5-7b",
+            with_models_dev_author("bytedance/ui-tars-1.5-7b"),
+        )
+        self.assertEqual(
+            "bytedance-seed/seed-1.6", with_models_dev_author("bytedance-seed/seed-1.6")
         )
         self.assertEqual("acme/qwen/x", with_models_dev_author("acme/qwen/x"))
 

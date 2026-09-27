@@ -113,6 +113,17 @@ function reviewedModelsDevelopedBy(labId) {
   return reviewedModelNames(model => names.has(model.developer));
 }
 
+// The Models release sort's order (web/app-core.js releasesNewestFirst): newest
+// models.dev release date first, ties and undated releases by name.
+function reviewedModelsDevelopedByNewestFirst(labId) {
+  const names = labDeveloperNames(labId);
+  const date = model => model.source_metadata?.release_date || "";
+  return reviewedModels
+    .filter(model => names.has(model.developer))
+    .sort((a, b) => date(b).localeCompare(date(a)) || a.name.localeCompare(b.name))
+    .map(model => model.name);
+}
+
 // A lab dialog's longest unbroken strings are a channel URL and a word in the
 // lab's name; the phone-width check opens the lab with the longest of each.
 function labIdWithLongest(measure) {
@@ -145,6 +156,7 @@ module.exports = {
   labsWithReleaseDistribution,
   labsMatching,
   reviewedModelsDevelopedBy,
+  reviewedModelsDevelopedByNewestFirst,
   labIdWithLongestChannel: labIdWithLongest(lab => Math.max(...lab.channels.map(channel => channel.url.length))),
   labIdWithLongestNameWord: labIdWithLongest(lab => Math.max(...lab.name.split(/\s+/).map(word => word.length))),
 };

@@ -12,6 +12,7 @@ from scripts.validate_directory import (
     MODELS_DEV_REPO,
     PUBLISHED_DATA,
     validate,
+    weighted_overall,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -341,6 +342,32 @@ class ValidationPolicyTests(unittest.TestCase):
             any("does not match weighted" in error for error in errors), errors
         )
 
+    def test_weighted_overall_sums_exactly_on_every_python(self) -> None:
+        # The gemini-apps assistant score: its weighted parts total exactly 8.915.
+        # Summed left to right in floats, as sum() does before Python 3.12, they
+        # land just below that and round to 8.91 against the stored 8.92.
+        weights = {
+            "task_reliability": 0.19,
+            "context_continuity": 0.14,
+            "tools_integrations": 0.13,
+            "human_control": 0.13,
+            "data_governance": 0.13,
+            "interoperability": 0.1,
+            "usability_access": 0.08,
+            "maturity": 0.1,
+        }
+        score = {
+            "task_reliability": 9.0,
+            "context_continuity": 9.0,
+            "tools_integrations": 9.5,
+            "human_control": 8.7,
+            "data_governance": 8.1,
+            "interoperability": 8.4,
+            "usability_access": 9.2,
+            "maturity": 9.5,
+        }
+        self.assertEqual(8.92, weighted_overall(score, weights))
+
     def test_local_runtime_rejects_unknown_accelerator(self) -> None:
         def mutate(runtime, root):
             runtime["accelerators"] = ["quantum"]
@@ -518,10 +545,8 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = self.catalog_with_pack()
         self.assertFalse([error for error in errors if "sample-pack" in error], errors)
 
-    def test_pack_rejects_every_scoring_and_popularity_field(self) -> None:
+    def test_pack_rejects_every_scoring_field(self) -> None:
         for field, value in (
-            ("stars", 10),
-            ("stars_verified_at", "2026-09-16"),
             ("score", {"overall": 5}),
             ("score_profile", "agent_system"),
             ("system_family", "agent_system"),
@@ -537,6 +562,24 @@ class ValidationPolicyTests(unittest.TestCase):
                     any(f"{field} is never recorded on a pack" in e for e in errors),
                     errors,
                 )
+
+    def test_pack_stars_are_descriptive_live_metadata(self) -> None:
+        def mutate_valid(pack, root):
+            pack["stars"] = 10
+            pack["stars_verified_at"] = "2026-09-24"
+
+        errors = self.catalog_with_pack(mutate_valid)
+        self.assertFalse([error for error in errors if "sample-pack" in error], errors)
+
+        def mutate_unstamped(pack, root):
+            pack["stars"] = 10
+            pack.pop("stars_verified_at", None)
+
+        errors = self.catalog_with_pack(mutate_unstamped)
+        self.assertTrue(
+            any("populated stars require stars_verified_at" in e for e in errors),
+            errors,
+        )
 
     def test_pack_rejects_unknown_type_host_and_install_mechanism(self) -> None:
         for field, value, message in (

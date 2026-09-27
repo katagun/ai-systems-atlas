@@ -10,25 +10,73 @@
       "scope": "tool_data_integration",
       "status": "published",
       "current_version": "2026-07-28",
-      "stewards": ["Model Context Protocol project"],
+      "stewards": [
+        "Model Context Protocol project"
+      ],
       "repo": "modelcontextprotocol/modelcontextprotocol",
       "url": "https://modelcontextprotocol.io/specification/latest",
       "description": "A client–server protocol for connecting AI applications to tools, resources, prompts, and external context.",
       "standardizes": "Capability negotiation, lifecycle, JSON-RPC messages, tools, resources, prompts, sampling, and related client–server features.",
       "does_not_standardize": "Agent-to-agent task delegation, an agent runtime, or how applications rank and use retrieved context.",
-      "licenses": ["Apache-2.0", "MIT", "CC-BY-4.0"],
+      "licenses": [
+        "Apache-2.0",
+        "MIT",
+        "CC-BY-4.0"
+      ],
       "license_note": "The repository documents a transition: the current specification and new contributions use Apache-2.0, earlier contributions retain MIT, and non-specification documentation uses CC BY 4.0.",
-      "related_specifications": ["a2a", "ag-ui", "webmcp"],
+      "related_specifications": [
+        "a2a",
+        "ag-ui",
+        "webmcp"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed specification snapshot", "path": "docs/specification/2026-07-28/index.mdx", "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2026-07-28/index.mdx", "blob_sha": "452d78601b135b95bbe45287e756c0579534096b", "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/452d78601b135b95bbe45287e756c0579534096b"},
-        {"kind": "web", "label": "Current specification", "url": "https://modelcontextprotocol.io/specification/latest", "verified_at": "2026-08-25"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed specification snapshot",
+          "path": "docs/specification/2026-07-28/index.mdx",
+          "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/docs/specification/2026-07-28/index.mdx",
+          "blob_sha": "452d78601b135b95bbe45287e756c0579534096b",
+          "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/452d78601b135b95bbe45287e756c0579534096b"
+        },
+        {
+          "kind": "web",
+          "label": "Current specification",
+          "url": "https://modelcontextprotocol.io/specification/latest",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Current specification and new repository contributions", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/LICENSE", "blob_sha": "4a93985763241755401a10678395303de4e720ba", "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/4a93985763241755401a10678395303de4e720ba"},
-        {"license_id": "MIT", "scope": "Contributions predating the documented license transition", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/LICENSE", "blob_sha": "4a93985763241755401a10678395303de4e720ba", "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/4a93985763241755401a10678395303de4e720ba"},
-        {"license_id": "CC-BY-4.0", "scope": "Repository documentation outside the normative specification", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/LICENSE", "blob_sha": "4a93985763241755401a10678395303de4e720ba", "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/4a93985763241755401a10678395303de4e720ba"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Current specification and new repository contributions",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/LICENSE",
+          "blob_sha": "4a93985763241755401a10678395303de4e720ba",
+          "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/4a93985763241755401a10678395303de4e720ba"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "Contributions predating the documented license transition",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/LICENSE",
+          "blob_sha": "4a93985763241755401a10678395303de4e720ba",
+          "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/4a93985763241755401a10678395303de4e720ba"
+        },
+        {
+          "license_id": "CC-BY-4.0",
+          "scope": "Repository documentation outside the normative specification",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/LICENSE",
+          "blob_sha": "4a93985763241755401a10678395303de4e720ba",
+          "immutable_url": "https://api.github.com/repos/modelcontextprotocol/modelcontextprotocol/git/blobs/4a93985763241755401a10678395303de4e720ba"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": 9298,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "a2a",
@@ -38,23 +86,54 @@
       "scope": "agent_interaction",
       "status": "published",
       "current_version": "1.0.0",
-      "stewards": ["A2A Project", "Linux Foundation"],
+      "stewards": [
+        "A2A Project",
+        "Linux Foundation"
+      ],
       "repo": "a2aproject/A2A",
       "url": "https://a2a-protocol.org/latest/specification/",
       "description": "An interoperability protocol for discovering independent agents, delegating tasks, and exchanging messages and artifacts.",
       "standardizes": "Agent cards, task lifecycle, messages, artifacts, streaming, push notifications, and authenticated agent-to-agent interaction.",
       "does_not_standardize": "Tool access inside an agent, the agent's internal planner, or front-end event rendering.",
-      "licenses": ["Apache-2.0"],
+      "licenses": [
+        "Apache-2.0"
+      ],
       "license_note": "The specification repository is licensed under Apache-2.0.",
-      "related_specifications": ["mcp", "ag-ui", "anp"],
+      "related_specifications": [
+        "mcp",
+        "ag-ui",
+        "anp"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed specification snapshot", "path": "docs/specification.md", "url": "https://github.com/a2aproject/A2A/blob/main/docs/specification.md", "blob_sha": "6d38bbfb03a036371cf03cca1331a510f603c1e9", "immutable_url": "https://api.github.com/repos/a2aproject/A2A/git/blobs/6d38bbfb03a036371cf03cca1331a510f603c1e9"},
-        {"kind": "web", "label": "Published specification", "url": "https://a2a-protocol.org/latest/specification/", "verified_at": "2026-08-25"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed specification snapshot",
+          "path": "docs/specification.md",
+          "url": "https://github.com/a2aproject/A2A/blob/main/docs/specification.md",
+          "blob_sha": "6d38bbfb03a036371cf03cca1331a510f603c1e9",
+          "immutable_url": "https://api.github.com/repos/a2aproject/A2A/git/blobs/6d38bbfb03a036371cf03cca1331a510f603c1e9"
+        },
+        {
+          "kind": "web",
+          "label": "Published specification",
+          "url": "https://a2a-protocol.org/latest/specification/",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Specification repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/a2aproject/A2A/blob/main/LICENSE", "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7", "immutable_url": "https://api.github.com/repos/a2aproject/A2A/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Specification repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/a2aproject/A2A/blob/main/LICENSE",
+          "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+          "immutable_url": "https://api.github.com/repos/a2aproject/A2A/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": 25918,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "ag-ui",
@@ -64,23 +143,53 @@
       "scope": "agent_user_interaction",
       "status": "evolving",
       "current_version": null,
-      "stewards": ["AG-UI project", "CopilotKit"],
+      "stewards": [
+        "AG-UI project",
+        "CopilotKit"
+      ],
       "repo": "ag-ui-protocol/ag-ui",
       "url": "https://docs.ag-ui.com/introduction",
       "description": "An event-based protocol for connecting agent runtimes to user-facing applications and interactive front ends.",
       "standardizes": "Streaming events for messages, tools, state, lifecycle, and human-in-the-loop interaction between agents and applications.",
       "does_not_standardize": "Agent-to-agent delegation, model-to-tool discovery, or a specific component library and visual design.",
-      "licenses": ["MIT"],
+      "licenses": [
+        "MIT"
+      ],
       "license_note": "The reference repository is licensed under MIT.",
-      "related_specifications": ["mcp", "a2a"],
+      "related_specifications": [
+        "mcp",
+        "a2a"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed project overview", "path": "README.md", "url": "https://github.com/ag-ui-protocol/ag-ui/blob/main/README.md", "blob_sha": "5978215532f62a0a13e6a4a577c08a35c1638c09", "immutable_url": "https://api.github.com/repos/ag-ui-protocol/ag-ui/git/blobs/5978215532f62a0a13e6a4a577c08a35c1638c09"},
-        {"kind": "web", "label": "Current protocol documentation", "url": "https://docs.ag-ui.com/introduction", "verified_at": "2026-08-25"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed project overview",
+          "path": "README.md",
+          "url": "https://github.com/ag-ui-protocol/ag-ui/blob/main/README.md",
+          "blob_sha": "5978215532f62a0a13e6a4a577c08a35c1638c09",
+          "immutable_url": "https://api.github.com/repos/ag-ui-protocol/ag-ui/git/blobs/5978215532f62a0a13e6a4a577c08a35c1638c09"
+        },
+        {
+          "kind": "web",
+          "label": "Current protocol documentation",
+          "url": "https://docs.ag-ui.com/introduction",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "MIT", "scope": "Protocol repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/ag-ui-protocol/ag-ui/blob/main/LICENSE", "blob_sha": "b77bf2ab726c6e7cb5a81a9d3b7dc38266ebfd3d", "immutable_url": "https://api.github.com/repos/ag-ui-protocol/ag-ui/git/blobs/b77bf2ab726c6e7cb5a81a9d3b7dc38266ebfd3d"}
+        {
+          "license_id": "MIT",
+          "scope": "Protocol repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/ag-ui-protocol/ag-ui/blob/main/LICENSE",
+          "blob_sha": "b77bf2ab726c6e7cb5a81a9d3b7dc38266ebfd3d",
+          "immutable_url": "https://api.github.com/repos/ag-ui-protocol/ag-ui/git/blobs/b77bf2ab726c6e7cb5a81a9d3b7dc38266ebfd3d"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": 16025,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "acp",
@@ -90,23 +199,53 @@
       "scope": "agent_client_integration",
       "status": "evolving",
       "current_version": "2",
-      "stewards": ["Agent Client Protocol project", "Zed Industries"],
+      "stewards": [
+        "Agent Client Protocol project",
+        "Zed Industries"
+      ],
       "repo": "agentclientprotocol/agent-client-protocol",
       "url": "https://agentclientprotocol.com/get-started/introduction",
       "description": "A protocol for connecting coding agents to editors, IDEs, and other interactive clients.",
       "standardizes": "Session setup, prompts, streamed updates, tool calls, permissions, files, terminals, and client–agent capabilities.",
       "does_not_standardize": "Agent-to-agent coordination, general model tool discovery, or repository instruction-file semantics.",
-      "licenses": ["Apache-2.0"],
+      "licenses": [
+        "Apache-2.0"
+      ],
       "license_note": "The protocol repository is licensed under Apache-2.0.",
-      "related_specifications": ["agents-md", "claude-md"],
+      "related_specifications": [
+        "agents-md",
+        "claude-md"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed protocol v2 overview", "path": "docs/protocol/v2/overview.mdx", "url": "https://github.com/agentclientprotocol/agent-client-protocol/blob/main/docs/protocol/v2/overview.mdx", "blob_sha": "8887dce3b0ab47af291c68e6bdab51fc1f5fa510", "immutable_url": "https://api.github.com/repos/agentclientprotocol/agent-client-protocol/git/blobs/8887dce3b0ab47af291c68e6bdab51fc1f5fa510"},
-        {"kind": "web", "label": "Current protocol documentation", "url": "https://agentclientprotocol.com/get-started/introduction", "verified_at": "2026-08-25"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed protocol v2 overview",
+          "path": "docs/protocol/v2/overview.mdx",
+          "url": "https://github.com/agentclientprotocol/agent-client-protocol/blob/main/docs/protocol/v2/overview.mdx",
+          "blob_sha": "8887dce3b0ab47af291c68e6bdab51fc1f5fa510",
+          "immutable_url": "https://api.github.com/repos/agentclientprotocol/agent-client-protocol/git/blobs/8887dce3b0ab47af291c68e6bdab51fc1f5fa510"
+        },
+        {
+          "kind": "web",
+          "label": "Current protocol documentation",
+          "url": "https://agentclientprotocol.com/get-started/introduction",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Protocol repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/agentclientprotocol/agent-client-protocol/blob/main/LICENSE", "blob_sha": "1de02305f81f6dc087b6229a1d86a31774d2fa31", "immutable_url": "https://api.github.com/repos/agentclientprotocol/agent-client-protocol/git/blobs/1de02305f81f6dc087b6229a1d86a31774d2fa31"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Protocol repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/agentclientprotocol/agent-client-protocol/blob/main/LICENSE",
+          "blob_sha": "1de02305f81f6dc087b6229a1d86a31774d2fa31",
+          "immutable_url": "https://api.github.com/repos/agentclientprotocol/agent-client-protocol/git/blobs/1de02305f81f6dc087b6229a1d86a31774d2fa31"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": 4318,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "agents-md",
@@ -116,24 +255,67 @@
       "scope": "project_instructions",
       "status": "evolving",
       "current_version": null,
-      "stewards": ["AGENTS.md community", "OpenAI"],
+      "stewards": [
+        "AGENTS.md community",
+        "OpenAI"
+      ],
       "repo": "agentsmd/agents.md",
       "url": "https://agents.md/",
       "description": "An open Markdown convention for giving coding agents persistent, repository-scoped instructions.",
       "standardizes": "A discoverable filename and hierarchical placement pattern for human-authored project guidance consumed by compatible agents.",
       "does_not_standardize": "A front-matter schema, an agent wire protocol, tool permissions, or a universal instruction vocabulary.",
-      "licenses": ["MIT"],
+      "licenses": [
+        "MIT"
+      ],
       "license_note": "The reference repository and site source are licensed under MIT.",
-      "related_specifications": ["claude-md", "agent-skills", "acp", "github-copilot-instructions", "gemini-md", "cline-rules", "cursor-rules", "continue-rules", "roo-code-rules", "devin-desktop-rules"],
+      "related_specifications": [
+        "claude-md",
+        "agent-skills",
+        "acp",
+        "github-copilot-instructions",
+        "gemini-md",
+        "cline-rules",
+        "cursor-rules",
+        "continue-rules",
+        "roo-code-rules",
+        "devin-desktop-rules"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed convention overview", "path": "README.md", "url": "https://github.com/agentsmd/agents.md/blob/main/README.md", "blob_sha": "8ce701e74909d5f08e2810380e0ff15f547aa0c8", "immutable_url": "https://api.github.com/repos/agentsmd/agents.md/git/blobs/8ce701e74909d5f08e2810380e0ff15f547aa0c8"},
-        {"kind": "web", "label": "Open convention site", "url": "https://agents.md/", "verified_at": "2026-08-25"},
-        {"kind": "web", "label": "OpenAI implementation guide", "url": "https://developers.openai.com/codex/guides/agents-md", "verified_at": "2026-08-25"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed convention overview",
+          "path": "README.md",
+          "url": "https://github.com/agentsmd/agents.md/blob/main/README.md",
+          "blob_sha": "8ce701e74909d5f08e2810380e0ff15f547aa0c8",
+          "immutable_url": "https://api.github.com/repos/agentsmd/agents.md/git/blobs/8ce701e74909d5f08e2810380e0ff15f547aa0c8"
+        },
+        {
+          "kind": "web",
+          "label": "Open convention site",
+          "url": "https://agents.md/",
+          "verified_at": "2026-08-25"
+        },
+        {
+          "kind": "web",
+          "label": "OpenAI implementation guide",
+          "url": "https://developers.openai.com/codex/guides/agents-md",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "MIT", "scope": "Reference repository and site source", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/agentsmd/agents.md/blob/main/LICENSE", "blob_sha": "e5ad2c5aa30343f143a5c418004ca1a8d2cfaff4", "immutable_url": "https://api.github.com/repos/agentsmd/agents.md/git/blobs/e5ad2c5aa30343f143a5c418004ca1a8d2cfaff4"}
+        {
+          "license_id": "MIT",
+          "scope": "Reference repository and site source",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/agentsmd/agents.md/blob/main/LICENSE",
+          "blob_sha": "e5ad2c5aa30343f143a5c418004ca1a8d2cfaff4",
+          "immutable_url": "https://api.github.com/repos/agentsmd/agents.md/git/blobs/e5ad2c5aa30343f143a5c418004ca1a8d2cfaff4"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": 24598,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "claude-md",
@@ -143,22 +325,46 @@
       "scope": "project_instructions",
       "status": "vendor_specific",
       "current_version": null,
-      "stewards": ["Anthropic"],
+      "stewards": [
+        "Anthropic"
+      ],
       "repo": null,
       "url": "https://code.claude.com/docs/en/memory",
       "description": "Claude Code's documented Markdown convention for persistent project and user instructions.",
       "standardizes": "Where Claude Code discovers project memory, user instructions, imports, and directory-scoped guidance inside its own product ecosystem.",
       "does_not_standardize": "A vendor-neutral repository instruction format, a wire protocol, or behavior in agents that do not implement Claude Code's convention.",
-      "licenses": ["LicenseRef-Unclear"],
+      "licenses": [
+        "LicenseRef-Unclear"
+      ],
       "license_note": "The product documentation defines the convention, but no standalone reusable format license was identified during review.",
-      "related_specifications": ["agents-md", "agent-skills", "acp", "github-copilot-instructions", "gemini-md", "claude-code-plugins"],
+      "related_specifications": [
+        "agents-md",
+        "agent-skills",
+        "acp",
+        "github-copilot-instructions",
+        "gemini-md",
+        "claude-code-plugins"
+      ],
       "evidence": [
-        {"kind": "web", "label": "Claude Code memory documentation", "url": "https://code.claude.com/docs/en/memory", "verified_at": "2026-09-12"}
+        {
+          "kind": "web",
+          "label": "Claude Code memory documentation",
+          "url": "https://code.claude.com/docs/en/memory",
+          "verified_at": "2026-09-12"
+        }
       ],
       "license_evidence": [
-        {"license_id": "LicenseRef-Unclear", "scope": "CLAUDE.md convention as described in product documentation; no standalone format license identified", "kind": "web_terms", "url": "https://code.claude.com/docs/en/memory", "verified_at": "2026-09-12"}
+        {
+          "license_id": "LicenseRef-Unclear",
+          "scope": "CLAUDE.md convention as described in product documentation; no standalone format license identified",
+          "kind": "web_terms",
+          "url": "https://code.claude.com/docs/en/memory",
+          "verified_at": "2026-09-12"
+        }
       ],
-      "verified_at": "2026-09-12"
+      "verified_at": "2026-09-12",
+      "stars": null,
+      "stars_verified_at": null
     },
     {
       "id": "github-copilot-instructions",
@@ -168,25 +374,69 @@
       "scope": "project_instructions",
       "status": "vendor_specific",
       "current_version": null,
-      "stewards": ["GitHub"],
+      "stewards": [
+        "GitHub"
+      ],
       "repo": "github/docs",
       "url": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions",
       "description": "GitHub Copilot's documented convention for persistent repository-wide and path-specific instructions.",
       "standardizes": "Discovery of .github/copilot-instructions.md and recursive .github/instructions/**/*.instructions.md files, per-surface support for applyTo glob front matter, GitHub.com excludeAgent controls, and documented instruction combination behavior inside Copilot.",
       "does_not_standardize": "Vendor-neutral instruction semantics, AGENTS.md itself, agent execution, permissions, or a wire protocol.",
-      "licenses": ["CC-BY-4.0"],
+      "licenses": [
+        "CC-BY-4.0"
+      ],
       "license_note": "The reviewed GitHub Docs content is licensed under CC BY 4.0; Copilot as a service remains governed separately.",
-      "related_specifications": ["agents-md", "claude-md", "gemini-md"],
+      "related_specifications": [
+        "agents-md",
+        "claude-md",
+        "gemini-md"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed repository-instructions documentation", "path": "content/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions.md", "url": "https://github.com/github/docs/blob/main/content/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions.md", "blob_sha": "7ea3a079698fc014295b245abfcd82bb67a2b243", "immutable_url": "https://api.github.com/repos/github/docs/git/blobs/7ea3a079698fc014295b245abfcd82bb67a2b243"},
-        {"kind": "git_blob", "label": "Reviewed support matrix", "path": "content/copilot/reference/custom-instructions-support.md", "url": "https://github.com/github/docs/blob/main/content/copilot/reference/custom-instructions-support.md", "blob_sha": "88476f69c24e614004063ee3741f712a968425ae", "immutable_url": "https://api.github.com/repos/github/docs/git/blobs/88476f69c24e614004063ee3741f712a968425ae"},
-        {"kind": "git_blob", "label": "Reviewed GitHub Docs content-license scope", "path": "README.md", "url": "https://github.com/github/docs/blob/main/README.md", "blob_sha": "f5730b788246d0e5ffab4e636fefdc4caab31ad0", "immutable_url": "https://api.github.com/repos/github/docs/git/blobs/f5730b788246d0e5ffab4e636fefdc4caab31ad0"},
-        {"kind": "web", "label": "Current GitHub Copilot documentation", "url": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions", "verified_at": "2026-08-25"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed repository-instructions documentation",
+          "path": "content/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions.md",
+          "url": "https://github.com/github/docs/blob/main/content/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions.md",
+          "blob_sha": "7ea3a079698fc014295b245abfcd82bb67a2b243",
+          "immutable_url": "https://api.github.com/repos/github/docs/git/blobs/7ea3a079698fc014295b245abfcd82bb67a2b243"
+        },
+        {
+          "kind": "git_blob",
+          "label": "Reviewed support matrix",
+          "path": "content/copilot/reference/custom-instructions-support.md",
+          "url": "https://github.com/github/docs/blob/main/content/copilot/reference/custom-instructions-support.md",
+          "blob_sha": "88476f69c24e614004063ee3741f712a968425ae",
+          "immutable_url": "https://api.github.com/repos/github/docs/git/blobs/88476f69c24e614004063ee3741f712a968425ae"
+        },
+        {
+          "kind": "git_blob",
+          "label": "Reviewed GitHub Docs content-license scope",
+          "path": "README.md",
+          "url": "https://github.com/github/docs/blob/main/README.md",
+          "blob_sha": "f5730b788246d0e5ffab4e636fefdc4caab31ad0",
+          "immutable_url": "https://api.github.com/repos/github/docs/git/blobs/f5730b788246d0e5ffab4e636fefdc4caab31ad0"
+        },
+        {
+          "kind": "web",
+          "label": "Current GitHub Copilot documentation",
+          "url": "https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/add-custom-instructions/add-repository-instructions",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "CC-BY-4.0", "scope": "GitHub Docs content defining the instruction convention", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/github/docs/blob/main/LICENSE", "blob_sha": "9238c8f9388066fe7cb3b308de35104bb3c9596b", "immutable_url": "https://api.github.com/repos/github/docs/git/blobs/9238c8f9388066fe7cb3b308de35104bb3c9596b"}
+        {
+          "license_id": "CC-BY-4.0",
+          "scope": "GitHub Docs content defining the instruction convention",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/github/docs/blob/main/LICENSE",
+          "blob_sha": "9238c8f9388066fe7cb3b308de35104bb3c9596b",
+          "immutable_url": "https://api.github.com/repos/github/docs/git/blobs/9238c8f9388066fe7cb3b308de35104bb3c9596b"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": 20884,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "gemini-md",
@@ -196,23 +446,53 @@
       "scope": "project_instructions",
       "status": "vendor_specific",
       "current_version": null,
-      "stewards": ["Google"],
+      "stewards": [
+        "Google"
+      ],
       "repo": "google-gemini/gemini-cli",
       "url": "https://geminicli.com/docs/cli/gemini-md/",
       "description": "Gemini CLI's documented convention for persistent user, workspace, and component-level instructional context.",
       "standardizes": "GEMINI.md discovery, global and workspace hierarchy, just-in-time directory loading, concatenation, @ imports, memory commands, and configurable context filenames inside Gemini CLI.",
       "does_not_standardize": "Vendor-neutral precedence, model memory storage, permissions, a wire protocol, or behavior in other agents.",
-      "licenses": ["Apache-2.0"],
+      "licenses": [
+        "Apache-2.0"
+      ],
       "license_note": "The Gemini CLI repository and reviewed documentation are licensed under Apache-2.0; Gemini service terms remain separate.",
-      "related_specifications": ["agents-md", "claude-md", "github-copilot-instructions"],
+      "related_specifications": [
+        "agents-md",
+        "claude-md",
+        "github-copilot-instructions"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed GEMINI.md documentation", "path": "docs/cli/gemini-md.md", "url": "https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/gemini-md.md", "blob_sha": "1e3cdad3b7934a54d78d30083558c80e1b03d3db", "immutable_url": "https://api.github.com/repos/google-gemini/gemini-cli/git/blobs/1e3cdad3b7934a54d78d30083558c80e1b03d3db"},
-        {"kind": "web", "label": "Current Gemini CLI documentation", "url": "https://geminicli.com/docs/cli/gemini-md/", "verified_at": "2026-08-25"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed GEMINI.md documentation",
+          "path": "docs/cli/gemini-md.md",
+          "url": "https://github.com/google-gemini/gemini-cli/blob/main/docs/cli/gemini-md.md",
+          "blob_sha": "1e3cdad3b7934a54d78d30083558c80e1b03d3db",
+          "immutable_url": "https://api.github.com/repos/google-gemini/gemini-cli/git/blobs/1e3cdad3b7934a54d78d30083558c80e1b03d3db"
+        },
+        {
+          "kind": "web",
+          "label": "Current Gemini CLI documentation",
+          "url": "https://geminicli.com/docs/cli/gemini-md/",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Gemini CLI repository and documentation", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/google-gemini/gemini-cli/blob/main/LICENSE", "blob_sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835", "immutable_url": "https://api.github.com/repos/google-gemini/gemini-cli/git/blobs/7a4a3ea2424c09fbe48d455aed1eaa94d9124835"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Gemini CLI repository and documentation",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/google-gemini/gemini-cli/blob/main/LICENSE",
+          "blob_sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
+          "immutable_url": "https://api.github.com/repos/google-gemini/gemini-cli/git/blobs/7a4a3ea2424c09fbe48d455aed1eaa94d9124835"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": 107146,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "cline-rules",
@@ -222,24 +502,64 @@
       "scope": "project_instructions",
       "status": "vendor_specific",
       "current_version": null,
-      "stewards": ["Cline project", "Cline Bot Inc."],
+      "stewards": [
+        "Cline project",
+        "Cline Bot Inc."
+      ],
       "repo": "cline/cline",
       "url": "https://docs.cline.bot/customization/cline-rules",
       "description": "Cline's product convention for persistent workspace and global agent guidance.",
       "standardizes": "Discovery and aggregation of Markdown or text rules under .clinerules/, workspace and global precedence, rule toggles, and optional path-conditional YAML front matter; Cline CLI documents .cline/rules/ separately.",
       "does_not_standardize": "Vendor-neutral instruction semantics, execution permissions, a tool protocol, or a universal instruction vocabulary.",
-      "licenses": ["Apache-2.0"],
+      "licenses": [
+        "Apache-2.0"
+      ],
       "license_note": "The Cline repository and reviewed documentation are licensed under Apache-2.0.",
-      "related_specifications": ["agents-md", "cursor-rules", "devin-desktop-rules", "continue-rules", "roo-code-rules"],
+      "related_specifications": [
+        "agents-md",
+        "cursor-rules",
+        "devin-desktop-rules",
+        "continue-rules",
+        "roo-code-rules"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed Cline Rules documentation", "path": "docs/customization/cline-rules.mdx", "url": "https://github.com/cline/cline/blob/main/docs/customization/cline-rules.mdx", "blob_sha": "24825e05810b86a15e984de1969dcd640af01634", "immutable_url": "https://api.github.com/repos/cline/cline/git/blobs/24825e05810b86a15e984de1969dcd640af01634"},
-        {"kind": "git_blob", "label": "Reviewed Cline CLI layout", "path": "docs/cli/cli-reference.mdx", "url": "https://github.com/cline/cline/blob/main/docs/cli/cli-reference.mdx", "blob_sha": "b49b5f12c04a6337d081fd18994ee0bbfa22ca25", "immutable_url": "https://api.github.com/repos/cline/cline/git/blobs/b49b5f12c04a6337d081fd18994ee0bbfa22ca25"},
-        {"kind": "web", "label": "Current Cline Rules documentation", "url": "https://docs.cline.bot/customization/cline-rules", "verified_at": "2026-08-25"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed Cline Rules documentation",
+          "path": "docs/customization/cline-rules.mdx",
+          "url": "https://github.com/cline/cline/blob/main/docs/customization/cline-rules.mdx",
+          "blob_sha": "24825e05810b86a15e984de1969dcd640af01634",
+          "immutable_url": "https://api.github.com/repos/cline/cline/git/blobs/24825e05810b86a15e984de1969dcd640af01634"
+        },
+        {
+          "kind": "git_blob",
+          "label": "Reviewed Cline CLI layout",
+          "path": "docs/cli/cli-reference.mdx",
+          "url": "https://github.com/cline/cline/blob/main/docs/cli/cli-reference.mdx",
+          "blob_sha": "b49b5f12c04a6337d081fd18994ee0bbfa22ca25",
+          "immutable_url": "https://api.github.com/repos/cline/cline/git/blobs/b49b5f12c04a6337d081fd18994ee0bbfa22ca25"
+        },
+        {
+          "kind": "web",
+          "label": "Current Cline Rules documentation",
+          "url": "https://docs.cline.bot/customization/cline-rules",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Cline repository and documentation", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/cline/cline/blob/main/LICENSE", "blob_sha": "05ae14a377caf4df24e26edde0c4f7b22ef3ef30", "immutable_url": "https://api.github.com/repos/cline/cline/git/blobs/05ae14a377caf4df24e26edde0c4f7b22ef3ef30"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Cline repository and documentation",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/cline/cline/blob/main/LICENSE",
+          "blob_sha": "05ae14a377caf4df24e26edde0c4f7b22ef3ef30",
+          "immutable_url": "https://api.github.com/repos/cline/cline/git/blobs/05ae14a377caf4df24e26edde0c4f7b22ef3ef30"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": 69218,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "cursor-rules",
@@ -249,23 +569,49 @@
       "scope": "project_instructions",
       "status": "vendor_specific",
       "current_version": null,
-      "stewards": ["Anysphere"],
+      "stewards": [
+        "Anysphere"
+      ],
       "repo": null,
       "url": "https://cursor.com/docs/rules",
       "description": "Cursor's documented convention for persistent and context-sensitive project instructions.",
       "standardizes": ".cursor/rules/*.mdc placement, activation front matter, four activation modes, nested rule discovery, and file or rule references inside Cursor.",
       "does_not_standardize": "Cross-agent instruction behavior, agent or tool protocols, permission policy, or a universal content vocabulary; the older .cursorrules file is deprecated.",
-      "licenses": ["LicenseRef-Unclear"],
+      "licenses": [
+        "LicenseRef-Unclear"
+      ],
       "license_note": "No standalone reusable-format license was identified in the reviewed product documentation; Cursor's service and documentation terms apply separately.",
-      "related_specifications": ["agents-md", "cline-rules", "devin-desktop-rules"],
+      "related_specifications": [
+        "agents-md",
+        "cline-rules",
+        "devin-desktop-rules"
+      ],
       "evidence": [
-        {"kind": "web", "label": "Current Cursor Rules documentation", "url": "https://cursor.com/docs/rules", "verified_at": "2026-08-25"},
-        {"kind": "web", "label": "Official legacy .cursorrules migration guidance", "url": "https://prod.cursor.com/help/customization/rules", "verified_at": "2026-08-25"}
+        {
+          "kind": "web",
+          "label": "Current Cursor Rules documentation",
+          "url": "https://cursor.com/docs/rules",
+          "verified_at": "2026-08-25"
+        },
+        {
+          "kind": "web",
+          "label": "Official legacy .cursorrules migration guidance",
+          "url": "https://prod.cursor.com/help/customization/rules",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "LicenseRef-Unclear", "scope": "Cursor project-rules convention; no standalone reusable-format license identified", "kind": "web_terms", "url": "https://cursor.com/en-US/terms-of-service", "verified_at": "2026-08-25"}
+        {
+          "license_id": "LicenseRef-Unclear",
+          "scope": "Cursor project-rules convention; no standalone reusable-format license identified",
+          "kind": "web_terms",
+          "url": "https://cursor.com/en-US/terms-of-service",
+          "verified_at": "2026-08-25"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": null,
+      "stars_verified_at": null
     },
     {
       "id": "continue-rules",
@@ -275,24 +621,62 @@
       "scope": "project_instructions",
       "status": "vendor_specific",
       "current_version": null,
-      "stewards": ["Continue project", "Continue Dev"],
+      "stewards": [
+        "Continue project",
+        "Continue Dev"
+      ],
       "repo": "continuedev/continue",
       "url": "https://docs.continue.dev/customize/rules",
       "description": "Continue's product convention for project-local Markdown and YAML instructions used across its interaction modes.",
       "standardizes": "Rule discovery under .continue/rules/, lexicographic loading, and front-matter controls for names, globs, regular expressions, descriptions, and unconditional activation.",
       "does_not_standardize": "Universal agent instructions, permission or tool execution, a wire protocol, or other products' interpretation.",
-      "licenses": ["Apache-2.0"],
+      "licenses": [
+        "Apache-2.0"
+      ],
       "license_note": "The Continue repository and reviewed documentation are licensed under Apache-2.0.",
-      "related_specifications": ["agents-md", "cline-rules", "roo-code-rules"],
+      "related_specifications": [
+        "agents-md",
+        "cline-rules",
+        "roo-code-rules"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed Continue Rules overview", "path": "docs/customize/rules.mdx", "url": "https://github.com/continuedev/continue/blob/main/docs/customize/rules.mdx", "blob_sha": "7eaede59c8e550f1d49747f1b56181db4c75e5c0", "immutable_url": "https://api.github.com/repos/continuedev/continue/git/blobs/7eaede59c8e550f1d49747f1b56181db4c75e5c0"},
-        {"kind": "git_blob", "label": "Reviewed Continue Rules reference", "path": "docs/customize/deep-dives/rules.mdx", "url": "https://github.com/continuedev/continue/blob/main/docs/customize/deep-dives/rules.mdx", "blob_sha": "f5f52955dec2ab624d8689d925b205ef4149ec76", "immutable_url": "https://api.github.com/repos/continuedev/continue/git/blobs/f5f52955dec2ab624d8689d925b205ef4149ec76"},
-        {"kind": "web", "label": "Current Continue Rules documentation", "url": "https://docs.continue.dev/customize/rules", "verified_at": "2026-08-25"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed Continue Rules overview",
+          "path": "docs/customize/rules.mdx",
+          "url": "https://github.com/continuedev/continue/blob/main/docs/customize/rules.mdx",
+          "blob_sha": "7eaede59c8e550f1d49747f1b56181db4c75e5c0",
+          "immutable_url": "https://api.github.com/repos/continuedev/continue/git/blobs/7eaede59c8e550f1d49747f1b56181db4c75e5c0"
+        },
+        {
+          "kind": "git_blob",
+          "label": "Reviewed Continue Rules reference",
+          "path": "docs/customize/deep-dives/rules.mdx",
+          "url": "https://github.com/continuedev/continue/blob/main/docs/customize/deep-dives/rules.mdx",
+          "blob_sha": "f5f52955dec2ab624d8689d925b205ef4149ec76",
+          "immutable_url": "https://api.github.com/repos/continuedev/continue/git/blobs/f5f52955dec2ab624d8689d925b205ef4149ec76"
+        },
+        {
+          "kind": "web",
+          "label": "Current Continue Rules documentation",
+          "url": "https://docs.continue.dev/customize/rules",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Continue repository and documentation", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/continuedev/continue/blob/main/LICENSE", "blob_sha": "c25dc1768217ba50d454fcc06290d66886512872", "immutable_url": "https://api.github.com/repos/continuedev/continue/git/blobs/c25dc1768217ba50d454fcc06290d66886512872"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Continue repository and documentation",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/continuedev/continue/blob/main/LICENSE",
+          "blob_sha": "c25dc1768217ba50d454fcc06290d66886512872",
+          "immutable_url": "https://api.github.com/repos/continuedev/continue/git/blobs/c25dc1768217ba50d454fcc06290d66886512872"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": 36013,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "roo-code-rules",
@@ -302,23 +686,54 @@
       "scope": "project_instructions",
       "status": "vendor_specific",
       "current_version": null,
-      "stewards": ["Roo Code project", "Roo Code, Inc."],
+      "stewards": [
+        "Roo Code project",
+        "Roo Code, Inc."
+      ],
       "repo": "RooCodeInc/Roo-Code",
       "url": "https://docs.roocode.com/features/custom-instructions",
       "description": "Roo Code's convention for global, workspace, and mode-specific persistent instructions.",
       "standardizes": "Discovery under .roo/rules/ and mode-specific directories, recursive alphabetical aggregation and precedence, plus fallback .roorules files inside Roo Code.",
       "does_not_standardize": "Cross-agent interpretation, mode definitions, permissions, or machine-to-machine protocols.",
-      "licenses": ["Apache-2.0"],
+      "licenses": [
+        "Apache-2.0"
+      ],
       "license_note": "The Roo Code documentation subtree reviewed for this convention is licensed under Apache-2.0.",
-      "related_specifications": ["agents-md", "continue-rules", "cline-rules"],
+      "related_specifications": [
+        "agents-md",
+        "continue-rules",
+        "cline-rules"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed Roo Code custom-instructions documentation", "path": "apps/docs/docs/features/custom-instructions.md", "url": "https://github.com/RooCodeInc/Roo-Code/blob/main/apps/docs/docs/features/custom-instructions.md", "blob_sha": "5a44a5f98f76b989af93bfca7a947b492b9b5a12", "immutable_url": "https://api.github.com/repos/RooCodeInc/Roo-Code/git/blobs/5a44a5f98f76b989af93bfca7a947b492b9b5a12"},
-        {"kind": "web", "label": "Current Roo Code documentation", "url": "https://docs.roocode.com/features/custom-instructions", "verified_at": "2026-08-25"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed Roo Code custom-instructions documentation",
+          "path": "apps/docs/docs/features/custom-instructions.md",
+          "url": "https://github.com/RooCodeInc/Roo-Code/blob/main/apps/docs/docs/features/custom-instructions.md",
+          "blob_sha": "5a44a5f98f76b989af93bfca7a947b492b9b5a12",
+          "immutable_url": "https://api.github.com/repos/RooCodeInc/Roo-Code/git/blobs/5a44a5f98f76b989af93bfca7a947b492b9b5a12"
+        },
+        {
+          "kind": "web",
+          "label": "Current Roo Code documentation",
+          "url": "https://docs.roocode.com/features/custom-instructions",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Roo Code documentation subtree", "kind": "git_blob", "path": "apps/docs/LICENSE", "url": "https://github.com/RooCodeInc/Roo-Code/blob/main/apps/docs/LICENSE", "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64", "immutable_url": "https://api.github.com/repos/RooCodeInc/Roo-Code/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Roo Code documentation subtree",
+          "kind": "git_blob",
+          "path": "apps/docs/LICENSE",
+          "url": "https://github.com/RooCodeInc/Roo-Code/blob/main/apps/docs/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/RooCodeInc/Roo-Code/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": 24298,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "devin-desktop-rules",
@@ -328,22 +743,43 @@
       "scope": "project_instructions",
       "status": "vendor_specific",
       "current_version": null,
-      "stewards": ["Cognition"],
+      "stewards": [
+        "Cognition"
+      ],
       "repo": null,
       "url": "https://docs.devin.ai/desktop/cascade/memories",
       "description": "Devin Desktop's current convention for persistent Cascade instructions, including legacy Windsurf compatibility paths.",
       "standardizes": "Rule discovery across workspace and parent directories, trigger-based activation, current .devin/rules/*.md placement, and fallback .windsurf/rules/*.md or .windsurfrules paths.",
       "does_not_standardize": "Instruction behavior in other agents, workflows or skills, permissions, or wire protocols.",
-      "licenses": ["LicenseRef-Unclear"],
+      "licenses": [
+        "LicenseRef-Unclear"
+      ],
       "license_note": "No standalone reusable-format license was identified in the reviewed product documentation; the legacy Windsurf names describe compatibility paths, not a separate current convention.",
-      "related_specifications": ["agents-md", "cursor-rules", "cline-rules"],
+      "related_specifications": [
+        "agents-md",
+        "cursor-rules",
+        "cline-rules"
+      ],
       "evidence": [
-        {"kind": "web", "label": "Current Devin Desktop rules documentation", "url": "https://docs.devin.ai/desktop/cascade/memories", "verified_at": "2026-08-25"}
+        {
+          "kind": "web",
+          "label": "Current Devin Desktop rules documentation",
+          "url": "https://docs.devin.ai/desktop/cascade/memories",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "LicenseRef-Unclear", "scope": "Devin Desktop and legacy Windsurf rules convention; no standalone reusable-format license identified", "kind": "web_terms", "url": "https://docs.devin.ai/desktop/cascade/memories", "verified_at": "2026-08-25"}
+        {
+          "license_id": "LicenseRef-Unclear",
+          "scope": "Devin Desktop and legacy Windsurf rules convention; no standalone reusable-format license identified",
+          "kind": "web_terms",
+          "url": "https://docs.devin.ai/desktop/cascade/memories",
+          "verified_at": "2026-08-25"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": null,
+      "stars_verified_at": null
     },
     {
       "id": "agent-skills",
@@ -353,25 +789,71 @@
       "scope": "capability_packaging",
       "status": "evolving",
       "current_version": null,
-      "stewards": ["Agent Skills project", "Anthropic"],
+      "stewards": [
+        "Agent Skills project",
+        "Anthropic"
+      ],
       "repo": "agentskills/agentskills",
       "url": "https://agentskills.io/specification",
       "description": "An open folder format for packaging reusable agent instructions, metadata, scripts, and supporting resources.",
       "standardizes": "A SKILL.md manifest, required metadata, optional resources, discovery, and progressive loading of capability instructions.",
       "does_not_standardize": "A marketplace, runtime permission model, inter-agent messaging, or the quality and safety of bundled scripts.",
-      "licenses": ["Apache-2.0", "CC-BY-4.0"],
+      "licenses": [
+        "Apache-2.0",
+        "CC-BY-4.0"
+      ],
       "license_note": "Repository code is Apache-2.0; the specification documentation is licensed under CC BY 4.0.",
-      "related_specifications": ["agents-md", "claude-md", "agent-plugins", "claude-code-plugins"],
+      "related_specifications": [
+        "agents-md",
+        "claude-md",
+        "agent-plugins",
+        "claude-code-plugins"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed specification snapshot", "path": "docs/specification.mdx", "url": "https://github.com/agentskills/agentskills/blob/main/docs/specification.mdx", "blob_sha": "d9a2db099d905da8b879a5c6f996728073985279", "immutable_url": "https://api.github.com/repos/agentskills/agentskills/git/blobs/d9a2db099d905da8b879a5c6f996728073985279"},
-        {"kind": "web", "label": "Current specification", "url": "https://agentskills.io/specification", "verified_at": "2026-08-25"},
-        {"kind": "web", "label": "OpenAI implementation guide", "url": "https://developers.openai.com/codex/skills", "verified_at": "2026-08-25"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed specification snapshot",
+          "path": "docs/specification.mdx",
+          "url": "https://github.com/agentskills/agentskills/blob/main/docs/specification.mdx",
+          "blob_sha": "d9a2db099d905da8b879a5c6f996728073985279",
+          "immutable_url": "https://api.github.com/repos/agentskills/agentskills/git/blobs/d9a2db099d905da8b879a5c6f996728073985279"
+        },
+        {
+          "kind": "web",
+          "label": "Current specification",
+          "url": "https://agentskills.io/specification",
+          "verified_at": "2026-08-25"
+        },
+        {
+          "kind": "web",
+          "label": "OpenAI implementation guide",
+          "url": "https://developers.openai.com/codex/skills",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Repository code outside the documentation-specific license", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/agentskills/agentskills/blob/main/LICENSE", "blob_sha": "a20f4476df158a57a68409015ea607c738856f57", "immutable_url": "https://api.github.com/repos/agentskills/agentskills/git/blobs/a20f4476df158a57a68409015ea607c738856f57"},
-        {"license_id": "CC-BY-4.0", "scope": "Specification documentation under docs/", "kind": "git_blob", "path": "docs/LICENSE", "url": "https://github.com/agentskills/agentskills/blob/main/docs/LICENSE", "blob_sha": "4ea99c213c5c0c005ae4e80df8e52169d06896ec", "immutable_url": "https://api.github.com/repos/agentskills/agentskills/git/blobs/4ea99c213c5c0c005ae4e80df8e52169d06896ec"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository code outside the documentation-specific license",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/agentskills/agentskills/blob/main/LICENSE",
+          "blob_sha": "a20f4476df158a57a68409015ea607c738856f57",
+          "immutable_url": "https://api.github.com/repos/agentskills/agentskills/git/blobs/a20f4476df158a57a68409015ea607c738856f57"
+        },
+        {
+          "license_id": "CC-BY-4.0",
+          "scope": "Specification documentation under docs/",
+          "kind": "git_blob",
+          "path": "docs/LICENSE",
+          "url": "https://github.com/agentskills/agentskills/blob/main/docs/LICENSE",
+          "blob_sha": "4ea99c213c5c0c005ae4e80df8e52169d06896ec",
+          "immutable_url": "https://api.github.com/repos/agentskills/agentskills/git/blobs/4ea99c213c5c0c005ae4e80df8e52169d06896ec"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": 25663,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "agent-plugins",
@@ -381,24 +863,62 @@
       "scope": "plugin_packaging",
       "status": "published",
       "current_version": "1.0.0",
-      "stewards": ["Agent Plugins project"],
+      "stewards": [
+        "Agent Plugins project"
+      ],
       "repo": "agentplugins/agent-plugins-spec",
       "url": "https://agent-plugins.org/specification",
       "description": "An open package format for distributing agent skills and MCP server configuration as one portable, client-neutral plugin.",
       "standardizes": "The plugin.json manifest, plugin root containment, fixed discovery locations for skills and MCP servers, namespaced client extensions, placeholder expansion, and client conformance requirements.",
       "does_not_standardize": "A marketplace, runtime sandbox, universal permission system, inter-agent communication, or portable commands, agents, and hooks, which version 1 leaves to namespaced client extensions.",
-      "licenses": ["Apache-2.0", "CC-BY-4.0"],
+      "licenses": [
+        "Apache-2.0",
+        "CC-BY-4.0"
+      ],
       "license_note": "Schemas and code samples are Apache-2.0; the specification and documentation are CC BY 4.0.",
-      "related_specifications": ["agent-skills", "claude-code-plugins"],
+      "related_specifications": [
+        "agent-skills",
+        "claude-code-plugins"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Published 1.0.0 specification snapshot", "path": "spec/1.0.0.md", "url": "https://github.com/agentplugins/agent-plugins-spec/blob/main/spec/1.0.0.md", "blob_sha": "c95263bd61fc16608390006bc461e964ce21cd12", "immutable_url": "https://api.github.com/repos/agentplugins/agent-plugins-spec/git/blobs/c95263bd61fc16608390006bc461e964ce21cd12"},
-        {"kind": "web", "label": "Published specification", "url": "https://agent-plugins.org/specification", "verified_at": "2026-08-25"}
+        {
+          "kind": "git_blob",
+          "label": "Published 1.0.0 specification snapshot",
+          "path": "spec/1.0.0.md",
+          "url": "https://github.com/agentplugins/agent-plugins-spec/blob/main/spec/1.0.0.md",
+          "blob_sha": "c95263bd61fc16608390006bc461e964ce21cd12",
+          "immutable_url": "https://api.github.com/repos/agentplugins/agent-plugins-spec/git/blobs/c95263bd61fc16608390006bc461e964ce21cd12"
+        },
+        {
+          "kind": "web",
+          "label": "Published specification",
+          "url": "https://agent-plugins.org/specification",
+          "verified_at": "2026-08-25"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Schemas and code samples", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/agentplugins/agent-plugins-spec/blob/main/LICENSE.md", "blob_sha": "b1c2f51d0884b9d5b04c960e5726ebd19b8565f4", "immutable_url": "https://api.github.com/repos/agentplugins/agent-plugins-spec/git/blobs/b1c2f51d0884b9d5b04c960e5726ebd19b8565f4"},
-        {"license_id": "CC-BY-4.0", "scope": "Specification and documentation", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/agentplugins/agent-plugins-spec/blob/main/LICENSE.md", "blob_sha": "b1c2f51d0884b9d5b04c960e5726ebd19b8565f4", "immutable_url": "https://api.github.com/repos/agentplugins/agent-plugins-spec/git/blobs/b1c2f51d0884b9d5b04c960e5726ebd19b8565f4"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Schemas and code samples",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/agentplugins/agent-plugins-spec/blob/main/LICENSE.md",
+          "blob_sha": "b1c2f51d0884b9d5b04c960e5726ebd19b8565f4",
+          "immutable_url": "https://api.github.com/repos/agentplugins/agent-plugins-spec/git/blobs/b1c2f51d0884b9d5b04c960e5726ebd19b8565f4"
+        },
+        {
+          "license_id": "CC-BY-4.0",
+          "scope": "Specification and documentation",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/agentplugins/agent-plugins-spec/blob/main/LICENSE.md",
+          "blob_sha": "b1c2f51d0884b9d5b04c960e5726ebd19b8565f4",
+          "immutable_url": "https://api.github.com/repos/agentplugins/agent-plugins-spec/git/blobs/b1c2f51d0884b9d5b04c960e5726ebd19b8565f4"
+        }
       ],
-      "verified_at": "2026-08-25"
+      "verified_at": "2026-08-25",
+      "stars": 1324,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "claude-code-plugins",
@@ -408,25 +928,67 @@
       "scope": "plugin_packaging",
       "status": "vendor_specific",
       "current_version": null,
-      "stewards": ["Anthropic"],
+      "stewards": [
+        "Anthropic"
+      ],
       "repo": "anthropics/claude-code",
       "url": "https://code.claude.com/docs/en/plugins-reference",
       "description": "Claude Code's documented plugin package and marketplace convention for installing skills, agents, hooks, and servers as one bundle.",
       "standardizes": "The optional .claude-plugin/plugin.json manifest and its component path fields, default locations for skills, commands, agents, hooks, MCP servers, LSP servers, and experimental themes and monitors, CLAUDE_PLUGIN_ROOT and CLAUDE_PLUGIN_DATA path expansion, installation scopes, and .claude-plugin/marketplace.json catalog entries and plugin sources.",
       "does_not_standardize": "A portable contract other clients implement, the SKILL.md format itself, MCP wire behavior, a runtime sandbox or permission model, or plugin behavior in agents that do not implement Claude Code's loader.",
-      "licenses": ["LicenseRef-Unclear", "LicenseRef-Proprietary"],
+      "licenses": [
+        "LicenseRef-Unclear",
+        "LicenseRef-Proprietary"
+      ],
       "license_note": "Product documentation defines the convention and no standalone reusable format license was identified during review; the steward's own plugin repository content, including the reviewed marketplace manifest, is reserved under Anthropic's Commercial Terms of Service.",
-      "related_specifications": ["agent-plugins", "agent-skills", "claude-md"],
+      "related_specifications": [
+        "agent-plugins",
+        "agent-skills",
+        "claude-md"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Steward's published marketplace manifest", "path": ".claude-plugin/marketplace.json", "url": "https://github.com/anthropics/claude-code/blob/main/.claude-plugin/marketplace.json", "blob_sha": "30e2a0bfb6704d4f648c41f92ea07ebd0ecfea5f", "immutable_url": "https://api.github.com/repos/anthropics/claude-code/git/blobs/30e2a0bfb6704d4f648c41f92ea07ebd0ecfea5f"},
-        {"kind": "web", "label": "Plugin manifest schema, component locations, and path expansion", "url": "https://code.claude.com/docs/en/plugins-reference", "verified_at": "2026-09-15"},
-        {"kind": "web", "label": "Marketplace schema, plugin entries, and plugin sources", "url": "https://code.claude.com/docs/en/plugin-marketplaces", "verified_at": "2026-09-03"}
+        {
+          "kind": "git_blob",
+          "label": "Steward's published marketplace manifest",
+          "path": ".claude-plugin/marketplace.json",
+          "url": "https://github.com/anthropics/claude-code/blob/main/.claude-plugin/marketplace.json",
+          "blob_sha": "30e2a0bfb6704d4f648c41f92ea07ebd0ecfea5f",
+          "immutable_url": "https://api.github.com/repos/anthropics/claude-code/git/blobs/30e2a0bfb6704d4f648c41f92ea07ebd0ecfea5f"
+        },
+        {
+          "kind": "web",
+          "label": "Plugin manifest schema, component locations, and path expansion",
+          "url": "https://code.claude.com/docs/en/plugins-reference",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "kind": "web",
+          "label": "Marketplace schema, plugin entries, and plugin sources",
+          "url": "https://code.claude.com/docs/en/plugin-marketplaces",
+          "verified_at": "2026-09-03"
+        }
       ],
       "license_evidence": [
-        {"license_id": "LicenseRef-Unclear", "scope": "The plugin and marketplace convention as described in product documentation; no standalone format license identified", "kind": "web_terms", "url": "https://code.claude.com/docs/en/plugins-reference", "verified_at": "2026-09-15"},
-        {"license_id": "LicenseRef-Proprietary", "scope": "anthropics/claude-code repository content supplying the reviewed marketplace manifest", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/anthropics/claude-code/blob/main/LICENSE.md", "blob_sha": "645a5d67c6d1e16437bec850dad5bd3b6c81f77c", "immutable_url": "https://api.github.com/repos/anthropics/claude-code/git/blobs/645a5d67c6d1e16437bec850dad5bd3b6c81f77c"}
+        {
+          "license_id": "LicenseRef-Unclear",
+          "scope": "The plugin and marketplace convention as described in product documentation; no standalone format license identified",
+          "kind": "web_terms",
+          "url": "https://code.claude.com/docs/en/plugins-reference",
+          "verified_at": "2026-09-15"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "anthropics/claude-code repository content supplying the reviewed marketplace manifest",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/anthropics/claude-code/blob/main/LICENSE.md",
+          "blob_sha": "645a5d67c6d1e16437bec850dad5bd3b6c81f77c",
+          "immutable_url": "https://api.github.com/repos/anthropics/claude-code/git/blobs/645a5d67c6d1e16437bec850dad5bd3b6c81f77c"
+        }
       ],
-      "verified_at": "2026-09-15"
+      "verified_at": "2026-09-15",
+      "stars": 147917,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "webmcp",
@@ -436,23 +998,52 @@
       "scope": "web_agent_integration",
       "status": "evolving",
       "current_version": null,
-      "stewards": ["Web Machine Learning Community Group", "W3C Community Group contributors"],
+      "stewards": [
+        "Web Machine Learning Community Group",
+        "W3C Community Group contributors"
+      ],
       "repo": "webmachinelearning/webmcp",
       "url": "https://webmachinelearning.github.io/webmcp/",
       "description": "A browser API that lets web applications expose structured JavaScript and form-based tools to AI agents.",
       "standardizes": "Registration, discovery, description, schema, invocation, cancellation, and lifecycle behavior for tools exposed by a web document to browser or embedded agents.",
       "does_not_standardize": "Remote MCP transports, an agent runtime, generic browser automation, or the application-specific semantics and authorization policy behind each web tool.",
-      "licenses": ["LicenseRef-W3C-Software-Document"],
+      "licenses": [
+        "LicenseRef-W3C-Software-Document"
+      ],
       "license_note": "Reports in the repository use the W3C Software and Document License; the draft is a Community Group Report, not a W3C Standard or Standards Track document.",
-      "related_specifications": ["mcp"],
+      "related_specifications": [
+        "mcp"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed draft specification source", "path": "index.bs", "url": "https://github.com/webmachinelearning/webmcp/blob/main/index.bs", "blob_sha": "241bb2c014b10a646649cd2a0d147498925aa63a", "immutable_url": "https://api.github.com/repos/webmachinelearning/webmcp/git/blobs/241bb2c014b10a646649cd2a0d147498925aa63a"},
-        {"kind": "web", "label": "Current Community Group Report", "url": "https://webmachinelearning.github.io/webmcp/", "verified_at": "2026-08-28"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed draft specification source",
+          "path": "index.bs",
+          "url": "https://github.com/webmachinelearning/webmcp/blob/main/index.bs",
+          "blob_sha": "241bb2c014b10a646649cd2a0d147498925aa63a",
+          "immutable_url": "https://api.github.com/repos/webmachinelearning/webmcp/git/blobs/241bb2c014b10a646649cd2a0d147498925aa63a"
+        },
+        {
+          "kind": "web",
+          "label": "Current Community Group Report",
+          "url": "https://webmachinelearning.github.io/webmcp/",
+          "verified_at": "2026-08-28"
+        }
       ],
       "license_evidence": [
-        {"license_id": "LicenseRef-W3C-Software-Document", "scope": "Reports in the specification repository", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/webmachinelearning/webmcp/blob/main/LICENSE.md", "blob_sha": "cabddd80c7fdf19cd5577d8b86ee7dadc64c9b4e", "immutable_url": "https://api.github.com/repos/webmachinelearning/webmcp/git/blobs/cabddd80c7fdf19cd5577d8b86ee7dadc64c9b4e"}
+        {
+          "license_id": "LicenseRef-W3C-Software-Document",
+          "scope": "Reports in the specification repository",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/webmachinelearning/webmcp/blob/main/LICENSE.md",
+          "blob_sha": "cabddd80c7fdf19cd5577d8b86ee7dadc64c9b4e",
+          "immutable_url": "https://api.github.com/repos/webmachinelearning/webmcp/git/blobs/cabddd80c7fdf19cd5577d8b86ee7dadc64c9b4e"
+        }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "stars": 4222,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "oasf",
@@ -462,23 +1053,52 @@
       "scope": "agent_identity_discovery",
       "status": "published",
       "current_version": "1.1.0",
-      "stewards": ["AGNTCY project", "Linux Foundation"],
+      "stewards": [
+        "AGNTCY project",
+        "Linux Foundation"
+      ],
       "repo": "agntcy/oasf",
       "url": "https://docs.agntcy.org/oasf/agent-record-guide/",
       "description": "A versioned schema and taxonomy for describing agent records, capabilities, domains, modules, and locators.",
       "standardizes": "Agent-record metadata, skill and domain taxonomies, extensible modules, locators, versioning, and validation used to announce and discover agent capabilities.",
       "does_not_standardize": "A discovery network or registry transport, cryptographic identity proof, agent-to-agent task lifecycle, authentication, or an agent runtime.",
-      "licenses": ["Apache-2.0"],
+      "licenses": [
+        "Apache-2.0"
+      ],
       "license_note": "The schema, server, and documentation repository are licensed under Apache-2.0.",
-      "related_specifications": ["anp"],
+      "related_specifications": [
+        "anp"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed schema overview", "path": "README.md", "url": "https://github.com/agntcy/oasf/blob/main/README.md", "blob_sha": "ed1e875c47e68b9cde7c35b84f5c204800d7bbaf", "immutable_url": "https://api.github.com/repos/agntcy/oasf/git/blobs/ed1e875c47e68b9cde7c35b84f5c204800d7bbaf"},
-        {"kind": "web", "label": "Agent Record guide", "url": "https://docs.agntcy.org/oasf/agent-record-guide/", "verified_at": "2026-08-28"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed schema overview",
+          "path": "README.md",
+          "url": "https://github.com/agntcy/oasf/blob/main/README.md",
+          "blob_sha": "ed1e875c47e68b9cde7c35b84f5c204800d7bbaf",
+          "immutable_url": "https://api.github.com/repos/agntcy/oasf/git/blobs/ed1e875c47e68b9cde7c35b84f5c204800d7bbaf"
+        },
+        {
+          "kind": "web",
+          "label": "Agent Record guide",
+          "url": "https://docs.agntcy.org/oasf/agent-record-guide/",
+          "verified_at": "2026-08-28"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Schema, server, and documentation repository", "kind": "git_blob", "path": "LICENSE.md", "url": "https://github.com/agntcy/oasf/blob/main/LICENSE.md", "blob_sha": "9ec4c8665ad828cfbc361cdc19fa38beb9884a36", "immutable_url": "https://api.github.com/repos/agntcy/oasf/git/blobs/9ec4c8665ad828cfbc361cdc19fa38beb9884a36"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Schema, server, and documentation repository",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/agntcy/oasf/blob/main/LICENSE.md",
+          "blob_sha": "9ec4c8665ad828cfbc361cdc19fa38beb9884a36",
+          "immutable_url": "https://api.github.com/repos/agntcy/oasf/git/blobs/9ec4c8665ad828cfbc361cdc19fa38beb9884a36"
+        }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "stars": 334,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "anp",
@@ -488,24 +1108,58 @@
       "scope": "agent_identity_discovery",
       "status": "published",
       "current_version": "1.1",
-      "stewards": ["Agent Network Protocol project"],
+      "stewards": [
+        "Agent Network Protocol project"
+      ],
       "repo": "agent-network-protocol/AgentNetworkProtocol",
       "url": "https://agent-network-protocol.com/specs/1.1/instant-messaging",
       "description": "An open protocol stack for decentralized agent identity, service discovery, secure messaging, and cross-domain communication.",
       "standardizes": "DID-based agent and group identity, endpoint and capability discovery, message bindings, direct and group messaging profiles, attachments, proofs, and optional encryption overlays.",
       "does_not_standardize": "An agent's internal planner or tools, a universal runtime, implementation-specific replica state, or every domain-specific application protocol.",
-      "licenses": ["Apache-2.0"],
+      "licenses": [
+        "Apache-2.0"
+      ],
       "license_note": "The specification repository is licensed under Apache-2.0.",
-      "related_specifications": ["a2a", "oasf"],
+      "related_specifications": [
+        "a2a",
+        "oasf"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed protocol-suite overview", "path": "README.md", "url": "https://github.com/agent-network-protocol/AgentNetworkProtocol/blob/main/README.md", "blob_sha": "b38680b1057aef15e526f005922b0fa210b0b8a8", "immutable_url": "https://api.github.com/repos/agent-network-protocol/AgentNetworkProtocol/git/blobs/b38680b1057aef15e526f005922b0fa210b0b8a8"},
-        {"kind": "web", "label": "Released 1.1 identity and discovery profile", "url": "https://agent-network-protocol.com/specs/1.1/message/identity-discovery", "verified_at": "2026-08-28"},
-        {"kind": "web", "label": "Released 1.1 messaging profile set", "url": "https://agent-network-protocol.com/specs/1.1/instant-messaging", "verified_at": "2026-08-28"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed protocol-suite overview",
+          "path": "README.md",
+          "url": "https://github.com/agent-network-protocol/AgentNetworkProtocol/blob/main/README.md",
+          "blob_sha": "b38680b1057aef15e526f005922b0fa210b0b8a8",
+          "immutable_url": "https://api.github.com/repos/agent-network-protocol/AgentNetworkProtocol/git/blobs/b38680b1057aef15e526f005922b0fa210b0b8a8"
+        },
+        {
+          "kind": "web",
+          "label": "Released 1.1 identity and discovery profile",
+          "url": "https://agent-network-protocol.com/specs/1.1/message/identity-discovery",
+          "verified_at": "2026-08-28"
+        },
+        {
+          "kind": "web",
+          "label": "Released 1.1 messaging profile set",
+          "url": "https://agent-network-protocol.com/specs/1.1/instant-messaging",
+          "verified_at": "2026-08-28"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Specification repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/agent-network-protocol/AgentNetworkProtocol/blob/main/LICENSE", "blob_sha": "3c09476e8c4d4c2031bf98c6735e1f06d188a8b6", "immutable_url": "https://api.github.com/repos/agent-network-protocol/AgentNetworkProtocol/git/blobs/3c09476e8c4d4c2031bf98c6735e1f06d188a8b6"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Specification repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/agent-network-protocol/AgentNetworkProtocol/blob/main/LICENSE",
+          "blob_sha": "3c09476e8c4d4c2031bf98c6735e1f06d188a8b6",
+          "immutable_url": "https://api.github.com/repos/agent-network-protocol/AgentNetworkProtocol/git/blobs/3c09476e8c4d4c2031bf98c6735e1f06d188a8b6"
+        }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "stars": 1436,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "ap2",
@@ -515,23 +1169,53 @@
       "scope": "agent_transactions",
       "status": "evolving",
       "current_version": "0.2.0",
-      "stewards": ["AP2 project", "Google", "FIDO Alliance working groups"],
+      "stewards": [
+        "AP2 project",
+        "Google",
+        "FIDO Alliance working groups"
+      ],
       "repo": "google-agentic-commerce/AP2",
       "url": "https://ap2-protocol.org/ap2/specification/",
       "description": "A payment-security protocol for proving a user's authorization and preserving evidence when an agent performs a transaction.",
       "standardizes": "Participant roles, checkout and payment mandates, receipts, human-present and autonomous authorization modes, verification responsibilities, and dispute evidence.",
       "does_not_standardize": "Catalog, cart, or checkout APIs; transport; the underlying payment rail; merchant fulfillment; or an agent's planning behavior.",
-      "licenses": ["Apache-2.0"],
+      "licenses": [
+        "Apache-2.0"
+      ],
       "license_note": "The specification, SDK, and samples repository is licensed under Apache-2.0.",
-      "related_specifications": ["ucp"],
+      "related_specifications": [
+        "ucp"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed AP2 v0.2 specification", "path": "docs/ap2/specification.md", "url": "https://github.com/google-agentic-commerce/AP2/blob/main/docs/ap2/specification.md", "blob_sha": "80a6dd354d2062a512281e32df42b0233af27c8f", "immutable_url": "https://api.github.com/repos/google-agentic-commerce/AP2/git/blobs/80a6dd354d2062a512281e32df42b0233af27c8f"},
-        {"kind": "web", "label": "Published AP2 specification", "url": "https://ap2-protocol.org/ap2/specification/", "verified_at": "2026-08-28"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed AP2 v0.2 specification",
+          "path": "docs/ap2/specification.md",
+          "url": "https://github.com/google-agentic-commerce/AP2/blob/main/docs/ap2/specification.md",
+          "blob_sha": "80a6dd354d2062a512281e32df42b0233af27c8f",
+          "immutable_url": "https://api.github.com/repos/google-agentic-commerce/AP2/git/blobs/80a6dd354d2062a512281e32df42b0233af27c8f"
+        },
+        {
+          "kind": "web",
+          "label": "Published AP2 specification",
+          "url": "https://ap2-protocol.org/ap2/specification/",
+          "verified_at": "2026-08-28"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Specification, SDK, and samples repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/google-agentic-commerce/AP2/blob/main/LICENSE", "blob_sha": "ff9ad4530f5716304e042cbac72cecd7c40f0e0e", "immutable_url": "https://api.github.com/repos/google-agentic-commerce/AP2/git/blobs/ff9ad4530f5716304e042cbac72cecd7c40f0e0e"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Specification, SDK, and samples repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/google-agentic-commerce/AP2/blob/main/LICENSE",
+          "blob_sha": "ff9ad4530f5716304e042cbac72cecd7c40f0e0e",
+          "immutable_url": "https://api.github.com/repos/google-agentic-commerce/AP2/git/blobs/ff9ad4530f5716304e042cbac72cecd7c40f0e0e"
+        }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "stars": 3191,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "ucp",
@@ -541,23 +1225,53 @@
       "scope": "agent_transactions",
       "status": "published",
       "current_version": "2026-04-08",
-      "stewards": ["Universal Commerce Protocol project", "UCP Governing Council"],
+      "stewards": [
+        "Universal Commerce Protocol project",
+        "UCP Governing Council"
+      ],
       "repo": "Universal-Commerce-Protocol/ucp",
       "url": "https://ucp.dev/latest/specification/overview/",
       "description": "A commerce protocol for capability discovery and interoperable shopping flows across agents, applications, businesses, and payment providers.",
       "standardizes": "Business and platform profiles, capability negotiation, checkout, orders, identity linking, and payment-token exchange across supported commerce transports.",
       "does_not_standardize": "The user's cryptographic authorization mandate, product recommendation ranking, an agent runtime, merchant-specific business logic, or underlying payment settlement.",
-      "licenses": ["Apache-2.0"],
+      "licenses": [
+        "Apache-2.0"
+      ],
       "license_note": "The specification and documentation repository is licensed under Apache-2.0.",
-      "related_specifications": ["ap2", "agentic-commerce-protocol"],
+      "related_specifications": [
+        "ap2",
+        "agentic-commerce-protocol"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed core concepts", "path": "docs/documentation/core-concepts.md", "url": "https://github.com/Universal-Commerce-Protocol/ucp/blob/main/docs/documentation/core-concepts.md", "blob_sha": "6c20944f288f8bcb6758e0a283b0919f662b7359", "immutable_url": "https://api.github.com/repos/Universal-Commerce-Protocol/ucp/git/blobs/6c20944f288f8bcb6758e0a283b0919f662b7359"},
-        {"kind": "web", "label": "Current UCP specification", "url": "https://ucp.dev/latest/specification/overview/", "verified_at": "2026-08-28"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed core concepts",
+          "path": "docs/documentation/core-concepts.md",
+          "url": "https://github.com/Universal-Commerce-Protocol/ucp/blob/main/docs/documentation/core-concepts.md",
+          "blob_sha": "6c20944f288f8bcb6758e0a283b0919f662b7359",
+          "immutable_url": "https://api.github.com/repos/Universal-Commerce-Protocol/ucp/git/blobs/6c20944f288f8bcb6758e0a283b0919f662b7359"
+        },
+        {
+          "kind": "web",
+          "label": "Current UCP specification",
+          "url": "https://ucp.dev/latest/specification/overview/",
+          "verified_at": "2026-08-28"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Specification and documentation repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/Universal-Commerce-Protocol/ucp/blob/main/LICENSE", "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7", "immutable_url": "https://api.github.com/repos/Universal-Commerce-Protocol/ucp/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Specification and documentation repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Universal-Commerce-Protocol/ucp/blob/main/LICENSE",
+          "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+          "immutable_url": "https://api.github.com/repos/Universal-Commerce-Protocol/ucp/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+        }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "stars": 3389,
+      "stars_verified_at": "2026-09-24"
     },
     {
       "id": "agentic-commerce-protocol",
@@ -567,23 +1281,53 @@
       "scope": "agent_transactions",
       "status": "published",
       "current_version": "2026-04-17",
-      "stewards": ["Agentic Commerce Protocol project", "OpenAI", "Stripe"],
+      "stewards": [
+        "Agentic Commerce Protocol project",
+        "OpenAI",
+        "Stripe"
+      ],
       "repo": "agentic-commerce-protocol/agentic-commerce-protocol",
       "url": "https://www.agenticcommerce.dev/docs",
       "description": "An open interaction model for buyers, agents, sellers, and payment providers to complete programmatic purchases.",
       "standardizes": "Checkout-session APIs, capability negotiation, carts and item feeds, orders, authentication metadata, payment handlers, credential delegation, schemas, examples, and webhooks.",
       "does_not_standardize": "General agent-to-agent messaging, product discovery ranking, a universal payment-authorization mandate, underlying payment rails, or merchant fulfillment operations.",
-      "licenses": ["Apache-2.0"],
+      "licenses": [
+        "Apache-2.0"
+      ],
       "license_note": "The RFC, OpenAPI, JSON Schema, examples, and documentation repository is licensed under Apache-2.0.",
-      "related_specifications": ["ucp"],
+      "related_specifications": [
+        "ucp"
+      ],
       "evidence": [
-        {"kind": "git_blob", "label": "Reviewed agentic-checkout RFC", "path": "rfcs/rfc.agentic_checkout.md", "url": "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol/blob/main/rfcs/rfc.agentic_checkout.md", "blob_sha": "2cf252233c74025e73cb59604e1d3562eb2fcbea", "immutable_url": "https://api.github.com/repos/agentic-commerce-protocol/agentic-commerce-protocol/git/blobs/2cf252233c74025e73cb59604e1d3562eb2fcbea"},
-        {"kind": "web", "label": "Current protocol documentation", "url": "https://www.agenticcommerce.dev/docs", "verified_at": "2026-08-28"}
+        {
+          "kind": "git_blob",
+          "label": "Reviewed agentic-checkout RFC",
+          "path": "rfcs/rfc.agentic_checkout.md",
+          "url": "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol/blob/main/rfcs/rfc.agentic_checkout.md",
+          "blob_sha": "2cf252233c74025e73cb59604e1d3562eb2fcbea",
+          "immutable_url": "https://api.github.com/repos/agentic-commerce-protocol/agentic-commerce-protocol/git/blobs/2cf252233c74025e73cb59604e1d3562eb2fcbea"
+        },
+        {
+          "kind": "web",
+          "label": "Current protocol documentation",
+          "url": "https://www.agenticcommerce.dev/docs",
+          "verified_at": "2026-08-28"
+        }
       ],
       "license_evidence": [
-        {"license_id": "Apache-2.0", "scope": "Protocol specification and documentation repository", "kind": "git_blob", "path": "LICENSE", "url": "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol/blob/main/LICENSE", "blob_sha": "c61b66391a3c1545c8c274bc6d7d764bafb84993", "immutable_url": "https://api.github.com/repos/agentic-commerce-protocol/agentic-commerce-protocol/git/blobs/c61b66391a3c1545c8c274bc6d7d764bafb84993"}
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Protocol specification and documentation repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/agentic-commerce-protocol/agentic-commerce-protocol/blob/main/LICENSE",
+          "blob_sha": "c61b66391a3c1545c8c274bc6d7d764bafb84993",
+          "immutable_url": "https://api.github.com/repos/agentic-commerce-protocol/agentic-commerce-protocol/git/blobs/c61b66391a3c1545c8c274bc6d7d764bafb84993"
+        }
       ],
-      "verified_at": "2026-08-28"
+      "verified_at": "2026-08-28",
+      "stars": 1547,
+      "stars_verified_at": "2026-09-24"
     }
   ]
 }

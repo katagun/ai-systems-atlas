@@ -308,14 +308,17 @@
 
   // `ids`, when present, narrows to one lab's releases: its reviewed rows and the
   // imported rows in its namespaces, which the caller resolves with labRelations.
+  // The "release" sort orders reviewed and imported rows together, newest first:
+  // the release date is models.dev metadata both carry, not a score.
   function filterModels(models, filters = {}) {
-    return filterScoredCollection(models, filters, MODEL_VIEW).filter(model =>
+    const matches = filterScoredCollection(models, filters, MODEL_VIEW).filter(model =>
       (!filters.modality || [
         ...(model.source_metadata?.modalities?.input || []),
         ...(model.source_metadata?.modalities?.output || []),
       ].includes(filters.modality)) &&
       (!filters.ids || filters.ids.has(model.id))
     );
+    return filters.sort === "release" ? releasesNewestFirst(matches) : matches;
   }
 
   // The mixed directory searches the same visible identity, editorial, and
@@ -380,6 +383,97 @@
       ...packs.map(record => ({ kind: "pack", record })),
       ...systems.map(record => ({ kind: "system", record })),
     ].sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
+  }
+
+  // Which one switcher chip is pressed. `entries` describes the buttons in
+  // order: { collection, family }, with no family on a collection-wide chip.
+  // A family chip wins over its collection's chip, so choosing Memory never
+  // also presses Systems: the controls are mutually exclusive (docs/WEB.md).
+  function activeSwitcherIndex(entries, { collection, family = "" }) {
+    if (family) {
+      const familyIndex = entries.findIndex(entry => entry.collection === collection && entry.family === family);
+      if (familyIndex !== -1) return familyIndex;
+    }
+    return entries.findIndex(entry => entry.collection === collection && entry.family === undefined);
+  }
+
+  // What each switcher chip counts: exactly what its scope lists by default.
+  // Systems and the family chips open on directoryDefaults().status, so they
+  // count active records; All lists everything, archived references
+  // included; Agent packs lists packs beside host-installed systems (ADR 035).
+  function switcherCounts({ projects = [], services = [], runtimes = [], models = [], packs = [], robots = [] }) {
+    const { status } = directoryDefaults();
+    const listed = projects.filter(project => !status || project.status === status);
+    const family = id => listed.filter(project => project.system_family === id).length;
+    return {
+      all: projects.length + services.length + runtimes.length + models.length + packs.length + robots.length,
+      systems: listed.length,
+      memory_system: family("memory_system"),
+      agent_system: family("agent_system"),
+      assistant_system: family("assistant_system"),
+      inference: services.length,
+      runtimes: runtimes.length,
+      models: models.length,
+      packs: packs.length + packShapedSystems(projects, {}).length,
+      robots: robots.length,
+    };
+  }
+
+  // Every URL parameter a scope writes, with its default. The keys are the
+  // ones the scope's filter already reads — directoryDefaults() for Systems,
+  // the view descriptors' facets elsewhere — so a parameter means the same in
+  // the URL and in the code; `q` is the scope's query. A value equal to its
+  // default is never written.
+  const SCOPE_URL_PARAMS = {
+    all: { q: "" },
+    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name" },
+    inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", sort: "score" },
+    runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", sort: "score" },
+    packs: { q: "", type: "", host: "", install: "", license: "" },
+    robots: { q: "", formFactor: "", aiBasis: "", availability: "", status: "" },
+    models: { q: "", type: "", distribution: "", modality: "", sourceModel: "", license: "", lab: "", sort: "score" },
+    labs: { q: "", type: "", headquarters: "", distribution: "" },
+    specifications: { q: "", type: "", scope: "", status: "", license: "" },
+  };
+  const SCOPE_URL_KEYS = [...new Set(Object.values(SCOPE_URL_PARAMS).flatMap(Object.keys)), "page"];
+
+  function scopeURLParams(scope, values = {}) {
+    return Object.entries(SCOPE_URL_PARAMS[scope] || {})
+      .filter(([key, fallback]) => values[key] !== undefined && String(values[key]) !== fallback)
+      .map(([key]) => [key, String(values[key])]);
+  }
+
+  // `allowed` maps each key to the Set of values its control offers, or to
+  // "text" for free text. A present parameter the control cannot take, or one
+  // this scope does not own, comes back in `rejected`, so the caller removes it
+  // rather than applying part of a state.
+  function readScopeURLParams(scope, params, allowed = {}) {
+    const owned = SCOPE_URL_PARAMS[scope] || {};
+    const values = {};
+    const rejected = [];
+    for (const key of SCOPE_URL_KEYS) {
+      if (key === "page" || !params.has(key)) continue;
+      const value = params.get(key);
+      const accepts = allowed[key];
+      if (key in owned && (accepts === "text" || (accepts instanceof Set && accepts.has(value)))) values[key] = value;
+      else rejected.push(key);
+    }
+    const page = params.get("page");
+    if (page !== null) {
+      if (/^[1-9]\d*$/.test(page)) values.page = Number(page);
+      else rejected.push("page");
+    }
+    return { values, rejected };
+  }
+
+  // Which scope a URL's filters belong to: a sibling view with filters, the
+  // Directory collection it names, or All. Views without filters own none.
+  function scopeFromURL(params) {
+    const view = params.get("view");
+    if (["models", "labs", "specifications"].includes(view)) return view;
+    if (view && view !== "directory") return null;
+    const collection = params.get("collection");
+    return ["systems", "inference", "runtimes", "packs", "robots"].includes(collection) ? collection : "all";
   }
 
   function paginate(items, { page = 1, pageSize } = {}) {
@@ -973,6 +1067,9 @@
     BADGE_FAMILIES,
     CARD_BADGES,
     CARD_BADGE_SETS,
+    SCOPE_URL_KEYS,
+    SCOPE_URL_PARAMS,
+    activeSwitcherIndex,
     badgeEmblem,
     badgeLegend,
     buildLabIndex,
@@ -1006,11 +1103,15 @@
     paginate,
     parseRecordReference,
     parseViewId,
+    readScopeURLParams,
     recordHaystack,
     releaseDate,
     releasesNewestFirst,
+    scopeFromURL,
+    scopeURLParams,
     shareRecordPath,
     sourceNamespace,
+    switcherCounts,
     UNLISTED_MODEL_LABEL,
     updateComparisonSelection,
   };

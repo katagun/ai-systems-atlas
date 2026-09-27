@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-17",
+  "generated_at": "2026-09-25",
   "entries": [
     {
       "name": "A-MEM paper implementation",
@@ -713,6 +713,30 @@
       "useful_lesson": "A derivative can be the only living thing in its lineage and still be packaging. The rule compares fields, not vitality, and the reader is served by whichever record in the lineage is active rather than by publishing every fork that outlives its parent.",
       "excluded_at": "2026-09-02",
       "verified_at": "2026-09-17"
+    },
+    {
+      "name": "Strands Agents Samples",
+      "repo": "strands-agents/samples",
+      "reason": "The README states the repository's examples are for demonstration and educational purposes only and are not intended for direct use in production. It is a teaching collection of per-language tutorials pointing at sibling SDK, tools, agent-builder, and MCP server repositories, with no runnable product of its own, so it fails the operational-product gate for the scored catalog.",
+      "useful_lesson": "SDK sample repositories that disclaim production use are teaching material, not systems; review the SDK and tool repositories they point at instead.",
+      "excluded_at": "2026-09-25",
+      "verified_at": "2026-09-25"
+    },
+    {
+      "name": "Spider",
+      "repo": "taoyds/spider",
+      "reason": "The README presents Spider as a large human-labeled dataset for complex and cross-domain semantic parsing and text-to-SQL, and the repository carries the dataset plus evaluation, preprocessing, and paper-baseline code. A dataset with baseline code is a non-operational research input, not an adoptable tool-using system.",
+      "useful_lesson": "Paper datasets stay research inputs even when the repository contains runnable evaluation scripts; the test is whether anyone can adopt it as a tool-using system.",
+      "excluded_at": "2026-09-25",
+      "verified_at": "2026-09-25"
+    },
+    {
+      "name": "Spider2",
+      "repo": "xlang-ai/Spider2",
+      "reason": "The README presents Spider 2.0 as a benchmark evaluating language models on enterprise text-to-SQL workflows, for benchmarking and research, with a leaderboard, evaluation suites, and gold releases. Even its Spider-Agent implementation is a benchmarking harness for rapid model comparison, and the DBT slice is a labelled task set, so the repository is benchmark material rather than an adoptable operational product.",
+      "useful_lesson": "An agent-shaped harness built for benchmarking models is still a benchmark; adoption as an operational product is the boundary, not agent vocabulary.",
+      "excluded_at": "2026-09-25",
+      "verified_at": "2026-09-25"
     }
   ]
 }

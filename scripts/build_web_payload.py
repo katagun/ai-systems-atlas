@@ -103,6 +103,7 @@ BOOT_FIELDS = {
         "description",
         "stewards",
         "related_specifications",
+        "stars",
     ),
     # source_metadata is a nested block rather than a card field, and it is here
     # for the same reason the flat ones are: the card prints the family and the
@@ -139,6 +140,7 @@ BOOT_FIELDS = {
         "packaging_formats",
         "licenses",
         "status",
+        "stars",
     ),
     # A lab card and every cross-link to a lab join through catalog_names and
     # systems (ADR 041), so both must be on the boot record; the join itself runs
@@ -254,11 +256,15 @@ SEARCH_FIELDS = {
     ),
 }
 
+# An imported row's card prints the family, modality route, and reported
+# openness; release_date rides along because the Models release-date sort
+# orders imported rows beside reviewed ones before any detail loads.
 MODEL_SOURCE_CARD_METADATA = (
     "family",
     "modalities",
     "reported_open_weights",
     "reported_license",
+    "release_date",
 )
 
 # Envelope keys the page reads: bootstrap() prints the newest of these as "Data updated".

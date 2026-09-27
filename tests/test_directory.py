@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import unittest
 from pathlib import Path
 
@@ -541,7 +542,7 @@ class DirectoryTests(unittest.TestCase):
                 set(project["score"]), set(dimensions) | {"overall"}, project["repo"]
             )
             calculated = round(
-                sum(
+                math.fsum(
                     project["score"][name] * weight
                     for name, weight in dimensions.items()
                 ),
@@ -684,7 +685,7 @@ class DirectoryTests(unittest.TestCase):
                 set(dimensions) | {"overall"}, set(record["score"]), record["id"]
             )
             calculated = round(
-                sum(
+                math.fsum(
                     record["score"][name] * weight
                     for name, weight in dimensions.items()
                 ),
@@ -759,7 +760,7 @@ class DirectoryTests(unittest.TestCase):
                 set(dimensions) | {"overall"}, set(record["score"]), record["id"]
             )
             calculated = round(
-                sum(
+                math.fsum(
                     record["score"][name] * weight
                     for name, weight in dimensions.items()
                 ),
@@ -1065,10 +1066,12 @@ class DirectoryTests(unittest.TestCase):
                 "primary_role",
                 "score_profile",
                 "score",
-                "stars",
-                "stars_verified_at",
             ):
                 self.assertNotIn(field, record, record["id"])
+            # Stars are descriptive live metadata on every repo-backed card,
+            # never a score: packs carry them, like local runtimes.
+            self.assertIn("stars", record, record["id"])
+            self.assertIn("stars_verified_at", record, record["id"])
             self.assertTrue(record["installs"].strip(), record["id"])
             self.assertNotIn(record["repo"].lower(), project_repos, record["id"])
         for group in ("pack_types", "pack_hosts", "pack_install_mechanisms"):
@@ -1120,8 +1123,8 @@ class DirectoryTests(unittest.TestCase):
         }
         self.assertLessEqual(expected, {record["id"] for record in records})
         by_id = {record["id"]: record for record in records}
-        # ByteDance's own pages list offices by region and name no headquarters, and the
-        # Cayman Islands entity behind its website does not count as one.
+        # ByteDance's own site names only the cities its staff are based out of, not a
+        # headquarters, and the Cayman Islands entity behind its website does not count.
         self.assertEqual(by_id["lab-bytedance"]["headquarters"], "none_listed")
         developers = {model["developer"] for model in self.models["models"]}
         claimed: dict[str, str] = {}

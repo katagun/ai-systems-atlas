@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, releaseDate, releasesNewestFirst, shareRecordPath, sourceNamespace, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, readScopeURLParams, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, shareRecordPath, sourceNamespace, switcherCounts, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -300,6 +300,21 @@ test("model filtering keeps unscored source imports and sorts them after reviews
     ["Audio Source"],
   );
   assert.deepEqual(filterModels([importedModel], { type: "language_model" }), []);
+});
+
+test("the release sort orders reviewed and imported rows newest first, undated last", () => {
+  const withDate = (model, date) => ({ ...model, source_metadata: { ...model.source_metadata, release_date: date } });
+  const dated = [
+    withDate(models[0], "2025-04-29"),
+    withDate(models[1], "2026-01"),
+    withDate(importedModel, "2026-03-02"),
+    { ...importedModel, id: "model-acme-undated", name: "Undated Source" },
+  ];
+  assert.deepEqual(
+    filterModels(dated, { sort: "release" }).map(item => item.name),
+    ["Audio Source", "Vision Model", "Qwen", "Undated Source"],
+  );
+  assert.deepEqual(filterModels(dated, { sort: "release", type: "language_model" }).map(item => item.name), ["Qwen"]);
 });
 
 test("a reviewed model without a models.dev row never prints null", () => {
@@ -1373,4 +1388,81 @@ test("mergePackScopeEntries unions packs and host-pack systems by name with kind
   const systems = [{ id: "z-sys", name: "Z" }, { id: "a-sys", name: "A" }];
   assert.deepEqual(mergePackScopeEntries(packs, systems).map(item => [item.kind, item.record.id]), [["system", "a-sys"], ["pack", "b-pack"], ["system", "z-sys"]]);
   assert.deepEqual(mergePackScopeEntries([], []), []);
+});
+
+test("exactly one switcher chip is pressed, and a family chip wins over Systems", () => {
+  const entries = [
+    { collection: "all" },
+    { collection: "systems" },
+    { collection: "systems", family: "memory_system" },
+    { collection: "systems", family: "agent_system" },
+    { collection: "inference" },
+  ];
+  assert.equal(activeSwitcherIndex(entries, { collection: "all" }), 0);
+  assert.equal(activeSwitcherIndex(entries, { collection: "systems" }), 1);
+  assert.equal(activeSwitcherIndex(entries, { collection: "systems", family: "memory_system" }), 2);
+  assert.equal(activeSwitcherIndex(entries, { collection: "systems", family: "agent_system" }), 3);
+  // A family with no chip of its own leaves the collection chip pressed.
+  assert.equal(activeSwitcherIndex(entries, { collection: "systems", family: "robot_system" }), 1);
+  assert.equal(activeSwitcherIndex(entries, { collection: "inference", family: "memory_system" }), 4);
+  assert.equal(activeSwitcherIndex(entries, { collection: "packs" }), -1);
+});
+
+test("each switcher chip counts what its scope lists by default", () => {
+  const systems = [
+    { name: "M1", system_family: "memory_system", status: "active", deployment: [] },
+    { name: "M2", system_family: "memory_system", status: "archived", deployment: [] },
+    { name: "A1", system_family: "agent_system", status: "active", deployment: ["host_pack"] },
+    { name: "A2", system_family: "agent_system", status: "superseded", deployment: [] },
+    { name: "S1", system_family: "assistant_system", status: "active", deployment: [] },
+  ];
+  const counts = switcherCounts({ projects: systems, services: [{}, {}], runtimes: [{}], models: [{}, {}, {}], packs: [{}], robots: [{}, {}, {}, {}] });
+  assert.deepEqual(counts, {
+    all: 5 + 2 + 1 + 3 + 1 + 4,
+    systems: 3,
+    memory_system: 1,
+    agent_system: 1,
+    assistant_system: 1,
+    inference: 2,
+    runtimes: 1,
+    models: 3,
+    packs: 1 + 1,
+    robots: 4,
+  });
+});
+
+test("a scope writes only the parameters that differ from their defaults, in a fixed order", () => {
+  assert.deepEqual(
+    scopeURLParams("systems", { q: "graph", family: "memory_system", role: "", status: "active", localOnly: "", sort: "name" }),
+    [["q", "graph"], ["family", "memory_system"]],
+  );
+  assert.deepEqual(scopeURLParams("systems", { status: "", localOnly: "1", sort: "score" }), [["status", ""], ["localOnly", "1"], ["sort", "score"]]);
+  assert.deepEqual(scopeURLParams("inference", { type: "direct_model_api", sort: "score" }), [["type", "direct_model_api"]]);
+  assert.deepEqual(scopeURLParams("nowhere", { q: "x" }), []);
+});
+
+test("restoring a scope keeps what its controls offer and rejects the rest", () => {
+  const params = new URLSearchParams("q=graph&family=memory_system&role=nope&type=direct_model_api&page=2");
+  const allowed = { q: "text", family: new Set(["", "memory_system"]), role: new Set(["", "human_pkm"]) };
+  assert.deepEqual(readScopeURLParams("systems", params, allowed), {
+    values: { q: "graph", family: "memory_system", page: 2 },
+    rejected: ["role", "type"],
+  });
+  assert.deepEqual(readScopeURLParams("all", new URLSearchParams("page=0"), { q: "text" }), { values: {}, rejected: ["page"] });
+  assert.ok(SCOPE_URL_KEYS.includes("page"));
+});
+
+test("a URL's filters belong to its view or to the Directory collection it names", () => {
+  assert.equal(scopeFromURL(new URLSearchParams("")), "all");
+  assert.equal(scopeFromURL(new URLSearchParams("collection=systems")), "systems");
+  assert.equal(scopeFromURL(new URLSearchParams("collection=nope")), "all");
+  assert.equal(scopeFromURL(new URLSearchParams("view=models&collection=systems")), "models");
+  assert.equal(scopeFromURL(new URLSearchParams("view=finder")), null);
+});
+
+test("the API view does not call web-page evidence pinned", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
+  // docs/DATA_MODEL.md: web terms carry "no claim of immutability".
+  assert.doesNotMatch(html, /pinned to the exact file or page/);
+  assert.match(html, /web page records the date it was read/);
 });

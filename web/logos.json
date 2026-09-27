@@ -475,6 +475,7 @@
     "mistral-vibe": "lobe:mistral",
     "muse-code": "lobe:meta",
     "openai-agents-sdk": "lobe:openai",
+    "openai-agents-api": "lobe:openai",
     "opencode": "lobe:opencode",
     "openhands": "lobe:openhands",
     "perplexity": "lobe:perplexity",

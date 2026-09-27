@@ -38,7 +38,7 @@ A marketplace record pins its manifest and names its steward, hosts, install mec
 5. Relate records only when it aids navigation; a relationship is not a compatibility claim.
 6. Run synchronization, payload and share-page generation, validation, all tests, and the pack browser checks in [`WEB.md`](WEB.md).
 
-Packs are never scored, sorted by popularity, or assigned a system family.
+Packs are never scored, sorted by popularity, or assigned a system family. Star counts are descriptive live metadata on every pack card, refreshed from GitHub alongside systems and runtimes; they never enter a score and the scope stays alphabetical with no stars sort.
 
 ## Scored systems that install as packs
 
