@@ -21,13 +21,6 @@
     };
   }
 
-  function matchesSearchTerm(haystack, term) {
-    if (!term) return true;
-    if (term.length > 2) return haystack.includes(term);
-    const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    return new RegExp(`(^|[^a-z0-9])${escaped}([^a-z0-9]|$)`).test(haystack);
-  }
-
   function monogramGlyph(name) {
     return (String(name || "").match(/[a-zA-Z0-9]/)?.[0] || "•").toUpperCase();
   }
@@ -87,29 +80,9 @@
     return 0;
   }
 
-  // The systems grid's own haystack: an optional index entry for the record,
-  // or (until an index arrives) the whole record stringified and lowercased —
-  // exactly what this search already matched against before indexes existed,
-  // so no index keeps this collection's search a no-op.
-  function recordHaystack(record, index) {
-    const indexed = index && index[record.id];
-    if (indexed) return indexed;
-    return JSON.stringify(record).toLowerCase();
-  }
-
-  function matchesRecordSearch(record, term, index) {
-    if (term.length === 1) {
-      const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      return new RegExp(`(^|[^a-z0-9])${escaped}`).test(String(record.name || "").toLowerCase());
-    }
-    return matchesSearchTerm(recordHaystack(record, index), term);
-  }
-
-  function matchesProject(project, filters) {
-    const term = (filters.term || "").trim().toLowerCase();
+  function matchesProjectFacets(project, filters) {
     const roles = filters.roles || [];
-    return matchesRecordSearch(project, term, filters.searchIndex) &&
-      (!filters.family || project.system_family === filters.family) &&
+    return (!filters.family || project.system_family === filters.family) &&
       (!filters.role || project.primary_role === filters.role) &&
       (!roles.length || roles.includes(project.primary_role)) &&
       (!filters.agent || project.agent_relation === filters.agent) &&
@@ -122,6 +95,12 @@
       (!filters.localOnly || project.local_first);
   }
 
+  function matchesProject(project, filters) {
+    const query = parseSearchQuery(filters.term);
+    return matchesProjectFacets(project, filters) && (!query.tokens.length
+      || recordMatch(query, searchFields("system", project, { index: filters.searchIndex, labelOf: filters.labelOf })) > 0);
+  }
+
   function compareProjects(sort) {
     if (sort === "stars") return (a, b) => (b.stars ?? -1) - (a.stars ?? -1);
     if (sort === "name") return (a, b) => a.name.localeCompare(b.name);
@@ -129,58 +108,53 @@
   }
 
   function filterAndSortProjects(projects, filters) {
-    return projects.filter(project => matchesProject(project, filters)).sort(compareProjects(filters.sort));
+    const query = parseSearchQuery(filters.term);
+    const byMatch = filters.sort === "match" && query.tokens.length > 0;
+    return orderBySearch(
+      projects.filter(project => matchesProjectFacets(project, filters)),
+      query,
+      project => searchFields("system", project, { index: filters.searchIndex, labelOf: filters.labelOf }),
+      compareProjects(filters.sort === "match" ? "name" : filters.sort),
+      byMatch,
+    );
   }
 
-  // Specifications, inference services, and local runtimes each document a
-  // narrower search surface than the systems grid: visible identity and
-  // boundary prose, never a relationship id or an evidence URL. An index
-  // entry stands in for that surface once one exists; absent one, the
-  // collection's own field list still builds it exactly as it always has.
   function filterSpecifications(specifications, filters = {}) {
-    const term = (filters.term || "").trim().toLowerCase();
-    return specifications.filter(specification => {
-      const indexed = filters.searchIndex && filters.searchIndex[specification.id];
-      const haystack = indexed || [
-        specification.id,
-        specification.name,
-        specification.short_name,
-        specification.description,
-        specification.standardizes,
-        specification.does_not_standardize,
-        specification.repo,
-        ...(specification.stewards || []),
-      ].filter(Boolean).join(" ").toLowerCase();
-      return matchesSearchTerm(haystack, term) &&
-        (!filters.type || specification.specification_type === filters.type) &&
-        (!filters.scope || specification.scope === filters.scope) &&
-        (!filters.status || specification.status === filters.status) &&
-        (!filters.license || specification.licenses.includes(filters.license));
-    }).sort((a, b) => a.name.localeCompare(b.name));
+    const faceted = specifications.filter(specification =>
+      (!filters.type || specification.specification_type === filters.type) &&
+      (!filters.scope || specification.scope === filters.scope) &&
+      (!filters.status || specification.status === filters.status) &&
+      (!filters.license || specification.licenses.includes(filters.license)));
+    return orderBySearch(
+      faceted,
+      parseSearchQuery(filters.term),
+      specification => searchFields("spec", specification, { index: filters.searchIndex, labelOf: filters.labelOf }),
+      (a, b) => a.name.localeCompare(b.name),
+      true,
+    );
   }
 
   function filterScoredCollection(records, filters = {}, options = {}) {
-    const term = (filters.term || "").trim().toLowerCase();
-    const searchFields = options.searchFields || [];
     const facets = options.facets || {};
-    return records.filter(record => {
-      const indexed = filters.searchIndex && filters.searchIndex[record.id];
-      const haystack = indexed || searchFields
-        .flatMap(field => Array.isArray(record[field]) ? record[field] : [record[field]])
-        .filter(Boolean).join(" ").toLowerCase();
-      if (!matchesSearchTerm(haystack, term)) return false;
-      return Object.entries(facets).every(([key, field]) => {
-        const selected = filters[key];
-        if (!selected) return true;
-        const value = record[field];
-        return Array.isArray(value) ? value.includes(selected) : value === selected;
-      });
-    }).sort(filters.sort === "score"
-      ? (a, b) => (b.score?.overall ?? -1) - (a.score?.overall ?? -1) || a.name.localeCompare(b.name)
-      : (a, b) => a.name.localeCompare(b.name));
+    const faceted = records.filter(record => Object.entries(facets).every(([key, field]) => {
+      const selected = filters[key];
+      if (!selected) return true;
+      const value = record[field];
+      return Array.isArray(value) ? value.includes(selected) : value === selected;
+    }));
+    const byScore = (a, b) => (b.score?.overall ?? -1) - (a.score?.overall ?? -1) || a.name.localeCompare(b.name);
+    const byName = (a, b) => a.name.localeCompare(b.name);
+    return orderBySearch(
+      faceted,
+      parseSearchQuery(filters.term),
+      record => searchFields(options.kind, record, { index: filters.searchIndex, labelOf: filters.labelOf, textFields: options.searchFields }),
+      filters.sort === "score" ? byScore : byName,
+      filters.sort === "match",
+    );
   }
 
   const INFERENCE_SERVICE_VIEW = {
+    kind: "inference",
     searchFields: [
       "id", "name", "operator", "description", "service_boundary", "regional_controls",
       "retention_controls", "routing", "customization", "strengths", "tradeoffs",
@@ -194,6 +168,7 @@
   };
 
   const LOCAL_RUNTIME_VIEW = {
+    kind: "runtime",
     searchFields: [
       "id", "name", "maintainer", "description", "runtime_boundary", "model_management",
       "hardware_requirements", "operational_controls", "strengths", "tradeoffs",
@@ -207,6 +182,7 @@
   };
 
   const MODEL_VIEW = {
+    kind: "model",
     searchFields: [
       "id", "source_id", "name", "developer", "description", "access_boundary",
       "strengths", "tradeoffs",
@@ -220,9 +196,10 @@
   };
 
   // Packs are unscored (ADR 032): the shared collection filter is reused for its
-  // facets and search, and the sort is pinned to name so no caller can ask for a
+  // facets and search, and unscoredSort pins the sort so no caller can ask for a
   // score order that does not exist.
   const PACK_VIEW = {
+    kind: "pack",
     searchFields: ["id", "name", "short_name", "steward", "repo", "description"],
     facets: {
       type: "pack_type",
@@ -232,8 +209,12 @@
     },
   };
 
+  // Unscored collections are A–Z while browsing and ordered by match while
+  // searching (ADR 032, ADR 037, ADR 040, ADR 041).
+  const unscoredSort = filters => (String(filters.term || "").trim() ? "match" : "name");
+
   function filterPacks(packs, filters = {}) {
-    return filterScoredCollection(packs, { ...filters, sort: "name" }, PACK_VIEW);
+    return filterScoredCollection(packs, { ...filters, sort: unscoredSort(filters) }, PACK_VIEW);
   }
 
   // Labs are unscored organizations (ADR 041). A lab stores the names the other
@@ -242,6 +223,7 @@
   // and share pages. `models` is the page's overlaid list, so a reviewed release
   // carries review_status "reviewed" and an imported models.dev row "imported".
   const LAB_VIEW = {
+    kind: "lab",
     searchFields: ["id", "name", "description", "catalog_names", "parent_organization"],
     facets: {
       type: "lab_type",
@@ -291,10 +273,11 @@
     return [...order.filter(mode => present.has(mode)), ...[...present].filter(mode => !order.includes(mode)).sort()];
   }
 
-  // Labs sort by name only; the distribution facet keeps a lab with at least one
-  // reviewed release distributed that way, so it needs the catalog's models.
+  // Labs sort as the other unscored collections do; the distribution facet keeps
+  // a lab with at least one reviewed release distributed that way, so it needs
+  // the catalog's models.
   function filterLabs(labs, filters = {}) {
-    return filterScoredCollection(labs, { ...filters, sort: "name" }, LAB_VIEW).filter(lab =>
+    return filterScoredCollection(labs, { ...filters, sort: unscoredSort(filters) }, LAB_VIEW).filter(lab =>
       !filters.distribution || labRelations(lab, { models: filters.models || [] }).models
         .some(model => (model.distribution_modes || []).includes(filters.distribution)));
   }
@@ -337,9 +320,10 @@
   }
 
   // Robots are unscored (ADR 037): the shared collection filter supplies the
-  // facets and search, and the sort is pinned to name so no caller can ask for
+  // facets and search, and unscoredSort pins the sort so no caller can ask for
   // a score order that does not exist.
   const ROBOT_VIEW = {
+    kind: "robot",
     searchFields: ["id", "name", "short_name", "manufacturer", "description"],
     facets: {
       formFactor: "form_factor",
@@ -349,8 +333,106 @@
     },
   };
 
+  // The prose each collection searches until its index arrives: the fields it
+  // has always searched, so a missing index narrows a search, never widens it.
+  const SEARCH_TEXT_FIELDS = {
+    system: ["id", "name", "description", "repo", "url", "why_it_matters", "strengths", "weaknesses"],
+    spec: ["id", "name", "short_name", "description", "standardizes", "does_not_standardize", "repo", "stewards"],
+    inference: INFERENCE_SERVICE_VIEW.searchFields,
+    runtime: LOCAL_RUNTIME_VIEW.searchFields,
+    model: MODEL_VIEW.searchFields,
+    pack: PACK_VIEW.searchFields,
+    lab: LAB_VIEW.searchFields,
+    robot: ROBOT_VIEW.searchFields,
+  };
+  const SEARCH_FIELD_WEIGHTS = { name: 50, label: 30, maker: 20, description: 10, text: 3 };
+
+  const searchWordCache = new Map();
+  function cachedSearchWords(text) {
+    const key = String(text || "");
+    let words = searchWordCache.get(key);
+    if (!words) {
+      words = searchWords(key);
+      searchWordCache.set(key, words);
+    }
+    return words;
+  }
+
+  // What a record is matched and ordered by. `labelOf(kind, record)` names its
+  // role or type (the caller holds the taxonomy); `text` is the record's search
+  // index entry, or its own prose until the index arrives.
+  function searchFields(kind, record, { index, labelOf, textFields } = {}) {
+    const maker = record.repo || record.operator || record.maintainer || record.developer
+      || record.steward || record.manufacturer || (record.stewards || []).join(" ");
+    const prose = (textFields || SEARCH_TEXT_FIELDS[kind] || ["name", "description"])
+      .flatMap(field => Array.isArray(record[field]) ? record[field] : [record[field]])
+      .filter(Boolean).join(" ");
+    return {
+      name: [record.name, record.short_name].filter(Boolean).join(" "),
+      label: labelOf ? labelOf(kind, record) : "",
+      maker: maker || "",
+      description: record.description || "",
+      text: (index && index[record.id]) || prose,
+    };
+  }
+
+  // A record's match weight: 0 when any query word misses every field, since
+  // every word must match. Otherwise the number only orders results; it never
+  // reads a score, stars, or any other merit (ADR 040).
+  function searchMatch(query, fields) {
+    if (!query.tokens.length) return 1;
+    const words = Object.fromEntries(Object.keys(SEARCH_FIELD_WEIGHTS).map(field => [field, cachedSearchWords(fields[field])]));
+    const nameHasAll = query.tokens.every(token => tokenHit(words.name, token, true) > 0);
+    let weight = 0;
+    for (const token of query.tokens) {
+      let best = 0;
+      for (const [field, fieldWeight] of Object.entries(SEARCH_FIELD_WEIGHTS)) {
+        const inName = field === "name";
+        best = Math.max(best, tokenHit(words[field], token, inName) * (inName && !nameHasAll ? 12 : fieldWeight));
+      }
+      if (!best) return 0;
+      weight += best;
+    }
+    const name = normalizeSearchText(fields.name).replace(/-/g, " ");
+    if (name === query.text) return weight + 1000;
+    if (name.startsWith(query.text)) return weight + 400;
+    return nameHasAll ? weight + 200 : weight;
+  }
+
+  // A split product name still comes first: "lang chain" also tries
+  // "langchain", and a record whose name holds the joined word counts as a
+  // name match.
+  function recordMatch(query, fields) {
+    let weight = searchMatch(query, fields);
+    const nameWords = cachedSearchWords(fields.name);
+    for (let i = 0; i < query.tokens.length - 1; i += 1) {
+      const tokens = [...query.tokens.slice(0, i), query.tokens[i] + query.tokens[i + 1], ...query.tokens.slice(i + 2)];
+      if (!tokens.every(token => tokenHit(nameWords, token, true) > 0)) continue;
+      weight = Math.max(weight, searchMatch({ raw: query.raw, text: tokens.join(" "), tokens }, fields) + 300);
+    }
+    return weight;
+  }
+
+  const isActiveRecord = record => !record.status || record.status === "active";
+
+  // Keeps the records a query matches and orders them: by match weight when
+  // `byMatch` is set and there is a query, otherwise by `compare`. Among equal
+  // matches, active records come first, then names A–Z.
+  function orderBySearch(records, query, fieldsOf, compare, byMatch) {
+    if (!query.tokens.length) return [...records].sort(compare);
+    const matched = [];
+    for (const record of records) {
+      const weight = recordMatch(query, fieldsOf(record));
+      if (weight > 0) matched.push({ record, weight });
+    }
+    if (!byMatch) return matched.map(item => item.record).sort(compare);
+    return matched.sort((a, b) => b.weight - a.weight
+      || Number(isActiveRecord(b.record)) - Number(isActiveRecord(a.record))
+      || a.record.name.localeCompare(b.record.name)).map(item => item.record);
+  }
+
   function filterRobots(robots, filters = {}) {
-    return filterScoredCollection(robots, { ...filters, sort: "name" }, ROBOT_VIEW);
+    return filterScoredCollection(robots, { ...filters, sort: unscoredSort(filters) }, ROBOT_VIEW);
   }
 
   function filterInferenceServices(services, filters = {}) {
@@ -376,45 +458,31 @@
     return filters.sort === "release" ? releasesNewestFirst(matches) : matches;
   }
 
-  // The mixed directory searches the same visible identity, editorial, and
-  // boundary prose as the Systems finder's advanced view, never the hidden
-  // provider metadata or evidence URLs that only ever show up in detail
-  // dialogs; an index entry stands in for that surface once one exists.
-  function matchesDirectoryProjectSearch(project, term, index) {
-    if (term.length === 1) return matchesRecordSearch(project, term, index);
-    const indexed = index && index[project.id];
-    const haystack = indexed || [
-      project.id,
-      project.name,
-      project.description,
-      project.repo,
-      project.url,
-      project.why_it_matters,
-      ...(project.strengths || []),
-      ...(project.weaknesses || []),
-    ].filter(Boolean).join(" ").toLowerCase();
-    return matchesSearchTerm(haystack, term);
-  }
+  const DIRECTORY_KINDS = [
+    ["system", "searchIndex"], ["inference", "serviceSearchIndex"], ["runtime", "runtimeSearchIndex"],
+    ["model", "modelSearchIndex"], ["pack", "packSearchIndex"], ["robot", "robotSearchIndex"],
+  ];
 
-  // Each collection in the unified directory keeps its own index namespace:
-  // filters.searchIndex covers systems (the same shape filterAndSortProjects
-  // takes), filters.serviceSearchIndex covers inference services,
-  // filters.runtimeSearchIndex covers local runtimes, filters.modelSearchIndex
-  // covers model releases, filters.packSearchIndex covers agent packs, and
-  // filters.robotSearchIndex covers robots. Each is supplied independently,
-  // so a missing one only narrows that collection to the searchable fields
-  // present in its boot records.
+  // All is A–Z while browsing (ADR 013) and ordered by match while searching,
+  // never by score (ADR 040). Each collection reads its own index namespace;
+  // a missing one narrows that collection to its boot fields.
   function filterDirectoryEntries(projects, services, runtimes = [], models = [], filters = {}, packs = [], robots = []) {
-    const term = (filters.term || "").trim().toLowerCase();
-    const entries = [
-      ...projects.filter(project => matchesDirectoryProjectSearch(project, term, filters.searchIndex)).map(record => ({ kind: "system", record })),
-      ...filterInferenceServices(services, { term, sort: "name", searchIndex: filters.serviceSearchIndex }).map(record => ({ kind: "inference", record })),
-      ...filterLocalRuntimes(runtimes, { term, sort: "name", searchIndex: filters.runtimeSearchIndex }).map(record => ({ kind: "runtime", record })),
-      ...filterModels(models, { term, sort: "name", searchIndex: filters.modelSearchIndex }).map(record => ({ kind: "model", record })),
-      ...filterPacks(packs, { term, searchIndex: filters.packSearchIndex }).map(record => ({ kind: "pack", record })),
-      ...filterRobots(robots, { term, searchIndex: filters.robotSearchIndex }).map(record => ({ kind: "robot", record })),
-    ];
-    return entries.sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
+    const query = parseSearchQuery(filters.term);
+    const lists = { system: projects, inference: services, runtime: runtimes, model: models, pack: packs, robot: robots };
+    const entries = [];
+    for (const [kind, indexKey] of DIRECTORY_KINDS) {
+      for (const record of lists[kind]) {
+        const weight = query.tokens.length
+          ? recordMatch(query, searchFields(kind, record, { index: filters[indexKey], labelOf: filters.labelOf }))
+          : 1;
+        if (weight > 0) entries.push({ kind, record, weight });
+      }
+    }
+    const byName = (a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind);
+    const ordered = query.tokens.length
+      ? entries.sort((a, b) => b.weight - a.weight || Number(isActiveRecord(b.record)) - Number(isActiveRecord(a.record)) || byName(a, b))
+      : entries.sort(byName);
+    return ordered.map(({ kind, record }) => ({ kind, record }));
   }
 
   // Scored systems that install into a host agent as a skills bundle, plugin,
@@ -422,22 +490,35 @@
   // beside the unscored packs; the search term is the only filter that applies,
   // because pack facets describe packs, not systems.
   function packShapedSystems(projects, filters = {}) {
-    const term = (filters.term || "").trim().toLowerCase();
-    return projects
-      .filter(project => (project.deployment || []).includes("host_pack"))
-      .filter(project => matchesDirectoryProjectSearch(project, term, filters.searchIndex))
-      .sort((a, b) => a.name.localeCompare(b.name));
+    const query = parseSearchQuery(filters.term);
+    return orderBySearch(
+      projects.filter(project => (project.deployment || []).includes("host_pack")),
+      query,
+      project => searchFields("system", project, { index: filters.searchIndex, labelOf: filters.labelOf }),
+      (a, b) => a.name.localeCompare(b.name),
+      query.tokens.length > 0,
+    );
   }
 
-  // The Packs scope lists one grid of installables: unscored packs beside
-  // scored host-installed systems (ADR 035). Both inputs arrive pre-filtered
-  // and name-sorted; the merge keeps that order with kind as tiebreak, the
-  // same rule filterDirectoryEntries uses for mixed entries.
-  function mergePackScopeEntries(packs, systems) {
-    return [
+  // The Packs scope lists one grid: unscored packs beside scored
+  // host-installed systems (ADR 035). It is A–Z while browsing and ordered
+  // by match while searching.
+  function mergePackScopeEntries(packs, systems, { term = "", packIndex, systemIndex, labelOf } = {}) {
+    const entries = [
       ...packs.map(record => ({ kind: "pack", record })),
       ...systems.map(record => ({ kind: "system", record })),
-    ].sort((a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind));
+    ];
+    const byName = (a, b) => a.record.name.localeCompare(b.record.name) || a.kind.localeCompare(b.kind);
+    const query = parseSearchQuery(term);
+    if (!query.tokens.length) return entries.sort(byName);
+    const weightOf = entry => recordMatch(query, searchFields(entry.kind, entry.record, {
+      index: entry.kind === "pack" ? packIndex : systemIndex, labelOf,
+    }));
+    return entries.map(entry => ({ entry, weight: weightOf(entry) }))
+      .sort((a, b) => b.weight - a.weight
+        || Number(isActiveRecord(b.entry.record)) - Number(isActiveRecord(a.entry.record))
+        || byName(a.entry, b.entry))
+      .map(item => item.entry);
   }
 
   // Which one switcher chip is pressed. `entries` describes the buttons in
@@ -1148,7 +1229,6 @@
     labRelations,
     labsForRecord,
     matchesProject,
-    matchesRecordSearch,
     mergePackScopeEntries,
     modelMetadataAttribution,
     modelSourceLabel,
@@ -1161,11 +1241,12 @@
     parseSearchQuery,
     parseViewId,
     readScopeURLParams,
-    recordHaystack,
+    recordMatch,
     releaseDate,
     releasesNewestFirst,
     scopeFromURL,
     scopeURLParams,
+    searchFields,
     searchWords,
     shareRecordPath,
     sourceNamespace,

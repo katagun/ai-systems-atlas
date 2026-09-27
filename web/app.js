@@ -255,6 +255,19 @@ const licenseName = id => taxonomyName("licenses", id);
 const scoreProfileName = id => taxonomyName("score_profiles", id);
 const traitNames = (group, values = []) => values.map(id => taxonomyName(group, id)).join(" · ");
 
+// A record's role or type in words, which search weighs above its prose.
+function searchLabel(kind, record) {
+  if (kind === "system") return `${roleName(record.primary_role)} ${familyName(record.system_family)} ${sourceModelName(record.source_model)}`;
+  if (kind === "inference") return taxonomyName("inference_service_types", record.service_type);
+  if (kind === "runtime") return taxonomyName("local_runtime_types", record.runtime_type);
+  if (kind === "model") return record.model_type ? taxonomyName("model_types", record.model_type) : "";
+  if (kind === "pack") return taxonomyName("pack_types", record.pack_type);
+  if (kind === "lab") return taxonomyName("lab_types", record.lab_type);
+  if (kind === "spec") return taxonomyName("specification_types", record.specification_type);
+  if (kind === "robot") return taxonomyName("robot_form_factors", record.form_factor);
+  return "";
+}
+
 // Static dispatch on purpose. The comparison kind comes from the compare URL
 // parameter, so any dynamic lookup keyed on it can resolve an unintended target;
 // an object literal would return inherited names such as "constructor". Each
@@ -1070,6 +1083,7 @@ function renderAllDirectoryEntries() {
     modelSearchIndex: searchIndexes.models,
     packSearchIndex: searchIndexes.packs,
     robotSearchIndex: searchIndexes.robots,
+    labelOf: searchLabel,
   }, state.packs, state.robots);
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   const paged = AtlasCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
@@ -1123,6 +1137,7 @@ function filteredProjects() {
   return AtlasCore.filterAndSortProjects(state.projects, {
     term: $("#project-search").value,
     searchIndex: searchIndexes.systems,
+    labelOf: searchLabel,
     family: $("#family-filter").value,
     role: $("#role-filter").value,
     roles: state.directoryRoles || [],
@@ -1200,6 +1215,7 @@ const COLLECTIONS = {
     records: () => AtlasCore.filterSpecifications(state.specifications, {
       term: $("#specification-search").value,
       searchIndex: searchIndexes.specifications,
+      labelOf: searchLabel,
       type: $("#specification-type-filter").value,
       scope: $("#specification-scope-filter").value,
       status: $("#specification-status-filter").value,
@@ -1235,6 +1251,7 @@ const COLLECTIONS = {
     records: () => AtlasCore.filterLabs(state.labs, {
       term: $("#lab-search").value,
       searchIndex: searchIndexes.labs,
+      labelOf: searchLabel,
       type: $("#lab-type-filter").value,
       headquarters: $("#lab-country-filter").value,
       distribution: $("#lab-distribution-filter").value,
@@ -1257,6 +1274,7 @@ const COLLECTIONS = {
     records: () => AtlasCore.filterInferenceServices(state.inferenceServices, {
       term: $("#inference-search").value,
       searchIndex: searchIndexes.inference,
+      labelOf: searchLabel,
       type: $("#inference-type-filter").value,
       delivery: $("#inference-delivery-filter").value,
       modelSource: $("#inference-model-source-filter").value,
@@ -1286,6 +1304,7 @@ const COLLECTIONS = {
     records: () => AtlasCore.filterLocalRuntimes(state.localRuntimes, {
       term: $("#runtime-search").value,
       searchIndex: searchIndexes.runtimes,
+      labelOf: searchLabel,
       type: $("#runtime-type-filter").value,
       accelerator: $("#runtime-accelerator-filter").value,
       modelFormat: $("#runtime-format-filter").value,
@@ -1322,6 +1341,7 @@ const COLLECTIONS = {
       license: $("#model-license-filter").value,
       sort: $("#model-sort-filter").value,
       searchIndex: searchIndexes.models,
+      labelOf: searchLabel,
       ids: labModelIds($("#model-lab-filter").value),
     }),
     card: model => {
@@ -1348,6 +1368,7 @@ const COLLECTIONS = {
     records: () => AtlasCore.filterRobots(state.robots, {
       term: $("#robot-search").value,
       searchIndex: searchIndexes.robots,
+      labelOf: searchLabel,
       formFactor: $("#robot-form-factor-filter").value,
       aiBasis: $("#robot-ai-basis-filter").value,
       availability: $("#robot-availability-filter").value,
@@ -1405,6 +1426,7 @@ function renderPacks() {
   const packs = AtlasCore.filterPacks(state.packs, {
     term,
     searchIndex: searchIndexes.packs,
+    labelOf: searchLabel,
     type: $("#pack-type-filter").value,
     host: $("#pack-host-filter").value,
     install: $("#pack-install-filter").value,
@@ -1413,8 +1435,11 @@ function renderPacks() {
   const systems = AtlasCore.packShapedSystems(state.projects, {
     term,
     searchIndex: searchIndexes.systems,
+    labelOf: searchLabel,
   });
-  const entries = AtlasCore.mergePackScopeEntries(packs, systems);
+  const entries = AtlasCore.mergePackScopeEntries(packs, systems, {
+    term, packIndex: searchIndexes.packs, systemIndex: searchIndexes.systems, labelOf: searchLabel,
+  });
   const packNoun = packs.length === 1 ? "pack" : "packs";
   const systemNoun = systems.length === 1 ? "installed system" : "installed systems";
   $("#pack-result-count").textContent = `${packs.length} ${packNoun} · ${systems.length} ${systemNoun} · Scores hidden`;

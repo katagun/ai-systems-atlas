@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewId, readScopeURLParams, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -139,12 +139,22 @@ test("search falls back to card text before the index arrives", () => {
   assert.equal(filterAndSortProjects(records, { term: "card", searchIndex: {} }).length, 1);
 });
 
-test("indexed search keeps infix matching, which is why the index is raw text", () => {
-  // "llama" appears only in the index text, never in the record's own id,
-  // name, or description — so this fails if recordHaystack ignores the index.
+test("indexed search reads the index through whole words", () => {
+  // "gguf" appears only in the index text, never in the record's own fields,
+  // so this fails if the matcher ignores the index.
   const records = [{ id: "ol", name: "Ol", description: "Runner.", score: { overall: 1 } }];
   const searchIndex = { ol: "ollama runner. runs gguf models locally." };
-  assert.equal(filterAndSortProjects(records, { term: "llama", searchIndex }).length, 1);
+  assert.equal(filterAndSortProjects(records, { term: "gguf", searchIndex }).length, 1);
+});
+
+test("mid-word matches count inside names but not inside prose", () => {
+  const records = [
+    { id: "o", name: "Ollama", description: "Local runner.", score: { overall: 1 } },
+    { id: "x", name: "Other", description: "Mentions ollama inside prose.", score: { overall: 9 } },
+    { id: "s", name: "Store", description: "Vector storage.", score: { overall: 9 } },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "llama", sort: "name" }).map(record => record.name), ["Ollama"]);
+  assert.deepEqual(filterAndSortProjects(records, { term: "rag", sort: "name" }).map(record => record.name), []);
 });
 
 test("a one-character term still matches only the start of a word in the name", () => {
@@ -753,7 +763,8 @@ test("robot filters combine form factor, availability, and status, sorted by nam
 });
 
 test("robot search covers name and maker, reads the index for named models, and never evidence URLs", () => {
-  assert.deepEqual(filterRobots(robots, { term: "dynamo" }).map(item => item.name), ["Atlas Arm", "Rover"]);
+  // Both match through their maker alone, so the active robot leads the archived one.
+  assert.deepEqual(filterRobots(robots, { term: "dynamo" }).map(item => item.name), ["Rover", "Atlas Arm"]);
   assert.deepEqual(filterRobots(robots, { term: "hidden" }), []);
   assert.deepEqual(filterRobots(robots, { term: "sample-vla", searchIndex: { "g-one": "sample-vla" } }).map(item => item.name), ["G One"]);
 });
@@ -1501,4 +1512,63 @@ test("short words are strict outside names, and names match inside compounds", (
   assert.equal(tokenHit(searchWords("GBrain"), "gbr", true), 0.8);
   assert.equal(tokenHit(searchWords("zebra"), "z", false), 0);
   assert.equal(tokenHit(searchWords("Alpha"), "a", true), 0.8);
+});
+
+test("a search orders by match and never by score", () => {
+  const records = [
+    { id: "a", name: "Alpha Router", description: "Routes requests to ollama.", status: "active", score: { overall: 10 } },
+    { id: "b", name: "Ollama", description: "Runs models.", status: "active", score: { overall: 1 } },
+    { id: "c", name: "Ollama Classic", description: "Old runner.", status: "archived", score: { overall: 9 } },
+  ];
+  const names = filterAndSortProjects(records, { term: "ollama", sort: "match", status: "" }).map(record => record.name);
+  assert.deepEqual(names, ["Ollama", "Ollama Classic", "Alpha Router"]);
+  // Without a query, "match" falls back to names A–Z.
+  assert.deepEqual(filterAndSortProjects(records, { term: "", sort: "match", status: "" }).map(record => record.name), ["Alpha Router", "Ollama", "Ollama Classic"]);
+});
+
+test("a split name is found as a name", () => {
+  const fields = searchFields("system", { id: "lc", name: "LangChain", description: "Framework." });
+  assert.ok(recordMatch(parseSearchQuery("lang chain"), fields) > 0);
+});
+
+test("the mixed directory stays A–Z while browsing and orders by match while searching", () => {
+  const systems = [{ id: "z", name: "Zeta Agent", description: "An agent.", status: "active", deployment: [] }];
+  const runtimes = [{ id: "o", name: "Ollama", maintainer: "Ollama", description: "Runs models.", api_styles: [] }];
+  const browse = filterDirectoryEntries(systems, [], runtimes, [], { term: "" }).map(entry => entry.record.name);
+  assert.deepEqual(browse, ["Ollama", "Zeta Agent"]);
+  const found = filterDirectoryEntries(systems, [], runtimes, [], { term: "agent" }).map(entry => entry.record.name);
+  assert.deepEqual(found, ["Zeta Agent"]);
+});
+
+test("real-catalog probes: known names first and loose queries answered", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const nameOf = (group, id) => (taxonomy[group] || []).find(item => item.id === id)?.name || "";
+  const labelOf = (kind, record) => ({
+    system: `${nameOf("primary_roles", record.primary_role)} ${nameOf("system_families", record.system_family)} ${nameOf("source_models", record.source_model)}`,
+    inference: nameOf("inference_service_types", record.service_type),
+    runtime: nameOf("local_runtime_types", record.runtime_type),
+    model: nameOf("model_types", record.model_type),
+    pack: nameOf("pack_types", record.pack_type),
+    robot: nameOf("robot_form_factors", record.form_factor),
+  })[kind] || "";
+  const boot = name => readWebJSON(`app/${name}.json`);
+  const index = name => readWebJSON(`app/search/${name}.json`);
+  const indexes = {
+    searchIndex: index("systems"), serviceSearchIndex: index("inference"), runtimeSearchIndex: index("runtimes"),
+    modelSearchIndex: index("models"), packSearchIndex: index("packs"), robotSearchIndex: index("robots"),
+  };
+  const run = term => filterDirectoryEntries(
+    boot("systems").systems, boot("inference").inference, boot("runtimes").runtimes, boot("models").models,
+    { term, labelOf, ...indexes }, boot("packs").packs, boot("robots").robots,
+  ).map(entry => entry.record.name);
+  assert.equal(run("ollama")[0], "Ollama");
+  assert.equal(run("cursor")[0], "Cursor");
+  assert.equal(run("openrouter")[0], "OpenRouter");
+  assert.equal(run("claude code")[0], "Claude Code");
+  assert.equal(run("lang chain")[0], "LangChain");
+  assert.deepEqual(run("self hosted"), run("self-hosted"));
+  assert.ok(run("gpt").includes("ChatGPT"));
+  assert.ok(run("run models locally").length > 0);
+  assert.ok(run("memory for agents").length > 0);
+  assert.ok(run("open source coding agent").length > 0);
 });
