@@ -1666,7 +1666,7 @@
       "description": "The AI company that develops the Solar language models and document-processing engines and builds agents for document workflows on them.",
       "lab_type": "ai_company",
       "headquarters": "kr",
-      "organization_note": "Upstage Co., Ltd. (주식회사 업스테이지) gives its business address in Gangnam-gu, Seoul. It develops the Solar models and its document-processing engines and offers them through its console API. One name, Upstage, covers the models in the catalog.",
+      "organization_note": "Upstage Co., Ltd. (주식회사 업스테이지) gives its business address in Gangnam-gu, Seoul. It develops the Solar models and its document-processing engines, offers them through its console API, and publishes the Solar Open 2 weights on Hugging Face. One name, Upstage, covers the models in the catalog.",
       "catalog_names": [
         "Upstage"
       ],
