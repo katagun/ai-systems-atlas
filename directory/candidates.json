@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-20",
+  "updated_at": "2026-09-27",
   "candidates": [
     {
       "repo": "aden-hive/hive",
@@ -6359,6 +6359,92 @@
         "proposed_at": "2026-09-24",
         "proposer": "candidate-triage"
       }
+    },
+    {
+      "repo": "ZhengyiLuo/AgentsDock",
+      "name": "AgentsDock",
+      "url": "https://github.com/ZhengyiLuo/AgentsDock",
+      "description": "Self-hosted server with desktop and mobile clients for running Claude Code, Codex, and Cursor chats on a machine the user controls, with persistent history, scheduled recurring jobs, digests, persistent terminals, and scoped chat sharing; the installed agent command lines do the model work.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent_workflow",
+      "classification_confidence": 0.55,
+      "github_detected_license": "Apache-2.0",
+      "stars": 79,
+      "topics": [
+        "agentic-ide",
+        "agentic-research",
+        "ai-agents",
+        "ai-research",
+        "claude-code",
+        "codex",
+        "cross-platform",
+        "developer-tools",
+        "electron",
+        "react-native",
+        "remote-development",
+        "research-tools",
+        "self-hosted",
+        "tmux",
+        "typescript"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Siri AI",
+      "url": "https://www.apple.com/apple-intelligence/",
+      "description": "Apple's conversational assistant, rolling out as a beta from 14 September 2026, that answers from personal context across messages, email, and photos, reads the screen, draws on the web, takes actions in apps, and keeps conversations in a dedicated Siri app synced through iCloud across a user's devices.",
+      "proposed_system_family": "assistant_system",
+      "proposed_primary_role": "general_ai_assistant",
+      "classification_confidence": 0.85,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "official-product",
+        "on-device",
+        "personal-context",
+        "voice-assistant"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Norton Neo",
+      "url": "https://neobrowser.ai/",
+      "description": "Gen Digital's security-focused browser whose built-in AI chat reads open tabs as context, keeps memories across sessions that the user can view, edit, or delete, keeps conversation history on the device by default, and can summarize Gmail threads, draft replies, and check Google Calendar.",
+      "proposed_system_family": "assistant_system",
+      "proposed_primary_role": "general_ai_assistant",
+      "classification_confidence": 0.6,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "ai-browser",
+        "local-chat-history",
+        "official-product",
+        "privacy"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     }
   ]
 }
