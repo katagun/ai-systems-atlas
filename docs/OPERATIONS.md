@@ -220,6 +220,29 @@ after a strictly newer human review of every reference, and otherwise keeps the 
 recently checked entry. When two baselines agree it keeps any open drift; when they disagree
 without a newer review it opens terms drift, so a person decides which page is right.
 
+## Reading a cited page directly
+
+Quote a page only after reading it yourself. A search-engine extract is a lead, not a read: the
+2026-09-25 lab re-read ([`LAB_REREAD_2026-09-25.md`](LAB_REREAD_2026-09-25.md)) found labels no
+page supported, and a filing cited as one company's annual report that was another's. Read each
+page as a browser shows it:
+
+```bash
+node scripts/read_page.mjs --out page-reads <url>...
+xvfb-run -a node scripts/read_page.mjs --headed --out page-reads <url>   # pages that render only in a full browser
+node scripts/read_page.mjs --full-text --out page-reads <url>            # text in collapsed sections and long filings
+xvfb-run -a node scripts/read_page.mjs --headed --from <page> <pdf-url>  # a document served only from its host's own link
+```
+
+Each page is saved as text headed by its URL, final URL, status, and title, and a PDF is saved
+as a file for text extraction, for example with `uv run --with pypdf`. The browser uses
+`HTTPS_PROXY` when it is set, and `CHROMIUM_PATH` names the browser binary where Playwright's
+own download is absent. SEC EDGAR asks automated clients to declare themselves, so pass
+`--user-agent` with a maintainer contact rather than reading EDGAR anonymously. The script never
+solves a challenge or disguises the browser: when a page stays behind a bot check or an error,
+record it as unreadable and cite a first-party page that can be read, as the lab re-read did for
+Perplexity's careers page and ByteDance's offices page.
+
 ## The two-fetch rule for a robot's evidence
 
 Before citing a page on a robot record, fetch it twice and compare the hashes the evidence

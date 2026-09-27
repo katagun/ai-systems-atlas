@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import math
 import unittest
 from pathlib import Path
 
@@ -541,7 +542,7 @@ class DirectoryTests(unittest.TestCase):
                 set(project["score"]), set(dimensions) | {"overall"}, project["repo"]
             )
             calculated = round(
-                sum(
+                math.fsum(
                     project["score"][name] * weight
                     for name, weight in dimensions.items()
                 ),
@@ -684,7 +685,7 @@ class DirectoryTests(unittest.TestCase):
                 set(dimensions) | {"overall"}, set(record["score"]), record["id"]
             )
             calculated = round(
-                sum(
+                math.fsum(
                     record["score"][name] * weight
                     for name, weight in dimensions.items()
                 ),
@@ -759,7 +760,7 @@ class DirectoryTests(unittest.TestCase):
                 set(dimensions) | {"overall"}, set(record["score"]), record["id"]
             )
             calculated = round(
-                sum(
+                math.fsum(
                     record["score"][name] * weight
                     for name, weight in dimensions.items()
                 ),
