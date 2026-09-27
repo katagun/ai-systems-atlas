@@ -2735,6 +2735,15 @@ const SEARCH_SCOPES = {
 function bindEvents() {
   $$(".tab").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
+  // The brand mark links home. A plain left click stays in the single-page
+  // app on the directory landing view; modified clicks and new tabs follow
+  // the href to the site root.
+  const brandLink = $(".brand-link");
+  if (brandLink) brandLink.addEventListener("click", event => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+    event.preventDefault();
+    activateView("directory");
+  });
   // Systems and the family chips all name the systems collection. Each sets
   // its family, none for Systems, so Systems clears a family, a role, or a
   // Finder role set that another chip or the Finder left behind.
