@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import math
 import re
 import urllib.parse
 from datetime import date, datetime
@@ -686,6 +687,17 @@ def validate_score_profile(
     return weights
 
 
+def weighted_overall(score: dict[str, Any], dimensions: dict[str, float]) -> float:
+    """The weighted dimension sum, rounded to two places.
+
+    math.fsum sums exactly, so every Python version agrees. Plain sum() changed its
+    float algorithm in 3.12, and 3.11 can round a sum such as 8.915 down to 8.91.
+    """
+    return round(
+        math.fsum(score[key] * weight for key, weight in dimensions.items()), 2
+    )
+
+
 def validate_record_score(
     record: dict[str, Any],
     dimensions: dict[str, float],
@@ -707,9 +719,7 @@ def validate_record_score(
     elif not is_number(score["overall"]):
         errors.append(f"{prefix}: score overall must be numeric")
     else:
-        calculated = round(
-            sum(score[key] * weight for key, weight in dimensions.items()), 2
-        )
+        calculated = weighted_overall(score, dimensions)
         if score["overall"] != calculated:
             errors.append(
                 f"{prefix}: overall {score['overall']} does not match weighted {calculated}"
@@ -954,9 +964,7 @@ def validate_project_classification(
         elif not is_number(score["overall"]):
             errors.append(f"{prefix}: score overall must be numeric")
         else:
-            calculated = round(
-                sum(score[key] * weight for key, weight in dimensions.items()), 2
-            )
+            calculated = weighted_overall(score, dimensions)
             if score["overall"] != calculated:
                 errors.append(
                     f"{prefix}: overall {score['overall']} does not match weighted {calculated}"

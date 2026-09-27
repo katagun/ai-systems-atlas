@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-25",
+  "updated_at": "2026-09-26",
   "terms_reviewed_at": "2026-09-24",
   "dispositions": [
     {
@@ -146,6 +146,42 @@
       "disposition": "excluded",
       "reason": "OpenRouter's pairing of the reviewed GPT-5.4 release (openai/gpt-5.4) with GPT Image 2 (models.dev row openai/gpt-image-2), not a release of its own.",
       "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "openai/gpt-5.6-luna-pro",
+      "disposition": "excluded",
+      "reason": "The reviewed GPT-5.6 Luna release (openai/gpt-5.6-luna) with reasoning.mode set to pro. OpenAI's reasoning guide documents pro as a reasoning mode of GPT-5.6 and GPT-6 models, and its docs have no gpt-5.6-luna-pro model page, so the route fixes a request parameter and is not a separate release.",
+      "decided_at": "2026-09-26"
+    },
+    {
+      "openrouter_id": "openai/gpt-5.6-sol-pro",
+      "disposition": "excluded",
+      "reason": "The reviewed GPT-5.6 Sol release (openai/gpt-5.6-sol) with reasoning.mode set to pro. OpenAI's reasoning guide documents pro as a reasoning mode of GPT-5.6 and GPT-6 models, and its docs have no gpt-5.6-sol-pro model page, so the route fixes a request parameter and is not a separate release.",
+      "decided_at": "2026-09-26"
+    },
+    {
+      "openrouter_id": "openai/gpt-5.6-terra-pro",
+      "disposition": "excluded",
+      "reason": "The reviewed GPT-5.6 Terra release (openai/gpt-5.6-terra) with reasoning.mode set to pro. OpenAI's reasoning guide documents pro as a reasoning mode of GPT-5.6 and GPT-6 models, and its docs have no gpt-5.6-terra-pro model page, so the route fixes a request parameter and is not a separate release.",
+      "decided_at": "2026-09-26"
+    },
+    {
+      "openrouter_id": "openai/gpt-6-astra-pro",
+      "disposition": "excluded",
+      "reason": "The reviewed GPT-6 Astra release (openai/gpt-6-astra) with reasoning.mode set to pro. OpenAI's reasoning guide documents pro as a reasoning mode of GPT-5.6 and GPT-6 models, and its docs have no gpt-6-astra-pro model page, so the route fixes a request parameter and is not a separate release.",
+      "decided_at": "2026-09-26"
+    },
+    {
+      "openrouter_id": "openai/gpt-6-luna-pro",
+      "disposition": "excluded",
+      "reason": "OpenAI's GPT-6 Luna (gpt-6-luna) with reasoning.mode set to pro. OpenAI's reasoning guide documents pro as a reasoning mode of GPT-5.6 and GPT-6 models, and its docs have no gpt-6-luna-pro model page, so the route fixes a request parameter and is not a separate release. models.dev's dev branch (commit e2159fe) lists the base model as openai/gpt-6-luna, so the next snapshot refresh brings it in for review.",
+      "decided_at": "2026-09-26"
+    },
+    {
+      "openrouter_id": "openai/gpt-6-sol-pro",
+      "disposition": "excluded",
+      "reason": "OpenAI's GPT-6 Sol (gpt-6-sol) with reasoning.mode set to pro. OpenAI's reasoning guide documents pro as a reasoning mode of GPT-5.6 and GPT-6 models, and its docs have no gpt-6-sol-pro model page, so the route fixes a request parameter and is not a separate release. models.dev's dev branch (commit e2159fe) lists the base model as openai/gpt-6-sol, so the next snapshot refresh brings it in for review.",
+      "decided_at": "2026-09-26"
     },
     {
       "openrouter_id": "openai/gpt-chat-latest",
