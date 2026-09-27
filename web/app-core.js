@@ -539,6 +539,60 @@
       .map(item => item.entry);
   }
 
+  // Edits needed to turn one string into another, counting a swap of two
+  // neighbouring letters as one edit ("form" is one edit from "from").
+  function editDistance(a, b) {
+    const rows = Array.from({ length: a.length + 1 }, (_, i) => [i, ...new Array(b.length).fill(0)]);
+    for (let j = 1; j <= b.length; j += 1) rows[0][j] = j;
+    for (let i = 1; i <= a.length; i += 1) {
+      for (let j = 1; j <= b.length; j += 1) {
+        rows[i][j] = Math.min(rows[i - 1][j] + 1, rows[i][j - 1] + 1, rows[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+        if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) rows[i][j] = Math.min(rows[i][j], rows[i - 2][j - 2] + 1);
+      }
+    }
+    return rows[a.length][b.length];
+  }
+
+  // Record names within one edit (queries up to seven letters) or two (longer)
+  // of a query that matched nothing. Whole names come before single words of
+  // a name, closer before farther, shorter before longer.
+  function suggestNames(records, raw, limit = 3) {
+    const query = normalizeSearchText(raw).replace(/-/g, " ");
+    if (query.length < 3) return [];
+    const most = query.length >= 8 ? 2 : 1;
+    const found = [];
+    for (const record of records) {
+      const name = normalizeSearchText(record.name).replace(/-/g, " ");
+      const whole = editDistance(name, query);
+      const nearestWord = Math.min(...name.split(" ").map(word => (Math.abs(word.length - query.length) <= most ? editDistance(word, query) : Infinity)));
+      const best = Math.min(whole, nearestWord);
+      if (best <= most) found.push({ name: record.name, rank: [whole <= most ? 0 : 1, best, record.name.length] });
+    }
+    found.sort((a, b) => a.rank[0] - b.rank[0] || a.rank[1] - b.rank[1] || a.rank[2] - b.rank[2] || a.name.localeCompare(b.name));
+    return [...new Set(found.map(item => item.name))].slice(0, limit);
+  }
+
+  // The Finder goal a query most plausibly names: at least 60% of its words of
+  // three letters or more, and at least one, appear in the goal's label or
+  // description. A goal with nothing eligible never matches. Each kept
+  // position is scored with queryWordHit, the better of its stem and its
+  // typed spelling, since a stem is not always a prefix of its own spelling
+  // ("libraries" stems to "library"): a stem-only hit test would miss it.
+  function matchFinderGoal(goals, raw) {
+    const query = parseSearchQuery(raw);
+    const positions = [...query.tokens.keys()].filter(i => query.tokens[i].length >= 3);
+    if (!positions.length) return null;
+    const needed = Math.max(1, Math.ceil(positions.length * 0.6));
+    let best = null;
+    for (const goal of goals) {
+      if (!goal.eligible) continue;
+      const goalWords = cachedSearchWords(`${goal.label} ${goal.description}`);
+      const hits = positions.filter(i => queryWordHit(goalWords, query, i, false) > 0).length;
+      if (hits >= needed && (!best || hits > best.hits)) best = { goal, hits };
+    }
+    return best ? best.goal : null;
+  }
+
   // Which one switcher chip is pressed. `entries` describes the buttons in
   // order: { collection, family }, with no family on a collection-wide chip.
   // A family chip wins over its collection's chip, so choosing Memory never
@@ -1232,6 +1286,7 @@
     compareProjects,
     cycleThemePreference,
     directoryDefaults,
+    editDistance,
     familyEmblem,
     filterAndSortProjects,
     filterDirectoryEntries,
@@ -1247,6 +1302,7 @@
     labRelations,
     labsForRecord,
     matchesProject,
+    matchFinderGoal,
     mergePackScopeEntries,
     modelMetadataAttribution,
     modelSourceLabel,
@@ -1269,6 +1325,7 @@
     shareRecordPath,
     sourceNamespace,
     stemQueryWord,
+    suggestNames,
     switcherCounts,
     tokenHit,
     UNLISTED_MODEL_LABEL,

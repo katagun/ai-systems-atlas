@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1617,4 +1617,37 @@ test("a split query ranks the joined name above a name that holds the words apar
     { id: "lc", name: "LangChain", description: "Framework.", score: { overall: 1 } },
   ];
   assert.deepEqual(filterAndSortProjects(records, { term: "lang chain", sort: "match" }).map(record => record.name), ["LangChain", "Lang Chain Kit"]);
+});
+
+test("a misspelled name suggests the closest whole names first", () => {
+  assert.equal(editDistance("olama", "ollama"), 1);
+  assert.equal(editDistance("form", "from"), 1);
+  const records = [{ name: "Ollama Cloud" }, { name: "Ollama" }, { name: "Llama-3.1-70B-Instruct" }, { name: "Mem0" }];
+  assert.deepEqual(suggestNames(records, "olama"), ["Ollama", "Ollama Cloud", "Llama-3.1-70B-Instruct"]);
+  assert.deepEqual(suggestNames(records, "zz"), []);
+});
+
+test("a query names a Finder job when most of its words appear in it", () => {
+  const goals = [
+    { id: "personal_machine", direction: "local_runtime", label: "Run models on my own computer", description: "A packaged runner that manages download, storage, and local serving.", eligible: 4 },
+    { id: "knowledge_assistant", direction: "memory_system", label: "Ask questions over documents", description: "A ready-to-use AI knowledge app or RAG workspace.", eligible: 9 },
+    { id: "empty", direction: "memory_system", label: "Run everything locally", description: "Nothing qualifies.", eligible: 0 },
+  ];
+  assert.equal(matchFinderGoal(goals, "run models locally").id, "personal_machine");
+  assert.equal(matchFinderGoal(goals, "rag").id, "knowledge_assistant");
+  assert.equal(matchFinderGoal(goals, "ai"), null);
+  assert.equal(matchFinderGoal(goals, "zebra crossing"), null);
+});
+
+// R-P1-8: matchFinderGoal must score a kept position with queryWordHit (the
+// better of a token's stem and its typed spelling), not with tokenHit on the
+// stem alone. "libraries" stems to "library", which is not a prefix of
+// "libraries", so a stem-only hit test misses a goal description that holds
+// the word as typed. A scratch check (not committed) shows the brief's
+// stem-only tokenHit call returns null for this same input.
+test("a query names a Finder job by an -ies word matched as typed, not only its stem", () => {
+  const goals = [
+    { id: "sdk_builder", direction: "agent_system", label: "Build with an SDK", description: "Build agent libraries.", eligible: 3 },
+  ];
+  assert.equal(matchFinderGoal(goals, "libraries").id, "sdk_builder");
 });
