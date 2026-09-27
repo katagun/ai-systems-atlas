@@ -1572,3 +1572,49 @@ test("real-catalog probes: known names first and loose queries answered", () => 
   assert.ok(run("memory for agents").length > 0);
   assert.ok(run("open source coding agent").length > 0);
 });
+
+// The exact-name bonus reads the query as typed: stemming turns "Swarms" into
+// "swarm", and dropping the stop word turns "A-MEM" into "mem".
+test("a name equal to the query as typed comes first when stemming changes the query", () => {
+  const records = [
+    { id: "sc", name: "SwarmClaw", description: "An agent.", score: { overall: 9 } },
+    { id: "s", name: "Swarms", description: "A framework.", score: { overall: 1 } },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "Swarms", sort: "match" }).map(record => record.name), ["Swarms", "SwarmClaw"]);
+});
+
+test("a name equal to the query as typed comes first when a stop word is dropped", () => {
+  const records = [
+    { id: "memori", name: "Memori", description: "A memory engine.", score: { overall: 9 } },
+    { id: "a-mem", name: "A-MEM", description: "Agentic memory.", score: { overall: 1 } },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "A-MEM", sort: "match" }).map(record => record.name), ["A-MEM", "Memori"]);
+});
+
+// "series" stems to "sery", which is not a prefix of "series", so a query word
+// also matches as typed.
+test("series finds a record whose description says series", () => {
+  const records = [{ id: "s", name: "Alpha", description: "Covers a model series.", score: { overall: 1 } }];
+  assert.equal(filterAndSortProjects(records, { term: "series" }).length, 1);
+});
+
+test("memories finds a record whose indexed text says memories", () => {
+  const records = [{ id: "m", name: "Beta", description: "A notes app.", score: { overall: 1 } }];
+  const searchIndex = { m: "beta a notes app. it keeps memories between sessions." };
+  assert.equal(filterAndSortProjects(records, { term: "memories", searchIndex }).length, 1);
+});
+
+test("a lab is found by its exact name when that name ends in -ies", () => {
+  const motif = [{ id: "lab-motif", name: "Motif Technologies", description: "A model developer.", lab_type: "ai_company", headquarters: "kr", catalog_names: ["Motif Technologies"], systems: [] }];
+  assert.deepEqual(filterLabs(motif, { term: "Motif Technologies" }).map(lab => lab.name), ["Motif Technologies"]);
+});
+
+// Without the joined-words retry, LangChain holds both words only inside one
+// word and ranks below a name that holds them apart.
+test("a split query ranks the joined name above a name that holds the words apart", () => {
+  const records = [
+    { id: "kit", name: "Lang Chain Kit", description: "Helpers.", score: { overall: 9 } },
+    { id: "lc", name: "LangChain", description: "Framework.", score: { overall: 1 } },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "lang chain", sort: "match" }).map(record => record.name), ["LangChain", "Lang Chain Kit"]);
+});

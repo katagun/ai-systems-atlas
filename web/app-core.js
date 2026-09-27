@@ -61,11 +61,14 @@
   }
 
   // Hyphens split query words, so "self-hosted" asks what "self hosted" asks.
+  // `words` holds each word as typed, index for index with its stem in
+  // `tokens`, because a stem is not always a prefix of its own spelling:
+  // "series" stems to "sery".
   function parseSearchQuery(raw) {
-    const tokens = normalizeSearchText(raw).replace(/-/g, " ").split(" ")
-      .filter(word => word && !SEARCH_STOP_WORDS.has(word))
-      .map(stemQueryWord);
-    return { raw: String(raw || ""), text: tokens.join(" "), tokens };
+    const words = normalizeSearchText(raw).replace(/-/g, " ").split(" ")
+      .filter(word => word && !SEARCH_STOP_WORDS.has(word));
+    const tokens = words.map(stemQueryWord);
+    return { raw: String(raw || ""), text: tokens.join(" "), tokens, words };
   }
 
   // How one query word hits one field's words: 1 for a whole word, 0.8 for a
@@ -376,39 +379,54 @@
     };
   }
 
+  // How query word `i` hits one field's words: the better of its stem and the
+  // word as typed, so "series" still finds "series" although it stems to
+  // "sery".
+  function queryWordHit(words, query, i, inName) {
+    const token = query.tokens[i];
+    const typed = (query.words || query.tokens)[i];
+    const hit = tokenHit(words, token, inName);
+    return typed === token ? hit : Math.max(hit, tokenHit(words, typed, inName));
+  }
+
   // A record's match weight: 0 when any query word misses every field, since
   // every word must match. Otherwise the number only orders results; it never
-  // reads a score, stars, or any other merit (ADR 040).
+  // reads a score, stars, or any other merit (ADR 040). The name bonuses also
+  // compare the query as typed, since stemming ("Swarms") and stop words
+  // ("A-MEM") change the stemmed text.
   function searchMatch(query, fields) {
     if (!query.tokens.length) return 1;
     const words = Object.fromEntries(Object.keys(SEARCH_FIELD_WEIGHTS).map(field => [field, cachedSearchWords(fields[field])]));
-    const nameHasAll = query.tokens.every(token => tokenHit(words.name, token, true) > 0);
+    const nameHasAll = query.tokens.every((_, i) => queryWordHit(words.name, query, i, true) > 0);
     let weight = 0;
-    for (const token of query.tokens) {
+    for (let i = 0; i < query.tokens.length; i += 1) {
       let best = 0;
       for (const [field, fieldWeight] of Object.entries(SEARCH_FIELD_WEIGHTS)) {
         const inName = field === "name";
-        best = Math.max(best, tokenHit(words[field], token, inName) * (inName && !nameHasAll ? 12 : fieldWeight));
+        best = Math.max(best, queryWordHit(words[field], query, i, inName) * (inName && !nameHasAll ? 12 : fieldWeight));
       }
       if (!best) return 0;
       weight += best;
     }
     const name = normalizeSearchText(fields.name).replace(/-/g, " ");
-    if (name === query.text) return weight + 1000;
-    if (name.startsWith(query.text)) return weight + 400;
+    const typed = normalizeSearchText(query.raw).replace(/-/g, " ");
+    if (name === query.text || name === typed) return weight + 1000;
+    if (name.startsWith(query.text) || (typed && name.startsWith(typed))) return weight + 400;
     return nameHasAll ? weight + 200 : weight;
   }
 
   // A split product name still comes first: "lang chain" also tries
   // "langchain", and a record whose name holds the joined word counts as a
-  // name match.
+  // name match. The typed words are joined beside their stems.
   function recordMatch(query, fields) {
     let weight = searchMatch(query, fields);
     const nameWords = cachedSearchWords(fields.name);
+    const join = (list, i) => [...list.slice(0, i), list[i] + list[i + 1], ...list.slice(i + 2)];
     for (let i = 0; i < query.tokens.length - 1; i += 1) {
-      const tokens = [...query.tokens.slice(0, i), query.tokens[i] + query.tokens[i + 1], ...query.tokens.slice(i + 2)];
-      if (!tokens.every(token => tokenHit(nameWords, token, true) > 0)) continue;
-      weight = Math.max(weight, searchMatch({ raw: query.raw, text: tokens.join(" "), tokens }, fields) + 300);
+      const tokens = join(query.tokens, i);
+      const joined = { raw: query.raw, text: tokens.join(" "), tokens, words: join(query.words || query.tokens, i) };
+      if (!tokens.every((_, j) => queryWordHit(nameWords, joined, j, true) > 0)) continue;
+      weight = Math.max(weight, searchMatch(joined, fields) + 300);
     }
     return weight;
   }
