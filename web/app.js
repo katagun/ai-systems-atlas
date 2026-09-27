@@ -195,6 +195,13 @@ async function bootstrap() {
   populateModelLabFilter();
   const scope = AtlasCore.scopeFromURL(new URL(window.location.href).searchParams);
   const restored = restoreScopeFromURL(scope);
+  // A shared or typed link with a query lists by match, as the sender saw it,
+  // unless it names a sort, which the reader chose, so typing keeps it too
+  // (ruling R-P1-2). A sort the scope cannot take was removed, as unnamed.
+  if (restored.q?.trim()) {
+    if (restored.sort === undefined) syncMatchSort(scope);
+    else sortChosenDuringQuery[scope] = true;
+  }
   renderStats();
   renderFinder();
   renderModels();
@@ -364,6 +371,39 @@ function writeScopeURL() {
   // Every render and keystroke lands here, so this is the writer that spends
   // most of WebKit's history budget; writeURL skips an unchanged URL.
   writeURL(url);
+}
+
+// Scopes whose Sort control has "Best match": a query selects it unless the
+// reader picked a sort since typing, and clearing the query gives back the
+// sort from before (spec, Phase 1 "Order"). syncMatchSort runs wherever a
+// scope's query changes: typing, a carried query, a Clear control, and the
+// Finder's handoff. So a sort chosen for one query never outlives it.
+const MATCH_SORTS = { systems: "#sort-filter", inference: "#inference-sort-filter", runtimes: "#runtime-sort-filter", models: "#model-sort-filter" };
+const sortBeforeQuery = {};
+const sortChosenDuringQuery = {};
+
+function syncMatchSort(scope) {
+  const selector = MATCH_SORTS[scope];
+  if (!selector) return;
+  const select = $(selector);
+  const hasQuery = Boolean($(SCOPE_CONTROLS[scope].q).value.trim());
+  if (hasQuery && !sortChosenDuringQuery[scope] && select.value !== "match") {
+    sortBeforeQuery[scope] = select.value;
+    select.value = "match";
+  } else if (!hasQuery) {
+    if (select.value === "match") select.value = sortBeforeQuery[scope] || AtlasCore.SCOPE_URL_PARAMS[scope].sort;
+    delete sortBeforeQuery[scope];
+    sortChosenDuringQuery[scope] = false;
+    if (scope === "systems") updateScoreSortAvailability();
+  }
+}
+
+// "12 results" beside a search box while it holds a query.
+function setSearchCount(scope, count) {
+  const selector = SCOPE_CONTROLS[scope]?.q;
+  const input = selector && $(selector);
+  const badge = input && input.parentElement.querySelector(".search-count");
+  if (badge) badge.textContent = input.value.trim() ? `${count} ${count === 1 ? "result" : "results"}` : "";
 }
 
 // Applies the URL to one scope's controls before its first paint. Family goes
@@ -736,13 +776,26 @@ function jumpToDirectoryFamily(family) {
   setDirectoryCollection("systems");
 }
 
-function setDirectoryCollection(collection, { updateURL = true } = {}) {
+function setDirectoryCollection(collection, { updateURL = true, carryQuery = updateURL } = {}) {
   const selected = ["all", "systems", "inference", "runtimes", "packs", "robots"].includes(collection) ? collection : "all";
+  // Read before the scope changes: the query the reader is leaving.
+  const previousQuery = carryQuery ? $(SCOPE_CONTROLS[state.directoryCollection].q).value : null;
   const compatible = (selected === "systems" && state.comparison.kind === "system")
     || (selected === "inference" && state.comparison.kind === "inference")
     || (selected === "runtimes" && state.comparison.kind === "runtime");
   if (updateURL && state.comparison.ids.length && !compatible) clearComparison({ updateURL: false });
   state.directoryCollection = selected;
+  if (previousQuery !== null) {
+    const input = $(SCOPE_CONTROLS[selected].q);
+    if (input.value !== previousQuery) {
+      input.value = previousQuery;
+      state.page[selected] = 1;
+    }
+    syncMatchSort(selected);
+    // A carried query searches what a typed one does: the indexes the box
+    // fetches on focus, with a repaint as each one lands.
+    if (previousQuery.trim()) SEARCH_SCOPES[SCOPE_CONTROLS[selected].q].forEach(name => loadSearchIndex(name)?.then(renderSearchSurfaces));
+  }
   syncCollectionSwitcher();
   $("#all-directory-panel").hidden = selected !== "all";
   $("#systems-directory-panel").hidden = selected !== "systems";
@@ -1086,6 +1139,7 @@ function renderAllDirectoryEntries() {
     labelOf: searchLabel,
   }, state.packs, state.robots);
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
+  setSearchCount("all", entries.length);
   const paged = AtlasCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
   state.page.all = paged.page;
   $("#all-directory-grid").innerHTML = paged.items.map(({ kind, record }) => {
@@ -1387,6 +1441,7 @@ function renderCollection(name) {
   const records = collection.records(context);
   const noun = collection.noun[records.length === 1 ? 0 : 1];
   $(collection.resultCount).textContent = `${records.length} ${noun}${context.suffix}`;
+  setSearchCount(name, records.length);
   const paged = AtlasCore.paginate(records, { page: state.page[collection.pageKey], pageSize: state.pageSize });
   state.page[collection.pageKey] = paged.page;
   const grid = $(collection.grid);
@@ -1443,6 +1498,7 @@ function renderPacks() {
   const packNoun = packs.length === 1 ? "pack" : "packs";
   const systemNoun = systems.length === 1 ? "installed system" : "installed systems";
   $("#pack-result-count").textContent = `${packs.length} ${packNoun} · ${systems.length} ${systemNoun} · Scores hidden`;
+  setSearchCount("packs", entries.length);
   const paged = AtlasCore.paginate(entries, { page: state.page.packs, pageSize: state.pageSize });
   state.page.packs = paged.page;
   const grid = $("#pack-grid");
@@ -1729,8 +1785,9 @@ function applyFinderToDirectory() {
     $("#runtime-format-filter").value = "";
     $("#runtime-api-filter").value = "";
     $("#runtime-sort-filter").value = "score";
+    syncMatchSort("runtimes");
     state.page.runtimes = 1;
-    setDirectoryCollection("runtimes");
+    setDirectoryCollection("runtimes", { carryQuery: false });
     activateView("directory");
     revealDirectoryResults();
     return;
@@ -1742,8 +1799,9 @@ function applyFinderToDirectory() {
     $("#inference-model-source-filter").value = "";
     $("#inference-api-filter").value = "";
     $("#inference-sort-filter").value = "score";
+    syncMatchSort("inference");
     state.page.inference = 1;
-    setDirectoryCollection("inference");
+    setDirectoryCollection("inference", { carryQuery: false });
     activateView("directory");
     revealDirectoryResults();
     return;
@@ -1763,9 +1821,10 @@ function applyFinderToDirectory() {
   $("#status-filter").value = "active";
   $("#local-filter").checked = false;
   $("#sort-filter").value = "score";
+  syncMatchSort("systems");
   updateScoreSortAvailability();
   state.page.systems = 1;
-  setDirectoryCollection("systems");
+  setDirectoryCollection("systems", { carryQuery: false });
   activateView("directory");
   revealDirectoryResults();
 }
@@ -2758,6 +2817,20 @@ const SEARCH_SCOPES = {
 };
 
 function bindEvents() {
+  for (const [scope, selector] of Object.entries(MATCH_SORTS)) {
+    $(SCOPE_CONTROLS[scope].q).addEventListener("input", () => syncMatchSort(scope));
+    $(selector).addEventListener("input", () => {
+      if ($(SCOPE_CONTROLS[scope].q).value.trim()) sortChosenDuringQuery[scope] = true;
+    });
+  }
+  document.addEventListener("keydown", event => {
+    if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) return;
+    if (event.target.closest?.("input, textarea, select, [contenteditable]")) return;
+    const selector = SCOPE_CONTROLS[activeScope()]?.q;
+    if (!selector) return;
+    event.preventDefault();
+    $(selector).focus();
+  });
   $$(".tab").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
   // Systems and the family chips all name the systems collection. Each sets
@@ -2824,6 +2897,7 @@ function bindEvents() {
     $("#inference-model-source-filter").value = "";
     $("#inference-api-filter").value = "";
     $("#inference-sort-filter").value = "score";
+    syncMatchSort("inference");
     state.page.inference = 1;
     renderInferenceServices();
   });
@@ -2834,6 +2908,7 @@ function bindEvents() {
     $("#runtime-format-filter").value = "";
     $("#runtime-api-filter").value = "";
     $("#runtime-sort-filter").value = "score";
+    syncMatchSort("runtimes");
     state.page.runtimes = 1;
     renderLocalRuntimes();
   });
@@ -2846,6 +2921,7 @@ function bindEvents() {
     $("#model-license-filter").value = "";
     $("#model-lab-filter").value = "";
     $("#model-sort-filter").value = "score";
+    syncMatchSort("models");
     state.page.models = 1;
     renderModels();
   });
@@ -2882,6 +2958,7 @@ function bindEvents() {
   });
   $("#reset-filters").addEventListener("click", () => {
     applyDirectoryDefaults();
+    syncMatchSort("systems");
     state.page.systems = 1;
     renderProjects();
   });

@@ -23,7 +23,7 @@
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=0e265e88e194">
+  <link rel="stylesheet" href="styles.css?v=bbc677996a29">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -95,7 +95,7 @@
 
       <div id="all-directory-panel" class="collection-panel">
         <section class="control-panel mixed-directory-controls" aria-label="All directory search">
-          <label class="search-field"><span>Search</span><input id="all-directory-search" type="search" placeholder="Search systems, models, inference services, local runtimes, agent packs, and robots" autocomplete="off"></label>
+          <label class="search-field"><span>Search</span><input id="all-directory-search" type="search" placeholder="Search systems, models, inference services, local runtimes, agent packs, and robots" autocomplete="off"><output class="search-count" aria-hidden="true"></output></label>
           <p class="filter-guidance">Mixed discovery is alphabetical and hides incomparable scores. Choose a specialist collection for filters and scoped scoring. <button data-open-tab="taxonomy">How comparisons work →</button></p>
         </section>
         <div class="result-row"><p id="all-directory-result-count" aria-live="polite"></p><button id="reset-all-directory" class="ghost-button">Clear search</button></div>
@@ -105,7 +105,7 @@
 
       <div id="systems-directory-panel" class="collection-panel" hidden>
         <section class="control-panel" id="directory-controls" aria-label="System filters">
-          <label class="search-field"><span>Search</span><input id="project-search" type="search" placeholder="Search all systems" autocomplete="off"></label>
+          <label class="search-field"><span>Search</span><input id="project-search" type="search" placeholder="Search all systems" autocomplete="off"><output class="search-count" aria-hidden="true"></output></label>
           <label><span>Family</span><select id="family-filter"><option value="">All families</option></select></label>
           <label><span>Role</span><select id="role-filter"><option value="">All roles</option></select></label>
           <label><span>Sort</span><select id="sort-filter"><option value="match">Best match</option><option value="score">Editorial score</option><option value="stars">GitHub stars</option><option value="name" selected>Name</option></select></label>
@@ -131,7 +131,7 @@
 
       <div id="inference-directory-panel" class="collection-panel" hidden>
         <section class="control-panel inference-controls" aria-label="Inference service filters">
-          <label class="search-field"><span>Search</span><input id="inference-search" type="search" placeholder="Search services and boundaries" autocomplete="off"></label>
+          <label class="search-field"><span>Search</span><input id="inference-search" type="search" placeholder="Search services and boundaries" autocomplete="off"><output class="search-count" aria-hidden="true"></output></label>
           <label><span>Type</span><select id="inference-type-filter"><option value="">All types</option></select></label>
           <label><span>Delivery</span><select id="inference-delivery-filter"><option value="">All delivery modes</option></select></label>
           <label><span>Model source</span><select id="inference-model-source-filter"><option value="">All model sources</option></select></label>
@@ -146,7 +146,7 @@
 
       <div id="runtimes-directory-panel" class="collection-panel" hidden>
         <section class="control-panel inference-controls" aria-label="Local runtime filters">
-          <label class="search-field"><span>Search</span><input id="runtime-search" type="search" placeholder="Search runtimes and boundaries" autocomplete="off"></label>
+          <label class="search-field"><span>Search</span><input id="runtime-search" type="search" placeholder="Search runtimes and boundaries" autocomplete="off"><output class="search-count" aria-hidden="true"></output></label>
           <label><span>Type</span><select id="runtime-type-filter"><option value="">All types</option></select></label>
           <label><span>Accelerator</span><select id="runtime-accelerator-filter"><option value="">All accelerators</option></select></label>
           <label><span>Model format</span><select id="runtime-format-filter"><option value="">All model formats</option></select></label>
@@ -161,7 +161,7 @@
 
       <div id="packs-directory-panel" class="collection-panel" hidden>
         <section class="control-panel inference-controls" aria-label="Agent pack filters">
-          <label class="search-field"><span>Search</span><input id="pack-search" type="search" placeholder="Search packs and stewards" autocomplete="off"></label>
+          <label class="search-field"><span>Search</span><input id="pack-search" type="search" placeholder="Search packs and stewards" autocomplete="off"><output class="search-count" aria-hidden="true"></output></label>
           <label><span>Type</span><select id="pack-type-filter"><option value="">All types</option></select></label>
           <label><span>Host</span><select id="pack-host-filter"><option value="">All hosts</option></select></label>
           <label><span>Install</span><select id="pack-install-filter"><option value="">All install mechanisms</option></select></label>
@@ -175,7 +175,7 @@
 
       <div id="robots-directory-panel" class="collection-panel" hidden>
         <section class="control-panel inference-controls" aria-label="Robot filters">
-          <label class="search-field"><span>Search</span><input id="robot-search" type="search" placeholder="Search robots, makers, and named models" autocomplete="off"></label>
+          <label class="search-field"><span>Search</span><input id="robot-search" type="search" placeholder="Search robots, makers, and named models" autocomplete="off"><output class="search-count" aria-hidden="true"></output></label>
           <label><span>Form</span><select id="robot-form-factor-filter"><option value="">All forms</option></select></label>
           <label><span>AI</span><select id="robot-ai-basis-filter"><option value="">Any</option></select></label>
           <label><span>Availability</span><select id="robot-availability-filter"><option value="">Any availability</option></select></label>
@@ -207,7 +207,7 @@
         <p>Every provider-independent model record from models.dev is discoverable here, along with releases Atlas has reviewed that models.dev does not list yet. Source imports are visibly unscored; releases with completed Atlas identity, licensing, evidence, and deployability review add the dedicated access score.</p>
       </div>
       <section class="control-panel inference-controls" aria-label="Model filters">
-        <label class="search-field"><span>Search</span><input id="model-search" type="search" placeholder="Search models, developers, and boundaries" autocomplete="off"></label>
+        <label class="search-field"><span>Search</span><input id="model-search" type="search" placeholder="Search models, developers, and boundaries" autocomplete="off"><output class="search-count" aria-hidden="true"></output></label>
         <label><span>Type</span><select id="model-type-filter"><option value="">All types</option></select></label>
         <label><span>Distribution</span><select id="model-distribution-filter"><option value="">All distribution modes</option></select></label>
         <label><span>Modality</span><select id="model-modality-filter"><option value="">All modalities</option></select></label>
@@ -229,7 +229,7 @@
         <p>Every lab here developed a release the Atlas has reviewed. Its record gathers what the catalog already holds about it, from releases and services to systems, runtimes, specifications, and packs, and lists where it publishes. Labs are recorded, never scored or ranked.</p>
       </div>
       <section class="control-panel specification-controls" aria-label="Lab filters">
-        <label class="search-field"><span>Search</span><input id="lab-search" type="search" placeholder="Search labs, units, and parent companies" autocomplete="off"></label>
+        <label class="search-field"><span>Search</span><input id="lab-search" type="search" placeholder="Search labs, units, and parent companies" autocomplete="off"><output class="search-count" aria-hidden="true"></output></label>
         <label><span>Type</span><select id="lab-type-filter"><option value="">All types</option></select></label>
         <label><span>Headquarters</span><select id="lab-country-filter"><option value="">All countries</option></select></label>
         <label><span>Releases</span><select id="lab-distribution-filter"><option value="">Any distribution</option></select></label>
@@ -247,7 +247,7 @@
         <p>Protocols, instruction conventions, and package formats—classified by what they connect, with no cross-purpose score.</p>
       </div>
       <section class="control-panel specification-controls" aria-label="Specification filters">
-        <label class="search-field"><span>Search</span><input id="specification-search" type="search" placeholder="Search specifications and purposes" autocomplete="off"></label>
+        <label class="search-field"><span>Search</span><input id="specification-search" type="search" placeholder="Search specifications and purposes" autocomplete="off"><output class="search-count" aria-hidden="true"></output></label>
         <label><span>Type</span><select id="specification-type-filter"><option value="">All types</option></select></label>
         <label><span>Scope</span><select id="specification-scope-filter"><option value="">All scopes</option></select></label>
         <label><span>Status</span><select id="specification-status-filter"><option value="">All statuses</option></select></label>
@@ -448,6 +448,6 @@
   <footer><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
   <script type="application/json" id="data-versions">{"projects.json":"0cba5a0920c1","taxonomy.json":"7c82e3e14ed1","license-evidence.json":"752e427a7aff","specifications.json":"f6487c60eb84","inference-services.json":"324b3828e171","local-runtimes.json":"c3d85a51fff7","models.json":"2036e061625e","models-dev.json":"ec5e4b8a29fb","logos.json":"8ba040c30961","app/systems.json":"f2c7bb11312c","app/inference.json":"6e25b94e9832","app/runtimes.json":"5384dc9974db","app/specifications.json":"ca24fe5a7b32","app/models.json":"bfed98d6ba28","app/packs.json":"61b78c650076","app/labs.json":"af9d1c0a63c9","app/robots.json":"98eca3792ac7","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"b6960c6ccb43","app/search/inference.json":"81f6e0352cc7","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"df4bbc9d3918","app/search/packs.json":"8cc96448002c","app/search/labs.json":"390cb86b239c","app/search/robots.json":"ca3d163bab05","app/detail":"0883f0a6c87b"}</script>
   <script src="app-core.js?v=b7f7772952c5" defer></script>
-  <script src="app.js?v=387c3aa9ebe5" defer></script>
+  <script src="app.js?v=6912fc883bf2" defer></script>
 </body>
 </html>

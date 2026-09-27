@@ -1457,3 +1457,15 @@ footer #data-date, footer .footer-meta {
 /* Glues the removal glyph to the chip's last word so a narrow chip never
    wraps the × onto a line by itself. */
 .filter-chip > span[aria-hidden="true"] { white-space: nowrap; }
+
+/* The query's result count, beside the input, so typing shows its effect
+   without scrolling. The live count in the result row stays the announced one. */
+.search-field { position: relative; }
+.search-field input { padding-right: 6.5rem; }
+.search-count {
+  position: absolute;
+  right: .8rem;
+  bottom: .7rem;
+  color: var(--muted);
+  font: 500 .72rem var(--font-mono);
+}
