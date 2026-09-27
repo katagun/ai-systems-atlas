@@ -58,6 +58,63 @@
       "stars_verified_at": "2026-09-24"
     },
     {
+      "id": "ai-berkshire",
+      "name": "AI Berkshire",
+      "steward": "xbtlin",
+      "repo": "xbtlin/ai-berkshire",
+      "url": "https://github.com/xbtlin/ai-berkshire",
+      "description": "Value-investing research skill and prompt documents a coding host reads to produce multi-analyst investment research: 22 Codex skills, 21 Codex slash prompts, and 21 Claude commands, alongside the published research reports they have produced.",
+      "pack_type": "skills_bundle",
+      "hosts": [
+        "claude_code",
+        "codex"
+      ],
+      "packaging_formats": [
+        "agent-skills"
+      ],
+      "install_mechanism": "copy_files",
+      "installs": "Twenty-two skill directories under codex-skills/, each holding one SKILL.md (investment-memo-craft also ships an agents/openai.yaml subagent definition), installed by scripts/install-codex-skills.sh into the Codex skills directory; 21 prompt documents under codex-prompts/ installed by scripts/install-codex-prompts.sh; 21 command documents under skills/ installed by scripts/install-claude-commands.sh into the Claude commands directory. The README documents Claude Code and Codex installs. The reports/, output/, data/, docs/, and assets/ trees are published research outputs and fixtures the installers do not copy into a host.",
+      "distribution_machinery": "scripts/install-codex-skills.sh, scripts/install-codex-prompts.sh, scripts/install-claude-commands.sh and their .bat counterparts with scripts/sync-codex-skills.py and scripts/sync-codex-prompts.py, which copy the pack's own documents into host directories.",
+      "not_a_system": "Owns no durable state it reads back and does no enforced work in ADR 031's terms. The tools/*.py programs (financial verification, market-data fetchers, backtesters, scrapers) run discrete computations when the host invokes them at a skill's instruction; they deny nothing, rewrite nothing, persist nothing the skill reads back, and execute nothing by themselves. tools/log-command.sh is a prompt-logging helper with no hook configuration in the tree, installed by no installer, and read back by nothing, and the published reports and return figures are the author's own outputs and claims, not reliability evidence.",
+      "status": "active",
+      "licenses": [
+        "MIT"
+      ],
+      "license_note": "LICENSE carries the standard MIT grant with copyright to xbtlin.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "Entire repository under the MIT licence (LICENSE)",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/xbtlin/ai-berkshire/blob/main/LICENSE",
+          "blob_sha": "99190759ce42f15f7ab6ede217e4b88f4924e67e",
+          "immutable_url": "https://api.github.com/repos/xbtlin/ai-berkshire/git/blobs/99190759ce42f15f7ab6ede217e4b88f4924e67e"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "git_blob",
+          "label": "README install documentation",
+          "path": "README.md",
+          "url": "https://github.com/xbtlin/ai-berkshire/blob/main/README.md",
+          "blob_sha": "d1a6e2a96dab04aaec0861d8b1d5d67d2ffddc34",
+          "immutable_url": "https://api.github.com/repos/xbtlin/ai-berkshire/git/blobs/d1a6e2a96dab04aaec0861d8b1d5d67d2ffddc34"
+        },
+        {
+          "kind": "git_blob",
+          "label": "Representative skill document",
+          "path": "codex-skills/investment-research/SKILL.md",
+          "url": "https://github.com/xbtlin/ai-berkshire/blob/main/codex-skills/investment-research/SKILL.md",
+          "blob_sha": "5ae8c2370d31077f12cb9abcf4dee788eee52206",
+          "immutable_url": "https://api.github.com/repos/xbtlin/ai-berkshire/git/blobs/5ae8c2370d31077f12cb9abcf4dee788eee52206"
+        }
+      ],
+      "stars": 16522,
+      "stars_verified_at": "2026-09-25",
+      "verified_at": "2026-09-25"
+    },
+    {
       "id": "buildwithclaude",
       "name": "Build with Claude",
       "steward": "Dave Poon (davepoon)",
@@ -333,6 +390,65 @@
       "verified_at": "2026-09-20",
       "stars": 2074,
       "stars_verified_at": "2026-09-24"
+    },
+    {
+      "id": "unity-skills",
+      "name": "Unity Skills",
+      "steward": "Unity Technologies (Unity-Technologies)",
+      "repo": "Unity-Technologies/skills",
+      "url": "https://github.com/Unity-Technologies/skills",
+      "description": "Thirty-two Agent Skills documents a coding agent reads to perform Unity workflows: CLI operations, project setup, ads, audio, UI, navigation, multiplayer, and rendering-pipeline tasks.",
+      "pack_type": "skills_bundle",
+      "hosts": [
+        "claude_code",
+        "github_copilot",
+        "cursor",
+        "cline"
+      ],
+      "packaging_formats": [
+        "agent-skills"
+      ],
+      "install_mechanism": "skills_cli",
+      "installs": "Thirty-two skill directories under skills/, each holding one SKILL.md with 167 accompanying reference documents (Markdown guides and C# snippets) across the bundle. The README installs the whole pack with npx skills add Unity-Technologies/skills and names Claude Code, GitHub Copilot, Cursor, and Cline as compatible hosts; the further 50-plus agents behind the skills.sh link are a format compatibility list rather than a documented install and are not recorded.",
+      "distribution_machinery": "scripts/check-skill-frontmatter.mjs with .github/workflows/validate-skills.yml, which validate SKILL.md frontmatter in CI; neither ships into a host.",
+      "not_a_system": "Owns no state it reads back and does no enforced work: the skills are documents the host reads to perform Unity operations, the C# files are reference snippets rather than executed programs, and the only shipped code validates frontmatter during continuous integration.",
+      "status": "active",
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "license_note": "LICENSE.md places the material under the Unity Companion License for Unity-dependent projects (see https://unity3d.com/legal/licenses/unity_companion_license): custom proprietary terms, not an open-source licence, and none is inferred beyond the file.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Entire repository under the Unity Companion License for Unity-dependent projects (LICENSE.md)",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/Unity-Technologies/skills/blob/main/LICENSE.md",
+          "blob_sha": "869c724c8cab8764b548fd5bd8cb8ea1fc849100",
+          "immutable_url": "https://api.github.com/repos/Unity-Technologies/skills/git/blobs/869c724c8cab8764b548fd5bd8cb8ea1fc849100"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "git_blob",
+          "label": "README install documentation",
+          "path": "README.md",
+          "url": "https://github.com/Unity-Technologies/skills/blob/main/README.md",
+          "blob_sha": "5126afc73e99acb7ff1d26d185723b2a72923e36",
+          "immutable_url": "https://api.github.com/repos/Unity-Technologies/skills/git/blobs/5126afc73e99acb7ff1d26d185723b2a72923e36"
+        },
+        {
+          "kind": "git_blob",
+          "label": "Representative skill document",
+          "path": "skills/2d-pixel-perfect/SKILL.md",
+          "url": "https://github.com/Unity-Technologies/skills/blob/main/skills/2d-pixel-perfect/SKILL.md",
+          "blob_sha": "cd2c1b05ae70dadc72ace45b5d9ff8daac3f8d71",
+          "immutable_url": "https://api.github.com/repos/Unity-Technologies/skills/git/blobs/cd2c1b05ae70dadc72ace45b5d9ff8daac3f8d71"
+        }
+      ],
+      "stars": 971,
+      "stars_verified_at": "2026-09-25",
+      "verified_at": "2026-09-25"
     }
   ]
 }
