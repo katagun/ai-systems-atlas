@@ -6705,7 +6705,7 @@
       "weaknesses": [
         "The platform serves one messaging channel on eligible business phone numbers, so it is not a general agent surface",
         "Eligibility excludes several regulated categories outright, including finance, government, health, alcohol, gambling, and over-the-counter drugs",
-        "The published documentation surface is small, and the governing terms render only in a browser, so their text could not be re-read during this review"
+        "The published documentation surface is small, and the governing terms let Meta use a business's input and output, including through human review and third-party vendors, to improve its AI models, including Business Agents"
       ],
       "why_it_matters": "Shows a messaging platform turning its business channel into a configurable agent surface, where reach is defined by the channel rather than by the customer's own systems.",
       "licenses": [

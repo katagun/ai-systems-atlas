@@ -49,7 +49,7 @@ Record `safety_framework` when the organization publishes a frontier-safety, res
 
 1. Confirm the inclusion gate: find the lab's reviewed releases in `models.json` and copy their `developer` strings.
 2. Collect the other names from `inference-services.json`, `local-runtimes.json`, `specifications.json`, and `packs.json`, and the systems from `projects.json`, following the naming rules above.
-3. Read the organization's own terms, privacy policy, imprint, or about page for its legal entity and headquarters, and its about or investor pages for its type and any parent. Cite each as dated `web` evidence, and open each page yourself: a search-engine extract is a lead, not a read, and a filing or annual report must be the named company's own document. The governing-terms page an inference-service record already cites is often the right source.
+3. Read the organization's own terms, privacy policy, imprint, or about page for its legal entity and headquarters, and its about or investor pages for its type and any parent. Cite each as dated `web` evidence, and open each page yourself with [`scripts/read_page.mjs`](OPERATIONS.md#reading-a-cited-page-directly): a search-engine extract is a lead, not a read, and a filing or annual report must be the named company's own document. The governing-terms page an inference-service record already cites is often the right source.
 4. Read each channel page and the safety framework before recording it.
 5. Write `description` as one sentence and `organization_note` as the organization's own structure.
 6. Run synchronization, payload and share-page generation, validation, all tests, and the Labs browser checks in [`WEB.md`](WEB.md).
