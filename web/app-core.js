@@ -357,6 +357,10 @@
     robot: ROBOT_VIEW.searchFields,
   };
   const SEARCH_FIELD_WEIGHTS = { name: 50, label: 30, maker: 20, description: 10, text: 3 };
+  // A field that holds the query as a phrase adds this many times its weight,
+  // so a phrase in a label (150) still stays below a name that holds every
+  // query word (200).
+  const PHRASE_FACTOR = 5;
 
   const searchWordCache = new Map();
   function cachedSearchWords(text) {
@@ -367,6 +371,31 @@
       searchWordCache.set(key, words);
     }
     return words;
+  }
+
+  // A field's words in order for the phrase test: its comparable words, with
+  // stop words left out as they are from a query.
+  const phraseWordCache = new Map();
+  function cachedPhraseWords(text) {
+    const key = String(text || "");
+    let words = phraseWordCache.get(key);
+    if (!words) {
+      words = comparableText(key).split(" ").filter(word => word && !SEARCH_STOP_WORDS.has(word));
+      phraseWordCache.set(key, words);
+    }
+    return words;
+  }
+
+  // Whether a text holds the query's words one after another, each matched by
+  // the rules for words outside a name (as typed or by its stem, whole, or by
+  // its start from four letters), with stop words skipped on both sides. So
+  // "self host" and "the self hosted" both find "a self-hosted agent".
+  function holdsPhrase(text, query) {
+    const words = cachedPhraseWords(text);
+    for (let k = 0; k + query.tokens.length <= words.length; k += 1) {
+      if (query.tokens.every((_, j) => queryWordHit([words[k + j]], query, j, false) > 0)) return true;
+    }
+    return false;
   }
 
   // What a record is matched and ordered by. `labelOf(kind, record)` names its
@@ -380,6 +409,9 @@
       .filter(Boolean).join(" ");
     return {
       name: [record.name, record.short_name].filter(Boolean).join(" "),
+      // Each whole name on its own, for the name leads: a short name such as
+      // "ACP" is as much the record's name as "Agent Client Protocol".
+      names: [record.name, record.short_name].filter(Boolean),
       label: labelOf ? labelOf(kind, record) : "",
       maker: maker || "",
       description: record.description || "",
@@ -399,9 +431,12 @@
 
   // A record's match weight: 0 when any query word misses every field, since
   // every word must match. Otherwise the number only orders results; it never
-  // reads a score, stars, or any other merit (ADR 040). The name bonuses also
-  // compare the query as typed, since stemming ("Swarms") and stop words
-  // ("A-MEM") change the stemmed text.
+  // reads a score, stars, or any other merit (ADR 040). For a query of two or
+  // more words, a field other than the name that holds them as a phrase adds
+  // a bonus by its weight, so a record described as "self-hosted" leads one
+  // whose words "self" and "host" sit apart. The name bonuses read each whole
+  // name, a short name included, and also compare the query as typed, since
+  // stemming ("Swarms") and stop words ("A-MEM") change the stemmed text.
   function searchMatch(query, fields) {
     if (!query.tokens.length) return 1;
     const words = Object.fromEntries(Object.keys(SEARCH_FIELD_WEIGHTS).map(field => [field, cachedSearchWords(fields[field])]));
@@ -416,25 +451,45 @@
       if (!best) return 0;
       weight += best;
     }
-    const name = comparableText(fields.name);
+    if (query.tokens.length > 1) {
+      // The weights run heaviest first, so the first field holding the phrase decides.
+      const phraseField = Object.keys(SEARCH_FIELD_WEIGHTS).find(field => field !== "name" && holdsPhrase(fields[field], query));
+      if (phraseField) weight += SEARCH_FIELD_WEIGHTS[phraseField] * PHRASE_FACTOR;
+    }
     const typed = comparableText(query.raw);
-    if (name === query.text || name === typed) return weight + 1000;
-    if (name.startsWith(query.text) || (typed && name.startsWith(typed))) return weight + 400;
+    const names = (fields.names || [fields.name]).map(comparableText);
+    if (names.some(name => name === query.text || name === typed)) return weight + 1000;
+    if (names.some(name => name.startsWith(query.text) || (typed && name.startsWith(typed)))) return weight + 400;
     return nameHasAll ? weight + 200 : weight;
   }
 
   // A split product name still comes first: "lang chain" also tries
-  // "langchain", and a record whose name holds the joined word counts as a
-  // name match. The typed words are joined beside their stems.
+  // "langchain". The joined word counts where a name holds it by the name
+  // rules, or where any field holds it as a whole word; a record whose name
+  // holds every joined word counts as a name match. Otherwise the fields that
+  // hold the joined word whole hold the phrase, and the heaviest earns its
+  // phrase bonus, the name's included, so "lang chain agents" still lists
+  // LangChain first. The typed words are joined beside their stems.
   function recordMatch(query, fields) {
     let weight = searchMatch(query, fields);
     const nameWords = cachedSearchWords(fields.name);
     const join = (list, i) => [...list.slice(0, i), list[i] + list[i + 1], ...list.slice(i + 2)];
     for (let i = 0; i < query.tokens.length - 1; i += 1) {
       const tokens = join(query.tokens, i);
-      const joined = { raw: query.raw, text: tokens.join(" "), tokens, words: join(query.words || query.tokens, i) };
-      if (!tokens.every((_, j) => queryWordHit(nameWords, joined, j, true) > 0)) continue;
-      weight = Math.max(weight, searchMatch(joined, fields) + 300);
+      const words = join(query.words || query.tokens, i);
+      const joined = { raw: query.raw, text: tokens.join(" "), tokens, words };
+      // Most joined words match nothing, so this cheap whole-word test runs first.
+      const whole = Object.keys(SEARCH_FIELD_WEIGHTS).filter(field => {
+        const fieldWords = cachedSearchWords(fields[field]);
+        return fieldWords.includes(tokens[i]) || fieldWords.includes(words[i]);
+      });
+      if (!whole.length && !(queryWordHit(nameWords, joined, i, true) > 0)) continue;
+      const joinedWeight = searchMatch(joined, fields);
+      if (!joinedWeight) continue;
+      const bonus = tokens.every((_, j) => queryWordHit(nameWords, joined, j, true) > 0)
+        ? 300
+        : Math.max(0, ...whole.map(field => SEARCH_FIELD_WEIGHTS[field] * PHRASE_FACTOR));
+      weight = Math.max(weight, joinedWeight + bonus);
     }
     return weight;
   }
@@ -587,21 +642,34 @@
 
   // The Finder goal a query most plausibly names: at least 60% of its words of
   // three letters or more, and at least one, appear in the goal's label or
-  // description. A goal with nothing eligible never matches. Each kept
-  // position is scored with queryWordHit, the better of its stem and its
-  // typed spelling, since a stem is not always a prefix of its own spelling
-  // ("libraries" stems to "library"): a stem-only hit test would miss it.
+  // description. A goal with nothing eligible never matches. A query of one
+  // such word names a goal only when that goal's label holds the word and no
+  // other eligible goal holds it anywhere, so "browser" names a goal while a
+  // generic word such as "agent" or "model" names none, and neither does a
+  // word only a description mentions ("open", in "open-weight"). The goal
+  // matching the most words wins, then the one whose label holds more of
+  // them, then the first listed. Each kept position is scored with
+  // queryWordHit, the better of its stem and its typed spelling, since a stem
+  // is not always a prefix of its own spelling ("libraries" stems to
+  // "library"): a stem-only hit test would miss it.
   function matchFinderGoal(goals, raw) {
     const query = parseSearchQuery(raw);
     const positions = [...query.tokens.keys()].filter(i => query.tokens[i].length >= 3);
     if (!positions.length) return null;
     const needed = Math.max(1, Math.ceil(positions.length * 0.6));
-    let best = null;
+    const matched = [];
     for (const goal of goals) {
       if (!goal.eligible) continue;
       const goalWords = cachedSearchWords(`${goal.label} ${goal.description}`);
       const hits = positions.filter(i => queryWordHit(goalWords, query, i, false) > 0).length;
-      if (hits >= needed && (!best || hits > best.hits)) best = { goal, hits };
+      if (hits < needed) continue;
+      const labelWords = cachedSearchWords(goal.label);
+      matched.push({ goal, hits, labelHits: positions.filter(i => queryWordHit(labelWords, query, i, false) > 0).length });
+    }
+    if (positions.length === 1 && (matched.length !== 1 || !matched[0].labelHits)) return null;
+    let best = null;
+    for (const item of matched) {
+      if (!best || item.hits > best.hits || (item.hits === best.hits && item.labelHits > best.labelHits)) best = item;
     }
     return best ? best.goal : null;
   }
@@ -1453,6 +1521,7 @@
     filterRobots,
     filterScoredCollection,
     filterSpecifications,
+    holdsPhrase,
     labDistributionModes,
     labRelations,
     labsForRecord,
