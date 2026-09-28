@@ -958,18 +958,38 @@ function initBadgeTooltip() {
     tooltip.style.left = `${left}px`;
     tooltip.style.top = `${Math.max(margin, top)}px`;
   };
+  // Escape dismisses the tooltip until the pointer really moves. The card's
+  // hover lift slides its emblems under a resting pointer, and a repaint or a
+  // clamped scroll does the same. Each hands an emblem a pointerover at the
+  // same spot, which must not bring back what the reader dismissed.
+  let pointer = null;
+  let dismissedAt = null;
+  const movedFrom = (spot, event) => Math.abs(event.clientX - spot.x) > 1 || Math.abs(event.clientY - spot.y) > 1;
+  document.addEventListener("pointermove", event => {
+    if (event.pointerType === "touch") return;
+    if (dismissedAt && movedFrom(dismissedAt, event)) dismissedAt = null;
+    pointer = { x: event.clientX, y: event.clientY };
+  }, { passive: true });
   document.addEventListener("pointerover", event => {
     if (event.pointerType === "touch") return;
+    if (dismissedAt && !movedFrom(dismissedAt, event)) return;
+    dismissedAt = null;
+    pointer = { x: event.clientX, y: event.clientY };
     const badge = event.target.closest?.(".card-badge");
     if (badge) show(badge);
     else if (anchor) hide();
   });
   document.addEventListener("click", event => {
+    dismissedAt = null;
     const badge = event.target.closest?.(".card-badge");
     if (badge && badge !== anchor) show(badge);
     else hide();
   });
-  document.addEventListener("keydown", event => { if (event.key === "Escape") hide(); });
+  document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") return;
+    hide();
+    dismissedAt = pointer;
+  });
   window.addEventListener("scroll", hide, { passive: true });
   window.addEventListener("resize", hide);
 }
