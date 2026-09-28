@@ -25,6 +25,22 @@ const indexRoute = name => new RegExp(`/app/search/${name}\\.json(\\?.*)?$`);
 const INDEX_WORD = "zyxwvutqj";
 const withIndexWord = (index, id) => ({ ...index, [id]: `${index[id]} ${INDEX_WORD}` });
 
+// Adds archived systems to the boot payload, with prose of their own so that
+// nothing else in the catalog matches their names. Systems lists active
+// records by default, so they stay hidden there until its filters are cleared.
+async function addArchivedSystems(page, names) {
+  const payload = readWeb("app/systems.json");
+  const [template] = payload.systems;
+  const added = names.map(name => {
+    const id = name.toLowerCase().replace(/\s+/g, "-");
+    return {
+      ...template, id, name, status: "archived", superseded_by: undefined,
+      description: "A record this test adds.", repo: `example/${id}`, url: `https://example.com/${id}`,
+    };
+  });
+  await page.route(/\/app\/systems\.json(\?.*)?$/, route => route.fulfill({ json: { ...payload, systems: [...payload.systems, ...added] } }));
+}
+
 // Every request the page makes for one path, whatever its content stamp.
 function requestsFor(page, pathname) {
   const urls = [];
@@ -292,6 +308,25 @@ test("Best match is offered only while a query is present", async ({ page }) => 
   await expect(page.locator('#inference-sort-filter option[value="match"]')).toHaveJSProperty("disabled", false);
 });
 
+// A page kept from browsing belongs to another list, so a query carried in
+// with new text starts on the first page. Every service holds this word, so
+// the carried query still fills several pages and no clamp can hide a kept one.
+test("a query carried in with new text starts on the first page", async ({ page }) => {
+  const index = readWeb("app/search/inference.json");
+  await page.route(indexRoute("inference"), route => route.fulfill({
+    json: Object.fromEntries(Object.entries(index).map(([id, text]) => [id, `${text} ${INDEX_WORD}`])),
+  }));
+  await page.goto("/?collection=inference&page=2");
+  const pager = page.locator("#inference-pager");
+  await expect(pager).toContainText("Page 2 of");
+  await page.getByRole("button", { name: /^All / }).click();
+  await page.locator("#all-directory-search").fill(INDEX_WORD);
+  await page.waitForFunction(() => searchIndexes.inference !== undefined);
+  await page.getByRole("button", { name: /^Inference services / }).click();
+  await expect(page.locator("#inference-search")).toHaveValue(INDEX_WORD);
+  await expect(pager).toContainText(/Page 1 of ([2-9]|\d{2,})/);
+});
+
 test("a carried query searches the same text a typed one does", async ({ page }) => {
   // Focusing the Systems box fetches only the Systems index, so the
   // Inference index is fetched for the carried query or not at all.
@@ -322,14 +357,16 @@ test("a misspelled name offers the right one", async ({ page }) => {
   await suggestion.click();
   await expect(page.locator("#all-directory-search")).toHaveValue("Ollama");
   await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
+  // The choice repaints away, so focus lands back in the search box.
+  await expect(page.locator("#all-directory-search")).toBeFocused();
 });
 
 test("a query with no match offers the Finder and a suggestion form", async ({ page }) => {
-  await searchAll(page, "notion alternative");
-  await expect(page.getByText("No matches for “notion alternative”.")).toBeVisible();
+  await searchAll(page, "Zyxwvut Frobnicator");
+  await expect(page.getByText("No matches for “Zyxwvut Frobnicator”.")).toBeVisible();
   await expect(page.getByRole("button", { name: "Try the Finder" })).toBeVisible();
   await expect(page.getByRole("link", { name: "Suggest it for review" }))
-    .toHaveAttribute("href", /template=system-suggestion\.yml&name=notion%20alternative/);
+    .toHaveAttribute("href", /template=system-suggestion\.yml&name=Zyxwvut%20Frobnicator$/);
 });
 
 // Many excluded names are hyphenated, and search reads a hyphen as a space,
@@ -386,21 +423,46 @@ test("the exclusions list is fetched once, stamped, and only for a search that f
     await held;
     await route.continue();
   });
-  await searchAll(page, "ollama");
+  // A record's own name finds at least that record.
+  const [system] = readWeb("app/systems.json").systems;
+  await searchAll(page, system.name);
   await allIndexesLanded(page);
-  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
+  await expect(page.locator("#all-directory-panel .search-count")).toHaveText(/^[1-9]\d* results?$/);
   expect(fetched, "a search that found something never needs the list").toEqual([]);
 
   // A second empty result while the first fetch is still in flight.
   const input = page.locator("#all-directory-search");
-  await input.fill("notion alternative");
-  await expect(page.getByText("No matches for “notion alternative”.")).toBeVisible();
-  await input.fill("notion alternatives");
-  await expect(page.getByText("No matches for “notion alternatives”.")).toBeVisible();
+  await input.fill("Zyxwvut Frobnicator");
+  await expect(page.getByText("No matches for “Zyxwvut Frobnicator”.")).toBeVisible();
+  await expect.poll(() => fetched.length, "the first empty result asks for the list").toBe(1);
+  await input.fill("Zyxwvut Frobnicators");
+  await expect(page.getByText("No matches for “Zyxwvut Frobnicators”.")).toBeVisible();
   release();
   await page.waitForFunction(() => Array.isArray(state.exclusions));
   expect(fetched, "one fetch serves every empty result").toHaveLength(1);
   expect(new URL(fetched[0]).searchParams.get("v"), "the list is fetched under its content stamp").toMatch(/^[0-9a-f]{12}$/);
+});
+
+// A list that fails to load counts as an empty one: empty results then name
+// no exclusion but still offer the form, and the page never asks again
+// (docs/WEB.md: exclusions.json is not retried within the page).
+test("an exclusions list that fails to load counts as empty, and is asked for once", async ({ page }) => {
+  const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
+  let requests = 0;
+  await page.route(/\/exclusions\.json(\?.*)?$/, route => {
+    requests += 1;
+    return route.fulfill({ status: 500, body: "" });
+  });
+  await searchAll(page, "Zyxwvut Frobnicator");
+  const grid = page.locator("#all-directory-grid");
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toBeVisible();
+  await page.locator("#all-directory-search").fill("Zyxwvut Frobnicators");
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveAttribute("href", /name=Zyxwvut%20Frobnicators$/);
+  await expect(grid).not.toContainText("Reviewed and left out:");
+  expect(await page.evaluate(() => state.exclusions), "a failed list is recorded as empty").toEqual([]);
+  expect(requests, "a failed list is not asked for again").toBe(1);
+  expect(errors, "no page error").toEqual([]);
 });
 
 // Every search surface besides All, each with the job banner when its panel has one.
@@ -421,8 +483,10 @@ test("every scope's empty search offers the next steps, and each Directory panel
     await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
     const banner = hint && page.locator(`[data-job-hint="${hint}"]`);
     if (banner) {
-      await page.locator(search).fill("run models locally");
-      await expect(banner, `${hint} names the job`).toContainText("Run models on my own computer");
+      // Any Finder goal with records to shortlist, asked for by its own label.
+      const goal = await page.evaluate(() => finderGoalEntries().find(entry => entry.eligible).label);
+      await page.locator(search).fill(goal);
+      await expect(banner, `${hint} names a job`).toContainText("Looks like a job:");
     }
     await page.locator(search).fill("Zyxwvut Frobnicator");
     const results = page.locator(grid);
@@ -432,31 +496,33 @@ test("every scope's empty search offers the next steps, and each Directory panel
     // the query can be suggested for review.
     await expect(results.getByRole("link", { name: "Suggest it for review" })).toBeVisible();
     await expect(results.getByRole("button", { name: /^Show (it|them)$/ })).toHaveCount(0);
+    await expect(page.locator(`.search-field:has(${search}) .search-count`), `${search} counts nothing`).toHaveText("0 results");
     if (banner) await expect(banner, `${hint} drops the banner`).toBeHidden();
   }
 });
 
-// Systems lists active records by default, so a superseded or archived
-// system's name finds nothing there until its filters are cleared (R-P1-11).
+// Systems lists active records by default, so an archived system's name finds
+// nothing there until its filters are cleared (R-P1-11).
 test("a search the filters hide says so, offers to show it, and never offers it back or for review", async ({ page }) => {
+  await addArchivedSystems(page, ["Zyxwvut Alpha", "Zyxwvut Beta"]);
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
   const search = page.locator("#project-search");
   const grid = page.locator("#project-grid");
-  await search.fill("kernel");
+  await search.fill("Zyxwvut");
   await expect(grid).toContainText("It matches 2 reviewed records your filters hide.");
   await expect(grid.getByRole("button", { name: "Show them" })).toBeVisible();
   // Did-you-mean offers only what the filters let through, never a hidden name.
-  await expect(grid.getByRole("button", { name: "Semantic Kernel", exact: true })).toHaveCount(0);
+  await expect(grid.getByRole("button", { name: "Zyxwvut Alpha", exact: true })).toHaveCount(0);
 
-  await search.fill("AutoGen");
-  await expect(grid).toContainText("No matches for “AutoGen” with these filters.");
+  await search.fill("Zyxwvut Alpha");
+  await expect(grid).toContainText("No matches for “Zyxwvut Alpha” with these filters.");
   await expect(grid).toContainText("It matches 1 reviewed record your filters hide.");
   await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
-  await expect(grid.getByRole("button", { name: "AutoGen", exact: true })).toHaveCount(0);
+  await expect(grid.getByRole("button", { name: "Zyxwvut Alpha", exact: true })).toHaveCount(0);
   await grid.getByRole("button", { name: "Show it" }).click();
-  await expect(page.locator("#project-grid .project-card h2")).toHaveText(["AutoGen"]);
-  await expect(search).toHaveValue("AutoGen");
+  await expect(page.locator("#project-grid .project-card h2")).toHaveText(["Zyxwvut Alpha"]);
+  await expect(search).toHaveValue("Zyxwvut Alpha");
   await expect(page.locator("#status-filter")).toHaveValue("");
   // The button repaints away, so focus lands back in the search box.
   await expect(search).toBeFocused();
@@ -469,42 +535,57 @@ test("showing what the filters hide also drops a Finder role set", async ({ page
   for (const value of ["memory_system", "agent_memory", "balanced"]) await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
   await page.locator("[data-finder-directory]").click();
   await expect(page.locator("#finder-roles-chip")).toBeVisible();
-  await page.locator("#project-search").fill("Joplin");
+  // An active memory system whose role the set leaves out, so only the set hides it.
+  const outside = await page.evaluate(() => state.projects.find(project => project.status === "active"
+    && project.system_family === "memory_system" && !state.directoryRoles.includes(project.primary_role)));
+  const index = readWeb("app/search/systems.json");
+  await page.route(indexRoute("systems"), route => route.fulfill({ json: withIndexWord(index, outside.id) }));
+  await page.locator("#project-search").fill(INDEX_WORD);
   const grid = page.locator("#project-grid");
   await expect(grid).toContainText("It matches 1 reviewed record your filters hide.");
   await grid.getByRole("button", { name: "Show it" }).click();
-  await expect(page.locator("#project-grid .project-card h2")).toHaveText(["Joplin"]);
+  await expect(page.locator("#project-grid .project-card h2")).toHaveText([outside.name]);
   await expect(page.locator("#finder-roles-chip")).toBeHidden();
 });
 
 test("a search one facet hides says so, and showing it clears that facet and keeps the query", async ({ page }) => {
+  // One service holds this word, and a Type it does not have hides it.
+  const services = readWeb("app/inference.json").inference;
+  const [service] = services;
+  const type = services.find(item => item.service_type !== service.service_type).service_type;
+  const index = readWeb("app/search/inference.json");
+  await page.route(indexRoute("inference"), route => route.fulfill({ json: withIndexWord(index, service.id) }));
   await page.goto("/?collection=inference");
   await expect(page.locator("#inference-grid .project-card").first()).toBeVisible();
-  await page.locator("#inference-type-filter").selectOption("direct_model_api");
-  await page.locator("#inference-search").fill("Together AI");
+  await page.locator("#inference-type-filter").selectOption(type);
+  await page.locator("#inference-search").fill(INDEX_WORD);
   const grid = page.locator("#inference-grid");
-  await expect(grid).toContainText("No matches for “Together AI” with these filters.");
+  await expect(grid).toContainText(`No matches for “${INDEX_WORD}” with these filters.`);
   await expect(grid).toContainText("It matches 1 reviewed record your filters hide.");
   await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
   await grid.getByRole("button", { name: "Show it" }).click();
   await expect(page.locator("#inference-type-filter")).toHaveValue("");
-  await expect(page.locator("#inference-grid .project-card h2")).toHaveText(["Together AI"]);
+  await expect(page.locator("#inference-grid .project-card h2")).toHaveText([service.name]);
   await expect(page.locator("#inference-directory-panel .search-count")).toHaveText("1 result");
-  await expect(page.locator("#inference-search")).toHaveValue("Together AI");
-  await expect(page).toHaveURL(address => address.searchParams.get("q") === "Together AI" && !address.searchParams.has("type"));
+  await expect(page.locator("#inference-search")).toHaveValue(INDEX_WORD);
+  await expect(page).toHaveURL(address => address.searchParams.get("q") === INDEX_WORD && !address.searchParams.has("type"));
 });
 
 // An imported models.dev row is not Atlas reviewed, and every Models type
 // filter hides it, since none of those rows has a type.
 test("a hidden match that is an imported source row is not called reviewed", async ({ page }) => {
+  const imported = readWeb("app/models.json").models.find(model => model.review_status === "imported" && !model.model_type);
+  const index = readWeb("app/search/models.json");
+  await page.route(indexRoute("models"), route => route.fulfill({ json: withIndexWord(index, imported.id) }));
   await page.goto("/?view=models");
   await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
-  await page.locator("#model-type-filter").selectOption("language_model");
-  await page.locator("#model-search").fill("Qwen3 Coder Flash");
+  const type = await page.locator('#model-type-filter option:not([value=""])').first().getAttribute("value");
+  await page.locator("#model-type-filter").selectOption(type);
+  await page.locator("#model-search").fill(INDEX_WORD);
   const grid = page.locator("#model-grid");
   await expect(grid).toContainText("It matches 1 record your filters hide.");
   await grid.getByRole("button", { name: "Show it" }).click();
-  await expect(page.locator("#model-grid .project-card h2")).toHaveText(["Qwen3 Coder Flash"]);
+  await expect(page.locator("#model-grid .project-card h2")).toHaveText([imported.name]);
 });
 
 // An empty result is one message, so it spans the grid rather than one card's
@@ -513,7 +594,7 @@ test("a hidden match that is an imported source row is not called reviewed", asy
 test("an empty result spans the grid, at a readable measure", async ({ page }) => {
   for (const [width, height] of [[1440, 900], [390, 844]]) {
     await page.setViewportSize({ width, height });
-    await searchAll(page, "notion alternative");
+    await searchAll(page, "Zyxwvut Frobnicator");
     const empty = page.locator("#all-directory-grid .empty-search");
     await expect(empty).toBeVisible();
     const { box, grid, column } = await empty.evaluate(element => ({
@@ -543,12 +624,14 @@ test("a button that switches views hands focus to the new view's heading", async
   await page.locator('.hero [data-open-tab="finder"]').press("Enter");
   await expect(page.locator("#finder-title")).toBeFocused();
 
-  await searchAll(page, "notion alternative");
+  await searchAll(page, "Zyxwvut Frobnicator");
   await page.getByRole("button", { name: "Try the Finder" }).press("Enter");
   await expect(page.locator("#finder")).toHaveClass(/is-active/);
   await expect(page.locator("#finder-title")).toBeFocused();
 
-  await searchAll(page, "run models locally");
+  // Any Finder goal with records to shortlist, asked for by its own label.
+  const goal = await page.evaluate(() => finderGoalEntries().find(entry => entry.eligible).label);
+  await searchAll(page, goal);
   await page.locator('[data-job-hint="all"]').getByRole("button", { name: /Open shortlist/ }).press("Enter");
   await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
   await expect(page.locator("#finder-content h2")).toBeFocused();
