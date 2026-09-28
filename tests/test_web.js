@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, packShapedSystems, paginate, parseRecordReference, parseViewId, readScopeURLParams, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, shareRecordPath, sourceNamespace, switcherCounts, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -139,12 +139,22 @@ test("search falls back to card text before the index arrives", () => {
   assert.equal(filterAndSortProjects(records, { term: "card", searchIndex: {} }).length, 1);
 });
 
-test("indexed search keeps infix matching, which is why the index is raw text", () => {
-  // "llama" appears only in the index text, never in the record's own id,
-  // name, or description — so this fails if recordHaystack ignores the index.
+test("indexed search reads the index through whole words", () => {
+  // "gguf" appears only in the index text, never in the record's own fields,
+  // so this fails if the matcher ignores the index.
   const records = [{ id: "ol", name: "Ol", description: "Runner.", score: { overall: 1 } }];
   const searchIndex = { ol: "ollama runner. runs gguf models locally." };
-  assert.equal(filterAndSortProjects(records, { term: "llama", searchIndex }).length, 1);
+  assert.equal(filterAndSortProjects(records, { term: "gguf", searchIndex }).length, 1);
+});
+
+test("mid-word matches count inside names but not inside prose", () => {
+  const records = [
+    { id: "o", name: "Ollama", description: "Local runner.", score: { overall: 1 } },
+    { id: "x", name: "Other", description: "Mentions ollama inside prose.", score: { overall: 9 } },
+    { id: "s", name: "Store", description: "Vector storage.", score: { overall: 9 } },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "llama", sort: "name" }).map(record => record.name), ["Ollama"]);
+  assert.deepEqual(filterAndSortProjects(records, { term: "rag", sort: "name" }).map(record => record.name), []);
 });
 
 test("a one-character term still matches only the start of a word in the name", () => {
@@ -753,7 +763,8 @@ test("robot filters combine form factor, availability, and status, sorted by nam
 });
 
 test("robot search covers name and maker, reads the index for named models, and never evidence URLs", () => {
-  assert.deepEqual(filterRobots(robots, { term: "dynamo" }).map(item => item.name), ["Atlas Arm", "Rover"]);
+  // Both match through their maker alone, so the active robot leads the archived one.
+  assert.deepEqual(filterRobots(robots, { term: "dynamo" }).map(item => item.name), ["Rover", "Atlas Arm"]);
   assert.deepEqual(filterRobots(robots, { term: "hidden" }), []);
   assert.deepEqual(filterRobots(robots, { term: "sample-vla", searchIndex: { "g-one": "sample-vla" } }).map(item => item.name), ["G One"]);
 });
@@ -1432,13 +1443,29 @@ test("each switcher chip counts what its scope lists by default", () => {
 });
 
 test("a scope writes only the parameters that differ from their defaults, in a fixed order", () => {
+  // Beside a query, Name is a sort the reader chose (ruling R-P1-2b).
   assert.deepEqual(
     scopeURLParams("systems", { q: "graph", family: "memory_system", role: "", status: "active", localOnly: "", sort: "name" }),
-    [["q", "graph"], ["family", "memory_system"]],
+    [["q", "graph"], ["family", "memory_system"], ["sort", "name"]],
   );
   assert.deepEqual(scopeURLParams("systems", { status: "", localOnly: "1", sort: "score" }), [["status", ""], ["localOnly", "1"], ["sort", "score"]]);
   assert.deepEqual(scopeURLParams("inference", { type: "direct_model_api", sort: "score" }), [["type", "direct_model_api"]]);
   assert.deepEqual(scopeURLParams("nowhere", { q: "x" }), []);
+});
+
+// Ruling R-P1-2b: while a query is present, Best match is the sort a URL
+// leaves out, so a reload or a shared link keeps any other sort the reader
+// chose, the browsing default included.
+test("while a query is present, a URL leaves out Best match and names any other sort", () => {
+  assert.deepEqual(scopeURLParams("inference", { q: "api", sort: "match" }), [["q", "api"]]);
+  assert.deepEqual(scopeURLParams("inference", { q: "api", sort: "score" }), [["q", "api"], ["sort", "score"]]);
+  assert.deepEqual(scopeURLParams("runtimes", { q: "api", sort: "score" }), [["q", "api"], ["sort", "score"]]);
+  assert.deepEqual(scopeURLParams("models", { q: "api", sort: "score" }), [["q", "api"], ["sort", "score"]]);
+  assert.deepEqual(scopeURLParams("systems", { q: "coding agent", sort: "name" }), [["q", "coding agent"], ["sort", "name"]]);
+  // Browsing keeps each scope's own default, and a query of spaces is none.
+  assert.deepEqual(scopeURLParams("inference", { q: "", sort: "score" }), []);
+  assert.deepEqual(scopeURLParams("inference", { q: "", sort: "match" }), [["sort", "match"]]);
+  assert.deepEqual(scopeURLParams("inference", { q: "  ", sort: "score" }), [["q", "  "]]);
 });
 
 test("restoring a scope keeps what its controls offer and rejects the rest", () => {
@@ -1460,9 +1487,299 @@ test("a URL's filters belong to its view or to the Directory collection it names
   assert.equal(scopeFromURL(new URLSearchParams("view=finder")), null);
 });
 
+// A label names one control, so it may hold only that one labelable element.
+// The search counts beside the boxes once sat inside them as <output>, a
+// second labelable element, which made each of those labels invalid.
+test("every label in index.html holds exactly one control", () => {
+  const labels = [...indexHTML().matchAll(/<label\b[^>]*>([\s\S]*?)<\/label>/g)];
+  assert.ok(labels.length > 0, "index.html has labels");
+  for (const [whole, inner] of labels) {
+    const controls = inner.match(/<(?:input|select|textarea|button|output|meter|progress)\b/g) || [];
+    assert.equal(controls.length, 1, `${whole.slice(0, 90)}… holds ${controls.length} controls`);
+  }
+});
+
+// Agent packs and robots have no scores, so the All intro promises scores
+// only where a collection has them (ruling R-P1-23).
+test("the All intro promises scores only where a collection has them", () => {
+  assert.match(indexHTML(), /Choose a collection for its own filters, and its scores where it has them\./);
+});
+
 test("the API view does not call web-page evidence pinned", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
   // docs/DATA_MODEL.md: web terms carry "no claim of immutability".
   assert.doesNotMatch(html, /pinned to the exact file or page/);
   assert.match(html, /web page records the date it was read/);
+});
+
+test("search text normalises case, accents, and separators", () => {
+  assert.equal(normalizeSearchText("  Qwen3.8 Omni — Flash!  "), "qwen3.8 omni flash");
+  assert.equal(normalizeSearchText("Café-Crème"), "cafe-creme");
+  assert.deepEqual(searchWords("llama.cpp and self-hosted"), ["llama.cpp", "llama", "cpp", "and", "self-hosted", "self", "hosted"]);
+});
+
+test("query words are stemmed lightly and never below four letters", () => {
+  assert.equal(stemQueryWord("agents"), "agent");
+  assert.equal(stemQueryWord("memories"), "memory");
+  assert.equal(stemQueryWord("locally"), "local");
+  assert.equal(stemQueryWord("hosted"), "host");
+  assert.equal(stemQueryWord("coding"), "coding");
+  assert.equal(stemQueryWord("news"), "news");
+  assert.equal(stemQueryWord("access"), "access");
+});
+
+test("a query drops stop words and treats hyphens as spaces", () => {
+  assert.deepEqual(parseSearchQuery("Memory for Agents").tokens, ["memory", "agent"]);
+  assert.deepEqual(parseSearchQuery("self-hosted").tokens, parseSearchQuery("self hosted").tokens);
+  assert.deepEqual(parseSearchQuery("   ").tokens, []);
+});
+
+// "ollama." asks for "ollama": a period that ends a query word is dropped
+// before matching, before the name bonus reads the query as typed, and before
+// did-you-mean, while a period inside or before a word stays.
+test("a period that ends a query word is dropped, and every other period stays", () => {
+  const words = raw => parseSearchQuery(raw).words;
+  assert.deepEqual(parseSearchQuery("ollama.").tokens, ["ollama"]);
+  assert.deepEqual(words("ollama. cloud"), ["ollama", "cloud"]);
+  assert.deepEqual(words(".net"), [".net"]);
+  assert.deepEqual(words("llama.cpp"), ["llama.cpp"]);
+  assert.deepEqual(words("node.js"), ["node.js"]);
+  assert.deepEqual(words("c++"), ["c++"]);
+  assert.deepEqual(words("c#"), ["c#"]);
+  assert.deepEqual(words("..."), []);
+  assert.deepEqual(words(". . ."), []);
+  assert.deepEqual(words("e.g."), ["e.g"]);
+  const records = [
+    { id: "memori", name: "Memori", description: "A memory engine.", score: { overall: 9 } },
+    { id: "a-mem", name: "A-MEM", description: "Agentic memory.", score: { overall: 1 } },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "A-MEM.", sort: "match" }).map(record => record.name), ["A-MEM", "Memori"]);
+  assert.deepEqual(suggestNames([{ name: "Ollama" }], "olama."), ["Ollama"]);
+});
+
+test("short words are strict outside names, and names match inside compounds", () => {
+  const prose = searchWords("An agent API that stores vectors in storage");
+  assert.equal(tokenHit(prose, "pi", false), 0);
+  assert.equal(tokenHit(prose, "rag", false), 0);
+  assert.equal(tokenHit(prose, "api", false), 1);
+  assert.equal(tokenHit(prose, "stor", false), 0.8);
+  assert.equal(tokenHit(searchWords("Pi"), "pi", true), 1);
+  assert.equal(tokenHit(searchWords("ChatGPT"), "gpt", true), 0.6);
+  assert.equal(tokenHit(searchWords("agentmemory"), "memory", true), 0.6);
+  assert.equal(tokenHit(searchWords("GBrain"), "gbr", true), 0.8);
+  assert.equal(tokenHit(searchWords("zebra"), "z", false), 0);
+  assert.equal(tokenHit(searchWords("Alpha"), "a", true), 0.8);
+});
+
+test("a search orders by match and never by score", () => {
+  const records = [
+    { id: "a", name: "Alpha Router", description: "Routes requests to ollama.", status: "active", score: { overall: 10 } },
+    { id: "b", name: "Ollama", description: "Runs models.", status: "active", score: { overall: 1 } },
+    { id: "c", name: "Ollama Classic", description: "Old runner.", status: "archived", score: { overall: 9 } },
+  ];
+  const names = filterAndSortProjects(records, { term: "ollama", sort: "match", status: "" }).map(record => record.name);
+  assert.deepEqual(names, ["Ollama", "Ollama Classic", "Alpha Router"]);
+  // Without a query, "match" falls back to names A–Z.
+  assert.deepEqual(filterAndSortProjects(records, { term: "", sort: "match", status: "" }).map(record => record.name), ["Alpha Router", "Ollama", "Ollama Classic"]);
+});
+
+// A specification's status comes from its own vocabulary, where "published"
+// is as current as a system's "active", so a superseded one follows it.
+test("a superseded specification follows a current one at an equal match", () => {
+  const specifications = [
+    { id: "alpha", name: "Alpha Protocol", short_name: "AP", description: "An older wire format.", status: "superseded", licenses: [] },
+    { id: "beta", name: "Beta Protocol", short_name: "BP", description: "A newer wire format.", status: "published", licenses: [] },
+  ];
+  assert.deepEqual(filterSpecifications(specifications, { term: "protocol" }).map(item => item.name), ["Beta Protocol", "Alpha Protocol"]);
+});
+
+// Every status in the taxonomy's record vocabularies is either current or no
+// longer current, and the inactive set holds exactly the second kind, so a
+// status added to a vocabulary has to be classed here before it ships.
+test("the inactive statuses are the taxonomy's statuses for records no longer current", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const statuses = ["project_statuses", "specification_statuses"].flatMap(group => taxonomy[group].map(item => item.id));
+  const current = ["active", "published", "evolving", "vendor_specific"];
+  assert.deepEqual([...new Set(statuses)].sort(), [...current, ...INACTIVE_STATUSES].sort());
+  assert.deepEqual([...INACTIVE_STATUSES].sort(), ["archived", "removed", "superseded"]);
+});
+
+// ADR 040's central promise: among equal matches, active records lead, then
+// names A–Z, and nothing reads a score or stars. Every record here matches
+// "notes" in its name alone, so all tie, and each merit field points the other
+// way: the archived record has the top score and the most stars, and among
+// the active ones each later name has the higher score and more stars.
+test("equal matches never order by score or stars, and active records lead", () => {
+  const systems = [
+    { id: "alpha", name: "Alpha Notes", description: "A notebook.", status: "archived", deployment: ["host_pack"], score: { overall: 10 }, stars: 99999 },
+    { id: "beta", name: "Beta Notes", description: "A notebook.", status: "active", deployment: [], score: { overall: 1 }, stars: 1 },
+    { id: "gamma", name: "Gamma Notes", description: "A notebook.", status: "active", deployment: [], score: { overall: 9 }, stars: 500 },
+  ];
+  const names = entries => entries.map(entry => (entry.record || entry).name);
+  assert.deepEqual(names(filterAndSortProjects(systems, { term: "notes", sort: "match", status: "" })), ["Beta Notes", "Gamma Notes", "Alpha Notes"]);
+  const runtimes = [{ id: "delta", name: "Delta Notes", maintainer: "Delta", description: "A notebook.", api_styles: [], score: { overall: 10 }, stars: 70000 }];
+  assert.deepEqual(names(filterDirectoryEntries(systems, [], runtimes, [], { term: "notes" })), ["Beta Notes", "Delta Notes", "Gamma Notes", "Alpha Notes"]);
+  // The Packs scope ties an active pack with an archived, top-scored system.
+  const packs = [{ id: "zeta", name: "Zeta Notes", steward: "Zeta", description: "A notebook.", status: "active" }];
+  assert.deepEqual(names(mergePackScopeEntries(packs, packShapedSystems(systems, { term: "notes" }), { term: "notes" })), ["Zeta Notes", "Alpha Notes"]);
+});
+
+// While searching, Specifications order by match, never A–Z: the one named
+// for the query leads one that only mentions it (ADR 040).
+test("a Specifications search orders by match, not A–Z", () => {
+  const specifications = [
+    { id: "alpha", name: "Alpha Rules", description: "Rules that build on the Zeta Protocol.", status: "published", licenses: [] },
+    { id: "zeta", name: "Zeta Protocol", description: "A wire format.", status: "published", licenses: [] },
+  ];
+  assert.deepEqual(filterSpecifications(specifications, { term: "zeta protocol" }).map(item => item.name), ["Zeta Protocol", "Alpha Rules"]);
+  assert.deepEqual(filterSpecifications(specifications, {}).map(item => item.name), ["Alpha Rules", "Zeta Protocol"]);
+});
+
+test("a split name is found as a name", () => {
+  const fields = searchFields("system", { id: "lc", name: "LangChain", description: "Framework." });
+  assert.ok(recordMatch(parseSearchQuery("lang chain"), fields) > 0);
+});
+
+test("the mixed directory stays A–Z while browsing and orders by match while searching", () => {
+  const systems = [{ id: "z", name: "Zeta Agent", description: "An agent.", status: "active", deployment: [] }];
+  const runtimes = [{ id: "o", name: "Ollama", maintainer: "Ollama", description: "Runs models.", api_styles: [] }];
+  const browse = filterDirectoryEntries(systems, [], runtimes, [], { term: "" }).map(entry => entry.record.name);
+  assert.deepEqual(browse, ["Ollama", "Zeta Agent"]);
+  const found = filterDirectoryEntries(systems, [], runtimes, [], { term: "agent" }).map(entry => entry.record.name);
+  assert.deepEqual(found, ["Zeta Agent"]);
+});
+
+test("real-catalog probes: known names first and loose queries answered", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const nameOf = (group, id) => (taxonomy[group] || []).find(item => item.id === id)?.name || "";
+  const labelOf = (kind, record) => ({
+    system: `${nameOf("primary_roles", record.primary_role)} ${nameOf("system_families", record.system_family)} ${nameOf("source_models", record.source_model)}`,
+    inference: nameOf("inference_service_types", record.service_type),
+    runtime: nameOf("local_runtime_types", record.runtime_type),
+    model: nameOf("model_types", record.model_type),
+    pack: nameOf("pack_types", record.pack_type),
+    robot: nameOf("robot_form_factors", record.form_factor),
+  })[kind] || "";
+  const boot = name => readWebJSON(`app/${name}.json`);
+  const index = name => readWebJSON(`app/search/${name}.json`);
+  const indexes = {
+    searchIndex: index("systems"), serviceSearchIndex: index("inference"), runtimeSearchIndex: index("runtimes"),
+    modelSearchIndex: index("models"), packSearchIndex: index("packs"), robotSearchIndex: index("robots"),
+  };
+  const search = term => filterDirectoryEntries(
+    boot("systems").systems, boot("inference").inference, boot("runtimes").runtimes, boot("models").models,
+    { term, labelOf, ...indexes }, boot("packs").packs, boot("robots").robots,
+  );
+  const run = term => search(term).map(entry => entry.record.name);
+  const indexOf = {
+    system: indexes.searchIndex, inference: indexes.serviceSearchIndex, runtime: indexes.runtimeSearchIndex,
+    model: indexes.modelSearchIndex, pack: indexes.packSearchIndex, robot: indexes.robotSearchIndex,
+  };
+  // Each result's searchable words: every field's, and its name's alone.
+  const hits = term => search(term).map(({ kind, record }) => {
+    const fields = searchFields(kind, record, { index: indexOf[kind], labelOf });
+    return { name: record.name, words: Object.values(fields).flatMap(text => searchWords(text)), nameWords: searchWords(fields.name) };
+  });
+  assert.equal(run("ollama")[0], "Ollama");
+  assert.deepEqual(run("ollama."), run("ollama"));
+  assert.equal(run("cursor")[0], "Cursor");
+  assert.equal(run("openrouter")[0], "OpenRouter");
+  assert.equal(run("claude code")[0], "Claude Code");
+  assert.equal(run("lang chain")[0], "LangChain");
+  assert.deepEqual(run("self hosted"), run("self-hosted"));
+  assert.ok(run("gpt").includes("ChatGPT"));
+  assert.ok(run("run models locally").length > 0);
+  assert.ok(run("memory for agents").length > 0);
+  assert.ok(run("open source coding agent").length > 0);
+  // Short words stay whole outside names: "rag" never matches inside a prose
+  // word such as "storage", and "pi" never matches "API".
+  const rag = hits("rag");
+  assert.ok(rag.length > 0);
+  for (const { name, words, nameWords } of rag) {
+    assert.ok(words.includes("rag") || nameWords.some(word => word.includes("rag")), `${name} matches "rag" by a whole word or inside its name`);
+  }
+  const pi = hits("pi");
+  assert.equal(pi[0].name, "Pi");
+  for (const { name, words, nameWords } of pi) {
+    assert.ok(words.includes("pi") || nameWords.some(word => word.startsWith("pi")), `${name} matches "pi" by a whole word or the start of a name word`);
+  }
+});
+
+// The exact-name bonus reads the query as typed: stemming turns "Swarms" into
+// "swarm", and dropping the stop word turns "A-MEM" into "mem".
+test("a name equal to the query as typed comes first when stemming changes the query", () => {
+  const records = [
+    { id: "sc", name: "SwarmClaw", description: "An agent.", score: { overall: 9 } },
+    { id: "s", name: "Swarms", description: "A framework.", score: { overall: 1 } },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "Swarms", sort: "match" }).map(record => record.name), ["Swarms", "SwarmClaw"]);
+});
+
+test("a name equal to the query as typed comes first when a stop word is dropped", () => {
+  const records = [
+    { id: "memori", name: "Memori", description: "A memory engine.", score: { overall: 9 } },
+    { id: "a-mem", name: "A-MEM", description: "Agentic memory.", score: { overall: 1 } },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "A-MEM", sort: "match" }).map(record => record.name), ["A-MEM", "Memori"]);
+});
+
+// "series" stems to "sery", which is not a prefix of "series", so a query word
+// also matches as typed.
+test("series finds a record whose description says series", () => {
+  const records = [{ id: "s", name: "Alpha", description: "Covers a model series.", score: { overall: 1 } }];
+  assert.equal(filterAndSortProjects(records, { term: "series" }).length, 1);
+});
+
+test("memories finds a record whose indexed text says memories", () => {
+  const records = [{ id: "m", name: "Beta", description: "A notes app.", score: { overall: 1 } }];
+  const searchIndex = { m: "beta a notes app. it keeps memories between sessions." };
+  assert.equal(filterAndSortProjects(records, { term: "memories", searchIndex }).length, 1);
+});
+
+test("a lab is found by its exact name when that name ends in -ies", () => {
+  const motif = [{ id: "lab-motif", name: "Motif Technologies", description: "A model developer.", lab_type: "ai_company", headquarters: "kr", catalog_names: ["Motif Technologies"], systems: [] }];
+  assert.deepEqual(filterLabs(motif, { term: "Motif Technologies" }).map(lab => lab.name), ["Motif Technologies"]);
+});
+
+// Without the joined-words retry, LangChain holds both words only inside one
+// word and ranks below a name that holds them apart.
+test("a split query ranks the joined name above a name that holds the words apart", () => {
+  const records = [
+    { id: "kit", name: "Lang Chain Kit", description: "Helpers.", score: { overall: 9 } },
+    { id: "lc", name: "LangChain", description: "Framework.", score: { overall: 1 } },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "lang chain", sort: "match" }).map(record => record.name), ["LangChain", "Lang Chain Kit"]);
+});
+
+test("a misspelled name suggests the closest whole names first", () => {
+  assert.equal(editDistance("olama", "ollama"), 1);
+  assert.equal(editDistance("form", "from"), 1);
+  const records = [{ name: "Ollama Cloud" }, { name: "Ollama" }, { name: "Llama-3.1-70B-Instruct" }, { name: "Mem0" }];
+  assert.deepEqual(suggestNames(records, "olama"), ["Ollama", "Ollama Cloud", "Llama-3.1-70B-Instruct"]);
+  assert.deepEqual(suggestNames(records, "zz"), []);
+});
+
+test("a query names a Finder job when most of its words appear in it", () => {
+  const goals = [
+    { id: "personal_machine", direction: "local_runtime", label: "Run models on my own computer", description: "A packaged runner that manages download, storage, and local serving.", eligible: 4 },
+    { id: "knowledge_assistant", direction: "memory_system", label: "Ask questions over documents", description: "A ready-to-use AI knowledge app or RAG workspace.", eligible: 9 },
+    { id: "empty", direction: "memory_system", label: "Run everything locally", description: "Nothing qualifies.", eligible: 0 },
+  ];
+  assert.equal(matchFinderGoal(goals, "run models locally").id, "personal_machine");
+  assert.equal(matchFinderGoal(goals, "rag").id, "knowledge_assistant");
+  assert.equal(matchFinderGoal(goals, "ai"), null);
+  assert.equal(matchFinderGoal(goals, "zebra crossing"), null);
+});
+
+// R-P1-8: matchFinderGoal must score a kept position with queryWordHit (the
+// better of a token's stem and its typed spelling), not with tokenHit on the
+// stem alone. "libraries" stems to "library", which is not a prefix of
+// "libraries", so a stem-only hit test misses a goal description that holds
+// the word as typed. A scratch check (not committed) shows the brief's
+// stem-only tokenHit call returns null for this same input.
+test("a query names a Finder job by an -ies word matched as typed, not only its stem", () => {
+  const goals = [
+    { id: "sdk_builder", direction: "agent_system", label: "Build with an SDK", description: "Build agent libraries.", eligible: 3 },
+  ];
+  assert.equal(matchFinderGoal(goals, "libraries").id, "sdk_builder");
 });
