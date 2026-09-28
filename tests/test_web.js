@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, COLLECTIONS, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, COLLECTIONS, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1672,22 +1672,49 @@ test("a split name also finds records whose prose holds the joined word", () => 
   assert.deepEqual(filterAndSortProjects(records, { term: "lang chain", sort: "match", status: "" }).map(record => record.name), ["LangChain", "Alpha Graph", "Beta Model"]);
 });
 
+// A name holding the joined word earns the phrase bonus at the name's weight,
+// so a product whose name is split in a longer query still leads records
+// that only hold the joined word in their repository.
+test("a split name leads a longer query ahead of records that only mention it", () => {
+  const records = [
+    { id: "aa", name: "Alpha Agents", repo: "langchain-ai/alpha-agents", description: "Agents.", status: "active", deployment: [] },
+    { id: "lc", name: "LangChain", description: "A framework for building agents.", status: "active", deployment: [] },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "lang chain agents", sort: "match", status: "" }).map(record => record.name), ["LangChain", "Alpha Agents"]);
+});
+
 // Words a record holds together, in order, outrank the same words held apart,
 // even when the apart ones land in a weightier field: "self hosted" once
 // listed services typed "Managed inference host" before records described
-// as self-hosted.
+// as self-hosted. The phrase is matched word by word under the usual rules,
+// so a stem, a word's start, or a stop word changes nothing.
 test("a phrase a record holds together outranks the same words apart", () => {
   const labelOf = (kind, record) => (record.id === "host" ? "Managed inference host" : "General work agent");
   const records = [
     { id: "host", name: "Alpha Cloud", description: "Serves models on a self-built engine.", status: "active", deployment: [] },
     { id: "agent", name: "Zeta", description: "A self-hosted assistant.", status: "active", deployment: [] },
   ];
-  assert.deepEqual(filterAndSortProjects(records, { term: "self hosted", sort: "match", status: "", labelOf }).map(record => record.name), ["Zeta", "Alpha Cloud"]);
+  for (const term of ["self hosted", "self host", "self hosting", "the self hosted"]) {
+    assert.deepEqual(filterAndSortProjects(records, { term, sort: "match", status: "", labelOf }).map(record => record.name), ["Zeta", "Alpha Cloud"], term);
+  }
+});
+
+// The phrase bonus stays below the name tiers: a label that holds the query
+// as a phrase still follows a name that holds every query word, though names
+// A–Z alone would put the label's record first.
+test("a phrase in a label never outranks a name that holds every query word", () => {
+  const labelOf = (kind, record) => (record.id === "label" ? "Open source" : "General work agent");
+  const records = [
+    { id: "label", name: "Alpha", description: "A kit.", status: "active", deployment: [] },
+    { id: "name", name: "Source Open Kit", description: "A kit.", status: "active", deployment: [] },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "open source", sort: "match", status: "", labelOf }).map(record => record.name), ["Source Open Kit", "Alpha"]);
 });
 
 // A short name is a whole name, so the exact-name lead reads it too: "ACP"
 // once tied Agent Client Protocol with a protocol whose short name only holds
-// ACP, and names A–Z put the other first.
+// ACP, and only names A–Z decided between them. The fixture renames one so
+// that A–Z would decide against it.
 test("a short name equal to the query comes first", () => {
   const specifications = [
     { id: "commerce", name: "Agentic Commerce Protocol", short_name: "Commerce ACP", description: "Checkout.", status: "published", licenses: [] },
@@ -1744,23 +1771,28 @@ test("real-catalog probes: known names first and loose queries answered", () => 
   assert.equal(run("claude code")[0], "Claude Code");
   assert.equal(run("lang chain")[0], "LangChain");
   assert.deepEqual(run("self hosted"), run("self-hosted"));
+  assert.deepEqual(run("the self hosted"), run("self hosted"));
   // A record that says the phrase leads the ones holding its words apart:
   // "self hosted" once listed services typed "Managed inference host" first.
-  const selfHosted = search("self hosted")[0];
-  const leading = searchFields(selfHosted.kind, selfHosted.record, { index: indexOf[selfHosted.kind], labelOf });
-  assert.ok(
-    [leading.label, leading.maker, leading.description].some(text => ` ${normalizeSearchText(text).replace(/-/g, " ")} `.includes(" self hosted ")),
-    `${selfHosted.record.name} leads "self hosted" without saying it`,
-  );
+  for (const term of ["self hosted", "self host"]) {
+    const [{ kind, record }] = search(term);
+    const leading = searchFields(kind, record, { index: indexOf[kind], labelOf });
+    assert.ok([leading.label, leading.maker, leading.description].some(text => holdsPhrase(text, parseSearchQuery(term))), `${record.name} leads "${term}" without saying it`);
+  }
   // A split name finds everything the joined one does.
   const split = new Set(run("lang chain"));
   for (const name of run("langchain")) assert.ok(split.has(name), `"lang chain" misses ${name}, which "langchain" finds`);
   // Each specification's short name lists that specification, or one of the
-  // same name, first.
+  // same name, first, and ahead by its match rather than by names A–Z.
   const { specifications } = boot("specifications");
+  const specificationIndex = index("specifications");
   for (const { short_name: shortName } of specifications) {
-    const [first] = filterSpecifications(specifications, { term: shortName, searchIndex: index("specifications"), labelOf });
+    const [first, second] = filterSpecifications(specifications, { term: shortName, searchIndex: specificationIndex, labelOf });
     assert.ok([first.name, first.short_name].some(name => name.toLowerCase() === shortName.toLowerCase()), `"${shortName}" lists ${first.name} first`);
+    if (second) {
+      const weight = item => recordMatch(parseSearchQuery(shortName), searchFields("spec", item, { index: specificationIndex, labelOf }));
+      assert.ok(weight(first) > weight(second), `"${shortName}" lists ${first.name} first only by names A–Z`);
+    }
   }
   assert.ok(run("gpt").includes("ChatGPT"));
   assert.ok(run("run models locally").length > 0);

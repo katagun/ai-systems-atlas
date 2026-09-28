@@ -357,9 +357,9 @@
     robot: ROBOT_VIEW.searchFields,
   };
   const SEARCH_FIELD_WEIGHTS = { name: 50, label: 30, maker: 20, description: 10, text: 3 };
-  // A field that holds the whole query as a phrase adds this many times its
-  // weight, so a phrase in a label (150) still stays below a name that holds
-  // every query word (200).
+  // A field that holds the query as a phrase adds this many times its weight,
+  // so a phrase in a label (150) still stays below a name that holds every
+  // query word (200).
   const PHRASE_FACTOR = 5;
 
   const searchWordCache = new Map();
@@ -373,17 +373,29 @@
     return words;
   }
 
-  // A field's comparable text, padded with spaces so a phrase is found only
-  // as whole words.
-  const comparableTextCache = new Map();
-  function cachedComparableText(text) {
+  // A field's words in order for the phrase test: its comparable words, with
+  // stop words left out as they are from a query.
+  const phraseWordCache = new Map();
+  function cachedPhraseWords(text) {
     const key = String(text || "");
-    let comparable = comparableTextCache.get(key);
-    if (comparable === undefined) {
-      comparable = ` ${comparableText(key)} `;
-      comparableTextCache.set(key, comparable);
+    let words = phraseWordCache.get(key);
+    if (!words) {
+      words = comparableText(key).split(" ").filter(word => word && !SEARCH_STOP_WORDS.has(word));
+      phraseWordCache.set(key, words);
     }
-    return comparable;
+    return words;
+  }
+
+  // Whether a text holds the query's words one after another, each matched by
+  // the rules for words outside a name (as typed or by its stem, whole, or by
+  // its start from four letters), with stop words skipped on both sides. So
+  // "self host" and "the self hosted" both find "a self-hosted agent".
+  function holdsPhrase(text, query) {
+    const words = cachedPhraseWords(text);
+    for (let k = 0; k + query.tokens.length <= words.length; k += 1) {
+      if (query.tokens.every((_, j) => queryWordHit([words[k + j]], query, j, false) > 0)) return true;
+    }
+    return false;
   }
 
   // What a record is matched and ordered by. `labelOf(kind, record)` names its
@@ -419,9 +431,9 @@
 
   // A record's match weight: 0 when any query word misses every field, since
   // every word must match. Otherwise the number only orders results; it never
-  // reads a score, stars, or any other merit (ADR 040). A field other than
-  // the name that holds the query's words together, in order, adds a phrase
-  // bonus by its weight, so a record described as "self-hosted" leads one
+  // reads a score, stars, or any other merit (ADR 040). For a query of two or
+  // more words, a field other than the name that holds them as a phrase adds
+  // a bonus by its weight, so a record described as "self-hosted" leads one
   // whose words "self" and "host" sit apart. The name bonuses read each whole
   // name, a short name included, and also compare the query as typed, since
   // stemming ("Swarms") and stop words ("A-MEM") change the stemmed text.
@@ -439,14 +451,12 @@
       if (!best) return 0;
       weight += best;
     }
-    const typed = comparableText(query.raw);
     if (query.tokens.length > 1) {
-      let phrase = 0;
-      for (const [field, fieldWeight] of Object.entries(SEARCH_FIELD_WEIGHTS)) {
-        if (field !== "name" && cachedComparableText(fields[field]).includes(` ${typed} `)) phrase = Math.max(phrase, fieldWeight * PHRASE_FACTOR);
-      }
-      weight += phrase;
+      // The weights run heaviest first, so the first field holding the phrase decides.
+      const phraseField = Object.keys(SEARCH_FIELD_WEIGHTS).find(field => field !== "name" && holdsPhrase(fields[field], query));
+      if (phraseField) weight += SEARCH_FIELD_WEIGHTS[phraseField] * PHRASE_FACTOR;
     }
+    const typed = comparableText(query.raw);
     const names = (fields.names || [fields.name]).map(comparableText);
     if (names.some(name => name === query.text || name === typed)) return weight + 1000;
     if (names.some(name => name.startsWith(query.text) || (typed && name.startsWith(typed)))) return weight + 400;
@@ -454,26 +464,31 @@
   }
 
   // A split product name still comes first: "lang chain" also tries
-  // "langchain", and a record whose name holds the joined word counts as a
-  // name match. A record whose other fields hold the joined word as a whole
-  // word holds the phrase there, and earns that field's phrase bonus. The
-  // typed words are joined beside their stems.
+  // "langchain". The joined word counts where a name holds it by the name
+  // rules, or where any field holds it as a whole word; a record whose name
+  // holds every joined word counts as a name match. Otherwise the fields that
+  // hold the joined word whole hold the phrase, and the heaviest earns its
+  // phrase bonus, the name's included, so "lang chain agents" still lists
+  // LangChain first. The typed words are joined beside their stems.
   function recordMatch(query, fields) {
     let weight = searchMatch(query, fields);
     const nameWords = cachedSearchWords(fields.name);
     const join = (list, i) => [...list.slice(0, i), list[i] + list[i + 1], ...list.slice(i + 2)];
     for (let i = 0; i < query.tokens.length - 1; i += 1) {
       const tokens = join(query.tokens, i);
-      const joined = { raw: query.raw, text: tokens.join(" "), tokens, words: join(query.words || query.tokens, i) };
+      const words = join(query.words || query.tokens, i);
+      const joined = { raw: query.raw, text: tokens.join(" "), tokens, words };
+      // Most joined words match nothing, so this cheap whole-word test runs first.
+      const whole = Object.keys(SEARCH_FIELD_WEIGHTS).filter(field => {
+        const fieldWords = cachedSearchWords(fields[field]);
+        return fieldWords.includes(tokens[i]) || fieldWords.includes(words[i]);
+      });
+      if (!whole.length && !(queryWordHit(nameWords, joined, i, true) > 0)) continue;
       const joinedWeight = searchMatch(joined, fields);
       if (!joinedWeight) continue;
-      let bonus = 0;
-      if (tokens.every((_, j) => queryWordHit(nameWords, joined, j, true) > 0)) bonus = 300;
-      else {
-        for (const [field, fieldWeight] of Object.entries(SEARCH_FIELD_WEIGHTS)) {
-          if (field !== "name" && queryWordHit(cachedSearchWords(fields[field]), joined, i, false) === 1) bonus = Math.max(bonus, fieldWeight * PHRASE_FACTOR);
-        }
-      }
+      const bonus = tokens.every((_, j) => queryWordHit(nameWords, joined, j, true) > 0)
+        ? 300
+        : Math.max(0, ...whole.map(field => SEARCH_FIELD_WEIGHTS[field] * PHRASE_FACTOR));
       weight = Math.max(weight, joinedWeight + bonus);
     }
     return weight;
@@ -1506,6 +1521,7 @@
     filterRobots,
     filterScoredCollection,
     filterSpecifications,
+    holdsPhrase,
     labDistributionModes,
     labRelations,
     labsForRecord,
