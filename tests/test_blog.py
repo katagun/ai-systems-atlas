@@ -343,7 +343,7 @@ class HeaderTests(PostFixture):
             )
         ]
         pages = self.pages()
-        for path, root in (
+        for path, _root in (
             ("blog/index.html", "../"),
             ("blog/newer/index.html", "../../"),
         ):
