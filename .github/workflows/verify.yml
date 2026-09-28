@@ -14,8 +14,19 @@ concurrency:
   group: verify-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+# The whole gate lives in .pre-commit-config.yaml: lint, format, secrets,
+# complexity, catalog validation, unit tests with coverage, syntax and web
+# behavior checks, generated-file freshness, and e2e. CI is environment setup
+# plus pre-commit, split so the fast hooks report in about a minute while the
+# two slow suites run beside them: the unit suite in its own job and the
+# browser suite in two shards. `verify`, the required check, is the gate job
+# that fails when any of them does, so branch protection names one context.
+# no-commit-to-branch is skipped: it guards local commits off main, and a
+# push-triggered run on main always sits on main, so the hook would fail
+# every post-merge verification. Branch protection is the guard.
 jobs:
-  verify:
+  static:
+    name: static checks and freshness
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -36,20 +47,99 @@ jobs:
           python-version: "3.12"
       - name: Sync environment
         run: uv sync --locked
-      - name: Install browser test dependencies
-        run: |
-          npm ci --ignore-scripts
-          npm exec -- playwright install --with-deps chromium
+      - name: Cache npm downloads
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install Node dependencies
+        run: npm ci --ignore-scripts
       - name: Install pre-commit
         run: pipx install pre-commit
-      # The whole gate lives in .pre-commit-config.yaml: lint, format,
-      # secrets, complexity, catalog validation, unit tests with coverage,
-      # syntax and web behavior checks, generated-file freshness, and e2e.
-      # This job is environment setup plus that one command.
-      # no-commit-to-branch is skipped: it guards local commits off main, and
-      # a push-triggered run on main always sits on main, so the hook would
-      # fail every post-merge verification. Branch protection is the guard.
-      - name: Run pre-commit on all files
+      - name: Run the fast hooks on all files
         env:
           SKIP: no-commit-to-branch
         run: pre-commit run --all-files --show-diff-on-failure
+
+  python:
+    name: python tests under coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          enable-cache: true
+          python-version: "3.12"
+      - name: Sync environment
+        run: uv sync --locked
+      - name: Install pre-commit
+        run: pipx install pre-commit
+      - name: Run the unit suite hook
+        run: pre-commit run --all-files --hook-stage pre-push python-tests-coverage
+
+  e2e:
+    name: browser tests (shard ${{ matrix.shard }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: ["1/2", "2/2"]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install uv
+        uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+        with:
+          enable-cache: true
+          python-version: "3.12"
+      - name: Sync environment
+        run: uv sync --locked
+      - name: Cache npm downloads
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install Node dependencies
+        run: npm ci --ignore-scripts
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install Chromium
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: npm exec -- playwright install --with-deps chromium
+      - name: Install Chromium system libraries
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        run: npm exec -- playwright install-deps chromium
+      - name: Install pre-commit
+        run: pipx install pre-commit
+      - name: Run the browser suite hook
+        env:
+          ATLAS_E2E_SHARD: ${{ matrix.shard }}
+        run: pre-commit run --all-files --hook-stage pre-push e2e-browser-tests
+
+  verify:
+    name: verify
+    needs: [static, python, e2e]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fail when any job did not succeed
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        run: |
+          echo "job results: $RESULTS"
+          case "$RESULTS" in
+            *failure*|*cancelled*|*skipped*) echo "a required job did not succeed"; exit 1 ;;
+          esac

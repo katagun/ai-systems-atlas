@@ -268,6 +268,17 @@ test("hovering an emblem explains it and Escape dismisses it", async ({ page }) 
   await expect(tooltip).toHaveAttribute("aria-hidden", "true");
   await page.keyboard.press("Escape");
   await expect(tooltip).toBeHidden();
+  // The pointer still rests on the emblem. The next layout change (a font or a
+  // deferred payload landing) makes Chromium re-hit-test it and fire pointerover
+  // on another child of the same emblem, which used to reopen the tooltip and
+  // made this test race that landing. Its timing cannot be waited for, so send
+  // the event itself: the dismissed emblem must stay quiet.
+  await emblem.locator("rect, path").first().dispatchEvent("pointerover", { bubbles: true });
+  await expect(tooltip).toBeHidden();
+  // Leaving the emblem and coming back explains it again.
+  await page.mouse.move(0, 0);
+  await emblem.hover();
+  await expect(tooltip).toBeVisible();
   await expect(page.locator("#project-search")).toHaveValue(openclaw.name);
 });
 

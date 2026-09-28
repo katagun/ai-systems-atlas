@@ -940,6 +940,11 @@ function initBadgeTooltip() {
   const tooltip = $("#badge-tooltip");
   if (!tooltip) return;
   let anchor = null;
+  // The emblem Escape closed. Hiding the tooltip changes layout, and any later
+  // layout change too, so Chromium re-hit-tests the resting pointer and fires
+  // pointerover on another child of the same emblem; that must not reopen what
+  // the key closed. The pointer leaving the emblem, or a click, clears it.
+  let dismissed = null;
   const hide = () => { tooltip.hidden = true; anchor = null; };
   hideDetachedBadgeTooltip = () => { if (anchor && !anchor.isConnected) hide(); };
   const show = badge => {
@@ -961,15 +966,16 @@ function initBadgeTooltip() {
   document.addEventListener("pointerover", event => {
     if (event.pointerType === "touch") return;
     const badge = event.target.closest?.(".card-badge");
-    if (badge) show(badge);
-    else if (anchor) hide();
+    if (badge) { if (badge !== dismissed) show(badge); }
+    else { dismissed = null; if (anchor) hide(); }
   });
   document.addEventListener("click", event => {
     const badge = event.target.closest?.(".card-badge");
+    dismissed = null;
     if (badge && badge !== anchor) show(badge);
     else hide();
   });
-  document.addEventListener("keydown", event => { if (event.key === "Escape") hide(); });
+  document.addEventListener("keydown", event => { if (event.key === "Escape") { dismissed = anchor; hide(); } });
   window.addEventListener("scroll", hide, { passive: true });
   window.addEventListener("resize", hide);
 }
