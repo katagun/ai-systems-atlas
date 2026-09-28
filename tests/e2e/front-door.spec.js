@@ -104,18 +104,17 @@ test("text typed on the front door replaces a query left in another collection",
 
 // Every lab's name also names its models, so the query is a word only a lab's
 // own record holds (AI Singapore's note names the Infocomm Media Development
-// Authority). The All list finds nothing; the Labs tile carries the query in.
+// Authority). The All list finds nothing; opening Labs from the results
+// carries the query in. The front door carries none (a clean start).
 /* global searchIndexes */
-test("a query only a lab answers follows the reader into Labs from its tile", async ({ page }) => {
+test("a query only a lab answers follows the reader from the All results into Labs", async ({ page }) => {
   await page.goto("/");
   await searchAll(page, "Infocomm");
   await page.waitForFunction(() =>
     ["systems", "inference", "runtimes", "models", "packs", "robots"].every(key => searchIndexes[key] !== undefined));
   await expect(page.locator("#all-directory-grid .empty-search")).toBeVisible();
   await expect(page.locator("#all-directory-grid .project-card")).toHaveCount(0);
-  await page.locator('.tab[data-tab="directory"]').click();
-  await expect(page.locator("#front-door")).toBeVisible();
-  await page.locator('[data-tile="labs"] .tile-open').click();
+  await openCollection(page, "labs");
   await expect(page.locator("#labs-directory-panel")).toBeVisible();
   await expect(page.locator("#lab-search")).toHaveValue("Infocomm");
   await expect(page.locator("#lab-grid .project-card")).toHaveCount(1);
@@ -123,6 +122,61 @@ test("a query only a lab answers follows the reader into Labs from its tile", as
 });
 
 // The door shows no cards, so it has no badges for the key to explain.
+// The door is a clean start: the query left in the collection last shown is
+// cleared on arrival, so a tile never opens with a search the door never showed.
+test("a tile opened from the front door carries no query from the collection last shown", async ({ page }) => {
+  await page.goto("/?collection=inference");
+  await page.locator("#inference-search").fill("vllm");
+  await expect(page).toHaveURL(/q=vllm/);
+  await page.locator('.tab[data-tab="directory"]').click();
+  await expect(page.locator("#front-door")).toBeVisible();
+  await openCollection(page, "runtimes");
+  await expect(page.locator("#runtimes-directory-panel")).toBeVisible();
+  await expect(page.locator("#runtime-search")).toHaveValue("");
+  await expect(page).not.toHaveURL(/[?&]q=/);
+});
+
+// A category link's count is what its collection lists narrowed to that one
+// category, so the link clears any other facet a previous visit left set.
+test("a category link opens its collection narrowed to that category alone", async ({ page }) => {
+  await page.goto("/?collection=inference&delivery=reserved_capacity");
+  await expect(page.locator("#inference-delivery-filter")).toHaveValue("reserved_capacity");
+  await page.locator('.tab[data-tab="directory"]').click();
+  const link = page.locator('[data-tile="inference"] [data-facet-value="direct_model_api"]');
+  const count = Number(await link.locator("strong").textContent());
+  await link.click();
+  await expect(page.locator("#inference-type-filter")).toHaveValue("direct_model_api");
+  await expect(page.locator("#inference-delivery-filter")).toHaveValue("");
+  await expect(page).toHaveURL(address => {
+    const keys = [...address.searchParams.keys()].sort();
+    return keys.join(",") === "collection,type" && address.searchParams.get("type") === "direct_model_api";
+  });
+  await expect(page.locator("#inference-result-count")).toContainText(new RegExp(`^${count} services?\\b`));
+});
+
+// Each search index the door's search fetches on focus repaints the grids as
+// it lands; the index must not be rebuilt under a reader's focus then.
+test("a focused tile keeps its focus while the search indexes land", async ({ page }) => {
+  // Hold the indexes until a tile has focus, so they land under it.
+  let release;
+  const held = new Promise(resolve => { release = resolve; });
+  await page.route(/\/app\/search\/[a-z]+\.json(\?.*)?$/, async route => {
+    await held;
+    await route.continue();
+  });
+  await page.goto("/");
+  await expect(page.locator("#door-jobs button")).toHaveCount(5);
+  await page.locator("#door-search").focus();
+  // Past the five Finder jobs to the first tile's button.
+  for (let step = 0; step < 6; step += 1) await page.keyboard.press("Tab");
+  const tile = page.locator('[data-tile="all"] .tile-open');
+  await expect(tile).toBeFocused();
+  release();
+  await page.waitForFunction(() =>
+    ["systems", "inference", "runtimes", "models", "packs", "robots"].every(key => searchIndexes[key] !== undefined));
+  await expect(tile).toBeFocused();
+});
+
 test("the badge key stays hidden on the front door and returns in results", async ({ page }) => {
   await page.goto("/");
   await expect(page.locator("#front-door")).toBeVisible();

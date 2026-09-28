@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
-const { allSearch, openCollection, pressedEntry } = require("./helpers/landing");
+const { allSearch, collectionEntry, openCollection, pressedEntry } = require("./helpers/landing");
 
 // The page binds its search and keyboard listeners once its data has loaded,
 // and paints the All grid right after, so a card on screen means they are live.
@@ -109,10 +109,18 @@ test("the result count shows beside the box, uncovered, without scrolling", asyn
 });
 
 test("slash focuses the search box", async ({ page }) => {
+  await page.goto("/");
+  await expect(collectionEntry(page, "all")).toBeVisible();
+  await page.locator("body").click({ position: { x: 5, y: 300 } });
+  await page.keyboard.press("/");
+  await expect(allSearch(page)).toHaveId("door-search");
+  await expect(allSearch(page)).toBeFocused();
+
   await page.goto("/?collection=all");
   await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
   await page.locator("body").click({ position: { x: 5, y: 300 } });
   await page.keyboard.press("/");
+  await expect(allSearch(page)).toHaveId("all-directory-search");
   await expect(allSearch(page)).toBeFocused();
 });
 
@@ -466,11 +474,13 @@ test("an empty result in another view gains the suggestion form when the exclusi
   await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
   await page.locator("#model-search").fill("Zyxwvut Frobnicator");
   await expect.poll(() => fetched.length, "the settled empty result asks for the list").toBe(1);
-  await page.locator('.tab[data-tab="directory"]').click();
+  // The Finder, not the Catalog tab: the Catalog opens on the front door,
+  // which clears the query this test leaves behind in Models.
+  await page.locator('.tab[data-tab="finder"]').click();
   release();
   await page.waitForFunction(() => Array.isArray(state.exclusions));
-  await openCollection(page, "models");
-  await expect(page.locator("#model-grid").getByRole("link", { name: "Suggest it for review" })).toBeVisible();
+  // The grid is hidden with its view, so the link is found by text, not role.
+  await expect(page.locator("#model-grid a", { hasText: "Suggest it for review" })).toHaveCount(1);
 });
 
 // A list that fails to load counts as an empty one: empty results then name

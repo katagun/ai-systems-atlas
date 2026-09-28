@@ -123,7 +123,7 @@ test("Models comparisons stay inside the model-access profile and restore from t
   // the scope clears it.
   await page.getByRole("button", { name: "Catalog", exact: true }).click();
   await expect(page.locator("#comparison-tray")).toBeVisible();
-  await page.getByRole("button", { name: /^Systems / }).click();
+  await openCollection(page, "systems");
   await expect(page.locator("#comparison-tray")).toBeHidden();
   await expect(page).not.toHaveURL(/compare=/);
 });

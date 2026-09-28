@@ -477,7 +477,15 @@ function clearComparison({ updateURL = true } = {}) {
   state.comparison = { kind: null, profile: null, ids: [], limitReached: false };
   if ($("#comparison-dialog")?.open) $("#comparison-dialog").close();
   renderComparisonControls();
+  syncDoorDots();
   if (updateURL) writeDirectoryURL();
+}
+
+// A tile's dot follows the comparison, so the index is rebuilt only when the
+// comparison changes. Rebuilding it on every grid repaint, as each search
+// index lands, would drop the focus and the click a reader has on a tile.
+function syncDoorDots() {
+  if (state.directoryStage === "door") renderCollectionIndex();
 }
 
 // The views where records can be compared, and so the only ones that show the
@@ -504,7 +512,6 @@ function renderComparisonControls() {
   $("#comparison-tray-title").textContent = records.length === 1 ? "1 item selected" : `${records.length} items selected`;
   $("#comparison-tray-items").textContent = records.map(item => item.name).join(" · ");
   $("#comparison-open").disabled = records.length < 2;
-  if (state.directoryStage === "door") renderCollectionIndex();
   $("#comparison-status").textContent = state.comparison.limitReached
     ? "Four is the maximum. Remove an item before adding another."
     : records.length === 1 ? "Choose at least one more item from this score profile." : "";
@@ -516,6 +523,7 @@ function toggleComparison(kind, id) {
   if (!record) return;
   state.comparison = AtlasCore.updateComparisonSelection(state.comparison, { kind, profile: record.score_profile, id });
   renderComparisonControls();
+  syncDoorDots();
   writeDirectoryURL();
 }
 
@@ -811,8 +819,17 @@ function leaveFrontDoor() {
   state.directoryStage = "results";
 }
 
+// The front door is a clean start: the query of the collection last shown
+// is cleared, so no tile opens with a search the door's empty box never showed.
 function showFrontDoor({ updateURL = true } = {}) {
   state.directoryStage = "door";
+  const collection = state.directoryCollection;
+  const query = $(SCOPE_CONTROLS[collection].q);
+  if (query.value) {
+    query.value = "";
+    state.page[collection] = 1;
+    syncMatchSort(collection);
+  }
   $$(".collection-panel").forEach(panel => { panel.hidden = true; });
   $("#scope-strip").hidden = true;
   $("#front-door").hidden = false;
@@ -834,12 +851,19 @@ function showResults() {
 // the collection to one category first; a family goes through
 // jumpToDirectoryFamily so the role and Finder set are cleared as ever.
 // setDirectoryCollection carries the query the reader leaves, so a query
-// only a lab or a specification answers follows the reader into Labs or
-// Specifications from its tile.
+// only a lab or a specification answers follows the reader from the All
+// results into Labs or Specifications; the front door itself carries none.
 function openCollection(id, { facet = null } = {}) {
   const entry = AtlasCore.COLLECTIONS.find(item => item.id === id);
   if (!entry) return;
   leaveFrontDoor();
+  // A category link opens the collection narrowed to that one category, so
+  // its results agree with the count on the link: other facets are cleared,
+  // and Systems keeps its default status, the one its counts are taken at.
+  if (facet) {
+    clearScopeFacets(id);
+    if (id === "systems") $("#status-filter").value = AtlasCore.directoryDefaults().status;
+  }
   if (id === "systems") {
     jumpToDirectoryFamily(facet && facet.key === "family" ? facet.value : "");
     return;
@@ -3245,7 +3269,8 @@ function bindEvents() {
     // A modal dialog makes the search box inert, so the key would only be
     // swallowed; leave it to the browser.
     if (document.querySelector("dialog[open]")) return;
-    const selector = SCOPE_CONTROLS[activeScope()]?.q;
+    const onDoor = $("#directory").classList.contains("is-active") && state.directoryStage === "door";
+    const selector = onDoor ? "#door-search" : SCOPE_CONTROLS[activeScope()]?.q;
     if (!selector) return;
     event.preventDefault();
     $(selector).focus();
