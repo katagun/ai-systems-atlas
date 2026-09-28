@@ -135,7 +135,7 @@ test("a model comparison opens degraded, and bounded, when detail never arrives"
   page.on("pageerror", error => errors.push(error.message));
   let detailRequests = 0;
   await page.route("**/app/detail/**", route => { detailRequests += 1; route.abort(); });
-  await page.goto("/?view=models&compare=model:model-anthropic-claude-sonnet-4-6,model-alibaba-qwen3-235b-a22b-instruct-2507");
+  await page.goto("/?collection=models&compare=model:model-anthropic-claude-sonnet-4-6,model-alibaba-qwen3-235b-a22b-instruct-2507");
 
   const table = page.locator(".comparison-table");
   await expect(table).toBeVisible();
@@ -296,7 +296,7 @@ test("a model dialog degrades to dashes when its detail never arrives", async ({
 
 test("focusing the model search loads the models index and widens the results", async ({ page }) => {
   const requested = dataRequests(page);
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
   await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
   expect(requested.filter(path => path.includes("/app/search/"))).toHaveLength(0);
 

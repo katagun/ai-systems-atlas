@@ -36,8 +36,8 @@ test("a specification record URL opens the Specifications view and its dialog", 
   await expect(page.locator("#specification-dialog")).toBeVisible();
   await expect(page.locator("#specification-dialog-content h1")).toHaveText("Model Context Protocol");
   await page.locator("#specification-dialog .dialog-close").click();
-  await expect(page.locator('.tab[data-tab="specifications"]')).toHaveClass(/is-active/);
-  await expect(page.locator("#specifications")).toHaveClass(/is-active/);
+  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(page.locator("#specifications-directory-panel")).not.toHaveAttribute("hidden");
 });
 
 test("a local runtime record URL opens inside the runtimes scope", async ({ page }) => {
@@ -55,8 +55,8 @@ test("a model record URL opens the Models view and keeps its distinct boundary",
   await expect(page.locator("#model-dialog-content h1")).toHaveText("Qwen2.5-Coder-0.5B");
   await expect(page.locator("#model-dialog-content")).toContainText("Model boundary");
   await page.locator("#model-dialog .dialog-close").click();
-  await expect(page.locator('.tab[data-tab="models"]')).toHaveClass(/is-active/);
-  await expect(page.locator("#models")).toHaveClass(/is-active/);
+  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
 });
 
 test("following a successor link updates the record URL", async ({ page }) => {

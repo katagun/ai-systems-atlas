@@ -39,17 +39,18 @@ test("mixed scopes show only the families, sibling views name their own sets, an
   await expect(items(page).nth(1)).toHaveText(/Control and privacy$/);
   await expect(items(page).first()).not.toContainText("What kind of record it is");
 
-  await page.locator('[data-tab="models"]').click();
+  await page.locator('[data-directory-collection="models"]').click();
   await expect(legend(page)).toBeVisible();
   await expect(items(page)).toHaveText(names(badgeLegend("models")));
 
-  await page.locator('[data-tab="specifications"]').click();
+  await page.locator('[data-directory-collection="specifications"]').click();
   await expect(items(page)).toHaveText(names(badgeLegend("specifications")));
 
-  await page.locator('[data-tab="labs"]').click();
+  await page.locator('[data-directory-collection="labs"]').click();
   await expect(items(page)).toHaveText(names(badgeLegend("labs")));
 
-  await page.locator('[data-tab="taxonomy"]').click();
+  await page.locator('.docs-button').click();
+  await page.locator('[data-open-view="taxonomy"]').click();
   await expect(legend(page)).toBeHidden();
 });
 
@@ -96,7 +97,7 @@ test("the legend and its Key chip step aside for the comparison tray", async ({ 
 test("the Models legend also steps aside for the comparison tray", async ({ page }) => {
   // Unlike Systems, every reviewed-model card carries a Compare control with
   // no family narrowing needed first.
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
   await expect(legend(page)).toBeVisible();
   await expect(items(page)).toHaveText(names(badgeLegend("models")));
   await page.locator('#model-grid [data-compare-id]').first().click();

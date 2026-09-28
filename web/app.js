@@ -473,7 +473,8 @@ function restoreComparisonFromURL() {
     updateScoreSortAvailability();
     setDirectoryCollection("systems", { updateURL: false });
   } else if (kind === "model") {
-    activateView("models");
+    setDirectoryCollection("models", { updateURL: false });
+    activateView("directory");
   } else {
     setDirectoryCollection(kind === "runtime" ? "runtimes" : "inference", { updateURL: false });
   }
@@ -657,6 +658,7 @@ function renderStats() {
   const counts = AtlasCore.switcherCounts({
     projects: state.projects, services: state.inferenceServices, runtimes: state.localRuntimes,
     models: state.models, packs: state.packs, robots: state.robots,
+    labs: state.labs, specifications: state.specifications,
   });
   $("#hero-kicker").textContent = `${counts.all} systems, source models, services, runtimes, packs, and robots`;
   $("#all-collection-count").textContent = counts.all;
@@ -667,6 +669,8 @@ function renderStats() {
   $("#inference-collection-count").textContent = counts.inference;
   $("#runtime-collection-count").textContent = counts.runtimes;
   $("#model-collection-count").textContent = counts.models;
+  $("#lab-collection-count").textContent = counts.labs;
+  $("#specification-collection-count").textContent = counts.specifications;
   $("#pack-collection-count").textContent = counts.packs;
   // An empty collection has no navigation entry: the scope exists before its
   // first record is reviewed, and a reader should not be sent to an empty page.
@@ -724,10 +728,11 @@ function jumpToDirectoryFamily(family) {
 }
 
 function setDirectoryCollection(collection, { updateURL = true } = {}) {
-  const selected = ["all", "systems", "inference", "runtimes", "packs", "robots"].includes(collection) ? collection : "all";
+  const selected = ["all", "systems", "inference", "runtimes", "packs", "robots", "models", "labs", "specifications"].includes(collection) ? collection : "all";
   const compatible = (selected === "systems" && state.comparison.kind === "system")
     || (selected === "inference" && state.comparison.kind === "inference")
-    || (selected === "runtimes" && state.comparison.kind === "runtime");
+    || (selected === "runtimes" && state.comparison.kind === "runtime")
+    || (selected === "models" && state.comparison.kind === "model");
   if (updateURL && state.comparison.ids.length && !compatible) clearComparison({ updateURL: false });
   state.directoryCollection = selected;
   syncCollectionSwitcher();
@@ -737,6 +742,9 @@ function setDirectoryCollection(collection, { updateURL = true } = {}) {
   $("#runtimes-directory-panel").hidden = selected !== "runtimes";
   $("#packs-directory-panel").hidden = selected !== "packs";
   $("#robots-directory-panel").hidden = selected !== "robots";
+  $("#models-directory-panel").hidden = selected !== "models";
+  $("#labs-directory-panel").hidden = selected !== "labs";
+  $("#specifications-directory-panel").hidden = selected !== "specifications";
   const renderers = {
     all: renderAllDirectoryEntries,
     systems: renderProjects,
@@ -744,11 +752,15 @@ function setDirectoryCollection(collection, { updateURL = true } = {}) {
     runtimes: renderLocalRuntimes,
     packs: renderPacks,
     robots: () => renderCollection("robots"),
+    models: renderModels,
+    labs: renderLabs,
+    specifications: renderSpecifications,
   };
   for (const [name, grid] of [
     ["all", "#all-directory-grid"], ["systems", "#project-grid"],
     ["inference", "#inference-grid"], ["runtimes", "#runtime-grid"], ["packs", "#pack-grid"],
-    ["robots", "#robot-grid"],
+    ["robots", "#robot-grid"], ["models", "#model-grid"], ["labs", "#lab-grid"],
+    ["specifications", "#specification-grid"],
   ]) {
     if (name !== selected) $(grid).innerHTML = "";
   }
@@ -2249,7 +2261,8 @@ function browseLabModels(labId) {
   $("#model-sort-filter").value = "release";
   state.page.models = 1;
   renderModels();
-  activateView("models");
+  setDirectoryCollection("models", { updateURL: false });
+  activateView("directory");
 }
 
 const RECORD_DIALOGS = {
@@ -2286,7 +2299,7 @@ const RECORD_DIALOGS = {
     find: id => state.packs.find(item => item.id === id),
     markup: packDialogMarkup,
     afterRender: () => {
-      $$('[data-open-spec]', $("#pack-dialog-content")).forEach(button => button.addEventListener("click", () => { $("#pack-dialog").close(); openSpecification(button.dataset.openSpec); activateView("specifications"); }));
+      $$('[data-open-spec]', $("#pack-dialog-content")).forEach(button => button.addEventListener("click", () => { $("#pack-dialog").close(); openSpecification(button.dataset.openSpec); setDirectoryCollection("specifications", { updateURL: false }); activateView("directory"); }));
       $$('[data-open-pack]', $("#pack-dialog-content")).forEach(button => button.addEventListener("click", () => openPack(button.dataset.openPack)));
       $$('[data-open-project]', $("#pack-dialog-content")).forEach(button => button.addEventListener("click", () => { $("#pack-dialog").close(); openProject(button.dataset.openProject); }));
     },
@@ -2442,9 +2455,10 @@ function restoreRecordFromURL() {
   if (raw === null) return;
   const reference = AtlasCore.parseRecordReference(raw);
   if (reference && openRecord(reference.kind, reference.id)) {
-    if (reference.kind === "spec") activateView("specifications");
-    if (reference.kind === "model") activateView("models");
-    if (reference.kind === "lab") activateView("labs");
+    if (reference.kind === "spec") setDirectoryCollection("specifications", { updateURL: false });
+    if (reference.kind === "model") setDirectoryCollection("models", { updateURL: false });
+    if (reference.kind === "lab") setDirectoryCollection("labs", { updateURL: false });
+    activateView("directory");
     return;
   }
   url.searchParams.delete("record");
@@ -2689,6 +2703,16 @@ function restoreViewFromURL() {
     activateView(id);
     return;
   }
+  const alias = AtlasCore.parseViewAlias ? AtlasCore.parseViewAlias(raw) : null;
+  if (alias) {
+    // Legacy sibling-view URL: land on the unified collection and drop `view=`.
+    url.searchParams.delete("view");
+    url.searchParams.set("collection", alias);
+    writeURL(url);
+    setDirectoryCollection(alias, { updateURL: false });
+    activateView("directory");
+    return;
+  }
   url.searchParams.delete("view");
   writeURL(url);
 }
@@ -2698,23 +2722,40 @@ function activateView(id) {
     setDirectoryCollection(id === "inference-services" ? "inference" : id === "local-runtimes" ? "runtimes" : id === "agent-packs" ? "packs" : "robots");
     id = "directory";
   }
-  const comparisonFitsView = (id === "models" && state.comparison.kind === "model")
-    || (id === "directory" && (
-      (state.directoryCollection === "systems" && state.comparison.kind === "system")
-      || (state.directoryCollection === "inference" && state.comparison.kind === "inference")
-      || (state.directoryCollection === "runtimes" && state.comparison.kind === "runtime")
-    ));
-  if ((id === "directory" || id === "models") && state.comparison.ids.length && !comparisonFitsView) {
+  const alias = AtlasCore.parseViewAlias ? AtlasCore.parseViewAlias(id) : null;
+  if (alias) {
+    setDirectoryCollection(alias, { updateURL: false });
+    id = "directory";
+  }
+  const comparisonFitsView = (id === "directory" && (
+    (state.directoryCollection === "systems" && state.comparison.kind === "system")
+    || (state.directoryCollection === "inference" && state.comparison.kind === "inference")
+    || (state.directoryCollection === "runtimes" && state.comparison.kind === "runtime")
+    || (state.directoryCollection === "models" && state.comparison.kind === "model")
+  ));
+  if (id === "directory" && state.comparison.ids.length && !comparisonFitsView) {
     clearComparison();
   }
-  $$(".tab").forEach(item => {
+  $$(".tab[data-tab]").forEach(item => {
     const active = item.dataset.tab === id;
     item.classList.toggle("is-active", active);
     if (active) item.setAttribute("aria-current", "page");
     else item.removeAttribute("aria-current");
   });
+  const docsButton = $(".docs-button");
+  const docsActive = id === "taxonomy" || id === "api";
+  if (docsButton) {
+    docsButton.classList.toggle("is-active", docsActive);
+    if (docsActive) docsButton.setAttribute("aria-current", "page");
+    else docsButton.removeAttribute("aria-current");
+  }
+  $$('[data-open-view]').forEach(item => {
+    const active = item.dataset.openView === id;
+    if (active) item.setAttribute("aria-current", "true");
+    else item.removeAttribute("aria-current");
+  });
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
-  if (id === "directory" || id === "models") renderComparisonControls();
+  if (id === "directory") renderComparisonControls();
   else $("#comparison-tray").hidden = true;
   syncBadgeLegend();
   writeViewURL(id);
@@ -2732,9 +2773,46 @@ const SEARCH_SCOPES = {
   "#all-directory-search": ["systems", "inference", "runtimes", "models", "packs", "robots"],
 };
 
+// Docs groups the explanatory views so the primary row stays on the catalog
+// loop. It is a plain menu: toggle on click, close on Escape, outside click,
+// or selection, with focus returned to the button on Escape.
+function closeDocsMenu({ focusButton = false } = {}) {
+  const menu = $("#docs-menu-list");
+  const button = $(".docs-button");
+  if (!menu || !button || menu.hidden) return;
+  menu.hidden = true;
+  button.setAttribute("aria-expanded", "false");
+  if (focusButton) button.focus();
+}
+
+function initDocsMenu() {
+  const button = $(".docs-button");
+  const menu = $("#docs-menu-list");
+  if (!button || !menu) return;
+  button.addEventListener("click", () => {
+    const open = menu.hidden;
+    menu.hidden = !open;
+    button.setAttribute("aria-expanded", String(open));
+  });
+  menu.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      closeDocsMenu({ focusButton: true });
+    }
+  });
+  document.addEventListener("click", event => {
+    if (!menu.hidden && !event.target.closest(".docs-menu")) closeDocsMenu();
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeDocsMenu();
+  });
+}
+
 function bindEvents() {
-  $$(".tab").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
+  $$(".tab[data-tab]").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
+  $$('[data-open-view]').forEach(button => button.addEventListener("click", () => { closeDocsMenu(); activateView(button.dataset.openView); }));
+  initDocsMenu();
   // The brand mark links home. A plain left click stays in the single-page
   // app on the directory landing view; modified clicks and new tabs follow
   // the href to the site root.

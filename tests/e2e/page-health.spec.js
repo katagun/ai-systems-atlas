@@ -1,6 +1,6 @@
 const { test, expect } = require("@playwright/test");
 
-const VIEWS = ["Directory", "Finder", "Models", "Labs", "Specifications", "Taxonomy"];
+const VIEWS = ["Catalog", "Find your fit", "Concepts", "Published data"];
 
 test("every view and a detail dialog render without console or page errors", async ({ page }) => {
   const errors = [];
@@ -10,9 +10,14 @@ test("every view and a detail dialog render without console or page errors", asy
   await page.goto("/");
   await expect(page.locator("#all-directory-result-count")).toContainText("entries");
   for (const view of VIEWS) {
-    await page.getByRole("button", { name: view, exact: true }).click();
+    if (view === "Concepts" || view === "Published data") {
+      await page.locator(".docs-button").click();
+      await page.getByRole("button", { name: view, exact: true }).click();
+    } else {
+      await page.getByRole("button", { name: view, exact: true }).click();
+    }
   }
-  await page.getByRole("button", { name: "Directory", exact: true }).click();
+  await page.getByRole("button", { name: "Catalog", exact: true }).click();
   await page.locator("#all-directory-search").fill("Kilo Code");
   await page.locator('#all-directory-grid [data-project="kilo-code"]').click();
   await expect(page.locator("#project-dialog h1")).toHaveText("Kilo Code");
@@ -26,20 +31,25 @@ test("no view overflows the page horizontally at 390px", async ({ page }) => {
   await expect(page.locator("#all-directory-result-count")).toContainText("entries");
 
   const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-  for (const view of VIEWS) {
-    await page.getByRole("button", { name: view, exact: true }).click();
-    expect(await overflow(), `${view} overflows horizontally`).toBeLessThanOrEqual(0);
-  }
-  for (const collection of [/^Systems /, /^Inference services /, /^Local runtimes /]) {
-    await page.getByRole("button", { name: "Directory", exact: true }).click();
+  await page.locator(".docs-button").click();
+  await page.getByRole("button", { name: "Concepts", exact: true }).click();
+  expect(await overflow(), "Concepts overflows horizontally").toBeLessThanOrEqual(0);
+  await page.locator(".docs-button").click();
+  await page.getByRole("button", { name: "Published data", exact: true }).click();
+  expect(await overflow(), "Published data overflows horizontally").toBeLessThanOrEqual(0);
+  for (const collection of [/^Systems /, /^Inference services /, /^Local runtimes /, /^Models /, /^Labs /, /^Specifications /]) {
+    await page.getByRole("button", { name: "Catalog", exact: true }).click();
     await page.getByRole("button", { name: collection }).click();
     expect(await overflow(), `${collection} overflows horizontally`).toBeLessThanOrEqual(0);
   }
+  await page.getByRole("button", { name: "Catalog", exact: true }).click();
+  await page.getByRole("button", { name: /^Local runtimes / }).click();
   await page.locator("#runtime-grid [data-local-runtime=\"ollama\"]").click();
   const dialogOverflow = await page.locator("#runtime-dialog").evaluate(dialog => dialog.scrollWidth - dialog.clientWidth);
   expect(dialogOverflow).toBeLessThanOrEqual(0);
   await page.locator("#runtime-dialog .dialog-close").click();
-  await page.getByRole("button", { name: "Models", exact: true }).click();
+  await page.getByRole("button", { name: "Catalog", exact: true }).click();
+  await page.getByRole("button", { name: /^Models / }).click();
   // Narrow first: high-scoring new records sort above older ones.
   await page.locator("#model-search").fill("Qwen2.5-Coder-0.5B");
   await page.locator('[data-model="model-alibaba-qwen2-5-coder-0-5b"]').click();
@@ -82,6 +92,7 @@ test("the blog index and its posts are reachable and self-contained", async ({ p
 
 test("the primary navigation links to the blog", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" });
+  await page.locator(".docs-button").click();
   await page.getByRole("link", { name: "Blog" }).click();
   await expect(page).toHaveURL(/\/blog\/$/);
 });
@@ -95,12 +106,12 @@ test("the blog carries the site header, and its view links land on the directory
   // A post sits one level deeper than the index; its links must still resolve.
   await page.locator(".post-list h2 a").first().click();
   await expect(page.locator("header.site-header")).toBeVisible();
-  await page.getByRole("link", { name: "Finder" }).click();
+  await page.getByRole("link", { name: "Find your fit" }).click();
   await expect(page).toHaveURL(/\/\?view=finder$/);
   await expect(page.locator("#finder")).toBeVisible();
 
   await page.goto("/blog/", { waitUntil: "networkidle" });
-  await page.locator("header.site-header").getByRole("link", { name: "Directory", exact: true }).click();
+  await page.locator("header.site-header").getByRole("link", { name: "Catalog", exact: true }).click();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.locator("#directory")).toBeVisible();
 });
@@ -120,7 +131,7 @@ test("the blog's theme control cycles and its choice follows the reader to the d
   // The choice is the site's, not the blog's: a post and the directory both honour it.
   await page.locator(".post-list h2 a").first().click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await page.locator("header.site-header").getByRole("link", { name: "Directory", exact: true }).click();
+  await page.locator("header.site-header").getByRole("link", { name: "Catalog", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await expect(page.locator("#theme-toggle")).toHaveAttribute("aria-label", "Theme: dark");
   await page.locator("#theme-toggle").click();

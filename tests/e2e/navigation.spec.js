@@ -22,7 +22,7 @@ for (const width of [390, 360, 320]) {
     await page.goto("/");
     const fit = await page.locator(".tabs").evaluate(nav => {
       const box = nav.getBoundingClientRect();
-      const items = [...nav.querySelectorAll(".tab, .tab-link")].map(item => item.getBoundingClientRect());
+      const items = [...nav.querySelectorAll(":scope > *")].map(item => item.getBoundingClientRect());
       return {
         overflow: nav.scrollWidth - nav.clientWidth,
         outside: items.filter(item => item.left < box.left - 0.5 || item.right > box.right + 0.5).length,
@@ -39,13 +39,14 @@ for (const width of [390, 360, 320]) {
 test("choosing a view writes a shareable URL and reloading restores it", async ({ page }) => {
   await page.goto("/");
 
-  await page.locator('.tab[data-tab="api"]').click();
+  await page.locator('.docs-button').click();
+  await page.locator('[data-open-view="api"]').click();
   await expect(page.locator("#api")).toHaveClass(/is-active/);
   await expect(page).toHaveURL(/view=api/);
 
   await page.reload();
   await expect(page.locator("#api")).toHaveClass(/is-active/);
-  await expect(page.locator('.tab[data-tab="api"]')).toHaveClass(/is-active/);
+  await expect(page.locator('.docs-button')).toHaveClass(/is-active/);
   await expect(page.locator("#directory")).not.toHaveClass(/is-active/);
 });
 
@@ -68,12 +69,20 @@ test("an unknown view parameter falls back to the directory rather than showing 
 
 test("the active view's tab carries aria-current and no other tab does", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator('.tab[aria-current="page"]')).toHaveAttribute("data-tab", "directory");
+  await expect(page.locator('.tab[data-tab="directory"][aria-current="page"]')).toHaveCount(1);
 
   await page.locator('.tab[data-tab="finder"]').click();
-  await expect(page.locator('.tab[aria-current="page"]')).toHaveCount(1);
-  await expect(page.locator('.tab[aria-current="page"]')).toHaveAttribute("data-tab", "finder");
+  await expect(page.locator('.tab[data-tab="finder"][aria-current="page"]')).toHaveCount(1);
 
-  await page.goto("/?view=labs");
-  await expect(page.locator('.tab[aria-current="page"]')).toHaveAttribute("data-tab", "labs");
+  await page.goto("/?view=taxonomy");
+  await expect(page.locator('.docs-button[aria-current="page"]')).toHaveCount(1);
+});
+
+test("a legacy sibling-view URL lands on its unified collection", async ({ page }) => {
+  await page.goto("/?view=models&q=gemma");
+  await expect(page.locator("#directory")).toHaveClass(/is-active/);
+  await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
+  await expect(page.locator("#model-search")).toHaveValue("gemma");
+  await expect(page).not.toHaveURL(/view=models/);
+  await expect(page).toHaveURL(/collection=models/);
 });

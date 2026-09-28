@@ -168,7 +168,7 @@ test("agent pack cards show their star count beside the install mechanism", asyn
 });
 
 test("specification cards show their star count beside the score note", async ({ page }) => {
-  await page.goto("/?view=specifications");
+  await page.goto("/?collection=specifications");
   await page.locator("#specification-search").fill("Model Context Protocol");
   const card = page.locator('#specification-grid .project-card:has([data-specification="mcp"])');
 
@@ -249,7 +249,7 @@ test("outside Systems, a card without a star count makes no GitHub claim", async
   await page.locator("#runtime-search").fill(lmStudio.name);
   await expectNoGitHubClaim(page.locator('#runtime-grid .project-card:has([data-local-runtime="lm-studio"])'));
 
-  await page.goto("/?view=specifications");
+  await page.goto("/?collection=specifications");
   await page.locator("#specification-search").fill("Cursor Project");
   await expectNoGitHubClaim(page.locator('#specification-grid .project-card:has([data-specification="cursor-rules"])'));
 });

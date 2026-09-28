@@ -34,9 +34,10 @@ test("a comparison decides the family, and a disagreeing family is dropped", asy
   await expect(page).not.toHaveURL(/family=memory_system/);
 });
 
-test("the Models view restores its query and filters", async ({ page }) => {
-  await page.goto("/?view=models&q=gemma&type=language_model");
-  await expect(page.locator("#models")).toHaveClass(/is-active/);
+test("the Models collection restores its query and filters", async ({ page }) => {
+  await page.goto("/?collection=models&q=gemma&type=language_model");
+  await expect(page.locator("#directory")).toHaveClass(/is-active/);
+  await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   await expect(page.locator("#model-search")).toHaveValue("gemma");
   await expect(page.locator("#model-type-filter")).toHaveValue("language_model");
   await page.reload();
@@ -105,8 +106,8 @@ test("a record opens while the browser refuses history writes", async ({ page })
   await page.locator("#project-dialog .dialog-close").click();
   await expect(page.locator("#project-dialog")).toBeHidden();
   await page.getByRole("button", { name: /^Memory / }).click();
-  await page.locator('.tab[data-tab="models"]').click();
-  await expect(page.locator("#models")).toHaveClass(/is-active/);
+  await page.locator('.collection-switcher [data-directory-collection="models"]').click();
+  await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   expect(errors).toEqual([]);
 });
 
