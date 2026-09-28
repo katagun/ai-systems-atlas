@@ -1,13 +1,14 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
+const { allSearch, openCollection, pressedEntry } = require("./helpers/landing");
 
 // The page binds its search and keyboard listeners once its data has loaded,
 // and paints the All grid right after, so a card on screen means they are live.
 async function searchAll(page, text) {
   await page.goto("/");
   await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
-  const input = page.locator("#all-directory-search");
+  const input = allSearch(page);
   await input.focus();
   await input.fill(text);
 }
@@ -89,7 +90,7 @@ test("hyphens and spaces ask the same question", async ({ page }) => {
   await searchAll(page, "self-hosted");
   await allIndexesLanded(page);
   const hyphenated = await page.locator("#all-directory-result-count").textContent();
-  await page.locator("#all-directory-search").fill("self hosted");
+  await allSearch(page).fill("self hosted");
   await expect(page.locator("#all-directory-result-count")).toHaveText(hyphenated);
 });
 
@@ -111,7 +112,7 @@ test("slash focuses the search box", async ({ page }) => {
   await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
   await page.locator("body").click({ position: { x: 5, y: 300 } });
   await page.keyboard.press("/");
-  await expect(page.locator("#all-directory-search")).toBeFocused();
+  await expect(allSearch(page)).toBeFocused();
 });
 
 // A modal dialog makes the search box inert, so "/" there could only be
@@ -130,7 +131,7 @@ test("slash does nothing while a dialog is open", async ({ page }) => {
 
 test("a query follows the reader to another scope, and Best match selects itself and gives way", async ({ page }) => {
   await searchAll(page, "coding agent");
-  await page.getByRole("button", { name: /^Systems / }).click();
+  await openCollection(page, "systems");
   await expect(page.locator("#project-search")).toHaveValue("coding agent");
   await expect(page.locator("#sort-filter")).toHaveValue("match");
   await page.locator("#project-search").fill("");
@@ -250,10 +251,10 @@ test("a query carried in with new text selects Best match, and clearing it resto
   await page.locator("#project-search").fill("memory");
   await expect(sort).toHaveValue("match");
   await sort.selectOption("stars");
-  await page.getByRole("button", { name: /^All / }).click();
+  await openCollection(page, "all");
   await page.locator("#reset-all-directory").click();
-  await page.locator("#all-directory-search").fill("browser");
-  await page.getByRole("button", { name: /^Systems / }).click();
+  await allSearch(page).fill("browser");
+  await openCollection(page, "systems");
   await expect(page.locator("#project-search")).toHaveValue("browser");
   await expect(sort, "a sort chosen for the old text gives way").toHaveValue("match");
   await page.locator("#project-search").fill("");
@@ -275,9 +276,9 @@ test("Search all from a sibling view leaves the Directory scope's own query alon
   await page.locator('.tab[data-tab="models"]').click();
   await page.locator("#model-search").fill(INDEX_WORD);
   await page.locator("#model-grid").getByRole("button", { name: "Search all" }).click();
-  await expect(page.locator("#all-directory-search")).toHaveValue(INDEX_WORD);
+  await expect(allSearch(page)).toHaveValue(INDEX_WORD);
   await expect(page.locator("#project-search"), "Search all writes only All's box").toHaveValue("memory");
-  await page.getByRole("button", { name: /^Systems / }).click();
+  await openCollection(page, "systems");
   await expect(page.locator("#project-search")).toHaveValue(INDEX_WORD);
   await expect(sort).toHaveValue("match");
 });
@@ -319,10 +320,10 @@ test("a query carried in with new text starts on the first page", async ({ page 
   await page.goto("/?collection=inference&page=2");
   const pager = page.locator("#inference-pager");
   await expect(pager).toContainText("Page 2 of");
-  await page.getByRole("button", { name: /^All / }).click();
-  await page.locator("#all-directory-search").fill(INDEX_WORD);
+  await openCollection(page, "all");
+  await allSearch(page).fill(INDEX_WORD);
   await page.waitForFunction(() => searchIndexes.inference !== undefined);
-  await page.getByRole("button", { name: /^Inference services / }).click();
+  await openCollection(page, "inference");
   await expect(page.locator("#inference-search")).toHaveValue(INDEX_WORD);
   await expect(pager).toContainText(/Page 1 of ([2-9]|\d{2,})/);
 });
@@ -337,7 +338,7 @@ test("a carried query searches the same text a typed one does", async ({ page })
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
   await page.locator("#project-search").fill("privacy");
-  await page.getByRole("button", { name: /^Inference services / }).click();
+  await openCollection(page, "inference");
   await expect(page.locator("#inference-search")).toHaveValue("privacy");
   await expect.poll(() => requested, { message: "the carried query fetches the Inference index" }).toBe(true);
   await page.waitForFunction(() => searchIndexes.inference !== undefined);
@@ -355,10 +356,10 @@ test("a misspelled name offers the right one", async ({ page }) => {
   const suggestion = page.getByRole("button", { name: "Ollama", exact: true });
   await expect(suggestion).toBeVisible();
   await suggestion.click();
-  await expect(page.locator("#all-directory-search")).toHaveValue("Ollama");
+  await expect(allSearch(page)).toHaveValue("Ollama");
   await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
   // The choice repaints away, so focus lands back in the search box.
-  await expect(page.locator("#all-directory-search")).toBeFocused();
+  await expect(allSearch(page)).toBeFocused();
 });
 
 test("a query with no match offers the Finder and a suggestion form", async ({ page }) => {
@@ -403,7 +404,7 @@ test("the job banner shows only while the query names a job", async ({ page }) =
   await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
   const hint = page.locator('[data-job-hint="all"]');
   await expect(hint).toBeHidden();
-  await page.locator("#all-directory-search").fill("run models locally");
+  await allSearch(page).fill("run models locally");
   await expect(hint).toBeVisible();
   await page.locator("#reset-all-directory").click();
   await expect(hint).toBeHidden();
@@ -431,7 +432,7 @@ test("the exclusions list is fetched once, stamped, and only for a search that f
   expect(fetched, "a search that found something never needs the list").toEqual([]);
 
   // A second empty result while the first fetch is still in flight.
-  const input = page.locator("#all-directory-search");
+  const input = allSearch(page);
   await input.fill("Zyxwvut Frobnicator");
   await expect(page.getByText("No matches for “Zyxwvut Frobnicator”.")).toBeVisible();
   await expect.poll(() => fetched.length, "the first empty result asks for the list").toBe(1);
@@ -480,7 +481,7 @@ test("an exclusions list that fails to load counts as empty, and is asked for on
   await searchAll(page, "Zyxwvut Frobnicator");
   const grid = page.locator("#all-directory-grid");
   await expect(grid.getByRole("link", { name: "Suggest it for review" })).toBeVisible();
-  await page.locator("#all-directory-search").fill("Zyxwvut Frobnicators");
+  await allSearch(page).fill("Zyxwvut Frobnicators");
   await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveAttribute("href", /name=Zyxwvut%20Frobnicators$/);
   await expect(grid).not.toContainText("Reviewed and left out:");
   expect(await page.evaluate(() => state.exclusions), "a failed list is recorded as empty").toEqual([]);
@@ -672,10 +673,10 @@ test("a query another collection answers offers Search all, not the suggestion f
   await expect(systems).toContainText(/It matches \d+ records? in other collections\./);
   await expect(systems.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
   await systems.getByRole("button", { name: "Search all" }).click();
-  await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#all-directory-search")).toHaveValue("vLLM");
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^All /);
+  await expect(allSearch(page)).toHaveValue("vLLM");
   await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("vLLM");
-  await expect(page.locator("#all-directory-search")).toBeFocused();
+  await expect(allSearch(page)).toBeFocused();
   await expect(page).toHaveURL(address => address.searchParams.get("q") === "vLLM" && !address.searchParams.has("collection"));
 
   await page.goto("/?view=specifications");
@@ -683,9 +684,9 @@ test("a query another collection answers offers Search all, not the suggestion f
   await page.locator("#specification-search").fill("vLLM");
   await page.locator("#specification-grid").getByRole("button", { name: "Search all" }).click();
   await expect(page.locator("#directory")).toHaveClass(/is-active/);
-  await expect(page.locator("#all-directory-search")).toHaveValue("vLLM");
+  await expect(allSearch(page)).toHaveValue("vLLM");
   await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("vLLM");
-  await expect(page.locator("#all-directory-search")).toBeFocused();
+  await expect(allSearch(page)).toBeFocused();
   await expect(page).toHaveURL(address => address.searchParams.get("q") === "vLLM" && !address.searchParams.has("view"));
 
   // Only Specifications answers this one, and All lists no specifications:
@@ -801,7 +802,7 @@ test("a search index that fails is asked for once, and a focused search box retr
   await searchAll(page, "Zyxwvut Frobnicator");
   const grid = page.locator("#all-directory-grid");
   await expect(grid.getByRole("link", { name: "Suggest it for review" })).toBeVisible();
-  await page.locator("#all-directory-search").fill("Zyxwvut Frobnicators");
+  await allSearch(page).fill("Zyxwvut Frobnicators");
   await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveAttribute("href", /name=Zyxwvut%20Frobnicators$/);
   expect(failures, "an empty result asks for a failed index once").toBe(1);
 
@@ -936,11 +937,11 @@ for (const colorScheme of ["light", "dark"]) {
 
     await page.goto("/");
     await page.waitForFunction(() => state.urlReady);
-    await page.locator("#all-directory-search").fill("Zyxwvut Frobnicator");
+    await allSearch(page).fill("Zyxwvut Frobnicator");
     await expectLegible(page.locator("#all-directory-grid .empty-search").getByRole("link", { name: "Suggest it for review" }), "Suggest it for review");
     // Any Finder goal with records to shortlist, asked for by its own label.
     const goal = await page.evaluate(() => finderGoalEntries().find(entry => entry.eligible).label);
-    await page.locator("#all-directory-search").fill(goal);
+    await allSearch(page).fill(goal);
     await expectLegible(page.locator('[data-job-hint="all"]').getByRole("button", { name: /Open shortlist/ }), "Open shortlist");
   });
 }
