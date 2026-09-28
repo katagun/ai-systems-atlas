@@ -150,6 +150,7 @@ Cards paint from the boot payload, so any field a badge tests must be in `BOOT_F
 | robot filters, cards, and detail dialog | `web/app-core.js` `ROBOT_VIEW` and `filterRobots`, `web/app.js` `robotCard` and `robotDialogMarkup` |
 | static structure and controls | `web/index.html` |
 | names and definitions | `directory/taxonomy.json` |
+| landing navigation in browser tests | `tests/e2e/helpers/landing.js`; no spec reaches a collection, a family, a view, or the mixed search by its own selector |
 
 Prefer taxonomy-driven labels. Keep HTML escaping at every data-to-markup boundary.
 

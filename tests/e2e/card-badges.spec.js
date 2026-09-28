@@ -2,6 +2,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { cardBadgeGlossary, cardBadges, BADGE_FAMILIES } = require("../../web/app-core.js");
+const { searchAll } = require("./helpers/landing");
 
 // Expectations come from the same published files and resolver the page uses,
 // and each fixture asserts the property it was chosen for, so a data change
@@ -104,11 +105,11 @@ test("a record shows the same badges in its collection grid and in All", async (
   expect(runtimeBadges.length).toBeGreaterThan(0);
 
   await page.goto("/");
-  await page.locator("#all-directory-search").fill(openclaw.name);
+  await searchAll(page, openclaw.name);
   await expect(page.locator('#all-directory-grid .project-card:has([data-project="openclaw"]) .card-badge'))
     .toHaveText(namePatterns(cardBadges("system", openclaw)));
 
-  await page.locator("#all-directory-search").fill(ollama.name);
+  await searchAll(page, ollama.name);
   await expect(page.locator('#all-directory-grid .project-card:has([data-local-runtime="ollama"]) .card-badge'))
     .toHaveText(namePatterns(runtimeBadges));
 
@@ -198,7 +199,7 @@ test("a reviewed-model card shows the same badges in the Models grid and in the 
   const expected = cardBadges("model", reviewedModel);
 
   await page.goto("/");
-  await page.locator("#all-directory-search").fill(reviewedModel.name);
+  await searchAll(page, reviewedModel.name);
   const mixedCard = page.locator(`#all-directory-grid .project-card:has([data-model="${reviewedModel.id}"])`);
   await expect(mixedCard.locator(".role-badge")).toHaveCount(0);
   await expect(mixedCard.locator(".card-badge")).toHaveText(namePatterns(expected));

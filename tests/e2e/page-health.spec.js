@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { searchAll } = require("./helpers/landing");
 
 const VIEWS = ["Directory", "Finder", "Models", "Labs", "Specifications", "Taxonomy"];
 
@@ -13,7 +14,7 @@ test("every view and a detail dialog render without console or page errors", asy
     await page.getByRole("button", { name: view, exact: true }).click();
   }
   await page.getByRole("button", { name: "Directory", exact: true }).click();
-  await page.locator("#all-directory-search").fill("Kilo Code");
+  await searchAll(page, "Kilo Code");
   await page.locator('#all-directory-grid [data-project="kilo-code"]').click();
   await expect(page.locator("#project-dialog h1")).toHaveText("Kilo Code");
 
