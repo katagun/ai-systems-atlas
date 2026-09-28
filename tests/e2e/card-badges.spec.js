@@ -259,6 +259,10 @@ test("hovering an emblem explains it and Escape dismisses it", async ({ page }) 
     });
     check();
   }));
+  // Where the pointer comes to rest: the hover aims at the emblem's centre
+  // before the card lifts.
+  const box = await emblem.boundingBox();
+  const rest = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
   await emblem.hover();
   await expect(tooltip).toBeVisible();
   // The first emblem is the card's type badge, so the tooltip names the Type family.
@@ -269,6 +273,16 @@ test("hovering an emblem explains it and Escape dismisses it", async ({ page }) 
   await expect(tooltip).toHaveAttribute("aria-hidden", "true");
   await page.keyboard.press("Escape");
   await expect(tooltip).toBeHidden();
+  // The card's 4px hover lift slides its emblem under the resting pointer,
+  // and a repaint or a clamped scroll does the same. Each hands the emblem a
+  // fresh pointerover at the resting spot, which is how Linux CI saw the
+  // tooltip return after Escape. The dismissal survives it, and only a real
+  // move reopens it.
+  await emblem.dispatchEvent("pointerover", { bubbles: true, pointerType: "mouse", clientX: rest.x, clientY: rest.y });
+  await expect(tooltip).toBeHidden();
+  await emblem.dispatchEvent("pointerover", { bubbles: true, pointerType: "mouse", clientX: rest.x + 6, clientY: rest.y });
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip.locator(".badge-tooltip-name")).toHaveText(first.name);
   await expect(page.locator("#project-search")).toHaveValue(openclaw.name);
 });
 
