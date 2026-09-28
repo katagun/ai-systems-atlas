@@ -3,12 +3,12 @@
   "sources": {
     "lobe": {
       "package": "@lobehub/icons-static-svg",
-      "version": "1.94.0",
+      "version": "1.95.1",
       "license": "MIT"
     },
     "simple": {
       "package": "simple-icons",
-      "version": "16.29.0",
+      "version": "16.32.0",
       "license": "CC0-1.0"
     }
   },
