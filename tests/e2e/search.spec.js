@@ -18,6 +18,22 @@ async function searchAll(page, text) {
 const allIndexesLanded = page => page.waitForFunction(() =>
   ["systems", "inference", "runtimes", "models", "packs", "robots"].every(key => searchIndexes[key] !== undefined));
 
+// Published files, read the way the page reads them, so a routed copy can add
+// a word no record holds: a query for it then matches only what the test put it on.
+const readWeb = file => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "..", "web", file), "utf8"));
+const indexRoute = name => new RegExp(`/app/search/${name}\\.json(\\?.*)?$`);
+const INDEX_WORD = "zyxwvutqj";
+const withIndexWord = (index, id) => ({ ...index, [id]: `${index[id]} ${INDEX_WORD}` });
+
+// Every request the page makes for one path, whatever its content stamp.
+function requestsFor(page, pathname) {
+  const urls = [];
+  page.on("request", request => {
+    if (new URL(request.url()).pathname === pathname) urls.push(request.url());
+  });
+  return urls;
+}
+
 // Measures the count beside a search box, after the page stops scrolling:
 // focusing and filling the box scroll it into view, and the page's smooth
 // scrolling animates that scroll. One evaluate then measures and hit-tests,
@@ -489,4 +505,116 @@ test("a query another collection answers offers Search all, not the suggestion f
   await expect(systems.getByRole("button", { name: "Try the Finder" })).toBeVisible();
   await expect(systems.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
   await expect(systems.getByRole("button", { name: "Search all" })).toHaveCount(0);
+});
+
+// An empty result judges the whole catalog, and the Systems box loads only its
+// own index, so the empty result loads the rest itself. Until they land it
+// offers nothing that judges the catalog: no count, no suggestion form, and
+// no exclusions fetch. Here only a model holds the query, in its held index.
+test("an empty result waits for every search index before it counts other collections", async ({ page }) => {
+  const models = readWeb("app/search/models.json");
+  const [first] = Object.keys(models);
+  let release;
+  const held = new Promise(resolve => { release = resolve; });
+  await page.route(indexRoute("models"), async route => {
+    await held;
+    await route.fulfill({ json: withIndexWord(models, first) });
+  });
+  const exclusions = requestsFor(page, "/exclusions.json");
+  const indexes = [];
+  page.on("request", request => {
+    if (new URL(request.url()).pathname.startsWith("/app/search/")) indexes.push(new URL(request.url()).pathname);
+  });
+  await page.goto("/?collection=systems");
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  await page.locator("#project-search").fill(INDEX_WORD);
+  const grid = page.locator("#project-grid");
+  await expect(grid).toContainText(`No matches for “${INDEX_WORD}”.`);
+  await expect(grid.getByRole("button", { name: "Try the Finder" })).toBeVisible();
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
+  // Every other index lands, and the held one alone still keeps the catalog unjudged.
+  await page.waitForFunction(() => ["systems", "inference", "runtimes", "packs", "robots", "labs", "specifications"]
+    .every(key => searchIndexes[key] !== undefined));
+  await expect(grid).not.toContainText("in other collections");
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
+  expect(exclusions, "no exclusions fetch while an index is pending").toEqual([]);
+
+  release();
+  await expect(grid).toContainText("It matches 1 record in other collections.");
+  await expect(grid.getByRole("button", { name: "Search all" })).toBeVisible();
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
+
+  // Once every index has landed, a later empty result fetches none again.
+  await page.locator("#project-search").fill("Zyxwvut Frobnicator");
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toBeVisible();
+  expect([...indexes].sort(), "each index is fetched once").toEqual([...new Set(indexes)].sort());
+  expect(indexes, "every collection's index").toHaveLength(8);
+});
+
+// A link that restores a query the boot records cannot answer paints an empty
+// result first. It waits for the indexes too, so the suggestion form never
+// flashes and the exclusions list is never fetched for a query the index answers.
+test("a restored query waits for the indexes before it offers the suggestion form", async ({ page }) => {
+  const systems = readWeb("app/search/systems.json");
+  const [first] = Object.keys(systems);
+  const { name } = readWeb("app/systems.json").systems.find(record => record.id === first);
+  let release;
+  const held = new Promise(resolve => { release = resolve; });
+  await page.route(indexRoute("systems"), async route => {
+    await held;
+    await route.fulfill({ json: withIndexWord(systems, first) });
+  });
+  const exclusions = requestsFor(page, "/exclusions.json");
+  await page.goto(`/?q=${INDEX_WORD}`);
+  const grid = page.locator("#all-directory-grid");
+  await expect(grid).toContainText(`No matches for “${INDEX_WORD}”.`);
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
+
+  release();
+  await expect(grid.locator(".project-card h2")).toHaveText([name]);
+  expect(exclusions, "a query the index answers never needs the exclusions list").toEqual([]);
+});
+
+// The form waits for the exclusions list as well, so it never invites review
+// of a name the review has already left out.
+test("the suggestion form waits for the exclusions list", async ({ page }) => {
+  const fetched = [];
+  let release;
+  const held = new Promise(resolve => { release = resolve; });
+  await page.route(/\/exclusions\.json(\?.*)?$/, async route => {
+    fetched.push(route.request().url());
+    await held;
+    await route.continue();
+  });
+  await searchAll(page, "Zyxwvut Frobnicator");
+  const grid = page.locator("#all-directory-grid");
+  // The list is asked for only once every index has settled.
+  await expect.poll(() => fetched.length).toBe(1);
+  await expect(grid).toContainText("No matches for “Zyxwvut Frobnicator”.");
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
+
+  release();
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toBeVisible();
+});
+
+// A failed index counts as settled, so an empty result asks for it once and
+// then judges the catalog without it; an index that keeps failing cannot loop.
+// A search box that loads the index on focus still retries it.
+test("a search index that fails is asked for once, and a focused search box retries it", async ({ page }) => {
+  let failures = 0;
+  await page.route(indexRoute("labs"), route => {
+    failures += 1;
+    return route.fulfill({ status: 503, body: "" });
+  });
+  await searchAll(page, "Zyxwvut Frobnicator");
+  const grid = page.locator("#all-directory-grid");
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toBeVisible();
+  await page.locator("#all-directory-search").fill("Zyxwvut Frobnicators");
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveAttribute("href", /name=Zyxwvut%20Frobnicators$/);
+  expect(failures, "an empty result asks for a failed index once").toBe(1);
+
+  await page.unroute(indexRoute("labs"));
+  await page.locator('.tab[data-tab="labs"]').click();
+  await page.locator("#lab-search").focus();
+  await page.waitForFunction(() => searchIndexes.labs !== undefined);
 });

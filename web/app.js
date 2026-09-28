@@ -1830,13 +1830,15 @@ function searchAllCollections(term) {
   $("#all-directory-search").focus();
 }
 
+// The list lands once, and every search surface repaints, since the suggestion
+// form under any empty result waits for it.
 let exclusionsRequest = null;
 function excludedEntry(term) {
   if (!state.exclusions) {
     exclusionsRequest ||= loadJSON("exclusions.json")
       .then(data => { state.exclusions = data.entries || []; })
       .catch(() => { state.exclusions = []; })
-      .then(() => pageRenderer(activeScope())?.());
+      .then(renderSearchSurfaces);
     return null;
   }
   const wanted = AtlasCore.normalizeSearchText(term);
@@ -1850,19 +1852,49 @@ function suggestionURL(term) {
 // Names compared the way suggestNames compares them.
 const comparableName = text => AtlasCore.normalizeSearchText(text).replace(/-/g, " ");
 
+// Every search index an empty result reads: All's six kinds, then Labs and
+// Specifications (emptyResultMatches).
+const CATALOG_INDEXES = ["systems", "inference", "runtimes", "models", "packs", "robots", "labs", "specifications"];
+const catalogIndexWaits = new Set();
+
+// Whether any of those indexes is still on its way. Each one neither loaded
+// nor failed is fetched, and the search surfaces repaint once as it lands. A
+// failed index counts as settled: an empty result never asks for it again,
+// so an index that keeps failing cannot loop.
+function catalogIndexesPending() {
+  let pending = false;
+  for (const collection of CATALOG_INDEXES) {
+    if (searchIndexes[collection] || searchIndexFailed.has(collection)) continue;
+    pending = true;
+    if (catalogIndexWaits.has(collection)) continue;
+    catalogIndexWaits.add(collection);
+    loadSearchIndex(collection)?.then(() => {
+      catalogIndexWaits.delete(collection);
+      renderSearchSurfaces();
+    });
+  }
+  return pending;
+}
+
 // An empty result names what the reader can do next (R-P1-11, R-P1-15): a
 // match the facets hide is offered back, and a match in another collection is
 // offered through All. The query is suggested for review only when nothing in
 // the catalog answers it and no exclusion names it. An imported models.dev row
 // is not Atlas reviewed, so a hidden count holding one does not say "reviewed".
+// Until every index has settled, part of the catalog is searched by its boot
+// fields alone, so only did-you-mean, which reads names, and the Finder show.
 function emptyStateMarkup(scope, fallback) {
   const selector = SCOPE_CONTROLS[scope]?.q;
   const term = selector ? $(selector).value : "";
   if (!term.trim()) return `<div class="notice">${fallback}</div>`;
-  const { hidden, elsewhere, found } = emptyResultMatches(scope, term);
+  const settled = !catalogIndexesPending();
+  const { hidden, elsewhere, found } = settled ? emptyResultMatches(scope, term) : { hidden: [], elsewhere: [], found: false };
   const typed = comparableName(term);
   const names = AtlasCore.suggestNames(facetedRecords(scope), term).filter(name => comparableName(name) !== typed);
-  const excluded = excludedEntry(term);
+  const excluded = settled ? excludedEntry(term) : null;
+  // The form also waits for the exclusions list, so it never invites review
+  // of a name the review already left out.
+  const suggest = settled && !found && !excluded && Array.isArray(state.exclusions);
   const reviewed = hidden.every(({ kind, record }) => kind !== "model" || isReviewedModel(record)) ? "reviewed " : "";
   return `<div class="notice empty-search">
     <p><strong>No matches for “${escapeHTML(term.trim())}”${hidden.length ? " with these filters" : ""}.</strong></p>
@@ -1870,7 +1902,7 @@ function emptyStateMarkup(scope, fallback) {
     ${elsewhere.length ? `<p>It matches ${elsewhere.length} ${elsewhere.length === 1 ? "record" : "records"} in other collections. <button type="button" class="link-button" data-empty-search-all>Search all</button></p>` : ""}
     ${names.length ? `<p>Did you mean ${names.map(name => `<button type="button" class="link-button" data-suggest-query="${escapeHTML(name)}">${escapeHTML(name)}</button>`).join(", ")}?</p>` : ""}
     ${excluded ? `<p><strong>Reviewed and left out:</strong> ${escapeHTML(excluded.name)}. ${escapeHTML(excluded.reason)}</p>` : ""}
-    <p><button type="button" class="link-button" data-empty-finder>Try the Finder</button>${found || excluded ? "" : ` · <a href="${escapeHTML(suggestionURL(term))}" target="_blank" rel="noreferrer">Suggest it for review</a>`}</p>
+    <p><button type="button" class="link-button" data-empty-finder>Try the Finder</button>${suggest ? ` · <a href="${escapeHTML(suggestionURL(term))}" target="_blank" rel="noreferrer">Suggest it for review</a>` : ""}</p>
   </div>`;
 }
 
@@ -2350,13 +2382,16 @@ function loadDetail(kind, record) {
 // and every filter falls back to the boot record until it lands.
 const searchIndexes = {};
 const searchIndexRequests = {};
+// Indexes whose last fetch failed. An empty result counts one as settled, so
+// it never waits on it or asks for it again; a focused search box still does.
+const searchIndexFailed = new Set();
 
 function loadSearchIndex(collection) {
   if (searchIndexes[collection]) return null;
   if (!searchIndexRequests[collection]) {
     searchIndexRequests[collection] = loadJSON(`app/search/${collection}.json`)
-      .then(index => { searchIndexes[collection] = index; })
-      .catch(() => { delete searchIndexRequests[collection]; });
+      .then(index => { searchIndexes[collection] = index; searchIndexFailed.delete(collection); })
+      .catch(() => { delete searchIndexRequests[collection]; searchIndexFailed.add(collection); });
   }
   return searchIndexRequests[collection];
 }
