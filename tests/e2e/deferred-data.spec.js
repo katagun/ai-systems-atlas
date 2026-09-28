@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { allSearch, searchAll } = require("./helpers/landing");
 
 // The card marks and the reviewed license evidence are the two largest files
 // the page can load, and neither is needed to render the directory. These
@@ -89,7 +90,7 @@ test("focusing search loads the index and widens the results", async ({ page }) 
 test("focusing common Directory search loads all four collection indexes", async ({ page }) => {
   const requested = dataRequests(page);
   await page.goto("/");
-  await page.locator("#all-directory-search").focus();
+  await allSearch(page).focus();
 
   for (const collection of ["systems", "inference", "runtimes", "models"]) {
     await expect.poll(() => requested.filter(path => path.endsWith(`/app/search/${collection}.json`)).length).toBe(1);
@@ -97,7 +98,7 @@ test("focusing common Directory search loads all four collection indexes", async
 
   // "retirement" is detail-only reviewed prose and reaches the mixed view
   // solely through the model search index.
-  await page.locator("#all-directory-search").fill("retirement");
+  await searchAll(page, "retirement");
   await expect(page.locator('#all-directory-grid [data-model="model-anthropic-claude-sonnet-4-6"]')).toBeVisible();
 });
 

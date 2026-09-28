@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { badgeLegend } = require("../../web/app-core.js");
+const { openCollection, openFamily } = require("./helpers/landing");
 
 const escapeRegExp = text => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 // Accelerator badges (apple-metal, amd-rocm, npu) draw mono letters (MTL, ROC,
@@ -17,10 +18,10 @@ test("the legend lists the active scope's badges and follows the scope", async (
   await expect(legend(page)).toBeVisible();
   await expect(items(page)).toHaveText(names(badgeLegend("inference")));
 
-  await page.locator('[data-directory-collection="runtimes"]').click();
+  await openCollection(page, "runtimes");
   await expect(items(page)).toHaveText(names(badgeLegend("runtimes")));
 
-  await page.locator('[data-directory-collection="systems"][data-directory-family="memory_system"]').click();
+  await openFamily(page, "memory_system");
   await expect(items(page)).toHaveText(names(badgeLegend("systems", "memory_system")));
 
   // The plain "Systems" switcher pill only changes the collection — the
@@ -79,7 +80,7 @@ test("the legend and its Key chip step aside for the comparison tray", async ({ 
   // score profile (comparisons are never comparable across families), so a
   // family must be selected before any [data-compare-id] button exists.
   await page.goto("/?collection=systems");
-  await page.locator('[data-directory-collection="systems"][data-directory-family="memory_system"]').click();
+  await openFamily(page, "memory_system");
   await expect(legend(page)).toBeVisible();
   await page.locator("#project-grid [data-compare-id]").first().click();
   await expect(page.locator("#comparison-tray")).toBeVisible();
