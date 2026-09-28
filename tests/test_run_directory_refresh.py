@@ -48,7 +48,12 @@ AUTH_TOKEN = ("gh", "auth", "token")
 DIFF_QUIET = ("git", "diff", "--cached", "--quiet")
 DIFF_CHECK = ("git", "diff", "--cached", "--check")
 ADD_WEB = ("git", "add", "-A", "web")
-ADD_DIRECTORY = ("git", "add", *refresh.STAGED_DIRECTORY_FILES)
+ADD_DIRECTORY = (
+    "git",
+    "add",
+    *refresh.STAGED_DIRECTORY_FILES,
+    *refresh.STAGED_TOOLING_FILES,
+)
 CHECKOUT_BRANCH = ("git", "checkout", "-B", refresh.REFRESH_BRANCH)
 REV_PARSE_SHORT = ("git", "rev-parse", "--short", "HEAD")
 PUSH = (
@@ -178,6 +183,23 @@ class GenerationStepsTests(unittest.TestCase):
         self.assertNotIn(["uv", "run", "python", "scripts/sync_web_data.py"], ran)
         self.assertEqual(2, len(results))
 
+    def test_the_icon_bump_precedes_logo_and_asset_regeneration(self) -> None:
+        """A bumped icon package changes web/logos.json, which the asset stamp
+        versions, so the bump runs before both generators and after every
+        catalog write that logo coverage reads."""
+        names = [name for name, _command, _token in refresh.GENERATION_STEPS]
+        bump = names.index("bump icon packages")
+        self.assertLess(names.index("regenerate share pages"), bump)
+        self.assertEqual(bump + 1, names.index("regenerate logo coverage"))
+        self.assertEqual(bump + 2, names.index("regenerate asset versions"))
+        self.assertEqual(len(names) - 1, names.index("regenerate asset versions"))
+        _name, command, needs_token = refresh.GENERATION_STEPS[bump]
+        self.assertFalse(needs_token)
+        self.assertEqual(("npm", "install"), tuple(command[:2]))
+        self.assertIn("--save-exact", command)
+        for package in refresh.ICON_PACKAGES:
+            self.assertIn(f"{package}@latest", command)
+
     def test_the_openrouter_cross_check_follows_the_models_dev_import(self) -> None:
         """ADR 039: leads are matched against the snapshot the same run refreshed."""
         scripts = [command[-1] for _name, command, _token in refresh.GENERATION_STEPS]
@@ -227,8 +249,16 @@ class StagingTests(unittest.TestCase):
             call for call in add_calls if call != ["git", "add", "-A", "web"]
         ]
         self.assertEqual(1, len(directory_calls))
-        self.assertEqual(list(refresh.STAGED_DIRECTORY_FILES), directory_calls[0][2:])
+        self.assertEqual(
+            [*refresh.STAGED_DIRECTORY_FILES, *refresh.STAGED_TOOLING_FILES],
+            directory_calls[0][2:],
+        )
         self.assertNotIn("directory/hn-signals.json", directory_calls[0])
+        # The icon bump edits the npm manifests; nothing else outside web/ and
+        # directory/ is staged.
+        self.assertEqual(
+            ("package.json", "package-lock.json"), refresh.STAGED_TOOLING_FILES
+        )
 
 
 class NothingChangedTests(unittest.TestCase):
