@@ -311,13 +311,81 @@ class HeaderTests(PostFixture):
     def test_the_blog_link_is_marked_current(self) -> None:
         pages = self.pages()
         self.assertIn(
-            '<a class="tab-link is-active" aria-current="page" href="./">Blog</a>',
+            '<a class="is-active" aria-current="page" href="./">Blog</a>',
             pages["blog/index.html"],
         )
         self.assertIn(
-            '<a class="tab-link is-active" aria-current="page" href="../">Blog</a>',
+            '<a class="is-active" aria-current="page" href="../">Blog</a>',
             pages["blog/newer/index.html"],
         )
+
+    def test_the_blog_header_mirrors_the_directory_navigation(self) -> None:
+        """web/index.html owns the primary navigation; the blog header must
+        carry the same entries, so a nav change cannot land in one and miss
+        the other. Labels, order, and targets are compared entry by entry,
+        with the blog's root-relative prefixes stripped."""
+        import re
+
+        index = (build_blog.ROOT / "web" / "index.html").read_text(encoding="utf-8")
+        tabs = re.search(
+            r'<nav class="tabs" aria-label="Primary navigation">(.*?)</nav>',
+            index,
+            re.DOTALL,
+        )
+        assert tabs is not None, "web/index.html has no primary navigation"
+        # Buttons name their view; the Docs menu names its views; Blog is external.
+        app_entries = []
+        for match in re.finditer(
+            r'<button class="tab[^"]*" data-tab="([^"]+)"[^>]*>([^<]+)</button>'
+            r'|<button class="tab docs-button"[^>]*>Docs</button>\s*<ul[^>]*>(.*?)</ul>'
+            r'|<a href="blog/">Blog</a>',
+            tabs.group(1),
+            re.DOTALL,
+        ):
+            view, label, docs = match.groups()
+            if view:
+                app_entries.append((label, f"view={view}"))
+            elif docs is not None:
+                for item in re.finditer(
+                    r'<button[^>]*data-open-view="([^"]+)"[^>]*>([^<]+)'
+                    r'|<a href="blog/">(Blog)</a>',
+                    docs,
+                ):
+                    view, label, blog = item.groups()
+                    if blog:
+                        app_entries.append(("Blog", "blog/"))
+                    else:
+                        app_entries.append((label, f"view={view}"))
+            else:
+                app_entries.append(("Blog", "blog/"))
+        self.assertEqual(
+            [label for label, _ in app_entries],
+            ["Catalog", "Find your fit", "Concepts", "Published data", "Blog"],
+        )
+        pages = self.pages()
+        for path, root in (("blog/index.html", "../"), ("blog/newer/index.html", "../../")):
+            with self.subTest(path):
+                html = pages[path]
+                self.assertIn(f'<a class="tab-link" href="{root}">Catalog</a>', html)
+                self.assertIn(
+                    f'<a class="tab-link" href="{root}?view=finder">Find your fit</a>',
+                    html,
+                )
+                for kind, slug, label in build_blog.COLLECTIONS:
+                    self.assertIn(
+                        f'<a class="tab-link" href="{root}?{kind}={slug}">{label}</a>',
+                        html,
+                    )
+                docs_block = re.search(
+                    r'<details class="docs-menu">.*?</details>', html, re.DOTALL
+                )
+                assert docs_block is not None, f"{path} has no Docs menu"
+                self.assertIn("<summary", docs_block.group(0))
+                for kind, slug, label in build_blog.DOCS:
+                    self.assertIn(
+                        f'<a href="{root}?{kind}={slug}">{label}</a>',
+                        docs_block.group(0),
+                    )
 
     def test_pages_load_the_site_stylesheet_and_fonts_under_their_content_stamp(
         self,

@@ -98,10 +98,22 @@ test("the primary navigation links to the blog", async ({ page }) => {
   await expect(page).toHaveURL(/\/blog\/$/);
 });
 
+test("the blog's Docs menu opens without application script and lands on its views", async ({ page }) => {
+  await page.goto("/blog/", { waitUntil: "networkidle" });
+  const header = page.locator("header.site-header");
+  await expect(header.getByRole("link", { name: "Concepts" })).toBeHidden();
+  await header.locator("summary").click();
+  await expect(header.getByRole("link", { name: "Concepts" })).toBeVisible();
+  await header.getByRole("link", { name: "Concepts" }).click();
+  await expect(page).toHaveURL(/\/\?view=taxonomy$/);
+  await expect(page.locator("#taxonomy")).toBeVisible();
+});
+
 test("the blog carries the site header, and its view links land on the directory", async ({ page }) => {
   await page.goto("/blog/", { waitUntil: "networkidle" });
   const header = page.locator("header.site-header");
   await expect(header).toBeVisible();
+  await header.locator("summary").click();
   await expect(header.getByRole("link", { name: "Blog" })).toHaveAttribute("aria-current", "page");
 
   // A post sits one level deeper than the index; its links must still resolve.
