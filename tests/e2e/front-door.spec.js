@@ -406,6 +406,16 @@ test("a record URL with no collection opens over its own collection's results", 
   await expect(page.locator("#runtimes-directory-panel")).toBeVisible();
   await expect(page).toHaveURL(/collection=runtimes/);
   await expect(page).not.toHaveURL(/record=/);
+
+  // A record opened over the All results keeps All (ruling R17).
+  await page.goto("/?collection=all&record=pack:agent-toolkit");
+  await page.reload();
+  await expect(page.locator("#pack-dialog")).toBeVisible();
+  await expect(page.locator("#all-directory-panel")).toBeVisible();
+  await page.locator("#pack-dialog .dialog-close").click();
+  await expect(page.locator("#all-directory-panel")).toBeVisible();
+  await expect(page).toHaveURL(/collection=all/);
+  await expect(page).not.toHaveURL(/record=/);
 });
 
 test("a comparison decides the scope before the collection's filters are applied", async ({ page }) => {

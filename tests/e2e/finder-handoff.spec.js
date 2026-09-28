@@ -183,3 +183,24 @@ test("the Finder chip sits beside the result count, and its × glyph never wraps
   await page.setViewportSize({ width: 375, height: 800 });
   await checkChipLayout();
 });
+
+// The role set has no URL key yet, so a Back that leaves Systems' URL state
+// as it was must not widen the list the Finder chose (ruling R18).
+test("Back after closing a record keeps the Finder's role set", async ({ page }) => {
+  await page.goto("/?view=finder");
+  for (const value of ["agent_system", "coding", "balanced"]) {
+    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
+  }
+  await page.locator("[data-finder-directory]").click();
+  await expect(page.locator("#finder-roles-chip")).toBeVisible();
+  const before = await page.locator("#result-count").textContent();
+  await page.locator("#project-grid [data-project]").first().click();
+  await expect(page.locator("#project-dialog")).toBeVisible();
+  await page.locator("#project-dialog .dialog-close").click();
+  await expect(page.locator("#project-dialog")).toBeHidden();
+  await page.goBack();
+  await expect(page.locator("#finder-roles-chip")).toBeVisible();
+  await expect(page.locator("#result-count")).toContainText("Finder match");
+  await expect(page.locator("#result-count")).toHaveText(before);
+  await expect(page.locator('#scope-strip [data-open-collection="systems"] .state-dot.is-finder')).toHaveCount(1);
+});

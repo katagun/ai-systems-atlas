@@ -1962,14 +1962,16 @@ test("a bare URL is the front door; a collection, a filter, a comparison, or a r
   assert.equal(stage("view=finder"), "results");
 });
 
-test("a comparison or a record names the scope before the collection parameter does", () => {
+test("a comparison names the scope before the collection parameter, and a record only without one", () => {
   const scope = query => scopeFromURL(new URLSearchParams(query));
   assert.equal(scope(""), "all");
   assert.equal(scope("collection=systems"), "systems");
   assert.equal(scope("collection=systems&compare=inference:a,b"), "inference");
   assert.equal(scope("compare=model:a,b"), "models");
   assert.equal(scope("record=runtime:ollama"), "runtimes");
-  assert.equal(scope("collection=systems&record=pack:superpowers"), "packs");
+  // An explicit collection keeps a record opened over it (ruling R17).
+  assert.equal(scope("collection=systems&record=pack:superpowers"), "systems");
+  assert.equal(scope("collection=all&record=pack:superpowers"), "all");
   assert.equal(scope("record=spec:mcp"), "specifications");
   assert.equal(scope("record=lab:anthropic"), "labs");
   assert.equal(scope("record=model:x"), "models");

@@ -2935,8 +2935,14 @@ function closeRecordDialogs() {
 // a URL that leaves a parameter out also clears it from the control (Phase 0
 // leftover: Back after closing a record showed older filters than the URL).
 // The sort remembered across a query goes too: it belonged to the state the
-// URL is replacing.
-function resetScopeControls(scope) {
+// URL is replacing. A Finder role set has no URL key yet, so it stays when
+// the URL keeps the Systems family it was applied to and names no role of
+// its own (ruling R18): a Back that changes nothing there must not widen
+// the list the Finder chose.
+function resetScopeControls(scope, params) {
+  const keepFinderRoles = scope === "systems"
+    && (params.get("family") || "") === $("#family-filter").value
+    && !params.get("role");
   for (const [key, selector] of Object.entries(SCOPE_CONTROLS[scope] || {})) {
     const control = $(selector);
     const fallback = AppCore.SCOPE_URL_PARAMS[scope][key] ?? "";
@@ -2946,11 +2952,11 @@ function resetScopeControls(scope) {
   state.page[scope] = 1;
   delete sortBeforeQuery[scope];
   sortChosenDuringQuery[scope] = false;
-  if (scope === "systems") {
+  if (!keepFinderRoles) {
     state.directoryRoles = null;
     state.directoryRolesLabel = null;
-    populateRoleFilter();
   }
+  if (scope === "systems") populateRoleFilter();
   // With the query empty this disables Best match again, so the URL's sort is
   // judged as boot judges it: "match" is never a sort the reader chose.
   syncMatchSort(scope);
@@ -2980,7 +2986,7 @@ function restoreFromURL({ boot = false } = {}) {
   state.urlReady = false;
   let restored = {};
   if (scope) {
-    resetScopeControls(scope);
+    resetScopeControls(scope, params);
     restored = restoreScopeFromURL(scope);
   }
   const comparisonRestored = restoreComparisonFromURL();
