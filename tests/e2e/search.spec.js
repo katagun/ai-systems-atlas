@@ -811,6 +811,61 @@ test("a search index that fails is asked for once, and a focused search box retr
   await page.waitForFunction(() => searchIndexes.labs !== undefined);
 });
 
+// Only a JSON object is an index. Stored, a body such as null would stay
+// falsy, so the empty result would wait on it for ever and re-arm its own
+// repaint in a microtask loop that hangs the page (N2). It is a failed load
+// instead: the empty result settles, the page answers, and focus retries.
+/* global searchIndexFailed */
+test("a search index whose body is not an object counts as failed, so the page settles and answers", async ({ page }) => {
+  await page.route(indexRoute("labs"), route => route.fulfill({ contentType: "application/json", body: "null" }));
+  await searchAll(page, "Zyxwvut Frobnicator");
+  await expect(page.locator("#all-directory-grid").getByRole("link", { name: "Suggest it for review" })).toBeVisible();
+  const answer = await Promise.race([
+    page.evaluate(() => searchIndexFailed.has("labs") && searchIndexes.labs === undefined),
+    new Promise(resolve => { setTimeout(() => resolve("no answer within 2 s"), 2000); }),
+  ]);
+  expect(answer, "the page answers, holding the body as a failed load").toBe(true);
+
+  await page.unroute(indexRoute("labs"));
+  await page.locator('.tab[data-tab="labs"]').click();
+  await page.locator("#lab-search").focus();
+  await page.waitForFunction(() => searchIndexes.labs !== undefined);
+});
+
+// The comparison tray belongs to the Directory and Models. A repaint that
+// lands while another view is open, here an index an empty result was
+// waiting on, must leave it hidden there, and the Directory shows it again
+// (N1). The Finder is where the wave's repaints reached; Labs is where an
+// index landing already unhid it before.
+test("a repaint that lands in another view leaves the comparison tray hidden", async ({ page }) => {
+  const { system_family: family } = readWeb("app/systems.json").systems.find(record => record.status === "active");
+  const releases = {};
+  for (const name of ["models", "specifications"]) {
+    const held = new Promise(resolve => { releases[name] = resolve; });
+    await page.route(indexRoute(name), async route => {
+      await held;
+      await route.continue();
+    });
+  }
+  await page.goto(`/?collection=systems&family=${family}`);
+  const tray = page.locator("#comparison-tray");
+  await page.locator("#project-grid .compare-toggle").first().click();
+  await expect(tray).toBeVisible();
+  await page.locator("#project-search").fill(INDEX_WORD);
+  await page.waitForFunction(() => ["systems", "inference", "runtimes", "packs", "robots", "labs"]
+    .every(key => searchIndexes[key] !== undefined));
+
+  for (const [view, name] of [["finder", "models"], ["labs", "specifications"]]) {
+    await page.locator(`.tab[data-tab="${view}"]`).click();
+    await expect(tray).toBeHidden();
+    releases[name]();
+    await page.waitForFunction(key => searchIndexes[key] !== undefined, name);
+    await expect(tray, `the ${name} repaint leaves the tray hidden in ${view}`).toBeHidden();
+  }
+  await page.locator('.tab[data-tab="directory"]').click();
+  await expect(tray).toBeVisible();
+});
+
 // WCAG contrast of an element's text against what it sits on: each
 // translucent background up to the first opaque one, composited in order. A
 // colour format it cannot read fails the test rather than being guessed at.

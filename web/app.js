@@ -473,6 +473,12 @@ function clearComparison({ updateURL = true } = {}) {
   if (updateURL) writeDirectoryURL();
 }
 
+// The views where records can be compared, and so the only ones that show the
+// comparison tray. activateView and every repaint decide through here, so a
+// repaint that lands while another view is open, such as a search index or
+// the exclusions list arriving, never unhides the tray over it.
+const COMPARISON_VIEWS = ["directory", "models"];
+
 function renderComparisonControls() {
   const records = comparisonRecords();
   $$('[data-compare-kind]').forEach(button => {
@@ -486,7 +492,7 @@ function renderComparisonControls() {
   });
   const tray = $("#comparison-tray");
   if (!tray) return;
-  tray.hidden = records.length === 0;
+  tray.hidden = records.length === 0 || !COMPARISON_VIEWS.includes($(".view.is-active")?.id);
   syncBadgeLegend();
   $("#comparison-tray-title").textContent = records.length === 1 ? "1 item selected" : `${records.length} items selected`;
   $("#comparison-tray-items").textContent = records.map(item => item.name).join(" · ");
@@ -2392,18 +2398,26 @@ function loadDetail(kind, record) {
 
 // A collection's search index is the editorial prose its filter matches on,
 // keyed by record id. It is worth a fetch only once someone means to search,
-// and every filter falls back to the boot record until it lands.
+// and every filter falls back to the boot record until it lands. Only a JSON
+// object is stored, so an index is loaded exactly when its entry is truthy.
 const searchIndexes = {};
 const searchIndexRequests = {};
 // Indexes whose last fetch failed. An empty result counts one as settled, so
 // it never waits on it or asks for it again; a focused search box still does.
 const searchIndexFailed = new Set();
 
+// A body that is not a JSON object, such as null, is a failed load too.
+// Stored, it would stay falsy, so an empty result would wait on it for ever,
+// re-arming its own repaint in a loop the page never leaves.
 function loadSearchIndex(collection) {
   if (searchIndexes[collection]) return null;
   if (!searchIndexRequests[collection]) {
     searchIndexRequests[collection] = loadJSON(`app/search/${collection}.json`)
-      .then(index => { searchIndexes[collection] = index; searchIndexFailed.delete(collection); })
+      .then(index => {
+        if (!index || typeof index !== "object" || Array.isArray(index)) throw new Error(`app/search/${collection}.json is not an index`);
+        searchIndexes[collection] = index;
+        searchIndexFailed.delete(collection);
+      })
       .catch(() => { delete searchIndexRequests[collection]; searchIndexFailed.add(collection); });
   }
   return searchIndexRequests[collection];
@@ -3006,7 +3020,7 @@ function activateView(id, { focusTarget } = {}) {
       || (state.directoryCollection === "inference" && state.comparison.kind === "inference")
       || (state.directoryCollection === "runtimes" && state.comparison.kind === "runtime")
     ));
-  if ((id === "directory" || id === "models") && state.comparison.ids.length && !comparisonFitsView) {
+  if (COMPARISON_VIEWS.includes(id) && state.comparison.ids.length && !comparisonFitsView) {
     clearComparison();
   }
   $$(".tab").forEach(item => {
@@ -3020,8 +3034,8 @@ function activateView(id, { focusTarget } = {}) {
     const heading = focusTarget || document.getElementById(document.getElementById(id)?.getAttribute("aria-labelledby"));
     heading?.focus({ preventScroll: true });
   }
-  if (id === "directory" || id === "models") renderComparisonControls();
-  else $("#comparison-tray").hidden = true;
+  // The view is active now, so the tray shows here only in COMPARISON_VIEWS.
+  renderComparisonControls();
   syncBadgeLegend();
   writeViewURL(id);
   writeScopeURL();
