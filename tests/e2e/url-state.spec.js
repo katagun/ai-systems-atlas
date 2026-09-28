@@ -1,8 +1,9 @@
 const { test, expect } = require("@playwright/test");
+const { openCollection, openFamily, pressedFamily } = require("./helpers/landing");
 
 test("a family chip, a query, and a filter survive a reload", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: /^Memory / }).click();
+  await openFamily(page, "memory_system");
   await page.locator("#project-search").fill("graph");
   await page.locator(".advanced-filter-shell summary").click();
   await page.locator("#license-filter").selectOption("MIT");
@@ -16,7 +17,7 @@ test("a family chip, a query, and a filter survive a reload", async ({ page }) =
   await expect(page.locator("#project-search")).toHaveValue("graph");
   await expect(page.locator("#license-filter")).toHaveValue("MIT");
   await expect(page.locator("#result-count")).toHaveText(before);
-  await expect(page.locator('.collection-switcher [aria-pressed="true"]')).toHaveAccessibleName(/^Memory /);
+  await expect(pressedFamily(page)).toHaveAccessibleName(/^Memory /);
 });
 
 test("values a control cannot take are removed from the URL rather than half-applied", async ({ page }) => {
@@ -48,10 +49,10 @@ test("a page number restores, and changing scope clears the last scope's paramet
   await page.goto("/?page=2");
   await expect(page.locator("#all-directory-pager .pager-nav span")).toContainText("Page 2 of");
 
-  await page.getByRole("button", { name: /^Inference services / }).click();
+  await openCollection(page, "inference");
   await page.locator("#inference-type-filter").selectOption("direct_model_api");
   await expect(page).toHaveURL(/type=direct_model_api/);
-  await page.getByRole("button", { name: /^Local runtimes / }).click();
+  await openCollection(page, "runtimes");
   await expect(page).not.toHaveURL(/type=/);
   await expect(page).not.toHaveURL(/page=/);
 });
@@ -59,7 +60,7 @@ test("a page number restores, and changing scope clears the last scope's paramet
 test("a family chip opens its family on the first page", async ({ page }) => {
   await page.goto("/?collection=systems&page=5");
   await expect(page.locator("#project-pager .pager-nav span")).toContainText("Page 5 of");
-  await page.getByRole("button", { name: /^Memory / }).click();
+  await openFamily(page, "memory_system");
   await expect(page.locator("#project-pager .pager-nav span")).toContainText("Page 1 of");
   await expect(page).not.toHaveURL(/page=/);
 });
@@ -105,7 +106,7 @@ test("a record opens while the browser refuses history writes", async ({ page })
   await expect(page.locator("#project-dialog")).toBeVisible();
   await page.locator("#project-dialog .dialog-close").click();
   await expect(page.locator("#project-dialog")).toBeHidden();
-  await page.getByRole("button", { name: /^Memory / }).click();
+  await openFamily(page, "memory_system");
   await page.locator('.collection-switcher [data-directory-collection="models"]').click();
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   expect(errors).toEqual([]);
@@ -113,7 +114,7 @@ test("a record opens while the browser refuses history writes", async ({ page })
 
 test("a comparison keeps the role and score sort chosen beside it", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: /^Agents / }).click();
+  await openFamily(page, "agent_system");
   await page.locator("#role-filter").selectOption("coding_agent");
   await page.locator("#sort-filter").selectOption("score");
   await page.locator('#project-grid [data-compare-id="kilo-code"]').click();

@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { openFamily } = require("./helpers/landing");
 
 // Typing searches the boot records at once, and focusing the box fetches the
 // systems search index, which repaints the grid when it lands. Tests measure
@@ -178,7 +179,7 @@ test("the details control names the record it opens", async ({ page }) => {
 
 test("Compare toggles without opening the record", async ({ page }) => {
   await page.goto("/?collection=systems");
-  await page.getByRole("button", { name: /^Agents / }).click();
+  await openFamily(page, "agent_system");
   await page.locator("#project-search").fill("Aider");
   await page.locator('#project-grid .compare-toggle[data-compare-id="aider"]').click();
   await expect(page.locator("#project-dialog")).not.toBeVisible();

@@ -1,6 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
+const { allSearch, searchAll } = require("./helpers/landing");
 
 // Expectations come from the published files the page loads, and each fixture
 // asserts the property it was chosen for, so a data change fails with a clear
@@ -85,7 +86,7 @@ const visibleLineCount = element => {
 
 test("landing cards show the star count of starred systems and runtimes", async ({ page }) => {
   await page.goto("/");
-  const search = page.locator("#all-directory-search");
+  const search = allSearch(page);
 
   await search.fill(superpowers.name);
   await expectStars(page.locator('#all-directory-grid .project-card:has([data-project="superpowers"])'), superpowers);
@@ -96,7 +97,7 @@ test("landing cards show the star count of starred systems and runtimes", async 
 
 test("a landing card keeps an archived status beside its star count", async ({ page }) => {
   await page.goto("/");
-  await page.locator("#all-directory-search").fill(archived.name);
+  await searchAll(page, archived.name);
   const card = page.locator(`#all-directory-grid .project-card:has([data-project="${archived.id}"])`);
 
   await expectStars(card, archived);
@@ -113,7 +114,7 @@ test("a landing card with a status and no count prints the status without a sepa
     await route.fulfill({ response, json: payload });
   });
   await page.goto("/");
-  await page.locator("#all-directory-search").fill(chatgpt.name);
+  await searchAll(page, chatgpt.name);
 
   await expect(page.locator('#all-directory-grid .project-card:has([data-project="chatgpt"]) .card-footer > span')).toHaveText("archived");
 });
@@ -163,7 +164,7 @@ test("agent pack cards show their star count beside the install mechanism", asyn
   await expect(card.locator(".card-footer")).toContainText("Host marketplace");
 
   await page.goto("/");
-  await page.locator("#all-directory-search").fill(agentToolkit.name);
+  await searchAll(page, agentToolkit.name);
   await expectStars(page.locator('#all-directory-grid .project-card:has([data-pack="agent-toolkit"])'), agentToolkit);
 });
 
@@ -239,7 +240,7 @@ test("Systems cards show the star count and say when a record has none", async (
 
 test("outside Systems, a card without a star count makes no GitHub claim", async ({ page }) => {
   await page.goto("/");
-  const search = page.locator("#all-directory-search");
+  const search = allSearch(page);
   await search.fill(chatgpt.name);
   await expectNoGitHubClaim(page.locator('#all-directory-grid .project-card:has([data-project="chatgpt"])'));
   await search.fill(lmStudio.name);

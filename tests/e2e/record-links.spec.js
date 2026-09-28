@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { pressedEntry } = require("./helpers/landing");
 
 test("opening a record writes a shareable URL, survives reload, and closes on back", async ({ page }) => {
   await page.goto("/?collection=systems");
@@ -45,7 +46,7 @@ test("a local runtime record URL opens inside the runtimes scope", async ({ page
 
   await expect(page.locator("#runtime-dialog-content h1")).toHaveText("Ollama");
   await page.locator("#runtime-dialog .dialog-close").click();
-  await expect(page.getByRole("button", { name: /^Local runtimes / })).toHaveAttribute("aria-pressed", "true");
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Local runtimes /);
   await expect(page).toHaveURL(/collection=runtimes/);
 });
 
