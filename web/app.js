@@ -229,7 +229,7 @@ async function bootstrap() {
   if ($("#door-search").value && state.directoryStage === "door") $("#door-search").dispatchEvent(new Event("input", { bubbles: true }));
   loadMarks();
   // The header's fonts can settle after bindEvents measured it.
-  syncHeaderHeight();
+  syncStickyClearance();
 }
 
 // Marks are decorative next to the record name, so they stay hidden from
@@ -839,6 +839,7 @@ function showFrontDoor({ updateURL = true } = {}) {
   $("#front-door").hidden = false;
   $("#hero-kicker").hidden = false;
   $("#directory-title").classList.remove("visually-hidden");
+  syncStickyClearance();
   renderCollectionIndex();
   syncBadgeLegend();
   if (updateURL) {
@@ -860,8 +861,9 @@ function showResults() {
 // The results strip: one entry per registry entry, the collection pressed.
 // At phone widths the entries are emblems only and the pressed one's name and
 // count read as a caption under the row (styles.css), so nine entries fit a
-// 320 px phone with slack and nothing scrolls sideways. Inside Systems a
-// second row lists the families, one pressed.
+// 320 px phone with slack and nothing scrolls sideways. Up to 1280 px each
+// shows its short name, so the row stays one row. Inside Systems a second
+// row lists the families, one pressed.
 const FAMILY_ORDER = ["memory_system", "agent_system", "assistant_system"];
 function renderScopeStrip() {
   const strip = $("#scope-strip");
@@ -881,11 +883,12 @@ function renderScopeStrip() {
     // Robots has no emblem until its form-factor badge exists, and a phone
     // clips every name, so its initial stands in rather than an empty button.
     const emblem = collectionEmblem(entry) || `<span class="scope-monogram" aria-hidden="true">${escapeHTML(AtlasCore.monogramGlyph(entry.name))}</span>`;
-    return `<button type="button" class="scope-entry${pressed ? " is-active" : ""}" data-open-collection="${escapeHTML(entry.id)}" aria-pressed="${pressed}" title="${escapeHTML(entry.name)}">${emblem}<span class="scope-name">${escapeHTML(entry.name)}</span><strong class="scope-count">${count}</strong>${stateDot(collectionStateFor(entry.id))}</button>`;
+    return `<button type="button" class="scope-entry${pressed ? " is-active" : ""}" data-open-collection="${escapeHTML(entry.id)}" aria-pressed="${pressed}" title="${escapeHTML(entry.name)}">${emblem}<span class="scope-name">${escapeHTML(entry.name)}</span><span class="scope-short" aria-hidden="true">${escapeHTML(entry.short)}</span><strong class="scope-count">${count}</strong>${stateDot(collectionStateFor(entry.id))}</button>`;
   }).join("");
   const familyRow = state.directoryCollection === "systems" ? renderFamilyRow(payloads) : "";
   strip.innerHTML = `<div class="scope-row">${entries}</div><p class="scope-caption" aria-hidden="true">${escapeHTML(caption)}</p>${familyRow}`;
   if (focusKey) strip.querySelector(focusKey)?.focus({ preventScroll: true });
+  syncStickyClearance();
 }
 
 function renderFamilyRow(payloads) {
@@ -898,10 +901,15 @@ function renderFamilyRow(payloads) {
 }
 
 // The strip sticks under the header above phone widths, so the header's
-// live height is a custom property the stylesheet reads.
-function syncHeaderHeight() {
+// live height is a custom property the stylesheet reads. The sticky height
+// is another, html's scroll-padding-top, so focus moving through a grid
+// stops below the header and the strip rather than under them. The strip's
+// height changes with the family row, so every strip render re-measures.
+function syncStickyClearance() {
   const header = $(".site-header");
-  if (header) document.documentElement.style.setProperty("--header-height", `${header.getBoundingClientRect().height}px`);
+  if (!header) return;
+  document.documentElement.style.setProperty("--header-height", `${header.getBoundingClientRect().height}px`);
+  document.documentElement.style.setProperty("--sticky-clearance", `${stickyHeight()}px`);
 }
 
 // The one way a tile or a strip entry opens a collection. A facet narrows
@@ -1802,13 +1810,18 @@ function renderFinder() {
   $("#finder-content").innerHTML = content + navigation;
 }
 
-// What sticks to the top of the viewport plus the reading margin both Finder
-// scroll corrections leave beneath it, measured once so the two never
-// disagree. The header sticks only above phone widths, and in results the
-// scope strip sticks under it, so each counts only while it is sticky.
-function headerClearance() {
+// How much sticks to the top of the viewport. The header sticks only above
+// phone widths, and in results the scope strip sticks under it, so each
+// counts only while it is sticky; a hidden strip measures no height.
+function stickyHeight() {
   const sticky = element => element && getComputedStyle(element).position === "sticky" ? element.getBoundingClientRect().height : 0;
-  return sticky($(".site-header")) + sticky($("#scope-strip")) + 12;
+  return sticky($(".site-header")) + sticky($("#scope-strip"));
+}
+
+// The sticky height plus the reading margin both Finder scroll corrections
+// leave beneath it, measured once so the two never disagree.
+function headerClearance() {
+  return stickyHeight() + 12;
 }
 
 // A choice replaces the panel's content, which can leave the step indicator
@@ -3318,8 +3331,8 @@ function initDocsMenu() {
 }
 
 function bindEvents() {
-  syncHeaderHeight();
-  window.addEventListener("resize", syncHeaderHeight);
+  syncStickyClearance();
+  window.addEventListener("resize", syncStickyClearance);
   for (const [scope, selector] of Object.entries(MATCH_SORTS)) {
     $(SCOPE_CONTROLS[scope].q).addEventListener("input", () => syncMatchSort(scope));
     $(selector).addEventListener("input", () => {

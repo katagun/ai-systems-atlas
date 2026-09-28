@@ -331,3 +331,61 @@ test("a switch into Directory results focuses its heading", async ({ page }) => 
   await expect(page.locator("#front-door")).toBeHidden();
   await expect(page.locator("#directory-title")).toBeFocused();
 });
+
+// Waits until scrollY holds still for five animation frames, since html
+// scrolls smoothly, then runs `measure` in the same frame.
+const settled = (page, measure) => page.evaluate(async source => {
+  await new Promise(resolve => {
+    let last = window.scrollY, still = 0;
+    const frame = () => requestAnimationFrame(() => { still = window.scrollY === last ? still + 1 : 0; last = window.scrollY; if (still >= 5) resolve(); else frame(); });
+    frame();
+  });
+  return new Function(`return (${source})()`)();
+}, measure.toString());
+
+test("between phone and wide desktop the strip stays one short row", async ({ page }) => {
+  for (const [width, height] of [[1024, 768], [1280, 800], [1440, 900]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto("/?collection=systems");
+    const strip = page.locator("#scope-strip");
+    await expect(strip.locator(".family-row")).toHaveCount(1);
+    const tops = await strip.locator(".scope-row .scope-entry").evaluateAll(entries => entries.map(entry => entry.getBoundingClientRect().top));
+    expect(new Set(tops).size, `${width}: one row`).toBe(1);
+    const height_ = await strip.evaluate(element => element.getBoundingClientRect().height);
+    expect(height_, `${width}: the strip stays short`).toBeLessThanOrEqual(96);
+  }
+  // The short name is shown and the full name stays the accessible name.
+  await page.setViewportSize({ width: 1024, height: 768 });
+  const services = page.locator('#scope-strip [data-open-collection="inference"]');
+  await expect(services.locator(".scope-short")).toBeVisible();
+  await expect(services).toHaveAccessibleName(/^Inference services \d/);
+});
+
+// Focus moving back up a results grid must stop below the sticky header and
+// strip, never under them (html's scroll-padding-top, measured by app.js).
+// A control wholly off screen is scrolled to the middle anyway, so before
+// each step the focused control sits 300 px below the strip: a card row up,
+// the previous control is then on screen but under the strip, and only the
+// scroll padding makes the browser scroll it clear.
+test("focus walking back up the results stays clear of the strip", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/?collection=systems");
+  const controls = page.locator("#project-grid button:visible");
+  await expect(controls.first()).toBeVisible();
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+  await controls.last().focus();
+  for (let step = 0; step < 8; step += 1) {
+    await page.evaluate(() => {
+      const stripBottom = document.querySelector("#scope-strip").getBoundingClientRect().bottom;
+      window.scrollBy({ top: document.activeElement.getBoundingClientRect().top - stripBottom - 300, behavior: "instant" });
+    });
+    await page.keyboard.press("Shift+Tab");
+    const [top, stripBottom, inGrid] = await settled(page, () => [
+      document.activeElement.getBoundingClientRect().top,
+      document.querySelector("#scope-strip").getBoundingClientRect().bottom,
+      Boolean(document.activeElement.closest("#project-grid")),
+    ]);
+    expect(inGrid, `step ${step}: focus is still in the grid`).toBe(true);
+    expect(top, `step ${step}: the focused control sits below the strip`).toBeGreaterThanOrEqual(stripBottom - 1);
+  }
+});

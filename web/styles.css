@@ -208,7 +208,10 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+/* Focus and anchor scrolling stop below whatever sticks to the top: the
+   header above phone widths and, in results, the scope strip. app.js writes
+   the measured sum (syncStickyClearance). */
+html { scroll-behavior: smooth; scroll-padding-top: var(--sticky-clearance, 0px); }
 body {
   margin: 0;
   min-height: 100vh;
@@ -487,6 +490,7 @@ h1 {
 /* The frame's fill mixes toward the panel colour, which on the ink pill would
    bury the glyph; the pressed emblem is drawn as outline only. */
 .scope-entry.is-active .badge-frame { fill: none; }
+.scope-short { display: none; }
 .scope-count { color: var(--cyan); font: 700 .68rem var(--font-mono); }
 .scope-entry.is-active .scope-count { color: inherit; }
 .scope-entry .state-dot { right: -.15rem; top: -.15rem; }
@@ -1315,17 +1319,28 @@ footer #data-date, footer .footer-meta {
   .site-header { grid-template-columns: 1fr auto auto; column-gap: .75rem; }
 }
 
+/* Between phone and wide desktop the full names would wrap the strip to two
+   or three rows, so each entry shows its short name; the full name stays
+   the accessible name, clipped as on phones. Nine full names measure about
+   1300 px, so they wait for the content column's 1360 px cap, at 1408 px. */
+@media (min-width: 721px) and (max-width: 1407px) {
+  .scope-entry .scope-name { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .scope-entry .scope-short { display: inline; }
+  .scope-row { gap: .2rem; }
+  .scope-entry { gap: .3rem; padding: .3rem .5rem .3rem .3rem; font-size: .8rem; }
+  .scope-entry .badge-emblem, .scope-monogram { width: 1.15rem; height: 1.15rem; }
+}
+
 @media (max-width: 720px) {
   main, footer { width: min(100% - 1.5rem, 1360px); }
-  /* The header scrolls away on a phone; only the scope strip is sticky. */
-  .site-header { position: static; padding: .75rem; display: flex; flex-wrap: wrap; gap: .65rem; justify-content: space-between; }
+  .site-header { padding: .75rem; display: flex; flex-wrap: wrap; gap: .65rem; justify-content: space-between; }
   .header-tools { order: 2; }
   .brand small { display: none; }
   .tabs { order: 3; width: 100%; flex-wrap: wrap; justify-content: center; column-gap: .35rem; row-gap: .1rem; overflow-x: visible; }
   .tab, .tab-link { flex: 0 0 auto; font-size: .66rem; }
   /* A button-anchored popup would hang off the viewport on a phone, where
      the Docs entry sits far from the right edge: the menu becomes a sheet
-     under the sticky header instead, on both the app and the blog header. */
+     under the header instead, on both the app and the blog header. */
   .docs-menu { position: static; }
   .tabs .docs-menu-list { left: .75rem; right: .75rem; top: 100%; min-width: 0; }
   h1 { font-size: clamp(2.7rem, 13vw, 4.5rem); }
@@ -1339,14 +1354,17 @@ footer #data-date, footer .footer-meta {
   .front-door .hero-copy { font-size: 1rem; line-height: 1.55; }
   .door-jobs { gap: .4rem; }
   .door-job { padding: .35rem .7rem; font-size: .8rem; }
-  /* Only the strip is sticky on a phone (the header is static above), which
-     closes the 185 px sticky-header leftover from Phase 0. Entries are
-     emblems only; the pressed entry's name and count read as the caption. */
+  /* Only the strip is sticky on a phone: the app's header scrolls away,
+     which closes the 185 px sticky-header leftover from Phase 0. The blog
+     shares this sheet and has no strip, so its header stays sticky. Entries
+     are emblems only; the pressed entry's name and count read as the caption. */
+  body:not(.writing-page) .site-header { position: static; }
   .scope-strip { top: 0; padding: .4rem 0 .35rem; }
   .scope-row { flex-wrap: nowrap; gap: .2rem; }
   .scope-entry { min-height: 0; padding: .2rem; gap: 0; }
   .scope-entry .badge-emblem, .scope-monogram { width: 1.2rem; height: 1.2rem; }
   .scope-entry .scope-name { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .scope-entry .scope-short { display: none; }
   .scope-entry .scope-count { display: none; }
   .scope-caption { display: block; }
   .view, #directory.view { padding: 2.6rem 0; }
