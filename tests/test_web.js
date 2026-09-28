@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, COLLECTIONS, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -887,8 +887,8 @@ test("the app does not disable the HTTP cache it just earned a content hash for"
 
 test("the primary navigation links to the blog, so it is found by scanning the nav", () => {
   const html = indexHTML();
-  assert.match(html, /<a class="tab-link" href="blog\/">Blog<\/a>/,
-    "index.html should link to blog/ from the primary tab row");
+  assert.match(html, /<nav class="tabs" aria-label="Primary navigation">[\s\S]*?href="blog\/">Blog<\/a>/,
+    "index.html should link to blog/ from the primary navigation");
 });
 
 test("the GitHub link is an icon with an accessible name rather than visible text", () => {
@@ -1011,6 +1011,23 @@ test("every primary navigation tab is addressable as a view parameter", () => {
   const tabs = [...html.matchAll(/class="tab[^"]*" data-tab="([a-z-]+)"/g)].map(m => m[1]);
   assert.ok(tabs.length > 0, "index.html has no primary navigation tabs");
   for (const tab of tabs) assert.equal(parseViewId(tab), tab, `${tab} is a tab but not an addressable view`);
+  for (const view of ["taxonomy", "api"]) {
+    assert.match(html, new RegExp(`data-open-view="${view}"`), `${view} is reachable through the Docs menu`);
+    assert.equal(parseViewId(view), view, `${view} is a Docs item but not an addressable view`);
+  }
+});
+
+test("legacy sibling-view URLs resolve to their unified collection", () => {
+  assert.equal(parseViewAlias("models"), "models");
+  assert.equal(parseViewAlias("labs"), "labs");
+  assert.equal(parseViewAlias("specifications"), "specifications");
+  assert.equal(parseViewAlias("directory"), null);
+  assert.equal(parseViewAlias("taxonomy"), null);
+  assert.equal(parseViewAlias("constructor"), null);
+  assert.equal(scopeFromURL(new URLSearchParams("view=models")), "models");
+  assert.equal(scopeFromURL(new URLSearchParams("collection=models")), "models");
+  assert.equal(scopeFromURL(new URLSearchParams("collection=labs")), "labs");
+  assert.equal(scopeFromURL(new URLSearchParams("collection=specifications")), "specifications");
 });
 
 test("an unknown or malformed view parameter resolves to no view", () => {
@@ -1439,6 +1456,8 @@ test("each switcher chip counts what its scope lists by default", () => {
     models: 3,
     packs: 1 + 1,
     robots: 4,
+    labs: 0,
+    specifications: 0,
   });
 });
 
@@ -1782,4 +1801,99 @@ test("a query names a Finder job by an -ies word matched as typed, not only its 
     { id: "sdk_builder", direction: "agent_system", label: "Build with an SDK", description: "Build agent libraries.", eligible: 3 },
   ];
   assert.equal(matchFinderGoal(goals, "libraries").id, "sdk_builder");
+});
+
+const registryPayloads = {
+  projects: [
+    { id: "m1", name: "M1", system_family: "memory_system", status: "active", deployment: [] },
+    { id: "m2", name: "M2", system_family: "memory_system", status: "archived", deployment: [] },
+    { id: "a1", name: "A1", system_family: "agent_system", status: "active", deployment: ["host_pack"] },
+    { id: "a2", name: "A2", system_family: "agent_system", status: "active", deployment: [] },
+    { id: "s1", name: "S1", system_family: "assistant_system", status: "active", deployment: [] },
+  ],
+  services: [
+    { id: "i1", name: "I1", service_type: "direct_model_api" },
+    { id: "i2", name: "I2", service_type: "direct_model_api" },
+    { id: "i3", name: "I3", service_type: "routing_aggregator" },
+  ],
+  runtimes: [{ id: "r1", name: "R1", runtime_type: "desktop_runner" }],
+  models: [
+    { id: "x1", name: "X1", review_status: "reviewed", model_type: "language_model" },
+    { id: "x2", name: "X2", review_status: "reviewed", model_type: "multimodal_language_model" },
+    { id: "x3", name: "X3", review_status: "imported" },
+  ],
+  packs: [{ id: "p1", name: "P1", pack_type: "skills_bundle" }],
+  robots: [{ id: "b1", name: "B1", form_factor: "humanoid" }, { id: "b2", name: "B2", form_factor: "quadruped" }],
+  labs: [{ id: "l1", name: "L1", lab_type: "ai_company" }],
+  specifications: [{ id: "sp1", name: "SP1", specification_type: "protocol" }],
+};
+
+test("the registry lists every collection once, scopes and sibling views alike, in front-door order", () => {
+  assert.deepEqual(COLLECTIONS.map(entry => entry.id), ["all", "systems", "models", "inference", "runtimes", "packs", "robots", "labs", "specifications"]);
+  assert.ok(COLLECTIONS.every(entry => entry.kind === "scope"));
+  // Every emblem names a type badge that exists; All and Robots have none yet.
+  for (const entry of COLLECTIONS) {
+    if (entry.emblem === null) assert.ok(["all", "robots"].includes(entry.id));
+    else assert.equal(CARD_BADGES[entry.emblem].family, "type", entry.id);
+  }
+  assert.equal(COLLECTIONS.find(entry => entry.id === "systems").emblem, "memory-system");
+});
+
+test("each collection counts what its default view lists, with its split", () => {
+  assert.deepEqual(collectionCount("all", registryPayloads), { count: 5 + 3 + 1 + 3 + 1 + 2, note: "A–Z, no scores" });
+  assert.deepEqual(collectionCount("systems", registryPayloads), { count: 4, note: "active" });
+  assert.deepEqual(collectionCount("models", registryPayloads), { count: 3, note: "2 reviewed · 1 imported" });
+  assert.deepEqual(collectionCount("packs", registryPayloads), { count: 2, note: "1 pack · 1 host-installed" });
+  assert.deepEqual(collectionCount("inference", registryPayloads), { count: 3, note: "" });
+  assert.deepEqual(collectionCount("robots", registryPayloads), { count: 2, note: "" });
+  assert.deepEqual(collectionCount("labs", registryPayloads), { count: 1, note: "" });
+  assert.deepEqual(collectionCount("specifications", registryPayloads), { count: 1, note: "" });
+  assert.deepEqual(collectionCount("robots", { ...registryPayloads, robots: [] }), { count: 0, note: "" });
+});
+
+test("a collection's categories are its largest values with the facet that opens them", () => {
+  assert.deepEqual(collectionCategories("systems", registryPayloads), [
+    { key: "family", value: "agent_system", count: 2, label: "Agents" },
+    { key: "family", value: "assistant_system", count: 1, label: "Assistants" },
+    { key: "family", value: "memory_system", count: 1, label: "Memory" },
+  ]);
+  // The tie between assistant_system and memory_system breaks by value, not
+  // by which record happened to come first.
+  assert.deepEqual(
+    collectionCategories("systems", { ...registryPayloads, projects: [...registryPayloads.projects].reverse() }).map(category => category.value),
+    ["agent_system", "assistant_system", "memory_system"]
+  );
+  assert.deepEqual(collectionCategories("inference", registryPayloads), [
+    { key: "type", value: "direct_model_api", count: 2, label: "Direct model API" },
+    { key: "type", value: "routing_aggregator", count: 1, label: "Routing aggregator" },
+  ]);
+  // Imported rows carry no model type, so only reviewed rows are tallied.
+  assert.deepEqual(collectionCategories("models", registryPayloads).map(category => category.value), ["language_model", "multimodal_language_model"]);
+  // Robots have no type badge yet, so the value is humanised.
+  assert.deepEqual(collectionCategories("robots", registryPayloads).map(category => category.label), ["Humanoid", "Quadruped"]);
+  assert.deepEqual(collectionCategories("robots", registryPayloads)[0].key, "formFactor");
+  assert.deepEqual(collectionCategories("all", registryPayloads), []);
+  assert.equal(collectionCategories("inference", registryPayloads, 1).length, 1);
+});
+
+test("a state dot names the collection a comparison or a Finder role set belongs to", () => {
+  assert.equal(collectionState("systems", { comparisonKind: "system", finderRoles: null }), "compare");
+  assert.equal(collectionState("runtimes", { comparisonKind: "runtime", finderRoles: null }), "compare");
+  assert.equal(collectionState("models", { comparisonKind: "model", finderRoles: null }), "compare");
+  assert.equal(collectionState("systems", { comparisonKind: null, finderRoles: ["coding_agent", "coding_agent_workflow"] }), "finder");
+  assert.equal(collectionState("systems", { comparisonKind: "system", finderRoles: ["coding_agent"] }), "compare");
+  assert.equal(collectionState("inference", { comparisonKind: "system", finderRoles: ["coding_agent"] }), null);
+  assert.equal(collectionState("packs", {}), null);
+});
+
+test("a bare URL is the front door; a collection, a filter, a comparison, or a record is results", () => {
+  const stage = query => directoryStageFromURL(new URLSearchParams(query));
+  assert.equal(stage(""), "door");
+  assert.equal(stage("view=directory"), "door");
+  assert.equal(stage("collection=all"), "results");
+  assert.equal(stage("collection=systems&family=memory_system"), "results");
+  assert.equal(stage("q=ollama"), "results");
+  assert.equal(stage("compare=system:aider,kilo-code"), "results");
+  assert.equal(stage("record=system:aider"), "results");
+  assert.equal(stage("view=finder"), "results");
 });

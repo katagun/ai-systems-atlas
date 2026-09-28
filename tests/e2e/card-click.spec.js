@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { openFamily } = require("./helpers/landing");
 
 // Typing searches the boot records at once, and focusing the box fetches the
 // systems search index, which repaints the grid when it lands. Tests measure
@@ -113,7 +114,7 @@ test("clicking between two emblems opens neither the record nor a tooltip", asyn
 });
 
 test("clicking beside a reviewed-model card's source line opens its record", async ({ page }) => {
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
   const card = page.locator("#model-grid .model-card:not(.imported-model-card)").first();
   const id = await card.locator(".card-open").getAttribute("data-model");
   // The source line sits above the details target for its hover title and
@@ -142,7 +143,7 @@ test("a card's hover-titled facts stay above its details target", async ({ page 
   const card = page.locator('#project-grid .project-card:has([data-project="aider"])');
   expect(await reached(card.locator(".license-badge").first()), "a project card's licence badge").toBe("itself");
 
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
   const model = page.locator("#model-grid .model-card:not(.imported-model-card)").first();
   expect(await reached(model.locator(".card-source-meta")), "a reviewed-model card's source line").toBe("itself");
 
@@ -178,7 +179,7 @@ test("the details control names the record it opens", async ({ page }) => {
 
 test("Compare toggles without opening the record", async ({ page }) => {
   await page.goto("/?collection=systems");
-  await page.getByRole("button", { name: /^Agents / }).click();
+  await openFamily(page, "agent_system");
   await page.locator("#project-search").fill("Aider");
   await page.locator('#project-grid .compare-toggle[data-compare-id="aider"]').click();
   await expect(page.locator("#project-dialog")).not.toBeVisible();

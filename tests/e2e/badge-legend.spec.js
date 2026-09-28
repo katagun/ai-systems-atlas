@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { badgeLegend } = require("../../web/app-core.js");
+const { openCollection, openFamily } = require("./helpers/landing");
 
 const escapeRegExp = text => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 // Accelerator badges (apple-metal, amd-rocm, npu) draw mono letters (MTL, ROC,
@@ -17,10 +18,10 @@ test("the legend lists the active scope's badges and follows the scope", async (
   await expect(legend(page)).toBeVisible();
   await expect(items(page)).toHaveText(names(badgeLegend("inference")));
 
-  await page.locator('[data-directory-collection="runtimes"]').click();
+  await openCollection(page, "runtimes");
   await expect(items(page)).toHaveText(names(badgeLegend("runtimes")));
 
-  await page.locator('[data-directory-collection="systems"][data-directory-family="memory_system"]').click();
+  await openFamily(page, "memory_system");
   await expect(items(page)).toHaveText(names(badgeLegend("systems", "memory_system")));
 
   // The plain "Systems" switcher pill only changes the collection — the
@@ -39,17 +40,18 @@ test("mixed scopes show only the families, sibling views name their own sets, an
   await expect(items(page).nth(1)).toHaveText(/Control and privacy$/);
   await expect(items(page).first()).not.toContainText("What kind of record it is");
 
-  await page.locator('[data-tab="models"]').click();
+  await page.locator('[data-directory-collection="models"]').click();
   await expect(legend(page)).toBeVisible();
   await expect(items(page)).toHaveText(names(badgeLegend("models")));
 
-  await page.locator('[data-tab="specifications"]').click();
+  await page.locator('[data-directory-collection="specifications"]').click();
   await expect(items(page)).toHaveText(names(badgeLegend("specifications")));
 
-  await page.locator('[data-tab="labs"]').click();
+  await page.locator('[data-directory-collection="labs"]').click();
   await expect(items(page)).toHaveText(names(badgeLegend("labs")));
 
-  await page.locator('[data-tab="taxonomy"]').click();
+  await page.locator('.docs-button').click();
+  await page.locator('[data-open-view="taxonomy"]').click();
   await expect(legend(page)).toBeHidden();
 });
 
@@ -79,7 +81,7 @@ test("the legend and its Key chip step aside for the comparison tray", async ({ 
   // score profile (comparisons are never comparable across families), so a
   // family must be selected before any [data-compare-id] button exists.
   await page.goto("/?collection=systems");
-  await page.locator('[data-directory-collection="systems"][data-directory-family="memory_system"]').click();
+  await openFamily(page, "memory_system");
   await expect(legend(page)).toBeVisible();
   await page.locator("#project-grid [data-compare-id]").first().click();
   await expect(page.locator("#comparison-tray")).toBeVisible();
@@ -96,7 +98,7 @@ test("the legend and its Key chip step aside for the comparison tray", async ({ 
 test("the Models legend also steps aside for the comparison tray", async ({ page }) => {
   // Unlike Systems, every reviewed-model card carries a Compare control with
   // no family narrowing needed first.
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
   await expect(legend(page)).toBeVisible();
   await expect(items(page)).toHaveText(names(badgeLegend("models")));
   await page.locator('#model-grid [data-compare-id]').first().click();

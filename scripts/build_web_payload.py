@@ -360,6 +360,24 @@ def searchable_text(value) -> str:
     return str(value)
 
 
+RECENT_LIMIT = 3
+
+
+def recent_record_ids(records: list[dict], limit: int = RECENT_LIMIT) -> list[str]:
+    """The ids of the records reviewed most recently, ties broken by name.
+
+    A tile shows these as marks (Phase 2 spec, section 3). A review date is
+    not a ranking, so the rule never touches a score. Records without
+    ``verified_at`` are left out.
+    """
+    dated = [record for record in records if record.get("verified_at")]
+    by_name = sorted(dated, key=lambda record: record["name"])
+    newest_first = sorted(
+        by_name, key=lambda record: record["verified_at"], reverse=True
+    )
+    return [record["id"] for record in newest_first[:limit]]
+
+
 def dumps(payload) -> str:
     """Payloads are machine-read, so they are written minified with a trailing newline."""
     return json.dumps(payload, separators=(",", ":"), sort_keys=False) + "\n"
@@ -396,6 +414,7 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
             for envelope_key in ENVELOPE_KEYS
             if envelope_key in document
         }
+        envelope["recent"] = recent_record_ids(document[key])
         if collection == "models":
             envelope.update(
                 {
