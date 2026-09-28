@@ -123,7 +123,7 @@ test("a reviewed-model card has no role pill and shows its distribution modes as
   const expected = cardBadges("model", reviewedModel);
   expect(expected.map(badge => badge.name)).toEqual(["Language model", "Downloadable weights"]);
 
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
   await page.locator("#model-search").fill(reviewedModel.name);
   const card = page.locator(`#model-grid .model-card:has([data-model="${reviewedModel.id}"])`);
   await expect(card.locator(".role-badge")).toHaveCount(0);
@@ -139,7 +139,7 @@ test("a reviewed-model card carrying every distribution mode shows its type and 
   const expected = cardBadges("model", allModesModel);
   expect(expected.map(badge => badge.name)).toEqual(["Multimodal language model", "Downloadable weights", "Developer API", "Third-party hosting"]);
 
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
   await page.locator("#model-search").fill(allModesModel.name);
   const card = page.locator(`#model-grid .model-card:has([data-model="${allModesModel.id}"])`);
   await expect(card.locator(".card-badge")).toHaveText(namePatterns(expected));
@@ -149,7 +149,7 @@ test("a reviewed-model card carrying every distribution mode shows its type and 
 test("an imported models.dev card keeps its role pill and shows only its source-record badge", async ({ page }) => {
   expect(cardBadges("model", importedModel).map(badge => badge.name)).toEqual(["Source record"]);
 
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
   await page.locator("#model-search").fill(importedModel.name);
   const card = page.locator(`#model-grid .model-card:has([data-model="${importedModel.id}"])`);
   await expect(card.locator(".role-badge")).toHaveText("Imported metadata · Not Atlas reviewed");
@@ -165,9 +165,9 @@ test("every card in every grid and the Finder shortlist leads with exactly one t
     ["/?collection=runtimes", "#runtime-grid"],
     ["/?collection=packs", "#pack-grid"],
     ["/", "#all-directory-grid"],
-    ["/?view=models", "#model-grid"],
-    ["/?view=specifications", "#specification-grid"],
-    ["/?view=labs", "#lab-grid"],
+    ["/?collection=models", "#model-grid"],
+    ["/?collection=specifications", "#specification-grid"],
+    ["/?collection=labs", "#lab-grid"],
   ];
   for (const [url, grid] of grids) {
     await page.goto(url);

@@ -297,9 +297,16 @@ class HeaderTests(PostFixture):
         ):
             with self.subTest(path):
                 html = pages[path]
-                self.assertIn(f'<a class="tab-link" href="{root}">Directory</a>', html)
-                for view in ("finder", "models", "specifications", "taxonomy", "api"):
-                    self.assertIn(f'href="{root}?view={view}"', html)
+                self.assertIn(f'<a class="tab-link" href="{root}">Catalog</a>', html)
+                for kind, slug in (
+                    ("view", "finder"),
+                    ("collection", "models"),
+                    ("collection", "labs"),
+                    ("collection", "specifications"),
+                    ("view", "taxonomy"),
+                    ("view", "api"),
+                ):
+                    self.assertIn(f'href="{root}?{kind}={slug}"', html)
 
     def test_the_blog_link_is_marked_current(self) -> None:
         pages = self.pages()

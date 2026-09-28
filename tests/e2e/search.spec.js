@@ -172,7 +172,7 @@ const BROWSING_SORTS = [
   ["/?collection=systems", "#project-search", "#sort-filter", "name"],
   ["/?collection=inference", "#inference-search", "#inference-sort-filter", "score"],
   ["/?collection=runtimes", "#runtime-search", "#runtime-sort-filter", "score"],
-  ["/?view=models", "#model-search", "#model-sort-filter", "score"],
+  ["/?collection=models", "#model-search", "#model-sort-filter", "score"],
 ];
 
 test("the browsing sort chosen during a query survives a reload", async ({ page }) => {
@@ -208,7 +208,7 @@ test("Clear filters ends the query, so the next query selects Best match again",
     ["/?collection=systems", "#project-search", "#sort-filter", "#reset-filters", "stars", "name"],
     ["/?collection=inference", "#inference-search", "#inference-sort-filter", "#reset-inference-filters", "name", "score"],
     ["/?collection=runtimes", "#runtime-search", "#runtime-sort-filter", "#reset-runtime-filters", "name", "score"],
-    ["/?view=models", "#model-search", "#model-sort-filter", "#reset-model-filters", "name", "score"],
+    ["/?collection=models", "#model-search", "#model-sort-filter", "#reset-model-filters", "name", "score"],
   ]) {
     await page.goto(url);
     await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
@@ -231,7 +231,7 @@ test("the Finder's handoff ends an earlier query, so the next query selects Best
     await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
     await page.locator(search).fill("api");
     await page.locator(sort).selectOption(chosen);
-    await page.getByRole("button", { name: "Finder", exact: true }).click();
+    await page.getByRole("button", { name: "Find your fit", exact: true }).click();
     for (const value of [direction, goal, priority]) await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
     await page.locator("[data-finder-directory]").click();
     await expect(page.locator(search)).toHaveValue("");
@@ -273,7 +273,7 @@ test("Search all from a sibling view leaves the Directory scope's own query alon
   const sort = page.locator("#sort-filter");
   await page.locator("#project-search").fill("memory");
   await sort.selectOption("stars");
-  await page.locator('.tab[data-tab="models"]').click();
+  await page.locator('[data-directory-collection="models"]').click();
   await page.locator("#model-search").fill(INDEX_WORD);
   await page.locator("#model-grid").getByRole("button", { name: "Search all" }).click();
   await expect(allSearch(page)).toHaveValue(INDEX_WORD);
@@ -456,14 +456,14 @@ test("an empty result in another view gains the suggestion form when the exclusi
     await held;
     await route.continue();
   });
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
   await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
   await page.locator("#model-search").fill("Zyxwvut Frobnicator");
   await expect.poll(() => fetched.length, "the settled empty result asks for the list").toBe(1);
   await page.locator('.tab[data-tab="directory"]').click();
   release();
   await page.waitForFunction(() => Array.isArray(state.exclusions));
-  await page.locator('.tab[data-tab="models"]').click();
+  await page.locator('[data-directory-collection="models"]').click();
   await expect(page.locator("#model-grid").getByRole("link", { name: "Suggest it for review" })).toBeVisible();
 });
 
@@ -496,9 +496,9 @@ const EMPTY_STATE_SCOPES = [
   { url: "/?collection=runtimes", search: "#runtime-search", grid: "#runtime-grid", hint: "runtimes" },
   { url: "/?collection=packs", search: "#pack-search", grid: "#pack-grid" },
   { url: "/?collection=robots", search: "#robot-search", grid: "#robot-grid" },
-  { url: "/?view=models", search: "#model-search", grid: "#model-grid" },
-  { url: "/?view=labs", search: "#lab-search", grid: "#lab-grid" },
-  { url: "/?view=specifications", search: "#specification-search", grid: "#specification-grid" },
+  { url: "/?collection=models", search: "#model-search", grid: "#model-grid" },
+  { url: "/?collection=labs", search: "#lab-search", grid: "#lab-grid" },
+  { url: "/?collection=specifications", search: "#specification-search", grid: "#specification-grid" },
 ];
 
 test("every scope's empty search offers the next steps, and each Directory panel with a banner offers the job", async ({ page }) => {
@@ -601,7 +601,7 @@ test("a hidden match that is an imported source row is not called reviewed", asy
   const imported = readWeb("app/models.json").models.find(model => model.review_status === "imported" && !model.model_type);
   const index = readWeb("app/search/models.json");
   await page.route(indexRoute("models"), route => route.fulfill({ json: withIndexWord(index, imported.id) }));
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
   await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
   const type = await page.locator('#model-type-filter option:not([value=""])').first().getAttribute("value");
   await page.locator("#model-type-filter").selectOption(type);
@@ -679,7 +679,7 @@ test("a query another collection answers offers Search all, not the suggestion f
   await expect(allSearch(page)).toBeFocused();
   await expect(page).toHaveURL(address => address.searchParams.get("q") === "vLLM" && !address.searchParams.has("collection"));
 
-  await page.goto("/?view=specifications");
+  await page.goto("/?collection=specifications");
   await expect(page.locator("#specification-grid .project-card").first()).toBeVisible();
   await page.locator("#specification-search").fill("vLLM");
   await page.locator("#specification-grid").getByRole("button", { name: "Search all" }).click();
@@ -807,7 +807,7 @@ test("a search index that fails is asked for once, and a focused search box retr
   expect(failures, "an empty result asks for a failed index once").toBe(1);
 
   await page.unroute(indexRoute("labs"));
-  await page.locator('.tab[data-tab="labs"]').click();
+  await page.locator('[data-directory-collection="labs"]').click();
   await page.locator("#lab-search").focus();
   await page.waitForFunction(() => searchIndexes.labs !== undefined);
 });
@@ -828,16 +828,16 @@ test("a search index whose body is not an object counts as failed, so the page s
   expect(answer, "the page answers, holding the body as a failed load").toBe(true);
 
   await page.unroute(indexRoute("labs"));
-  await page.locator('.tab[data-tab="labs"]').click();
+  await page.locator('[data-directory-collection="labs"]').click();
   await page.locator("#lab-search").focus();
   await page.waitForFunction(() => searchIndexes.labs !== undefined);
 });
 
-// The comparison tray belongs to the Directory and Models. A repaint that
-// lands while another view is open, here an index an empty result was
-// waiting on, must leave it hidden there, and the Directory shows it again
-// (N1). The Finder is where the wave's repaints reached; Labs is where an
-// index landing already unhid it before.
+// The comparison tray belongs to the Catalog's comparable collections. A repaint
+// that lands while another view or collection is open, here an index an empty
+// result was waiting on, must leave it hidden there, and the Directory shows
+// it again (N1). The Finder is where the wave's repaints reached; Labs is
+// where an index landing already unhid it before.
 test("a repaint that lands in another view leaves the comparison tray hidden", async ({ page }) => {
   const { system_family: family } = readWeb("app/systems.json").systems.find(record => record.status === "active");
   const releases = {};
@@ -856,15 +856,23 @@ test("a repaint that lands in another view leaves the comparison tray hidden", a
   await page.waitForFunction(() => ["systems", "inference", "runtimes", "packs", "robots", "labs"]
     .every(key => searchIndexes[key] !== undefined));
 
-  for (const [view, name] of [["finder", "models"], ["labs", "specifications"]]) {
-    await page.locator(`.tab[data-tab="${view}"]`).click();
+  for (const [tab, chip, name] of [["finder", null, "models"], [null, "labs", "specifications"]]) {
+    if (tab) await page.locator(`.tab[data-tab="${tab}"]`).click();
+    else {
+      // Collections live inside the Catalog view, so return to it first.
+      await page.locator('.tab[data-tab="directory"]').click();
+      await page.locator(`[data-directory-collection="${chip}"]`).click();
+    }
     await expect(tray).toBeHidden();
     releases[name]();
     await page.waitForFunction(key => searchIndexes[key] !== undefined, name);
-    await expect(tray, `the ${name} repaint leaves the tray hidden in ${view}`).toBeHidden();
+    await expect(tray, `the ${name} repaint leaves the tray hidden`).toBeHidden();
   }
-  await page.locator('.tab[data-tab="directory"]').click();
-  await expect(tray).toBeVisible();
+  // Labs is an unscored collection, so entering it clears the system
+  // comparison as incompatible; returning to Systems keeps it cleared.
+  await page.locator('[data-directory-collection="systems"]:not([data-directory-family])').click();
+  await expect(tray).toBeHidden();
+  await expect(page).not.toHaveURL(/compare=/);
 });
 
 // WCAG contrast of an element's text against what it sits on: each

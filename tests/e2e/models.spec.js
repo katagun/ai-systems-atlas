@@ -5,9 +5,10 @@ const QWEN = "model-alibaba-qwen2-5-coder-0-5b";
 const DEEPSEEK = "model-deepseek-deepseek-v4-pro";
 
 test("Models exposes every source record and keeps Atlas reviews distinct", async ({ page }) => {
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
 
-  await expect(page.locator('.tab[data-tab="models"]')).toHaveClass(/is-active/);
+  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   await expect(page.locator("#model-result-count")).toHaveText(
     `${catalogCounts.models} models · ${catalogCounts.reviewedModels} Atlas reviewed; source imports are unscored`,
   );
@@ -63,7 +64,7 @@ test("Models exposes every source record and keeps Atlas reviews distinct", asyn
 });
 
 test("an imported models.dev record is unscored and opens attributed source details", async ({ page }) => {
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
   await page.locator("#model-search").fill("Sarvam 105B");
 
   const card = page.locator("#model-grid .imported-model-card").filter({ hasText: "Sarvam 105B" });
@@ -86,12 +87,13 @@ test("the Directory quick filters include Models and its complete source count",
   const quickFilter = page.getByRole("button", { name: `Models ${catalogCounts.models}`, exact: true });
   await expect(quickFilter).toBeVisible();
   await quickFilter.click();
-  await expect(page.locator('.tab[data-tab="models"]')).toHaveClass(/is-active/);
+  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   await expect(page.locator("#model-result-count")).toContainText(`${catalogCounts.models} models`);
 });
 
 test("Models comparisons stay inside the model-access profile and restore from the URL", async ({ page }) => {
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
 
   // Past the default 24: high-scoring new records sort above older ones.
   await page.locator('#model-pager select[aria-label="Results per page"]').selectOption("96");
@@ -110,11 +112,17 @@ test("Models comparisons stay inside the model-access profile and restore from t
   await page.locator("#comparison-dialog .dialog-close").click();
 
   await page.reload();
-  await expect(page.locator('.tab[data-tab="models"]')).toHaveClass(/is-active/);
+  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   await expect(page.locator("#comparison-dialog")).toBeVisible();
+  await expect(page).toHaveURL(/collection=models/);
   await page.locator("#comparison-dialog .dialog-close").click();
 
-  await page.getByRole("button", { name: "Directory", exact: true }).click();
+  // The comparison survives staying inside its own collection scope; leaving
+  // the scope clears it.
+  await page.getByRole("button", { name: "Catalog", exact: true }).click();
+  await expect(page.locator("#comparison-tray")).toBeVisible();
+  await page.getByRole("button", { name: /^Systems / }).click();
   await expect(page.locator("#comparison-tray")).toBeHidden();
   await expect(page).not.toHaveURL(/compare=/);
 });
@@ -128,7 +136,7 @@ test("a reviewed model models.dev does not list yet says so and never prints nul
       : model);
     await route.fulfill({ response, json: { ...payload, unlisted_reviewed_count: 1, models } });
   });
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
 
   await expect(page.locator("#models-kicker")).toContainText("1 not yet on models.dev");
   const card = page.locator(`#model-grid .project-card:has([data-model="${QWEN}"])`);

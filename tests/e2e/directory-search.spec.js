@@ -115,7 +115,8 @@ test("superseded systems leave the active view and link to their successor", asy
 test("taxonomy documents every local-runtime group and its score weights", async ({ page }) => {
   await page.goto("/");
 
-  await page.getByRole("button", { name: "Taxonomy" }).click();
+  await page.locator(".docs-button").click();
+  await page.getByRole("button", { name: "Concepts" }).click();
   for (const group of [
     "Local runtime types", "Runtime accelerators", "Runtime model formats",
     "Runtime serving modes", "Runtime deployment surfaces", "Local-runtime score",
@@ -210,7 +211,7 @@ test("mixed browsing surfaces local runtimes without scores or comparison", asyn
 test("the finder guides a local runtime path into the runtimes scope", async ({ page }) => {
   await page.goto("/");
 
-  await page.getByRole("button", { name: "Finder", exact: true }).click();
+  await page.getByRole("button", { name: "Find your fit", exact: true }).click();
   await page.locator('[data-finder-choice][data-finder-value="local_runtime"]').click();
   await page.locator('[data-finder-choice][data-finder-value="serve_workload"]').click();
   await page.locator('[data-finder-choice][data-finder-value="hardware"]').click();
@@ -506,7 +507,7 @@ test("reviewed named agent additions are searchable", async ({ page }) => {
 
 test("finder offers assistant outcomes and preserves the selected role", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Finder", exact: true }).click();
+  await page.getByRole("button", { name: "Find your fit", exact: true }).click();
   await page.getByRole("button", { name: /I need an assistant/ }).click();
   await page.getByRole("button", { name: /Use several models in one place/ }).click();
   await page.getByRole("button", { name: /Model and data portability/ }).click();
@@ -523,7 +524,7 @@ test("finder offers assistant outcomes and preserves the selected role", async (
 
 test("finder recommends inference services without crossing score profiles", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Finder", exact: true }).click();
+  await page.getByRole("button", { name: "Find your fit", exact: true }).click();
   await page.getByRole("button", { name: /I need an inference service/ }).click();
   await page.getByRole("button", { name: /Route across models and providers/ }).click();
   await page.getByRole("button", { name: /Traffic resilience/ }).click();
@@ -666,7 +667,8 @@ test("a packaging-format link in a pack dialog opens the specification", async (
 
 test("taxonomy documents every pack group", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Taxonomy" }).click();
+  await page.locator(".docs-button").click();
+  await page.getByRole("button", { name: "Concepts" }).click();
   for (const group of ["Pack types", "Pack hosts", "Pack install mechanisms"]) {
     await expect(page.locator("#taxonomy-content h2", { hasText: group })).toHaveCount(1);
   }
