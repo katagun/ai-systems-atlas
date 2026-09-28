@@ -5,8 +5,9 @@ const { allSearch, openCollection, pressedEntry } = require("./helpers/landing")
 
 // The page binds its search and keyboard listeners once its data has loaded,
 // and paints the All grid right after, so a card on screen means they are live.
+// The All list is results, so the page opens on it rather than the front door.
 async function searchAll(page, text) {
-  await page.goto("/");
+  await page.goto("/?collection=all");
   await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
   const input = allSearch(page);
   await input.focus();
@@ -108,7 +109,7 @@ test("the result count shows beside the box, uncovered, without scrolling", asyn
 });
 
 test("slash focuses the search box", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/?collection=all");
   await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
   await page.locator("body").click({ position: { x: 5, y: 300 } });
   await page.keyboard.press("/");
@@ -273,7 +274,7 @@ test("Search all from a sibling view leaves the Directory scope's own query alon
   const sort = page.locator("#sort-filter");
   await page.locator("#project-search").fill("memory");
   await sort.selectOption("stars");
-  await page.locator('[data-directory-collection="models"]').click();
+  await openCollection(page, "models");
   await page.locator("#model-search").fill(INDEX_WORD);
   await page.locator("#model-grid").getByRole("button", { name: "Search all" }).click();
   await expect(allSearch(page)).toHaveValue(INDEX_WORD);
@@ -468,7 +469,7 @@ test("an empty result in another view gains the suggestion form when the exclusi
   await page.locator('.tab[data-tab="directory"]').click();
   release();
   await page.waitForFunction(() => Array.isArray(state.exclusions));
-  await page.locator('[data-directory-collection="models"]').click();
+  await openCollection(page, "models");
   await expect(page.locator("#model-grid").getByRole("link", { name: "Suggest it for review" })).toBeVisible();
 });
 
@@ -649,9 +650,9 @@ test("a button that switches views hands focus to the new view's heading", async
   expect(await page.evaluate(() => document.activeElement === document.body), "boot leaves focus alone").toBe(true);
 
   await page.goto("/");
-  await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
-  await page.locator('.hero [data-open-tab="finder"]').press("Enter");
-  await expect(page.locator("#finder-title")).toBeFocused();
+  await page.locator("#door-jobs button").first().press("Enter");
+  await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
+  await expect(page.locator("#finder-content h2")).toBeFocused();
 
   await searchAll(page, "Zyxwvut Frobnicator");
   await page.getByRole("button", { name: "Try the Finder" }).press("Enter");
@@ -682,7 +683,7 @@ test("a query another collection answers offers Search all, not the suggestion f
   await expect(allSearch(page)).toHaveValue("vLLM");
   await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("vLLM");
   await expect(allSearch(page)).toBeFocused();
-  await expect(page).toHaveURL(address => address.searchParams.get("q") === "vLLM" && !address.searchParams.has("collection"));
+  await expect(page).toHaveURL(address => address.searchParams.get("q") === "vLLM" && address.searchParams.get("collection") === "all");
 
   await page.goto("/?collection=specifications");
   await expect(page.locator("#specification-grid .project-card").first()).toBeVisible();
@@ -812,7 +813,7 @@ test("a search index that fails is asked for once, and a focused search box retr
   expect(failures, "an empty result asks for a failed index once").toBe(1);
 
   await page.unroute(indexRoute("labs"));
-  await page.locator('[data-directory-collection="labs"]').click();
+  await openCollection(page, "labs");
   await page.locator("#lab-search").focus();
   await page.waitForFunction(() => searchIndexes.labs !== undefined);
 });
@@ -833,7 +834,7 @@ test("a search index whose body is not an object counts as failed, so the page s
   expect(answer, "the page answers, holding the body as a failed load").toBe(true);
 
   await page.unroute(indexRoute("labs"));
-  await page.locator('[data-directory-collection="labs"]').click();
+  await openCollection(page, "labs");
   await page.locator("#lab-search").focus();
   await page.waitForFunction(() => searchIndexes.labs !== undefined);
 });
@@ -866,7 +867,7 @@ test("a repaint that lands in another view leaves the comparison tray hidden", a
     else {
       // Collections live inside the Catalog view, so return to it first.
       await page.locator('.tab[data-tab="directory"]').click();
-      await page.locator(`[data-directory-collection="${chip}"]`).click();
+      await openCollection(page, chip);
     }
     await expect(tray).toBeHidden();
     releases[name]();
@@ -875,7 +876,7 @@ test("a repaint that lands in another view leaves the comparison tray hidden", a
   }
   // Labs is an unscored collection, so entering it clears the system
   // comparison as incompatible; returning to Systems keeps it cleared.
-  await page.locator('[data-directory-collection="systems"]:not([data-directory-family])').click();
+  await openCollection(page, "systems");
   await expect(tray).toBeHidden();
   await expect(page).not.toHaveURL(/compare=/);
 });

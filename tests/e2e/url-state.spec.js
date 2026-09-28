@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { openCollection, openFamily, pressedFamily } = require("./helpers/landing");
+const { openCollection, openFamily, pressedEntry, pressedFamily } = require("./helpers/landing");
 
 test("a family chip, a query, and a filter survive a reload", async ({ page }) => {
   await page.goto("/");
@@ -17,6 +17,7 @@ test("a family chip, a query, and a filter survive a reload", async ({ page }) =
   await expect(page.locator("#project-search")).toHaveValue("graph");
   await expect(page.locator("#license-filter")).toHaveValue("MIT");
   await expect(page.locator("#result-count")).toHaveText(before);
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Systems /);
   await expect(pressedFamily(page)).toHaveAccessibleName(/^Memory /);
 });
 
@@ -107,7 +108,7 @@ test("a record opens while the browser refuses history writes", async ({ page })
   await page.locator("#project-dialog .dialog-close").click();
   await expect(page.locator("#project-dialog")).toBeHidden();
   await openFamily(page, "memory_system");
-  await page.locator('.collection-switcher [data-directory-collection="models"]').click();
+  await openCollection(page, "models");
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   expect(errors).toEqual([]);
 });

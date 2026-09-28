@@ -1,6 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
-const { collectionEntry, openCollection, searchAll } = require("./helpers/landing");
+const { collectionEntry, entryCount, openCollection, searchAll } = require("./helpers/landing");
 
 const ROBOTS = [
   { id: "g-one", name: "G One", manufacturer: "Unibot", url: "https://unibot.example/g-one", description: "A compact humanoid.", form_factor: "humanoid", ai_basis: ["vendor_named_model", "open_model_interface"], availability: "orderable", status: "active" },
@@ -41,10 +41,9 @@ async function withEmptyRobots(page) {
 test("the robots entry stays out of the navigation while the collection is empty", async ({ page }) => {
   await withEmptyRobots(page);
   await page.goto("/");
-  // toBeHidden also passes for an element that does not exist, so pin its presence first.
-  await expect(collectionEntry(page, "robots")).toHaveCount(1);
-  await expect(collectionEntry(page, "robots")).toBeHidden();
-  await expect(page.locator("#all-collection-count")).toHaveText(String(catalogCounts.allDirectoryEntries - catalogCounts.robots));
+  // A missing entry also passes for an index that never rendered, so pin the index first.
+  expect(await entryCount(page, "all")).toBe(catalogCounts.allDirectoryEntries - catalogCounts.robots);
+  await expect(collectionEntry(page, "robots")).toHaveCount(0);
 });
 
 test("the published robots open from the real collection", async ({ page }) => {

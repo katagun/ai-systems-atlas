@@ -15,7 +15,8 @@ const {
 test("searching G finds GBrain and GStack across all families", async ({ page }) => {
   await page.goto("/");
 
-  await expect(pressedEntry(page)).toHaveAccessibleName(/^All /);
+  await expect(page.locator("#front-door")).toBeVisible();
+  await openCollection(page, "all");
   await expect(page.locator("#all-directory-result-count")).toContainText(
     `${catalogCounts.allDirectoryEntries} entries · Scores hidden across collections`,
   );
@@ -77,17 +78,6 @@ test("canonical and repository links use the AI Systems Atlas slug", async ({ pa
     "href",
     "https://github.com/katagun/ai-systems-atlas",
   );
-});
-
-test("the atlas orbital field spans the five landscape nodes", async ({ page }) => {
-  await page.goto("/");
-
-  await expect(page.locator(".atlas-map .map-node")).toHaveCount(5);
-  await expect(page.locator(".atlas-map .map-orbit")).toHaveCount(5);
-  await expect(page.locator(".atlas-map .map-orbit").first()).toBeVisible();
-
-  // Every node is labelled; a colour legend could only disagree with them.
-  await expect(page.locator(".atlas-map .map-legend")).toHaveCount(0);
 });
 
 test("superseded systems leave the active view and link to their successor", async ({ page }) => {
@@ -192,7 +182,7 @@ test("a cross-profile comparison URL is discarded rather than partially restored
 });
 
 test("mixed browsing surfaces local runtimes without scores or comparison", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/?collection=all");
 
   // Past the default 24: reviewed model records name their SGLang
   // deployment path, so the runtime card sorts past page one.
@@ -260,7 +250,7 @@ test("the unified Directory remains usable at a narrow viewport", async ({ page 
 
 test("vendor instruction conventions are searchable and inspectable", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Specifications" }).click();
+  await openCollection(page, "specifications");
 
   for (const name of ["copilot-instructions.md", "GEMINI.md", ".clinerules/"]) {
     await page.locator("#specification-search").fill(name);
@@ -275,7 +265,7 @@ test("vendor instruction conventions are searchable and inspectable", async ({ p
 
 test("new protocol layers are searchable and keep their boundaries distinct", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Specifications" }).click();
+  await openCollection(page, "specifications");
 
   for (const name of ["WebMCP", "OASF", "ANP", "AP2", "UCP", "Commerce ACP"]) {
     await page.locator("#specification-search").fill(name);
@@ -376,8 +366,8 @@ test("the Memory, Agents, and Assistants chips jump straight into their filtered
 
   await openFamily(page, "memory_system");
   await expect(page).toHaveURL(/collection=systems/);
-  await expect(collectionEntry(page, "systems")).toHaveAttribute("aria-pressed", "false");
   await expect(pressedEntry(page)).toHaveCount(1);
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Systems /);
   await expect(pressedFamily(page)).toHaveAccessibleName(/^Memory /);
   await expect(familyEntry(page, "agent_system")).toHaveAttribute("aria-pressed", "false");
   await expect(page.locator("#family-filter")).toHaveValue("memory_system");
@@ -515,8 +505,9 @@ test("finder offers assistant outcomes and preserves the selected role", async (
   await expect(page.locator(".finder-results h3").filter({ hasText: /^T3 Chat$/ })).toHaveCount(1);
   await expect(page.locator(".finder-result").filter({ hasText: "T3 Chat" }).locator(".card-monogram")).toHaveText("T");
   await page.getByRole("button", { name: "Browse matches →" }).click();
-  await expect(collectionEntry(page, "systems")).toHaveAttribute("aria-pressed", "false");
   await expect(pressedEntry(page)).toHaveCount(1);
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Systems /);
+  await expect(pressedFamily(page)).toHaveAccessibleName(/^Assistants /);
   await expect(page).toHaveURL(/collection=systems/);
   await expect(page.locator("#family-filter")).toHaveValue("assistant_system");
   await expect(page.locator("#role-filter")).toHaveValue("multi_model_chat_client");

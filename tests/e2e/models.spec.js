@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
+const { collectionEntry, entryCount, openCollection } = require("./helpers/landing");
 
 const QWEN = "model-alibaba-qwen2-5-coder-0-5b";
 const DEEPSEEK = "model-deepseek-deepseek-v4-pro";
@@ -81,12 +82,12 @@ test("an imported models.dev record is unscored and opens attributed source deta
   await expect(dialog.locator(".record-link-row")).toHaveCount(0);
 });
 
-test("the Directory quick filters include Models and its complete source count", async ({ page }) => {
+test("the Directory's collections include Models and its complete source count", async ({ page }) => {
   await page.goto("/");
 
-  const quickFilter = page.getByRole("button", { name: `Models ${catalogCounts.models}`, exact: true });
-  await expect(quickFilter).toBeVisible();
-  await quickFilter.click();
+  await expect(collectionEntry(page, "models")).toBeVisible();
+  expect(await entryCount(page, "models")).toBe(catalogCounts.models);
+  await openCollection(page, "models");
   await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   await expect(page.locator("#model-result-count")).toContainText(`${catalogCounts.models} models`);

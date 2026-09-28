@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { searchAll } = require("./helpers/landing");
+const { collectionEntry, searchAll } = require("./helpers/landing");
 
 const VIEWS = ["Catalog", "Find your fit", "Concepts", "Published data"];
 
@@ -9,7 +9,7 @@ test("every view and a detail dialog render without console or page errors", asy
   page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
 
   await page.goto("/");
-  await expect(page.locator("#all-directory-result-count")).toContainText("entries");
+  await expect(collectionEntry(page, "all")).toBeVisible();
   for (const view of VIEWS) {
     if (view === "Concepts" || view === "Published data") {
       await page.locator(".docs-button").click();
@@ -29,7 +29,7 @@ test("every view and a detail dialog render without console or page errors", asy
 test("no view overflows the page horizontally at 390px", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
-  await expect(page.locator("#all-directory-result-count")).toContainText("entries");
+  await expect(collectionEntry(page, "all")).toBeVisible();
 
   const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   await page.locator(".docs-button").click();
@@ -65,7 +65,7 @@ test("the page loads without third-party runtime requests", async ({ page, baseU
   });
 
   await page.goto("/", { waitUntil: "networkidle" });
-  await expect(page.locator("#all-directory-result-count")).toContainText("entries");
+  await expect(collectionEntry(page, "all")).toBeVisible();
 
   expect(external).toEqual([]);
 });

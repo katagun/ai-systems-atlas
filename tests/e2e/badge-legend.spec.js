@@ -34,20 +34,20 @@ test("the legend lists the active scope's badges and follows the scope", async (
 });
 
 test("mixed scopes show only the families, sibling views name their own sets, and badge-less views show nothing", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/?collection=all");
   await expect(items(page)).toHaveCount(4);
   await expect(items(page).first()).toHaveText(/Type$/);
   await expect(items(page).nth(1)).toHaveText(/Control and privacy$/);
   await expect(items(page).first()).not.toContainText("What kind of record it is");
 
-  await page.locator('[data-directory-collection="models"]').click();
+  await openCollection(page, "models");
   await expect(legend(page)).toBeVisible();
   await expect(items(page)).toHaveText(names(badgeLegend("models")));
 
-  await page.locator('[data-directory-collection="specifications"]').click();
+  await openCollection(page, "specifications");
   await expect(items(page)).toHaveText(names(badgeLegend("specifications")));
 
-  await page.locator('[data-directory-collection="labs"]').click();
+  await openCollection(page, "labs");
   await expect(items(page)).toHaveText(names(badgeLegend("labs")));
 
   await page.locator('.docs-button').click();

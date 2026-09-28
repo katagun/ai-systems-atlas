@@ -164,7 +164,7 @@ test("every card in every grid and the Finder shortlist leads with exactly one t
     ["/?collection=inference", "#inference-grid"],
     ["/?collection=runtimes", "#runtime-grid"],
     ["/?collection=packs", "#pack-grid"],
-    ["/", "#all-directory-grid"],
+    ["/?collection=all", "#all-directory-grid"],
     ["/?collection=models", "#model-grid"],
     ["/?collection=specifications", "#specification-grid"],
     ["/?collection=labs", "#lab-grid"],
@@ -298,7 +298,7 @@ test("tapping an emblem toggles the tooltip and an outside tap closes it", async
   const box = await tooltip.boundingBox();
   expect(box.x).toBeGreaterThanOrEqual(0);
   expect(box.x + box.width).toBeLessThanOrEqual(390);
-  await page.locator("h1").first().tap();
+  await page.locator("#systems-directory-panel .result-row").tap();
   await expect(tooltip).toBeHidden();
   await context.close();
 });
