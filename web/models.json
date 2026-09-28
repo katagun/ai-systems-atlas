@@ -26665,7 +26665,7 @@
       "name": "Sonar",
       "developer": "Perplexity",
       "url": "https://docs.perplexity.ai/docs/sonar/models/sonar",
-      "description": "Perplexity's lightweight search release for quick grounded answers with real-time web search, served as the sonar API model with 128K context and no public weights.",
+      "description": "Perplexity's lightweight search release for quick grounded answers with real-time web search, with 128K context and no public weights, served as perplexity/sonar on the Agent API after support for the Sonar API ended on September 27, 2026.",
       "model_type": "language_model",
       "distribution_modes": [
         "developer_api"
@@ -26717,14 +26717,14 @@
           "verified_at": "2026-09-18"
         }
       ],
-      "access_boundary": "This record represents the sonar search line served through the Perplexity Sonar API, supported until September 27, 2026 with migration to the Agent API. The Pro, Reasoning Pro, and Deep Research siblings, retired Llama-based sonar names, and the Perplexity platform itself are separate boundaries.",
+      "access_boundary": "This record represents the sonar search line, served through the Perplexity Sonar API until Perplexity ended Sonar Chat Completions support on September 27, 2026, and through the Agent API as perplexity/sonar, whose model list links the same Sonar model page. The Pro, Reasoning Pro, and Deep Research siblings, retired Llama-based sonar names, the Agent API presets, and the Perplexity platform itself are separate boundaries.",
       "strengths": [
         "Dedicated first-party page pins the model with 128K context, citations, and search grounding",
-        "First-party API with SDKs and OpenAI-compatible access"
+        "Still served on the Agent API as perplexity/sonar, with first-party SDKs and OpenAI-compatible access"
       ],
       "tradeoffs": [
         "No downloadable weights exist anywhere first-party for this model",
-        "The evergreen name carries no pinnable snapshot and support ends September 27, 2026"
+        "The evergreen name carries no pinnable snapshot, and its Sonar API route lost support on September 27, 2026, leaving the Agent API as the documented path"
       ],
       "score_profile": "model_access",
       "score": {
@@ -26741,7 +26741,19 @@
           "kind": "web",
           "label": "Official Sonar model documentation with samples",
           "url": "https://docs.perplexity.ai/docs/sonar/models/sonar",
-          "verified_at": "2026-09-18"
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Official Sonar-to-Agent-API migration guide recording that Sonar Chat Completions support ended on September 27, 2026",
+          "url": "https://docs.perplexity.ai/docs/agent-api/migrate-from-sonar/overview",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Official Agent API model list naming perplexity/sonar and linking the Sonar model page",
+          "url": "https://docs.perplexity.ai/docs/agent-api/models",
+          "verified_at": "2026-09-28"
         },
         {
           "kind": "web",
@@ -26757,7 +26769,7 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-28"
     },
     {
       "id": "model-perplexity-sonar-deep-research",
@@ -26765,7 +26777,7 @@
       "name": "Sonar Deep Research",
       "developer": "Perplexity",
       "url": "https://docs.perplexity.ai/docs/sonar/models/sonar-deep-research",
-      "description": "Perplexity's exhaustive research release generating cited reports over hundreds of sources, served as the sonar-deep-research API model with 128K context and no public weights.",
+      "description": "Perplexity's exhaustive research release generating cited reports over hundreds of sources, served as the sonar-deep-research Sonar API model with 128K context and no public weights until support for that API ended on September 27, 2026.",
       "model_type": "language_model",
       "distribution_modes": [
         "developer_api"
@@ -26817,14 +26829,14 @@
           "verified_at": "2026-09-18"
         }
       ],
-      "access_boundary": "This record represents the sonar-deep-research line served through the Perplexity Sonar API with asynchronous execution and reasoning effort. Other Sonar siblings and the platform itself are separate boundaries.",
+      "access_boundary": "This record represents the sonar-deep-research line served through the Perplexity Sonar API with asynchronous execution and reasoning effort. Perplexity ended Sonar Chat Completions support on September 27, 2026: synchronous and streaming requests are being reformulated as Agent API requests, rolling out by model, asynchronous requests are no longer supported, and the Agent API lists no sonar-deep-research model, only a migration mapping to its high preset. Other Sonar siblings, the Agent API presets, and the platform itself are separate boundaries.",
       "strengths": [
         "Dedicated first-party page pins the model with citation, search-query, and reasoning billing dimensions",
-        "Asynchronous API with reasoning effort for long research runs"
+        "Documented reasoning effort trades research depth against speed and cost"
       ],
       "tradeoffs": [
         "No downloadable weights exist anywhere first-party for this model",
-        "The evergreen name carries no pinnable snapshot and support ends September 27, 2026"
+        "The evergreen name carries no pinnable snapshot, and its API support, including the asynchronous mode its long runs used, ended on September 27, 2026 with no Agent API model to succeed it, only the high preset"
       ],
       "score_profile": "model_access",
       "score": {
@@ -26841,7 +26853,19 @@
           "kind": "web",
           "label": "Official Sonar Deep Research model documentation",
           "url": "https://docs.perplexity.ai/docs/sonar/models/sonar-deep-research",
-          "verified_at": "2026-09-18"
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Official Sonar-to-Agent-API migration guide recording that Sonar Chat Completions support ended on September 27, 2026",
+          "url": "https://docs.perplexity.ai/docs/agent-api/migrate-from-sonar/overview",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Official Agent API model list, which names perplexity/sonar and no sonar-deep-research model",
+          "url": "https://docs.perplexity.ai/docs/agent-api/models",
+          "verified_at": "2026-09-28"
         },
         {
           "kind": "web",
@@ -26857,7 +26881,7 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-28"
     },
     {
       "id": "model-perplexity-sonar-pro",
@@ -26865,7 +26889,7 @@
       "name": "Sonar Pro",
       "developer": "Perplexity",
       "url": "https://docs.perplexity.ai/docs/sonar/models/sonar-pro",
-      "description": "Perplexity's advanced search release for complex multi-step questions with deeper retrieval, served as the sonar-pro API model with 200K context and no public weights.",
+      "description": "Perplexity's advanced search release for complex multi-step questions with deeper retrieval, served as the sonar-pro Sonar API model with 200K context and no public weights until support for that API ended on September 27, 2026.",
       "model_type": "language_model",
       "distribution_modes": [
         "developer_api"
@@ -26918,14 +26942,14 @@
           "verified_at": "2026-09-18"
         }
       ],
-      "access_boundary": "This record represents the sonar-pro search line served through the Perplexity Sonar API, supported until September 27, 2026. The Pro Search mode is a parameter of this model, not a separate release. Other Sonar siblings and the platform itself are separate boundaries.",
+      "access_boundary": "This record represents the sonar-pro search line served through the Perplexity Sonar API. Perplexity ended Sonar Chat Completions support on September 27, 2026: synchronous and streaming requests are being reformulated as Agent API requests, rolling out by model, and the Agent API lists no sonar-pro model, only a migration mapping to its fast preset. The Pro Search mode is a parameter of this model, not a separate release. Other Sonar siblings, the Agent API presets, and the platform itself are separate boundaries.",
       "strengths": [
         "Dedicated first-party page pins the model with 200K context and doubled search results",
         "Pro Search mode and follow-up support on the first-party API"
       ],
       "tradeoffs": [
         "No downloadable weights exist anywhere first-party for this model",
-        "The evergreen name carries no pinnable snapshot and support ends September 27, 2026"
+        "The evergreen name carries no pinnable snapshot, and its API support ended on September 27, 2026 with no Agent API model to succeed it, only the fast preset"
       ],
       "score_profile": "model_access",
       "score": {
@@ -26942,7 +26966,19 @@
           "kind": "web",
           "label": "Official Sonar Pro model documentation",
           "url": "https://docs.perplexity.ai/docs/sonar/models/sonar-pro",
-          "verified_at": "2026-09-18"
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Official Sonar-to-Agent-API migration guide recording that Sonar Chat Completions support ended on September 27, 2026",
+          "url": "https://docs.perplexity.ai/docs/agent-api/migrate-from-sonar/overview",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Official Agent API model list, which names perplexity/sonar and no sonar-pro model",
+          "url": "https://docs.perplexity.ai/docs/agent-api/models",
+          "verified_at": "2026-09-28"
         },
         {
           "kind": "web",
@@ -26958,7 +26994,7 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-28"
     },
     {
       "id": "model-perplexity-sonar-reasoning-pro",
@@ -26966,7 +27002,7 @@
       "name": "Sonar Reasoning Pro",
       "developer": "Perplexity",
       "url": "https://docs.perplexity.ai/docs/sonar/models/sonar-reasoning-pro",
-      "description": "Perplexity's chain-of-thought reasoning release for complex multi-step tasks, served as the sonar-reasoning-pro API model with 128K context and no public weights.",
+      "description": "Perplexity's chain-of-thought reasoning release for complex multi-step tasks, served as the sonar-reasoning-pro Sonar API model with 128K context and no public weights until support for that API ended on September 27, 2026.",
       "model_type": "language_model",
       "distribution_modes": [
         "developer_api"
@@ -27019,14 +27055,14 @@
           "verified_at": "2026-09-18"
         }
       ],
-      "access_boundary": "This record represents the sonar-reasoning-pro line served through the Perplexity Sonar API, the named successor of the December 2025 deprecated sonar-reasoning model. Other Sonar siblings and the platform itself are separate boundaries.",
+      "access_boundary": "This record represents the sonar-reasoning-pro line served through the Perplexity Sonar API, the named successor of the December 2025 deprecated sonar-reasoning model. Perplexity ended Sonar Chat Completions support on September 27, 2026: synchronous and streaming requests are being reformulated as Agent API requests, rolling out by model, and the Agent API lists no sonar-reasoning-pro model, only a migration mapping to its low preset. Other Sonar siblings, the Agent API presets, and the platform itself are separate boundaries.",
       "strengths": [
         "Dedicated first-party page pins the model with chain-of-thought reasoning and structured outputs",
         "Explicit predecessor-deprecation lineage on first-party docs"
       ],
       "tradeoffs": [
         "No downloadable weights exist anywhere first-party for this model",
-        "The evergreen name carries no pinnable snapshot and support ends September 27, 2026"
+        "The evergreen name carries no pinnable snapshot, and its API support ended on September 27, 2026 with no Agent API model to succeed it, only the low preset"
       ],
       "score_profile": "model_access",
       "score": {
@@ -27043,7 +27079,19 @@
           "kind": "web",
           "label": "Official Sonar Reasoning Pro model documentation",
           "url": "https://docs.perplexity.ai/docs/sonar/models/sonar-reasoning-pro",
-          "verified_at": "2026-09-18"
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Official Sonar-to-Agent-API migration guide recording that Sonar Chat Completions support ended on September 27, 2026",
+          "url": "https://docs.perplexity.ai/docs/agent-api/migrate-from-sonar/overview",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Official Agent API model list, which names perplexity/sonar and no sonar-reasoning-pro model",
+          "url": "https://docs.perplexity.ai/docs/agent-api/models",
+          "verified_at": "2026-09-28"
         },
         {
           "kind": "web",
@@ -27059,7 +27107,7 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-28"
     },
     {
       "id": "model-poolside-laguna-m-1",
