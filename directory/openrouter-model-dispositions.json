@@ -4,6 +4,36 @@
   "terms_reviewed_at": "2026-09-24",
   "dispositions": [
     {
+      "openrouter_id": "aion-labs/aion-2.0",
+      "disposition": "held",
+      "reason": "AionLabs' model page (https://www.aionlabs.ai/docs/models/) describes Aion 2.0 as \"A variant of DeepSeek V3.2 optimized for immersive roleplaying and storytelling\": a downstream fine-tune of an open base model, held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
+      "decided_at": "2026-09-28"
+    },
+    {
+      "openrouter_id": "aion-labs/aion-3.0",
+      "disposition": "excluded",
+      "reason": "AionLabs' model page (https://www.aionlabs.ai/docs/models/) describes Aion 3.0 as \"A multi-model system built on the GLM family of models\" in which \"multiple specialized models contribute to each response\": a composite serving system, not one model release.",
+      "decided_at": "2026-09-28"
+    },
+    {
+      "openrouter_id": "aion-labs/aion-3.0-mini",
+      "disposition": "excluded",
+      "reason": "AionLabs' model page (https://www.aionlabs.ai/docs/models/) describes Aion 3.0 Mini as \"A multi-model system built on the DeepSeek family of models\" in which \"multiple specialized models contribute to each response\": a composite serving system, not one model release.",
+      "decided_at": "2026-09-28"
+    },
+    {
+      "openrouter_id": "aion-labs/aion-3.5",
+      "disposition": "excluded",
+      "reason": "AionLabs' model page (https://www.aionlabs.ai/docs/models/) describes Aion 3.5 as \"A multi-model system built on the GLM family of models\" in which \"multiple specialized models contribute to each response\": a composite serving system, not one model release.",
+      "decided_at": "2026-09-28"
+    },
+    {
+      "openrouter_id": "aion-labs/aion-3.5-mini",
+      "disposition": "excluded",
+      "reason": "AionLabs' model page (https://www.aionlabs.ai/docs/models/) describes Aion 3.5 Mini as \"A multi-model system built on the GLM family of models\" in which \"multiple specialized models contribute to each response\": a composite serving system, not one model release.",
+      "decided_at": "2026-09-28"
+    },
+    {
       "openrouter_id": "aion-labs/aion-rp-llama-3.1-8b",
       "disposition": "held",
       "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
@@ -74,6 +104,12 @@
       "disposition": "excluded",
       "reason": "Experimental September 2025 checkpoint of the DeepSeek V3 line, superseded by the reviewed DeepSeek V3.2 release (deepseek/deepseek-v3.2); model-dispositions.json excludes earlier V3 checkpoints the same way.",
       "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "fireworks/ember-1",
+      "disposition": "held",
+      "reason": "Fireworks Research's post-train of Kimi K3, announced on 23 September 2026 (https://fireworks.ai/blog/ember-1) as \"a serving option alongside the base Kimi K3 model as a Research Preview release on Serverless\", with two-week access made permanent \"based on community demand\" and no weights, model page, or terms of its own. Held until Fireworks makes it a permanent release with a boundary of its own under docs/MODELS.md.",
+      "decided_at": "2026-09-28"
     },
     {
       "openrouter_id": "google/gemini-2.5-pro-preview",
