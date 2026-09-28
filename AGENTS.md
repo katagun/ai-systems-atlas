@@ -67,6 +67,6 @@ node scripts/build_asset_version.mjs
 ```
 
 The complete check list lives in [.pre-commit-config.yaml](.pre-commit-config.yaml) and runs in [verify.yml](.github/workflows/verify.yml).
-It runs on commit via pre-commit; `pre-commit run --all-files` reproduces CI exactly, browser suite included.
+The fast hooks run on commit and the unit and browser suites on push; `pre-commit run --all-files --hook-stage pre-push` reproduces CI exactly, browser suite included.
 Browser tests (`npm run test:e2e`) start their own server. An exploratory server is available with
 `uv run python scripts/serve_web.py 8765`.
