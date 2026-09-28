@@ -503,6 +503,28 @@ test("a restored query with no sort lands on Best match", async ({ page }) => {
   await expect(page.locator("#inference-sort-filter")).toHaveValue("match");
 });
 
+// Following the skip link changes only the fragment, which fires popstate;
+// nothing the URL's search carries changed, so nothing is restored.
+test("the skip link restores nothing, so a sort chosen before typing still comes back", async ({ page }) => {
+  await page.goto("/?collection=inference");
+  await page.locator("#inference-sort-filter").selectOption("name");
+  const index = page.waitForResponse(response => new URL(response.url()).pathname === "/app/search/inference.json");
+  await page.locator("#inference-search").fill("router");
+  await index;
+  await page.waitForFunction(() => searchIndexes.inference !== undefined);
+  await expect(page.locator("#inference-sort-filter")).toHaveValue("match");
+  const before = await page.locator("#inference-result-count").textContent();
+  const search = new URL(page.url()).search;
+  await page.locator(".skip-link").focus();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#main$/);
+  expect(new URL(page.url()).search).toBe(search);
+  await expect(page.locator("#inference-sort-filter")).toHaveValue("match");
+  await expect(page.locator("#inference-result-count")).toHaveText(before);
+  await page.locator("#inference-search").fill("");
+  await expect(page.locator("#inference-sort-filter")).toHaveValue("name");
+});
+
 // A sort chosen before typing is what clearing the query gives back, but
 // beside a query the URL names only a sort the reader chose since typing,
 // so a reload forgets the earlier one (BACKLOG, Phase 1 leftover).

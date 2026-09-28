@@ -1979,5 +1979,7 @@ test("a comparison names the scope before the collection parameter, and a record
   assert.equal(scope("compare=system:a,b&record=runtime:x"), "systems");
   assert.equal(scope("record=nonsense"), "all");
   assert.equal(scope("compare=constructor:a,b"), "all");
+  // A comparison without a colon names no kind, so "systemx" is not "system".
+  assert.equal(scope("compare=systemx&collection=inference"), "inference");
   assert.equal(scope("view=finder&record=system:aider"), null);
 });

@@ -295,7 +295,15 @@ function writeURL(url, { push = false } = {}) {
     if (push) window.history.pushState(null, "", url);
     else window.history.replaceState(null, "", url);
   } catch {}
+  settledSearch = window.location.search;
 }
+
+// The query string the page last restored or wrote, so the page's state
+// agrees with it. A popstate that arrives with the same one changed only the
+// fragment, as the skip link does, and has nothing to restore: a restore
+// there would reset the grid and forget in-memory state the URL cannot
+// carry, such as the sort from before a query or a Finder role set.
+let settledSearch = null;
 
 function writeDirectoryURL() {
   const url = new URL(window.location.href);
@@ -2938,11 +2946,10 @@ function closeRecordDialogs() {
 // URL is replacing. A Finder role set has no URL key yet, so it stays when
 // the URL keeps the Systems family it was applied to and names no role of
 // its own (ruling R18): a Back that changes nothing there must not widen
-// the list the Finder chose.
+// the list the Finder chose. Restoring another collection leaves it alone,
+// as a strip switch does.
 function resetScopeControls(scope, params) {
-  const keepFinderRoles = scope === "systems"
-    && (params.get("family") || "") === $("#family-filter").value
-    && !params.get("role");
+  const keepFinderRoles = (params.get("family") || "") === $("#family-filter").value && !params.get("role");
   for (const [key, selector] of Object.entries(SCOPE_CONTROLS[scope] || {})) {
     const control = $(selector);
     const fallback = AppCore.SCOPE_URL_PARAMS[scope][key] ?? "";
@@ -2952,7 +2959,7 @@ function resetScopeControls(scope, params) {
   state.page[scope] = 1;
   delete sortBeforeQuery[scope];
   sortChosenDuringQuery[scope] = false;
-  if (!keepFinderRoles) {
+  if (scope === "systems" && !keepFinderRoles) {
     state.directoryRoles = null;
     state.directoryRolesLabel = null;
   }
@@ -3022,6 +3029,7 @@ function restoreFromURL({ boot = false } = {}) {
   // only the selection. It opens last, since its loading notice lives in the
   // tray, which the view switch above repaints.
   if (boot && comparisonRestored) openComparison();
+  settledSearch = window.location.search;
 }
 
 // The share link is the record's static preview page, which carries its own
@@ -3619,7 +3627,7 @@ function bindEvents() {
   $("#lab-dialog .dialog-close").addEventListener("click", () => $("#lab-dialog").close());
   $("#lab-dialog").addEventListener("click", event => { if (event.target === $("#lab-dialog")) $("#lab-dialog").close(); });
   RECORD_DIALOG_SELECTORS.forEach(selector => $(selector).addEventListener("close", clearRecordURL));
-  window.addEventListener("popstate", () => restoreFromURL());
+  window.addEventListener("popstate", () => { if (window.location.search !== settledSearch) restoreFromURL(); });
   document.addEventListener("click", event => {
     const button = event.target.closest("[data-copy-record-link]");
     if (button) copyRecordLink(button);

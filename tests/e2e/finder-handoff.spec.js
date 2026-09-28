@@ -203,4 +203,24 @@ test("Back after closing a record keeps the Finder's role set", async ({ page })
   await expect(page.locator("#result-count")).toContainText("Finder match");
   await expect(page.locator("#result-count")).toHaveText(before);
   await expect(page.locator('#scope-strip [data-open-collection="systems"] .state-dot.is-finder')).toHaveCount(1);
+
+  // A Back inside another collection leaves Systems alone, as a strip switch
+  // does. The Systems strip entry clears the family by design, so the way
+  // back into Systems is Back to the entry the Finder landed on.
+  await page.locator("#project-grid [data-project]").first().click();
+  await page.locator("#project-dialog .dialog-close").click();
+  await expect(page.locator("#project-dialog")).toBeHidden();
+  await page.locator('#scope-strip [data-open-collection="inference"]').click();
+  await page.locator("#inference-grid [data-inference-service]").first().click();
+  await expect(page.locator("#inference-dialog")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#inference-dialog")).toBeHidden();
+  await expect(page.locator("#inference-directory-panel")).toBeVisible();
+  await expect(page.locator('#scope-strip [data-open-collection="systems"] .state-dot.is-finder')).toHaveCount(1);
+  await page.goBack();
+  await expect(page.locator("#systems-directory-panel")).toBeVisible();
+  await expect(page.locator("#finder-roles-chip")).toBeVisible();
+  await expect(page.locator("#result-count")).toContainText("Finder match");
+  await expect(page.locator("#result-count")).toHaveText(before);
+  await expect(page.locator('#scope-strip [data-open-collection="systems"] .state-dot.is-finder')).toHaveCount(1);
 });

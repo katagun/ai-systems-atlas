@@ -858,16 +858,18 @@
     if (["models", "labs", "specifications"].includes(view)) return view;
     if (view && view !== "directory") return null;
     // The kind comes from the URL, so it is looked up as an own key only, as
-    // record kinds are: "constructor" must not resolve.
+    // record kinds are: "constructor" must not resolve. Without a colon a
+    // comparison names no kind.
     const compare = params.get("compare") || "";
-    const kind = compare.slice(0, compare.indexOf(":"));
+    const colon = compare.indexOf(":");
+    const kind = colon > 0 ? compare.slice(0, colon) : "";
     if (Object.hasOwn(COMPARISON_COLLECTIONS, kind)) return COMPARISON_COLLECTIONS[kind];
     if (params.has("collection")) {
       const collection = params.get("collection");
       return ["systems", "inference", "runtimes", "packs", "robots", "models", "labs", "specifications"].includes(collection) ? collection : "all";
     }
     const record = parseRecordReference(params.get("record"));
-    return record ? RECORD_COLLECTIONS[record.kind] : "all";
+    return record ? RECORD_COLLECTIONS[record.kind] ?? "all" : "all";
   }
 
   function paginate(items, { page = 1, pageSize } = {}) {
