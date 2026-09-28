@@ -301,16 +301,11 @@ def load_posts(root: Path = ROOT) -> list[dict[str, Any]]:
 
 
 # The main page's header, reproduced as static markup. The entries mirror
-# web/index.html's primary navigation in order: the Catalog home link (in
-# render_header), Find your fit, one link per collection the Directory
-# switcher names, then the Docs menu. Each entry is (url kind, slug, label);
-# the blog's links reach the app through the query parameter the app restores
+# web/index.html's primary navigation exactly: the Catalog home link and
+# Find your fit as plain links, then a Docs menu holding the explanatory
+# views and the blog itself. Each entry is (url kind, slug, label); the
+# blog's links reach the app through the query parameter the app restores
 # on load. The theme control is driven by THEME_SCRIPT.
-COLLECTIONS = (
-    ("collection", "models", "Models"),
-    ("collection", "labs", "Labs"),
-    ("collection", "specifications", "Specifications"),
-)
 DOCS = (
     ("view", "taxonomy", "Concepts"),
     ("view", "api", "Published data"),
@@ -390,15 +385,11 @@ def render_header(root: str, blog: str) -> str:
     """The site header for a page whose path to the site root is ``root``.
 
     It mirrors web/index.html's primary navigation item for item — Catalog,
-    Find your fit, the collections, then a Docs menu — so the two headers
-    cannot drift apart; tests/test_blog.py pins the parity. The Docs menu
-    is a native disclosure here because a blog page loads no application
-    script; the shared styles in web/styles.css render it like the app's.
+    Find your fit, then a Docs menu — so the two headers cannot drift
+    apart; tests/test_blog.py pins the parity. The Docs menu is a native
+    disclosure here because a blog page loads no application script; the
+    shared styles in web/styles.css render it like the app's.
     """
-    links = "".join(
-        f'<a class="tab-link" href="{root}?{kind}={slug}">{label}</a>'
-        for kind, slug, label in COLLECTIONS
-    )
     docs = "".join(
         f'<li><a href="{root}?{kind}={slug}">{label}</a></li>'
         for kind, slug, label in DOCS
@@ -414,7 +405,6 @@ def render_header(root: str, blog: str) -> str:
         '<nav class="tabs" aria-label="Primary navigation">'
         f'<a class="tab-link" href="{root}">Catalog</a>'
         f'<a class="tab-link" href="{root}?view=finder">Find your fit</a>'
-        f"{links}"
         '<details class="docs-menu">'
         '<summary class="tab-link">Docs</summary>'
         f'<ul class="docs-menu-list">{docs}'
