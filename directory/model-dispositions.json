@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-22",
+  "updated_at": "2026-09-28",
   "dispositions": [
     {
       "source_id": "alibaba/qwen3.8-2.4t-a95b",
@@ -263,7 +263,7 @@
     {
       "source_id": "alibaba/qwen-plus",
       "disposition": "excluded",
-      "reason": "Undated Plus API head rolling across dated snapshots (currently qwen-plus-2025-07-28, with qwen-plus-latest as the explicit floater). Excluded as a serving-tier alias: undated API head that moves between dated snapshots with no weight repository under its own name in the Qwen org.",
+      "reason": "Undated Plus API head rolling across dated snapshots (as of 2026-09-28 functionally equivalent to qwen-plus-2025-12-01, with qwen-plus-latest as the explicit floater); the line is reviewed at that snapshot as model-alibaba-qwen-plus-2025-12-01. Excluded as a serving-tier alias: undated API head that moves between dated snapshots with no weight repository under its own name in the Qwen org.",
       "decided_at": "2026-09-16"
     },
     {
@@ -293,7 +293,7 @@
     {
       "source_id": "alibaba/qwen3-max",
       "disposition": "excluded",
-      "reason": "Undated Qwen3-Max line head that moved from qwen3-max-2025-09-23 to qwen3-max-2026-01-23; a future line record anchors at the pinned snapshot, not this head. Excluded as a serving-tier alias: undated API head that moves between dated snapshots with no weight repository under its own name in the Qwen org.",
+      "reason": "Undated Qwen3-Max line head that moved from qwen3-max-2025-09-23 to qwen3-max-2026-01-23; the line is reviewed at that pinned snapshot as model-alibaba-qwen3-max-2026-01-23, not at this head. Excluded as a serving-tier alias: undated API head that moves between dated snapshots with no weight repository under its own name in the Qwen org.",
       "decided_at": "2026-09-16"
     },
     {
@@ -317,13 +317,13 @@
     {
       "source_id": "alibaba/qwen3.5-flash",
       "disposition": "excluded",
-      "reason": "Undated 3.5-Flash API head functionally equivalent to snapshot qwen3.5-flash-2026-02-23. Excluded as a serving-tier alias: undated API head that moves between dated snapshots with no weight repository under its own name in the Qwen org.",
+      "reason": "Undated 3.5-Flash API head functionally equivalent to snapshot qwen3.5-flash-2026-02-23; the line is reviewed at that snapshot as model-alibaba-qwen3-5-flash-2026-02-23. Excluded as a serving-tier alias: undated API head that moves between dated snapshots with no weight repository under its own name in the Qwen org.",
       "decided_at": "2026-09-16"
     },
     {
       "source_id": "alibaba/qwen3.5-plus",
       "disposition": "excluded",
-      "reason": "Undated 3.5-Plus API head that moved from qwen3.5-plus-2026-02-15 to qwen3.5-plus-2026-04-20. Excluded as a serving-tier alias: undated API head that moves between dated snapshots with no weight repository under its own name in the Qwen org.",
+      "reason": "Undated 3.5-Plus API head that, as of 2026-09-28, still resolves to snapshot qwen3.5-plus-2026-02-15 although Alibaba serves the newer qwen3.5-plus-2026-04-20; the line is reviewed at that newest snapshot as model-alibaba-qwen3-5-plus-2026-04-20. Excluded as a serving-tier alias: undated API head that moves between dated snapshots with no weight repository under its own name in the Qwen org.",
       "decided_at": "2026-09-16"
     },
     {
