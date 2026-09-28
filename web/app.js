@@ -195,9 +195,10 @@ async function bootstrap() {
   populateModelLabFilter();
   const scope = AtlasCore.scopeFromURL(new URL(window.location.href).searchParams);
   const restored = restoreScopeFromURL(scope);
-  // A shared or typed link with a query lists by match, as the sender saw it,
-  // unless it names a sort, which the reader chose, so typing keeps it too
-  // (ruling R-P1-2). A sort the scope cannot take was removed, as unnamed.
+  // Beside a query, the URL names every sort but Best match (scopeURLParams,
+  // rulings R-P1-2 and R-P1-2b). So a link with a query and no sort lists by
+  // match, and a sort it names is one the reader chose, which typing keeps.
+  // A sort the scope cannot take was removed on restore, so it counts as none.
   if (restored.q?.trim()) {
     if (restored.sort === undefined) syncMatchSort(scope);
     else sortChosenDuringQuery[scope] = true;

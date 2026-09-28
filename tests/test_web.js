@@ -1443,13 +1443,29 @@ test("each switcher chip counts what its scope lists by default", () => {
 });
 
 test("a scope writes only the parameters that differ from their defaults, in a fixed order", () => {
+  // Beside a query, Name is a sort the reader chose (ruling R-P1-2b).
   assert.deepEqual(
     scopeURLParams("systems", { q: "graph", family: "memory_system", role: "", status: "active", localOnly: "", sort: "name" }),
-    [["q", "graph"], ["family", "memory_system"]],
+    [["q", "graph"], ["family", "memory_system"], ["sort", "name"]],
   );
   assert.deepEqual(scopeURLParams("systems", { status: "", localOnly: "1", sort: "score" }), [["status", ""], ["localOnly", "1"], ["sort", "score"]]);
   assert.deepEqual(scopeURLParams("inference", { type: "direct_model_api", sort: "score" }), [["type", "direct_model_api"]]);
   assert.deepEqual(scopeURLParams("nowhere", { q: "x" }), []);
+});
+
+// Ruling R-P1-2b: while a query is present, Best match is the sort a URL
+// leaves out, so a reload or a shared link keeps any other sort the reader
+// chose, the browsing default included.
+test("while a query is present, a URL leaves out Best match and names any other sort", () => {
+  assert.deepEqual(scopeURLParams("inference", { q: "api", sort: "match" }), [["q", "api"]]);
+  assert.deepEqual(scopeURLParams("inference", { q: "api", sort: "score" }), [["q", "api"], ["sort", "score"]]);
+  assert.deepEqual(scopeURLParams("runtimes", { q: "api", sort: "score" }), [["q", "api"], ["sort", "score"]]);
+  assert.deepEqual(scopeURLParams("models", { q: "api", sort: "score" }), [["q", "api"], ["sort", "score"]]);
+  assert.deepEqual(scopeURLParams("systems", { q: "coding agent", sort: "name" }), [["q", "coding agent"], ["sort", "name"]]);
+  // Browsing keeps each scope's own default, and a query of spaces is none.
+  assert.deepEqual(scopeURLParams("inference", { q: "", sort: "score" }), []);
+  assert.deepEqual(scopeURLParams("inference", { q: "", sort: "match" }), [["sort", "match"]]);
+  assert.deepEqual(scopeURLParams("inference", { q: "  ", sort: "score" }), [["q", "  "]]);
 });
 
 test("restoring a scope keeps what its controls offer and rejects the rest", () => {

@@ -631,7 +631,8 @@
   // ones the scope's filter already reads — directoryDefaults() for Systems,
   // the view descriptors' facets elsewhere — so a parameter means the same in
   // the URL and in the code; `q` is the scope's query. A value equal to its
-  // default is never written.
+  // default is never written, and while a query is present a sort's default
+  // is Best match (scopeURLParams).
   const SCOPE_URL_PARAMS = {
     all: { q: "" },
     systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name" },
@@ -645,9 +646,15 @@
   };
   const SCOPE_URL_KEYS = [...new Set(Object.values(SCOPE_URL_PARAMS).flatMap(Object.keys)), "page"];
 
+  // A query lists by Best match unless the reader chose another sort, so
+  // while one is present the URL leaves out "match" and names any other sort,
+  // the browsing default included. A reload or a shared link then restores
+  // the sort the reader chose (ruling R-P1-2b).
   function scopeURLParams(scope, values = {}) {
+    const searching = String(values.q ?? "").trim() !== "";
     return Object.entries(SCOPE_URL_PARAMS[scope] || {})
-      .filter(([key, fallback]) => values[key] !== undefined && String(values[key]) !== fallback)
+      .filter(([key, fallback]) => values[key] !== undefined
+        && String(values[key]) !== (key === "sort" && searching ? "match" : fallback))
       .map(([key]) => [key, String(values[key])]);
   }
 

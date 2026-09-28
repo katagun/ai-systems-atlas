@@ -118,6 +118,42 @@ test("a sort the link names is kept while the reader types", async ({ page }) =>
   await expect(page.locator("#sort-filter")).toHaveValue("name");
 });
 
+// Each scope with a Sort control, and its sort while browsing.
+const BROWSING_SORTS = [
+  ["/?collection=systems", "#project-search", "#sort-filter", "name"],
+  ["/?collection=inference", "#inference-search", "#inference-sort-filter", "score"],
+  ["/?collection=runtimes", "#runtime-search", "#runtime-sort-filter", "score"],
+  ["/?view=models", "#model-search", "#model-sort-filter", "score"],
+];
+
+test("the browsing sort chosen during a query survives a reload", async ({ page }) => {
+  for (const [url, search, sort, browsing] of BROWSING_SORTS) {
+    await page.goto(url);
+    await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
+    await page.locator(search).fill("api");
+    await expect(page.locator(sort)).toHaveValue("match");
+    await page.locator(sort).selectOption(browsing);
+    await page.reload();
+    await expect(page.locator(search)).toHaveValue("api");
+    await expect(page.locator(sort), `${sort} keeps ${browsing} across a reload`).toHaveValue(browsing);
+    await expect(page).toHaveURL(address => address.searchParams.get("sort") === browsing);
+  }
+});
+
+test("Best match left in place during a query returns after a reload, and the URL names no sort", async ({ page }) => {
+  for (const [url, search, sort] of BROWSING_SORTS) {
+    await page.goto(url);
+    await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
+    await page.locator(search).fill("api");
+    await expect(page.locator(sort)).toHaveValue("match");
+    await page.reload();
+    await expect(page.locator(search)).toHaveValue("api");
+    await expect(page.locator(sort)).toHaveValue("match");
+    await expect(page, `${url} with a query leaves Best match out of the URL`)
+      .toHaveURL(address => address.searchParams.get("q") === "api" && !address.searchParams.has("sort"));
+  }
+});
+
 test("Clear filters ends the query, so the next query selects Best match again", async ({ page }) => {
   for (const [url, search, sort, clear, chosen, fallback] of [
     ["/?collection=systems", "#project-search", "#sort-filter", "#reset-filters", "stars", "name"],
