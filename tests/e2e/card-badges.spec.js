@@ -2,6 +2,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { cardBadgeGlossary, cardBadges, BADGE_FAMILIES } = require("../../web/app-core.js");
+const { searchAll } = require("./helpers/landing");
 
 // Expectations come from the same published files and resolver the page uses,
 // and each fixture asserts the property it was chosen for, so a data change
@@ -104,11 +105,11 @@ test("a record shows the same badges in its collection grid and in All", async (
   expect(runtimeBadges.length).toBeGreaterThan(0);
 
   await page.goto("/");
-  await page.locator("#all-directory-search").fill(openclaw.name);
+  await searchAll(page, openclaw.name);
   await expect(page.locator('#all-directory-grid .project-card:has([data-project="openclaw"]) .card-badge'))
     .toHaveText(namePatterns(cardBadges("system", openclaw)));
 
-  await page.locator("#all-directory-search").fill(ollama.name);
+  await searchAll(page, ollama.name);
   await expect(page.locator('#all-directory-grid .project-card:has([data-local-runtime="ollama"]) .card-badge'))
     .toHaveText(namePatterns(runtimeBadges));
 
@@ -198,7 +199,7 @@ test("a reviewed-model card shows the same badges in the Models grid and in the 
   const expected = cardBadges("model", reviewedModel);
 
   await page.goto("/");
-  await page.locator("#all-directory-search").fill(reviewedModel.name);
+  await searchAll(page, reviewedModel.name);
   const mixedCard = page.locator(`#all-directory-grid .project-card:has([data-model="${reviewedModel.id}"])`);
   await expect(mixedCard.locator(".role-badge")).toHaveCount(0);
   await expect(mixedCard.locator(".card-badge")).toHaveText(namePatterns(expected));
@@ -258,6 +259,10 @@ test("hovering an emblem explains it and Escape dismisses it", async ({ page }) 
     });
     check();
   }));
+  // Where the pointer comes to rest: the hover aims at the emblem's centre
+  // before the card lifts.
+  const box = await emblem.boundingBox();
+  const rest = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
   await emblem.hover();
   await expect(tooltip).toBeVisible();
   // The first emblem is the card's type badge, so the tooltip names the Type family.
@@ -268,34 +273,17 @@ test("hovering an emblem explains it and Escape dismisses it", async ({ page }) 
   await expect(tooltip).toHaveAttribute("aria-hidden", "true");
   await page.keyboard.press("Escape");
   await expect(tooltip).toBeHidden();
+  // The card's 4px hover lift slides its emblem under the resting pointer,
+  // and a repaint or a clamped scroll does the same. Each hands the emblem a
+  // fresh pointerover at the resting spot, which is how Linux CI saw the
+  // tooltip return after Escape. The dismissal survives it, and only a real
+  // move reopens it.
+  await emblem.dispatchEvent("pointerover", { bubbles: true, pointerType: "mouse", clientX: rest.x, clientY: rest.y });
+  await expect(tooltip).toBeHidden();
+  await emblem.dispatchEvent("pointerover", { bubbles: true, pointerType: "mouse", clientX: rest.x + 6, clientY: rest.y });
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip.locator(".badge-tooltip-name")).toHaveText(first.name);
   await expect(page.locator("#project-search")).toHaveValue(openclaw.name);
-});
-
-test("moving between one emblem's shapes does not reopen a tooltip Escape dismissed", async ({ page }) => {
-  // After Escape, Chromium can re-hit-test a pointer that has not moved and
-  // send an over from the emblem's frame to one of its glyph's shapes. That is
-  // not entering the emblem, so the tooltip must stay dismissed. Dispatching the
-  // sequence directly pins the rule without the timing the hover test above
-  // depends on.
-  await page.goto("/?collection=systems");
-  await page.locator("#project-search").fill(openclaw.name);
-  const emblem = page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first();
-  await expect(emblem).toBeVisible();
-  const states = await emblem.evaluate(badge => {
-    const tooltip = document.querySelector("#badge-tooltip");
-    const frame = badge.querySelector(".badge-frame");
-    const shape = badge.querySelector(".badge-glyph > *");
-    const over = (target, relatedTarget) => target.dispatchEvent(
-      new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse", relatedTarget }),
-    );
-    over(frame, null);
-    const shown = !tooltip.hidden;
-    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
-    const dismissed = tooltip.hidden;
-    over(shape, frame);
-    return { shown, dismissed, reopened: !tooltip.hidden };
-  });
-  expect(states).toEqual({ shown: true, dismissed: true, reopened: false });
 });
 
 test("tapping an emblem toggles the tooltip and an outside tap closes it", async ({ browser }) => {

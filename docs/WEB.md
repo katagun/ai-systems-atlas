@@ -46,7 +46,7 @@ Every other badge is a **trait badge**. Each tests one reviewed field for presen
 
 Badges render as icon-only emblems rather than text chips. Each badge has exactly one `family` in `BADGE_FAMILIES` in `web/app-core.js`: Type (a circle frame in the neutral `--slate-ink`, so the kind reads apart from the coloured traits), Control and privacy (a shield frame, `--cyan`), Capabilities (a hexagon frame, `--violet`), and Platform and hardware (a rounded-square frame, `--amber`). The family decides the emblem's frame shape and accent colour; `styles.css` colours a family's emblems through its `[data-family]` selector rather than a literal. One glyph maps to exactly one badge id: glyphs are hand-drawn 1.5-unit strokes on a shared 32-unit viewBox, and the three accelerator badges are lettered `MTL`, `ROC`, and `NPU` instead of being drawn or borrowed from a vendor mark.
 
-Badges are not controls and take no tab stop. Each still carries its name and definition in visually hidden text beside the emblem, so a screen reader announces it once. One shared tooltip, `#badge-tooltip`, is `aria-hidden` and pointer-only: it shows the badge's family, name, and definition, opens on hover and on tap, and closes on Escape, on scroll, on an outside tap, or when the pointer leaves. There is no `title` attribute on a badge. Emblems sit above the card's own click target, so a tap on an emblem opens only its tooltip.
+Badges are not controls and take no tab stop. Each still carries its name and definition in visually hidden text beside the emblem, so a screen reader announces it once. One shared tooltip, `#badge-tooltip`, is `aria-hidden` and pointer-only: it shows the badge's family, name, and definition, opens on hover and on tap, and closes on Escape, on scroll, on an outside tap, or when the pointer leaves. Once Escape closes it, it stays closed until the pointer moves, so a repaint or a scroll under a resting pointer never brings it back. There is no `title` attribute on a badge. Emblems sit above the card's own click target, so a tap on an emblem opens only its tooltip.
 
 A legend strip fixed to the bottom of the viewport names the active scope's emblems, type badges first:
 
@@ -163,6 +163,7 @@ Cards paint from the boot payload, so any field a badge tests must be in `BOOT_F
 | robot filters, cards, and detail dialog | `web/app-core.js` `ROBOT_VIEW` and `filterRobots`, `web/app.js` `robotCard` and `robotDialogMarkup` |
 | static structure and controls | `web/index.html` |
 | names and definitions | `directory/taxonomy.json` |
+| landing navigation in browser tests | `tests/e2e/helpers/landing.js`; no spec reaches a collection, a family, a view, or the mixed search by its own selector |
 
 Prefer taxonomy-driven labels. Keep HTML escaping at every data-to-markup boundary.
 

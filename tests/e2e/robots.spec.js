@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
+const { collectionEntry, openCollection, searchAll } = require("./helpers/landing");
 
 const ROBOTS = [
   { id: "g-one", name: "G One", manufacturer: "Unibot", url: "https://unibot.example/g-one", description: "A compact humanoid.", form_factor: "humanoid", ai_basis: ["vendor_named_model", "open_model_interface"], availability: "orderable", status: "active" },
@@ -41,8 +42,8 @@ test("the robots entry stays out of the navigation while the collection is empty
   await withEmptyRobots(page);
   await page.goto("/");
   // toBeHidden also passes for an element that does not exist, so pin its presence first.
-  await expect(page.locator('[data-directory-collection="robots"]')).toHaveCount(1);
-  await expect(page.locator('[data-directory-collection="robots"]')).toBeHidden();
+  await expect(collectionEntry(page, "robots")).toHaveCount(1);
+  await expect(collectionEntry(page, "robots")).toBeHidden();
   await expect(page.locator("#all-collection-count")).toHaveText(String(catalogCounts.allDirectoryEntries - catalogCounts.robots));
 });
 
@@ -135,7 +136,7 @@ test("a robot with a named-model basis also reads as an em dash before its detai
 test("mixed browsing surfaces robots without scores or comparison", async ({ page }) => {
   await withRobots(page);
   await page.goto("/");
-  await page.locator("#all-directory-search").fill("rover");
+  await searchAll(page, "rover");
   const card = page.locator('#all-directory-grid .robot-card:has([data-robot="rover"])');
   await expect(card).toHaveCount(1);
   await expect(card.locator(".family-label")).toContainText("Robot · Quadruped");
@@ -166,7 +167,7 @@ test("syncing the switcher on a phone never scrolls the page vertically", async 
   await page.goto("/?collection=robots");
   await expect(page.getByRole("button", { name: "Robots 2" })).toBeInViewport();
   const before = await page.evaluate(() => window.scrollY);
-  await page.getByRole("button", { name: /^All/ }).click();
+  await openCollection(page, "all");
   await page.getByRole("button", { name: "Robots 2" }).click();
   const after = await page.evaluate(() => window.scrollY);
   expect(after).toBe(before);
