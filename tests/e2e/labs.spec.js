@@ -2,9 +2,10 @@ const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
 
 test("Labs lists every lab by name and filters by type, headquarters, and release distribution", async ({ page }) => {
-  await page.goto("/?view=labs");
+  await page.goto("/?collection=labs");
 
-  await expect(page.locator('.tab[data-tab="labs"]')).toHaveClass(/is-active/);
+  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(page.locator("#labs-directory-panel")).not.toHaveAttribute("hidden");
   await expect(page.locator("#labs-kicker")).toHaveText(
     `${catalogCounts.labs} labs · developers of ${catalogCounts.labCoveredModels} of ${catalogCounts.reviewedModels} reviewed releases`,
   );
@@ -35,7 +36,7 @@ test("Labs lists every lab by name and filters by type, headquarters, and releas
 });
 
 test("a lab dialog joins the records that name the lab and browses its releases in Models", async ({ page }) => {
-  await page.goto("/?view=labs");
+  await page.goto("/?collection=labs");
   await page.locator('#lab-grid [data-lab="lab-anthropic"]').click();
 
   const dialog = page.locator("#lab-dialog-content");
@@ -51,7 +52,8 @@ test("a lab dialog joins the records that name the lab and browses its releases 
 
   // Models continues the dialog's newest-first list instead of the score order.
   await dialog.locator('[data-browse-lab-models="lab-anthropic"]').click();
-  await expect(page.locator('.tab[data-tab="models"]')).toHaveClass(/is-active/);
+  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   await expect(page.locator("#model-lab-filter")).toHaveValue("lab-anthropic");
   await expect(page.locator("#model-sort-filter")).toHaveValue("release");
   await page.locator('#model-pager select[aria-label="Results per page"]').selectOption("96");
@@ -67,7 +69,7 @@ test("a lab dialog joins the records that name the lab and browses its releases 
 test("a lab dialog fits a phone screen with its longest channel URL and name", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   for (const id of [catalogCounts.labIdWithLongestChannel, catalogCounts.labIdWithLongestNameWord]) {
-    await page.goto(`/?view=labs&record=lab:${id}`);
+    await page.goto(`/?collection=labs&record=lab:${id}`);
     const dialog = page.locator("#lab-dialog");
     // Channels are detail-only; measure once they have painted.
     await expect(dialog.locator(".lab-channel-link").first()).toBeVisible();
@@ -76,7 +78,7 @@ test("a lab dialog fits a phone screen with its longest channel URL and name", a
 });
 
 test("a model dialog links to the lab that developed the release", async ({ page }) => {
-  await page.goto("/?view=models&record=model:model-deepseek-deepseek-v4-pro");
+  await page.goto("/?collection=models&record=model:model-deepseek-deepseek-v4-pro");
   await expect(page.locator("#model-dialog-content h1")).toHaveText("DeepSeek V4 Pro");
 
   await page.locator('#model-dialog-content [data-open-lab="lab-deepseek"]').click();

@@ -302,14 +302,15 @@ def load_posts(root: Path = ROOT) -> list[dict[str, Any]]:
 
 # The main page's header, reproduced as static markup. Its view tabs are buttons that
 # app.js wires up; here they are links to the same views through the `view` query
-# parameter the app restores on load. The theme control is driven by THEME_SCRIPT.
+# parameter the app restores on load, or to unified-catalog collections through
+# the `collection` query parameter. The theme control is driven by THEME_SCRIPT.
 VIEWS = (
-    ("finder", "Finder"),
-    ("models", "Models"),
-    ("labs", "Labs"),
-    ("specifications", "Specifications"),
-    ("taxonomy", "Taxonomy"),
-    ("api", "API"),
+    ("view", "finder", "Find your fit"),
+    ("collection", "models", "Models"),
+    ("collection", "labs", "Labs"),
+    ("collection", "specifications", "Specifications"),
+    ("view", "taxonomy", "Concepts"),
+    ("view", "api", "Published data"),
 )
 REPOSITORY = "https://github.com/katagun/ai-systems-atlas"
 GITHUB_ICON = (
@@ -385,8 +386,8 @@ def asset_versions(root: Path) -> dict[str, str]:
 def render_header(root: str, blog: str) -> str:
     """The site header for a page whose path to the site root is ``root``."""
     views = "".join(
-        f'<a class="tab-link" href="{root}?view={view}">{label}</a>'
-        for view, label in VIEWS
+        f'<a class="tab-link" href="{root}?{kind}={slug}">{label}</a>'
+        for kind, slug, label in VIEWS
     )
     return (
         '<a class="skip-link" href="#main">Skip to content</a>\n'
@@ -397,7 +398,7 @@ def render_header(root: str, blog: str) -> str:
         '<span class="wm-ceful">ceful</span><span class="wm-coexist">coexist</span><span class="wm-nce">nce</span></span>'
         f"</strong><small>{SITE_TAGLINE}</small></a></div>\n"
         '<nav class="tabs" aria-label="Primary navigation">'
-        f'<a class="tab-link" href="{root}">Directory</a>{views}'
+        f'<a class="tab-link" href="{root}">Catalog</a>{views}'
         f'<a class="tab-link is-active" aria-current="page" href="{blog}">Blog</a></nav>\n'
         '<div class="header-tools">'
         f'<a class="suggest-link" href="{REPOSITORY}/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a>'

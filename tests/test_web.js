@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -887,8 +887,8 @@ test("the app does not disable the HTTP cache it just earned a content hash for"
 
 test("the primary navigation links to the blog, so it is found by scanning the nav", () => {
   const html = indexHTML();
-  assert.match(html, /<a class="tab-link" href="blog\/">Blog<\/a>/,
-    "index.html should link to blog/ from the primary tab row");
+  assert.match(html, /<nav class="tabs" aria-label="Primary navigation">[\s\S]*?href="blog\/">Blog<\/a>/,
+    "index.html should link to blog/ from the primary navigation");
 });
 
 test("the GitHub link is an icon with an accessible name rather than visible text", () => {
@@ -1011,6 +1011,23 @@ test("every primary navigation tab is addressable as a view parameter", () => {
   const tabs = [...html.matchAll(/class="tab[^"]*" data-tab="([a-z-]+)"/g)].map(m => m[1]);
   assert.ok(tabs.length > 0, "index.html has no primary navigation tabs");
   for (const tab of tabs) assert.equal(parseViewId(tab), tab, `${tab} is a tab but not an addressable view`);
+  for (const view of ["taxonomy", "api"]) {
+    assert.match(html, new RegExp(`data-open-view="${view}"`), `${view} is reachable through the Docs menu`);
+    assert.equal(parseViewId(view), view, `${view} is a Docs item but not an addressable view`);
+  }
+});
+
+test("legacy sibling-view URLs resolve to their unified collection", () => {
+  assert.equal(parseViewAlias("models"), "models");
+  assert.equal(parseViewAlias("labs"), "labs");
+  assert.equal(parseViewAlias("specifications"), "specifications");
+  assert.equal(parseViewAlias("directory"), null);
+  assert.equal(parseViewAlias("taxonomy"), null);
+  assert.equal(parseViewAlias("constructor"), null);
+  assert.equal(scopeFromURL(new URLSearchParams("view=models")), "models");
+  assert.equal(scopeFromURL(new URLSearchParams("collection=models")), "models");
+  assert.equal(scopeFromURL(new URLSearchParams("collection=labs")), "labs");
+  assert.equal(scopeFromURL(new URLSearchParams("collection=specifications")), "specifications");
 });
 
 test("an unknown or malformed view parameter resolves to no view", () => {
@@ -1439,6 +1456,8 @@ test("each switcher chip counts what its scope lists by default", () => {
     models: 3,
     packs: 1 + 1,
     robots: 4,
+    labs: 0,
+    specifications: 0,
   });
 });
 

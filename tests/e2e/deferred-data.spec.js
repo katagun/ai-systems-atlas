@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { allSearch, searchAll } = require("./helpers/landing");
 
 // The card marks and the reviewed license evidence are the two largest files
 // the page can load, and neither is needed to render the directory. These
@@ -89,7 +90,7 @@ test("focusing search loads the index and widens the results", async ({ page }) 
 test("focusing common Directory search loads all four collection indexes", async ({ page }) => {
   const requested = dataRequests(page);
   await page.goto("/");
-  await page.locator("#all-directory-search").focus();
+  await allSearch(page).focus();
 
   for (const collection of ["systems", "inference", "runtimes", "models"]) {
     await expect.poll(() => requested.filter(path => path.endsWith(`/app/search/${collection}.json`)).length).toBe(1);
@@ -97,7 +98,7 @@ test("focusing common Directory search loads all four collection indexes", async
 
   // "retirement" is detail-only reviewed prose and reaches the mixed view
   // solely through the model search index.
-  await page.locator("#all-directory-search").fill("retirement");
+  await searchAll(page, "retirement");
   await expect(page.locator('#all-directory-grid [data-model="model-anthropic-claude-sonnet-4-6"]')).toBeVisible();
 });
 
@@ -137,7 +138,7 @@ test("a model comparison opens degraded, and bounded, when detail never arrives"
   page.on("pageerror", error => errors.push(error.message));
   let detailRequests = 0;
   await page.route("**/app/detail/**", route => { detailRequests += 1; route.abort(); });
-  await page.goto("/?view=models&compare=model:model-anthropic-claude-sonnet-4-6,model-alibaba-qwen3-235b-a22b-instruct-2507");
+  await page.goto("/?collection=models&compare=model:model-anthropic-claude-sonnet-4-6,model-alibaba-qwen3-235b-a22b-instruct-2507");
 
   const table = page.locator(".comparison-table");
   await expect(table).toBeVisible();
@@ -298,7 +299,7 @@ test("a model dialog degrades to dashes when its detail never arrives", async ({
 
 test("focusing the model search loads the models index and widens the results", async ({ page }) => {
   const requested = dataRequests(page);
-  await page.goto("/?view=models");
+  await page.goto("/?collection=models");
   await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
   expect(requested.filter(path => path.includes("/app/search/"))).toHaveLength(0);
 
