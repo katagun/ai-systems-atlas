@@ -391,7 +391,7 @@ def render_header(root: str, blog: str) -> str:
     return (
         '<a class="skip-link" href="#main">Skip to content</a>\n'
         '<header class="site-header">\n'
-        f'<div class="brand"><a href="{root}"><strong class="wordmark">'
+        f'<div class="brand"><a class="brand-link" href="{root}" aria-label="{SITE_NAME} — home"><strong class="wordmark">'
         f'<span class="wordmark-name">{SITE_NAME}</span>'
         '<span class="wordmark-art" aria-hidden="true"><span class="wm-pe">pe</span><span class="wm-a">a</span>'
         '<span class="wm-ceful">ceful</span><span class="wm-coexist">coexist</span><span class="wm-nce">nce</span></span>'
