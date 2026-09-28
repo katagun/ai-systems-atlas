@@ -686,3 +686,82 @@ test("a search index that fails is asked for once, and a focused search box retr
   await page.locator("#lab-search").focus();
   await page.waitForFunction(() => searchIndexes.labs !== undefined);
 });
+
+// WCAG contrast of an element's text against what it sits on: each
+// translucent background up to the first opaque one, composited in order. A
+// colour format it cannot read fails the test rather than being guessed at.
+const contrastOf = locator => locator.evaluate(element => {
+  if (!element.isConnected) throw new Error("the element was repainted away before it was measured");
+  const parse = value => {
+    const rgb = value.match(/^rgba?\(([\d.]+), ([\d.]+), ([\d.]+)(?:, ([\d.]+))?\)$/);
+    if (!rgb) throw new Error(`unreadable colour ${value}`);
+    return { r: Number(rgb[1]), g: Number(rgb[2]), b: Number(rgb[3]), a: rgb[4] === undefined ? 1 : Number(rgb[4]) };
+  };
+  const over = (top, bottom) => ({
+    r: top.r * top.a + bottom.r * (1 - top.a),
+    g: top.g * top.a + bottom.g * (1 - top.a),
+    b: top.b * top.a + bottom.b * (1 - top.a),
+    a: 1,
+  });
+  const layers = [];
+  for (let node = element; node; node = node.parentElement) {
+    const layer = parse(getComputedStyle(node).backgroundColor);
+    if (layer.a > 0) layers.push(layer);
+    if (layer.a === 1) break;
+  }
+  const background = layers.reduceRight((base, layer) => over(layer, base), { r: 255, g: 255, b: 255, a: 1 });
+  const text = over(parse(getComputedStyle(element).color), background);
+  const luminance = ({ r, g, b }) => [r, g, b]
+    .map(channel => channel / 255)
+    .map(channel => (channel <= 0.03928 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4))
+    .reduce((sum, channel, i) => sum + channel * [0.2126, 0.7152, 0.0722][i], 0);
+  const [lighter, darker] = [luminance(text), luminance(background)].sort((a, b) => b - a);
+  return {
+    ratio: (lighter + 0.05) / (darker + 0.05),
+    underlined: getComputedStyle(element).textDecorationLine.includes("underline"),
+  };
+});
+
+// Every action an empty result offers, and the job banner's button, sits on a
+// tinted surface. Each must reach WCAG AA, 4.5:1 for text this size, in both
+// palettes, and keep the underline that marks it as a link or button (D13).
+/* global finderGoalEntries */
+for (const colorScheme of ["light", "dark"]) {
+  test(`an empty result's actions and the job banner's button are legible in ${colorScheme}`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme });
+    const expectLegible = async (locator, name) => {
+      await expect(locator, name).toBeVisible();
+      // The results repaint as each index lands and once more when the
+      // exclusions list does, which is the last load, so measure after it.
+      await page.waitForFunction(() => Array.isArray(state.exclusions));
+      const { ratio, underlined } = await contrastOf(locator);
+      expect(ratio, `${name} contrast in ${colorScheme}`).toBeGreaterThanOrEqual(4.5);
+      expect(underlined, `${name} keeps its underline`).toBe(true);
+    };
+    // One system and one model hold this word, and the Status filter hides
+    // the system, so Systems offers both "Show it" and "Search all".
+    const systemsIndex = readWeb("app/search/systems.json");
+    const modelsIndex = readWeb("app/search/models.json");
+    const [system] = Object.keys(systemsIndex);
+    const [model] = Object.keys(modelsIndex);
+    await page.route(indexRoute("systems"), route => route.fulfill({ json: withIndexWord(systemsIndex, system) }));
+    await page.route(indexRoute("models"), route => route.fulfill({ json: withIndexWord(modelsIndex, model) }));
+    const { status } = readWeb("app/systems.json").systems.find(record => record.id === system);
+    await page.goto(`/?collection=systems&status=${status === "active" ? "archived" : "active"}`);
+    await page.waitForFunction(() => state.urlReady);
+    await page.locator("#project-search").fill(INDEX_WORD);
+    const systems = page.locator("#project-grid .empty-search");
+    await expectLegible(systems.getByRole("button", { name: "Show it" }), "Show it");
+    await expectLegible(systems.getByRole("button", { name: "Search all" }), "Search all");
+    await expectLegible(systems.getByRole("button", { name: "Try the Finder" }), "Try the Finder");
+
+    await page.goto("/");
+    await page.waitForFunction(() => state.urlReady);
+    await page.locator("#all-directory-search").fill("Zyxwvut Frobnicator");
+    await expectLegible(page.locator("#all-directory-grid .empty-search").getByRole("link", { name: "Suggest it for review" }), "Suggest it for review");
+    // Any Finder goal with records to shortlist, asked for by its own label.
+    const goal = await page.evaluate(() => finderGoalEntries().find(entry => entry.eligible).label);
+    await page.locator("#all-directory-search").fill(goal);
+    await expectLegible(page.locator('[data-job-hint="all"]').getByRole("button", { name: /Open shortlist/ }), "Open shortlist");
+  });
+}

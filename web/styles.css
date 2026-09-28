@@ -1492,3 +1492,11 @@ footer #data-date, footer .footer-meta {
 .empty-search { grid-column: 1 / -1; max-width: 70ch; }
 .empty-search p { margin: 0 0 .5rem; }
 .empty-search p:last-child { margin-bottom: 0; }
+/* The link colour falls below 4.5:1 on these tinted surfaces in the light
+   palette, so their links and link buttons take the surface's own ink. The
+   underline still marks each one, and hover thickens it rather than
+   switching to the brighter link colour. */
+.empty-search :is(a, .link-button),
+.job-hint .link-button { color: inherit; }
+.empty-search :is(a, .link-button):hover,
+.job-hint .link-button:hover { color: inherit; text-decoration-thickness: 2px; }
