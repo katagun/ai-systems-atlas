@@ -1960,7 +1960,7 @@
       "name": "Perplexity API",
       "operator": "Perplexity AI",
       "service_type": "direct_model_api",
-      "url": "https://docs.perplexity.ai/getting-started/overview",
+      "url": "https://docs.perplexity.ai/docs/getting-started/overview",
       "description": "Perplexity's developer API for search-grounded answers, research workflows, and supported model invocation.",
       "service_boundary": "Represents Perplexity's developer API, not the Perplexity answer engine, Comet, Perplexity Computer, or third-party access to similarly named models.",
       "delivery_modes": [
@@ -2010,8 +2010,8 @@
         {
           "kind": "web",
           "label": "Perplexity API overview",
-          "url": "https://docs.perplexity.ai/getting-started/overview",
-          "verified_at": "2026-08-28"
+          "url": "https://docs.perplexity.ai/docs/getting-started/overview",
+          "verified_at": "2026-09-28"
         }
       ],
       "verified_at": "2026-08-28",
