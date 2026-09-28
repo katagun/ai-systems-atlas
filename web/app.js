@@ -194,18 +194,6 @@ async function bootstrap() {
   populateFilters();
   populateCollectionFilters();
   populateModelLabFilter();
-  const scope = AppCore.scopeFromURL(new URL(window.location.href).searchParams);
-  const restored = restoreScopeFromURL(scope);
-  // Beside a query, the URL names every sort but Best match (scopeURLParams,
-  // rulings R-P1-2 and R-P1-2b). So a link with a query and no sort lists by
-  // match, and a sort it names is one the reader chose, which typing keeps.
-  // A sort the scope cannot take was removed on restore, so it counts as none;
-  // Best match is one, since it is disabled until a query is present. Either
-  // way syncMatchSort runs, so the restored query offers Best match again.
-  if (restored.q?.trim()) {
-    if (restored.sort !== undefined) sortChosenDuringQuery[scope] = true;
-    syncMatchSort(scope);
-  }
   renderStats();
   renderFinder();
   renderDoorJobs();
@@ -214,16 +202,7 @@ async function bootstrap() {
   renderSpecifications();
   renderTaxonomy();
   bindEvents();
-  const bootParams = new URL(window.location.href).searchParams;
-  if (!restoreComparisonFromURL()) {
-    if (AppCore.directoryStageFromURL(bootParams) === "door") showFrontDoor({ updateURL: false });
-    else setDirectoryCollection(bootParams.get("collection") || "all", { updateURL: false });
-  }
-  restoreViewFromURL();
-  restoreRecordFromURL();
-  state.urlReady = true;
-  writeScopeURL();
-  if (restored.q) loadRestoredSearch(scope, restored.page);
+  restoreFromURL({ boot: true });
   // Text typed on the front door before its listener was bound is still a
   // search; it lands in results the way a keystroke after boot would.
   if ($("#door-search").value && state.directoryStage === "door") $("#door-search").dispatchEvent(new Event("input", { bubbles: true }));
@@ -566,7 +545,6 @@ function restoreComparisonFromURL() {
   }
   renderComparisonControls();
   writeDirectoryURL();
-  if (ids.length >= 2) openComparison();
   return true;
 }
 
@@ -2953,36 +2931,91 @@ function closeRecordDialogs() {
   RECORD_DIALOG_SELECTORS.forEach(selector => { if ($(selector).open) $(selector).close(); });
 }
 
-function restoreRecordFromURL() {
-  const url = new URL(window.location.href);
-  const raw = url.searchParams.get("record");
-  if (raw === null) return;
-  const reference = AppCore.parseRecordReference(raw);
-  if (reference && openRecord(reference.kind, reference.id)) {
-    if (reference.kind === "spec") setDirectoryCollection("specifications", { updateURL: false });
-    if (reference.kind === "model") setDirectoryCollection("models", { updateURL: false });
-    if (reference.kind === "lab") setDirectoryCollection("labs", { updateURL: false });
-    activateView("directory");
-    return;
+// Resets one scope's controls to the defaults its URL parameters assume, so
+// a URL that leaves a parameter out also clears it from the control (Phase 0
+// leftover: Back after closing a record showed older filters than the URL).
+// The sort remembered across a query goes too: it belonged to the state the
+// URL is replacing.
+function resetScopeControls(scope) {
+  for (const [key, selector] of Object.entries(SCOPE_CONTROLS[scope] || {})) {
+    const control = $(selector);
+    const fallback = AppCore.SCOPE_URL_PARAMS[scope][key] ?? "";
+    if (control.type === "checkbox") control.checked = fallback === "1";
+    else control.value = fallback;
   }
-  url.searchParams.delete("record");
-  writeURL(url);
+  state.page[scope] = 1;
+  delete sortBeforeQuery[scope];
+  sortChosenDuringQuery[scope] = false;
+  if (scope === "systems") {
+    state.directoryRoles = null;
+    state.directoryRolesLabel = null;
+    populateRoleFilter();
+  }
+  // With the query empty this disables Best match again, so the URL's sort is
+  // judged as boot judges it: "match" is never a sort the reader chose.
+  syncMatchSort(scope);
 }
 
-// Back and forward move between record states only: collection and comparison
-// changes replace the current entry, so a popstate is always a record change.
-function syncRecordWithHistory() {
-  // Back from results lands on the entry leaveFrontDoor pushed: a bare
-  // Directory URL, which is the front door.
-  const onDoor = $("#directory").classList.contains("is-active") && state.directoryStage === "door";
-  if (!onDoor && AppCore.directoryStageFromURL(new URL(window.location.href).searchParams) === "door") {
-    showFrontDoor({ updateURL: false });
-    activateView("directory");
+// One restore for boot and for every popstate. The URL decides, in order:
+// the view; the scope, where a comparison or a record names its collection
+// before `collection` does (scopeFromURL); that scope's controls, reset
+// first; the comparison; the front door or results; the record. The scope
+// writer is quiet until the end, so a half-restored state never reaches the
+// address bar, and nothing here pushes.
+function restoreFromURL({ boot = false } = {}) {
+  const url = new URL(window.location.href);
+  const params = url.searchParams;
+  const rawView = params.get("view");
+  let view = rawView === null ? "directory" : AppCore.parseViewId(rawView);
+  if (!view) {
+    // A legacy sibling-view URL lands on its unified collection; any other
+    // unknown view is dropped.
+    const alias = AppCore.parseViewAlias(rawView);
+    params.delete("view");
+    if (alias) params.set("collection", alias);
+    writeURL(url);
+    view = "directory";
   }
-  const reference = AppCore.parseRecordReference(new URL(window.location.href).searchParams.get("record"));
-  if (reference && openRecord(reference.kind, reference.id)) return;
-  closeRecordDialogs();
-  clearRecordURL();
+  const scope = AppCore.scopeFromURL(params);
+  state.urlReady = false;
+  let restored = {};
+  if (scope) {
+    resetScopeControls(scope);
+    restored = restoreScopeFromURL(scope);
+  }
+  const comparisonRestored = restoreComparisonFromURL();
+  if (!comparisonRestored && state.comparison.ids.length) clearComparison({ updateURL: false });
+  const onDoor = view === "directory" && AppCore.directoryStageFromURL(params) === "door";
+  if (onDoor) showFrontDoor({ updateURL: false });
+  else if (scope && !comparisonRestored) setDirectoryCollection(scope, { updateURL: false });
+  activateView(view);
+  // Beside a query, the URL names every sort but Best match (scopeURLParams,
+  // rulings R-P1-2 and R-P1-2b). So a link with a query and no sort lists by
+  // match, and a sort it names is one the reader chose, which typing keeps.
+  // A sort the scope cannot take was removed on restore, so it counts as none.
+  if (scope && restored.q?.trim()) {
+    if (restored.sort !== undefined) sortChosenDuringQuery[scope] = true;
+    syncMatchSort(scope);
+  }
+  // The record is read from the URL as it arrived; an open dialog names it
+  // already, so showRecordDialog writes nothing and nothing pushes.
+  const reference = AppCore.parseRecordReference(params.get("record"));
+  if (!reference || !openRecord(reference.kind, reference.id)) {
+    closeRecordDialogs();
+    // A record the page cannot show leaves the URL, as any value a control
+    // cannot take does.
+    const current = new URL(window.location.href);
+    current.searchParams.delete("record");
+    writeURL(current);
+  }
+  state.urlReady = true;
+  writeDirectoryURL();
+  writeScopeURL();
+  if (restored.q) loadRestoredSearch(scope, restored.page);
+  // A shared comparison link opens its table; Back to a comparison restores
+  // only the selection. It opens last, since its loading notice lives in the
+  // tray, which the view switch above repaints.
+  if (boot && comparisonRestored) openComparison();
 }
 
 // The share link is the record's static preview page, which carries its own
@@ -3202,29 +3235,6 @@ function writeViewURL(id) {
   const url = new URL(window.location.href);
   if (id === "directory") url.searchParams.delete("view");
   else url.searchParams.set("view", id);
-  writeURL(url);
-}
-
-function restoreViewFromURL() {
-  const url = new URL(window.location.href);
-  const raw = url.searchParams.get("view");
-  if (raw === null) return;
-  const id = AppCore.parseViewId(raw);
-  if (id) {
-    activateView(id);
-    return;
-  }
-  const alias = AppCore.parseViewAlias ? AppCore.parseViewAlias(raw) : null;
-  if (alias) {
-    // Legacy sibling-view URL: land on the unified collection and drop `view=`.
-    url.searchParams.delete("view");
-    url.searchParams.set("collection", alias);
-    writeURL(url);
-    setDirectoryCollection(alias, { updateURL: false });
-    activateView("directory");
-    return;
-  }
-  url.searchParams.delete("view");
   writeURL(url);
 }
 
@@ -3603,7 +3613,7 @@ function bindEvents() {
   $("#lab-dialog .dialog-close").addEventListener("click", () => $("#lab-dialog").close());
   $("#lab-dialog").addEventListener("click", event => { if (event.target === $("#lab-dialog")) $("#lab-dialog").close(); });
   RECORD_DIALOG_SELECTORS.forEach(selector => $(selector).addEventListener("close", clearRecordURL));
-  window.addEventListener("popstate", syncRecordWithHistory);
+  window.addEventListener("popstate", () => restoreFromURL());
   document.addEventListener("click", event => {
     const button = event.target.closest("[data-copy-record-link]");
     if (button) copyRecordLink(button);

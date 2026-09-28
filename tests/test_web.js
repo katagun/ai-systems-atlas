@@ -1961,3 +1961,21 @@ test("a bare URL is the front door; a collection, a filter, a comparison, or a r
   assert.equal(stage("record=system:aider"), "results");
   assert.equal(stage("view=finder"), "results");
 });
+
+test("a comparison or a record names the scope before the collection parameter does", () => {
+  const scope = query => scopeFromURL(new URLSearchParams(query));
+  assert.equal(scope(""), "all");
+  assert.equal(scope("collection=systems"), "systems");
+  assert.equal(scope("collection=systems&compare=inference:a,b"), "inference");
+  assert.equal(scope("compare=model:a,b"), "models");
+  assert.equal(scope("record=runtime:ollama"), "runtimes");
+  assert.equal(scope("collection=systems&record=pack:superpowers"), "packs");
+  assert.equal(scope("record=spec:mcp"), "specifications");
+  assert.equal(scope("record=lab:anthropic"), "labs");
+  assert.equal(scope("record=model:x"), "models");
+  // A comparison wins over a record; a malformed reference is ignored.
+  assert.equal(scope("compare=system:a,b&record=runtime:x"), "systems");
+  assert.equal(scope("record=nonsense"), "all");
+  assert.equal(scope("compare=constructor:a,b"), "all");
+  assert.equal(scope("view=finder&record=system:aider"), null);
+});
