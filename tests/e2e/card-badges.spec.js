@@ -231,8 +231,15 @@ for (const colorScheme of ["light", "dark"]) {
 
 test("hovering an emblem explains it and Escape dismisses it", async ({ page }) => {
   const [first] = cardBadges("system", openclaw);
-  await page.goto("/?collection=systems");
-  await page.locator("#project-search").fill(openclaw.name);
+  // Arrive with the query in the URL rather than typing it. Escape in a
+  // focused search box also clears it, and the repainted grid can put another
+  // card's emblem under the resting pointer, whose tooltip then opens: Linux
+  // CI's wider text did exactly that. The restored query loads the search
+  // index, whose repaint must land before the hover, not between it and the key.
+  // searchIndexes is an app.js global.
+  /* global searchIndexes */
+  await page.goto(`/?collection=systems&q=${encodeURIComponent(openclaw.name)}`);
+  await page.waitForFunction(() => searchIndexes.systems !== undefined);
   const emblem = page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first();
   const tooltip = page.locator("#badge-tooltip");
   await expect(tooltip).toBeHidden();
@@ -262,6 +269,7 @@ test("hovering an emblem explains it and Escape dismisses it", async ({ page }) 
   await expect(tooltip).toHaveAttribute("aria-hidden", "true");
   await page.keyboard.press("Escape");
   await expect(tooltip).toBeHidden();
+  await expect(page.locator("#project-search")).toHaveValue(openclaw.name);
 });
 
 test("tapping an emblem toggles the tooltip and an outside tap closes it", async ({ browser }) => {

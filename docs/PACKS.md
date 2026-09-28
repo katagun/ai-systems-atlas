@@ -38,11 +38,11 @@ A marketplace record pins its manifest and names its steward, hosts, install mec
 5. Relate records only when it aids navigation; a relationship is not a compatibility claim.
 6. Run synchronization, payload and share-page generation, validation, all tests, and the pack browser checks in [`WEB.md`](WEB.md).
 
-Packs are never scored, sorted by popularity, or assigned a system family. Star counts are descriptive live metadata on every pack card, refreshed from GitHub alongside systems and runtimes; they never enter a score and the scope stays alphabetical with no stars sort.
+Packs are never scored, sorted by popularity, or assigned a system family. Star counts are descriptive live metadata on every pack card, refreshed from GitHub alongside systems and runtimes; they never enter a score, and the scope has no stars sort: it is alphabetical while browsing, and a search orders its results by match ([ADR 040](adr/040-search-orders-by-match-never-by-score.md)).
 
 ## Scored systems that install as packs
 
-A repository that installs as a skills bundle, plugin, or vault and passes ADR 031's prongs is a scored system, not a pack, and it never appears in `packs.json`. It carries the deployment mode `host_pack` on its system record instead, and the Agent packs scope lists it inline among the unscored packs, alphabetically, with its score hidden and its details in the Systems scope. Set the mode at review from the record's own prose; it never decides inclusion. See [ADR 034](adr/034-installing-into-a-host-is-a-deployment-mode-not-a-collection.md) and [ADR 035](adr/035-host-installed-systems-are-listed-inline-in-the-packs-scope.md).
+A repository that installs as a skills bundle, plugin, or vault and passes ADR 031's prongs is a scored system, not a pack, and it never appears in `packs.json`. It carries the deployment mode `host_pack` on its system record instead, and the Agent packs scope lists it inline among the unscored packs and in the same order, with its score hidden and its details in the Systems scope. Set the mode at review from the record's own prose; it never decides inclusion. See [ADR 034](adr/034-installing-into-a-host-is-a-deployment-mode-not-a-collection.md) and [ADR 035](adr/035-host-installed-systems-are-listed-inline-in-the-packs-scope.md).
 
 ## Current coverage
 
