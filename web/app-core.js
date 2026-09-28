@@ -723,10 +723,9 @@
       if (value === undefined || value === null) continue;
       tally.set(value, (tally.get(value) || 0) + 1);
     }
-    // Array#sort is stable, so a tie keeps the value's first-encountered
-    // order in collectionEntries rather than an arbitrary alphabetical one.
+    // Ties break by value A–Z, so the order never depends on record order.
     return [...tally.entries()]
-      .sort((a, b) => b[1] - a[1])
+      .sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])))
       .slice(0, limit)
       .map(([value, count]) => ({
         key: collection.facet,

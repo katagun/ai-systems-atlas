@@ -1854,9 +1854,15 @@ test("each collection counts what its default view lists, with its split", () =>
 test("a collection's categories are its largest values with the facet that opens them", () => {
   assert.deepEqual(collectionCategories("systems", registryPayloads), [
     { key: "family", value: "agent_system", count: 2, label: "Agents" },
-    { key: "family", value: "memory_system", count: 1, label: "Memory" },
     { key: "family", value: "assistant_system", count: 1, label: "Assistants" },
+    { key: "family", value: "memory_system", count: 1, label: "Memory" },
   ]);
+  // The tie between assistant_system and memory_system breaks by value, not
+  // by which record happened to come first.
+  assert.deepEqual(
+    collectionCategories("systems", { ...registryPayloads, projects: [...registryPayloads.projects].reverse() }).map(category => category.value),
+    ["agent_system", "assistant_system", "memory_system"]
+  );
   assert.deepEqual(collectionCategories("inference", registryPayloads), [
     { key: "type", value: "direct_model_api", count: 2, label: "Direct model API" },
     { key: "type", value: "routing_aggregator", count: 1, label: "Routing aggregator" },
