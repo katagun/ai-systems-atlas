@@ -271,6 +271,33 @@ test("hovering an emblem explains it and Escape dismisses it", async ({ page }) 
   await expect(page.locator("#project-search")).toHaveValue(openclaw.name);
 });
 
+test("moving between one emblem's shapes does not reopen a tooltip Escape dismissed", async ({ page }) => {
+  // After Escape, Chromium can re-hit-test a pointer that has not moved and
+  // send an over from the emblem's frame to one of its glyph's shapes. That is
+  // not entering the emblem, so the tooltip must stay dismissed. Dispatching the
+  // sequence directly pins the rule without the timing the hover test above
+  // depends on.
+  await page.goto("/?collection=systems");
+  await page.locator("#project-search").fill(openclaw.name);
+  const emblem = page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first();
+  await expect(emblem).toBeVisible();
+  const states = await emblem.evaluate(badge => {
+    const tooltip = document.querySelector("#badge-tooltip");
+    const frame = badge.querySelector(".badge-frame");
+    const shape = badge.querySelector(".badge-glyph > *");
+    const over = (target, relatedTarget) => target.dispatchEvent(
+      new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse", relatedTarget }),
+    );
+    over(frame, null);
+    const shown = !tooltip.hidden;
+    document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    const dismissed = tooltip.hidden;
+    over(shape, frame);
+    return { shown, dismissed, reopened: !tooltip.hidden };
+  });
+  expect(states).toEqual({ shown: true, dismissed: true, reopened: false });
+});
+
 test("tapping an emblem toggles the tooltip and an outside tap closes it", async ({ browser }) => {
   const context = await browser.newContext({ hasTouch: true, viewport: { width: 390, height: 800 } });
   const page = await context.newPage();
