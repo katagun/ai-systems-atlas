@@ -65,4 +65,4 @@ A 404, a sales gate, or a login wall on a required evidence role fails the gate.
 
 No `score`, `score_profile`, `system_family`, `primary_role`, `stars`, `stars_verified_at`, `price`, `price_usd`, or `benchmarks`. Hardware stays prose so that no specification can be sorted or ranked.
 
-Robots are never scored, compared, ranked, sorted by popularity, given a Finder goal, or given a card badge. The scope lists them alphabetically and offers no sort control. Relate a record to another only when it aids navigation; a relationship is not a compatibility claim, and `related_models` stays empty until the action-policy model decision in [`../BACKLOG.md`](../BACKLOG.md) is made.
+Robots are never scored, compared, ranked, sorted by popularity, given a Finder goal, or given a card badge. The scope lists them alphabetically while browsing, orders a search by match ([ADR 040](adr/040-search-orders-by-match-never-by-score.md)), and offers no sort control. Relate a record to another only when it aids navigation; a relationship is not a compatibility claim, and `related_models` stays empty until the action-policy model decision in [`../BACKLOG.md`](../BACKLOG.md) is made.

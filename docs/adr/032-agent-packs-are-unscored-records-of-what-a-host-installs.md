@@ -1,6 +1,6 @@
 # ADR 032: Agent packs are unscored records of what a host installs
 
-**Status:** Accepted. Amends [ADR 031](031-skill-packs-earn-records-by-owned-state-or-enforced-work.md).
+**Status:** Accepted. Amends [ADR 031](031-skill-packs-earn-records-by-owned-state-or-enforced-work.md). Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order).
 
 ## Context
 
