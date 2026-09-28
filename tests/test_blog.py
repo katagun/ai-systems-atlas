@@ -363,7 +363,10 @@ class HeaderTests(PostFixture):
             ["Catalog", "Find your fit", "Concepts", "Published data", "Blog"],
         )
         pages = self.pages()
-        for path, root in (("blog/index.html", "../"), ("blog/newer/index.html", "../../")):
+        for path, root in (
+            ("blog/index.html", "../"),
+            ("blog/newer/index.html", "../../"),
+        ):
             with self.subTest(path):
                 html = pages[path]
                 self.assertIn(f'<a class="tab-link" href="{root}">Catalog</a>', html)
