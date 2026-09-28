@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-26",
+  "updated_at": "2026-09-28",
   "terms_reviewed_at": "2026-09-24",
   "dispositions": [
     {
@@ -260,6 +260,18 @@
       "disposition": "excluded",
       "reason": "OpenRouter's single route for xAI's March 9, 2026 Grok 4.20 snapshot, which Atlas represents as the reviewed record xai/grok-4.20-0309-reasoning and the models.dev row xai/grok-4.20-0309-non-reasoning.",
       "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "z-ai/glm-5.3-flashx",
+      "disposition": "excluded",
+      "reason": "Speed tier of the reviewed GLM-5.3-Flash release (zhipuai/glm-5.3-flash). Z.ai's docs present GLM-5.3-Flash and GLM-5.3-FlashX as one model, with FlashX served at up to 200 tokens/s through inference optimization under its own price, and Z.ai publishes no FlashX weights.",
+      "decided_at": "2026-09-28"
+    },
+    {
+      "openrouter_id": "z-ai/glm-5.3-prime",
+      "disposition": "held",
+      "reason": "OpenRouter lists it as a high-speed variant of the reviewed GLM-5.3 (zhipuai/glm-5.3), but no Z.ai source names it: docs.z.ai, docs.bigmodel.cn, Z.ai's pricing page, and its Hugging Face organization have no GLM-5.3-Prime as of 2026-09-28. Held until first-party documentation establishes its identity; if it proves a speed tier like GLM-5.3-FlashX, exclude it the same way.",
+      "decided_at": "2026-09-28"
     }
   ]
 }
