@@ -127,6 +127,19 @@ jobs:
         env:
           ATLAS_E2E_SHARD: ${{ matrix.shard }}
         run: pre-commit run --all-files --hook-stage pre-push e2e-browser-tests
+      # Playwright keeps a trace, the page snapshot, and the error context for
+      # each failed test under test-results/ (trace: retain-on-failure in
+      # playwright.config.js). Linux-only failures could not be diagnosed from
+      # log text alone, so the directory is kept for a week on failure; open a
+      # trace with `npx playwright show-trace <file>.zip`.
+      - name: Keep the traces of failed tests
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: playwright-test-results-shard-${{ strategy.job-index }}
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
 
   verify:
     name: verify
