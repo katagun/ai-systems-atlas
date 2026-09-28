@@ -1,6 +1,6 @@
 # ADR 037: Robots are unscored records of what a vendor documents
 
-**Status:** Accepted
+**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order).
 
 ## Context
 

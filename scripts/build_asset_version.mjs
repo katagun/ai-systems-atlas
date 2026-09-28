@@ -22,6 +22,7 @@ const REFERENCE = /((?:href|src)=")([\w./-]+)\?v=[^"]*(")/g;
 const DATA_FILES = [
   "projects.json", "taxonomy.json", "license-evidence.json", "specifications.json",
   "inference-services.json", "local-runtimes.json", "models.json", "models-dev.json", "logos.json",
+  "exclusions.json",
   "app/systems.json", "app/inference.json", "app/runtimes.json", "app/specifications.json",
   "app/models.json", "app/packs.json", "app/labs.json", "app/robots.json",
   "app/model-source-details.json",

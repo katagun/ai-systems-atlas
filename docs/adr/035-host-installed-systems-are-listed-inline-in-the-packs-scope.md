@@ -1,6 +1,6 @@
 # ADR 035: Host-installed systems are listed inline in the Agent packs scope
 
-**Status:** Accepted. Amends [ADR 034](034-installing-into-a-host-is-a-deployment-mode-not-a-collection.md).
+**Status:** Accepted. Amends [ADR 034](034-installing-into-a-host-is-a-deployment-mode-not-a-collection.md). Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order).
 
 ## Context
 
