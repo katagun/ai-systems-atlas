@@ -1,3 +1,5 @@
+const fs = require("node:fs");
+const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 
 // The page binds its search and keyboard listeners once its data has loaded,
@@ -213,4 +215,116 @@ test("a carried query searches the same text a typed one does", async ({ page })
   await page.locator("#inference-search").fill("privacy");
   await page.waitForFunction(() => searchIndexes.inference !== undefined);
   await expect(page.locator("#inference-result-count")).toHaveText(carried);
+});
+
+test("a misspelled name offers the right one", async ({ page }) => {
+  await searchAll(page, "olama");
+  const suggestion = page.getByRole("button", { name: "Ollama", exact: true });
+  await expect(suggestion).toBeVisible();
+  await suggestion.click();
+  await expect(page.locator("#all-directory-search")).toHaveValue("Ollama");
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
+});
+
+test("a query with no match offers the Finder and a suggestion form", async ({ page }) => {
+  await searchAll(page, "notion alternative");
+  await expect(page.getByText("No matches for “notion alternative”.")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Try the Finder" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Suggest it for review" }))
+    .toHaveAttribute("href", /template=system-suggestion\.yml&name=notion%20alternative/);
+});
+
+test("a name the review left out says why", async ({ page }) => {
+  // Serve a known exclusion so the test does not depend on which real
+  // entries happen to be mentioned in some record's prose.
+  const published = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "..", "web", "exclusions.json"), "utf8"));
+  await page.route(/\/exclusions\.json(\?.*)?$/, route => route.fulfill({
+    json: { ...published, entries: [{ ...published.entries[0], name: "Zyxwvut Frobnicator", reason: "Test reason: out of scope." }] },
+  }));
+  await searchAll(page, "Zyxwvut Frobnicator");
+  await expect(page.getByText("Reviewed and left out:")).toBeVisible();
+  await expect(page.getByText("Test reason: out of scope.")).toBeVisible();
+});
+
+test("an intent query offers the Finder job and opens its shortlist step", async ({ page }) => {
+  await searchAll(page, "run models locally");
+  const hint = page.locator('[data-job-hint="all"]');
+  await expect(hint).toContainText("Run models on my own computer");
+  await hint.getByRole("button", { name: /Open shortlist/ }).click();
+  await expect(page.locator("#finder")).toHaveClass(/is-active/);
+  await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
+});
+
+// The banner is a flex box, and an author display rule overrides the one the
+// hidden attribute brings, so the stylesheet has to restore it.
+test("the job banner shows only while the query names a job", async ({ page }) => {
+  await searchAll(page, "ollama");
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
+  const hint = page.locator('[data-job-hint="all"]');
+  await expect(hint).toBeHidden();
+  await page.locator("#all-directory-search").fill("run models locally");
+  await expect(hint).toBeVisible();
+  await page.locator("#reset-all-directory").click();
+  await expect(hint).toBeHidden();
+});
+
+// The exclusions list is a published endpoint, read only to explain an empty
+// result. A search that finds something never needs it, one fetch serves every
+// empty result after it, and it carries the content stamp every other data
+// file does (ruling R-P1-3), so a changed list is never served from a cache.
+/* global state */
+test("the exclusions list is fetched once, stamped, and only for a search that found nothing", async ({ page }) => {
+  const fetched = [];
+  let release;
+  const held = new Promise(resolve => { release = resolve; });
+  await page.route(/\/exclusions\.json(\?.*)?$/, async route => {
+    fetched.push(route.request().url());
+    await held;
+    await route.continue();
+  });
+  await searchAll(page, "ollama");
+  await allIndexesLanded(page);
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
+  expect(fetched, "a search that found something never needs the list").toEqual([]);
+
+  // A second empty result while the first fetch is still in flight.
+  const input = page.locator("#all-directory-search");
+  await input.fill("notion alternative");
+  await expect(page.getByText("No matches for “notion alternative”.")).toBeVisible();
+  await input.fill("notion alternatives");
+  await expect(page.getByText("No matches for “notion alternatives”.")).toBeVisible();
+  release();
+  await page.waitForFunction(() => Array.isArray(state.exclusions));
+  expect(fetched, "one fetch serves every empty result").toHaveLength(1);
+  expect(new URL(fetched[0]).searchParams.get("v"), "the list is fetched under its content stamp").toMatch(/^[0-9a-f]{12}$/);
+});
+
+// Every search surface besides All, each with the job banner when its panel has one.
+const EMPTY_STATE_SCOPES = [
+  { url: "/?collection=systems", search: "#project-search", grid: "#project-grid", hint: "systems" },
+  { url: "/?collection=inference", search: "#inference-search", grid: "#inference-grid", hint: "inference" },
+  { url: "/?collection=runtimes", search: "#runtime-search", grid: "#runtime-grid", hint: "runtimes" },
+  { url: "/?collection=packs", search: "#pack-search", grid: "#pack-grid" },
+  { url: "/?collection=robots", search: "#robot-search", grid: "#robot-grid" },
+  { url: "/?view=models", search: "#model-search", grid: "#model-grid" },
+  { url: "/?view=labs", search: "#lab-search", grid: "#lab-grid" },
+  { url: "/?view=specifications", search: "#specification-search", grid: "#specification-grid" },
+];
+
+test("every scope's empty search offers the next steps, and each Directory panel with a banner offers the job", async ({ page }) => {
+  for (const { url, search, grid, hint } of EMPTY_STATE_SCOPES) {
+    await page.goto(url);
+    await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
+    const banner = hint && page.locator(`[data-job-hint="${hint}"]`);
+    if (banner) {
+      await page.locator(search).fill("run models locally");
+      await expect(banner, `${hint} names the job`).toContainText("Run models on my own computer");
+    }
+    await page.locator(search).fill("Zyxwvut Frobnicator");
+    const results = page.locator(grid);
+    await expect(results, `${grid} explains the empty result`).toContainText("No matches for “Zyxwvut Frobnicator”.");
+    await expect(results.getByRole("button", { name: "Try the Finder" })).toBeVisible();
+    await expect(results.getByRole("link", { name: "Suggest it for review" })).toBeVisible();
+    if (banner) await expect(banner, `${hint} drops the banner`).toBeHidden();
+  }
 });

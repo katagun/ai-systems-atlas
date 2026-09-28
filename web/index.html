@@ -23,7 +23,7 @@
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=f80f3a6a42b1">
+  <link rel="stylesheet" href="styles.css?v=9abeed3acec9">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -101,6 +101,7 @@
           <p class="filter-guidance">Mixed discovery is alphabetical and hides incomparable scores. Choose a specialist collection for filters and scoped scoring. <button data-open-tab="taxonomy">How comparisons work →</button></p>
         </section>
         <div class="result-row"><p id="all-directory-result-count" aria-live="polite"></p><button id="reset-all-directory" class="ghost-button">Clear search</button></div>
+        <div class="job-hint" data-job-hint="all" hidden></div>
         <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems, model releases, inference services, local runtimes, agent packs, and robots"></section>
         <nav id="all-directory-pager" class="pager" aria-label="All-directory pagination"></nav>
       </div>
@@ -127,6 +128,7 @@
           <p class="filter-guidance">Choose one family to compare editorial scores. All-family browsing is unscored. <button data-open-tab="taxonomy">How comparisons work →</button></p>
         </section>
         <div class="result-row"><button id="finder-roles-chip" class="filter-chip" type="button" hidden></button><p id="result-count" aria-live="polite" tabindex="-1"></p><button id="reset-filters" class="ghost-button">Clear filters</button></div>
+        <div class="job-hint" data-job-hint="systems" hidden></div>
         <section id="project-grid" class="project-grid" aria-label="Reviewed systems"></section>
         <nav id="project-pager" class="pager" aria-label="Systems pagination"></nav>
       </div>
@@ -142,6 +144,7 @@
           <p class="filter-guidance">Scores compare stable service operations across types. Filter for workload fit before treating overall as a shortlist. <button data-open-tab="taxonomy">How scoring works →</button></p>
         </section>
         <div class="result-row"><p id="inference-result-count" aria-live="polite" tabindex="-1"></p><button id="reset-inference-filters" class="ghost-button">Clear filters</button></div>
+        <div class="job-hint" data-job-hint="inference" hidden></div>
         <section id="inference-grid" class="project-grid inference-grid" aria-label="Reviewed inference services"></section>
         <nav id="inference-pager" class="pager" aria-label="Inference services pagination"></nav>
       </div>
@@ -157,6 +160,7 @@
           <p class="filter-guidance">Scores compare documented execution capability on hardware you operate. They exclude throughput, latency, and benchmark rank, so filter for hardware and format fit first. <button data-open-tab="taxonomy">How scoring works →</button></p>
         </section>
         <div class="result-row"><p id="runtime-result-count" aria-live="polite" tabindex="-1"></p><button id="reset-runtime-filters" class="ghost-button">Clear filters</button></div>
+        <div class="job-hint" data-job-hint="runtimes" hidden></div>
         <section id="runtime-grid" class="project-grid inference-grid" aria-label="Reviewed local runtimes"></section>
         <nav id="runtime-pager" class="pager" aria-label="Local runtimes pagination"></nav>
       </div>
@@ -448,8 +452,8 @@
   </dialog>
 
   <footer><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
-  <script type="application/json" id="data-versions">{"projects.json":"0cba5a0920c1","taxonomy.json":"f0ba4485fb8f","license-evidence.json":"752e427a7aff","specifications.json":"f6487c60eb84","inference-services.json":"324b3828e171","local-runtimes.json":"c3d85a51fff7","models.json":"aaf12f5a9b9a","models-dev.json":"ec5e4b8a29fb","logos.json":"8ba040c30961","app/systems.json":"f2c7bb11312c","app/inference.json":"6e25b94e9832","app/runtimes.json":"5384dc9974db","app/specifications.json":"ca24fe5a7b32","app/models.json":"4b4bef9396ab","app/packs.json":"c12a9cb8a17d","app/labs.json":"af9d1c0a63c9","app/robots.json":"d6e64c3ecd5e","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"b6960c6ccb43","app/search/inference.json":"81f6e0352cc7","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"6d610bfc7c93","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"3b80a047e4bb","app/search/robots.json":"f3ba0fcf79b2","app/detail":"26b4c45bfba0"}</script>
+  <script type="application/json" id="data-versions">{"projects.json":"0cba5a0920c1","taxonomy.json":"f0ba4485fb8f","license-evidence.json":"752e427a7aff","specifications.json":"f6487c60eb84","inference-services.json":"324b3828e171","local-runtimes.json":"c3d85a51fff7","models.json":"aaf12f5a9b9a","models-dev.json":"ec5e4b8a29fb","logos.json":"8ba040c30961","exclusions.json":"777a4187f003","app/systems.json":"f2c7bb11312c","app/inference.json":"6e25b94e9832","app/runtimes.json":"5384dc9974db","app/specifications.json":"ca24fe5a7b32","app/models.json":"4b4bef9396ab","app/packs.json":"c12a9cb8a17d","app/labs.json":"af9d1c0a63c9","app/robots.json":"d6e64c3ecd5e","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"b6960c6ccb43","app/search/inference.json":"81f6e0352cc7","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"6d610bfc7c93","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"3b80a047e4bb","app/search/robots.json":"f3ba0fcf79b2","app/detail":"26b4c45bfba0"}</script>
   <script src="app-core.js?v=4ca82fcefe0c" defer></script>
-  <script src="app.js?v=f7bf7ec2b721" defer></script>
+  <script src="app.js?v=86581f7287fe" defer></script>
 </body>
 </html>

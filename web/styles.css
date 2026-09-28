@@ -1471,3 +1471,22 @@ footer #data-date, footer .footer-meta {
   color: var(--muted);
   font: 500 .72rem var(--font-mono);
 }
+.job-hint {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: .5rem 1rem;
+  margin: 0 0 1rem;
+  padding: .7rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--cyan) 30%, var(--line));
+  border-radius: var(--radius-control);
+  background: var(--sage-soft);
+  color: var(--sage-ink);
+  font-size: .9rem;
+}
+/* The flex display above would otherwise override the hidden attribute. */
+.job-hint[hidden] { display: none; }
+.job-hint strong { color: var(--text); }
+.empty-search p { margin: 0 0 .5rem; }
+.empty-search p:last-child { margin-bottom: 0; }

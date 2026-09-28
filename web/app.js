@@ -1141,6 +1141,7 @@ function renderAllDirectoryEntries() {
   }, state.packs, state.robots);
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   setSearchCount("all", entries.length);
+  renderJobHint("all", $("#all-directory-search").value);
   const paged = AtlasCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
   state.page.all = paged.page;
   $("#all-directory-grid").innerHTML = paged.items.map(({ kind, record }) => {
@@ -1176,7 +1177,7 @@ function renderAllDirectoryEntries() {
       </article>`;
     }
     return mixedSystemCard(record);
-  }).join("") || '<div class="notice">No systems, model releases, inference services, local runtimes, agent packs, or robots match this search.</div>';
+  }).join("") || emptyStateMarkup("all", "No systems, model releases, inference services, local runtimes, agent packs, or robots match this search.");
   $$('[data-project]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   $$('[data-inference-service]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
   $$('[data-local-runtime]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
@@ -1443,11 +1444,12 @@ function renderCollection(name) {
   const noun = collection.noun[records.length === 1 ? 0 : 1];
   $(collection.resultCount).textContent = `${records.length} ${noun}${context.suffix}`;
   setSearchCount(name, records.length);
+  renderJobHint(name, $(SCOPE_CONTROLS[name].q).value);
   const paged = AtlasCore.paginate(records, { page: state.page[collection.pageKey], pageSize: state.pageSize });
   state.page[collection.pageKey] = paged.page;
   const grid = $(collection.grid);
   grid.innerHTML = paged.items.map(record => collection.card(record, context)).join("")
-    || `<div class="notice">${collection.empty}</div>`;
+    || emptyStateMarkup(name, collection.empty);
   $$(`[${datasetAttribute(collection.dataset)}]`, grid).forEach(button =>
     button.addEventListener("click", () => collection.open(button.dataset[collection.dataset])));
   if (context.comparable) {
@@ -1505,7 +1507,7 @@ function renderPacks() {
   const grid = $("#pack-grid");
   grid.innerHTML = paged.items.map(({ kind, record }) =>
     kind === "pack" ? packCard(record) : mixedSystemCard(record)).join("")
-    || '<div class="notice">No agent packs match these filters.</div>';
+    || emptyStateMarkup("packs", "No agent packs match these filters.");
   $$('[data-pack]', grid).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
   $$('[data-project]', grid).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   paintMarks(grid);
@@ -1698,17 +1700,86 @@ function recommendationReasons(project, priority) {
 const FINDER_DETAIL_KINDS = { inference_service: "inference", local_runtime: "runtime" };
 const finderDetailAwaited = new Set();
 
+// The records a Finder goal can draw on: active systems in its family and
+// role set, or services or runtimes of its type (docs/WEB.md).
+function finderGoalRecords(direction, goalConfig) {
+  if (direction === "inference_service") return state.inferenceServices.filter(item => goalConfig.serviceTypes.includes(item.service_type));
+  if (direction === "local_runtime") return state.localRuntimes.filter(item => goalConfig.runtimeTypes.includes(item.runtime_type));
+  return state.projects.filter(item => item.status === "active" && item.system_family === direction && goalConfig.roles.includes(item.primary_role));
+}
+
 function finderCandidates() {
   const { direction, goal } = state.finder.answers;
   const goalConfig = FINDER_GOALS[direction]?.find(item => item.id === goal);
-  if (!goalConfig) return [];
-  const records = direction === "inference_service" ? state.inferenceServices
-    : direction === "local_runtime" ? state.localRuntimes : state.projects;
-  return records.filter(project => {
-    if (direction === "inference_service") return goalConfig.serviceTypes.includes(project.service_type);
-    if (direction === "local_runtime") return goalConfig.runtimeTypes.includes(project.runtime_type);
-    return project.status === "active" && project.system_family === direction && goalConfig.roles.includes(project.primary_role);
-  });
+  return goalConfig ? finderGoalRecords(direction, goalConfig) : [];
+}
+
+let finderGoalList = null;
+function finderGoalEntries() {
+  finderGoalList ||= Object.entries(FINDER_GOALS).flatMap(([direction, goals]) =>
+    goals.map(goal => ({ ...goal, direction, eligible: finderGoalRecords(direction, goal).length })));
+  return finderGoalList;
+}
+
+function openFinderAt(direction, goal) {
+  state.finder = { step: 2, answers: { direction, goal } };
+  renderFinder();
+  activateView("finder");
+}
+
+function renderJobHint(scope, term) {
+  const hint = $(`[data-job-hint="${scope}"]`);
+  if (!hint) return;
+  const goal = term.trim() ? AtlasCore.matchFinderGoal(finderGoalEntries(), term) : null;
+  hint.hidden = !goal;
+  hint.innerHTML = goal
+    ? `<span>Looks like a job: <strong>${escapeHTML(goal.label)}</strong>. The Finder can shortlist from ${goal.eligible} reviewed ${goal.eligible === 1 ? "record" : "records"}.</span><button type="button" class="link-button" data-finder-goal="${escapeHTML(`${goal.direction}:${goal.id}`)}">Open shortlist →</button>`
+    : "";
+}
+
+// Records each scope's did-you-mean draws from, so a suggestion always
+// matches something in the scope it is offered in.
+const SCOPE_RECORDS = {
+  all: () => [...state.projects, ...state.inferenceServices, ...state.localRuntimes, ...state.models, ...state.packs, ...state.robots],
+  systems: () => state.projects,
+  inference: () => state.inferenceServices,
+  runtimes: () => state.localRuntimes,
+  packs: () => [...state.packs, ...AtlasCore.packShapedSystems(state.projects, {})],
+  robots: () => state.robots,
+  models: () => state.models,
+  labs: () => state.labs,
+  specifications: () => state.specifications,
+};
+
+let exclusionsRequest = null;
+function excludedEntry(term) {
+  if (!state.exclusions) {
+    exclusionsRequest ||= loadJSON("exclusions.json")
+      .then(data => { state.exclusions = data.entries || []; })
+      .catch(() => { state.exclusions = []; })
+      .then(() => pageRenderer(activeScope())?.());
+    return null;
+  }
+  const wanted = AtlasCore.normalizeSearchText(term);
+  return state.exclusions.find(entry => AtlasCore.normalizeSearchText(entry.name) === wanted) || null;
+}
+
+function suggestionURL(term) {
+  return `https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml&name=${encodeURIComponent(term.trim())}`;
+}
+
+function emptyStateMarkup(scope, fallback) {
+  const selector = SCOPE_CONTROLS[scope]?.q;
+  const term = selector ? $(selector).value : "";
+  if (!term.trim()) return `<div class="notice">${fallback}</div>`;
+  const names = AtlasCore.suggestNames(SCOPE_RECORDS[scope]?.() || [], term);
+  const excluded = excludedEntry(term);
+  return `<div class="notice empty-search">
+    <p><strong>No matches for “${escapeHTML(term.trim())}”.</strong></p>
+    ${names.length ? `<p>Did you mean ${names.map(name => `<button type="button" class="link-button" data-suggest-query="${escapeHTML(name)}">${escapeHTML(name)}</button>`).join(", ")}?</p>` : ""}
+    ${excluded ? `<p><strong>Reviewed and left out:</strong> ${escapeHTML(excluded.name)}. ${escapeHTML(excluded.reason)}</p>` : ""}
+    <p><button type="button" class="link-button" data-empty-finder>Try the Finder</button> · <a href="${escapeHTML(suggestionURL(term))}" target="_blank" rel="noreferrer">Suggest it for review</a></p>
+  </div>`;
 }
 
 // Null once this goal's candidates have been waited on, so a detail file that
@@ -3055,6 +3126,25 @@ function bindEvents() {
       labLink.closest("dialog")?.close();
       openLab(labLink.dataset.openLab);
     }
+  });
+  document.addEventListener("click", event => {
+    const suggestion = event.target.closest("[data-suggest-query]");
+    if (suggestion) {
+      const selector = SCOPE_CONTROLS[activeScope()]?.q;
+      if (!selector) return;
+      const input = $(selector);
+      input.value = suggestion.dataset.suggestQuery;
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.focus();
+      return;
+    }
+    const goal = event.target.closest("[data-finder-goal]");
+    if (goal) {
+      const [direction, id] = goal.dataset.finderGoal.split(":");
+      openFinderAt(direction, id);
+      return;
+    }
+    if (event.target.closest("[data-empty-finder]")) activateView("finder");
   });
   $("#comparison-open").addEventListener("click", openComparison);
   $("#comparison-clear").addEventListener("click", () => clearComparison());
