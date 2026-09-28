@@ -1,6 +1,6 @@
 # ADR 013: Distinct collections share one Directory surface
 
-**Status:** Accepted
+**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order).
 
 ## Context
 

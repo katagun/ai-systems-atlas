@@ -1,6 +1,6 @@
 # ADR 041: Labs are unscored records of who develops the catalog's models
 
-**Status:** Accepted
+**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order).
 
 ## Context
 
