@@ -22,6 +22,13 @@ updates:
       timezone: America/Denver
     open-pull-requests-limit: 5
     versioning-strategy: increase-if-necessary
+    # An icon-package bump changes the vendored SVG sources, so web/logos.json
+    # must be regenerated in the same change or the logo-coverage check fails.
+    # Dependabot cannot run the generator; the weekly refresh
+    # (scripts/run_directory_refresh.py) bumps these two and regenerates.
+    ignore:
+      - dependency-name: simple-icons
+      - dependency-name: "@lobehub/icons-static-svg"
     commit-message:
       prefix: "chore(npm)"
     labels:

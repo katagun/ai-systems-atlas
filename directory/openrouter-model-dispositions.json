@@ -244,6 +244,36 @@
       "decided_at": "2026-09-25"
     },
     {
+      "openrouter_id": "qwen/qwen-plus-2025-07-28",
+      "disposition": "excluded",
+      "reason": "Alibaba's July 28, 2025 Qwen-Plus snapshot (qwen-plus-2025-07-28), an earlier snapshot of the line reviewed at its current snapshot as model-alibaba-qwen-plus-2025-12-01, which Alibaba documents as improving on the July 28 snapshot. docs/MODELS.md keeps one record per line at its current fixed identity and excludes earlier snapshots with a pointer.",
+      "decided_at": "2026-09-28"
+    },
+    {
+      "openrouter_id": "qwen/qwen3-max-thinking",
+      "disposition": "excluded",
+      "reason": "The reviewed Qwen3-Max snapshot of January 23, 2026 (model-alibaba-qwen3-max-2026-01-23) with thinking switched on: the route's canonical slug is qwen3-max-thinking-20260123, and Alibaba's deep-thinking guide lists qwen3-max-2026-01-23 as a hybrid thinking model with thinking off by default, so the route fixes a request setting and is not a separate release.",
+      "decided_at": "2026-09-28"
+    },
+    {
+      "openrouter_id": "qwen/qwen3.5-flash-02-23",
+      "disposition": "excluded",
+      "reason": "The reviewed Qwen3.5-Flash snapshot of February 23, 2026 (model-alibaba-qwen3-5-flash-2026-02-23) under OpenRouter's shortened name; Alibaba's model code is qwen3.5-flash-2026-02-23.",
+      "decided_at": "2026-09-28"
+    },
+    {
+      "openrouter_id": "qwen/qwen3.5-plus-02-15",
+      "disposition": "excluded",
+      "reason": "Alibaba's February 15, 2026 Qwen3.5-Plus snapshot (qwen3.5-plus-2026-02-15), an earlier snapshot of the line reviewed at its newest snapshot as model-alibaba-qwen3-5-plus-2026-04-20, which Alibaba documents as improving on it; the undated qwen3.5-plus name still resolves to this snapshot. docs/MODELS.md keeps one record per line at its current fixed identity and excludes earlier snapshots with a pointer.",
+      "decided_at": "2026-09-28"
+    },
+    {
+      "openrouter_id": "qwen/qwen3.5-plus-20260420",
+      "disposition": "excluded",
+      "reason": "The reviewed Qwen3.5-Plus snapshot of April 20, 2026 (model-alibaba-qwen3-5-plus-2026-04-20) under OpenRouter's undashed date; Alibaba's model code is qwen3.5-plus-2026-04-20.",
+      "decided_at": "2026-09-28"
+    },
+    {
       "openrouter_id": "sao10k/l3-lunaris-8b",
       "disposition": "held",
       "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
