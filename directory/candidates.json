@@ -4862,8 +4862,8 @@
       "triage": {
         "verdict": "held",
         "rule": "In scope but blocked: pack-shaped repository whose scored-catalog path requires file evidence of owned state or enforced work, and current evidence holds README claims only. Applicable gate: \"The evidence is a file in the repository \u2014 the indexer, the store and its schema, the hook or policy that returns a denial, the script that does the work \u2014 never a claim in the README.\"",
-        "finding": "Licence file says \"MIT License\" with \"Copyright (c) 2026 sharpdeveye\" and the standard permission grant. README describes \"1 core skill \u00b7 25 commands \u00b7 7 domain references \u00b7 memory layer \u00b7 audit trail\" installed into host coding agents via \"npx skills add sharpdeveye/maestro\", and claims \"decisions, audit trail, and session history survive across sessions\". That memory claim is exactly the kind of owned-state hint that could bring a host-run pack into the scored catalog, but per policy a README claim alone cannot satisfy the prongs. No cross-collection hits and no digest errors; evidence covers LICENSE and README only, with no repository file demonstrating a store, schema, hook, policy, or work-performing script. Held pending the blocking file-evidence question.",
-        "held_by": "whether any repository file (indexer, store and its schema, hook or policy returning a denial, or work-performing script) satisfies the owned-state or enforced-work prongs; README claims alone cannot satisfy them",
+        "finding": "Licence file says \"MIT License\" with \"Copyright (c) 2026 sharpdeveye\" and the standard permission grant. README describes \"1 core skill \u00b7 25 commands \u00b7 7 domain references \u00b7 memory layer \u00b7 audit trail\" installed into host coding agents via \"npx skills add sharpdeveye/maestro\", and claims \"decisions, audit trail, and session history survive across sessions\". That memory claim is exactly the kind of owned-state hint that could bring a host-run pack into the scored catalog, but per policy a README claim alone cannot satisfy the prongs. No cross-collection hits and no digest errors; evidence covers LICENSE and README only, with no repository file demonstrating a store, schema, hook, policy, or work-performing script. Held pending the blocking file-evidence question. Tree re-check 2026-09-27 answers the file-evidence question in the affirmative direction: maestro-extension/src/core/ carries state.ts, history.ts, context.ts, and workspace-indexer.ts; src/adapters/ and chat/participant.ts wire an editor host and chat participant; mcp-server/src/ serves tools, resources, prompts, and wave-state.ts; packages/core/ holds audit.ts, decisions.ts, and estimators with tests. Whether that state is owned (read back to change later behavior) or auxiliary is the scored-review call.",
+        "held_by": "scored-system review under ADR 031: the extension host code and MCP wave-state suggest owned state the system reads back; human to confirm against the tree",
         "evidence": [
           {
             "label": "LICENSE",
@@ -4884,7 +4884,7 @@
             "immutable_url": "https://api.github.com/repos/sharpdeveye/maestro/git/blobs/1d5bb8a498b2acc320e90df9aca5b9550fdc4f1b"
           }
         ],
-        "proposed_at": "2026-09-24",
+        "proposed_at": "2026-09-27",
         "proposer": "candidate-triage"
       }
     },
@@ -5383,9 +5383,9 @@
         "editorial_score"
       ],
       "triage": {
-        "verdict": "held",
-        "rule": "Propose held per docs/CURATION.md inclusion gate: \"enough implementation or product evidence exists to assess its claimed behavior\" is not yet met because the README fetch failed and only the licence file is pinned.",
-        "finding": "Partial evidence only. Licence file states \"MIT License\" with \"Copyright (c) 2026 Tigerless Labs\" and the standard grant \"Permission is hereby granted, free of charge, to any person obtaining a copy\" of \"this software and associated documentation files\". The README document is absent: recorded error (README: RemoteDisconnected: Remote end closed connection without response). Product-behavior claims therefore rest on the candidate blurb alone, which describes a long-term memory runtime with plain Markdown as the source of truth and local retrieval, and cannot be quoted from reviewed bundle text. Cross-collection hits: none.",
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "Licence file states \"MIT License\" with \"Copyright (c) 2026 Tigerless Labs\" and the standard grant, and the README licence section reads \"[MIT](LICENSE).\" README titles the product \"agent-memory: the long-term memory runtime for AI agents\", where \"the single source of truth, the SQLite index beside them is a cache you can delete at any time\", shared such that \"Claude Code, Codex CLI, and anything else that can run a shell command share that store\". Install \"Requires Python 3.12 or higher\" and, as \"so install from a checkout\", which \"builds `mem`, `mem-mcp`, and `mem-hook` into `.venv/bin`\". Effectiveness evidence is vendor-run: \"Measured on LongMemEval-S with a bounded haystack, 120 episodes\", with the caveat \"Absolute numbers are not comparable to published LongMemEval scores\". No cross-collection hits. Boundary question: the repo ships both host-read skill documents and runnable mem/mem-mcp/mem-hook binaries, so the reviewer must fix whether the review boundary is the memory runtime as a whole or the skill documents, and treat the vendor-run eval figures as claims for weaknesses rather than reliability evidence.",
         "evidence": [
           {
             "label": "LICENSE",
@@ -5395,11 +5395,19 @@
             "fetched_at": "2026-09-24",
             "blob_sha": "36314997443758dae060c5b828fcbb4a09a47e8b",
             "immutable_url": "https://api.github.com/repos/tigerless-labs/agent-memory/git/blobs/36314997443758dae060c5b828fcbb4a09a47e8b"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/tigerless-labs/agent-memory/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "9c2e220c9efbdc69cc6ffea7c4b934907c59afadbf5e620d8a8e1088dccc6c85",
+            "fetched_at": "2026-09-27",
+            "blob_sha": "73b028823b7c2dd36fa3a3bdc6b0f61257368180",
+            "immutable_url": "https://api.github.com/repos/tigerless-labs/agent-memory/git/blobs/73b028823b7c2dd36fa3a3bdc6b0f61257368180"
           }
         ],
-        "proposed_at": "2026-09-24",
-        "proposer": "candidate-triage",
-        "held_by": "missing README evidence"
+        "proposed_at": "2026-09-27",
+        "proposer": "candidate-triage"
       }
     },
     {
@@ -5665,7 +5673,7 @@
       "triage": {
         "verdict": "held",
         "rule": "An entry belongs in directory/projects.json only when authoritative license or terms sources establish a reviewed source model and complete licenses list. That licence evidence is missing here, so the candidate waits rather than proceeding.",
-        "finding": "Evidence is partial: the licence fetch failed with HTTP 404, so only the README was gathered. README presents GAM as a highly modular agentic file system framework providing structured memory and operating environments for large language models, with text and video modalities across Python SDK, CLI, REST API, and Web Platform access levels. No cross-collection hits. In scope as a memory framework but blocked until an authoritative licence source is located and pinned.",
+        "finding": "Evidence is partial: the licence fetch failed with HTTP 404, so only the README was gathered. README presents GAM as a highly modular agentic file system framework providing structured memory and operating environments for large language models, with text and video modalities across Python SDK, CLI, REST API, and Web Platform access levels. No cross-collection hits. In scope as a memory framework but blocked until an authoritative licence source is located and pinned. Re-check 2026-09-27: the README licence section states \"This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.\", but LICENSE, LICENSE.md, COPYING, COPYING.md, and LICENSE.txt all return 404 on the default branch and GitHub detects no licence, so the hold stands.",
         "evidence": [
           {
             "label": "README",
@@ -5677,7 +5685,7 @@
             "immutable_url": "https://api.github.com/repos/VectorSpaceLab/general-agentic-memory/git/blobs/1a5c04648325f7b3598a06ab8b3229a1c2ae3c7f"
           }
         ],
-        "proposed_at": "2026-09-24",
+        "proposed_at": "2026-09-27",
         "proposer": "candidate-triage",
         "held_by": "missing licence evidence"
       }
@@ -5944,7 +5952,7 @@
       "triage": {
         "verdict": "held",
         "rule": "A pack that a host agent runs \u2014 a skills bundle, a plugin, a prompt-and-process kit, a vault bundle \u2014 qualifies only when it owns state or does enforced work.",
-        "finding": "Licence file says: \"MIT License\" with \"Copyright (c) 2026 Zach Saw\". README claims: \"Give coding agents compiler-accurate Find Usages for C#.\" and \"`graphify-csharp` is a free, headless Roslyn/MSBuild indexer for coding agents.\" The repo ships two things at once: a runnable indexer that emits compiler-resolved callers, references, inheritance, and overrides as JSON, and a host-read instruction doc (\"It teaches an agent how to start a warm session, use exact symbol IDs\" and \"callers and relationships, interpret static-analysis limits, and export JSON\" \"when needed.\"). No cross-collection hits. Evidence complete with no fetch errors. In scope as a candidate but blocked on the collection decision below.",
+        "finding": "Licence file says: \"MIT License\" with \"Copyright (c) 2026 Zach Saw\". README claims: \"Give coding agents compiler-accurate Find Usages for C#.\" and \"`graphify-csharp` is a free, headless Roslyn/MSBuild indexer for coding agents.\" The repo ships two things at once: a runnable indexer that emits compiler-resolved callers, references, inheritance, and overrides as JSON, and a host-read instruction doc (\"It teaches an agent how to start a warm session, use exact symbol IDs\" and \"callers and relationships, interpret static-analysis limits, and export JSON\" \"when needed.\"). No cross-collection hits. Evidence complete with no fetch errors. In scope as a candidate but blocked on the collection decision below. Tree re-check 2026-09-27: src/Graphify.CSharp/Incremental/ carries IncrementalCacheStore, IncrementalIndexSession, FileSystemChangeWatcher, WatcherSessionRegistry, TransitionEventJournal, and the SemanticQuery server and engine; src/Graphify.CSharp.Cli/ adds watcher and query command lines; .agents/skills/ holds the host-read SKILL.md documents.",
         "evidence": [
           {
             "label": "LICENSE",
@@ -5965,9 +5973,9 @@
             "immutable_url": "https://api.github.com/repos/zachsaw/graphify-csharp/git/blobs/931c43ffd00ead8f17ce3945bea23f180a9d76c2"
           }
         ],
-        "proposed_at": "2026-09-24",
+        "proposed_at": "2026-09-27",
         "proposer": "candidate-triage",
-        "held_by": "BACKLOG.md: settle the operational boundary for agent skill packs"
+        "held_by": "scored-system review under ADR 031: the incremental cache store, watcher host and session registry, and semantic query server need a human state-vs-cache call; the instruction docs alone would be packs"
       }
     },
     {
