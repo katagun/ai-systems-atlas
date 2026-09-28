@@ -443,6 +443,29 @@ test("the exclusions list is fetched once, stamped, and only for a search that f
   expect(new URL(fetched[0]).searchParams.get("v"), "the list is fetched under its content stamp").toMatch(/^[0-9a-f]{12}$/);
 });
 
+// The suggestion form waits for the exclusions list, so the list's arrival
+// repaints every view's results, not only those on screen. Switching views
+// repaints nothing, so an empty result left in another view needs it too.
+test("an empty result in another view gains the suggestion form when the exclusions list lands", async ({ page }) => {
+  const fetched = [];
+  let release;
+  const held = new Promise(resolve => { release = resolve; });
+  await page.route(/\/exclusions\.json(\?.*)?$/, async route => {
+    fetched.push(route.request().url());
+    await held;
+    await route.continue();
+  });
+  await page.goto("/?view=models");
+  await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
+  await page.locator("#model-search").fill("Zyxwvut Frobnicator");
+  await expect.poll(() => fetched.length, "the settled empty result asks for the list").toBe(1);
+  await page.locator('.tab[data-tab="directory"]').click();
+  release();
+  await page.waitForFunction(() => Array.isArray(state.exclusions));
+  await page.locator('.tab[data-tab="models"]').click();
+  await expect(page.locator("#model-grid").getByRole("link", { name: "Suggest it for review" })).toBeVisible();
+});
+
 // A list that fails to load counts as an empty one: empty results then name
 // no exclusion but still offer the form, and the page never asks again
 // (docs/WEB.md: exclusions.json is not retried within the page).
