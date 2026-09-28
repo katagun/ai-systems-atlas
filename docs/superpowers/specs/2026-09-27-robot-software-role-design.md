@@ -132,7 +132,7 @@ Expected outcomes, each open to reversal on the review's own evidence:
 
 - `tests/test_directory.py`: `robot_control` is a valid capability; a record carrying an unknown capability still fails.
 - `tests/test_web.js`: the Capability filter narrows by `agent_capabilities`; the URL state round-trips `capability`; the trait-badge guard still passes with no new badge; the badge set is unchanged.
-- `tests/e2e/directory-search.spec.js`: one case selects a capability in the filter and asserts the count, mirroring the Interface case at line 544.
+- `tests/e2e/directory-search.spec.js`: one case selects a capability in the filter and asserts the count, mirroring the Interface case. If the Phase 2 session's PR #347 has landed, the case navigates through `tests/e2e/helpers/landing.js` rather than its own steps.
 - `tests/test_update_directory.py`: a robotics description routes to `agent_framework_sdk` at or above 0.82; a description with "ROS" alone does not route by the new rung.
 - Page-stability check, recomputed blob hashes, and `validate_directory.py` at both PRs. No test pins the five candidates by name, checked with `grep` on 2026-09-28.
 
