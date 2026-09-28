@@ -11,9 +11,18 @@ test("searching G finds GBrain and GStack across all families", async ({ page })
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await page.locator("#all-directory-search").fill("G");
 
+  // Every name that starts with G ties on match, so the ties list A–Z: GBrain
+  // shares the first page with the Gemini releases, and GStack follows the GPT
+  // and Grok releases onto a later page.
   const resultNames = page.locator("#all-directory-grid .project-card h2");
   await expect(resultNames.filter({ hasText: /^GBrain$/ })).toHaveCount(1);
-  await expect(resultNames.filter({ hasText: /^GStack$/ })).toHaveCount(1);
+  const gstack = resultNames.filter({ hasText: /^GStack$/ });
+  const pagerText = page.locator("#all-directory-pager .pager-nav span");
+  for (let pageNumber = 2; pageNumber <= 20 && !(await gstack.count()); pageNumber += 1) {
+    await page.locator("#all-directory-pager [data-pager-next]").click();
+    await expect(pagerText).toHaveText(new RegExp(`^Page ${pageNumber} of `));
+  }
+  await expect(gstack).toHaveCount(1);
 });
 
 test("common Directory search discovers model releases without exposing their score", async ({ page }) => {
@@ -125,7 +134,10 @@ test("the local runtimes scope filters, sorts, and opens its own detail dialog",
   await expect(names.first()).toHaveText("exo");
 
   await page.locator("#runtime-search").fill("Ollama Cloud");
-  await expect(names).toHaveText(["Ollama"]);
+  // Every word must match somewhere, and exo's prose mentions both Ollama and a
+  // cloud service, so the list orders by Best match, which puts Ollama first.
+  await page.locator("#runtime-sort-filter").selectOption("match");
+  await expect(names.first()).toHaveText("Ollama");
   await page.locator('#runtime-grid [data-local-runtime="ollama"]').click();
   await expect(page.locator("#runtime-dialog")).toBeVisible();
   await expect(page.locator("#runtime-dialog-content .eyebrow")).toContainText("Local-runtime score");

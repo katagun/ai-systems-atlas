@@ -195,6 +195,16 @@ async function bootstrap() {
   populateModelLabFilter();
   const scope = AtlasCore.scopeFromURL(new URL(window.location.href).searchParams);
   const restored = restoreScopeFromURL(scope);
+  // Beside a query, the URL names every sort but Best match (scopeURLParams,
+  // rulings R-P1-2 and R-P1-2b). So a link with a query and no sort lists by
+  // match, and a sort it names is one the reader chose, which typing keeps.
+  // A sort the scope cannot take was removed on restore, so it counts as none;
+  // Best match is one, since it is disabled until a query is present. Either
+  // way syncMatchSort runs, so the restored query offers Best match again.
+  if (restored.q?.trim()) {
+    if (restored.sort !== undefined) sortChosenDuringQuery[scope] = true;
+    syncMatchSort(scope);
+  }
   renderStats();
   renderFinder();
   renderModels();
@@ -254,6 +264,19 @@ const sourceModelName = id => taxonomyName("source_models", id);
 const licenseName = id => taxonomyName("licenses", id);
 const scoreProfileName = id => taxonomyName("score_profiles", id);
 const traitNames = (group, values = []) => values.map(id => taxonomyName(group, id)).join(" · ");
+
+// A record's role or type in words, which search weighs above its prose.
+function searchLabel(kind, record) {
+  if (kind === "system") return `${roleName(record.primary_role)} ${familyName(record.system_family)} ${sourceModelName(record.source_model)}`;
+  if (kind === "inference") return taxonomyName("inference_service_types", record.service_type);
+  if (kind === "runtime") return taxonomyName("local_runtime_types", record.runtime_type);
+  if (kind === "model") return record.model_type ? taxonomyName("model_types", record.model_type) : "";
+  if (kind === "pack") return taxonomyName("pack_types", record.pack_type);
+  if (kind === "lab") return taxonomyName("lab_types", record.lab_type);
+  if (kind === "spec") return taxonomyName("specification_types", record.specification_type);
+  if (kind === "robot") return taxonomyName("robot_form_factors", record.form_factor);
+  return "";
+}
 
 // Static dispatch on purpose. The comparison kind comes from the compare URL
 // parameter, so any dynamic lookup keyed on it can resolve an unintended target;
@@ -353,6 +376,43 @@ function writeScopeURL() {
   writeURL(url);
 }
 
+// Scopes whose Sort control has "Best match": a query selects it unless the
+// reader picked a sort since typing, and clearing the query gives back the
+// sort from before (spec, Phase 1 "Order"). syncMatchSort runs wherever a
+// scope's query changes: typing, a carried query, a Clear control, and the
+// Finder's handoff. So a sort chosen for one query never outlives it. Best
+// match orders a query's matches, so it is offered only beside a query.
+const MATCH_SORTS = { systems: "#sort-filter", inference: "#inference-sort-filter", runtimes: "#runtime-sort-filter", models: "#model-sort-filter" };
+const sortBeforeQuery = {};
+const sortChosenDuringQuery = {};
+
+function syncMatchSort(scope) {
+  const selector = MATCH_SORTS[scope];
+  if (!selector) return;
+  const select = $(selector);
+  const hasQuery = Boolean($(SCOPE_CONTROLS[scope].q).value.trim());
+  select.querySelector('option[value="match"]').disabled = !hasQuery;
+  if (hasQuery && !sortChosenDuringQuery[scope] && select.value !== "match") {
+    // A carried query can replace one the box still holds, so the sort from
+    // before the first query is the one clearing gives back.
+    sortBeforeQuery[scope] ??= select.value;
+    select.value = "match";
+  } else if (!hasQuery) {
+    if (select.value === "match") select.value = sortBeforeQuery[scope] || AtlasCore.SCOPE_URL_PARAMS[scope].sort;
+    delete sortBeforeQuery[scope];
+    sortChosenDuringQuery[scope] = false;
+    if (scope === "systems") updateScoreSortAvailability();
+  }
+}
+
+// "12 results" beside a search box while it holds a query.
+function setSearchCount(scope, count) {
+  const selector = SCOPE_CONTROLS[scope]?.q;
+  const input = selector && $(selector);
+  const badge = input && input.parentElement.querySelector(".search-count");
+  if (badge) badge.textContent = input.value.trim() ? `${count} ${count === 1 ? "result" : "results"}` : "";
+}
+
 // Applies the URL to one scope's controls before its first paint. Family goes
 // first because it decides which roles and sorts Systems offers, the score
 // sort among them. It goes first even beside a comparison, which decides the
@@ -413,6 +473,12 @@ function clearComparison({ updateURL = true } = {}) {
   if (updateURL) writeDirectoryURL();
 }
 
+// The views where records can be compared, and so the only ones that show the
+// comparison tray. activateView and every repaint decide through here, so a
+// repaint that lands while another view is open, such as a search index or
+// the exclusions list arriving, never unhides the tray over it.
+const COMPARISON_VIEWS = ["directory"];
+
 function renderComparisonControls() {
   const records = comparisonRecords();
   $$('[data-compare-kind]').forEach(button => {
@@ -426,7 +492,7 @@ function renderComparisonControls() {
   });
   const tray = $("#comparison-tray");
   if (!tray) return;
-  tray.hidden = records.length === 0;
+  tray.hidden = records.length === 0 || !COMPARISON_VIEWS.includes($(".view.is-active")?.id);
   syncBadgeLegend();
   $("#comparison-tray-title").textContent = records.length === 1 ? "1 item selected" : `${records.length} items selected`;
   $("#comparison-tray-items").textContent = records.map(item => item.name).join(" · ");
@@ -727,14 +793,30 @@ function jumpToDirectoryFamily(family) {
   setDirectoryCollection("systems");
 }
 
-function setDirectoryCollection(collection, { updateURL = true } = {}) {
+function setDirectoryCollection(collection, { updateURL = true, carryQuery = updateURL } = {}) {
   const selected = ["all", "systems", "inference", "runtimes", "packs", "robots", "models", "labs", "specifications"].includes(collection) ? collection : "all";
+  // Read before the scope changes: the query the reader is leaving.
+  const previousQuery = carryQuery ? $(SCOPE_CONTROLS[state.directoryCollection].q).value : null;
   const compatible = (selected === "systems" && state.comparison.kind === "system")
     || (selected === "inference" && state.comparison.kind === "inference")
     || (selected === "runtimes" && state.comparison.kind === "runtime")
     || (selected === "models" && state.comparison.kind === "model");
   if (updateURL && state.comparison.ids.length && !compatible) clearComparison({ updateURL: false });
   state.directoryCollection = selected;
+  if (previousQuery !== null) {
+    const input = $(SCOPE_CONTROLS[selected].q);
+    // Changed text is a new query in this scope: it starts on the first page,
+    // and a sort the reader chose for the old text gives way to Best match.
+    if (input.value !== previousQuery) {
+      input.value = previousQuery;
+      state.page[selected] = 1;
+      sortChosenDuringQuery[selected] = false;
+    }
+    syncMatchSort(selected);
+    // A carried query searches what a typed one does: the indexes the box
+    // fetches on focus, with a repaint as each one lands.
+    if (previousQuery.trim()) SEARCH_SCOPES[SCOPE_CONTROLS[selected].q].forEach(name => loadSearchIndex(name)?.then(renderSearchSurfaces));
+  }
   syncCollectionSwitcher();
   $("#all-directory-panel").hidden = selected !== "all";
   $("#systems-directory-panel").hidden = selected !== "systems";
@@ -1082,8 +1164,11 @@ function renderAllDirectoryEntries() {
     modelSearchIndex: searchIndexes.models,
     packSearchIndex: searchIndexes.packs,
     robotSearchIndex: searchIndexes.robots,
+    labelOf: searchLabel,
   }, state.packs, state.robots);
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
+  setSearchCount("all", entries.length);
+  renderJobHint("all", $("#all-directory-search").value);
   const paged = AtlasCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
   state.page.all = paged.page;
   $("#all-directory-grid").innerHTML = paged.items.map(({ kind, record }) => {
@@ -1119,7 +1204,7 @@ function renderAllDirectoryEntries() {
       </article>`;
     }
     return mixedSystemCard(record);
-  }).join("") || '<div class="notice">No systems, model releases, inference services, local runtimes, agent packs, or robots match this search.</div>';
+  }).join("") || emptyStateMarkup("all", "No systems, model releases, inference services, local runtimes, agent packs, or robots match this search.");
   $$('[data-project]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   $$('[data-inference-service]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
   $$('[data-local-runtime]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
@@ -1131,10 +1216,11 @@ function renderAllDirectoryEntries() {
   if (activeScope() === "all") writeScopeURL();
 }
 
-function filteredProjects() {
+function filteredProjects(term) {
   return AtlasCore.filterAndSortProjects(state.projects, {
-    term: $("#project-search").value,
+    term,
     searchIndex: searchIndexes.systems,
+    labelOf: searchLabel,
     family: $("#family-filter").value,
     role: $("#role-filter").value,
     roles: state.directoryRoles || [],
@@ -1154,7 +1240,9 @@ function filteredProjects() {
 // differs — where its records come from, how its cards look, which dialog a
 // card opens — and renderCollection owns the shape they all shared: filter,
 // count, paginate, paint, bind, page. A fifth collection is a new entry here,
-// not a fifth near-identical function.
+// not a fifth near-identical function. `records(term)` lists an entry for a
+// query under its current facets, so an empty result can also ask what the
+// facets alone allow.
 const COLLECTIONS = {
   systems: {
     grid: "#project-grid",
@@ -1181,7 +1269,7 @@ const COLLECTIONS = {
       // only exists once a family narrows the grid to one score profile.
       return { family, suffix, comparable: Boolean(family) };
     },
-    records: () => filteredProjects(),
+    records: term => filteredProjects(term),
     card: (project, { family }) => {
 
     const score = family ? `<div class="score-ring" aria-label="${escapeHTML(project.score_profile)} score ${project.score.overall} out of 10">${project.score.overall}</div>` : "";
@@ -1209,9 +1297,10 @@ const COLLECTIONS = {
       $("#specifications-kicker").textContent = `${state.specifications.length} reviewed specifications`;
       return { suffix: " · Unscored", comparable: false };
     },
-    records: () => AtlasCore.filterSpecifications(state.specifications, {
-      term: $("#specification-search").value,
+    records: term => AtlasCore.filterSpecifications(state.specifications, {
+      term,
       searchIndex: searchIndexes.specifications,
+      labelOf: searchLabel,
       type: $("#specification-type-filter").value,
       scope: $("#specification-scope-filter").value,
       status: $("#specification-status-filter").value,
@@ -1244,9 +1333,10 @@ const COLLECTIONS = {
       $("#labs-kicker").textContent = `${state.labs.length} labs · developers of ${covered} of ${state.reviewedModelCount} reviewed releases`;
       return { suffix: " · Unscored", comparable: false };
     },
-    records: () => AtlasCore.filterLabs(state.labs, {
-      term: $("#lab-search").value,
+    records: term => AtlasCore.filterLabs(state.labs, {
+      term,
       searchIndex: searchIndexes.labs,
+      labelOf: searchLabel,
       type: $("#lab-type-filter").value,
       headquarters: $("#lab-country-filter").value,
       distribution: $("#lab-distribution-filter").value,
@@ -1266,9 +1356,10 @@ const COLLECTIONS = {
       suffix: ` · ${state.taxonomy.inference_service_score_profile.name}`,
       comparable: true,
     }),
-    records: () => AtlasCore.filterInferenceServices(state.inferenceServices, {
-      term: $("#inference-search").value,
+    records: term => AtlasCore.filterInferenceServices(state.inferenceServices, {
+      term,
       searchIndex: searchIndexes.inference,
+      labelOf: searchLabel,
       type: $("#inference-type-filter").value,
       delivery: $("#inference-delivery-filter").value,
       modelSource: $("#inference-model-source-filter").value,
@@ -1295,9 +1386,10 @@ const COLLECTIONS = {
       suffix: ` · ${state.taxonomy.local_runtime_score_profile.name}`,
       comparable: true,
     }),
-    records: () => AtlasCore.filterLocalRuntimes(state.localRuntimes, {
-      term: $("#runtime-search").value,
+    records: term => AtlasCore.filterLocalRuntimes(state.localRuntimes, {
+      term,
       searchIndex: searchIndexes.runtimes,
+      labelOf: searchLabel,
       type: $("#runtime-type-filter").value,
       accelerator: $("#runtime-accelerator-filter").value,
       modelFormat: $("#runtime-format-filter").value,
@@ -1325,8 +1417,8 @@ const COLLECTIONS = {
       $("#models-kicker").textContent = AtlasCore.modelsKickerText(state.modelSourceCount, state.reviewedModelCount, state.modelUnlistedCount);
       return { suffix: ` · ${state.reviewedModelCount} Atlas reviewed; source imports are unscored`, comparable: true };
     },
-    records: () => AtlasCore.filterModels(state.models, {
-      term: $("#model-search").value,
+    records: term => AtlasCore.filterModels(state.models, {
+      term,
       type: $("#model-type-filter").value,
       distribution: $("#model-distribution-filter").value,
       modality: $("#model-modality-filter").value,
@@ -1334,6 +1426,7 @@ const COLLECTIONS = {
       license: $("#model-license-filter").value,
       sort: $("#model-sort-filter").value,
       searchIndex: searchIndexes.models,
+      labelOf: searchLabel,
       ids: labModelIds($("#model-lab-filter").value),
     }),
     card: model => {
@@ -1357,9 +1450,10 @@ const COLLECTIONS = {
     empty: "No robots match these filters.",
     open: id => openRobot(id),
     context: () => ({ suffix: " · Unscored", comparable: false }),
-    records: () => AtlasCore.filterRobots(state.robots, {
-      term: $("#robot-search").value,
+    records: term => AtlasCore.filterRobots(state.robots, {
+      term,
       searchIndex: searchIndexes.robots,
+      labelOf: searchLabel,
       formFactor: $("#robot-form-factor-filter").value,
       aiBasis: $("#robot-ai-basis-filter").value,
       availability: $("#robot-availability-filter").value,
@@ -1375,14 +1469,16 @@ const datasetAttribute = key => `data-${key.replace(/[A-Z]/g, letter => `-${lett
 function renderCollection(name) {
   const collection = COLLECTIONS[name];
   const context = collection.context();
-  const records = collection.records(context);
+  const records = collection.records($(SCOPE_CONTROLS[name].q).value);
   const noun = collection.noun[records.length === 1 ? 0 : 1];
   $(collection.resultCount).textContent = `${records.length} ${noun}${context.suffix}`;
+  setSearchCount(name, records.length);
+  renderJobHint(name, $(SCOPE_CONTROLS[name].q).value);
   const paged = AtlasCore.paginate(records, { page: state.page[collection.pageKey], pageSize: state.pageSize });
   state.page[collection.pageKey] = paged.page;
   const grid = $(collection.grid);
   grid.innerHTML = paged.items.map(record => collection.card(record, context)).join("")
-    || `<div class="notice">${collection.empty}</div>`;
+    || emptyStateMarkup(name, collection.empty);
   $$(`[${datasetAttribute(collection.dataset)}]`, grid).forEach(button =>
     button.addEventListener("click", () => collection.open(button.dataset[collection.dataset])));
   if (context.comparable) {
@@ -1412,11 +1508,11 @@ function labModelIds(labId) {
 // One grid of installables: unscored packs beside scored host-installed
 // systems (ADR 035). Pack facets narrow only packs; the search term narrows
 // both. Scores stay hidden and comparison stays off, as the scope requires.
-function renderPacks() {
-  const term = $("#pack-search").value;
+function packScope(term) {
   const packs = AtlasCore.filterPacks(state.packs, {
     term,
     searchIndex: searchIndexes.packs,
+    labelOf: searchLabel,
     type: $("#pack-type-filter").value,
     host: $("#pack-host-filter").value,
     install: $("#pack-install-filter").value,
@@ -1425,17 +1521,26 @@ function renderPacks() {
   const systems = AtlasCore.packShapedSystems(state.projects, {
     term,
     searchIndex: searchIndexes.systems,
+    labelOf: searchLabel,
   });
-  const entries = AtlasCore.mergePackScopeEntries(packs, systems);
+  const entries = AtlasCore.mergePackScopeEntries(packs, systems, {
+    term, packIndex: searchIndexes.packs, systemIndex: searchIndexes.systems, labelOf: searchLabel,
+  });
+  return { packs, systems, entries };
+}
+
+function renderPacks() {
+  const { packs, systems, entries } = packScope($("#pack-search").value);
   const packNoun = packs.length === 1 ? "pack" : "packs";
   const systemNoun = systems.length === 1 ? "installed system" : "installed systems";
   $("#pack-result-count").textContent = `${packs.length} ${packNoun} · ${systems.length} ${systemNoun} · Scores hidden`;
+  setSearchCount("packs", entries.length);
   const paged = AtlasCore.paginate(entries, { page: state.page.packs, pageSize: state.pageSize });
   state.page.packs = paged.page;
   const grid = $("#pack-grid");
   grid.innerHTML = paged.items.map(({ kind, record }) =>
     kind === "pack" ? packCard(record) : mixedSystemCard(record)).join("")
-    || '<div class="notice">No agent packs match these filters.</div>';
+    || emptyStateMarkup("packs", "No agent packs match these filters.");
   $$('[data-pack]', grid).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
   $$('[data-project]', grid).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   paintMarks(grid);
@@ -1501,7 +1606,7 @@ function renderFinder() {
     // now, while the priority question is on screen.
     ensureFinderDetail();
     const choices = FINDER_PRIORITIES[answers.direction];
-    content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2>What matters most?</h2><p>This adjusts ranking only within the selected score profile.</p></div>
+    content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2 tabindex="-1">What matters most?</h2><p>This adjusts ranking only within the selected score profile.</p></div>
       <div class="finder-choice-grid">${choices.map(item => finderChoice("priority", item)).join("")}</div>`;
   } else {
     const { direction, goal } = answers;
@@ -1628,17 +1733,208 @@ function recommendationReasons(project, priority) {
 const FINDER_DETAIL_KINDS = { inference_service: "inference", local_runtime: "runtime" };
 const finderDetailAwaited = new Set();
 
+// The records a Finder goal can draw on: active systems in its family and
+// role set, or services or runtimes of its type (docs/WEB.md).
+function finderGoalRecords(direction, goalConfig) {
+  if (direction === "inference_service") return state.inferenceServices.filter(item => goalConfig.serviceTypes.includes(item.service_type));
+  if (direction === "local_runtime") return state.localRuntimes.filter(item => goalConfig.runtimeTypes.includes(item.runtime_type));
+  return state.projects.filter(item => item.status === "active" && item.system_family === direction && goalConfig.roles.includes(item.primary_role));
+}
+
 function finderCandidates() {
   const { direction, goal } = state.finder.answers;
   const goalConfig = FINDER_GOALS[direction]?.find(item => item.id === goal);
-  if (!goalConfig) return [];
-  const records = direction === "inference_service" ? state.inferenceServices
-    : direction === "local_runtime" ? state.localRuntimes : state.projects;
-  return records.filter(project => {
-    if (direction === "inference_service") return goalConfig.serviceTypes.includes(project.service_type);
-    if (direction === "local_runtime") return goalConfig.runtimeTypes.includes(project.runtime_type);
-    return project.status === "active" && project.system_family === direction && goalConfig.roles.includes(project.primary_role);
+  return goalConfig ? finderGoalRecords(direction, goalConfig) : [];
+}
+
+let finderGoalList = null;
+function finderGoalEntries() {
+  finderGoalList ||= Object.entries(FINDER_GOALS).flatMap(([direction, goals]) =>
+    goals.map(goal => ({ ...goal, direction, eligible: finderGoalRecords(direction, goal).length })));
+  return finderGoalList;
+}
+
+// The job is already chosen, so focus lands on the question it leaves open.
+function openFinderAt(direction, goal) {
+  state.finder = { step: 2, answers: { direction, goal } };
+  renderFinder();
+  activateView("finder", { focusTarget: $("#finder-content h2") });
+}
+
+function renderJobHint(scope, term) {
+  const hint = $(`[data-job-hint="${scope}"]`);
+  if (!hint) return;
+  const goal = term.trim() ? AtlasCore.matchFinderGoal(finderGoalEntries(), term) : null;
+  hint.hidden = !goal;
+  hint.innerHTML = goal
+    ? `<span>Looks like a job: <strong>${escapeHTML(goal.label)}</strong>. The Finder can shortlist from ${goal.eligible} reviewed ${goal.eligible === 1 ? "record" : "records"}.</span><button type="button" class="link-button" data-finder-goal="${escapeHTML(`${goal.direction}:${goal.id}`)}">Open shortlist →</button>`
+    : "";
+}
+
+// What each scope searches before any facet applies, as [kind, records, index]
+// groups: the kind searchFields reads a record as, and the search index the
+// scope's own filter widens it with once that index has loaded.
+const SCOPE_RECORDS = {
+  all: () => [
+    ["system", state.projects, searchIndexes.systems], ["inference", state.inferenceServices, searchIndexes.inference],
+    ["runtime", state.localRuntimes, searchIndexes.runtimes], ["model", state.models, searchIndexes.models],
+    ["pack", state.packs, searchIndexes.packs], ["robot", state.robots, searchIndexes.robots],
+  ],
+  systems: () => [["system", state.projects, searchIndexes.systems]],
+  inference: () => [["inference", state.inferenceServices, searchIndexes.inference]],
+  runtimes: () => [["runtime", state.localRuntimes, searchIndexes.runtimes]],
+  packs: () => [["pack", state.packs, searchIndexes.packs], ["system", AtlasCore.packShapedSystems(state.projects, {}), searchIndexes.systems]],
+  robots: () => [["robot", state.robots, searchIndexes.robots]],
+  models: () => [["model", state.models, searchIndexes.models]],
+  labs: () => [["lab", state.labs, searchIndexes.labs]],
+  specifications: () => [["spec", state.specifications, searchIndexes.specifications]],
+};
+
+// What a query still finds when a scope lists nothing for it, across the whole
+// catalog: All's six kinds, then Labs and Specifications, which All leaves
+// out. It runs the matcher every scope's filter runs, with each kind's index
+// once that index has loaded, and every facet ignored.
+// - `hidden`: this scope's own matches. It lists none of them, so its facets
+//   hide every one. All has no facets, so it hides nothing.
+// - `elsewhere`: matches of All's kinds outside this scope, which All lists.
+// - `found`: whether anything in the catalog matches at all.
+function emptyResultMatches(scope, term) {
+  const query = AtlasCore.parseSearchQuery(term);
+  const matches = [...SCOPE_RECORDS.all(), ...SCOPE_RECORDS.labs(), ...SCOPE_RECORDS.specifications()]
+    .flatMap(([kind, records, index]) => records
+      .filter(record => AtlasCore.recordMatch(query, AtlasCore.searchFields(kind, record, { index, labelOf: searchLabel })) > 0)
+      .map(record => ({ kind, record })));
+  if (scope === "all") return { hidden: [], elsewhere: [], found: matches.length > 0 };
+  const own = new Set((SCOPE_RECORDS[scope]?.() || []).flatMap(([, records]) => records));
+  const allKinds = new Set(SCOPE_RECORDS.all().map(([kind]) => kind));
+  return {
+    hidden: matches.filter(({ record }) => own.has(record)),
+    elsewhere: matches.filter(({ kind, record }) => allKinds.has(kind) && !own.has(record)),
+    found: matches.length > 0,
+  };
+}
+
+// The records a scope lists under its current facets with no query: what its
+// did-you-mean draws from, so a suggestion always matches something in the
+// scope as filtered.
+function facetedRecords(scope) {
+  if (scope === "packs") return packScope("").entries.map(entry => entry.record);
+  if (COLLECTIONS[scope]) return COLLECTIONS[scope].records("");
+  return (SCOPE_RECORDS[scope]?.() || []).flatMap(([, records]) => records);
+}
+
+// "Show it" under an empty result: clears every facet the scope's URL
+// carries, keeping its query and sort, then repaints through each changed
+// control's own input path, so the page, the counts, and the URL follow.
+// Systems also drops a Finder role set, a facet no control holds.
+function clearScopeFacets(scope) {
+  if (!SCOPE_CONTROLS[scope]) return;
+  if (scope === "systems") {
+    state.directoryRoles = null;
+    state.directoryRolesLabel = null;
+  }
+  const changed = Object.entries(SCOPE_CONTROLS[scope])
+    .filter(([key]) => key !== "q" && key !== "sort")
+    .map(([, selector]) => $(selector))
+    .filter(control => (control.type === "checkbox" ? control.checked : control.value !== ""));
+  changed.forEach(control => {
+    if (control.type === "checkbox") control.checked = false;
+    else control.value = "";
   });
+  changed.forEach(control => control.dispatchEvent(new Event("input", { bubbles: true })));
+  if (!changed.length) pageRenderer(scope)?.();
+  $(SCOPE_CONTROLS[scope].q).focus();
+}
+
+// "Search all" under an empty result: lists the query in All, opening the
+// Directory from a sibling view (Models, Labs, Specifications). It writes All's
+// box itself rather than carrying the query through the Directory's current
+// scope, whose box a sibling view keeps hidden: text written there would later
+// carry back as unchanged and keep a sort chosen for another query. Focusing
+// All's box loads its indexes, as it does for a typed query.
+function searchAllCollections(term) {
+  if ($(".view.is-active")?.id !== "directory") activateView("directory");
+  $("#all-directory-search").value = term;
+  state.page.all = 1;
+  setDirectoryCollection("all", { carryQuery: false });
+  $("#all-directory-search").focus();
+}
+
+// Names compared the way search and suggestNames compare them: a hyphen reads
+// as a space, so "claude squad" names claude-squad.
+const comparableName = text => AtlasCore.comparableText(text);
+
+// The list lands once, and every search surface repaints, since the suggestion
+// form under any empty result waits for it.
+let exclusionsRequest = null;
+function excludedEntry(term) {
+  if (!state.exclusions) {
+    exclusionsRequest ||= loadJSON("exclusions.json")
+      .then(data => { state.exclusions = data.entries || []; })
+      .catch(() => { state.exclusions = []; })
+      .then(renderSearchSurfaces);
+    return null;
+  }
+  const wanted = comparableName(term);
+  return state.exclusions.find(entry => comparableName(entry.name) === wanted) || null;
+}
+
+function suggestionURL(term) {
+  return `https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml&name=${encodeURIComponent(term.trim())}`;
+}
+
+// Every search index an empty result reads: All's six kinds, then Labs and
+// Specifications (emptyResultMatches).
+const CATALOG_INDEXES = ["systems", "inference", "runtimes", "models", "packs", "robots", "labs", "specifications"];
+const catalogIndexWaits = new Set();
+
+// Whether any of those indexes is still on its way. Each one neither loaded
+// nor failed is fetched, and the search surfaces repaint once as it lands. A
+// failed index counts as settled: an empty result never asks for it again,
+// so an index that keeps failing cannot loop.
+function catalogIndexesPending() {
+  let pending = false;
+  for (const collection of CATALOG_INDEXES) {
+    if (searchIndexes[collection] || searchIndexFailed.has(collection)) continue;
+    pending = true;
+    if (catalogIndexWaits.has(collection)) continue;
+    catalogIndexWaits.add(collection);
+    loadSearchIndex(collection)?.then(() => {
+      catalogIndexWaits.delete(collection);
+      renderSearchSurfaces();
+    });
+  }
+  return pending;
+}
+
+// An empty result names what the reader can do next (R-P1-11, R-P1-15): a
+// match the facets hide is offered back, and a match in another collection is
+// offered through All. The query is suggested for review only when nothing in
+// the catalog answers it and no exclusion names it. An imported models.dev row
+// is not Atlas reviewed, so a hidden count holding one does not say "reviewed".
+// Until every index has settled, part of the catalog is searched by its boot
+// fields alone, so only did-you-mean, which reads names, and the Finder show.
+function emptyStateMarkup(scope, fallback) {
+  const selector = SCOPE_CONTROLS[scope]?.q;
+  const term = selector ? $(selector).value : "";
+  if (!term.trim()) return `<div class="notice">${fallback}</div>`;
+  const settled = !catalogIndexesPending();
+  const { hidden, elsewhere, found } = settled ? emptyResultMatches(scope, term) : { hidden: [], elsewhere: [], found: false };
+  const typed = comparableName(term);
+  const names = AtlasCore.suggestNames(facetedRecords(scope), term).filter(name => comparableName(name) !== typed);
+  const excluded = settled ? excludedEntry(term) : null;
+  // The form also waits for the exclusions list, so it never invites review
+  // of a name the review already left out.
+  const suggest = settled && !found && !excluded && Array.isArray(state.exclusions);
+  const reviewed = hidden.every(({ kind, record }) => kind !== "model" || isReviewedModel(record)) ? "reviewed " : "";
+  return `<div class="notice empty-search">
+    <p><strong>No matches for “${escapeHTML(term.trim())}”${hidden.length ? " with these filters" : ""}.</strong></p>
+    ${hidden.length ? `<p>It matches ${hidden.length} ${reviewed}${hidden.length === 1 ? "record" : "records"} your filters hide. <button type="button" class="link-button" data-empty-unfilter>${hidden.length === 1 ? "Show it" : "Show them"}</button></p>` : ""}
+    ${elsewhere.length ? `<p>It matches ${elsewhere.length} ${elsewhere.length === 1 ? "record" : "records"} in other collections. <button type="button" class="link-button" data-empty-search-all>Search all</button></p>` : ""}
+    ${names.length ? `<p>Did you mean ${names.map(name => `<button type="button" class="link-button" data-suggest-query="${escapeHTML(name)}">${escapeHTML(name)}</button>`).join(", ")}?</p>` : ""}
+    ${excluded ? `<p><strong>Reviewed and left out:</strong> ${escapeHTML(excluded.name)}. ${escapeHTML(excluded.reason)}</p>` : ""}
+    <p><button type="button" class="link-button" data-empty-finder>Try the Finder</button>${suggest ? ` · <a href="${escapeHTML(suggestionURL(term))}" target="_blank" rel="noreferrer">Suggest it for review</a>` : ""}</p>
+  </div>`;
 }
 
 // Null once this goal's candidates have been waited on, so a detail file that
@@ -1716,8 +2012,9 @@ function applyFinderToDirectory() {
     $("#runtime-format-filter").value = "";
     $("#runtime-api-filter").value = "";
     $("#runtime-sort-filter").value = "score";
+    syncMatchSort("runtimes");
     state.page.runtimes = 1;
-    setDirectoryCollection("runtimes");
+    setDirectoryCollection("runtimes", { carryQuery: false });
     activateView("directory");
     revealDirectoryResults();
     return;
@@ -1729,8 +2026,9 @@ function applyFinderToDirectory() {
     $("#inference-model-source-filter").value = "";
     $("#inference-api-filter").value = "";
     $("#inference-sort-filter").value = "score";
+    syncMatchSort("inference");
     state.page.inference = 1;
-    setDirectoryCollection("inference");
+    setDirectoryCollection("inference", { carryQuery: false });
     activateView("directory");
     revealDirectoryResults();
     return;
@@ -1750,9 +2048,10 @@ function applyFinderToDirectory() {
   $("#status-filter").value = "active";
   $("#local-filter").checked = false;
   $("#sort-filter").value = "score";
+  syncMatchSort("systems");
   updateScoreSortAvailability();
   state.page.systems = 1;
-  setDirectoryCollection("systems");
+  setDirectoryCollection("systems", { carryQuery: false });
   activateView("directory");
   revealDirectoryResults();
 }
@@ -2111,16 +2410,27 @@ function loadDetail(kind, record) {
 
 // A collection's search index is the editorial prose its filter matches on,
 // keyed by record id. It is worth a fetch only once someone means to search,
-// and every filter falls back to the boot record until it lands.
+// and every filter falls back to the boot record until it lands. Only a JSON
+// object is stored, so an index is loaded exactly when its entry is truthy.
 const searchIndexes = {};
 const searchIndexRequests = {};
+// Indexes whose last fetch failed. An empty result counts one as settled, so
+// it never waits on it or asks for it again; a focused search box still does.
+const searchIndexFailed = new Set();
 
+// A body that is not a JSON object, such as null, is a failed load too.
+// Stored, it would stay falsy, so an empty result would wait on it for ever,
+// re-arming its own repaint in a loop the page never leaves.
 function loadSearchIndex(collection) {
   if (searchIndexes[collection]) return null;
   if (!searchIndexRequests[collection]) {
     searchIndexRequests[collection] = loadJSON(`app/search/${collection}.json`)
-      .then(index => { searchIndexes[collection] = index; })
-      .catch(() => { delete searchIndexRequests[collection]; });
+      .then(index => {
+        if (!index || typeof index !== "object" || Array.isArray(index)) throw new Error(`app/search/${collection}.json is not an index`);
+        searchIndexes[collection] = index;
+        searchIndexFailed.delete(collection);
+      })
+      .catch(() => { delete searchIndexRequests[collection]; searchIndexFailed.add(collection); });
   }
   return searchIndexRequests[collection];
 }
@@ -2717,7 +3027,13 @@ function restoreViewFromURL() {
   writeURL(url);
 }
 
-function activateView(id) {
+// A switch hides whatever was pressed inside the old view, so focus would fall
+// to the page. When focus is leaving another view, it lands on the new view's
+// heading instead, or on `focusTarget`, without scrolling. Boot, the header's
+// tabs, and dialogs all sit outside every view, so they keep their focus.
+function activateView(id, { focusTarget } = {}) {
+  // Read before anything repaints: a repaint can detach the focused element.
+  const leaving = document.activeElement?.closest?.(".view");
   if (id === "inference-services" || id === "local-runtimes" || id === "agent-packs" || id === "robots") {
     setDirectoryCollection(id === "inference-services" ? "inference" : id === "local-runtimes" ? "runtimes" : id === "agent-packs" ? "packs" : "robots");
     id = "directory";
@@ -2733,7 +3049,7 @@ function activateView(id) {
     || (state.directoryCollection === "runtimes" && state.comparison.kind === "runtime")
     || (state.directoryCollection === "models" && state.comparison.kind === "model")
   ));
-  if (id === "directory" && state.comparison.ids.length && !comparisonFitsView) {
+  if (COMPARISON_VIEWS.includes(id) && state.comparison.ids.length && !comparisonFitsView) {
     clearComparison();
   }
   $$(".tab[data-tab]").forEach(item => {
@@ -2755,8 +3071,12 @@ function activateView(id) {
     else item.removeAttribute("aria-current");
   });
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
-  if (id === "directory") renderComparisonControls();
-  else $("#comparison-tray").hidden = true;
+  if (leaving && leaving.id !== id) {
+    const heading = focusTarget || document.getElementById(document.getElementById(id)?.getAttribute("aria-labelledby"));
+    heading?.focus({ preventScroll: true });
+  }
+  // The view is active now, so the tray shows here only in COMPARISON_VIEWS.
+  renderComparisonControls();
   syncBadgeLegend();
   writeViewURL(id);
   writeScopeURL();
@@ -2809,6 +3129,25 @@ function initDocsMenu() {
 }
 
 function bindEvents() {
+  for (const [scope, selector] of Object.entries(MATCH_SORTS)) {
+    $(SCOPE_CONTROLS[scope].q).addEventListener("input", () => syncMatchSort(scope));
+    $(selector).addEventListener("input", () => {
+      if ($(SCOPE_CONTROLS[scope].q).value.trim()) sortChosenDuringQuery[scope] = true;
+    });
+  }
+  document.addEventListener("keydown", event => {
+    if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) return;
+    if (event.target.closest?.("input, textarea, select, [contenteditable]")) return;
+    // A modal dialog makes the search box inert, so the key would only be
+    // swallowed; leave it to the browser.
+    if (document.querySelector("dialog[open]")) return;
+    const selector = SCOPE_CONTROLS[activeScope()]?.q;
+    if (!selector) return;
+    event.preventDefault();
+    $(selector).focus();
+  });
+  // The Docs menu button carries .tab styling but no data-tab, so the primary
+  // tabs bind on [data-tab] and the menu wires separately below.
   $$(".tab[data-tab]").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
   $$('[data-open-view]').forEach(button => button.addEventListener("click", () => { closeDocsMenu(); activateView(button.dataset.openView); }));
@@ -2886,6 +3225,7 @@ function bindEvents() {
     $("#inference-model-source-filter").value = "";
     $("#inference-api-filter").value = "";
     $("#inference-sort-filter").value = "score";
+    syncMatchSort("inference");
     state.page.inference = 1;
     renderInferenceServices();
   });
@@ -2896,6 +3236,7 @@ function bindEvents() {
     $("#runtime-format-filter").value = "";
     $("#runtime-api-filter").value = "";
     $("#runtime-sort-filter").value = "score";
+    syncMatchSort("runtimes");
     state.page.runtimes = 1;
     renderLocalRuntimes();
   });
@@ -2908,6 +3249,7 @@ function bindEvents() {
     $("#model-license-filter").value = "";
     $("#model-lab-filter").value = "";
     $("#model-sort-filter").value = "score";
+    syncMatchSort("models");
     state.page.models = 1;
     renderModels();
   });
@@ -2944,6 +3286,7 @@ function bindEvents() {
   });
   $("#reset-filters").addEventListener("click", () => {
     applyDirectoryDefaults();
+    syncMatchSort("systems");
     state.page.systems = 1;
     renderProjects();
   });
@@ -3030,6 +3373,34 @@ function bindEvents() {
       labLink.closest("dialog")?.close();
       openLab(labLink.dataset.openLab);
     }
+  });
+  document.addEventListener("click", event => {
+    const suggestion = event.target.closest("[data-suggest-query]");
+    if (suggestion) {
+      const selector = SCOPE_CONTROLS[activeScope()]?.q;
+      if (!selector) return;
+      const input = $(selector);
+      input.value = suggestion.dataset.suggestQuery;
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.focus();
+      return;
+    }
+    const goal = event.target.closest("[data-finder-goal]");
+    if (goal) {
+      const [direction, id] = goal.dataset.finderGoal.split(":");
+      openFinderAt(direction, id);
+      return;
+    }
+    if (event.target.closest("[data-empty-unfilter]")) {
+      clearScopeFacets(activeScope());
+      return;
+    }
+    if (event.target.closest("[data-empty-search-all]")) {
+      const selector = SCOPE_CONTROLS[activeScope()]?.q;
+      if (selector) searchAllCollections($(selector).value);
+      return;
+    }
+    if (event.target.closest("[data-empty-finder]")) activateView("finder");
   });
   $("#comparison-open").addEventListener("click", openComparison);
   $("#comparison-clear").addEventListener("click", () => clearComparison());
