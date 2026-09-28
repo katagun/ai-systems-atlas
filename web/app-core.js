@@ -642,6 +642,120 @@
     };
   }
 
+  // The collections the Directory offers, in the order the front door's index
+  // and the results strip list them (Phase 2 spec, section 2). Every entry is
+  // a Directory collection since #345; `kind` stays so a future sibling view
+  // is one word. `emblem` names the card badge whose emblem the entry shows:
+  // the family's own type badge for a system family, else the collection's
+  // first type badge in CARD_BADGES order. All shows the type family's empty
+  // frame, and Robots shows none until its form_factor type badge exists
+  // (ADR 037). `field` is what the tile's categories tally; `facet` is the
+  // URL key that opens the scope narrowed to one.
+  const FAMILY_SHORT_NAMES = { memory_system: "Memory", agent_system: "Agents", assistant_system: "Assistants" };
+  const COLLECTIONS = [
+    { id: "all", name: "Everything", short: "All", kind: "scope", emblem: null, field: null, facet: null },
+    { id: "systems", name: "Systems", short: "Systems", kind: "scope", emblem: "memory-system", field: "system_family", facet: "family" },
+    { id: "models", name: "Models", short: "Models", kind: "scope", emblem: "language-model", field: "model_type", facet: "type" },
+    { id: "inference", name: "Inference services", short: "Services", kind: "scope", emblem: "direct-model-api", field: "service_type", facet: "type" },
+    { id: "runtimes", name: "Local runtimes", short: "Runtimes", kind: "scope", emblem: "desktop-runner", field: "runtime_type", facet: "type" },
+    { id: "packs", name: "Agent packs", short: "Packs", kind: "scope", emblem: "skills-bundle", field: "pack_type", facet: "type" },
+    { id: "robots", name: "Robots", short: "Robots", kind: "scope", emblem: null, field: "form_factor", facet: "formFactor" },
+    { id: "labs", name: "Labs", short: "Labs", kind: "scope", emblem: "ai-company", field: "lab_type", facet: "type" },
+    { id: "specifications", name: "Specifications", short: "Specs", kind: "scope", emblem: "protocol", field: "specification_type", facet: "type" },
+  ];
+
+  // What a collection's default view lists: the same records switcherCounts
+  // counted, so a tile and a strip entry never disagree with the grid.
+  function collectionEntries(id, payloads = {}) {
+    const { projects = [], services = [], runtimes = [], models = [], packs = [], robots = [], labs = [], specifications = [] } = payloads;
+    const { status } = directoryDefaults();
+    const listed = projects.filter(project => !status || project.status === status);
+    if (id === "all") return [...projects, ...services, ...runtimes, ...models, ...packs, ...robots];
+    if (id === "systems") return listed;
+    if (id === "models") return models;
+    if (id === "inference") return services;
+    if (id === "runtimes") return runtimes;
+    if (id === "packs") return [...packs, ...packShapedSystems(projects, {})];
+    if (id === "robots") return robots;
+    if (id === "labs") return labs;
+    if (id === "specifications") return specifications;
+    return [];
+  }
+
+  // The count beside a name, and the split where the collection has one:
+  // Models reviewed against imported (ADR 027), Agent packs packs against
+  // host-installed systems (ADR 035), Systems active, All unscored A–Z.
+  function collectionCount(id, payloads = {}) {
+    const count = collectionEntries(id, payloads).length;
+    if (id === "all") return { count, note: "A–Z, no scores" };
+    if (id === "systems") return { count, note: "active" };
+    if (id === "models") {
+      const reviewed = (payloads.models || []).filter(model => model.review_status === "reviewed").length;
+      return { count, note: `${reviewed} reviewed · ${count - reviewed} imported` };
+    }
+    if (id === "packs") {
+      const packs = (payloads.packs || []).length;
+      return { count, note: `${packs} ${packs === 1 ? "pack" : "packs"} · ${count - packs} host-installed` };
+    }
+    return { count, note: "" };
+  }
+
+  function humanize(value) {
+    return String(value).replaceAll("_", " ").replace(/^./, letter => letter.toUpperCase());
+  }
+
+  // A value's reader-facing name is its type badge's name; every type value
+  // has one (docs/WEB.md "Card badges"), except Robots' form factors so far.
+  function typeName(field, value) {
+    const badge = Object.values(CARD_BADGES).find(entry => entry.family === "type" && entry.test && entry.test.field === field && entry.test.equals === value);
+    return badge ? badge.name : humanize(value);
+  }
+
+  // A collection's largest categories, at most `limit`, each with the facet
+  // key and value that opens the scope narrowed to it. Records without the
+  // field (imported model rows, host-installed systems) are not tallied.
+  function collectionCategories(id, payloads = {}, limit = 4) {
+    const collection = COLLECTIONS.find(entry => entry.id === id);
+    if (!collection || !collection.field) return [];
+    const tally = new Map();
+    for (const record of collectionEntries(id, payloads)) {
+      const value = record[collection.field];
+      if (value === undefined || value === null) continue;
+      tally.set(value, (tally.get(value) || 0) + 1);
+    }
+    // Ties break by value A–Z, so the order never depends on record order.
+    return [...tally.entries()]
+      .sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])))
+      .slice(0, limit)
+      .map(([value, count]) => ({
+        key: collection.facet,
+        value,
+        count,
+        label: id === "systems" ? FAMILY_SHORT_NAMES[value] || humanize(value) : typeName(collection.field, value),
+      }));
+  }
+
+  // Which collection a comparison belongs to, by the comparison's kind.
+  const COMPARISON_COLLECTIONS = { system: "systems", inference: "inference", runtime: "runtimes", model: "models" };
+
+  // The state dot on a collection's entry: a comparison in progress there,
+  // or the Finder's role set applied to Systems. A comparison wins.
+  function collectionState(id, { comparisonKind = null, finderRoles = null } = {}) {
+    if (COMPARISON_COLLECTIONS[comparisonKind] === id) return "compare";
+    if (id === "systems" && finderRoles) return "finder";
+    return null;
+  }
+
+  // A bare Directory URL is the front door; anything that names a scope, a
+  // filter, a comparison, or a record is results (front-door spec, "URL
+  // state and history"). Other views are never the door.
+  function directoryStageFromURL(params) {
+    const view = params.get("view");
+    if (view && view !== "directory") return "results";
+    if (params.has("collection") || params.has("compare") || params.has("record")) return "results";
+    return SCOPE_URL_KEYS.some(key => params.has(key)) ? "results" : "door";
+  }
+
   // Every URL parameter a scope writes, with its default. The keys are the
   // ones the scope's filter already reads — directoryDefaults() for Systems,
   // the view descriptors' facets elsewhere — so a parameter means the same in
@@ -1306,6 +1420,9 @@
     BADGE_FAMILIES,
     CARD_BADGES,
     CARD_BADGE_SETS,
+    COLLECTIONS,
+    COMPARISON_COLLECTIONS,
+    FAMILY_SHORT_NAMES,
     INACTIVE_STATUSES,
     SCOPE_URL_KEYS,
     SCOPE_URL_PARAMS,
@@ -1315,10 +1432,15 @@
     buildLabIndex,
     cardBadgeGlossary,
     cardBadges,
+    collectionCategories,
+    collectionCount,
+    collectionEntries,
+    collectionState,
     comparableText,
     compareProjects,
     cycleThemePreference,
     directoryDefaults,
+    directoryStageFromURL,
     editDistance,
     familyEmblem,
     filterAndSortProjects,

@@ -358,3 +358,37 @@ class WebPayloadTests(unittest.TestCase):
                 (ROOT / "web" / path).read_text(encoding="utf-8"),
                 f"web/{path} is stale; run uv run python scripts/build_web_payload.py",
             )
+
+    def test_every_boot_payload_names_its_three_most_recently_reviewed_records(
+        self,
+    ) -> None:
+        """Tiles show the three records reviewed last, ties broken by name (Phase 2 spec, section 3)."""
+        for collection, name, key, _ in COLLECTIONS:
+            payload = json.loads(self.payloads[f"app/{collection}.json"])
+            records = self.catalog[name][key]
+            by_name = sorted(records, key=lambda record: record["name"])
+            newest_first = sorted(
+                by_name, key=lambda record: record["verified_at"], reverse=True
+            )
+            self.assertEqual(
+                payload["recent"],
+                [record["id"] for record in newest_first[:3]],
+                collection,
+            )
+            self.assertTrue(
+                set(payload["recent"])
+                <= {record["id"] for record in payload[collection]},
+                collection,
+            )
+
+    def test_recent_record_ids_orders_by_review_date_then_name(self) -> None:
+        records = [
+            {"id": "b", "name": "Beta", "verified_at": "2026-09-01"},
+            {"id": "a", "name": "Alpha", "verified_at": "2026-09-01"},
+            {"id": "c", "name": "Gamma", "verified_at": "2026-09-20"},
+            {"id": "d", "name": "Delta", "verified_at": "2026-08-01"},
+            {"id": "e", "name": "Epsilon"},
+        ]
+        self.assertEqual(build_web_payload.recent_record_ids(records), ["c", "a", "b"])
+        self.assertEqual(build_web_payload.recent_record_ids(records, limit=1), ["c"])
+        self.assertEqual(build_web_payload.recent_record_ids([]), [])
