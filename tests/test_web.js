@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1487,6 +1487,24 @@ test("a URL's filters belong to its view or to the Directory collection it names
   assert.equal(scopeFromURL(new URLSearchParams("view=finder")), null);
 });
 
+// A label names one control, so it may hold only that one labelable element.
+// The search counts beside the boxes once sat inside them as <output>, a
+// second labelable element, which made each of those labels invalid.
+test("every label in index.html holds exactly one control", () => {
+  const labels = [...indexHTML().matchAll(/<label\b[^>]*>([\s\S]*?)<\/label>/g)];
+  assert.ok(labels.length > 0, "index.html has labels");
+  for (const [whole, inner] of labels) {
+    const controls = inner.match(/<(?:input|select|textarea|button|output|meter|progress)\b/g) || [];
+    assert.equal(controls.length, 1, `${whole.slice(0, 90)}… holds ${controls.length} controls`);
+  }
+});
+
+// Agent packs and robots have no scores, so the All intro promises scores
+// only where a collection has them (ruling R-P1-23).
+test("the All intro promises scores only where a collection has them", () => {
+  assert.match(indexHTML(), /Choose a collection for its own filters, and its scores where it has them\./);
+});
+
 test("the API view does not call web-page evidence pinned", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
   // docs/DATA_MODEL.md: web terms carry "no claim of immutability".
@@ -1516,6 +1534,29 @@ test("a query drops stop words and treats hyphens as spaces", () => {
   assert.deepEqual(parseSearchQuery("   ").tokens, []);
 });
 
+// "ollama." asks for "ollama": a period that ends a query word is dropped
+// before matching, before the name bonus reads the query as typed, and before
+// did-you-mean, while a period inside or before a word stays.
+test("a period that ends a query word is dropped, and every other period stays", () => {
+  const words = raw => parseSearchQuery(raw).words;
+  assert.deepEqual(parseSearchQuery("ollama.").tokens, ["ollama"]);
+  assert.deepEqual(words("ollama. cloud"), ["ollama", "cloud"]);
+  assert.deepEqual(words(".net"), [".net"]);
+  assert.deepEqual(words("llama.cpp"), ["llama.cpp"]);
+  assert.deepEqual(words("node.js"), ["node.js"]);
+  assert.deepEqual(words("c++"), ["c++"]);
+  assert.deepEqual(words("c#"), ["c#"]);
+  assert.deepEqual(words("..."), []);
+  assert.deepEqual(words(". . ."), []);
+  assert.deepEqual(words("e.g."), ["e.g"]);
+  const records = [
+    { id: "memori", name: "Memori", description: "A memory engine.", score: { overall: 9 } },
+    { id: "a-mem", name: "A-MEM", description: "Agentic memory.", score: { overall: 1 } },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "A-MEM.", sort: "match" }).map(record => record.name), ["A-MEM", "Memori"]);
+  assert.deepEqual(suggestNames([{ name: "Ollama" }], "olama."), ["Ollama"]);
+});
+
 test("short words are strict outside names, and names match inside compounds", () => {
   const prose = searchWords("An agent API that stores vectors in storage");
   assert.equal(tokenHit(prose, "pi", false), 0);
@@ -1540,6 +1581,27 @@ test("a search orders by match and never by score", () => {
   assert.deepEqual(names, ["Ollama", "Ollama Classic", "Alpha Router"]);
   // Without a query, "match" falls back to names A–Z.
   assert.deepEqual(filterAndSortProjects(records, { term: "", sort: "match", status: "" }).map(record => record.name), ["Alpha Router", "Ollama", "Ollama Classic"]);
+});
+
+// A specification's status comes from its own vocabulary, where "published"
+// is as current as a system's "active", so a superseded one follows it.
+test("a superseded specification follows a current one at an equal match", () => {
+  const specifications = [
+    { id: "alpha", name: "Alpha Protocol", short_name: "AP", description: "An older wire format.", status: "superseded", licenses: [] },
+    { id: "beta", name: "Beta Protocol", short_name: "BP", description: "A newer wire format.", status: "published", licenses: [] },
+  ];
+  assert.deepEqual(filterSpecifications(specifications, { term: "protocol" }).map(item => item.name), ["Beta Protocol", "Alpha Protocol"]);
+});
+
+// Every status in the taxonomy's record vocabularies is either current or no
+// longer current, and the inactive set holds exactly the second kind, so a
+// status added to a vocabulary has to be classed here before it ships.
+test("the inactive statuses are the taxonomy's statuses for records no longer current", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const statuses = ["project_statuses", "specification_statuses"].flatMap(group => taxonomy[group].map(item => item.id));
+  const current = ["active", "published", "evolving", "vendor_specific"];
+  assert.deepEqual([...new Set(statuses)].sort(), [...current, ...INACTIVE_STATUSES].sort());
+  assert.deepEqual([...INACTIVE_STATUSES].sort(), ["archived", "removed", "superseded"]);
 });
 
 test("a split name is found as a name", () => {
@@ -1578,6 +1640,7 @@ test("real-catalog probes: known names first and loose queries answered", () => 
     { term, labelOf, ...indexes }, boot("packs").packs, boot("robots").robots,
   ).map(entry => entry.record.name);
   assert.equal(run("ollama")[0], "Ollama");
+  assert.deepEqual(run("ollama."), run("ollama"));
   assert.equal(run("cursor")[0], "Cursor");
   assert.equal(run("openrouter")[0], "OpenRouter");
   assert.equal(run("claude code")[0], "Claude Code");

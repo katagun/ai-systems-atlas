@@ -98,6 +98,20 @@ test("slash focuses the search box", async ({ page }) => {
   await expect(page.locator("#all-directory-search")).toBeFocused();
 });
 
+// A modal dialog makes the search box inert, so "/" there could only be
+// swallowed. The page leaves the key to the browser, and focus in the dialog.
+test("slash does nothing while a dialog is open", async ({ page }) => {
+  const [runtime] = readWeb("app/runtimes.json").runtimes;
+  await page.goto(`/?record=runtime:${runtime.id}`);
+  const close = page.locator("#runtime-dialog .dialog-close");
+  await expect(close).toBeVisible();
+  await page.evaluate(() => window.addEventListener("keydown", event => { window.slashPrevented = event.defaultPrevented; }));
+  await close.focus();
+  await page.keyboard.press("/");
+  expect(await page.evaluate(() => window.slashPrevented), "the key is left to the browser").toBe(false);
+  expect(await page.evaluate(() => Boolean(document.activeElement.closest("dialog[open]"))), "focus stays in the dialog").toBe(true);
+});
+
 test("a query follows the reader to another scope, and Best match selects itself and gives way", async ({ page }) => {
   await searchAll(page, "coding agent");
   await page.getByRole("button", { name: /^Systems / }).click();
@@ -318,18 +332,22 @@ test("a query with no match offers the Finder and a suggestion form", async ({ p
     .toHaveAttribute("href", /template=system-suggestion\.yml&name=notion%20alternative/);
 });
 
-test("a name the review left out says why", async ({ page }) => {
+// Many excluded names are hyphenated, and search reads a hyphen as a space,
+// so the name typed either way finds its entry (D18).
+test("a name the review left out says why, however its hyphen is typed", async ({ page }) => {
   // Serve a known exclusion so the test does not depend on which real
   // entries happen to be mentioned in some record's prose.
-  const published = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "..", "web", "exclusions.json"), "utf8"));
+  const published = readWeb("exclusions.json");
   await page.route(/\/exclusions\.json(\?.*)?$/, route => route.fulfill({
-    json: { ...published, entries: [{ ...published.entries[0], name: "Zyxwvut Frobnicator", reason: "Test reason: out of scope." }] },
+    json: { ...published, entries: [{ ...published.entries[0], name: "Zyxwvut-Frobnicator", reason: "Test reason: out of scope." }] },
   }));
-  await searchAll(page, "Zyxwvut Frobnicator");
-  await expect(page.getByText("Reviewed and left out:")).toBeVisible();
-  await expect(page.getByText("Test reason: out of scope.")).toBeVisible();
-  // The review already saw it, so there is nothing to suggest.
-  await expect(page.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
+  for (const typed of ["Zyxwvut Frobnicator", "zyxwvut-frobnicator"]) {
+    await searchAll(page, typed);
+    await expect(page.getByText("Reviewed and left out:"), `${typed} finds the entry`).toBeVisible();
+    await expect(page.getByText("Test reason: out of scope.")).toBeVisible();
+    // The review already saw it, so there is nothing to suggest.
+    await expect(page.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
+  }
 });
 
 test("an intent query offers the Finder job and opens its shortlist step", async ({ page }) => {

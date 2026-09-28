@@ -1842,6 +1842,10 @@ function searchAllCollections(term) {
   $("#all-directory-search").focus();
 }
 
+// Names compared the way search and suggestNames compare them: a hyphen reads
+// as a space, so "claude squad" names claude-squad.
+const comparableName = text => AtlasCore.comparableText(text);
+
 // The list lands once, and every search surface repaints, since the suggestion
 // form under any empty result waits for it.
 let exclusionsRequest = null;
@@ -1853,16 +1857,13 @@ function excludedEntry(term) {
       .then(renderSearchSurfaces);
     return null;
   }
-  const wanted = AtlasCore.normalizeSearchText(term);
-  return state.exclusions.find(entry => AtlasCore.normalizeSearchText(entry.name) === wanted) || null;
+  const wanted = comparableName(term);
+  return state.exclusions.find(entry => comparableName(entry.name) === wanted) || null;
 }
 
 function suggestionURL(term) {
   return `https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml&name=${encodeURIComponent(term.trim())}`;
 }
-
-// Names compared the way suggestNames compares them.
-const comparableName = text => AtlasCore.normalizeSearchText(text).replace(/-/g, " ");
 
 // Every search index an empty result reads: All's six kinds, then Labs and
 // Specifications (emptyResultMatches).
@@ -3047,6 +3048,9 @@ function bindEvents() {
   document.addEventListener("keydown", event => {
     if (event.key !== "/" || event.ctrlKey || event.metaKey || event.altKey) return;
     if (event.target.closest?.("input, textarea, select, [contenteditable]")) return;
+    // A modal dialog makes the search box inert, so the key would only be
+    // swallowed; leave it to the browser.
+    if (document.querySelector("dialog[open]")) return;
     const selector = SCOPE_CONTROLS[activeScope()]?.q;
     if (!selector) return;
     event.preventDefault();

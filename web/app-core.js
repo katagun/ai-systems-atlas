@@ -60,12 +60,19 @@
     return stem;
   }
 
-  // Hyphens split query words, so "self-hosted" asks what "self hosted" asks.
-  // `words` holds each word as typed, index for index with its stem in
+  // A query or a name as search compares them: a hyphen reads as a space and
+  // a period that ends a word is dropped, so "self-hosted" asks what "self
+  // hosted" asks and "ollama." what "ollama" asks, while ".net" and
+  // "llama.cpp" stay whole.
+  function comparableText(text) {
+    return normalizeSearchText(text).replace(/-/g, " ").replace(/\.+(?=\s|$)/g, "").replace(/\s+/g, " ").trim();
+  }
+
+  // `words` holds each query word as typed, index for index with its stem in
   // `tokens`, because a stem is not always a prefix of its own spelling:
   // "series" stems to "sery".
   function parseSearchQuery(raw) {
-    const words = normalizeSearchText(raw).replace(/-/g, " ").split(" ")
+    const words = comparableText(raw).split(" ")
       .filter(word => word && !SEARCH_STOP_WORDS.has(word));
     const tokens = words.map(stemQueryWord);
     return { raw: String(raw || ""), text: tokens.join(" "), tokens, words };
@@ -336,8 +343,9 @@
     },
   };
 
-  // The prose each collection searches until its index arrives: the fields it
-  // has always searched, so a missing index narrows a search, never widens it.
+  // The fields each collection searches until its index arrives, so a missing
+  // index narrows a search, never widens it (for systems, the mixed
+  // directory's old list).
   const SEARCH_TEXT_FIELDS = {
     system: ["id", "name", "description", "repo", "url", "why_it_matters", "strengths", "weaknesses"],
     spec: ["id", "name", "short_name", "description", "standardizes", "does_not_standardize", "repo", "stewards"],
@@ -408,8 +416,8 @@
       if (!best) return 0;
       weight += best;
     }
-    const name = normalizeSearchText(fields.name).replace(/-/g, " ");
-    const typed = normalizeSearchText(query.raw).replace(/-/g, " ");
+    const name = comparableText(fields.name);
+    const typed = comparableText(query.raw);
     if (name === query.text || name === typed) return weight + 1000;
     if (name.startsWith(query.text) || (typed && name.startsWith(typed))) return weight + 400;
     return nameHasAll ? weight + 200 : weight;
@@ -431,7 +439,12 @@
     return weight;
   }
 
-  const isActiveRecord = record => !record.status || record.status === "active";
+  // Every record status the taxonomy defines that means a record is no longer
+  // current, from project_statuses (systems, packs, robots) and
+  // specification_statuses; no other kind carries a status. Among equal
+  // matches, every other record comes first (ADR 040).
+  const INACTIVE_STATUSES = new Set(["archived", "superseded", "removed"]);
+  const isActiveRecord = record => !INACTIVE_STATUSES.has(record.status);
 
   // Keeps the records a query matches and orders them: by match weight when
   // `byMatch` is set and there is a query, otherwise by `compare`. Among equal
@@ -557,12 +570,12 @@
   // of a query that matched nothing. Whole names come before single words of
   // a name, closer before farther, shorter before longer.
   function suggestNames(records, raw, limit = 3) {
-    const query = normalizeSearchText(raw).replace(/-/g, " ");
+    const query = comparableText(raw);
     if (query.length < 3) return [];
     const most = query.length >= 8 ? 2 : 1;
     const found = [];
     for (const record of records) {
-      const name = normalizeSearchText(record.name).replace(/-/g, " ");
+      const name = comparableText(record.name);
       const whole = editDistance(name, query);
       const nearestWord = Math.min(...name.split(" ").map(word => (Math.abs(word.length - query.length) <= most ? editDistance(word, query) : Infinity)));
       const best = Math.min(whole, nearestWord);
@@ -1282,6 +1295,7 @@
     BADGE_FAMILIES,
     CARD_BADGES,
     CARD_BADGE_SETS,
+    INACTIVE_STATUSES,
     SCOPE_URL_KEYS,
     SCOPE_URL_PARAMS,
     activeSwitcherIndex,
@@ -1290,6 +1304,7 @@
     buildLabIndex,
     cardBadgeGlossary,
     cardBadges,
+    comparableText,
     compareProjects,
     cycleThemePreference,
     directoryDefaults,
