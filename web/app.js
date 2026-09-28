@@ -961,6 +961,10 @@ function initBadgeTooltip() {
   document.addEventListener("pointerover", event => {
     if (event.pointerType === "touch") return;
     const badge = event.target.closest?.(".card-badge");
+    // Moving between one emblem's own shapes is not entering it. Chromium
+    // sends such an over when it re-hit-tests a resting pointer, which would
+    // otherwise reopen a tooltip that Escape just dismissed.
+    if (badge?.contains(event.relatedTarget)) return;
     if (badge) show(badge);
     else if (anchor) hide();
   });
