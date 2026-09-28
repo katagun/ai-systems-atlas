@@ -689,7 +689,7 @@ test("a query another collection answers offers Search all, not the suggestion f
   await expect(systems).toContainText(/It matches \d+ records? in other collections\./);
   await expect(systems.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
   await systems.getByRole("button", { name: "Search all" }).click();
-  await expect(pressedEntry(page)).toHaveAccessibleName(/^All /);
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Everything /);
   await expect(allSearch(page)).toHaveValue("vLLM");
   await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("vLLM");
   await expect(allSearch(page)).toBeFocused();

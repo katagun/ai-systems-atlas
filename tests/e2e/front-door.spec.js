@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { familyEntry, openCollection, searchAll } = require("./helpers/landing");
+const { familyEntry, openCollection, pressedEntry, searchAll } = require("./helpers/landing");
 const counts = require("./helpers/catalog-counts");
 
 test("a bare URL opens the front door with every collection above the fold", async ({ page }) => {
@@ -106,7 +106,7 @@ test("text typed on the front door replaces a query left in another collection",
 // own record holds (AI Singapore's note names the Infocomm Media Development
 // Authority). The All list finds nothing; opening Labs from the results
 // carries the query in. The front door carries none (a clean start).
-/* global searchIndexes */
+/* global activateView, searchIndexes */
 test("a query only a lab answers follows the reader from the All results into Labs", async ({ page }) => {
   await page.goto("/");
   await searchAll(page, "Infocomm");
@@ -211,4 +211,123 @@ test("the Directory tab and the brand mark return to the front door", async ({ p
   await page.goto("/?collection=runtimes");
   await page.locator(".brand-link").click();
   await expect(page.locator("#front-door")).toBeVisible();
+});
+
+test("results carry a sticky strip with exactly one pressed entry, families inside Systems", async ({ page }) => {
+  await page.goto("/?collection=inference");
+  const strip = page.locator("#scope-strip");
+  await expect(strip).toBeVisible();
+  await expect(strip.locator(".scope-row .scope-entry")).toHaveCount(9);
+  await expect(pressedEntry(page)).toHaveCount(1);
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Inference services \d/);
+  await expect(strip.locator(".family-row")).toHaveCount(0);
+  await expect(strip).toHaveCSS("position", "sticky");
+  await openCollection(page, "systems");
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Systems \d/);
+  await expect(strip.locator(".family-row .family-entry")).toHaveCount(4);
+  await expect(strip.locator('.family-row [aria-pressed="true"]')).toHaveAccessibleName(/^All families \d/);
+  await familyEntry(page, "memory_system").click();
+  await expect(strip.locator('.family-row [aria-pressed="true"]')).toHaveAccessibleName(/^Memory \d/);
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Systems \d/);
+  await expect(page.locator("#family-filter")).toHaveValue("memory_system");
+});
+
+test("at phone widths the strip shows emblems only, fits with slack, and is the only sticky thing", async ({ page }) => {
+  for (const width of [320, 360, 390]) {
+    await page.setViewportSize({ width, height: 812 });
+    await page.goto("/?collection=runtimes");
+    const strip = page.locator("#scope-strip");
+    const row = strip.locator(".scope-row");
+    // scrollWidth never drops below clientWidth, so the entries' extent is
+    // measured from the row's left edge to the last entry's right edge.
+    const [rowWidth, frame, overflow] = await row.evaluate(element => [
+      element.lastElementChild.getBoundingClientRect().right - element.getBoundingClientRect().left,
+      element.clientWidth,
+      element.scrollWidth - element.clientWidth,
+    ]);
+    expect(frame - rowWidth, `${width}: the row leaves at least 16 px`).toBeGreaterThanOrEqual(16);
+    expect(overflow, `${width}: the row never scrolls sideways`).toBe(0);
+    await expect(strip.locator(".scope-caption")).toHaveText(/^Local runtimes · \d+$/);
+    const nameWidth = await strip.locator(".scope-entry").first().locator(".scope-name").evaluate(element => element.getBoundingClientRect().width);
+    expect(nameWidth, `${width}: names are clipped, not shown`).toBeLessThanOrEqual(1);
+    await expect(page.locator(".site-header")).toHaveCSS("position", "static");
+    await expect(strip).toHaveCSS("position", "sticky");
+    await expect(strip).toHaveCSS("top", "0px");
+  }
+});
+
+test("above phone widths the strip sticks under the header", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto("/?collection=systems");
+  const headerHeight = await page.locator(".site-header").evaluate(element => element.getBoundingClientRect().height);
+  await expect(page.locator("#scope-strip")).toHaveCSS("top", `${headerHeight}px`);
+  await page.mouse.wheel(0, 2000);
+  // Wait for smooth scrolling to stop before measuring (html { scroll-behavior: smooth }).
+  await page.evaluate(() => new Promise(resolve => {
+    let last = window.scrollY, still = 0;
+    const frame = () => requestAnimationFrame(() => { still = window.scrollY === last ? still + 1 : 0; last = window.scrollY; if (still >= 5) resolve(); else frame(); });
+    frame();
+  }));
+  const [stripTop, headerBottom] = await page.evaluate(() => [
+    document.querySelector("#scope-strip").getBoundingClientRect().top,
+    document.querySelector(".site-header").getBoundingClientRect().bottom,
+  ]);
+  expect(Math.abs(stripTop - headerBottom)).toBeLessThan(2);
+});
+
+test("a state dot marks a comparison in progress and Finder roles applied", async ({ page }) => {
+  await page.goto("/?collection=systems&compare=system:aider,kilo-code");
+  await expect(page.locator('#scope-strip [data-open-collection="systems"] .state-dot.is-compare')).toHaveCount(1);
+  // A compare link opens the comparison itself; close it to reach the tray.
+  await page.locator("#comparison-dialog .dialog-close").click();
+  await page.locator("#comparison-clear").click();
+  await expect(page.locator("#scope-strip .state-dot")).toHaveCount(0);
+  await page.goto("/?view=finder");
+  for (const value of ["agent_system", "coding", "balanced"]) {
+    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
+  }
+  await page.locator("[data-finder-directory]").click();
+  await expect(page.locator('#scope-strip [data-open-collection="systems"] .state-dot.is-finder')).toHaveCount(1);
+  await page.locator("#finder-roles-chip").click();
+  await expect(page.locator("#scope-strip .state-dot")).toHaveCount(0);
+});
+
+test("the Systems entry clears a family, and the Models entry opens its collection", async ({ page }) => {
+  await page.goto("/?collection=systems&family=memory_system");
+  await openCollection(page, "systems");
+  await expect(page.locator("#family-filter")).toHaveValue("");
+  await expect(page).not.toHaveURL(/family=/);
+  await page.locator('#scope-strip [data-open-collection="models"]').click();
+  await expect(page.locator("#models-directory-panel")).toBeVisible();
+  await expect(page).toHaveURL(/collection=models/);
+});
+
+// A grid repaints under the strip as a search runs; a reader's focus on a
+// strip entry must survive it.
+test("a focused strip entry keeps its focus while the grid repaints", async ({ page }) => {
+  await page.goto("/?collection=inference");
+  const entry = page.locator('#scope-strip [data-open-collection="runtimes"]');
+  await entry.focus();
+  await page.evaluate(() => {
+    const input = document.querySelector("#inference-search");
+    input.value = "vllm";
+    input.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await expect(page).toHaveURL(/q=vllm/);
+  await expect(entry).toBeFocused();
+});
+
+// The heading is the Directory view's focus target, so it must exist in
+// results too: a switch into results from another view lands focus on it.
+test("a switch into Directory results focuses its heading", async ({ page }) => {
+  await page.goto("/?collection=systems");
+  await page.locator("#systems-directory-panel [data-open-tab=taxonomy]").click();
+  await expect(page.locator("#taxonomy")).toHaveClass(/is-active/);
+  await expect(page.locator("#taxonomy-title")).toBeFocused();
+  // The Catalog tab returns to the front door by design; the switch that
+  // lands in results is the app's own, as the Finder and record links use.
+  await page.evaluate(() => activateView("directory"));
+  await expect(page.locator("#systems-directory-panel")).toBeVisible();
+  await expect(page.locator("#front-door")).toBeHidden();
+  await expect(page.locator("#directory-title")).toBeFocused();
 });

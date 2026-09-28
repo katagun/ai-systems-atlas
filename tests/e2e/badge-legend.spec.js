@@ -21,14 +21,15 @@ test("the legend lists the active scope's badges and follows the scope", async (
   await openCollection(page, "runtimes");
   await expect(items(page)).toHaveText(names(badgeLegend("runtimes")));
 
+  // The family row lives inside Systems, so the reader opens Systems first.
+  await openCollection(page, "systems");
+  await expect(items(page)).toHaveText(names(badgeLegend("systems")));
   await openFamily(page, "memory_system");
   await expect(items(page)).toHaveText(names(badgeLegend("systems", "memory_system")));
 
-  // The plain "Systems" switcher pill only changes the collection — the
-  // family filter itself (the actual scope narrower) is untouched by it, same
-  // as the grid it drives, so the family select is how a reader widens back
-  // out to every system family. This also exercises the #family-filter input
-  // listener's syncBadgeLegend() call.
+  // The family select widens back out to every system family, as the All
+  // families entry does. This exercises the #family-filter input listener's
+  // syncBadgeLegend() call.
   await page.locator("#family-filter").selectOption("");
   await expect(items(page)).toHaveText(names(badgeLegend("systems")));
 });

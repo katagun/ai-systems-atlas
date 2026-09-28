@@ -228,6 +228,8 @@ async function bootstrap() {
   // search; it lands in results the way a keystroke after boot would.
   if ($("#door-search").value && state.directoryStage === "door") $("#door-search").dispatchEvent(new Event("input", { bubbles: true }));
   loadMarks();
+  // The header's fonts can settle after bindEvents measured it.
+  syncHeaderHeight();
 }
 
 // Marks are decorative next to the record name, so they stay hidden from
@@ -508,6 +510,8 @@ function renderComparisonControls() {
   const tray = $("#comparison-tray");
   if (!tray) return;
   tray.hidden = records.length === 0 || !COMPARISON_VIEWS.includes($(".view.is-active")?.id);
+  // The strip's dots follow the comparison; its render keeps a reader's focus.
+  if (state.directoryStage === "results") renderScopeStrip();
   syncBadgeLegend();
   $("#comparison-tray-title").textContent = records.length === 1 ? "1 item selected" : `${records.length} items selected`;
   $("#comparison-tray-items").textContent = records.map(item => item.name).join(" · ");
@@ -833,6 +837,8 @@ function showFrontDoor({ updateURL = true } = {}) {
   $$(".collection-panel").forEach(panel => { panel.hidden = true; });
   $("#scope-strip").hidden = true;
   $("#front-door").hidden = false;
+  $("#hero-kicker").hidden = false;
+  $("#directory-title").classList.remove("visually-hidden");
   renderCollectionIndex();
   syncBadgeLegend();
   if (updateURL) {
@@ -841,10 +847,61 @@ function showFrontDoor({ updateURL = true } = {}) {
   }
 }
 
+// The heading stays in the page, visually hidden, because activateView lands
+// focus on it when a switch into the Directory leaves another view.
 function showResults() {
   state.directoryStage = "results";
   $("#front-door").hidden = true;
+  $("#hero-kicker").hidden = true;
+  $("#directory-title").classList.add("visually-hidden");
   $("#scope-strip").hidden = false;
+}
+
+// The results strip: one entry per registry entry, the collection pressed.
+// At phone widths the entries are emblems only and the pressed one's name and
+// count read as a caption under the row (styles.css), so nine entries fit a
+// 320 px phone with slack and nothing scrolls sideways. Inside Systems a
+// second row lists the families, one pressed.
+const FAMILY_ORDER = ["memory_system", "agent_system", "assistant_system"];
+function renderScopeStrip() {
+  const strip = $("#scope-strip");
+  // Every grid repaint lands here, so a reader's focus on an entry is put
+  // back on the rebuilt one rather than dropped to the page.
+  const focused = strip.contains(document.activeElement) ? document.activeElement : null;
+  const focusKey = focused?.dataset.openCollection !== undefined
+    ? `[data-open-collection="${focused.dataset.openCollection}"]`
+    : focused?.dataset.familyEntry !== undefined ? `[data-family-entry="${focused.dataset.familyEntry}"]` : null;
+  const payloads = collectionPayloads();
+  let caption = "";
+  const entries = AtlasCore.COLLECTIONS.map(entry => {
+    const { count } = AtlasCore.collectionCount(entry.id, payloads);
+    if (count === 0 && entry.id !== "all") return "";
+    const pressed = entry.id === state.directoryCollection;
+    if (pressed) caption = `${entry.name} · ${count}`;
+    // Robots has no emblem until its form-factor badge exists, and a phone
+    // clips every name, so its initial stands in rather than an empty button.
+    const emblem = collectionEmblem(entry) || `<span class="scope-monogram" aria-hidden="true">${escapeHTML(AtlasCore.monogramGlyph(entry.name))}</span>`;
+    return `<button type="button" class="scope-entry${pressed ? " is-active" : ""}" data-open-collection="${escapeHTML(entry.id)}" aria-pressed="${pressed}" title="${escapeHTML(entry.name)}">${emblem}<span class="scope-name">${escapeHTML(entry.name)}</span><strong class="scope-count">${count}</strong>${stateDot(collectionStateFor(entry.id))}</button>`;
+  }).join("");
+  const familyRow = state.directoryCollection === "systems" ? renderFamilyRow(payloads) : "";
+  strip.innerHTML = `<div class="scope-row">${entries}</div><p class="scope-caption" aria-hidden="true">${escapeHTML(caption)}</p>${familyRow}`;
+  if (focusKey) strip.querySelector(focusKey)?.focus({ preventScroll: true });
+}
+
+function renderFamilyRow(payloads) {
+  const current = $("#family-filter").value;
+  const categories = AtlasCore.collectionCategories("systems", payloads);
+  const total = AtlasCore.collectionCount("systems", payloads).count;
+  const entry = (value, name, count) => `<button type="button" class="family-entry${value === current ? " is-active" : ""}" data-family-entry="${escapeHTML(value)}" aria-pressed="${value === current}">${escapeHTML(name)} <strong>${count}</strong></button>`;
+  const families = FAMILY_ORDER.map(id => entry(id, AtlasCore.FAMILY_SHORT_NAMES[id], (categories.find(category => category.value === id) || { count: 0 }).count));
+  return `<div class="family-row" role="group" aria-label="System families">${entry("", "All families", total)}${families.join("")}</div>`;
+}
+
+// The strip sticks under the header above phone widths, so the header's
+// live height is a custom property the stylesheet reads.
+function syncHeaderHeight() {
+  const header = $(".site-header");
+  if (header) document.documentElement.style.setProperty("--header-height", `${header.getBoundingClientRect().height}px`);
 }
 
 // The one way a tile or a strip entry opens a collection. A facet narrows
@@ -902,6 +959,7 @@ function setDirectoryCollection(collection, { updateURL = true, carryQuery = upd
   if (updateURL && state.comparison.ids.length && !compatible) clearComparison({ updateURL: false });
   state.directoryCollection = selected;
   showResults();
+  renderScopeStrip();
   if (previousQuery !== null) {
     const input = $(SCOPE_CONTROLS[selected].q);
     // Changed text is a new query in this scope: it starts on the first page,
@@ -1744,10 +1802,13 @@ function renderFinder() {
   $("#finder-content").innerHTML = content + navigation;
 }
 
-// The sticky header's live height plus the reading margin both Finder scroll
-// corrections leave beneath it, measured once so the two never disagree.
+// What sticks to the top of the viewport plus the reading margin both Finder
+// scroll corrections leave beneath it, measured once so the two never
+// disagree. The header sticks only above phone widths, and in results the
+// scope strip sticks under it, so each counts only while it is sticky.
 function headerClearance() {
-  return ($(".site-header")?.getBoundingClientRect().height || 0) + 12;
+  const sticky = element => element && getComputedStyle(element).position === "sticky" ? element.getBoundingClientRect().height : 0;
+  return sticky($(".site-header")) + sticky($("#scope-strip")) + 12;
 }
 
 // A choice replaces the panel's content, which can leave the step indicator
@@ -3257,6 +3318,8 @@ function initDocsMenu() {
 }
 
 function bindEvents() {
+  syncHeaderHeight();
+  window.addEventListener("resize", syncHeaderHeight);
   for (const [scope, selector] of Object.entries(MATCH_SORTS)) {
     $(SCOPE_CONTROLS[scope].q).addEventListener("input", () => syncMatchSort(scope));
     $(selector).addEventListener("input", () => {
@@ -3333,6 +3396,11 @@ function bindEvents() {
     target.setSelectionRange(value.length, value.length);
   });
   document.addEventListener("click", event => {
+    const family = event.target.closest("[data-family-entry]");
+    if (family) {
+      jumpToDirectoryFamily(family.dataset.familyEntry);
+      return;
+    }
     const category = event.target.closest("[data-facet-key]");
     if (category) {
       openCollection(category.dataset.openCollection, { facet: { key: category.dataset.facetKey, value: category.dataset.facetValue } });
@@ -3356,6 +3424,7 @@ function bindEvents() {
     state.page.systems = 1;
     renderProjects();
     syncBadgeLegend();
+    renderScopeStrip();
   });
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.directoryRolesLabel = null; state.page.systems = 1; renderProjects(); });
   ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
@@ -3452,6 +3521,7 @@ function bindEvents() {
     state.directoryRolesLabel = null;
     state.page.systems = 1;
     renderProjects();
+    renderScopeStrip();
     // The chip removes itself, so keyboard and screen-reader focus would
     // otherwise fall off the page; land it on the count the chip affected.
     $("#result-count").focus();
