@@ -198,10 +198,12 @@ async function bootstrap() {
   // Beside a query, the URL names every sort but Best match (scopeURLParams,
   // rulings R-P1-2 and R-P1-2b). So a link with a query and no sort lists by
   // match, and a sort it names is one the reader chose, which typing keeps.
-  // A sort the scope cannot take was removed on restore, so it counts as none.
+  // A sort the scope cannot take was removed on restore, so it counts as none;
+  // Best match is one, since it is disabled until a query is present. Either
+  // way syncMatchSort runs, so the restored query offers Best match again.
   if (restored.q?.trim()) {
-    if (restored.sort === undefined) syncMatchSort(scope);
-    else sortChosenDuringQuery[scope] = true;
+    if (restored.sort !== undefined) sortChosenDuringQuery[scope] = true;
+    syncMatchSort(scope);
   }
   renderStats();
   renderFinder();
@@ -378,7 +380,8 @@ function writeScopeURL() {
 // reader picked a sort since typing, and clearing the query gives back the
 // sort from before (spec, Phase 1 "Order"). syncMatchSort runs wherever a
 // scope's query changes: typing, a carried query, a Clear control, and the
-// Finder's handoff. So a sort chosen for one query never outlives it.
+// Finder's handoff. So a sort chosen for one query never outlives it. Best
+// match orders a query's matches, so it is offered only beside a query.
 const MATCH_SORTS = { systems: "#sort-filter", inference: "#inference-sort-filter", runtimes: "#runtime-sort-filter", models: "#model-sort-filter" };
 const sortBeforeQuery = {};
 const sortChosenDuringQuery = {};
@@ -388,8 +391,11 @@ function syncMatchSort(scope) {
   if (!selector) return;
   const select = $(selector);
   const hasQuery = Boolean($(SCOPE_CONTROLS[scope].q).value.trim());
+  select.querySelector('option[value="match"]').disabled = !hasQuery;
   if (hasQuery && !sortChosenDuringQuery[scope] && select.value !== "match") {
-    sortBeforeQuery[scope] = select.value;
+    // A carried query can replace one the box still holds, so the sort from
+    // before the first query is the one clearing gives back.
+    sortBeforeQuery[scope] ??= select.value;
     select.value = "match";
   } else if (!hasQuery) {
     if (select.value === "match") select.value = sortBeforeQuery[scope] || AtlasCore.SCOPE_URL_PARAMS[scope].sort;
@@ -788,9 +794,12 @@ function setDirectoryCollection(collection, { updateURL = true, carryQuery = upd
   state.directoryCollection = selected;
   if (previousQuery !== null) {
     const input = $(SCOPE_CONTROLS[selected].q);
+    // Changed text is a new query in this scope: it starts on the first page,
+    // and a sort the reader chose for the old text gives way to Best match.
     if (input.value !== previousQuery) {
       input.value = previousQuery;
       state.page[selected] = 1;
+      sortChosenDuringQuery[selected] = false;
     }
     syncMatchSort(selected);
     // A carried query searches what a typed one does: the indexes the box
@@ -1819,14 +1828,17 @@ function clearScopeFacets(scope) {
   $(SCOPE_CONTROLS[scope].q).focus();
 }
 
-// "Search all" under an empty result: lists the query in All. The switch to
-// All carries the query from the Directory's current scope, so a sibling view
-// (Models, Labs, Specifications) opens the Directory and hands it the query.
+// "Search all" under an empty result: lists the query in All, opening the
+// Directory from a sibling view (Models, Labs, Specifications). It writes All's
+// box itself rather than carrying the query through the Directory's current
+// scope, whose box a sibling view keeps hidden: text written there would later
+// carry back as unchanged and keep a sort chosen for another query. Focusing
+// All's box loads its indexes, as it does for a typed query.
 function searchAllCollections(term) {
   if ($(".view.is-active")?.id !== "directory") activateView("directory");
-  $(SCOPE_CONTROLS[state.directoryCollection].q).value = term;
+  $("#all-directory-search").value = term;
   state.page.all = 1;
-  setDirectoryCollection("all");
+  setDirectoryCollection("all", { carryQuery: false });
   $("#all-directory-search").focus();
 }
 

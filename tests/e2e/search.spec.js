@@ -210,6 +210,74 @@ test("the Finder's handoff ends an earlier query, so the next query selects Best
   }
 });
 
+// A sort chosen for one query must not outlive it (D9). Text carried in that
+// differs from what the box held is a new query there, so it selects Best
+// match, and clearing it restores the sort from before the box held a query.
+test("a query carried in with new text selects Best match, and clearing it restores the earlier sort", async ({ page }) => {
+  await page.goto("/?collection=systems");
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  const sort = page.locator("#sort-filter");
+  await page.locator("#project-search").fill("memory");
+  await expect(sort).toHaveValue("match");
+  await sort.selectOption("stars");
+  await page.getByRole("button", { name: /^All / }).click();
+  await page.locator("#reset-all-directory").click();
+  await page.locator("#all-directory-search").fill("browser");
+  await page.getByRole("button", { name: /^Systems / }).click();
+  await expect(page.locator("#project-search")).toHaveValue("browser");
+  await expect(sort, "a sort chosen for the old text gives way").toHaveValue("match");
+  await page.locator("#project-search").fill("");
+  await expect(sort, "clearing restores the sort from before the first query").toHaveValue("name");
+});
+
+// Search all writes All's box alone. Writing the hidden Directory scope's box
+// would make a later carry back look unchanged and keep a stale sort (D9).
+test("Search all from a sibling view leaves the Directory scope's own query alone", async ({ page }) => {
+  // Only a system holds this word, so Models lists nothing and offers All.
+  const systems = readWeb("app/search/systems.json");
+  const [first] = Object.keys(systems);
+  await page.route(indexRoute("systems"), route => route.fulfill({ json: withIndexWord(systems, first) }));
+  await page.goto("/?collection=systems");
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  const sort = page.locator("#sort-filter");
+  await page.locator("#project-search").fill("memory");
+  await sort.selectOption("stars");
+  await page.locator('.tab[data-tab="models"]').click();
+  await page.locator("#model-search").fill(INDEX_WORD);
+  await page.locator("#model-grid").getByRole("button", { name: "Search all" }).click();
+  await expect(page.locator("#all-directory-search")).toHaveValue(INDEX_WORD);
+  await expect(page.locator("#project-search"), "Search all writes only All's box").toHaveValue("memory");
+  await page.getByRole("button", { name: /^Systems / }).click();
+  await expect(page.locator("#project-search")).toHaveValue(INDEX_WORD);
+  await expect(sort).toHaveValue("match");
+});
+
+// Best match orders a query's matches, so browsing never offers it (D23). A
+// link naming it without a query loses it, typing offers it, and clearing
+// takes it away. Playwright's toBeDisabled does not read an option's state.
+test("Best match is offered only while a query is present", async ({ page }) => {
+  for (const [url, search, sortSelector, browsing] of BROWSING_SORTS) {
+    await page.goto(`${url}&sort=match`);
+    await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
+    const sort = page.locator(sortSelector);
+    const bestMatch = sort.locator('option[value="match"]');
+    await expect(sort, `${url} restores its browsing sort`).toHaveValue(browsing);
+    await expect(page, `${url} drops a Best match named without a query`).toHaveURL(address => !address.searchParams.has("sort"));
+    await expect(bestMatch).toHaveJSProperty("disabled", true);
+    await page.locator(search).fill("api");
+    await expect(bestMatch).toHaveJSProperty("disabled", false);
+    await expect(sort).toHaveValue("match");
+    await page.locator(search).fill("");
+    await expect(bestMatch).toHaveJSProperty("disabled", true);
+    await expect(sort).toHaveValue(browsing);
+  }
+  // A link with a query offers Best match beside a sort it names.
+  await page.goto("/?collection=inference&q=api&sort=name");
+  await expect(page.locator("#inference-search")).toHaveValue("api");
+  await expect(page.locator("#inference-sort-filter")).toHaveValue("name");
+  await expect(page.locator('#inference-sort-filter option[value="match"]')).toHaveJSProperty("disabled", false);
+});
+
 test("a carried query searches the same text a typed one does", async ({ page }) => {
   // Focusing the Systems box fetches only the Systems index, so the
   // Inference index is fetched for the carried query or not at all.

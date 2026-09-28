@@ -111,7 +111,7 @@
           <label class="search-field"><span>Search</span><input id="project-search" type="search" placeholder="Search all systems" autocomplete="off"><output class="search-count" aria-hidden="true"></output></label>
           <label><span>Family</span><select id="family-filter"><option value="">All families</option></select></label>
           <label><span>Role</span><select id="role-filter"><option value="">All roles</option></select></label>
-          <label><span>Sort</span><select id="sort-filter"><option value="match">Best match</option><option value="score">Editorial score</option><option value="stars">GitHub stars</option><option value="name" selected>Name</option></select></label>
+          <label><span>Sort</span><select id="sort-filter"><option value="match" disabled>Best match</option><option value="score">Editorial score</option><option value="stars">GitHub stars</option><option value="name" selected>Name</option></select></label>
           <details class="advanced-filter-shell">
             <summary>More filters</summary>
             <div class="advanced-filters">
@@ -140,7 +140,7 @@
           <label><span>Delivery</span><select id="inference-delivery-filter"><option value="">All delivery modes</option></select></label>
           <label><span>Model source</span><select id="inference-model-source-filter"><option value="">All model sources</option></select></label>
           <label><span>API style</span><select id="inference-api-filter"><option value="">All API styles</option></select></label>
-          <label><span>Sort</span><select id="inference-sort-filter"><option value="match">Best match</option><option value="score" selected>Service score</option><option value="name">Name</option></select></label>
+          <label><span>Sort</span><select id="inference-sort-filter"><option value="match" disabled>Best match</option><option value="score" selected>Service score</option><option value="name">Name</option></select></label>
           <p class="filter-guidance">Scores compare stable service operations across types. Filter for workload fit before treating overall as a shortlist. <button data-open-tab="taxonomy">How scoring works →</button></p>
         </section>
         <div class="result-row"><p id="inference-result-count" aria-live="polite" tabindex="-1"></p><button id="reset-inference-filters" class="ghost-button">Clear filters</button></div>
@@ -156,7 +156,7 @@
           <label><span>Accelerator</span><select id="runtime-accelerator-filter"><option value="">All accelerators</option></select></label>
           <label><span>Model format</span><select id="runtime-format-filter"><option value="">All model formats</option></select></label>
           <label><span>API style</span><select id="runtime-api-filter"><option value="">All API styles</option></select></label>
-          <label><span>Sort</span><select id="runtime-sort-filter"><option value="match">Best match</option><option value="score" selected>Runtime score</option><option value="name">Name</option></select></label>
+          <label><span>Sort</span><select id="runtime-sort-filter"><option value="match" disabled>Best match</option><option value="score" selected>Runtime score</option><option value="name">Name</option></select></label>
           <p class="filter-guidance">Scores compare documented execution capability on hardware you operate. They exclude throughput, latency, and benchmark rank, so filter for hardware and format fit first. <button data-open-tab="taxonomy">How scoring works →</button></p>
         </section>
         <div class="result-row"><p id="runtime-result-count" aria-live="polite" tabindex="-1"></p><button id="reset-runtime-filters" class="ghost-button">Clear filters</button></div>
@@ -220,7 +220,7 @@
         <label><span>Source model</span><select id="model-source-filter"><option value="">All source models</option></select></label>
         <label><span>License</span><select id="model-license-filter"><option value="">All licenses</option></select></label>
         <label><span>Lab</span><select id="model-lab-filter"><option value="">All labs</option></select></label>
-        <label><span>Sort</span><select id="model-sort-filter"><option value="match">Best match</option><option value="score" selected>Review and access score</option><option value="release">Release date, newest first</option><option value="name">Name</option></select></label>
+        <label><span>Sort</span><select id="model-sort-filter"><option value="match" disabled>Best match</option><option value="score" selected>Review and access score</option><option value="release">Release date, newest first</option><option value="name">Name</option></select></label>
         <p class="filter-guidance">Imported source records have no Atlas score. Reviewed scores compare access and deployability only; they exclude output quality, benchmarks, parameter count, current price, latency, and throughput. <button data-open-tab="taxonomy">How scoring works →</button></p>
       </section>
       <div class="result-row"><p id="model-result-count" aria-live="polite"></p><button id="reset-model-filters" class="ghost-button">Clear filters</button></div>
@@ -454,6 +454,6 @@
   <footer><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
   <script type="application/json" id="data-versions">{"projects.json":"0cba5a0920c1","taxonomy.json":"f0ba4485fb8f","license-evidence.json":"752e427a7aff","specifications.json":"f6487c60eb84","inference-services.json":"324b3828e171","local-runtimes.json":"c3d85a51fff7","models.json":"aaf12f5a9b9a","models-dev.json":"ec5e4b8a29fb","logos.json":"8ba040c30961","exclusions.json":"777a4187f003","app/systems.json":"f2c7bb11312c","app/inference.json":"6e25b94e9832","app/runtimes.json":"5384dc9974db","app/specifications.json":"ca24fe5a7b32","app/models.json":"4b4bef9396ab","app/packs.json":"c12a9cb8a17d","app/labs.json":"af9d1c0a63c9","app/robots.json":"d6e64c3ecd5e","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"b6960c6ccb43","app/search/inference.json":"81f6e0352cc7","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"6d610bfc7c93","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"3b80a047e4bb","app/search/robots.json":"f3ba0fcf79b2","app/detail":"26b4c45bfba0"}</script>
   <script src="app-core.js?v=4ca82fcefe0c" defer></script>
-  <script src="app.js?v=3b6928f63be2" defer></script>
+  <script src="app.js?v=1d39e87c77c2" defer></script>
 </body>
 </html>
