@@ -13,11 +13,22 @@ function e2ePort() {
 const port = e2ePort();
 const origin = `http://127.0.0.1:${port}`;
 
+// CI splits the suite across runners: ATLAS_E2E_SHARD="1/2" runs the first half.
+// Unset locally, so `npm run test:e2e` is still the whole suite.
+function e2eShard() {
+  const match = /^(\d+)\/(\d+)$/.exec(process.env.ATLAS_E2E_SHARD || "");
+  if (!match) return undefined;
+  const [current, total] = [Number(match[1]), Number(match[2])];
+  if (current < 1 || total < 1 || current > total) throw new Error(`ATLAS_E2E_SHARD must be current/total, got ${process.env.ATLAS_E2E_SHARD}`);
+  return { current, total };
+}
+
 module.exports = defineConfig({
   testDir: "./tests/e2e",
   fullyParallel: false,
   retries: process.env.CI ? 1 : 0,
   workers: 1,
+  shard: e2eShard(),
   reporter: "list",
   use: {
     baseURL: origin,

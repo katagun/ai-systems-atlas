@@ -3,7 +3,7 @@
   "sources": {
     "lobe": {
       "package": "@lobehub/icons-static-svg",
-      "version": "1.94.0",
+      "version": "1.95.1",
       "license": "MIT"
     },
     "simple": {
