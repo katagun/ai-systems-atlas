@@ -149,8 +149,8 @@ test("a restored query searches the same text a typed one does", async ({ page }
 });
 
 test("a restored page beside a query survives the index widening the matches", async ({ page }) => {
-  // The boot records alone match "rag" on one page; its index widens that to two.
-  await page.goto("/?collection=systems&q=rag&page=2");
+  // The boot records alone match "approval" on one page; its index widens that to two.
+  await page.goto("/?collection=systems&q=approval&page=2");
   await expect(page.locator("#project-pager .pager-nav span")).toContainText("Page 2 of");
   await expect(page).toHaveURL(/page=2/);
 });
@@ -159,7 +159,7 @@ test("a reader who changes a filter before the index lands keeps their own page"
   let release;
   const held = new Promise(resolve => { release = resolve; });
   await page.route("**/app/search/systems.json*", async route => { await held; await route.continue(); });
-  await page.goto("/?collection=systems&q=rag&page=2");
+  await page.goto("/?collection=systems&q=approval&page=2");
   await expect(page.locator("#project-pager .pager-nav span")).toHaveText("Page 1 of 1");
   await page.locator(".advanced-filter-shell summary").click();
   await page.locator("#status-filter").selectOption("");
