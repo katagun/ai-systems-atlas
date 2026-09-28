@@ -232,27 +232,35 @@ test("results carry a sticky strip with exactly one pressed entry, families insi
   await expect(page.locator("#family-filter")).toHaveValue("memory_system");
 });
 
-test("at phone widths the strip shows emblems only, fits with slack, and is the only sticky thing", async ({ page }) => {
-  for (const width of [320, 360, 390]) {
+test("up to tablet width the strip shows emblems only in one row with slack, sticky under a sticky header only above phones", async ({ page }) => {
+  for (const width of [320, 360, 390, 768, 960]) {
     await page.setViewportSize({ width, height: 812 });
     await page.goto("/?collection=runtimes");
     const strip = page.locator("#scope-strip");
     const row = strip.locator(".scope-row");
     // scrollWidth never drops below clientWidth, so the entries' extent is
     // measured from the row's left edge to the last entry's right edge.
-    const [rowWidth, frame, overflow] = await row.evaluate(element => [
+    const [rowWidth, frame, overflow, rows] = await row.evaluate(element => [
       element.lastElementChild.getBoundingClientRect().right - element.getBoundingClientRect().left,
       element.clientWidth,
       element.scrollWidth - element.clientWidth,
+      new Set([...element.children].map(entry => entry.getBoundingClientRect().top)).size,
     ]);
+    expect(rows, `${width}: one row`).toBe(1);
     expect(frame - rowWidth, `${width}: the row leaves at least 16 px`).toBeGreaterThanOrEqual(16);
     expect(overflow, `${width}: the row never scrolls sideways`).toBe(0);
     await expect(strip.locator(".scope-caption")).toHaveText(/^Local runtimes · \d+$/);
     const nameWidth = await strip.locator(".scope-entry").first().locator(".scope-name").evaluate(element => element.getBoundingClientRect().width);
     expect(nameWidth, `${width}: names are clipped, not shown`).toBeLessThanOrEqual(1);
-    await expect(page.locator(".site-header")).toHaveCSS("position", "static");
     await expect(strip).toHaveCSS("position", "sticky");
-    await expect(strip).toHaveCSS("top", "0px");
+    if (width <= 720) {
+      await expect(page.locator(".site-header")).toHaveCSS("position", "static");
+      await expect(strip).toHaveCSS("top", "0px");
+    } else {
+      await expect(page.locator(".site-header")).toHaveCSS("position", "sticky");
+      const headerHeight = await page.locator(".site-header").evaluate(element => element.getBoundingClientRect().height);
+      await expect(strip).toHaveCSS("top", `${headerHeight}px`);
+    }
   }
 });
 
@@ -343,8 +351,8 @@ const settled = (page, measure) => page.evaluate(async source => {
   return new Function(`return (${source})()`)();
 }, measure.toString());
 
-test("between phone and wide desktop the strip stays one short row", async ({ page }) => {
-  for (const [width, height] of [[1024, 768], [1280, 800], [1440, 900]]) {
+test("from tablet to wide desktop the strip stays one short row", async ({ page }) => {
+  for (const [width, height] of [[768, 1024], [1024, 768], [1280, 800], [1440, 900]]) {
     await page.setViewportSize({ width, height });
     await page.goto("/?collection=systems");
     const strip = page.locator("#scope-strip");

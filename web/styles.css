@@ -1319,16 +1319,32 @@ footer #data-date, footer .footer-meta {
   .site-header { grid-template-columns: 1fr auto auto; column-gap: .75rem; }
 }
 
-/* Between phone and wide desktop the full names would wrap the strip to two
+/* Between tablet and wide desktop the full names would wrap the strip to two
    or three rows, so each entry shows its short name; the full name stays
    the accessible name, clipped as on phones. Nine full names measure about
    1300 px, so they wait for the content column's 1360 px cap, at 1408 px. */
-@media (min-width: 721px) and (max-width: 1407px) {
+@media (min-width: 1001px) and (max-width: 1407px) {
   .scope-entry .scope-name { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   .scope-entry .scope-short { display: inline; }
   .scope-row { gap: .2rem; }
   .scope-entry { gap: .3rem; padding: .3rem .5rem .3rem .3rem; font-size: .8rem; }
   .scope-entry .badge-emblem, .scope-monogram { width: 1.15rem; height: 1.15rem; }
+}
+
+/* Up to tablet width even short names wrap the strip (they measure 898 px,
+   so they need a 1001 px viewport for 16 px of slack), so entries are emblems
+   only and the pressed entry's name and count read as the caption under the
+   one row. Above phone width the header still sticks and the strip under it. */
+@media (max-width: 1000px) {
+  .scope-strip { padding: .4rem 0 .35rem; }
+  .scope-row { flex-wrap: nowrap; gap: .2rem; }
+  .scope-entry { min-height: 0; padding: .2rem; gap: 0; }
+  .scope-entry .badge-emblem, .scope-monogram { width: 1.2rem; height: 1.2rem; }
+  .scope-entry .scope-name { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  .scope-entry .scope-short { display: none; }
+  .scope-entry .scope-count { display: none; }
+  .scope-caption { display: block; margin-top: .2rem; }
+  .family-row { margin-top: .3rem; }
 }
 
 @media (max-width: 720px) {
@@ -1356,17 +1372,9 @@ footer #data-date, footer .footer-meta {
   .door-job { padding: .35rem .7rem; font-size: .8rem; }
   /* Only the strip is sticky on a phone: the app's header scrolls away,
      which closes the 185 px sticky-header leftover from Phase 0. The blog
-     shares this sheet and has no strip, so its header stays sticky. Entries
-     are emblems only; the pressed entry's name and count read as the caption. */
+     shares this sheet and has no strip, so its header stays sticky. */
   body:not(.writing-page) .site-header { position: static; }
-  .scope-strip { top: 0; padding: .4rem 0 .35rem; }
-  .scope-row { flex-wrap: nowrap; gap: .2rem; }
-  .scope-entry { min-height: 0; padding: .2rem; gap: 0; }
-  .scope-entry .badge-emblem, .scope-monogram { width: 1.2rem; height: 1.2rem; }
-  .scope-entry .scope-name { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-  .scope-entry .scope-short { display: none; }
-  .scope-entry .scope-count { display: none; }
-  .scope-caption { display: block; }
+  .scope-strip { top: 0; }
   .view, #directory.view { padding: 2.6rem 0; }
   .definitions, .taxonomy-grid { grid-template-columns: 1fr; }
   .api-facts, .endpoint-list, .api-notes { grid-template-columns: 1fr; }

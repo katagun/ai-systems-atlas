@@ -859,11 +859,11 @@ function showResults() {
 }
 
 // The results strip: one entry per registry entry, the collection pressed.
-// At phone widths the entries are emblems only and the pressed one's name and
-// count read as a caption under the row (styles.css), so nine entries fit a
-// 320 px phone with slack and nothing scrolls sideways. Up to 1280 px each
-// shows its short name, so the row stays one row. Inside Systems a second
-// row lists the families, one pressed.
+// Up to tablet width (1000 px) the entries are emblems only and the pressed
+// one's name and count read as a caption under the row (styles.css), so nine
+// entries fit a 320 px phone with slack and nothing scrolls sideways. Up to
+// 1407 px each shows its short name, so the row stays one row. Inside Systems
+// a second row lists the families, one pressed.
 const FAMILY_ORDER = ["memory_system", "agent_system", "assistant_system"];
 function renderScopeStrip() {
   const strip = $("#scope-strip");
