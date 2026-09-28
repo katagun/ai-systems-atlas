@@ -1659,6 +1659,43 @@ test("a split name is found as a name", () => {
   assert.ok(recordMatch(parseSearchQuery("lang chain"), fields) > 0);
 });
 
+// The joined word is tried against every field, not only names, so "lang
+// chain" also finds a record whose prose says "langchain". That record holds
+// the phrase, so it leads one whose prose only holds "language" and "chain"
+// apart; only a name match earns the split-name lead.
+test("a split name also finds records whose prose holds the joined word", () => {
+  const records = [
+    { id: "cot", name: "Beta Model", description: "A language model trained on chain-of-thought traces.", status: "active", deployment: [] },
+    { id: "lg", name: "Alpha Graph", description: "Graphs built on LangChain.", status: "active", deployment: [] },
+    { id: "lc", name: "LangChain", description: "Framework.", status: "active", deployment: [] },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "lang chain", sort: "match", status: "" }).map(record => record.name), ["LangChain", "Alpha Graph", "Beta Model"]);
+});
+
+// Words a record holds together, in order, outrank the same words held apart,
+// even when the apart ones land in a weightier field: "self hosted" once
+// listed services typed "Managed inference host" before records described
+// as self-hosted.
+test("a phrase a record holds together outranks the same words apart", () => {
+  const labelOf = (kind, record) => (record.id === "host" ? "Managed inference host" : "General work agent");
+  const records = [
+    { id: "host", name: "Alpha Cloud", description: "Serves models on a self-built engine.", status: "active", deployment: [] },
+    { id: "agent", name: "Zeta", description: "A self-hosted assistant.", status: "active", deployment: [] },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "self hosted", sort: "match", status: "", labelOf }).map(record => record.name), ["Zeta", "Alpha Cloud"]);
+});
+
+// A short name is a whole name, so the exact-name lead reads it too: "ACP"
+// once tied Agent Client Protocol with a protocol whose short name only holds
+// ACP, and names A–Z put the other first.
+test("a short name equal to the query comes first", () => {
+  const specifications = [
+    { id: "commerce", name: "Agentic Commerce Protocol", short_name: "Commerce ACP", description: "Checkout.", status: "published", licenses: [] },
+    { id: "client", name: "Zeta Client Protocol", short_name: "ACP", description: "Editors.", status: "published", licenses: [] },
+  ];
+  assert.deepEqual(filterSpecifications(specifications, { term: "acp" }).map(item => item.name), ["Zeta Client Protocol", "Agentic Commerce Protocol"]);
+});
+
 test("the mixed directory stays A–Z while browsing and orders by match while searching", () => {
   const systems = [{ id: "z", name: "Zeta Agent", description: "An agent.", status: "active", deployment: [] }];
   const runtimes = [{ id: "o", name: "Ollama", maintainer: "Ollama", description: "Runs models.", api_styles: [] }];
@@ -1677,6 +1714,7 @@ test("real-catalog probes: known names first and loose queries answered", () => 
     runtime: nameOf("local_runtime_types", record.runtime_type),
     model: nameOf("model_types", record.model_type),
     pack: nameOf("pack_types", record.pack_type),
+    spec: nameOf("specification_types", record.specification_type),
     robot: nameOf("robot_form_factors", record.form_factor),
   })[kind] || "";
   const boot = name => readWebJSON(`app/${name}.json`);
@@ -1706,6 +1744,24 @@ test("real-catalog probes: known names first and loose queries answered", () => 
   assert.equal(run("claude code")[0], "Claude Code");
   assert.equal(run("lang chain")[0], "LangChain");
   assert.deepEqual(run("self hosted"), run("self-hosted"));
+  // A record that says the phrase leads the ones holding its words apart:
+  // "self hosted" once listed services typed "Managed inference host" first.
+  const selfHosted = search("self hosted")[0];
+  const leading = searchFields(selfHosted.kind, selfHosted.record, { index: indexOf[selfHosted.kind], labelOf });
+  assert.ok(
+    [leading.label, leading.maker, leading.description].some(text => ` ${normalizeSearchText(text).replace(/-/g, " ")} `.includes(" self hosted ")),
+    `${selfHosted.record.name} leads "self hosted" without saying it`,
+  );
+  // A split name finds everything the joined one does.
+  const split = new Set(run("lang chain"));
+  for (const name of run("langchain")) assert.ok(split.has(name), `"lang chain" misses ${name}, which "langchain" finds`);
+  // Each specification's short name lists that specification, or one of the
+  // same name, first.
+  const { specifications } = boot("specifications");
+  for (const { short_name: shortName } of specifications) {
+    const [first] = filterSpecifications(specifications, { term: shortName, searchIndex: index("specifications"), labelOf });
+    assert.ok([first.name, first.short_name].some(name => name.toLowerCase() === shortName.toLowerCase()), `"${shortName}" lists ${first.name} first`);
+  }
   assert.ok(run("gpt").includes("ChatGPT"));
   assert.ok(run("run models locally").length > 0);
   assert.ok(run("memory for agents").length > 0);
@@ -1785,20 +1841,39 @@ test("a query names a Finder job when most of its words appear in it", () => {
     { id: "empty", direction: "memory_system", label: "Run everything locally", description: "Nothing qualifies.", eligible: 0 },
   ];
   assert.equal(matchFinderGoal(goals, "run models locally").id, "personal_machine");
-  assert.equal(matchFinderGoal(goals, "rag").id, "knowledge_assistant");
+  assert.equal(matchFinderGoal(goals, "rag workspace").id, "knowledge_assistant");
   assert.equal(matchFinderGoal(goals, "ai"), null);
   assert.equal(matchFinderGoal(goals, "zebra crossing"), null);
+});
+
+// One word names a job only when that job's label holds it and no other job
+// with records holds it anywhere. A generic word such as "agent" raises no
+// banner, and neither does "rag", which only a description mentions. Among
+// jobs matching as many words, the one whose label holds more of them wins.
+test("one word names a Finder job only when that job's label alone holds it", () => {
+  const goals = [
+    { id: "general_work", direction: "agent_system", label: "Delegate general knowledge work", description: "An end-user agent that plans and completes broad multi-step work.", eligible: 5 },
+    { id: "build_agents", direction: "agent_system", label: "Build and orchestrate agents", description: "A framework for tools, workflows, state, and multi-agent coordination.", eligible: 7 },
+    { id: "knowledge_assistant", direction: "memory_system", label: "Ask questions over documents", description: "A ready-to-use AI knowledge app or RAG workspace.", eligible: 9 },
+    { id: "empty", direction: "memory_system", label: "Summarize documents", description: "Nothing qualifies.", eligible: 0 },
+  ];
+  assert.equal(matchFinderGoal(goals, "agent"), null);
+  assert.equal(matchFinderGoal(goals, "rag"), null);
+  // A job with nothing to shortlist never makes a word ambiguous.
+  assert.equal(matchFinderGoal(goals, "documents").id, "knowledge_assistant");
+  assert.equal(matchFinderGoal(goals, "multi agent").id, "build_agents");
 });
 
 // R-P1-8: matchFinderGoal must score a kept position with queryWordHit (the
 // better of a token's stem and its typed spelling), not with tokenHit on the
 // stem alone. "libraries" stems to "library", which is not a prefix of
-// "libraries", so a stem-only hit test misses a goal description that holds
-// the word as typed. A scratch check (not committed) shows the brief's
-// stem-only tokenHit call returns null for this same input.
+// "libraries", so a stem-only hit test misses a goal label that holds the
+// word as typed. A scratch check (not committed) shows the brief's
+// stem-only tokenHit call returns null for this same input. The word sits in
+// the label because one word names a goal only through its label.
 test("a query names a Finder job by an -ies word matched as typed, not only its stem", () => {
   const goals = [
-    { id: "sdk_builder", direction: "agent_system", label: "Build with an SDK", description: "Build agent libraries.", eligible: 3 },
+    { id: "sdk_builder", direction: "agent_system", label: "Build agent libraries", description: "An SDK for building agents.", eligible: 3 },
   ];
   assert.equal(matchFinderGoal(goals, "libraries").id, "sdk_builder");
 });

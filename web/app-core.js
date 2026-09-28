@@ -357,6 +357,10 @@
     robot: ROBOT_VIEW.searchFields,
   };
   const SEARCH_FIELD_WEIGHTS = { name: 50, label: 30, maker: 20, description: 10, text: 3 };
+  // A field that holds the whole query as a phrase adds this many times its
+  // weight, so a phrase in a label (150) still stays below a name that holds
+  // every query word (200).
+  const PHRASE_FACTOR = 5;
 
   const searchWordCache = new Map();
   function cachedSearchWords(text) {
@@ -367,6 +371,19 @@
       searchWordCache.set(key, words);
     }
     return words;
+  }
+
+  // A field's comparable text, padded with spaces so a phrase is found only
+  // as whole words.
+  const comparableTextCache = new Map();
+  function cachedComparableText(text) {
+    const key = String(text || "");
+    let comparable = comparableTextCache.get(key);
+    if (comparable === undefined) {
+      comparable = ` ${comparableText(key)} `;
+      comparableTextCache.set(key, comparable);
+    }
+    return comparable;
   }
 
   // What a record is matched and ordered by. `labelOf(kind, record)` names its
@@ -380,6 +397,9 @@
       .filter(Boolean).join(" ");
     return {
       name: [record.name, record.short_name].filter(Boolean).join(" "),
+      // Each whole name on its own, for the name leads: a short name such as
+      // "ACP" is as much the record's name as "Agent Client Protocol".
+      names: [record.name, record.short_name].filter(Boolean),
       label: labelOf ? labelOf(kind, record) : "",
       maker: maker || "",
       description: record.description || "",
@@ -399,9 +419,12 @@
 
   // A record's match weight: 0 when any query word misses every field, since
   // every word must match. Otherwise the number only orders results; it never
-  // reads a score, stars, or any other merit (ADR 040). The name bonuses also
-  // compare the query as typed, since stemming ("Swarms") and stop words
-  // ("A-MEM") change the stemmed text.
+  // reads a score, stars, or any other merit (ADR 040). A field other than
+  // the name that holds the query's words together, in order, adds a phrase
+  // bonus by its weight, so a record described as "self-hosted" leads one
+  // whose words "self" and "host" sit apart. The name bonuses read each whole
+  // name, a short name included, and also compare the query as typed, since
+  // stemming ("Swarms") and stop words ("A-MEM") change the stemmed text.
   function searchMatch(query, fields) {
     if (!query.tokens.length) return 1;
     const words = Object.fromEntries(Object.keys(SEARCH_FIELD_WEIGHTS).map(field => [field, cachedSearchWords(fields[field])]));
@@ -416,16 +439,25 @@
       if (!best) return 0;
       weight += best;
     }
-    const name = comparableText(fields.name);
     const typed = comparableText(query.raw);
-    if (name === query.text || name === typed) return weight + 1000;
-    if (name.startsWith(query.text) || (typed && name.startsWith(typed))) return weight + 400;
+    if (query.tokens.length > 1) {
+      let phrase = 0;
+      for (const [field, fieldWeight] of Object.entries(SEARCH_FIELD_WEIGHTS)) {
+        if (field !== "name" && cachedComparableText(fields[field]).includes(` ${typed} `)) phrase = Math.max(phrase, fieldWeight * PHRASE_FACTOR);
+      }
+      weight += phrase;
+    }
+    const names = (fields.names || [fields.name]).map(comparableText);
+    if (names.some(name => name === query.text || name === typed)) return weight + 1000;
+    if (names.some(name => name.startsWith(query.text) || (typed && name.startsWith(typed)))) return weight + 400;
     return nameHasAll ? weight + 200 : weight;
   }
 
   // A split product name still comes first: "lang chain" also tries
   // "langchain", and a record whose name holds the joined word counts as a
-  // name match. The typed words are joined beside their stems.
+  // name match. A record whose other fields hold the joined word as a whole
+  // word holds the phrase there, and earns that field's phrase bonus. The
+  // typed words are joined beside their stems.
   function recordMatch(query, fields) {
     let weight = searchMatch(query, fields);
     const nameWords = cachedSearchWords(fields.name);
@@ -433,8 +465,16 @@
     for (let i = 0; i < query.tokens.length - 1; i += 1) {
       const tokens = join(query.tokens, i);
       const joined = { raw: query.raw, text: tokens.join(" "), tokens, words: join(query.words || query.tokens, i) };
-      if (!tokens.every((_, j) => queryWordHit(nameWords, joined, j, true) > 0)) continue;
-      weight = Math.max(weight, searchMatch(joined, fields) + 300);
+      const joinedWeight = searchMatch(joined, fields);
+      if (!joinedWeight) continue;
+      let bonus = 0;
+      if (tokens.every((_, j) => queryWordHit(nameWords, joined, j, true) > 0)) bonus = 300;
+      else {
+        for (const [field, fieldWeight] of Object.entries(SEARCH_FIELD_WEIGHTS)) {
+          if (field !== "name" && queryWordHit(cachedSearchWords(fields[field]), joined, i, false) === 1) bonus = Math.max(bonus, fieldWeight * PHRASE_FACTOR);
+        }
+      }
+      weight = Math.max(weight, joinedWeight + bonus);
     }
     return weight;
   }
@@ -587,21 +627,34 @@
 
   // The Finder goal a query most plausibly names: at least 60% of its words of
   // three letters or more, and at least one, appear in the goal's label or
-  // description. A goal with nothing eligible never matches. Each kept
-  // position is scored with queryWordHit, the better of its stem and its
-  // typed spelling, since a stem is not always a prefix of its own spelling
-  // ("libraries" stems to "library"): a stem-only hit test would miss it.
+  // description. A goal with nothing eligible never matches. A query of one
+  // such word names a goal only when that goal's label holds the word and no
+  // other eligible goal holds it anywhere, so "browser" names a goal while a
+  // generic word such as "agent" or "model" names none, and neither does a
+  // word only a description mentions ("open", in "open-weight"). The goal
+  // matching the most words wins, then the one whose label holds more of
+  // them, then the first listed. Each kept position is scored with
+  // queryWordHit, the better of its stem and its typed spelling, since a stem
+  // is not always a prefix of its own spelling ("libraries" stems to
+  // "library"): a stem-only hit test would miss it.
   function matchFinderGoal(goals, raw) {
     const query = parseSearchQuery(raw);
     const positions = [...query.tokens.keys()].filter(i => query.tokens[i].length >= 3);
     if (!positions.length) return null;
     const needed = Math.max(1, Math.ceil(positions.length * 0.6));
-    let best = null;
+    const matched = [];
     for (const goal of goals) {
       if (!goal.eligible) continue;
       const goalWords = cachedSearchWords(`${goal.label} ${goal.description}`);
       const hits = positions.filter(i => queryWordHit(goalWords, query, i, false) > 0).length;
-      if (hits >= needed && (!best || hits > best.hits)) best = { goal, hits };
+      if (hits < needed) continue;
+      const labelWords = cachedSearchWords(goal.label);
+      matched.push({ goal, hits, labelHits: positions.filter(i => queryWordHit(labelWords, query, i, false) > 0).length });
+    }
+    if (positions.length === 1 && (matched.length !== 1 || !matched[0].labelHits)) return null;
+    let best = null;
+    for (const item of matched) {
+      if (!best || item.hits > best.hits || (item.hits === best.hits && item.labelHits > best.labelHits)) best = item;
     }
     return best ? best.goal : null;
   }

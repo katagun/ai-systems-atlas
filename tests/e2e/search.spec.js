@@ -406,6 +406,11 @@ test("the job banner shows only while the query names a job", async ({ page }) =
   await expect(hint).toBeHidden();
   await allSearch(page).fill("run models locally");
   await expect(hint).toBeVisible();
+  // A generic word appears in several jobs, so it names none of them.
+  await allSearch(page).fill("agent");
+  await expect(hint).toBeHidden();
+  await allSearch(page).fill("run models locally");
+  await expect(hint).toBeVisible();
   await page.locator("#reset-all-directory").click();
   await expect(hint).toBeHidden();
 });
