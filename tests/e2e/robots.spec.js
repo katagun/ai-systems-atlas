@@ -1,6 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
-const { collectionEntry, openCollection, searchAll } = require("./helpers/landing");
+const { collectionEntry, entryCount, openCollection, pressedEntry, searchAll } = require("./helpers/landing");
 
 const ROBOTS = [
   { id: "g-one", name: "G One", manufacturer: "Unibot", url: "https://unibot.example/g-one", description: "A compact humanoid.", form_factor: "humanoid", ai_basis: ["vendor_named_model", "open_model_interface"], availability: "orderable", status: "active" },
@@ -41,10 +41,9 @@ async function withEmptyRobots(page) {
 test("the robots entry stays out of the navigation while the collection is empty", async ({ page }) => {
   await withEmptyRobots(page);
   await page.goto("/");
-  // toBeHidden also passes for an element that does not exist, so pin its presence first.
-  await expect(collectionEntry(page, "robots")).toHaveCount(1);
-  await expect(collectionEntry(page, "robots")).toBeHidden();
-  await expect(page.locator("#all-collection-count")).toHaveText(String(catalogCounts.allDirectoryEntries - catalogCounts.robots));
+  // A missing entry also passes for an index that never rendered, so pin the index first.
+  expect(await entryCount(page, "all")).toBe(catalogCounts.allDirectoryEntries - catalogCounts.robots);
+  await expect(collectionEntry(page, "robots")).toHaveCount(0);
 });
 
 test("the published robots open from the real collection", async ({ page }) => {
@@ -52,7 +51,8 @@ test("the published robots open from the real collection", async ({ page }) => {
   // fetches a real robot's detail payload, so this fails if the published
   // records stop loading.
   await page.goto("/?collection=robots");
-  await expect(page.getByRole("button", { name: `Robots ${catalogCounts.robots}` })).toBeVisible();
+  await expect(collectionEntry(page, "robots")).toBeVisible();
+  expect(await entryCount(page, "robots")).toBe(catalogCounts.robots);
   await page.locator('#robot-grid [data-robot="spot"]').click();
   await expect(page.locator("#robot-dialog")).toBeVisible();
   await expect(page.locator("#robot-dialog-content")).toContainText("Models the vendor names");
@@ -64,9 +64,8 @@ test("the robots scope filters, opens its own dialog, and never scores or compar
   await withRobots(page);
   await page.goto("/?collection=robots");
 
-  const switcherButton = page.getByRole("button", { name: "Robots 2" });
-  await expect(switcherButton).toBeVisible();
-  await expect(switcherButton).toHaveAttribute("aria-pressed", "true");
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Robots /);
+  expect(await entryCount(page, "robots")).toBe(2);
   await expect(page.locator("#robot-result-count")).toContainText("2 robots · Unscored");
   await expect(page.locator("#robot-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#robot-grid .compare-toggle")).toHaveCount(0);
@@ -148,14 +147,14 @@ test("the active Robots switcher entry stays reachable at a wide desktop width",
   await withRobots(page);
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/?collection=robots");
-  await expect(page.getByRole("button", { name: "Robots 2" })).toBeInViewport();
+  await expect(collectionEntry(page, "robots")).toBeInViewport();
 });
 
 test("the active Robots switcher entry scrolls into view on a phone", async ({ page }) => {
   await withRobots(page);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/?collection=robots");
-  await expect(page.getByRole("button", { name: "Robots 2" })).toBeInViewport();
+  await expect(collectionEntry(page, "robots")).toBeInViewport();
 });
 
 test("syncing the switcher on a phone never scrolls the page vertically", async ({ page }) => {
@@ -165,10 +164,10 @@ test("syncing the switcher on a phone never scrolls the page vertically", async 
   await withRobots(page);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/?collection=robots");
-  await expect(page.getByRole("button", { name: "Robots 2" })).toBeInViewport();
+  await expect(collectionEntry(page, "robots")).toBeInViewport();
   const before = await page.evaluate(() => window.scrollY);
   await openCollection(page, "all");
-  await page.getByRole("button", { name: "Robots 2" }).click();
+  await openCollection(page, "robots");
   const after = await page.evaluate(() => window.scrollY);
   expect(after).toBe(before);
 });

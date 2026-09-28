@@ -19,7 +19,7 @@ const state = {
   labIndex: null,
   reviewedModelCount: 0, modelSourceCount: 0,
   licenses: new Map(), logos: { icons: {}, records: {} },
-  directoryCollection: "all", directoryRoles: null, directoryRolesLabel: null, badgeLegendPreference: null,
+  directoryCollection: "all", directoryStage: "door", recent: {}, directoryRoles: null, directoryRolesLabel: null, badgeLegendPreference: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
   pageSize: readStoredPageSize(),
@@ -185,6 +185,7 @@ async function bootstrap() {
   state.labs = labs.labs;
   state.labIndex = AtlasCore.buildLabIndex(state.labs, state.models);
   state.robots = robots.robots;
+  state.recent = { systems: systems.recent || [], inference: inference.recent || [], runtimes: runtimes.recent || [], specifications: specifications.recent || [], models: models.recent || [], packs: packs.recent || [], labs: labs.recent || [], robots: robots.recent || [] };
   const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at, models.verified_at, models.source_updated_at, packs.verified_at, labs.verified_at, robots.verified_at]
     .filter(Boolean)
     .sort()
@@ -207,20 +208,28 @@ async function bootstrap() {
   }
   renderStats();
   renderFinder();
+  renderDoorJobs();
   renderModels();
   renderLabs();
   renderSpecifications();
   renderTaxonomy();
   bindEvents();
+  const bootParams = new URL(window.location.href).searchParams;
   if (!restoreComparisonFromURL()) {
-    setDirectoryCollection(new URL(window.location.href).searchParams.get("collection") || "all", { updateURL: false });
+    if (AtlasCore.directoryStageFromURL(bootParams) === "door") showFrontDoor({ updateURL: false });
+    else setDirectoryCollection(bootParams.get("collection") || "all", { updateURL: false });
   }
   restoreViewFromURL();
   restoreRecordFromURL();
   state.urlReady = true;
   writeScopeURL();
   if (restored.q) loadRestoredSearch(scope, restored.page);
+  // Text typed on the front door before its listener was bound is still a
+  // search; it lands in results the way a keystroke after boot would.
+  if ($("#door-search").value && state.directoryStage === "door") $("#door-search").dispatchEvent(new Event("input", { bubbles: true }));
   loadMarks();
+  // The header's fonts can settle after bindEvents measured it.
+  syncStickyClearance();
 }
 
 // Marks are decorative next to the record name, so they stay hidden from
@@ -311,7 +320,7 @@ function writeURL(url, { push = false } = {}) {
 
 function writeDirectoryURL() {
   const url = new URL(window.location.href);
-  if (state.directoryCollection === "all") url.searchParams.delete("collection");
+  if (state.directoryStage === "door") url.searchParams.delete("collection");
   else url.searchParams.set("collection", state.directoryCollection);
   if (state.comparison.ids.length) {
     url.searchParams.set("compare", `${state.comparison.kind}:${state.comparison.ids.join(",")}`);
@@ -339,7 +348,7 @@ const SCOPE_CONTROLS = {
 // sibling view that has filters. Finder, Taxonomy, and API carry none.
 function activeScope() {
   const view = $(".view.is-active")?.id;
-  if (view === "directory") return state.directoryCollection;
+  if (view === "directory") return state.directoryStage === "door" ? null : state.directoryCollection;
   return SCOPE_CONTROLS[view] ? view : null;
 }
 
@@ -470,7 +479,15 @@ function clearComparison({ updateURL = true } = {}) {
   state.comparison = { kind: null, profile: null, ids: [], limitReached: false };
   if ($("#comparison-dialog")?.open) $("#comparison-dialog").close();
   renderComparisonControls();
+  syncDoorDots();
   if (updateURL) writeDirectoryURL();
+}
+
+// A tile's dot follows the comparison, so the index is rebuilt only when the
+// comparison changes. Rebuilding it on every grid repaint, as each search
+// index lands, would drop the focus and the click a reader has on a tile.
+function syncDoorDots() {
+  if (state.directoryStage === "door") renderCollectionIndex();
 }
 
 // The views where records can be compared, and so the only ones that show the
@@ -493,6 +510,8 @@ function renderComparisonControls() {
   const tray = $("#comparison-tray");
   if (!tray) return;
   tray.hidden = records.length === 0 || !COMPARISON_VIEWS.includes($(".view.is-active")?.id);
+  // The strip's dots follow the comparison; its render keeps a reader's focus.
+  if (state.directoryStage === "results") renderScopeStrip();
   syncBadgeLegend();
   $("#comparison-tray-title").textContent = records.length === 1 ? "1 item selected" : `${records.length} items selected`;
   $("#comparison-tray-items").textContent = records.map(item => item.name).join(" · ");
@@ -508,6 +527,7 @@ function toggleComparison(kind, id) {
   if (!record) return;
   state.comparison = AtlasCore.updateComparisonSelection(state.comparison, { kind, profile: record.score_profile, id });
   renderComparisonControls();
+  syncDoorDots();
   writeDirectoryURL();
 }
 
@@ -721,60 +741,203 @@ function applyDirectoryDefaults() {
 }
 
 function renderStats() {
-  const counts = AtlasCore.switcherCounts({
-    projects: state.projects, services: state.inferenceServices, runtimes: state.localRuntimes,
-    models: state.models, packs: state.packs, robots: state.robots,
-    labs: state.labs, specifications: state.specifications,
-  });
-  $("#hero-kicker").textContent = `${counts.all} systems, source models, services, runtimes, packs, and robots`;
-  $("#all-collection-count").textContent = counts.all;
-  $("#system-collection-count").textContent = counts.systems;
-  $("#memory-collection-count").textContent = counts.memory_system;
-  $("#agent-collection-count").textContent = counts.agent_system;
-  $("#assistant-collection-count").textContent = counts.assistant_system;
-  $("#inference-collection-count").textContent = counts.inference;
-  $("#runtime-collection-count").textContent = counts.runtimes;
-  $("#model-collection-count").textContent = counts.models;
-  $("#lab-collection-count").textContent = counts.labs;
-  $("#specification-collection-count").textContent = counts.specifications;
-  $("#pack-collection-count").textContent = counts.packs;
-  // An empty collection has no navigation entry: the scope exists before its
-  // first record is reviewed, and a reader should not be sent to an empty page.
-  $("#robot-collection-count").textContent = counts.robots;
-  $("#robot-collection-count").parentElement.hidden = counts.robots === 0;
+  const { count } = AtlasCore.collectionCount("all", collectionPayloads());
+  $("#hero-kicker").textContent = `${count} systems, source models, services, runtimes, packs, and robots`;
 }
 
-function syncCollectionSwitcher() {
-  const buttons = $$('[data-directory-collection]');
-  const active = AtlasCore.activeSwitcherIndex(
-    buttons.map(button => ({ collection: button.dataset.directoryCollection, family: button.dataset.directoryFamily })),
-    { collection: state.directoryCollection, family: $("#family-filter").value },
-  );
-  buttons.forEach((button, index) => {
-    button.classList.toggle("is-active", index === active);
-    button.setAttribute("aria-pressed", String(index === active));
+// Every registry function reads the boot payloads in this shape.
+function collectionPayloads() {
+  return {
+    projects: state.projects, services: state.inferenceServices, runtimes: state.localRuntimes, models: state.models,
+    packs: state.packs, robots: state.robots, labs: state.labs, specifications: state.specifications,
+  };
+}
+
+function collectionEmblem(entry) {
+  if (entry.id === "all") return AtlasCore.familyEmblem("type");
+  return entry.emblem ? AtlasCore.badgeEmblem(entry.emblem) : "";
+}
+
+function collectionStateFor(id) {
+  return AtlasCore.collectionState(id, {
+    comparisonKind: state.comparison.ids.length ? state.comparison.kind : null,
+    finderRoles: state.directoryRoles,
   });
-  const activeButton = buttons[active] || null;
-  // The switcher wraps at desktop widths, so every entry is already visible
-  // there; only the narrow layout keeps the horizontal scroll strip that can
-  // hide the active entry off-screen. Scrolling only fires when the strip is
-  // actually scrollable, so a scope change on a wide viewport never jolts the
-  // page, and it never asks for smooth scrolling so reduced motion is respected.
-  // scrollIntoView would do here, but it can scroll the whole page vertically
-  // to bring the switcher itself into view (e.g. a Systems family change that
-  // re-syncs it while it sits above the fold on a phone); moving only
-  // switcher.scrollLeft, by the button's nearest-edge overflow, never touches
-  // the page's own scroll position.
-  const switcher = $(".collection-switcher");
-  if (activeButton && switcher && switcher.scrollWidth > switcher.clientWidth) {
-    const switcherRect = switcher.getBoundingClientRect();
-    const buttonRect = activeButton.getBoundingClientRect();
-    if (buttonRect.left < switcherRect.left) {
-      switcher.scrollLeft -= switcherRect.left - buttonRect.left;
-    } else if (buttonRect.right > switcherRect.right) {
-      switcher.scrollLeft += buttonRect.right - switcherRect.right;
-    }
+}
+
+// A state dot is decoration with a hidden label, so the entry's accessible
+// name still starts with the collection's name and count.
+function stateDot(kind) {
+  if (kind === "compare") return '<span class="state-dot is-compare" title="A comparison is in progress here"><span class="visually-hidden">A comparison is in progress here</span></span>';
+  if (kind === "finder") return '<span class="state-dot is-finder" title="Finder roles applied"><span class="visually-hidden">Finder roles applied</span></span>';
+  return "";
+}
+
+// The three records the payload names as reviewed most recently, painted the
+// way a card's mark is: an icon once logos.json lands, a monogram until then.
+function tileMarks(id) {
+  const records = (state.recent[id] || [])
+    .map(recordId => AtlasCore.collectionEntries(id, collectionPayloads()).find(record => record.id === recordId))
+    .filter(Boolean);
+  if (!records.length) return "";
+  return `<span class="tile-marks" aria-hidden="true">${records.map(cardMark).join("")}</span>`;
+}
+
+// The index: one tile per registry entry, hidden while its collection is
+// empty (the Robots rule from ADR 037, now general). A tile carries emblem,
+// name, count with its split, the largest categories as links, three marks,
+// and a state dot. It carries no definition; those stay in Taxonomy.
+function renderCollectionIndex() {
+  const payloads = collectionPayloads();
+  $("#collection-index").innerHTML = AtlasCore.COLLECTIONS.map(entry => {
+    const { count, note } = AtlasCore.collectionCount(entry.id, payloads);
+    if (count === 0 && entry.id !== "all") return "";
+    const categories = AtlasCore.collectionCategories(entry.id, payloads);
+    const categoryList = categories.length
+      ? `<ul class="tile-categories" role="list">${categories.map(category => `<li><button type="button" class="tile-category" data-open-collection="${escapeHTML(entry.id)}" data-facet-key="${escapeHTML(category.key)}" data-facet-value="${escapeHTML(category.value)}">${escapeHTML(category.label)} <strong>${category.count}</strong></button></li>`).join("")}</ul>`
+      : "";
+    return `<article class="tile${entry.id === "all" ? " tile-wide" : ""}" data-tile="${escapeHTML(entry.id)}">
+      <button type="button" class="tile-open" data-open-collection="${escapeHTML(entry.id)}">${collectionEmblem(entry)}<span class="tile-name">${escapeHTML(entry.name)}</span><span class="tile-count"><strong>${count}</strong>${note ? `<small>${escapeHTML(note)}</small>` : ""}</span></button>
+      ${categoryList}${tileMarks(entry.id)}${stateDot(collectionStateFor(entry.id))}
+    </article>`;
+  }).join("");
+}
+
+// The front door's Finder jobs: the first goal of each direction, opened at
+// the Finder's priority question with that direction and goal answered
+// (openFinderAt, which the job hint under a search already uses).
+function renderDoorJobs() {
+  $("#door-jobs").innerHTML = FINDER_DIRECTIONS.map(direction => {
+    const goal = FINDER_GOALS[direction.id][0];
+    return `<li><button type="button" class="door-job" data-door-direction="${escapeHTML(direction.id)}" data-door-goal="${escapeHTML(goal.id)}">${escapeHTML(goal.label)}</button></li>`;
+  }).join("");
+}
+
+// Leaving the front door pushes one history entry, so Back returns to it;
+// every change inside results keeps replacing (front-door spec, "URL state
+// and history"). Pushing the current URL first, then replacing it with the
+// new state, spends one history call, within WebKit's budget (writeURL).
+function leaveFrontDoor() {
+  if (state.directoryStage !== "door") return;
+  try { window.history.pushState(null, "", window.location.href); } catch {}
+  state.directoryStage = "results";
+}
+
+// The front door is a clean start: the query of the collection last shown
+// is cleared, so no tile opens with a search the door's empty box never showed.
+function showFrontDoor({ updateURL = true } = {}) {
+  state.directoryStage = "door";
+  const collection = state.directoryCollection;
+  const query = $(SCOPE_CONTROLS[collection].q);
+  if (query.value) {
+    query.value = "";
+    state.page[collection] = 1;
+    syncMatchSort(collection);
   }
+  $$(".collection-panel").forEach(panel => { panel.hidden = true; });
+  $("#scope-strip").hidden = true;
+  $("#front-door").hidden = false;
+  $("#hero-kicker").hidden = false;
+  $("#directory-title").classList.remove("visually-hidden");
+  syncStickyClearance();
+  renderCollectionIndex();
+  syncBadgeLegend();
+  if (updateURL) {
+    writeDirectoryURL();
+    writeScopeURL();
+  }
+}
+
+// The heading stays in the page, visually hidden, because activateView lands
+// focus on it when a switch into the Directory leaves another view.
+function showResults() {
+  state.directoryStage = "results";
+  $("#front-door").hidden = true;
+  $("#hero-kicker").hidden = true;
+  $("#directory-title").classList.add("visually-hidden");
+  $("#scope-strip").hidden = false;
+}
+
+// The results strip: one entry per registry entry, the collection pressed.
+// Up to tablet width (1000 px) the entries are emblems only and the pressed
+// one's name and count read as a caption under the row (styles.css), so nine
+// entries fit a 320 px phone with slack and nothing scrolls sideways. Up to
+// 1407 px each shows its short name, so the row stays one row. Inside Systems
+// a second row lists the families, one pressed.
+const FAMILY_ORDER = ["memory_system", "agent_system", "assistant_system"];
+function renderScopeStrip() {
+  const strip = $("#scope-strip");
+  // Every grid repaint lands here, so a reader's focus on an entry is put
+  // back on the rebuilt one rather than dropped to the page.
+  const focused = strip.contains(document.activeElement) ? document.activeElement : null;
+  const focusKey = focused?.dataset.openCollection !== undefined
+    ? `[data-open-collection="${focused.dataset.openCollection}"]`
+    : focused?.dataset.familyEntry !== undefined ? `[data-family-entry="${focused.dataset.familyEntry}"]` : null;
+  const payloads = collectionPayloads();
+  let caption = "";
+  const entries = AtlasCore.COLLECTIONS.map(entry => {
+    const { count } = AtlasCore.collectionCount(entry.id, payloads);
+    if (count === 0 && entry.id !== "all") return "";
+    const pressed = entry.id === state.directoryCollection;
+    if (pressed) caption = `${entry.name} · ${count}`;
+    // Robots has no emblem until its form-factor badge exists, and a phone
+    // clips every name, so its initial stands in rather than an empty button.
+    const emblem = collectionEmblem(entry) || `<span class="scope-monogram" aria-hidden="true">${escapeHTML(AtlasCore.monogramGlyph(entry.name))}</span>`;
+    return `<button type="button" class="scope-entry${pressed ? " is-active" : ""}" data-open-collection="${escapeHTML(entry.id)}" aria-pressed="${pressed}" title="${escapeHTML(entry.name)}">${emblem}<span class="scope-name">${escapeHTML(entry.name)}</span><span class="scope-short" aria-hidden="true">${escapeHTML(entry.short)}</span><strong class="scope-count">${count}</strong>${stateDot(collectionStateFor(entry.id))}</button>`;
+  }).join("");
+  const familyRow = state.directoryCollection === "systems" ? renderFamilyRow(payloads) : "";
+  strip.innerHTML = `<div class="scope-row">${entries}</div><p class="scope-caption" aria-hidden="true">${escapeHTML(caption)}</p>${familyRow}`;
+  if (focusKey) strip.querySelector(focusKey)?.focus({ preventScroll: true });
+  syncStickyClearance();
+}
+
+function renderFamilyRow(payloads) {
+  const current = $("#family-filter").value;
+  const categories = AtlasCore.collectionCategories("systems", payloads);
+  const total = AtlasCore.collectionCount("systems", payloads).count;
+  const entry = (value, name, count) => `<button type="button" class="family-entry${value === current ? " is-active" : ""}" data-family-entry="${escapeHTML(value)}" aria-pressed="${value === current}">${escapeHTML(name)} <strong>${count}</strong></button>`;
+  const families = FAMILY_ORDER.map(id => entry(id, AtlasCore.FAMILY_SHORT_NAMES[id], (categories.find(category => category.value === id) || { count: 0 }).count));
+  return `<div class="family-row" role="group" aria-label="System families">${entry("", "All families", total)}${families.join("")}</div>`;
+}
+
+// The strip sticks under the header above phone widths, so the header's
+// live height is a custom property the stylesheet reads. The sticky height
+// is another, html's scroll-padding-top, so focus moving through a grid
+// stops below the header and the strip rather than under them. The strip's
+// height changes with the family row, so every strip render re-measures.
+function syncStickyClearance() {
+  const header = $(".site-header");
+  if (!header) return;
+  document.documentElement.style.setProperty("--header-height", `${header.getBoundingClientRect().height}px`);
+  document.documentElement.style.setProperty("--sticky-clearance", `${stickyHeight()}px`);
+}
+
+// The one way a tile or a strip entry opens a collection. A facet narrows
+// the collection to one category first; a family goes through
+// jumpToDirectoryFamily so the role and Finder set are cleared as ever.
+// setDirectoryCollection carries the query the reader leaves, so a query
+// only a lab or a specification answers follows the reader from the All
+// results into Labs or Specifications; the front door itself carries none.
+function openCollection(id, { facet = null } = {}) {
+  const entry = AtlasCore.COLLECTIONS.find(item => item.id === id);
+  if (!entry) return;
+  leaveFrontDoor();
+  // A category link opens the collection narrowed to that one category, so
+  // its results agree with the count on the link: other facets are cleared,
+  // and Systems keeps its default status, the one its counts are taken at.
+  if (facet) {
+    clearScopeFacets(id);
+    if (id === "systems") $("#status-filter").value = AtlasCore.directoryDefaults().status;
+  }
+  if (id === "systems") {
+    jumpToDirectoryFamily(facet && facet.key === "family" ? facet.value : "");
+    return;
+  }
+  if (facet) {
+    $(SCOPE_CONTROLS[id][facet.key]).value = facet.value;
+    state.page[id] = 1;
+  }
+  setDirectoryCollection(id);
 }
 
 // Opens Systems on one family, or on every family when `family` is empty,
@@ -803,6 +966,8 @@ function setDirectoryCollection(collection, { updateURL = true, carryQuery = upd
     || (selected === "models" && state.comparison.kind === "model");
   if (updateURL && state.comparison.ids.length && !compatible) clearComparison({ updateURL: false });
   state.directoryCollection = selected;
+  showResults();
+  renderScopeStrip();
   if (previousQuery !== null) {
     const input = $(SCOPE_CONTROLS[selected].q);
     // Changed text is a new query in this scope: it starts on the first page,
@@ -817,7 +982,6 @@ function setDirectoryCollection(collection, { updateURL = true, carryQuery = upd
     // fetches on focus, with a repaint as each one lands.
     if (previousQuery.trim()) SEARCH_SCOPES[SCOPE_CONTROLS[selected].q].forEach(name => loadSearchIndex(name)?.then(renderSearchSurfaces));
   }
-  syncCollectionSwitcher();
   $("#all-directory-panel").hidden = selected !== "all";
   $("#systems-directory-panel").hidden = selected !== "systems";
   $("#inference-directory-panel").hidden = selected !== "inference";
@@ -1031,7 +1195,9 @@ function syncBadgeLegend() {
   const activeViewId = $(".view.is-active")?.id;
   const inDirectory = activeViewId === "directory";
   const systemFamily = state.directoryCollection === "systems" ? $("#family-filter").value : "";
-  const legend = inDirectory ? AtlasCore.badgeLegend(state.directoryCollection, systemFamily)
+  // The front door shows no cards, so it has no badges to explain.
+  const legend = inDirectory && state.directoryStage === "door" ? null
+    : inDirectory ? AtlasCore.badgeLegend(state.directoryCollection, systemFamily)
     : ["models", "specifications", "labs"].includes(activeViewId) ? AtlasCore.badgeLegend(activeViewId)
     : null;
   const shown = Boolean(legend) && $("#comparison-tray").hidden;
@@ -1644,10 +1810,18 @@ function renderFinder() {
   $("#finder-content").innerHTML = content + navigation;
 }
 
-// The sticky header's live height plus the reading margin both Finder scroll
-// corrections leave beneath it, measured once so the two never disagree.
+// How much sticks to the top of the viewport. The header sticks only above
+// phone widths, and in results the scope strip sticks under it, so each
+// counts only while it is sticky; a hidden strip measures no height.
+function stickyHeight() {
+  const sticky = element => element && getComputedStyle(element).position === "sticky" ? element.getBoundingClientRect().height : 0;
+  return sticky($(".site-header")) + sticky($("#scope-strip"));
+}
+
+// The sticky height plus the reading margin both Finder scroll corrections
+// leave beneath it, measured once so the two never disagree.
 function headerClearance() {
-  return ($(".site-header")?.getBoundingClientRect().height || 0) + 12;
+  return stickyHeight() + 12;
 }
 
 // A choice replaces the panel's content, which can leave the step indicator
@@ -2798,6 +2972,13 @@ function restoreRecordFromURL() {
 // Back and forward move between record states only: collection and comparison
 // changes replace the current entry, so a popstate is always a record change.
 function syncRecordWithHistory() {
+  // Back from results lands on the entry leaveFrontDoor pushed: a bare
+  // Directory URL, which is the front door.
+  const onDoor = $("#directory").classList.contains("is-active") && state.directoryStage === "door";
+  if (!onDoor && AtlasCore.directoryStageFromURL(new URL(window.location.href).searchParams) === "door") {
+    showFrontDoor({ updateURL: false });
+    activateView("directory");
+  }
   const reference = AtlasCore.parseRecordReference(new URL(window.location.href).searchParams.get("record"));
   if (reference && openRecord(reference.kind, reference.id)) return;
   closeRecordDialogs();
@@ -3111,6 +3292,7 @@ const SEARCH_SCOPES = {
   "#model-search": ["models"], "#pack-search": ["packs", "systems"], "#lab-search": ["labs"],
   "#robot-search": ["robots"],
   "#all-directory-search": ["systems", "inference", "runtimes", "models", "packs", "robots"],
+  "#door-search": ["systems", "inference", "runtimes", "models", "packs", "robots"],
 };
 
 // Docs groups the explanatory views so the primary row stays on the catalog
@@ -3149,6 +3331,8 @@ function initDocsMenu() {
 }
 
 function bindEvents() {
+  syncStickyClearance();
+  window.addEventListener("resize", syncStickyClearance);
   for (const [scope, selector] of Object.entries(MATCH_SORTS)) {
     $(SCOPE_CONTROLS[scope].q).addEventListener("input", () => syncMatchSort(scope));
     $(selector).addEventListener("input", () => {
@@ -3161,14 +3345,18 @@ function bindEvents() {
     // A modal dialog makes the search box inert, so the key would only be
     // swallowed; leave it to the browser.
     if (document.querySelector("dialog[open]")) return;
-    const selector = SCOPE_CONTROLS[activeScope()]?.q;
+    const onDoor = $("#directory").classList.contains("is-active") && state.directoryStage === "door";
+    const selector = onDoor ? "#door-search" : SCOPE_CONTROLS[activeScope()]?.q;
     if (!selector) return;
     event.preventDefault();
     $(selector).focus();
   });
   // The Docs menu button carries .tab styling but no data-tab, so the primary
   // tabs bind on [data-tab] and the menu wires separately below.
-  $$(".tab[data-tab]").forEach(button => button.addEventListener("click", () => activateView(button.dataset.tab)));
+  $$(".tab[data-tab]").forEach(button => button.addEventListener("click", () => {
+    activateView(button.dataset.tab);
+    if (button.dataset.tab === "directory") showFrontDoor();
+  }));
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
   $$('[data-open-view]').forEach(button => button.addEventListener("click", () => { closeDocsMenu(); activateView(button.dataset.openView); }));
   initDocsMenu();
@@ -3180,15 +3368,8 @@ function bindEvents() {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
     event.preventDefault();
     activateView("directory");
+    showFrontDoor();
   });
-  // Systems and the family chips all name the systems collection. Each sets
-  // its family, none for Systems, so Systems clears a family, a role, or a
-  // Finder role set that another chip or the Finder left behind.
-  $$('[data-directory-collection]').forEach(button => button.addEventListener("click", () => {
-    const { directoryCollection: collection, directoryFamily: family } = button.dataset;
-    if (collection === "systems") jumpToDirectoryFamily(family || "");
-    else setDirectoryCollection(collection);
-  }));
   // Fetching on focus rather than on the first keystroke usually beats the
   // second character, so the widened results arrive before anyone sees the
   // narrow ones. The All view searches five collections, so it loads five.
@@ -3208,6 +3389,44 @@ function bindEvents() {
   $("#all-directory-search").addEventListener("input", () => { state.page.all = 1; renderAllDirectoryEntries(); });
   initBadgeTooltip();
   initBadgeLegend();
+  // The front door's search hands its text to the All search and lands in
+  // results, so the first character is the search; the caret follows.
+  $("#door-search").addEventListener("input", event => {
+    const value = event.target.value;
+    if (!value) return;
+    event.target.value = "";
+    $("#all-directory-search").value = value;
+    state.page.all = 1;
+    openCollection("all");
+    // Leaving the door carries the query of the scope last shown, which can
+    // replace the text just typed; the typed text is the search.
+    const target = $("#all-directory-search");
+    if (target.value !== value) {
+      target.value = value;
+      target.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+    target.focus({ preventScroll: true });
+    target.setSelectionRange(value.length, value.length);
+  });
+  document.addEventListener("click", event => {
+    const family = event.target.closest("[data-family-entry]");
+    if (family) {
+      jumpToDirectoryFamily(family.dataset.familyEntry);
+      return;
+    }
+    const category = event.target.closest("[data-facet-key]");
+    if (category) {
+      openCollection(category.dataset.openCollection, { facet: { key: category.dataset.facetKey, value: category.dataset.facetValue } });
+      return;
+    }
+    const entry = event.target.closest("[data-open-collection]");
+    if (entry) {
+      openCollection(entry.dataset.openCollection);
+      return;
+    }
+    const job = event.target.closest("[data-door-goal]");
+    if (job) openFinderAt(job.dataset.doorDirection, job.dataset.doorGoal);
+  });
   $("#family-filter").addEventListener("input", () => {
     clearComparison();
     state.directoryRoles = null;
@@ -3215,10 +3434,10 @@ function bindEvents() {
     $("#role-filter").value = "";
     populateRoleFilter();
     updateScoreSortAvailability();
-    syncCollectionSwitcher();
     state.page.systems = 1;
     renderProjects();
     syncBadgeLegend();
+    renderScopeStrip();
   });
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.directoryRolesLabel = null; state.page.systems = 1; renderProjects(); });
   ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
@@ -3315,6 +3534,7 @@ function bindEvents() {
     state.directoryRolesLabel = null;
     state.page.systems = 1;
     renderProjects();
+    renderScopeStrip();
     // The chip removes itself, so keyboard and screen-reader focus would
     // otherwise fall off the page; land it on the count the chip affected.
     $("#result-count").focus();

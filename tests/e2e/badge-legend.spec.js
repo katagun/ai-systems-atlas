@@ -21,33 +21,34 @@ test("the legend lists the active scope's badges and follows the scope", async (
   await openCollection(page, "runtimes");
   await expect(items(page)).toHaveText(names(badgeLegend("runtimes")));
 
+  // The family row lives inside Systems, so the reader opens Systems first.
+  await openCollection(page, "systems");
+  await expect(items(page)).toHaveText(names(badgeLegend("systems")));
   await openFamily(page, "memory_system");
   await expect(items(page)).toHaveText(names(badgeLegend("systems", "memory_system")));
 
-  // The plain "Systems" switcher pill only changes the collection — the
-  // family filter itself (the actual scope narrower) is untouched by it, same
-  // as the grid it drives, so the family select is how a reader widens back
-  // out to every system family. This also exercises the #family-filter input
-  // listener's syncBadgeLegend() call.
+  // The family select widens back out to every system family, as the All
+  // families entry does. This exercises the #family-filter input listener's
+  // syncBadgeLegend() call.
   await page.locator("#family-filter").selectOption("");
   await expect(items(page)).toHaveText(names(badgeLegend("systems")));
 });
 
 test("mixed scopes show only the families, sibling views name their own sets, and badge-less views show nothing", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/?collection=all");
   await expect(items(page)).toHaveCount(4);
   await expect(items(page).first()).toHaveText(/Type$/);
   await expect(items(page).nth(1)).toHaveText(/Control and privacy$/);
   await expect(items(page).first()).not.toContainText("What kind of record it is");
 
-  await page.locator('[data-directory-collection="models"]').click();
+  await openCollection(page, "models");
   await expect(legend(page)).toBeVisible();
   await expect(items(page)).toHaveText(names(badgeLegend("models")));
 
-  await page.locator('[data-directory-collection="specifications"]').click();
+  await openCollection(page, "specifications");
   await expect(items(page)).toHaveText(names(badgeLegend("specifications")));
 
-  await page.locator('[data-directory-collection="labs"]').click();
+  await openCollection(page, "labs");
   await expect(items(page)).toHaveText(names(badgeLegend("labs")));
 
   await page.locator('.docs-button').click();

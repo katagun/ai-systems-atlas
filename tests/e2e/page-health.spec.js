@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { searchAll } = require("./helpers/landing");
+const { collectionEntry, openCollection, searchAll } = require("./helpers/landing");
 
 const VIEWS = ["Catalog", "Find your fit", "Concepts", "Published data"];
 
@@ -9,7 +9,7 @@ test("every view and a detail dialog render without console or page errors", asy
   page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
 
   await page.goto("/");
-  await expect(page.locator("#all-directory-result-count")).toContainText("entries");
+  await expect(collectionEntry(page, "all")).toBeVisible();
   for (const view of VIEWS) {
     if (view === "Concepts" || view === "Published data") {
       await page.locator(".docs-button").click();
@@ -29,7 +29,7 @@ test("every view and a detail dialog render without console or page errors", asy
 test("no view overflows the page horizontally at 390px", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
-  await expect(page.locator("#all-directory-result-count")).toContainText("entries");
+  await expect(collectionEntry(page, "all")).toBeVisible();
 
   const overflow = () => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   await page.locator(".docs-button").click();
@@ -38,19 +38,19 @@ test("no view overflows the page horizontally at 390px", async ({ page }) => {
   await page.locator(".docs-button").click();
   await page.getByRole("button", { name: "Published data", exact: true }).click();
   expect(await overflow(), "Published data overflows horizontally").toBeLessThanOrEqual(0);
-  for (const collection of [/^Systems /, /^Inference services /, /^Local runtimes /, /^Models /, /^Labs /, /^Specifications /]) {
+  for (const collection of ["systems", "inference", "runtimes", "models", "labs", "specifications"]) {
     await page.getByRole("button", { name: "Catalog", exact: true }).click();
-    await page.getByRole("button", { name: collection }).click();
+    await openCollection(page, collection);
     expect(await overflow(), `${collection} overflows horizontally`).toBeLessThanOrEqual(0);
   }
   await page.getByRole("button", { name: "Catalog", exact: true }).click();
-  await page.getByRole("button", { name: /^Local runtimes / }).click();
+  await openCollection(page, "runtimes");
   await page.locator("#runtime-grid [data-local-runtime=\"ollama\"]").click();
   const dialogOverflow = await page.locator("#runtime-dialog").evaluate(dialog => dialog.scrollWidth - dialog.clientWidth);
   expect(dialogOverflow).toBeLessThanOrEqual(0);
   await page.locator("#runtime-dialog .dialog-close").click();
   await page.getByRole("button", { name: "Catalog", exact: true }).click();
-  await page.getByRole("button", { name: /^Models / }).click();
+  await openCollection(page, "models");
   // Narrow first: high-scoring new records sort above older ones.
   await page.locator("#model-search").fill("Qwen2.5-Coder-0.5B");
   await page.locator('[data-model="model-alibaba-qwen2-5-coder-0-5b"]').click();
@@ -65,7 +65,7 @@ test("the page loads without third-party runtime requests", async ({ page, baseU
   });
 
   await page.goto("/", { waitUntil: "networkidle" });
-  await expect(page.locator("#all-directory-result-count")).toContainText("entries");
+  await expect(collectionEntry(page, "all")).toBeVisible();
 
   expect(external).toEqual([]);
 });

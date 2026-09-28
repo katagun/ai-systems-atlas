@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, COLLECTIONS, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, COLLECTIONS, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1416,49 +1416,6 @@ test("mergePackScopeEntries unions packs and host-pack systems by name with kind
   const systems = [{ id: "z-sys", name: "Z" }, { id: "a-sys", name: "A" }];
   assert.deepEqual(mergePackScopeEntries(packs, systems).map(item => [item.kind, item.record.id]), [["system", "a-sys"], ["pack", "b-pack"], ["system", "z-sys"]]);
   assert.deepEqual(mergePackScopeEntries([], []), []);
-});
-
-test("exactly one switcher chip is pressed, and a family chip wins over Systems", () => {
-  const entries = [
-    { collection: "all" },
-    { collection: "systems" },
-    { collection: "systems", family: "memory_system" },
-    { collection: "systems", family: "agent_system" },
-    { collection: "inference" },
-  ];
-  assert.equal(activeSwitcherIndex(entries, { collection: "all" }), 0);
-  assert.equal(activeSwitcherIndex(entries, { collection: "systems" }), 1);
-  assert.equal(activeSwitcherIndex(entries, { collection: "systems", family: "memory_system" }), 2);
-  assert.equal(activeSwitcherIndex(entries, { collection: "systems", family: "agent_system" }), 3);
-  // A family with no chip of its own leaves the collection chip pressed.
-  assert.equal(activeSwitcherIndex(entries, { collection: "systems", family: "robot_system" }), 1);
-  assert.equal(activeSwitcherIndex(entries, { collection: "inference", family: "memory_system" }), 4);
-  assert.equal(activeSwitcherIndex(entries, { collection: "packs" }), -1);
-});
-
-test("each switcher chip counts what its scope lists by default", () => {
-  const systems = [
-    { name: "M1", system_family: "memory_system", status: "active", deployment: [] },
-    { name: "M2", system_family: "memory_system", status: "archived", deployment: [] },
-    { name: "A1", system_family: "agent_system", status: "active", deployment: ["host_pack"] },
-    { name: "A2", system_family: "agent_system", status: "superseded", deployment: [] },
-    { name: "S1", system_family: "assistant_system", status: "active", deployment: [] },
-  ];
-  const counts = switcherCounts({ projects: systems, services: [{}, {}], runtimes: [{}], models: [{}, {}, {}], packs: [{}], robots: [{}, {}, {}, {}] });
-  assert.deepEqual(counts, {
-    all: 5 + 2 + 1 + 3 + 1 + 4,
-    systems: 3,
-    memory_system: 1,
-    agent_system: 1,
-    assistant_system: 1,
-    inference: 2,
-    runtimes: 1,
-    models: 3,
-    packs: 1 + 1,
-    robots: 4,
-    labs: 0,
-    specifications: 0,
-  });
 });
 
 test("a scope writes only the parameters that differ from their defaults, in a fixed order", () => {

@@ -674,42 +674,6 @@
     return best ? best.goal : null;
   }
 
-  // Which one switcher chip is pressed. `entries` describes the buttons in
-  // order: { collection, family }, with no family on a collection-wide chip.
-  // A family chip wins over its collection's chip, so choosing Memory never
-  // also presses Systems: the controls are mutually exclusive (docs/WEB.md).
-  function activeSwitcherIndex(entries, { collection, family = "" }) {
-    if (family) {
-      const familyIndex = entries.findIndex(entry => entry.collection === collection && entry.family === family);
-      if (familyIndex !== -1) return familyIndex;
-    }
-    return entries.findIndex(entry => entry.collection === collection && entry.family === undefined);
-  }
-
-  // What each switcher chip counts: exactly what its scope lists by default.
-  // Systems and the family chips open on directoryDefaults().status, so they
-  // count active records; All lists everything, archived references
-  // included; Agent packs lists packs beside host-installed systems (ADR 035).
-  function switcherCounts({ projects = [], services = [], runtimes = [], models = [], packs = [], robots = [], labs = [], specifications = [] }) {
-    const { status } = directoryDefaults();
-    const listed = projects.filter(project => !status || project.status === status);
-    const family = id => listed.filter(project => project.system_family === id).length;
-    return {
-      all: projects.length + services.length + runtimes.length + models.length + packs.length + robots.length,
-      systems: listed.length,
-      memory_system: family("memory_system"),
-      agent_system: family("agent_system"),
-      assistant_system: family("assistant_system"),
-      inference: services.length,
-      runtimes: runtimes.length,
-      models: models.length,
-      packs: packs.length + packShapedSystems(projects, {}).length,
-      robots: robots.length,
-      labs: labs.length,
-      specifications: specifications.length,
-    };
-  }
-
   // The collections the Directory offers, in the order the front door's index
   // and the results strip list them (Phase 2 spec, section 2). Every entry is
   // a Directory collection since #345; `kind` stays so a future sibling view
@@ -732,8 +696,8 @@
     { id: "specifications", name: "Specifications", short: "Specs", kind: "scope", emblem: "protocol", field: "specification_type", facet: "type" },
   ];
 
-  // What a collection's default view lists: the same records switcherCounts
-  // counted, so a tile and a strip entry never disagree with the grid.
+  // What a collection's default view lists, so a tile and a strip entry never
+  // disagree with the grid.
   function collectionEntries(id, payloads = {}) {
     const { projects = [], services = [], runtimes = [], models = [], packs = [], robots = [], labs = [], specifications = [] } = payloads;
     const { status } = directoryDefaults();
@@ -1494,7 +1458,6 @@
     INACTIVE_STATUSES,
     SCOPE_URL_KEYS,
     SCOPE_URL_PARAMS,
-    activeSwitcherIndex,
     badgeEmblem,
     badgeLegend,
     buildLabIndex,
@@ -1551,7 +1514,6 @@
     sourceNamespace,
     stemQueryWord,
     suggestNames,
-    switcherCounts,
     tokenHit,
     UNLISTED_MODEL_LABEL,
     updateComparisonSelection,
