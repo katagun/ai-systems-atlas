@@ -1803,6 +1803,11 @@
       "kind": "unclear"
     },
     {
+      "id": "LicenseRef-Upstage-Solar",
+      "name": "Upstage Solar License",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-Vispark-Service-Terms",
       "name": "Vispark Service Terms",
       "kind": "proprietary"
