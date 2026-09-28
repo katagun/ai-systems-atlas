@@ -1579,7 +1579,7 @@ function renderFinder() {
     // now, while the priority question is on screen.
     ensureFinderDetail();
     const choices = FINDER_PRIORITIES[answers.direction];
-    content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2>What matters most?</h2><p>This adjusts ranking only within the selected score profile.</p></div>
+    content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2 tabindex="-1">What matters most?</h2><p>This adjusts ranking only within the selected score profile.</p></div>
       <div class="finder-choice-grid">${choices.map(item => finderChoice("priority", item)).join("")}</div>`;
   } else {
     const { direction, goal } = answers;
@@ -1727,10 +1727,11 @@ function finderGoalEntries() {
   return finderGoalList;
 }
 
+// The job is already chosen, so focus lands on the question it leaves open.
 function openFinderAt(direction, goal) {
   state.finder = { step: 2, answers: { direction, goal } };
   renderFinder();
-  activateView("finder");
+  activateView("finder", { focusTarget: $("#finder-content h2") });
 }
 
 function renderJobHint(scope, term) {
@@ -1762,15 +1763,28 @@ const SCOPE_RECORDS = {
   specifications: () => [["spec", state.specifications, searchIndexes.specifications]],
 };
 
-// The records a query finds in a scope with every facet ignored, by the
-// matcher the scope's own filter runs. An empty result lists nothing, so each
-// of them is one the facets hide. All has no facets, so it hides nothing.
-function hiddenMatches(scope, term) {
-  if (scope === "all") return [];
+// What a query still finds when a scope lists nothing for it, across the whole
+// catalog: All's six kinds, then Labs and Specifications, which All leaves
+// out. It runs the matcher every scope's filter runs, with each kind's index
+// once that index has loaded, and every facet ignored.
+// - `hidden`: this scope's own matches. It lists none of them, so its facets
+//   hide every one. All has no facets, so it hides nothing.
+// - `elsewhere`: matches of All's kinds outside this scope, which All lists.
+// - `found`: whether anything in the catalog matches at all.
+function emptyResultMatches(scope, term) {
   const query = AtlasCore.parseSearchQuery(term);
-  return (SCOPE_RECORDS[scope]?.() || []).flatMap(([kind, records, index]) => records
-    .filter(record => AtlasCore.recordMatch(query, AtlasCore.searchFields(kind, record, { index, labelOf: searchLabel })) > 0)
-    .map(record => ({ kind, record })));
+  const matches = [...SCOPE_RECORDS.all(), ...SCOPE_RECORDS.labs(), ...SCOPE_RECORDS.specifications()]
+    .flatMap(([kind, records, index]) => records
+      .filter(record => AtlasCore.recordMatch(query, AtlasCore.searchFields(kind, record, { index, labelOf: searchLabel })) > 0)
+      .map(record => ({ kind, record })));
+  if (scope === "all") return { hidden: [], elsewhere: [], found: matches.length > 0 };
+  const own = new Set((SCOPE_RECORDS[scope]?.() || []).flatMap(([, records]) => records));
+  const allKinds = new Set(SCOPE_RECORDS.all().map(([kind]) => kind));
+  return {
+    hidden: matches.filter(({ record }) => own.has(record)),
+    elsewhere: matches.filter(({ kind, record }) => allKinds.has(kind) && !own.has(record)),
+    found: matches.length > 0,
+  };
 }
 
 // The records a scope lists under its current facets with no query: what its
@@ -1784,10 +1798,14 @@ function facetedRecords(scope) {
 
 // "Show it" under an empty result: clears every facet the scope's URL
 // carries, keeping its query and sort, then repaints through each changed
-// control's own input path, so the page, the counts, and the URL follow. On
-// Systems, that path for Family also drops a Finder role set.
+// control's own input path, so the page, the counts, and the URL follow.
+// Systems also drops a Finder role set, a facet no control holds.
 function clearScopeFacets(scope) {
   if (!SCOPE_CONTROLS[scope]) return;
+  if (scope === "systems") {
+    state.directoryRoles = null;
+    state.directoryRolesLabel = null;
+  }
   const changed = Object.entries(SCOPE_CONTROLS[scope])
     .filter(([key]) => key !== "q" && key !== "sort")
     .map(([, selector]) => $(selector))
@@ -1797,7 +1815,19 @@ function clearScopeFacets(scope) {
     else control.value = "";
   });
   changed.forEach(control => control.dispatchEvent(new Event("input", { bubbles: true })));
+  if (!changed.length) pageRenderer(scope)?.();
   $(SCOPE_CONTROLS[scope].q).focus();
+}
+
+// "Search all" under an empty result: lists the query in All. The switch to
+// All carries the query from the Directory's current scope, so a sibling view
+// (Models, Labs, Specifications) opens the Directory and hands it the query.
+function searchAllCollections(term) {
+  if ($(".view.is-active")?.id !== "directory") activateView("directory");
+  $(SCOPE_CONTROLS[state.directoryCollection].q).value = term;
+  state.page.all = 1;
+  setDirectoryCollection("all");
+  $("#all-directory-search").focus();
 }
 
 let exclusionsRequest = null;
@@ -1820,16 +1850,16 @@ function suggestionURL(term) {
 // Names compared the way suggestNames compares them.
 const comparableName = text => AtlasCore.normalizeSearchText(text).replace(/-/g, " ");
 
-// An empty result names what the reader can do next (R-P1-11). A match the
-// facets hide is offered back, and the query is suggested for review only
-// when nothing in the catalog answers it: no hidden match, no exclusion. An
-// imported models.dev row is not Atlas reviewed, so a count holding one does
-// not say "reviewed".
+// An empty result names what the reader can do next (R-P1-11, R-P1-15): a
+// match the facets hide is offered back, and a match in another collection is
+// offered through All. The query is suggested for review only when nothing in
+// the catalog answers it and no exclusion names it. An imported models.dev row
+// is not Atlas reviewed, so a hidden count holding one does not say "reviewed".
 function emptyStateMarkup(scope, fallback) {
   const selector = SCOPE_CONTROLS[scope]?.q;
   const term = selector ? $(selector).value : "";
   if (!term.trim()) return `<div class="notice">${fallback}</div>`;
-  const hidden = hiddenMatches(scope, term);
+  const { hidden, elsewhere, found } = emptyResultMatches(scope, term);
   const typed = comparableName(term);
   const names = AtlasCore.suggestNames(facetedRecords(scope), term).filter(name => comparableName(name) !== typed);
   const excluded = excludedEntry(term);
@@ -1837,9 +1867,10 @@ function emptyStateMarkup(scope, fallback) {
   return `<div class="notice empty-search">
     <p><strong>No matches for “${escapeHTML(term.trim())}”${hidden.length ? " with these filters" : ""}.</strong></p>
     ${hidden.length ? `<p>It matches ${hidden.length} ${reviewed}${hidden.length === 1 ? "record" : "records"} your filters hide. <button type="button" class="link-button" data-empty-unfilter>${hidden.length === 1 ? "Show it" : "Show them"}</button></p>` : ""}
+    ${elsewhere.length ? `<p>It matches ${elsewhere.length} ${elsewhere.length === 1 ? "record" : "records"} in other collections. <button type="button" class="link-button" data-empty-search-all>Search all</button></p>` : ""}
     ${names.length ? `<p>Did you mean ${names.map(name => `<button type="button" class="link-button" data-suggest-query="${escapeHTML(name)}">${escapeHTML(name)}</button>`).join(", ")}?</p>` : ""}
     ${excluded ? `<p><strong>Reviewed and left out:</strong> ${escapeHTML(excluded.name)}. ${escapeHTML(excluded.reason)}</p>` : ""}
-    <p><button type="button" class="link-button" data-empty-finder>Try the Finder</button>${hidden.length || excluded ? "" : ` · <a href="${escapeHTML(suggestionURL(term))}" target="_blank" rel="noreferrer">Suggest it for review</a>`}</p>
+    <p><button type="button" class="link-button" data-empty-finder>Try the Finder</button>${found || excluded ? "" : ` · <a href="${escapeHTML(suggestionURL(term))}" target="_blank" rel="noreferrer">Suggest it for review</a>`}</p>
   </div>`;
 }
 
@@ -2910,7 +2941,13 @@ function restoreViewFromURL() {
   writeURL(url);
 }
 
-function activateView(id) {
+// A switch hides whatever was pressed inside the old view, so focus would fall
+// to the page. When focus is leaving another view, it lands on the new view's
+// heading instead, or on `focusTarget`, without scrolling. Boot, the header's
+// tabs, and dialogs all sit outside every view, so they keep their focus.
+function activateView(id, { focusTarget } = {}) {
+  // Read before anything repaints: a repaint can detach the focused element.
+  const leaving = document.activeElement?.closest?.(".view");
   if (id === "inference-services" || id === "local-runtimes" || id === "agent-packs" || id === "robots") {
     setDirectoryCollection(id === "inference-services" ? "inference" : id === "local-runtimes" ? "runtimes" : id === "agent-packs" ? "packs" : "robots");
     id = "directory";
@@ -2931,6 +2968,10 @@ function activateView(id) {
     else item.removeAttribute("aria-current");
   });
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
+  if (leaving && leaving.id !== id) {
+    const heading = focusTarget || document.getElementById(document.getElementById(id)?.getAttribute("aria-labelledby"));
+    heading?.focus({ preventScroll: true });
+  }
   if (id === "directory" || id === "models") renderComparisonControls();
   else $("#comparison-tray").hidden = true;
   syncBadgeLegend();
@@ -3207,6 +3248,11 @@ function bindEvents() {
     }
     if (event.target.closest("[data-empty-unfilter]")) {
       clearScopeFacets(activeScope());
+      return;
+    }
+    if (event.target.closest("[data-empty-search-all]")) {
+      const selector = SCOPE_CONTROLS[activeScope()]?.q;
+      if (selector) searchAllCollections($(selector).value);
       return;
     }
     if (event.target.closest("[data-empty-finder]")) activateView("finder");

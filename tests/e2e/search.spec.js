@@ -427,3 +427,66 @@ test("an empty result spans the grid, at a readable measure", async ({ page }) =
     }
   }
 });
+
+// A view switch hides the button that asked for it, so focus would fall to
+// the page. It lands on the new view's heading instead, or on the Finder's
+// question when a job opens it partway (R-P1-14). Boot moves no focus.
+test("a button that switches views hands focus to the new view's heading", async ({ page }) => {
+  await page.goto("/?view=finder");
+  await expect(page.locator("#finder-content h2")).toHaveText("What should it do?");
+  expect(await page.evaluate(() => document.activeElement === document.body), "boot leaves focus alone").toBe(true);
+
+  await page.goto("/");
+  await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
+  await page.locator('.hero [data-open-tab="finder"]').press("Enter");
+  await expect(page.locator("#finder-title")).toBeFocused();
+
+  await searchAll(page, "notion alternative");
+  await page.getByRole("button", { name: "Try the Finder" }).press("Enter");
+  await expect(page.locator("#finder")).toHaveClass(/is-active/);
+  await expect(page.locator("#finder-title")).toBeFocused();
+
+  await searchAll(page, "run models locally");
+  await page.locator('[data-job-hint="all"]').getByRole("button", { name: /Open shortlist/ }).press("Enter");
+  await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
+  await expect(page.locator("#finder-content h2")).toBeFocused();
+});
+
+// "Suggest it for review" waits until nothing anywhere in the catalog answers
+// the query. A match in another collection is offered through All, from a
+// Directory scope or from a sibling view (R-P1-15).
+test("a query another collection answers offers Search all, not the suggestion form", async ({ page }) => {
+  // vLLM is a local runtime, so Systems lists nothing for it.
+  await page.goto("/?collection=systems");
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  await page.locator("#project-search").fill("vLLM");
+  const systems = page.locator("#project-grid");
+  await expect(systems).toContainText(/It matches \d+ records? in other collections\./);
+  await expect(systems.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
+  await systems.getByRole("button", { name: "Search all" }).click();
+  await expect(page.getByRole("button", { name: /^All / })).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#all-directory-search")).toHaveValue("vLLM");
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("vLLM");
+  await expect(page.locator("#all-directory-search")).toBeFocused();
+  await expect(page).toHaveURL(address => address.searchParams.get("q") === "vLLM" && !address.searchParams.has("collection"));
+
+  await page.goto("/?view=specifications");
+  await expect(page.locator("#specification-grid .project-card").first()).toBeVisible();
+  await page.locator("#specification-search").fill("vLLM");
+  await page.locator("#specification-grid").getByRole("button", { name: "Search all" }).click();
+  await expect(page.locator("#directory")).toHaveClass(/is-active/);
+  await expect(page.locator("#all-directory-search")).toHaveValue("vLLM");
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("vLLM");
+  await expect(page.locator("#all-directory-search")).toBeFocused();
+  await expect(page).toHaveURL(address => address.searchParams.get("q") === "vLLM" && !address.searchParams.has("view"));
+
+  // Only Specifications answers this one, and All lists no specifications:
+  // no suggestion form, and nothing for Search all to show.
+  await page.goto("/?collection=systems");
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  await page.locator("#project-search").fill("Agent2Agent Protocol");
+  await expect(systems).toContainText("No matches for “Agent2Agent Protocol”.");
+  await expect(systems.getByRole("button", { name: "Try the Finder" })).toBeVisible();
+  await expect(systems.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
+  await expect(systems.getByRole("button", { name: "Search all" })).toHaveCount(0);
+});
