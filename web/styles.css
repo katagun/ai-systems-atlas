@@ -1488,5 +1488,7 @@ footer #data-date, footer .footer-meta {
 /* The flex display above would otherwise override the hidden attribute. */
 .job-hint[hidden] { display: none; }
 .job-hint strong { color: var(--text); }
+/* One message, not a card: it spans the grid, at a readable measure. */
+.empty-search { grid-column: 1 / -1; max-width: 70ch; }
 .empty-search p { margin: 0 0 .5rem; }
 .empty-search p:last-child { margin-bottom: 0; }

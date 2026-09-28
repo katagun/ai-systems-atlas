@@ -1189,9 +1189,9 @@ function renderAllDirectoryEntries() {
   if (activeScope() === "all") writeScopeURL();
 }
 
-function filteredProjects() {
+function filteredProjects(term) {
   return AtlasCore.filterAndSortProjects(state.projects, {
-    term: $("#project-search").value,
+    term,
     searchIndex: searchIndexes.systems,
     labelOf: searchLabel,
     family: $("#family-filter").value,
@@ -1213,7 +1213,9 @@ function filteredProjects() {
 // differs — where its records come from, how its cards look, which dialog a
 // card opens — and renderCollection owns the shape they all shared: filter,
 // count, paginate, paint, bind, page. A fifth collection is a new entry here,
-// not a fifth near-identical function.
+// not a fifth near-identical function. `records(term)` lists an entry for a
+// query under its current facets, so an empty result can also ask what the
+// facets alone allow.
 const COLLECTIONS = {
   systems: {
     grid: "#project-grid",
@@ -1240,7 +1242,7 @@ const COLLECTIONS = {
       // only exists once a family narrows the grid to one score profile.
       return { family, suffix, comparable: Boolean(family) };
     },
-    records: () => filteredProjects(),
+    records: term => filteredProjects(term),
     card: (project, { family }) => {
 
     const score = family ? `<div class="score-ring" aria-label="${escapeHTML(project.score_profile)} score ${project.score.overall} out of 10">${project.score.overall}</div>` : "";
@@ -1268,8 +1270,8 @@ const COLLECTIONS = {
       $("#specifications-kicker").textContent = `${state.specifications.length} reviewed specifications`;
       return { suffix: " · Unscored", comparable: false };
     },
-    records: () => AtlasCore.filterSpecifications(state.specifications, {
-      term: $("#specification-search").value,
+    records: term => AtlasCore.filterSpecifications(state.specifications, {
+      term,
       searchIndex: searchIndexes.specifications,
       labelOf: searchLabel,
       type: $("#specification-type-filter").value,
@@ -1304,8 +1306,8 @@ const COLLECTIONS = {
       $("#labs-kicker").textContent = `${state.labs.length} labs · developers of ${covered} of ${state.reviewedModelCount} reviewed releases`;
       return { suffix: " · Unscored", comparable: false };
     },
-    records: () => AtlasCore.filterLabs(state.labs, {
-      term: $("#lab-search").value,
+    records: term => AtlasCore.filterLabs(state.labs, {
+      term,
       searchIndex: searchIndexes.labs,
       labelOf: searchLabel,
       type: $("#lab-type-filter").value,
@@ -1327,8 +1329,8 @@ const COLLECTIONS = {
       suffix: ` · ${state.taxonomy.inference_service_score_profile.name}`,
       comparable: true,
     }),
-    records: () => AtlasCore.filterInferenceServices(state.inferenceServices, {
-      term: $("#inference-search").value,
+    records: term => AtlasCore.filterInferenceServices(state.inferenceServices, {
+      term,
       searchIndex: searchIndexes.inference,
       labelOf: searchLabel,
       type: $("#inference-type-filter").value,
@@ -1357,8 +1359,8 @@ const COLLECTIONS = {
       suffix: ` · ${state.taxonomy.local_runtime_score_profile.name}`,
       comparable: true,
     }),
-    records: () => AtlasCore.filterLocalRuntimes(state.localRuntimes, {
-      term: $("#runtime-search").value,
+    records: term => AtlasCore.filterLocalRuntimes(state.localRuntimes, {
+      term,
       searchIndex: searchIndexes.runtimes,
       labelOf: searchLabel,
       type: $("#runtime-type-filter").value,
@@ -1388,8 +1390,8 @@ const COLLECTIONS = {
       $("#models-kicker").textContent = AtlasCore.modelsKickerText(state.modelSourceCount, state.reviewedModelCount, state.modelUnlistedCount);
       return { suffix: ` · ${state.reviewedModelCount} Atlas reviewed; source imports are unscored`, comparable: true };
     },
-    records: () => AtlasCore.filterModels(state.models, {
-      term: $("#model-search").value,
+    records: term => AtlasCore.filterModels(state.models, {
+      term,
       type: $("#model-type-filter").value,
       distribution: $("#model-distribution-filter").value,
       modality: $("#model-modality-filter").value,
@@ -1421,8 +1423,8 @@ const COLLECTIONS = {
     empty: "No robots match these filters.",
     open: id => openRobot(id),
     context: () => ({ suffix: " · Unscored", comparable: false }),
-    records: () => AtlasCore.filterRobots(state.robots, {
-      term: $("#robot-search").value,
+    records: term => AtlasCore.filterRobots(state.robots, {
+      term,
       searchIndex: searchIndexes.robots,
       labelOf: searchLabel,
       formFactor: $("#robot-form-factor-filter").value,
@@ -1440,7 +1442,7 @@ const datasetAttribute = key => `data-${key.replace(/[A-Z]/g, letter => `-${lett
 function renderCollection(name) {
   const collection = COLLECTIONS[name];
   const context = collection.context();
-  const records = collection.records(context);
+  const records = collection.records($(SCOPE_CONTROLS[name].q).value);
   const noun = collection.noun[records.length === 1 ? 0 : 1];
   $(collection.resultCount).textContent = `${records.length} ${noun}${context.suffix}`;
   setSearchCount(name, records.length);
@@ -1479,8 +1481,7 @@ function labModelIds(labId) {
 // One grid of installables: unscored packs beside scored host-installed
 // systems (ADR 035). Pack facets narrow only packs; the search term narrows
 // both. Scores stay hidden and comparison stays off, as the scope requires.
-function renderPacks() {
-  const term = $("#pack-search").value;
+function packScope(term) {
   const packs = AtlasCore.filterPacks(state.packs, {
     term,
     searchIndex: searchIndexes.packs,
@@ -1498,6 +1499,11 @@ function renderPacks() {
   const entries = AtlasCore.mergePackScopeEntries(packs, systems, {
     term, packIndex: searchIndexes.packs, systemIndex: searchIndexes.systems, labelOf: searchLabel,
   });
+  return { packs, systems, entries };
+}
+
+function renderPacks() {
+  const { packs, systems, entries } = packScope($("#pack-search").value);
   const packNoun = packs.length === 1 ? "pack" : "packs";
   const systemNoun = systems.length === 1 ? "installed system" : "installed systems";
   $("#pack-result-count").textContent = `${packs.length} ${packNoun} · ${systems.length} ${systemNoun} · Scores hidden`;
@@ -1737,19 +1743,62 @@ function renderJobHint(scope, term) {
     : "";
 }
 
-// Records each scope's did-you-mean draws from, so a suggestion always
-// matches something in the scope it is offered in.
+// What each scope searches before any facet applies, as [kind, records, index]
+// groups: the kind searchFields reads a record as, and the search index the
+// scope's own filter widens it with once that index has loaded.
 const SCOPE_RECORDS = {
-  all: () => [...state.projects, ...state.inferenceServices, ...state.localRuntimes, ...state.models, ...state.packs, ...state.robots],
-  systems: () => state.projects,
-  inference: () => state.inferenceServices,
-  runtimes: () => state.localRuntimes,
-  packs: () => [...state.packs, ...AtlasCore.packShapedSystems(state.projects, {})],
-  robots: () => state.robots,
-  models: () => state.models,
-  labs: () => state.labs,
-  specifications: () => state.specifications,
+  all: () => [
+    ["system", state.projects, searchIndexes.systems], ["inference", state.inferenceServices, searchIndexes.inference],
+    ["runtime", state.localRuntimes, searchIndexes.runtimes], ["model", state.models, searchIndexes.models],
+    ["pack", state.packs, searchIndexes.packs], ["robot", state.robots, searchIndexes.robots],
+  ],
+  systems: () => [["system", state.projects, searchIndexes.systems]],
+  inference: () => [["inference", state.inferenceServices, searchIndexes.inference]],
+  runtimes: () => [["runtime", state.localRuntimes, searchIndexes.runtimes]],
+  packs: () => [["pack", state.packs, searchIndexes.packs], ["system", AtlasCore.packShapedSystems(state.projects, {}), searchIndexes.systems]],
+  robots: () => [["robot", state.robots, searchIndexes.robots]],
+  models: () => [["model", state.models, searchIndexes.models]],
+  labs: () => [["lab", state.labs, searchIndexes.labs]],
+  specifications: () => [["spec", state.specifications, searchIndexes.specifications]],
 };
+
+// The records a query finds in a scope with every facet ignored, by the
+// matcher the scope's own filter runs. An empty result lists nothing, so each
+// of them is one the facets hide. All has no facets, so it hides nothing.
+function hiddenMatches(scope, term) {
+  if (scope === "all") return [];
+  const query = AtlasCore.parseSearchQuery(term);
+  return (SCOPE_RECORDS[scope]?.() || []).flatMap(([kind, records, index]) => records
+    .filter(record => AtlasCore.recordMatch(query, AtlasCore.searchFields(kind, record, { index, labelOf: searchLabel })) > 0)
+    .map(record => ({ kind, record })));
+}
+
+// The records a scope lists under its current facets with no query: what its
+// did-you-mean draws from, so a suggestion always matches something in the
+// scope as filtered.
+function facetedRecords(scope) {
+  if (scope === "packs") return packScope("").entries.map(entry => entry.record);
+  if (COLLECTIONS[scope]) return COLLECTIONS[scope].records("");
+  return (SCOPE_RECORDS[scope]?.() || []).flatMap(([, records]) => records);
+}
+
+// "Show it" under an empty result: clears every facet the scope's URL
+// carries, keeping its query and sort, then repaints through each changed
+// control's own input path, so the page, the counts, and the URL follow. On
+// Systems, that path for Family also drops a Finder role set.
+function clearScopeFacets(scope) {
+  if (!SCOPE_CONTROLS[scope]) return;
+  const changed = Object.entries(SCOPE_CONTROLS[scope])
+    .filter(([key]) => key !== "q" && key !== "sort")
+    .map(([, selector]) => $(selector))
+    .filter(control => (control.type === "checkbox" ? control.checked : control.value !== ""));
+  changed.forEach(control => {
+    if (control.type === "checkbox") control.checked = false;
+    else control.value = "";
+  });
+  changed.forEach(control => control.dispatchEvent(new Event("input", { bubbles: true })));
+  $(SCOPE_CONTROLS[scope].q).focus();
+}
 
 let exclusionsRequest = null;
 function excludedEntry(term) {
@@ -1768,17 +1817,29 @@ function suggestionURL(term) {
   return `https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml&name=${encodeURIComponent(term.trim())}`;
 }
 
+// Names compared the way suggestNames compares them.
+const comparableName = text => AtlasCore.normalizeSearchText(text).replace(/-/g, " ");
+
+// An empty result names what the reader can do next (R-P1-11). A match the
+// facets hide is offered back, and the query is suggested for review only
+// when nothing in the catalog answers it: no hidden match, no exclusion. An
+// imported models.dev row is not Atlas reviewed, so a count holding one does
+// not say "reviewed".
 function emptyStateMarkup(scope, fallback) {
   const selector = SCOPE_CONTROLS[scope]?.q;
   const term = selector ? $(selector).value : "";
   if (!term.trim()) return `<div class="notice">${fallback}</div>`;
-  const names = AtlasCore.suggestNames(SCOPE_RECORDS[scope]?.() || [], term);
+  const hidden = hiddenMatches(scope, term);
+  const typed = comparableName(term);
+  const names = AtlasCore.suggestNames(facetedRecords(scope), term).filter(name => comparableName(name) !== typed);
   const excluded = excludedEntry(term);
+  const reviewed = hidden.every(({ kind, record }) => kind !== "model" || isReviewedModel(record)) ? "reviewed " : "";
   return `<div class="notice empty-search">
-    <p><strong>No matches for “${escapeHTML(term.trim())}”.</strong></p>
+    <p><strong>No matches for “${escapeHTML(term.trim())}”${hidden.length ? " with these filters" : ""}.</strong></p>
+    ${hidden.length ? `<p>It matches ${hidden.length} ${reviewed}${hidden.length === 1 ? "record" : "records"} your filters hide. <button type="button" class="link-button" data-empty-unfilter>${hidden.length === 1 ? "Show it" : "Show them"}</button></p>` : ""}
     ${names.length ? `<p>Did you mean ${names.map(name => `<button type="button" class="link-button" data-suggest-query="${escapeHTML(name)}">${escapeHTML(name)}</button>`).join(", ")}?</p>` : ""}
     ${excluded ? `<p><strong>Reviewed and left out:</strong> ${escapeHTML(excluded.name)}. ${escapeHTML(excluded.reason)}</p>` : ""}
-    <p><button type="button" class="link-button" data-empty-finder>Try the Finder</button> · <a href="${escapeHTML(suggestionURL(term))}" target="_blank" rel="noreferrer">Suggest it for review</a></p>
+    <p><button type="button" class="link-button" data-empty-finder>Try the Finder</button>${hidden.length || excluded ? "" : ` · <a href="${escapeHTML(suggestionURL(term))}" target="_blank" rel="noreferrer">Suggest it for review</a>`}</p>
   </div>`;
 }
 
@@ -3142,6 +3203,10 @@ function bindEvents() {
     if (goal) {
       const [direction, id] = goal.dataset.finderGoal.split(":");
       openFinderAt(direction, id);
+      return;
+    }
+    if (event.target.closest("[data-empty-unfilter]")) {
+      clearScopeFacets(activeScope());
       return;
     }
     if (event.target.closest("[data-empty-finder]")) activateView("finder");

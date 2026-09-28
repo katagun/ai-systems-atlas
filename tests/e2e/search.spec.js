@@ -244,6 +244,8 @@ test("a name the review left out says why", async ({ page }) => {
   await searchAll(page, "Zyxwvut Frobnicator");
   await expect(page.getByText("Reviewed and left out:")).toBeVisible();
   await expect(page.getByText("Test reason: out of scope.")).toBeVisible();
+  // The review already saw it, so there is nothing to suggest.
+  await expect(page.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
 });
 
 test("an intent query offers the Finder job and opens its shortlist step", async ({ page }) => {
@@ -324,7 +326,104 @@ test("every scope's empty search offers the next steps, and each Directory panel
     const results = page.locator(grid);
     await expect(results, `${grid} explains the empty result`).toContainText("No matches for “Zyxwvut Frobnicator”.");
     await expect(results.getByRole("button", { name: "Try the Finder" })).toBeVisible();
+    // Nothing matches even with every facet cleared, so nothing is hidden and
+    // the query can be suggested for review.
     await expect(results.getByRole("link", { name: "Suggest it for review" })).toBeVisible();
+    await expect(results.getByRole("button", { name: /^Show (it|them)$/ })).toHaveCount(0);
     if (banner) await expect(banner, `${hint} drops the banner`).toBeHidden();
+  }
+});
+
+// Systems lists active records by default, so a superseded or archived
+// system's name finds nothing there until its filters are cleared (R-P1-11).
+test("a search the filters hide says so, offers to show it, and never offers it back or for review", async ({ page }) => {
+  await page.goto("/?collection=systems");
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  const search = page.locator("#project-search");
+  const grid = page.locator("#project-grid");
+  await search.fill("kernel");
+  await expect(grid).toContainText("It matches 2 reviewed records your filters hide.");
+  await expect(grid.getByRole("button", { name: "Show them" })).toBeVisible();
+  // Did-you-mean offers only what the filters let through, never a hidden name.
+  await expect(grid.getByRole("button", { name: "Semantic Kernel", exact: true })).toHaveCount(0);
+
+  await search.fill("AutoGen");
+  await expect(grid).toContainText("No matches for “AutoGen” with these filters.");
+  await expect(grid).toContainText("It matches 1 reviewed record your filters hide.");
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
+  await expect(grid.getByRole("button", { name: "AutoGen", exact: true })).toHaveCount(0);
+  await grid.getByRole("button", { name: "Show it" }).click();
+  await expect(page.locator("#project-grid .project-card h2")).toHaveText(["AutoGen"]);
+  await expect(search).toHaveValue("AutoGen");
+  await expect(page.locator("#status-filter")).toHaveValue("");
+  // The button repaints away, so focus lands back in the search box.
+  await expect(search).toBeFocused();
+});
+
+// The Finder's handoff narrows Systems by a role set no control shows, so
+// showing what the filters hide must drop it too: Family's own path does.
+test("showing what the filters hide also drops a Finder role set", async ({ page }) => {
+  await page.goto("/?view=finder");
+  for (const value of ["memory_system", "agent_memory", "balanced"]) await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
+  await page.locator("[data-finder-directory]").click();
+  await expect(page.locator("#finder-roles-chip")).toBeVisible();
+  await page.locator("#project-search").fill("Joplin");
+  const grid = page.locator("#project-grid");
+  await expect(grid).toContainText("It matches 1 reviewed record your filters hide.");
+  await grid.getByRole("button", { name: "Show it" }).click();
+  await expect(page.locator("#project-grid .project-card h2")).toHaveText(["Joplin"]);
+  await expect(page.locator("#finder-roles-chip")).toBeHidden();
+});
+
+test("a search one facet hides says so, and showing it clears that facet and keeps the query", async ({ page }) => {
+  await page.goto("/?collection=inference");
+  await expect(page.locator("#inference-grid .project-card").first()).toBeVisible();
+  await page.locator("#inference-type-filter").selectOption("direct_model_api");
+  await page.locator("#inference-search").fill("Together AI");
+  const grid = page.locator("#inference-grid");
+  await expect(grid).toContainText("No matches for “Together AI” with these filters.");
+  await expect(grid).toContainText("It matches 1 reviewed record your filters hide.");
+  await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
+  await grid.getByRole("button", { name: "Show it" }).click();
+  await expect(page.locator("#inference-type-filter")).toHaveValue("");
+  await expect(page.locator("#inference-grid .project-card h2")).toHaveText(["Together AI"]);
+  await expect(page.locator("#inference-directory-panel .search-count")).toHaveText("1 result");
+  await expect(page.locator("#inference-search")).toHaveValue("Together AI");
+  await expect(page).toHaveURL(address => address.searchParams.get("q") === "Together AI" && !address.searchParams.has("type"));
+});
+
+// An imported models.dev row is not Atlas reviewed, and every Models type
+// filter hides it, since none of those rows has a type.
+test("a hidden match that is an imported source row is not called reviewed", async ({ page }) => {
+  await page.goto("/?view=models");
+  await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
+  await page.locator("#model-type-filter").selectOption("language_model");
+  await page.locator("#model-search").fill("Qwen3 Coder Flash");
+  const grid = page.locator("#model-grid");
+  await expect(grid).toContainText("It matches 1 record your filters hide.");
+  await grid.getByRole("button", { name: "Show it" }).click();
+  await expect(page.locator("#model-grid .project-card h2")).toHaveText(["Qwen3 Coder Flash"]);
+});
+
+// An empty result is one message, so it spans the grid rather than one card's
+// column, at a measure that stays readable on a wide screen (R-P1-12). Widths
+// do not move with scrolling, so nothing here waits for it to settle.
+test("an empty result spans the grid, at a readable measure", async ({ page }) => {
+  for (const [width, height] of [[1440, 900], [390, 844]]) {
+    await page.setViewportSize({ width, height });
+    await searchAll(page, "notion alternative");
+    const empty = page.locator("#all-directory-grid .empty-search");
+    await expect(empty).toBeVisible();
+    const { box, grid, column } = await empty.evaluate(element => ({
+      box: element.getBoundingClientRect().width,
+      grid: element.parentElement.getBoundingClientRect().width,
+      column: parseFloat(getComputedStyle(element.parentElement).gridTemplateColumns.split(" ")[0]),
+    }));
+    if (width === 1440) {
+      expect(box, "wider than one card's column").toBeGreaterThan(column + 16);
+      expect(box, "narrower than the whole grid").toBeLessThan(grid - 16);
+    } else {
+      expect(Math.abs(box - grid), "as wide as the phone's one-column grid").toBeLessThanOrEqual(1);
+    }
   }
 });
