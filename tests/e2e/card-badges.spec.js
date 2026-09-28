@@ -2,6 +2,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { cardBadgeGlossary, cardBadges, BADGE_FAMILIES } = require("../../web/app-core.js");
+const { searchAll } = require("./helpers/landing");
 
 // Expectations come from the same published files and resolver the page uses,
 // and each fixture asserts the property it was chosen for, so a data change
@@ -104,11 +105,11 @@ test("a record shows the same badges in its collection grid and in All", async (
   expect(runtimeBadges.length).toBeGreaterThan(0);
 
   await page.goto("/");
-  await page.locator("#all-directory-search").fill(openclaw.name);
+  await searchAll(page, openclaw.name);
   await expect(page.locator('#all-directory-grid .project-card:has([data-project="openclaw"]) .card-badge'))
     .toHaveText(namePatterns(cardBadges("system", openclaw)));
 
-  await page.locator("#all-directory-search").fill(ollama.name);
+  await searchAll(page, ollama.name);
   await expect(page.locator('#all-directory-grid .project-card:has([data-local-runtime="ollama"]) .card-badge'))
     .toHaveText(namePatterns(runtimeBadges));
 
@@ -198,7 +199,7 @@ test("a reviewed-model card shows the same badges in the Models grid and in the 
   const expected = cardBadges("model", reviewedModel);
 
   await page.goto("/");
-  await page.locator("#all-directory-search").fill(reviewedModel.name);
+  await searchAll(page, reviewedModel.name);
   const mixedCard = page.locator(`#all-directory-grid .project-card:has([data-model="${reviewedModel.id}"])`);
   await expect(mixedCard.locator(".role-badge")).toHaveCount(0);
   await expect(mixedCard.locator(".card-badge")).toHaveText(namePatterns(expected));
@@ -258,6 +259,10 @@ test("hovering an emblem explains it and Escape dismisses it", async ({ page }) 
     });
     check();
   }));
+  // Where the pointer comes to rest: the hover aims at the emblem's centre
+  // before the card lifts.
+  const box = await emblem.boundingBox();
+  const rest = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
   await emblem.hover();
   await expect(tooltip).toBeVisible();
   // The first emblem is the card's type badge, so the tooltip names the Type family.
@@ -268,17 +273,16 @@ test("hovering an emblem explains it and Escape dismisses it", async ({ page }) 
   await expect(tooltip).toHaveAttribute("aria-hidden", "true");
   await page.keyboard.press("Escape");
   await expect(tooltip).toBeHidden();
-  // The pointer still rests on the emblem. The next layout change (a font or a
-  // deferred payload landing) makes Chromium re-hit-test it and fire pointerover
-  // on another child of the same emblem, which used to reopen the tooltip and
-  // made this test race that landing. Its timing cannot be waited for, so send
-  // the event itself: the dismissed emblem must stay quiet.
-  await emblem.locator("rect, path").first().dispatchEvent("pointerover", { bubbles: true });
+  // The card's 4px hover lift slides its emblem under the resting pointer,
+  // and a repaint or a clamped scroll does the same. Each hands the emblem a
+  // fresh pointerover at the resting spot, which is how Linux CI saw the
+  // tooltip return after Escape. The dismissal survives it, and only a real
+  // move reopens it.
+  await emblem.dispatchEvent("pointerover", { bubbles: true, pointerType: "mouse", clientX: rest.x, clientY: rest.y });
   await expect(tooltip).toBeHidden();
-  // Leaving the emblem and coming back explains it again.
-  await page.mouse.move(0, 0);
-  await emblem.hover();
+  await emblem.dispatchEvent("pointerover", { bubbles: true, pointerType: "mouse", clientX: rest.x + 6, clientY: rest.y });
   await expect(tooltip).toBeVisible();
+  await expect(tooltip.locator(".badge-tooltip-name")).toHaveText(first.name);
   await expect(page.locator("#project-search")).toHaveValue(openclaw.name);
 });
 
