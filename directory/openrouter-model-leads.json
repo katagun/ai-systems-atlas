@@ -462,15 +462,6 @@
       "last_seen_at": "2026-09-25"
     },
     {
-      "openrouter_id": "qwen/qwen-plus-2025-07-28",
-      "canonical_slug": "qwen/qwen-plus-2025-07-28",
-      "name": "Qwen: Qwen Plus 0728",
-      "hugging_face_id": null,
-      "listed_at": "2025-09-08",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
       "openrouter_id": "qwen/qwen3-14b",
       "canonical_slug": "qwen/qwen3-14b-04-28",
       "name": "Qwen: Qwen3 14B",
@@ -516,15 +507,6 @@
       "last_seen_at": "2026-09-25"
     },
     {
-      "openrouter_id": "qwen/qwen3-max-thinking",
-      "canonical_slug": "qwen/qwen3-max-thinking-20260123",
-      "name": "Qwen: Qwen3 Max Thinking",
-      "hugging_face_id": null,
-      "listed_at": "2026-02-09",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
       "openrouter_id": "qwen/qwen3-vl-30b-a3b-instruct",
       "canonical_slug": "qwen/qwen3-vl-30b-a3b-instruct",
       "name": "Qwen: Qwen3 VL 30B A3B Instruct",
@@ -566,33 +548,6 @@
       "name": "Qwen: Qwen3 VL 8B Thinking",
       "hugging_face_id": "Qwen/Qwen3-VL-8B-Thinking",
       "listed_at": "2025-10-14",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "qwen/qwen3.5-flash-02-23",
-      "canonical_slug": "qwen/qwen3.5-flash-20260224",
-      "name": "Qwen: Qwen3.5-Flash",
-      "hugging_face_id": null,
-      "listed_at": "2026-02-25",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "qwen/qwen3.5-plus-02-15",
-      "canonical_slug": "qwen/qwen3.5-plus-20260216",
-      "name": "Qwen: Qwen3.5 Plus 2026-02-15",
-      "hugging_face_id": null,
-      "listed_at": "2026-02-16",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "qwen/qwen3.5-plus-20260420",
-      "canonical_slug": "qwen/qwen3.5-plus-20260420",
-      "name": "Qwen: Qwen3.5 Plus 2026-04-20",
-      "hugging_face_id": null,
-      "listed_at": "2026-04-27",
       "discovered_at": "2026-09-25",
       "last_seen_at": "2026-09-25"
     },
