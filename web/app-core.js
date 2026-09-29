@@ -715,14 +715,14 @@
   // is one word. `emblem` names the card badge whose emblem the entry shows:
   // the family's own type badge for a system family, else the collection's
   // first type badge in CARD_BADGES order (Agent packs shares the agent head).
-  // All shows the type family's empty
-  // frame; Robots has a navigation-only glyph, independent of form-factor
+  // All shows the type family's empty frame. Systems and Robots have
+  // navigation-only glyphs, independent of system-family and form-factor
   // card badges (ADR 037). `field` is what the tile's categories tally; `facet` is the
   // URL key that opens the scope narrowed to one.
   const FAMILY_SHORT_NAMES = { memory_system: "Memory", agent_system: "Agents", assistant_system: "Assistants" };
   const COLLECTIONS = [
     { id: "all", name: "Everything", short: "All", kind: "scope", emblem: null, field: null, facet: null },
-    { id: "systems", name: "Systems", short: "Systems", kind: "scope", emblem: "memory-system", field: "system_family", facet: "family" },
+    { id: "systems", name: "Systems", short: "Systems", kind: "scope", emblem: null, glyph: '<path d="m14.8 12.5-3.1 6M17.2 12.5l3.1 6M13 21h6"/><rect x="13.5" y="7.5" width="5" height="5" rx="1"/><rect x="8" y="18.5" width="5" height="5" rx="1"/><rect x="19" y="18.5" width="5" height="5" rx="1"/>', field: "system_family", facet: "family" },
     { id: "models", name: "Models", short: "Models", kind: "scope", emblem: "language-model", field: "model_type", facet: "type" },
     { id: "inference", name: "Inference services", short: "Services", kind: "scope", emblem: "direct-model-api", field: "service_type", facet: "type" },
     { id: "runtimes", name: "Local runtimes", short: "Runtimes", kind: "scope", emblem: "desktop-runner", field: "runtime_type", facet: "type" },
