@@ -678,7 +678,7 @@ test("a query another collection answers offers Search all, not the suggestion f
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
   await search(page, "vLLM");
   const systems = page.locator("#project-grid");
-  await expect(systems).toContainText(/It matches \d+ records? in other collections:/);
+  await expect(systems).toContainText("It matches records in other collections:");
   await expect(systems.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
   await systems.getByRole("button", { name: "Search all" }).click();
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Everything /);
@@ -741,7 +741,7 @@ test("an empty result waits for every search index before it counts other collec
   expect(exclusions, "no exclusions fetch while an index is pending").toEqual([]);
 
   release();
-  await expect(grid).toContainText("It matches 1 record in other collections:");
+  await expect(grid).toContainText("It matches records in other collections: Models 1 · Search all");
   await expect(grid.getByRole("button", { name: "Search all" })).toBeVisible();
   await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
 

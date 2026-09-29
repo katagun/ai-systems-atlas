@@ -2218,7 +2218,6 @@ const SCOPE_RECORDS = {
 //   with its count, in registry order. From All that is Labs and
 //   Specifications, which All leaves out (Phase 3 spec, section 2).
 // - `searchAll`: whether All lists matches this scope does not.
-// - `others`: how many distinct records outside this scope match.
 // - `found`: whether anything in the catalog matches at all.
 function emptyResultMatches(scope, term) {
   const query = AppCore.parseSearchQuery(term);
@@ -2226,9 +2225,7 @@ function emptyResultMatches(scope, term) {
   const hidden = scope === "all" ? [] : ownGroups.flatMap(([kind, records, index]) => records
     .filter(record => AppCore.recordMatch(query, AppCore.searchFields(kind, record, { index, labelOf: searchLabel })) > 0)
     .map(record => ({ kind, record })));
-  const matched = currentMatches(term);
-  const counts = AppCore.collectionMatchCounts(matched, collectionPayloads());
-  const own = new Set(ownGroups.flatMap(([, records]) => records));
+  const counts = AppCore.collectionMatchCounts(currentMatches(term), collectionPayloads());
   const elsewhere = AppCore.COLLECTIONS
     .filter(entry => entry.id !== scope && entry.id !== "all" && counts[entry.id] > 0)
     .map(entry => ({ id: entry.id, name: entry.name, count: counts[entry.id] }));
@@ -2237,7 +2234,6 @@ function emptyResultMatches(scope, term) {
     hidden,
     elsewhere,
     searchAll: scope !== "all" && counts.all > hiddenInAll,
-    others: [...matched].filter(record => !own.has(record)).length,
     found: counts.all + counts.labs + counts.specifications > 0,
   };
 }
@@ -2346,7 +2342,7 @@ function emptyStateMarkup(scope, fallback) {
   const term = selector ? $(selector).value : "";
   if (!isSearching(term)) return `<div class="notice">${fallback}</div>`;
   const settled = !catalogIndexesPending();
-  const { hidden, elsewhere, searchAll, others, found } = settled ? emptyResultMatches(scope, term) : { hidden: [], elsewhere: [], searchAll: false, others: 0, found: false };
+  const { hidden, elsewhere, searchAll, found } = settled ? emptyResultMatches(scope, term) : { hidden: [], elsewhere: [], searchAll: false, found: false };
   const typed = comparableName(term);
   const names = AppCore.suggestNames(facetedRecords(scope), term).filter(name => comparableName(name) !== typed);
   const excluded = settled ? excludedEntry(term) : null;
@@ -2357,7 +2353,7 @@ function emptyStateMarkup(scope, fallback) {
   return `<div class="notice empty-search">
     <p><strong>No matches for “${escapeHTML(term.trim())}”${hidden.length ? " with these filters" : ""}.</strong></p>
     ${hidden.length ? `<p>It matches ${hidden.length} ${reviewed}${hidden.length === 1 ? "record" : "records"} your filters hide. <button type="button" class="link-button" data-empty-unfilter>${hidden.length === 1 ? "Show it" : "Show them"}</button></p>` : ""}
-    ${elsewhere.length || searchAll ? `<p>It matches ${others} ${others === 1 ? "record" : "records"} in other collections: ${[
+    ${elsewhere.length || searchAll ? `<p>It matches records in other collections: ${[
       ...elsewhere.map(entry => `<button type="button" class="link-button" data-empty-open-collection="${escapeHTML(entry.id)}">${escapeHTML(entry.name)} ${entry.count}</button>`),
       ...(searchAll ? ['<button type="button" class="link-button" data-empty-search-all>Search all</button>'] : []),
     ].join(" · ")}</p>` : ""}

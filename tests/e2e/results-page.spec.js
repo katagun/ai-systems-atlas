@@ -65,6 +65,23 @@ test("an empty result names the collections that hold matches, from the front do
   await expect(page.locator("#lab-grid .project-card")).toHaveCount(1);
 });
 
+// ECC is an agent system installed as a pack, so Systems and Agent packs both
+// list it. A Systems filter that hides it leaves no "0 records" line, and the
+// Agent packs button counts what Agent packs then lists.
+test("an empty result's collection buttons count where the matches are, when two collections list one record", async ({ page }) => {
+  await page.goto("/?collection=systems&family=memory_system");
+  await search(page, "ECC");
+  const grid = page.locator("#project-grid");
+  await expect(grid).toContainText("It matches 1 reviewed record your filters hide.");
+  await expect(grid).toContainText("It matches records in other collections: Agent packs 1");
+  await expect(grid).not.toContainText(/\b0 records?\b/);
+  await expect(grid.getByRole("button", { name: "Search all" })).toHaveCount(0);
+  await expect(collectionEntry(page, "packs").locator(".scope-count")).toHaveText("1");
+  await grid.locator('[data-empty-open-collection="packs"]').click();
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Agent packs\b/);
+  await expect(page.locator("#pack-grid .project-card h2")).toHaveText(["ECC"]);
+});
+
 test("a restored query survives boot and Back", async ({ page }) => {
   await page.goto("/?collection=systems&q=memory");
   await expect(searchBox(page)).toHaveValue("memory");
