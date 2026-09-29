@@ -2034,12 +2034,12 @@ const registryPayloads = {
 test("the registry lists every collection once, each a Directory collection, in front-door order", () => {
   assert.deepEqual(COLLECTIONS.map(entry => entry.id), ["all", "systems", "models", "inference", "runtimes", "packs", "robots", "labs", "specifications"]);
   assert.ok(COLLECTIONS.every(entry => entry.kind === "scope"));
-  // Every emblem names a type badge that exists; All and Robots have none yet.
+  // Collections use a known type badge or their own navigation glyph;
+  // Everything alone uses the empty frame.
   for (const entry of COLLECTIONS) {
-    if (entry.emblem === null) assert.ok(["all", "robots"].includes(entry.id));
+    if (entry.emblem === null) assert.ok(entry.id === "all" || entry.glyph, entry.id);
     else assert.equal(CARD_BADGES[entry.emblem].family, "type", entry.id);
   }
-  assert.equal(COLLECTIONS.find(entry => entry.id === "systems").emblem, "memory-system");
 });
 
 test("each collection counts what its default view lists, with its split", () => {
