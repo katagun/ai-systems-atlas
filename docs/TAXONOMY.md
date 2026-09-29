@@ -23,6 +23,8 @@ General agent-architecture pattern content — harness shapes, failure taxonomie
 
 Autonomous scientific-discovery systems are not a further role either. They are classified by the operational outcome they own — sourced investigation is `research_agent` — while the discovery mechanism itself, writing and executing code against data or instruments, is carried by `agent_capabilities` and `execution_boundaries` like any other agent trait. See [ADR 023](adr/023-autonomous-science-systems-are-not-a-role.md).
 
+Robot software is not a further role either. A framework a developer builds a robot-controlling agent with is `agent_framework_sdk`, and any system that sends a model's decisions to a robot's actuators carries `robot_control` in `agent_capabilities`; the outcome a robot role would have to name, completing physical tasks a person delegates, is written down with the conditions that reopen the question. See [ADR 044](adr/044-robot-software-classifies-by-the-outcome-it-owns.md).
+
 ## Family 1: memory systems
 
 Memory-system roles are human-first PKM, AI knowledge app / RAG brain, external agent-memory service, temporal context / graph engine, human–agent memory bridge, ambient capture, and retrieval infrastructure.
