@@ -35,7 +35,7 @@ model_candidates: 6
 system_candidates: 123
 exclusions: 91
 packs: 8
-labs: 42 covering 311 releases
+labs: 43 covering 311 releases
 robots: 4
 ```
 
@@ -64,7 +64,7 @@ The Agent packs collection under [ADR 032](adr/032-agent-packs-are-unscored-reco
 
 ### Labs
 
-The Labs collection under [ADR 041](adr/041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md) covers all 311 reviewed model releases with forty-two organizations. Twenty-five are AI companies, fifteen technology companies, and two public research organizations, AI Singapore and the Swiss AI Initiative. Seventeen are headquartered in the United States, ten in China, two in South Korea, and one each in Belgium, Canada, France, Israel, Japan, Singapore, Switzerland, and Türkiye; five record no headquarters listed. Japan enters the taxonomy with Sakana AI, the first lab headquartered there. Ten publish a frontier-safety or scaling framework on their own pages; for the other thirty-two none was found, which the records leave as an absence rather than a finding.
+The Labs collection under [ADR 041](adr/041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md) covers all 311 reviewed model releases with forty-three organizations. Twenty-six are AI companies, fifteen technology companies, and two public research organizations, AI Singapore and the Swiss AI Initiative. Seventeen are headquartered in the United States, ten in China, two in South Korea, and one each in Belgium, Canada, France, Israel, Japan, Singapore, Switzerland, and Türkiye; five record no headquarters listed. Japan enters the taxonomy with Sakana AI, the first lab headquartered there. One lab, Safe Superintelligence, joins to nothing: it is admitted on its own published statement of frontier intent under [ADR 044](adr/044-a-lab-may-be-recorded-on-its-own-published-statement-of-frontier-intent.md), which widens ADR 041's reviewed-release gate by exactly that basis and requires the two to be mutually exclusive. Ten publish a frontier-safety or scaling framework on their own pages; for the other thirty-three none was found, which the records leave as an absence rather than a finding.
 
 The first batch took fifteen organizations that between them developed 237 releases: every organization with eight or more reviewed releases except ByteDance, then Moonshot AI and MiniMax, whose own inference services the catalog already reviews, and Microsoft and Amazon, which build nine and four of the reviewed systems. ByteDance was held until [`LABS.md`](LABS.md#classification) said how to record an organization whose own pages name no headquarters.
 
