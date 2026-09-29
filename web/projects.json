@@ -19168,6 +19168,161 @@
       ],
       "source_model": "proprietary",
       "license_review_status": "verified"
+    },
+    {
+      "id": "lerobot",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "LeRobot",
+      "repo": "huggingface/lerobot",
+      "url": "https://github.com/huggingface/lerobot",
+      "description": "A PyTorch framework for building robot-controlling agents: a policy chooses an action from the robot's observation, including vision-language-action policies that take a language instruction, and a Robot interface sends that action to physical hardware.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "versioned"
+      ],
+      "canonical_data": "policy checkpoints and recorded episode datasets as files",
+      "deployment": [
+        "library",
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "robot_control"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0",
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 27219,
+      "stars_verified_at": "2026-09-04",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 6.8,
+        "autonomy": 7.6,
+        "human_control": 7.0,
+        "observability_recovery": 6.5,
+        "data_sovereignty": 8.8,
+        "interoperability": 8.4,
+        "maturity": 8.0,
+        "overall": 7.46
+      },
+      "strengths": [
+        "Documented control loop from a policy's decision to a physical robot, across supported arms and humanoids",
+        "Vision-language-action policies take a language instruction and act",
+        "Installs as a pip package and runs on the operator's own machine"
+      ],
+      "weaknesses": [
+        "Recovery and monitoring are left to the application; the framework ships no supervisor",
+        "Training and dataset tooling dominate the documentation, so the control path is one section among many"
+      ],
+      "why_it_matters": "The clearest open example of a framework whose agent loop ends at a robot rather than at a software tool.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-28",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "om1",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "OM1",
+      "repo": "OpenMind/OM1",
+      "url": "https://github.com/OpenMind/OM1",
+      "description": "A configurable framework for building robot-controlling agents: camera, audio, and LIDAR inputs feed an LLM that chooses named actions, and action plugins carry them out on humanoid and quadruped robots or in simulators.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "audio",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "json5 agent configurations and system prompts",
+      "deployment": [
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "robot_control"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "The Go runtime on main ships only as the rolling nightly pre-release; the latest tagged release, v1.0.2-beta.2 of 2026-04-29, is the deprecated Python runtime with no binaries.",
+      "score": {
+        "task_reliability": 6.4,
+        "tool_use": 7.2,
+        "autonomy": 7.8,
+        "human_control": 6.0,
+        "observability_recovery": 6.2,
+        "data_sovereignty": 5.5,
+        "interoperability": 7.6,
+        "maturity": 5.8,
+        "overall": 6.53
+      },
+      "strengths": [
+        "An LLM chooses named actions and connectors carry them out; the README documents a Unitree Go2 movement connector and full autonomy with the BrainPack module on four robots",
+        "Inputs, models, and actions are composed in a json5 config file",
+        "Ollama is documented as a local substitute for the language model"
+      ],
+      "weaknesses": [
+        "The default model path runs through OpenMind's hosted endpoint and needs an account key; only the LLM has a documented local substitute",
+        "The maintained runtime has no tagged release; the README's release link points at a deprecated beta",
+        "The docs describe a robot-identity network and a blockchain governance system it says it is exploring, neither of which the README mentions",
+        "Low-level control and collision avoidance are delegated to the robot's own SDK"
+      ],
+      "why_it_matters": "An LLM agent loop whose actions are a robot's motion rather than a file or a browser.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-28",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 2904,
+      "stars_verified_at": "2026-09-04",
+      "historical_stars": null,
+      "github_detected_license": "MIT"
     }
   ],
   "verified_at": "2026-09-28"

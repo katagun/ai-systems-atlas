@@ -3573,6 +3573,45 @@
           "verified_at": "2026-08-28"
         }
       ]
+    },
+    {
+      "project_id": "lerobot",
+      "repo": "huggingface/lerobot",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository under the Apache License 2.0, including the appended DETR notice",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/huggingface/lerobot/blob/main/LICENSE",
+          "blob_sha": "93baf0c18936131979fdda6a38536cbcef0efccb",
+          "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/93baf0c18936131979fdda6a38536cbcef0efccb"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "code derived from Diffusion Policy, FOWM, simxarm, ALOHA, StarVLA, and Meta Platforms, under MIT notices appended to the LICENSE file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/huggingface/lerobot/blob/main/LICENSE",
+          "blob_sha": "93baf0c18936131979fdda6a38536cbcef0efccb",
+          "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/93baf0c18936131979fdda6a38536cbcef0efccb"
+        }
+      ]
+    },
+    {
+      "project_id": "om1",
+      "repo": "OpenMind/OM1",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/OpenMind/OM1/blob/main/LICENSE",
+          "blob_sha": "a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0",
+          "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-28"

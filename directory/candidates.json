@@ -654,60 +654,6 @@
       }
     },
     {
-      "repo": "dora-rs/dora",
-      "name": "Dora",
-      "url": "https://github.com/dora-rs/dora",
-      "description": "Dora (Dataflow-Oriented Robotic Architecture) is middleware for composing AI-based robotic applications as low-latency, distributed dataflow pipelines.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": "Apache-2.0",
-      "stars": 3922,
-      "topics": [
-        "dataflow",
-        "embodied-ai",
-        "low-latency",
-        "robotics",
-        "rust"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robot software role decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Ships an installable CLI (cargo install dora-cli) and Python API (pip install dora-rs) with releases, CI, and a public node hub, so a maintained run path is documented. Its documented outcome is a declarative dataflow graph: the node hub lists ready-made nodes for cameras, YOLO, LLMs, and TTS, and the README documents a ROS2 bridge carrying 'bidirectional topics, services, and actions over DDS' between graph nodes and ROS2, where 'actions' is the ROS2 request/feedback/result concept rather than actuation. The README never uses the words actuator, hardware, physical, or VLM, so a model node's output reaching a robot's actuator through this bridge is a reasonable inference from what a ROS2-connected dataflow graph does, not a claim the README makes outright. No existing role names composing a dataflow graph that mixes model node types (LLM, YOLO) with a ROS2 bridge to robot software; the node-hub and LLM-node claims are stated directly in the README's feature list without reading the source tree, but the actuator link is not.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/dora-rs/dora/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "ae5e06d263ca95043cedfd1d14c4eb3474389fb6570dd0d0abc6060c9273e268",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "9700c27ca56309d5458bc986482823b51459669b",
-            "immutable_url": "https://api.github.com/repos/dora-rs/dora/git/blobs/9700c27ca56309d5458bc986482823b51459669b"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/dora-rs/dora/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "7b515bc646ca4e20427bc6a72b8ca5149a0e9b38a77e9a7d0ba5463af5a6cfbc",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "fe9751aa01eb9c7d359209185eb26c8e31f1a15f",
-            "immutable_url": "https://api.github.com/repos/dora-rs/dora/git/blobs/fe9751aa01eb9c7d359209185eb26c8e31f1a15f"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
       "repo": "FailproofAI/failproofai",
       "name": "failproofai",
       "url": "https://github.com/FailproofAI/failproofai",
@@ -1138,18 +1084,18 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robot software role decision",
+        "held_by": "programme-gated run path",
         "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Publishes a Python SDK (pip install safari-sdk) for accessing, serving, evaluating, and fine-tuning Gemini Robotics checkpoints; the README says most of that functionality requires joining a Trusted Tester program rather than downloading open weights. The README documents a bundled framework whose Embodiments component 'connect agents to physical robot systems' and whose worked example wires a conversational agent to control an Aloha robot, with a Tools component described as letting the agent perform robot control. No existing role names a developer package whose own documentation describes connecting a model-driven agent to physical robot hardware, and this is stated directly in the README's Agent, Embodiments, and Tools sections without reading the source tree.",
+        "finding": "Publishes a Python SDK (pip install safari-sdk) for accessing, serving, evaluating, and fine-tuning Gemini Robotics checkpoints; the README says most of that functionality requires joining a Trusted Tester program rather than downloading open weights. The README documents a bundled framework whose Embodiments component 'connect agents to physical robot systems' and whose worked example wires a conversational agent to control an Aloha robot, with a Tools component described as letting the agent perform robot control. No existing role names a developer package whose own documentation describes connecting a model-driven agent to physical robot hardware, and this is stated directly in the README's Agent, Embodiments, and Tools sections without reading the source tree. Re-read on 2026-09-28 under ADR 045: the README still says most functionality requires joining the Trusted Tester programme, so the run path a reader can adopt is gated; the hold lifts at general availability, on the reasoning ADR 023 recorded for Microsoft Discovery.",
         "evidence": [
           {
             "label": "README",
             "url": "https://github.com/google-deepmind/gemini-robotics-sdk/blob/main/README.md",
             "kind": "git_blob",
-            "content_sha256": "fb10b5979c91654e67ab8b3462ddd8a68382eaa3f343e5254a3fb8b23a29e8bc",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "b0a48c5f1e40f8de6cf4f5f95764887d9c717389",
-            "immutable_url": "https://api.github.com/repos/google-deepmind/gemini-robotics-sdk/git/blobs/b0a48c5f1e40f8de6cf4f5f95764887d9c717389"
+            "content_sha256": "e994460be219cfcabeda77d13b30bb6d9329682c5097ee90415c2ef32b69d48e",
+            "fetched_at": "2026-09-28",
+            "blob_sha": "28dc33308a18fba5a374a788b699f6561c34ddf2",
+            "immutable_url": "https://api.github.com/repos/google-deepmind/gemini-robotics-sdk/git/blobs/28dc33308a18fba5a374a788b699f6561c34ddf2"
           },
           {
             "label": "LICENSE",
@@ -2026,54 +1972,6 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-28",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "huggingface/lerobot",
-      "name": "LeRobot",
-      "url": "https://github.com/huggingface/lerobot",
-      "description": "LeRobot provides models, datasets, and tools in PyTorch for end-to-end robot learning, aiming to make real-world robotics more accessible.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": "Apache-2.0",
-      "stars": 27219,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "triage": {
-        "verdict": "held",
-        "held_by": "robot software role decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Ships an installable PyPI package (pip install lerobot) with a documented training and control run path and a hardware-agnostic Robot interface. Its documented outcome is taking a trained policy's output and sending it straight to physical hardware: the README's own code example reads 'action = model.select_action(obs)' followed by 'robot.send_action(action)', across supported arms, humanoids, and other devices, including vision-language-action policies. No existing role names a framework whose distinguishing behavior is sending a model's output to a physical actuator rather than to a software tool, and the property is shown directly in the README's code example without reading the source tree.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/huggingface/lerobot/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "ba1a9487ce72d9018743997285a1ae29ba1f26c5656c2d97b038bc094b5ef9b2",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "50814df9295864e814a424c26461100f0fee631f",
-            "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/50814df9295864e814a424c26461100f0fee631f"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/huggingface/lerobot/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "0583375a0ec642ec79c447781f34322b0cfa66baff31258214d040f1f6d86d7c",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "a603343cdda0228e53d8d9cdeb355f342f1e8f2c",
-            "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/a603343cdda0228e53d8d9cdeb355f342f1e8f2c"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      },
       "review_required": [
         "licensing",
         "classification",
@@ -3614,60 +3512,6 @@
       }
     },
     {
-      "repo": "OpenMind/OM1",
-      "name": "OM1",
-      "url": "https://github.com/OpenMind/OM1",
-      "description": "OM1 is a modular AI hardware-abstraction layer that lets LLM-driven agents control heterogeneous robots over ROS2 and Zenoh.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.25,
-      "github_detected_license": "MIT",
-      "stars": 2904,
-      "topics": [
-        "llm",
-        "multiagent",
-        "robotics",
-        "ros2",
-        "zenoh"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robot software role decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Ships pre-built binaries for four platforms plus a documented build-from-source path, with a five-minute quick start that gets a running instance talking. Its documented outcome is a runtime that takes camera, microphone, LIDAR, and web input, routes it through a configurable choice of LLM and VLM providers, and issues physical actions -- motion, autonomous navigation, and spoken conversation -- on humanoid and quadruped robots as well as simulators. No existing role names a runtime whose delegated outcomes include moving a physical body rather than only files, applications, or the web, and the property is stated directly in the README's opening description and quick-start walkthrough without reading the source tree.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/OpenMind/OM1/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "b9a9bb3a9cf647cbcb7727e456be2c69b9638b06b58794a7f86d50bda60c795b",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "50deb2fe3b68f0f239d8fc911201a72c57840764",
-            "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/50deb2fe3b68f0f239d8fc911201a72c57840764"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/OpenMind/OM1/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "346d8a3f9ea734e02cbce9ebcc9969b18f28242badd1078360168a09e0e2f37c",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0",
-            "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
       "repo": "openvla/openvla",
       "name": "OpenVLA",
       "url": "https://github.com/openvla/openvla",
@@ -3947,9 +3791,9 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robot software role decision",
+        "held_by": "action-policy model boundary",
         "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Publishes an installable Python package (uv/pip) plus three named vision-language-action checkpoint families (pi0, pi0-FAST, pi0.5), downloaded from a hosted bucket rather than bundled in the repository, with documented fine-tuning and serving code. The README's own remote-inference workflow runs the checkpoint on a separate server and streams its predicted action_chunk output to the robot over a websocket connection, and its quickstart shows inference producing that action_chunk from a camera image and a language instruction. No existing role names a package whose delegated outcome is streaming a trained policy's action output to a physical robot rather than to a software tool, and this is stated directly in the README's quickstart and remote-inference sections without reading the source tree.",
+        "finding": "Publishes an installable Python package (uv/pip) plus three named vision-language-action checkpoint families (pi0, pi0-FAST, pi0.5), downloaded from a hosted bucket rather than bundled in the repository, with documented fine-tuning and serving code. The README's own remote-inference workflow runs the checkpoint on a separate server and streams its predicted action_chunk output to the robot over a websocket connection, and its quickstart shows inference producing that action_chunk from a camera image and a language instruction. No existing role names a package whose delegated outcome is streaming a trained policy's action output to a physical robot rather than to a software tool, and this is stated directly in the README's quickstart and remote-inference sections without reading the source tree. Re-read on 2026-09-28 under ADR 045: the repository has no tags, its PyPI name is a placeholder, its last commit is dated 2026-08-24, and its LICENSE_GEMMA.txt is Google's Gemma Terms of Use whose scope (the checkpoints, the code, or both) is unresolved. Its software exists to run or fine-tune its own three checkpoint families, so the systems question waits on the action-policy model decision, as Isaac GR00T's and OpenVLA's do.",
         "evidence": [
           {
             "label": "README",
@@ -5980,6 +5824,54 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-09-14",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "octo-models/octo",
+      "name": "Octo",
+      "url": "https://github.com/octo-models/octo",
+      "description": "Octo is a generalist robot policy trained on Open X-Embodiment data, with code to fine-tune it and to run it on a real WidowX robot.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": "MIT",
+      "stars": 1789,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-28",
+      "triage": {
+        "verdict": "held",
+        "held_by": "action-policy model boundary",
+        "rule": "docs/CURATION.md inclusion gate; ADR 045 routing",
+        "finding": "Screened in the ADR 045 comparison-set review. The README's own evaluation section runs the pretrained policy on a real WidowX robot, so the physical reach is stated directly; but the repository is a policy model release with inference and fine-tuning code, the shape batch 39 held Isaac GR00T and OpenVLA in, so it waits on the action-policy model decision rather than on the systems scope. Latest release v1.5 of 2024-05-24.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/octo-models/octo/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "057e41b4866d4c1c19eaf8882c5f1551594476f1b2193f52ec626833381de262",
+            "fetched_at": "2026-09-28",
+            "blob_sha": "b33cd8e7df1bb51243e060e14b5a14741cb06032",
+            "immutable_url": "https://api.github.com/repos/octo-models/octo/git/blobs/b33cd8e7df1bb51243e060e14b5a14741cb06032"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/octo-models/octo/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "8c891a7dd06fdaa873aa011ff0b2773a3ccfe6d123f6b9a9fc589db718aec1d1",
+            "fetched_at": "2026-09-28",
+            "blob_sha": "239522dcb0271245b5486e598a98737d445b3cd6",
+            "immutable_url": "https://api.github.com/repos/octo-models/octo/git/blobs/239522dcb0271245b5486e598a98737d445b3cd6"
+          }
+        ],
+        "proposed_at": "2026-09-28",
+        "proposer": "ADR 045 comparison-set screen"
+      },
       "review_required": [
         "licensing",
         "classification",

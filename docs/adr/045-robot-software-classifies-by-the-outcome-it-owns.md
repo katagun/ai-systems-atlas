@@ -1,6 +1,6 @@
 # ADR 045: Robot software classifies by the outcome it owns
 
-**Status:** Proposed
+**Status:** Accepted
 
 ## Context
 
@@ -82,5 +82,5 @@ No card badge. Two or three records of 133 agent systems is about 2%, and `docs/
 - The Systems scope gains a Capability filter over every published capability, recorded in `docs/WEB.md`, which also records why there is no badge.
 - `scripts/update_directory.py` routes robotics vocabulary to `agent_framework_sdk` with a relevance floor, as ADR 023 did for `research_agent`. `DISCOVERY_QUERIES` is unchanged, so the rung re-routes only what existing queries find.
 - `docs/CURATION.md` no longer says the robot software decision is open, and gains a scope-boundary paragraph for reading a robot-software candidate. `docs/ROBOTS.md` states that software which controls a robot is a scored system record, never a robot record. `AGENTS.md` routes robot software to the Taxonomy guide.
-- The five candidates are reviewed in a following change, which records coverage batch 96 and sets this record to Accepted.
+- The five candidates are reviewed in a following change, which records coverage batch 98 and sets this record to Accepted.
 - A future proposal for a robot role arrives against a written outcome and a named, refused mechanism.

@@ -23,17 +23,17 @@ Every count below is generated, not transcribed. `uv run python scripts/validate
 <!-- catalog-counts: regenerate with `uv run python scripts/validate_directory.py --counts` -->
 
 ```text
-systems: 214
-  agent_system 134, assistant_system 17, memory_system 63
-  active-choice 202 (archived 9, superseded 3)
+systems: 216
+  agent_system 136, assistant_system 17, memory_system 63
+  active-choice 204 (archived 9, superseded 3)
 specifications: 22
 inference_services: 60
 local_runtimes: 17
 model_releases: 311
 models_dev_source_records: 424
 model_candidates: 6
-system_candidates: 123
-exclusions: 91
+system_candidates: 121
+exclusions: 98
 packs: 8
 labs: 43 covering 311 releases
 robots: 4
@@ -308,5 +308,7 @@ Choose small batches with one coherent boundary question:
 96. **OpenRouter lead batch five — the newest leads:** one publish outside the queue under [ADR 038](adr/038-reviewed-models-may-precede-their-models-dev-source-row.md), four exclusions, and two holds, with no new licence identifiers. Upstage's Solar Mini 4 is a dated API release (`solar-mini4-260922` behind the `solar-mini4` alias) under the same Upstage terms as the reviewed Solar Pro lines. AionLabs' model page describes four of its routes as multi-model systems, which are composites rather than model releases, so they are excluded, and a fifth as a variant of DeepSeek V3.2, so it is held with the other fine-tunes. Fireworks' Ember-1 is held as a two-week research preview. GLM 5.3 Prime, also among the newest leads, was already held by the fourth OpenRouter lead batch. The reviewed Models collection moves from three hundred four to three hundred five and the queue stays at six; the Upstage lab now covers five releases. The score does not measure output quality, benchmark rank, parameter count, price, latency, or throughput.
 
 97. **OpenRouter lead batch six — dated Qwen API snapshots:** four publishes outside the queue under [ADR 038](adr/038-reviewed-models-may-precede-their-models-dev-source-row.md), five OpenRouter exclusions, and no new licence identifiers. Alibaba Cloud Model Studio documents each API line's dated snapshots on the line's own page, while models.dev lists only the undated names, which the Atlas already excludes as moving aliases. Each record takes its line at the newest dated snapshot, under the Model Studio agreement that governs the other reviewed hosted Qwen records: Qwen3 Max at 2026-01-23; Qwen3.5 Plus at 2026-04-20, although the undated `qwen3.5-plus` name still resolves to the February 15 snapshot; Qwen3.5 Flash at its only snapshot, 2026-02-23; and Qwen Plus at 2025-12-01. OpenRouter's Qwen3 Max Thinking route is the January snapshot with thinking switched on, its Qwen3.5 Flash and April Qwen3.5 Plus routes are the same snapshots under other names, and its February Qwen3.5 Plus and July 2025 Qwen Plus routes are earlier snapshots of the reviewed lines. The model dispositions for the four undated names now point at the line records, and two of their reasons were corrected: `qwen-plus` resolves to the December 2025 snapshot, and `qwen3.5-plus` still resolves to February's. The reviewed Models collection moves from three hundred five to three hundred nine and the queue stays at six; the Alibaba lab now covers thirty releases. The score does not measure output quality, benchmark rank, parameter count, price, latency, or throughput.
+
+98. **Robot software, decided and reviewed:** two publishes, three holds, seven exclusions, and the `robot software role decision` label retired, under [ADR 045](adr/045-robot-software-classifies-by-the-outcome-it-owns.md), which mints no role and records reaching a robot as `robot_control` in `agent_capabilities`, reachable through the new Capability filter. `huggingface/lerobot` and `OpenMind/OM1` are published as `agent_framework_sdk` on their documented run paths: LeRobot's README sends a policy's chosen action to a physical robot through its `Robot` interface, and OM1's action plugins "map high-level decisions from one or more LLMs into concrete physical or digital actions". OM1 is a framework, not a runtime: it documents no durable state, skills, schedules, or memory lifecycle, which the runtime definition requires, and ADR 019 forbids stretching a definition. `Physical-Intelligence/openpi` moves to `action-policy model boundary`, because its software exists to run or fine-tune its own checkpoints, and the newly screened `octo-models/octo` joins it; `google-deepmind/gemini-robotics-sdk` waits under `programme-gated run path` for general availability. `dora-rs/dora` is excluded on the dario and TreeQuest line: middleware whose README states no agent loop of its own, distinguished in the entry from LangGraph and sandbase-harness. Twelve neighbours were screened for the comparison set ADR 011 requires; five were already decided in batch 39 (Isaac Lab, ManiSkill and robosuite excluded; Isaac GR00T and OpenVLA held), Octo is newly held beside them, and six new exclusions record Genesis and robomimic on the simulator and training-framework lines, ROS 2, MoveIt 2 and Isaac ROS Common on the Nav2 line, and Open X-Embodiment as a dataset. The ADR 023 tripwire count after this batch is two full-gate systems, so the decision does not reopen by its own result. The decisive README, LICENSE and release facts were re-fetched on 2026-09-28; the openpi packaging and Gemma licence facts come from a 2026-09-27 read; and every pinned blob hash was recomputed before a record cited it. LeRobot's LICENSE file itself carries six appended MIT notices, which is why the record lists MIT. The candidate queue moved from 123 to 121 records and the exclusions from 91 to 98.
 
 For each batch, promote or exclude every reviewed candidate in the same change, update this snapshot only when counts materially change, and follow `CURATION.md` for evidence and scoring.
