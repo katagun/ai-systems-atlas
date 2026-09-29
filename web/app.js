@@ -175,6 +175,7 @@ async function bootstrap() {
   state.projects = systems.systems;
   state.inferenceServices = inference.inference;
   state.localRuntimes = runtimes.runtimes;
+  state.runtimesVerifiedAt = runtimes.verified_at;
   state.specifications = specifications.specifications;
   state.models = models.models;
   state.reviewedModelCount = models.reviewed_count;
@@ -195,6 +196,7 @@ async function bootstrap() {
   populateFilters();
   populateCollectionFilters();
   populateModelLabFilter();
+  populateRuntimeMatrixFilters();
   renderStats();
   renderFinder();
   renderDoorJobs();
@@ -1670,6 +1672,84 @@ const renderInferenceServices = () => renderCollection("inference");
 const renderLocalRuntimes = () => renderCollection("runtimes");
 const renderModels = () => renderCollection("models");
 const renderLabs = () => renderCollection("labs");
+
+const RUNTIME_MATRIX_CONTROLS = {
+  runtimeAccelerator: { selector: "#matrix-accelerator", fallback: "" },
+  runtimeFormat: { selector: "#matrix-format", fallback: "" },
+  matrix: { selector: "#matrix-columns", fallback: "accelerators" },
+};
+const RUNTIME_MATRIX_GROUPS = {
+  accelerators: { taxonomy: "runtime_accelerators", name: "Hardware" },
+  model_formats: { taxonomy: "runtime_model_formats", name: "Model formats" },
+  api_styles: { taxonomy: "inference_api_styles", name: "API styles" },
+};
+
+function runtimeMatrixColumns(field) {
+  return state.taxonomy[RUNTIME_MATRIX_GROUPS[field].taxonomy]
+    .filter(item => state.localRuntimes.some(runtime => (runtime[field] || []).includes(item.id)));
+}
+
+function populateRuntimeMatrixFilters() {
+  for (const [field, selector] of [["accelerators", "#matrix-accelerator"], ["model_formats", "#matrix-format"]]) {
+    $(selector).insertAdjacentHTML("beforeend", runtimeMatrixColumns(field)
+      .map(item => `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`).join(""));
+  }
+}
+
+// Matrix parameters belong only to Explore. Ordinary catalog links create a
+// history entry, so Back and reload restore this exact hardware/format slice.
+function restoreRuntimeMatrix() {
+  const params = new URL(window.location.href).searchParams;
+  for (const [key, { selector, fallback }] of Object.entries(RUNTIME_MATRIX_CONTROLS)) {
+    const value = params.get(key) || fallback;
+    const select = $(selector);
+    select.value = [...select.options].some(option => option.value === value) ? value : fallback;
+  }
+  updateRuntimeMatrix();
+}
+
+function updateRuntimeMatrix() {
+  const url = new URL(window.location.href);
+  for (const [key, { selector, fallback }] of Object.entries(RUNTIME_MATRIX_CONTROLS)) {
+    const value = $(selector).value;
+    if (value === fallback) url.searchParams.delete(key);
+    else url.searchParams.set(key, value);
+  }
+  writeURL(url);
+  renderRuntimeMatrix();
+}
+
+function renderRuntimeMatrix() {
+  const accelerator = $("#matrix-accelerator").value;
+  const modelFormat = $("#matrix-format").value;
+  const field = $("#matrix-columns").value;
+  const rows = AppCore.filterLocalRuntimes(state.localRuntimes, { accelerator, modelFormat, sort: "name" });
+  const columns = runtimeMatrixColumns(field);
+  const group = RUNTIME_MATRIX_GROUPS[field].name;
+  const params = new URLSearchParams({ collection: "runtimes", sort: "name" });
+  if (accelerator) params.set("accelerator", accelerator);
+  if (modelFormat) params.set("modelFormat", modelFormat);
+  $("#runtime-matrix-browse").href = `?${params}`;
+  $("#runtime-matrix-date").textContent = `Catalog review date ${state.runtimesVerifiedAt || "not recorded"}`;
+  $("#runtime-matrix-count").textContent = `${rows.length} of ${state.localRuntimes.length} reviewed runtimes`;
+  if (!rows.length) {
+    $("#runtime-matrix-content").innerHTML = '<p class="notice">No reviewed runtimes match both filters. Change a filter or reset the matrix.</p>';
+    return;
+  }
+  const body = rows.map(runtime => {
+    const recordParams = new URLSearchParams(params);
+    recordParams.set("record", `runtime:${runtime.id}`);
+    const cells = columns.map(column => {
+      const recorded = (runtime[field] || []).includes(column.id);
+      return `<td${recorded ? ' class="is-recorded"' : ""}><span aria-hidden="true">${recorded ? "●" : "—"}</span><span class="visually-hidden">${recorded ? "Recorded" : "Not recorded"}</span></td>`;
+    }).join("");
+    return `<tr><th scope="row"><a href="?${escapeHTML(recordParams.toString())}">${escapeHTML(runtime.name)}</a></th>${cells}</tr>`;
+  }).join("");
+  $("#runtime-matrix-content").innerHTML = `<div class="runtime-matrix-scroll" role="region" aria-label="Runtime ${escapeHTML(group)} table, scroll horizontally for more columns" tabindex="0" aria-describedby="runtime-matrix-note">
+    <table class="runtime-matrix"><caption>${escapeHTML(group)} recorded for the selected runtimes. Names open reviewed details.</caption>
+    <thead><tr><th scope="col">Runtime</th>${columns.map(column => `<th scope="col">${escapeHTML(column.name)}</th>`).join("")}</tr></thead>
+    <tbody>${body}</tbody></table></div>`;
+}
 
 function modelAccessURL(distribution, sourceModel = "") {
   const params = new URLSearchParams({ collection: "models", distribution, sort: "name" });
@@ -3299,6 +3379,7 @@ function openComparison() {
 // for a collection, a comparison, and a record.
 function writeViewURL(id) {
   const url = new URL(window.location.href);
+  if (id !== "explore") Object.keys(RUNTIME_MATRIX_CONTROLS).forEach(key => url.searchParams.delete(key));
   if (id === "directory") url.searchParams.delete("view");
   else url.searchParams.set("view", id);
   writeURL(url);
@@ -3348,6 +3429,7 @@ function activateView(id, { focusTarget } = {}) {
     else item.removeAttribute("aria-current");
   });
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
+  if (id === "explore") restoreRuntimeMatrix();
   if (leaving && leaving.id !== id) {
     const heading = focusTarget || document.getElementById(document.getElementById(id)?.getAttribute("aria-labelledby"));
     heading?.focus({ preventScroll: true });
@@ -3407,6 +3489,11 @@ function initDocsMenu() {
 }
 
 function bindEvents() {
+  Object.values(RUNTIME_MATRIX_CONTROLS).forEach(({ selector }) => $(selector).addEventListener("change", updateRuntimeMatrix));
+  $("#matrix-reset").addEventListener("click", () => {
+    Object.values(RUNTIME_MATRIX_CONTROLS).forEach(({ selector, fallback }) => { $(selector).value = fallback; });
+    updateRuntimeMatrix();
+  });
   syncStickyClearance();
   window.addEventListener("resize", syncStickyClearance);
   for (const [scope, selector] of Object.entries(MATCH_SORTS)) {
