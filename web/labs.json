@@ -1616,63 +1616,56 @@
       "admission_basis": "reviewed_release"
     },
     {
-      "id": "lab-xai",
-      "name": "SpaceXAI (xAI)",
-      "url": "https://x.ai/",
-      "description": "The AI company, formerly xAI, that develops the Grok models and builds Grok, Grok Bot, and the xAI API on them.",
-      "lab_type": "ai_company",
+      "id": "lab-stanford-nlp",
+      "name": "Stanford NLP Group",
+      "url": "https://nlp.stanford.edu/",
+      "description": "The Stanford University research group that develops CoreNLP, Stanza, and DSPy, the framework for programming rather than prompting language models.",
+      "lab_type": "public_research",
       "headquarters": "us",
-      "parent_organization": "SpaceX (Space Exploration Technologies Corp.)",
-      "organization_note": "SpaceX completed its acquisition of xAI on 2 February 2026, making it a wholly owned subsidiary, and xAI now calls itself SpaceXAI; its policies name SpaceXAI LLC. The catalog names the developer xAI or SpaceXAI (xAI) release by release and names the API operator xAI, so both names belong to this record.",
-      "catalog_names": [
-        "xAI",
-        "SpaceXAI (xAI)"
-      ],
+      "parent_organization": "Stanford University",
+      "admission_basis": "reviewed_system",
+      "organization_note": "The Stanford Natural Language Processing Group describes itself on its own site as \"a passionate, inclusive group of students, faculty, postdocs, and research engineers\" and states that it \"is part of the Stanford AI Lab (SAIL)\" with close associations to the Stanford Institute for Human-Centered Artificial Intelligence and the Center for Research on Foundation Models, and that it includes members of the Linguistics, Computer Science, and Psychology departments and the Graduate School of Education. It is a group inside Stanford University rather than a separate legal entity, so the parent is the university and the group gives its address as the Gates Computer Science Building, 353 Jane Stanford Way, Stanford, California. It is recorded on a system rather than a release: its own page names DSPy, \"a Python framework for programming rather than prompting LLMs\", and DSPy is the reviewed system record stanfordnlp/dspy, which the group publishes from its own GitHub organization. Nothing in the catalog names the group as a model developer, service operator, runtime maintainer, or steward, so catalog_names is empty and the record joins from the system instead. The group's published software is otherwise Java and Python NLP tooling rather than model weights: CoreNLP, Stanza, and GloVe, which its software page says are \"open source, licensed under the GNU General Public License\", a different license from the MIT-licensed DSPy, so the record names DSPy as the reviewed system and does not claim the others. It publishes no frontier-safety, responsible-scaling, preparedness, or risk-management framework on its own pages, so the field is omitted rather than filled with the AI Index its affiliated HAI institute produces, which is a research report and not a framework.",
+      "catalog_names": [],
       "systems": [
-        "grok",
-        "grok-bot"
+        "dspy"
       ],
       "channels": [
         {
-          "kind": "model_catalog",
-          "url": "https://docs.x.ai/developers/models"
-        },
-        {
-          "kind": "release_notes",
-          "url": "https://docs.x.ai/developers/release-notes"
-        },
-        {
           "kind": "news",
-          "url": "https://x.ai/news"
+          "url": "https://nlp.stanford.edu/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/stanfordnlp"
         }
       ],
-      "safety_framework": {
-        "title": "xAI Frontier Artificial Intelligence Framework (effective 30 June 2026)",
-        "url": "https://media.x.ai/v1/website/xai-frontier-artificial-intelligence-framework-30-june-2026-99c40684.pdf",
-        "verified_at": "2026-09-25"
-      },
       "evidence": [
         {
           "kind": "web",
-          "label": "SpaceX Form S-1: the xAI merger closed on 2 February 2026, making xAI a wholly owned subsidiary",
-          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
-          "verified_at": "2026-09-25"
+          "label": "Group page: the Natural Language Processing Group at Stanford University, part of the Stanford AI Lab with close associations to HAI and the Center for Research on Foundation Models, and the developer of DSPy, a Python framework for programming rather than prompting LLMs, plus Stanza for text in over 75 languages; address Gates Computer Science Building, 353 Jane Stanford Way, Stanford, CA 94305-9020",
+          "url": "https://nlp.stanford.edu/",
+          "verified_at": "2026-09-29"
         },
         {
           "kind": "web",
-          "label": "SpaceX Form S-1 Exhibit 21.1: list of significant subsidiaries, including X.AI LLC (Nevada)",
-          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/exhibit211-sx1.htm",
-          "verified_at": "2026-09-25"
+          "label": "Software page: CoreNLP, Stanza, and GloVe distributed as open source under the GNU General Public License, with commercial licensing available",
+          "url": "https://nlp.stanford.edu/software/",
+          "verified_at": "2026-09-29"
         },
         {
           "kind": "web",
-          "label": "Privacy policy naming SpaceXAI LLC",
-          "url": "https://x.ai/legal/privacy-policy",
-          "verified_at": "2026-09-25"
+          "label": "Verified stanfordnlp GitHub organization, from which the group publishes DSPy",
+          "url": "https://github.com/stanfordnlp",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "DSPy repository under the group's own organization: DSPy, Programming - not prompting - Foundation Models, the framework named as the group's own on its group page",
+          "url": "https://github.com/stanfordnlp/dspy",
+          "verified_at": "2026-09-29"
         }
       ],
-      "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "verified_at": "2026-09-29"
     },
     {
       "id": "lab-stepfun",
@@ -2135,6 +2128,65 @@
       "admission_basis": "reviewed_release"
     },
     {
+      "id": "lab-xai",
+      "name": "SpaceXAI (xAI)",
+      "url": "https://x.ai/",
+      "description": "The AI company, formerly xAI, that develops the Grok models and builds Grok, Grok Bot, and the xAI API on them.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "parent_organization": "SpaceX (Space Exploration Technologies Corp.)",
+      "organization_note": "SpaceX completed its acquisition of xAI on 2 February 2026, making it a wholly owned subsidiary, and xAI now calls itself SpaceXAI; its policies name SpaceXAI LLC. The catalog names the developer xAI or SpaceXAI (xAI) release by release and names the API operator xAI, so both names belong to this record.",
+      "catalog_names": [
+        "xAI",
+        "SpaceXAI (xAI)"
+      ],
+      "systems": [
+        "grok",
+        "grok-bot"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.x.ai/developers/models"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.x.ai/developers/release-notes"
+        },
+        {
+          "kind": "news",
+          "url": "https://x.ai/news"
+        }
+      ],
+      "safety_framework": {
+        "title": "xAI Frontier Artificial Intelligence Framework (effective 30 June 2026)",
+        "url": "https://media.x.ai/v1/website/xai-frontier-artificial-intelligence-framework-30-june-2026-99c40684.pdf",
+        "verified_at": "2026-09-25"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "SpaceX Form S-1: the xAI merger closed on 2 February 2026, making xAI a wholly owned subsidiary",
+          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "SpaceX Form S-1 Exhibit 21.1: list of significant subsidiaries, including X.AI LLC (Nevada)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/exhibit211-sx1.htm",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy policy naming SpaceXAI LLC",
+          "url": "https://x.ai/legal/privacy-policy",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
+    },
+    {
       "id": "lab-xiaomi",
       "name": "Xiaomi",
       "url": "https://www.mi.com/global/",
@@ -2237,5 +2289,6 @@
       "verified_at": "2026-09-25",
       "admission_basis": "reviewed_release"
     }
-  ]
+  ],
+  "updated_at": "2026-09-29"
 }

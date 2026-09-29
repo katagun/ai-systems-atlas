@@ -885,6 +885,71 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertEqual(self.lab_errors(self.catalog_with_lab(mutate)), [])
 
+    def test_lab_may_be_admitted_on_a_system_it_developed(self) -> None:
+        """ADR 047: a research group joins from a system, not a release.
+
+        The Stanford shape: no catalog name, because a system record names no
+        organization, and one reviewed system in `systems`.
+        """
+
+        def mutate(lab):
+            lab["admission_basis"] = "reviewed_system"
+            lab["catalog_names"] = []
+            lab["systems"] = ["dspy"]
+
+        self.assertEqual(self.lab_errors(self.catalog_with_lab(mutate)), [])
+
+    def test_system_based_lab_needs_a_system_and_no_release(self) -> None:
+        """Each exclusivity direction of the three bases is refused, not permitted."""
+
+        def no_system(lab):
+            lab["admission_basis"] = "reviewed_system"
+            lab["catalog_names"] = []
+            lab["systems"] = []
+
+        errors = self.lab_errors(self.catalog_with_lab(no_system))
+        self.assertTrue(any("develops no reviewed system" in e for e in errors), errors)
+
+        def announced_despite_a_system(lab):
+            lab["admission_basis"] = "frontier_announcement"
+            lab["catalog_names"] = []
+            lab["systems"] = ["dspy"]
+
+        errors = self.lab_errors(self.catalog_with_lab(announced_despite_a_system))
+        self.assertTrue(any("has a reviewed system" in e for e in errors), errors)
+
+        def system_based_despite_a_release(lab):
+            # Keeps the sample's Anthropic name, so the reviewed release is still
+            # reachable and the basis is the thing that is wrong.
+            lab["admission_basis"] = "reviewed_system"
+            lab["systems"] = ["dspy"]
+
+        errors = self.lab_errors(self.catalog_with_lab(system_based_despite_a_release))
+        self.assertTrue(
+            any("has a reviewed model release" in e for e in errors), errors
+        )
+
+    def test_unreviewed_release_lab_is_told_which_weaker_basis_fits(self) -> None:
+        """A lab with no release is named the basis it can actually use."""
+
+        def as_unreleased_system_based(lab):
+            lab["admission_basis"] = "reviewed_release"
+            lab["catalog_names"] = []
+            lab["systems"] = ["dspy"]
+
+        errors = self.lab_errors(self.catalog_with_lab(as_unreleased_system_based))
+        self.assertTrue(any("must be reviewed_system" in e for e in errors), errors)
+
+        def as_unreleased_announced(lab):
+            lab["admission_basis"] = "reviewed_release"
+            lab["catalog_names"] = []
+            lab["systems"] = []
+
+        errors = self.lab_errors(self.catalog_with_lab(as_unreleased_announced))
+        self.assertTrue(
+            any("must be frontier_announcement" in e for e in errors), errors
+        )
+
     def test_lab_is_recorded_only_once_it_developed_a_reviewed_release(self) -> None:
         documents = {
             name: json.loads((ROOT / "directory" / name).read_text(encoding="utf-8"))

@@ -161,4 +161,7 @@ module.exports = {
   reviewedModelsDevelopedByNewestFirst,
   labIdWithLongestChannel: labIdWithLongest(lab => Math.max(...lab.channels.map(channel => channel.url.length))),
   labIdWithLongestNameWord: labIdWithLongest(lab => Math.max(...lab.name.split(/\s+/).map(word => word.length))),
+  // The two bases that join to no model release each have a record, so their
+  // dialogs stay covered as labs are added rather than relying on a fixed id.
+  labIdWithBasis: basis => labs.find(lab => lab.admission_basis === basis).id,
 };

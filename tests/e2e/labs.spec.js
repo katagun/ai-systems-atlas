@@ -78,6 +78,26 @@ test("a lab dialog fits a phone screen with its longest channel URL and name", a
   }
 });
 
+test("a lab admitted on a system explains its empty release join instead of listing nothing", async ({ page }) => {
+  await page.goto(`/?collection=labs&record=lab:${catalogCounts.labIdWithBasis("reviewed_system")}`);
+  const dialog = page.locator("#lab-dialog-content");
+  await expect(dialog.locator("h1")).toHaveText("Stanford NLP Group");
+  await expect(dialog).toContainText("Recorded because:");
+  await expect(dialog).toContainText("Reviewed system");
+
+  // ADR 047: a research group joins from a system, so the Models block is empty
+  // and has to say why rather than print a bare zero over an empty list.
+  const releases = dialog.locator(".detail-block").filter({ hasText: "Reviewed model releases" });
+  await expect(releases.locator("h3")).toHaveText("Reviewed model releases · 0");
+  await expect(releases).toContainText("recorded on a system it built");
+  await expect(dialog.locator("[data-browse-lab-models]")).toHaveCount(0);
+  // Nothing in the catalog names the group, so that line is omitted, not blank.
+  await expect(dialog).not.toContainText("Named in the catalog as");
+
+  const systems = dialog.locator(".detail-block").filter({ hasText: "Systems it builds" });
+  await expect(systems).toContainText("DSPy");
+});
+
 test("a model dialog links to the lab that developed the release", async ({ page }) => {
   await page.goto("/?collection=models&record=model:model-deepseek-deepseek-v4-pro");
   await expect(page.locator("#model-dialog-content h1")).toHaveText("DeepSeek V4 Pro");
