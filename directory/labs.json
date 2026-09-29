@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-25",
+  "verified_at": "2026-09-28",
   "labs": [
     {
       "id": "lab-ai-singapore",
@@ -1468,6 +1468,144 @@
       "verified_at": "2026-09-25"
     },
     {
+      "id": "lab-sakana-ai",
+      "name": "Sakana AI",
+      "url": "https://sakana.ai/",
+      "description": "The Tokyo-based frontier R&D company that develops the Sakana Namazu models for Japan, the Fugu multi-agent orchestration foundation models, and the AI Scientist and Darwin Gödel Machine research systems.",
+      "lab_type": "ai_company",
+      "headquarters": "jp",
+      "organization_note": "Sakana AI K.K., whose corporate page gives its headquarters as Azabudai Hills Mori JP Tower 22F, Minato-ku, Tokyo, was founded in July 2023 by David Ha, Ren Ito, and Llion Jones and describes itself as a Tokyo-based frontier R&D company. The API platform trades as Sakana AI Co., Ltd. in its terms of service and the site footer reads Sakana AI 株式会社, so the Japanese and English entity strings name the same company rather than separate labs; the catalog keeps both strings because the inference-service record names its operator Sakana AI Co., Ltd. and the model record names its developer Sakana AI. It develops and serves the Sakana Namazu line itself and the Fugu orchestration tiers, and it publishes the Darwin Gödel Machine and ShinkaEvolve systems — the DGM code from the first author's personal account, which is the location Sakana's own page links as the released code. It publishes no frontier-safety, responsible-scaling, or preparedness framework on its own pages: the obvious paths return not-found and it publishes instead a usage policy, a defense policy, and a research safety section on the DGM page, so the field is omitted rather than filled with a usage policy.",
+      "catalog_names": [
+        "Sakana AI",
+        "Sakana AI Co., Ltd."
+      ],
+      "systems": [
+        "darwin-godel-machine",
+        "shinkaevolve"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://console.sakana.ai/models"
+        },
+        {
+          "kind": "news",
+          "url": "https://sakana.ai/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/SakanaAI"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/SakanaAI"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Corporate page: company name Sakana AI K.K., founded July 2023, headquarters at Azabudai Hills Mori JP Tower 22F, Minato-ku, Tokyo, and a Tokyo-based frontier R&D company founded by David Ha, Ren Ito, and Llion Jones",
+          "url": "https://sakana.ai/company-info/",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Sakana AI API Platform Terms of Service, effective 28 September 2026, naming Sakana AI Co., Ltd. as the Company providing the API",
+          "url": "https://console.sakana.ai/terms-of-service",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Console model reference: the sakana-namazu-v1.0 model ID and its moving alias, and the four Fugu orchestration tiers",
+          "url": "https://console.sakana.ai/models",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Fugu release post: Fugu as a language model trained to call models in an agent pool, with an entirely swappable pool and a fixed training cutoff date",
+          "url": "https://sakana.ai/fugu-release/",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Darwin Gödel Machine page: the system, its self-improvement loop, and the released code it links at github.com/jennyzzt/dgm",
+          "url": "https://sakana.ai/dgm/",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Verified Sakana AI GitHub organization, the publisher of ShinkaEvolve and the AI Scientist repositories",
+          "url": "https://github.com/SakanaAI",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "SakanaAI Hugging Face organization publishing the Evo-era Japanese models and research checkpoints",
+          "url": "https://huggingface.co/SakanaAI",
+          "verified_at": "2026-09-28"
+        }
+      ],
+      "verified_at": "2026-09-28"
+    },
+    {
+      "id": "lab-xai",
+      "name": "SpaceXAI (xAI)",
+      "url": "https://x.ai/",
+      "description": "The AI company, formerly xAI, that develops the Grok models and builds Grok, Grok Bot, and the xAI API on them.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "parent_organization": "SpaceX (Space Exploration Technologies Corp.)",
+      "organization_note": "SpaceX completed its acquisition of xAI on 2 February 2026, making it a wholly owned subsidiary, and xAI now calls itself SpaceXAI; its policies name SpaceXAI LLC. The catalog names the developer xAI or SpaceXAI (xAI) release by release and names the API operator xAI, so both names belong to this record.",
+      "catalog_names": [
+        "xAI",
+        "SpaceXAI (xAI)"
+      ],
+      "systems": [
+        "grok",
+        "grok-bot"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.x.ai/developers/models"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.x.ai/developers/release-notes"
+        },
+        {
+          "kind": "news",
+          "url": "https://x.ai/news"
+        }
+      ],
+      "safety_framework": {
+        "title": "xAI Frontier Artificial Intelligence Framework (effective 30 June 2026)",
+        "url": "https://media.x.ai/v1/website/xai-frontier-artificial-intelligence-framework-30-june-2026-99c40684.pdf",
+        "verified_at": "2026-09-25"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "SpaceX Form S-1: the xAI merger closed on 2 February 2026, making xAI a wholly owned subsidiary",
+          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "SpaceX Form S-1 Exhibit 21.1: list of significant subsidiaries, including X.AI LLC (Nevada)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/exhibit211-sx1.htm",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy policy naming SpaceXAI LLC",
+          "url": "https://x.ai/legal/privacy-policy",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25"
+    },
+    {
       "id": "lab-stepfun",
       "name": "StepFun",
       "url": "https://www.stepfun.com/",
@@ -1912,64 +2050,6 @@
           "kind": "web",
           "label": "Newsroom giving its headquarters at 111 Maiden Lane, San Francisco",
           "url": "https://writer.com/newsroom/",
-          "verified_at": "2026-09-25"
-        }
-      ],
-      "verified_at": "2026-09-25"
-    },
-    {
-      "id": "lab-xai",
-      "name": "SpaceXAI (xAI)",
-      "url": "https://x.ai/",
-      "description": "The AI company, formerly xAI, that develops the Grok models and builds Grok, Grok Bot, and the xAI API on them.",
-      "lab_type": "ai_company",
-      "headquarters": "us",
-      "parent_organization": "SpaceX (Space Exploration Technologies Corp.)",
-      "organization_note": "SpaceX completed its acquisition of xAI on 2 February 2026, making it a wholly owned subsidiary, and xAI now calls itself SpaceXAI; its policies name SpaceXAI LLC. The catalog names the developer xAI or SpaceXAI (xAI) release by release and names the API operator xAI, so both names belong to this record.",
-      "catalog_names": [
-        "xAI",
-        "SpaceXAI (xAI)"
-      ],
-      "systems": [
-        "grok",
-        "grok-bot"
-      ],
-      "channels": [
-        {
-          "kind": "model_catalog",
-          "url": "https://docs.x.ai/developers/models"
-        },
-        {
-          "kind": "release_notes",
-          "url": "https://docs.x.ai/developers/release-notes"
-        },
-        {
-          "kind": "news",
-          "url": "https://x.ai/news"
-        }
-      ],
-      "safety_framework": {
-        "title": "xAI Frontier Artificial Intelligence Framework (effective 30 June 2026)",
-        "url": "https://media.x.ai/v1/website/xai-frontier-artificial-intelligence-framework-30-june-2026-99c40684.pdf",
-        "verified_at": "2026-09-25"
-      },
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "SpaceX Form S-1: the xAI merger closed on 2 February 2026, making xAI a wholly owned subsidiary",
-          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "SpaceX Form S-1 Exhibit 21.1: list of significant subsidiaries, including X.AI LLC (Nevada)",
-          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/exhibit211-sx1.htm",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Privacy policy naming SpaceXAI LLC",
-          "url": "https://x.ai/legal/privacy-policy",
           "verified_at": "2026-09-25"
         }
       ],
