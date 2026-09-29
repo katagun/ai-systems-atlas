@@ -117,7 +117,7 @@ The nine `.collection-panel` sections keep their ids and become each collection'
   PR 2 restates the rule in those words. It also deletes the sentence saying Models, Labs, and Specifications "never receive a carried query", which has been false since #345.
 - **The search boxes.** The front door keeps `#door-search`, and typing there lands in All with the caret in `#results-search` (section 7 may change that). Leaving the door still removes the Elements selection (`element`, `elementRecord`), as ADR 046 requires. "/" focuses whichever box is visible.
 
-**One match pass, after a pause.** A query is matched once per collection. The match is reused by the results, the strip's counts, and the empty state; matching all eight kinds took 3–6 ms per query in the review's measurements.
+**One match pass, after a pause.** A query is matched once per collection for the strip's counts and the empty result's pointers; the results keep their own ranked pass, which also orders them. Matching all eight kinds took 3–6 ms per query in the review's measurements.
 
 The results, the strip's counts, and the URL follow the reader 150 ms after the last keystroke, not on every keystroke. `syncMatchSort` stays synchronous, because it changes a control's state rather than painting. This closes `CR-21` in `BACKLOG.md`, whose measurement puts the filter half alone at 3–14 ms on the main thread per keystroke across nine handlers. It also closes the related wasted repaints:
 - `setPageSize` repainting the hidden Models, Labs, and Specifications grids;
@@ -188,7 +188,7 @@ The existing descriptors become these definitions (`INFERENCE_SERVICE_VIEW`, `LO
 
 The filter functions are rebuilt on these definitions. Every filter's URL key and meaning stays the same.
 
-`SCOPE_CONTROLS`, `readScopeControls`, `resetScopeControls`, and `clearScopeFacets` assume one select or checkbox per key, and they are reworked to read the rail's groups by key. Restore checks a value against the values the collection publishes, not against the values enabled under the current filters, so a shared link whose value lists nothing under its other filters still restores. It then lands on the empty result's "Show it".
+Every filter's `<select>` stays, hidden, as the state its restore, reset, and handoff paths already read (`SCOPE_CONTROLS`, `readScopeControls`, `resetScopeControls`, `clearScopeFacets`). The rail draws its values and labels from the select, and a choice goes back through the select's own `input` event. Counts never disable a select's options, so restore checks a shared link's value against the values the collection publishes, not the values enabled under the current filters, and a link whose value lists nothing under its other filters still restores. It then lands on the empty result's "Show it".
 
 ### 4. The list view
 
@@ -326,7 +326,7 @@ Every other contract Phase 2 listed holds, and so does ADR 046's Elements map, w
 - `renderScopeStrip`;
 - `syncDoorDots`;
 - `restoreFromURL`;
-- `resetScopeControls` (reworked in section 3 but keeping its role);
+- `resetScopeControls`, which still reads the hidden selects;
 - the pushed front-door entry;
 - a comparison kept off the front door's URL;
 - the keyboard focus on the pressed entry after a tile opens;
