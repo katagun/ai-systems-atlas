@@ -110,3 +110,42 @@ for (const theme of ["light", "dark"]) {
     expect(errors).toEqual([]);
   });
 }
+
+test("Elements previews hydrate delayed logos and keep mobile counts and bounds correct", async ({ page }) => {
+  const logos = require("../../web/logos.json");
+  let release;
+  const gate = new Promise(resolve => { release = resolve; });
+  await page.route("**/logos.json*", async route => { await gate; await route.continue(); });
+  await page.goto("/");
+  const tile = page.locator('[data-element="coding_agent"]');
+  await expect(tile.locator(".card-monogram")).toHaveCount(Math.min(3, coding.length));
+  expect(await tile.locator("[data-mark]").evaluateAll(marks => marks.map(mark => mark.dataset.mark))).toEqual(coding.slice(0, 3).map(record => record.id));
+  release();
+  for (const record of coding.slice(0, 3)) {
+    if (logos.records[record.id]) await expect(tile.locator(`[data-mark="${record.id}"] svg`)).toHaveCount(1);
+  }
+  await tile.click();
+  await expect(page.locator("#element-record-name [data-mark]")).toHaveAttribute("data-mark", coding[0].id);
+  await page.locator("#element-record").selectOption(coding[1].id);
+  await expect(page.locator("#element-record-name [data-mark]")).toHaveAttribute("data-mark", coding[1].id);
+  for (const theme of ["light", "dark"]) {
+    await page.evaluate(theme => document.documentElement.dataset.theme = theme, theme);
+    for (const width of [320, 390, 767, 768, 1440]) {
+      await page.setViewportSize({ width, height: 900 });
+      const limit = width < 768 ? 2 : 3;
+      await expect(tile.locator(".card-mark:visible")).toHaveCount(Math.min(limit, coding.length));
+      await expect(tile.locator(width < 768 ? ".element-more-mobile" : ".element-more-desktop")).toHaveText(coding.length > limit ? `+${coding.length - limit}` : "");
+      expect(await page.locator(".element-tile:visible").evaluateAll(tiles => tiles.every(tile => tile.scrollWidth <= tile.clientWidth))).toBe(true);
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    }
+  }
+});
+
+test("Elements remains navigable when logos fail", async ({ page }) => {
+  await page.route("**/logos.json*", route => route.abort());
+  await page.goto("/?element=coding_agent");
+  await expect(page.locator("#element-record-name .card-monogram")).toHaveCount(1);
+  await expect(page.locator("#element-record-name")).toHaveAccessibleName(coding[0].name);
+  await page.locator("#element-record").selectOption(coding[1].id);
+  await expect(page.locator("#element-record-name [data-mark]")).toHaveAttribute("data-mark", coding[1].id);
+});
