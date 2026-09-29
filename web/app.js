@@ -314,10 +314,11 @@ function writeScopeURL() {
 
 // Scopes whose Sort control has "Best match": a query selects it unless the
 // reader picked a sort since typing, and clearing the query gives back the
-// sort from before (spec, Phase 1 "Order"). syncMatchSort runs wherever a
-// scope's query changes: typing, a carried query, a Clear control, and the
-// Finder's handoff. So a sort chosen for one query never outlives it. Best
-// match orders a query's matches, so it is offered only beside a query.
+// sort from before (spec, Phase 1 "Order"). syncMatchSort runs wherever the
+// query or the collection changes: typing, a Clear control, a handoff that
+// clears the query, a collection switch, and a restore. So a sort chosen for
+// one query never outlives it. Best match orders a query's matches, so it is
+// offered only beside a query.
 const MATCH_SORTS = { systems: "#sort-filter", inference: "#inference-sort-filter", runtimes: "#runtime-sort-filter", models: "#model-sort-filter" };
 const sortBeforeQuery = {};
 const sortChosenDuringQuery = {};
@@ -329,8 +330,8 @@ function syncMatchSort(scope) {
   const hasQuery = Boolean($(SCOPE_CONTROLS[scope].q).value.trim());
   select.querySelector('option[value="match"]').disabled = !hasQuery;
   if (hasQuery && !sortChosenDuringQuery[scope] && select.value !== "match") {
-    // A carried query can replace one the box still holds, so the sort from
-    // before the first query is the one clearing gives back.
+    // A restored browseSort may already hold the sort from before the query;
+    // keep it, because it is the one clearing gives back.
     sortBeforeQuery[scope] ??= select.value;
     select.value = "match";
   } else if (!hasQuery) {
