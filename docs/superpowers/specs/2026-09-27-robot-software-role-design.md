@@ -67,7 +67,7 @@ Robot software is classified by the operational outcome it owns, under the roles
 
 **No badge.** Two or three records of 133 agent systems is about 2%. `docs/WEB.md` admits a badge that separates roughly 10–75% of its family, and ADR 034 declined one at nine of 128. The agent badge set also already holds six badges, which is `MAX_CARD_BADGES`, so a seventh could be cut off on cards that match all six. `docs/WEB.md` records the decision in the badge section's own words: the value is filterable and printed in record details, and a badge is revisited if the family's count reaches the floor.
 
-**Where a reader sees the value.** The Capability filter; the record's "Agent operation" detail block, which already prints capabilities; the Taxonomy view, which lists every capability with its definition once `docs/TAXONOMY.md` has one; and the share page, which prints the same traits.
+**Where a reader sees the value.** The Capability filter; the record's "Agent operation" detail block, which already prints capabilities; and the Taxonomy view, which lists every capability with its definition once `docs/TAXONOMY.md` has one.
 
 ### 4. Roles and evidence for the five
 

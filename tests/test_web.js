@@ -582,6 +582,17 @@ test("the capability filter combines with role rather than replacing it", () => 
 
 test("the systems scope writes the capability to the URL", () => {
   assert.equal(SCOPE_URL_PARAMS.systems.capability, "");
+  const written = scopeURLParams("systems", { capability: "robot_control", status: "active", sort: "name" });
+  assert.deepEqual(written, [["capability", "robot_control"]]);
+  const restored = readScopeURLParams("systems", new URLSearchParams(written), {
+    capability: new Set(["", "robot_control"]),
+  });
+  assert.equal(restored.values.capability, "robot_control");
+});
+
+test("robot control has no card badge (ADR 044)", () => {
+  const tests = Object.values(CARD_BADGES).map(badge => JSON.stringify(badge.test || {}));
+  assert.ok(tests.every(test => !test.includes("robot_control")), "a badge tests robot_control");
 });
 
 test("monogram glyphs use the first alphanumeric character uppercased", () => {

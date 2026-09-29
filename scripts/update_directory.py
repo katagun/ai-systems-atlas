@@ -272,6 +272,16 @@ def classify(text: str) -> tuple[str | None, float]:
     ):
         # ADR 023: autonomous scientific-discovery systems take an existing role.
         return "research_agent", max(relevance, 0.82)
+    if "research agent" in lowered or "deep research" in lowered:
+        return "research_agent", max(relevance, 0.82)
+    if "browser agent" in lowered or "computer use agent" in lowered:
+        return "browser_computer_agent", max(relevance, 0.82)
+    if "multi-agent" in lowered or "multi agent" in lowered:
+        return "multi_agent_orchestrator", max(relevance, 0.8)
+    if any(
+        term in lowered for term in ("stateful agent", "agent runtime", "agent harness")
+    ):
+        return "stateful_agent_runtime", max(relevance, 0.83)
     if any(
         term in lowered
         for term in (
@@ -285,18 +295,9 @@ def classify(text: str) -> tuple[str | None, float]:
         )
     ):
         # ADR 044: robot software takes an existing role; the physical
-        # boundary is a trait. "ROS" is not a signal: it is middleware.
+        # boundary is a trait. "ROS" is not a keyword; a ROS package that says
+        # "robot" still queues, and a reviewer dismisses it (spec §6).
         return "agent_framework_sdk", max(relevance, 0.82)
-    if "research agent" in lowered or "deep research" in lowered:
-        return "research_agent", max(relevance, 0.82)
-    if "browser agent" in lowered or "computer use agent" in lowered:
-        return "browser_computer_agent", max(relevance, 0.82)
-    if "multi-agent" in lowered or "multi agent" in lowered:
-        return "multi_agent_orchestrator", max(relevance, 0.8)
-    if any(
-        term in lowered for term in ("stateful agent", "agent runtime", "agent harness")
-    ):
-        return "stateful_agent_runtime", max(relevance, 0.83)
     if "agent framework" in lowered or "agent sdk" in lowered:
         return "agent_framework_sdk", max(relevance, 0.8)
     if "temporal" in lowered and "graph" in lowered:

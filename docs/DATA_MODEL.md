@@ -50,6 +50,8 @@ Fields are grouped by responsibility:
 
 All enum values and score dimensions come from `taxonomy.json`. Validation rejects unknown values and incompatible family, role, secondary-role, or score-profile combinations. Every family has exactly one score profile. Agent-operation fields are required only for agent systems; assistants use the shared architecture, retrieval, capture, lifecycle, deployment, provider, and evidence fields.
 
+Automation and candidate discovery never infer `robot_control`; a reviewer sets it from the record's own evidence.
+
 ### Source and license traits
 
 `source_model` is one of `open_source`, `mixed_open_source`, `mixed_source`, `open_core`, `source_available`, `proprietary`, or `unclear`. `licenses` lists every material reviewed identifier, including content or commercial terms that cover part of the represented system. Neither field controls inclusion.
@@ -64,7 +66,7 @@ The taxonomy assigns each license a kind. Validation keeps the two fields cohere
 
 ### Optional provider traits
 
-`provider_relationship` and `model_backends` are an atomic optional pair. Omit both until official support has been reviewed. When present, both must use taxonomy values; `provider_native` requires exactly one backend. Automation and candidate discovery never infer these editorial traits, and never infer `robot_control`: a reviewer sets it from the record's own evidence.
+`provider_relationship` and `model_backends` are an atomic optional pair. Omit both until official support has been reviewed. When present, both must use taxonomy values; `provider_native` requires exactly one backend. Automation and candidate discovery never infer these editorial traits.
 
 ## Timestamp semantics
 

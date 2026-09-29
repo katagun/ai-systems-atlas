@@ -577,6 +577,7 @@ test("the capability filter reaches the agents that carry a capability", async (
 
   await page.reload();
   await expect(page.locator("#capability-filter")).toHaveValue("browser_control");
+  await expect(names.filter({ hasText: /^Browser Use$/ })).toHaveCount(1);
   await expect(names.filter({ hasText: /^Aider$/ })).toHaveCount(0);
 });
 

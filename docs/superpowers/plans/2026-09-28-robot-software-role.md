@@ -102,7 +102,7 @@ Add to `tests/test_directory.py`, after `test_provider_relationship_is_a_trait_n
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
-Run: `uv run python -m pytest tests/test_directory.py -k "robot_control" -v`
+Run: `uv run --with pytest python -m pytest tests/test_directory.py -k "robot_control" -v`
 Expected: both FAIL, the first with `'robot_control' not found in ...`, the second because the carrying record produces an `unknown agent_capabilities` style error.
 
 - [ ] **Step 3: Add the value and the two documentation sentences**
@@ -137,7 +137,7 @@ In `docs/DATA_MODEL.md` line 67, append one sentence to the paragraph so it ends
 
 - [ ] **Step 4: Run the tests to verify they pass**
 
-Run: `uv run python -m pytest tests/test_directory.py -v` and `uv run python scripts/validate_directory.py`
+Run: `uv run --with pytest python -m pytest tests/test_directory.py -v` and `uv run python scripts/validate_directory.py`
 Expected: all PASS; the validator prints no errors.
 
 - [ ] **Step 5: Commit**
@@ -386,7 +386,7 @@ Add to `tests/test_update_directory.py` after `test_science_wording_does_not_cap
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
-Run: `uv run python -m pytest tests/test_update_directory.py -k "robot_software or ros_alone" -v`
+Run: `uv run --with pytest python -m pytest tests/test_update_directory.py -k "robot_software or ros_alone" -v`
 Expected: the first FAILS (role is `None` or another role); the second may already pass.
 
 - [ ] **Step 3: Add the rung**
@@ -415,7 +415,7 @@ In `scripts/update_directory.py`, directly after the `return "research_agent", m
 
 - [ ] **Step 4: Run the tests to verify they pass**
 
-Run: `uv run python -m pytest tests/test_update_directory.py -v`
+Run: `uv run --with pytest python -m pytest tests/test_update_directory.py -v`
 Expected: all PASS, including the ADR 023 science cases and the harness case, which the new rung must not capture (none of their descriptions contain the seven terms).
 
 - [ ] **Step 5: Commit**
@@ -593,7 +593,7 @@ Software that controls a robot is never a robot record: it is a scored system in
 
 - [ ] **Step 3: Lint and test the documentation**
 
-Run: `export PATH=/usr/local/bin:$PATH && npx --yes markdownlint-cli2 "docs/adr/044-robot-software-classifies-by-the-outcome-it-owns.md" "docs/*.md" "AGENTS.md" "BACKLOG.md"` and `uv run python -m pytest tests/test_documentation.py -v`
+Run: `export PATH=/usr/local/bin:$PATH && npx --yes markdownlint-cli2 "docs/adr/044-robot-software-classifies-by-the-outcome-it-owns.md" "docs/*.md" "AGENTS.md" "BACKLOG.md"` and `uv run --with pytest python -m pytest tests/test_documentation.py -v`
 Expected: `0 issues`; all documentation tests PASS (the relative-link test resolves every `adr/044-...` link because the file now exists).
 
 - [ ] **Step 4: Commit**
@@ -630,7 +630,7 @@ Expected: no errors. `git status --short` shows only generated files changed.
 
 - [ ] **Step 2: Run the whole suite once**
 
-Run: `uv run python -m pytest -q 2>&1 | tail -3`, `/usr/local/bin/node --test tests/test_web.js 2>&1 | /usr/bin/grep -E "^# (pass|fail)"`, and `/usr/local/bin/node node_modules/.bin/playwright test 2>&1 | tail -4`
+Run: `uv run --with pytest python -m pytest -q 2>&1 | tail -3`, `/usr/local/bin/node --test tests/test_web.js 2>&1 | /usr/bin/grep -E "^# (pass|fail)"`, and `/usr/local/bin/node node_modules/.bin/playwright test 2>&1 | tail -4`
 Expected: pytest all passed; `# fail 0`; Playwright `N passed`. If any e2e test fails only after a 30-second timeout with later tests reporting `ERR_CONNECTION_REFUSED`, the local test server dropped: rerun once before reading the diff.
 
 - [ ] **Step 3: Commit the generated files**
@@ -826,7 +826,7 @@ Expected: `projects.json` gains `lerobot`, `license-evidence.json` gains its ite
 
 - [ ] **Step 4: Validate and test**
 
-Run: `uv run python scripts/validate_directory.py && uv run python -m pytest tests/test_directory.py -q 2>&1 | tail -2`
+Run: `uv run python scripts/validate_directory.py && uv run --with pytest python -m pytest tests/test_directory.py -q 2>&1 | tail -2`
 Expected: no validator errors; tests pass.
 
 - [ ] **Step 5: Commit**
@@ -933,7 +933,7 @@ Score reasoning to review: autonomy is the strongest dimension because the loop 
 ```bash
 uv run python scripts/promote_system_candidate.py check scratchpad/robot-software/om1-review.json
 uv run python scripts/promote_system_candidate.py apply scratchpad/robot-software/om1-review.json
-uv run python scripts/validate_directory.py && uv run python -m pytest tests/test_directory.py -q 2>&1 | tail -2
+uv run python scripts/validate_directory.py && uv run --with pytest python -m pytest tests/test_directory.py -q 2>&1 | tail -2
 ```
 
 Expected: no errors; `candidates.json` loses `OpenMind/OM1`.
@@ -1024,7 +1024,7 @@ Set `stars` from `gh api repos/octo-models/octo --jq '.stargazers_count'`. Fill 
 
 - [ ] **Step 5: Validate and commit**
 
-Run: `uv run python scripts/validate_directory.py && uv run python -m pytest tests/test_candidate_evidence.py tests/test_directory.py -q 2>&1 | tail -2`
+Run: `uv run python scripts/validate_directory.py && uv run --with pytest python -m pytest tests/test_candidate_evidence.py tests/test_directory.py -q 2>&1 | tail -2`
 Expected: no errors.
 
 ```bash
@@ -1086,7 +1086,7 @@ If Task 7 showed `mani-skill/ManiSkill` now resolves to `haosulab/ManiSkill`, ch
 
 - [ ] **Step 4: Validate and commit**
 
-Run: `uv run python scripts/validate_directory.py && uv run python -m pytest tests/test_directory.py -q 2>&1 | tail -2`
+Run: `uv run python scripts/validate_directory.py && uv run --with pytest python -m pytest tests/test_directory.py -q 2>&1 | tail -2`
 Expected: no errors; the exclusion count rises by seven (`python3 -c "import json;print(len(json.load(open('directory/exclusions.json'))['exclusions']))"` before and after).
 
 ```bash
@@ -1175,7 +1175,7 @@ If Task 9 ended in the hold branch, replace the `om1` assertions with `self.asse
 
 - [ ] **Step 2: Run the test to verify it passes against Tasks 8–11**
 
-Run: `uv run python -m pytest tests/test_directory.py -k robot_software_batch -v`
+Run: `uv run --with pytest python -m pytest tests/test_directory.py -k robot_software_batch -v`
 Expected: PASS. If it fails, a prior task left a disposition unrecorded; fix the data, not the test.
 
 - [ ] **Step 3: Write coverage entry 96 and update the snapshot**
@@ -1206,7 +1206,7 @@ In the ADR file, change line 3 to `**Status:** Accepted`. In `BACKLOG.md`, delet
 
 - [ ] **Step 5: Lint, test, commit**
 
-Run: `export PATH=/usr/local/bin:$PATH && npx --yes markdownlint-cli2 "docs/COVERAGE.md" "docs/adr/044-*.md" "BACKLOG.md" && uv run python -m pytest tests/test_directory.py tests/test_documentation.py -q 2>&1 | tail -2`
+Run: `export PATH=/usr/local/bin:$PATH && npx --yes markdownlint-cli2 "docs/COVERAGE.md" "docs/adr/044-*.md" "BACKLOG.md" && uv run --with pytest python -m pytest tests/test_directory.py tests/test_documentation.py -q 2>&1 | tail -2`
 Expected: `0 issues`; tests pass.
 
 ```bash
@@ -1232,7 +1232,7 @@ Expected: no errors; `web/records/systems/lerobot/` and `web/records/systems/om1
 
 - [ ] **Step 2: Check the badge guard and the whole suite**
 
-Run: `/usr/local/bin/node --test tests/test_web.js 2>&1 | /usr/bin/grep -E "^not ok|^# (pass|fail)"`, `uv run python -m pytest -q 2>&1 | tail -3`, `/usr/local/bin/node node_modules/.bin/playwright test 2>&1 | tail -4`
+Run: `/usr/local/bin/node --test tests/test_web.js 2>&1 | /usr/bin/grep -E "^not ok|^# (pass|fail)"`, `uv run --with pytest python -m pytest -q 2>&1 | tail -3`, `/usr/local/bin/node node_modules/.bin/playwright test 2>&1 | tail -4`
 Expected: `# fail 0` (no badge was added, so the trait-badge guard is unaffected); pytest passes; Playwright passes. Then open `http://127.0.0.1:PORT/?collection=systems&capability=robot_control` against the local server (`uv run python scripts/serve_web.py` prints the port) and confirm exactly the published robot-software records list.
 
 - [ ] **Step 3: Commit the generated files**
