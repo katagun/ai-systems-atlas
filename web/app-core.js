@@ -99,6 +99,29 @@
     return true;
   }
 
+  // Display notation only: canonical role ids and names remain taxonomy-owned.
+  const ELEMENT_SYMBOLS = {
+    human_pkm: "Pk", ai_knowledge_app: "Kb", agent_memory_service: "Ms",
+    context_graph_engine: "Kg", memory_bridge: "Mb", ambient_capture: "Ac",
+    retrieval_infrastructure: "Ri", general_work_agent: "Ga", coding_agent: "Ca",
+    research_agent: "Ra", browser_computer_agent: "Bc", data_analysis_agent: "Da",
+    stateful_agent_runtime: "Hr", coding_agent_workflow: "Cw", multi_agent_orchestrator: "Mo",
+    agent_framework_sdk: "Fw", general_ai_assistant: "As", enterprise_work_assistant: "Ea",
+    multi_model_chat_client: "Mc",
+  };
+
+  function systemElements(projects, taxonomy) {
+    return taxonomy.system_families.map(family => {
+      const roles = taxonomy.primary_roles.filter(role => role.family === family.id).map(role => {
+        const records = projects.filter(project => project.status === "active"
+          && project.system_family === family.id && project.primary_role === role.id)
+          .sort((a, b) => a.name.localeCompare(b.name));
+        return { ...role, symbol: ELEMENT_SYMBOLS[role.id] || role.name.slice(0, 2), records };
+      });
+      return { ...family, roles, count: roles.reduce((sum, role) => sum + role.records.length, 0) };
+    });
+  }
+
   function systemDeploymentSummary(projects, taxonomy) {
     const active = projects.filter(project => project.status === "active");
     const groupRows = (field, groups, columns, matches) => {
@@ -1756,6 +1779,7 @@
     mergePackScopeEntries,
     modelAccessSummary,
     systemDeploymentSummary,
+    systemElements,
     modelMetadataAttribution,
     modelSourceLabel,
     modelsKickerText,

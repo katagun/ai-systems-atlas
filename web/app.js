@@ -118,6 +118,7 @@ async function bootstrap() {
   renderStats();
   renderFinder();
   renderDoorJobs();
+  renderElements();
   renderModels();
   renderLabs();
   renderSpecifications();
@@ -235,7 +236,11 @@ let settledSearch = null;
 function writeDirectoryURL() {
   const url = new URL(window.location.href);
   if (state.directoryStage === "door") url.searchParams.delete("collection");
-  else url.searchParams.set("collection", state.directoryCollection);
+  else {
+    url.searchParams.set("collection", state.directoryCollection);
+    url.searchParams.delete("element");
+    url.searchParams.delete("elementRecord");
+  }
   if (state.comparison.ids.length && state.directoryStage !== "door") {
     url.searchParams.set("compare", `${state.comparison.kind}:${state.comparison.ids.join(",")}`);
   } else {
@@ -720,6 +725,96 @@ function renderCollectionIndex() {
   }).join("");
 }
 
+// Elements uses the boot records for navigation; only a selected record loads
+// detail. Repaints touch sheet content, never its focused select or role tiles.
+let elementGroups = [];
+let selectedElement = null;
+let selectedElementRecord = null;
+let elementRequest = 0;
+
+function renderElements() {
+  elementGroups = AppCore.systemElements(state.projects, state.taxonomy);
+  $("#elements-count").textContent = `${elementGroups.reduce((sum, group) => sum + group.count, 0)} active systems · ${elementGroups.reduce((sum, group) => sum + group.roles.length, 0)} operational roles`;
+  $("#element-groups").innerHTML = elementGroups.map(group => `<section class="element-group" data-element-family="${escapeHTML(group.id)}" aria-labelledby="element-family-${escapeHTML(group.id)}">
+    <div class="element-family-heading"><h3 id="element-family-${escapeHTML(group.id)}">${escapeHTML(group.name)}</h3><span>${group.count} active</span></div>
+    <div class="element-tiles">${group.roles.map(role => `<button type="button" class="element-tile" data-element="${escapeHTML(role.id)}" aria-pressed="false" aria-controls="element-sheet"${role.records.length ? "" : " disabled"} aria-label="${escapeHTML(role.name)}, ${role.records.length} active systems. Show reference sheet"><span class="element-count">${role.records.length}</span><span class="element-symbol" aria-hidden="true">${escapeHTML(role.symbol)}</span><span class="element-name">${escapeHTML(role.name)}</span></button>`).join("")}</div></section>`).join("");
+}
+
+function positionElementSheet() {
+  const sheet = $("#element-sheet");
+  const family = selectedElement && document.querySelector(`[data-element-family="${selectedElement.family}"]`);
+  if (family && window.matchMedia("(max-width: 700px)").matches) family.after(sheet);
+  else $("#element-groups").after(sheet);
+}
+
+function writeElementURL() {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("element");
+  url.searchParams.delete("elementRecord");
+  if (selectedElement) {
+    url.searchParams.set("element", selectedElement.id);
+    url.searchParams.set("elementRecord", selectedElementRecord.id);
+  }
+  writeURL(url);
+}
+
+function selectElement(id, recordId = "", { focus = false } = {}) {
+  selectedElement = elementGroups.flatMap(group => group.roles).find(role => role.id === id && role.records.length) || null;
+  selectedElementRecord = selectedElement?.records.find(record => record.id === recordId) || selectedElement?.records[0] || null;
+  elementRequest += 1;
+  $$("[data-element]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.element === selectedElement?.id)));
+  $("#element-sheet").hidden = !selectedElement;
+  positionElementSheet();
+  if (selectedElement) {
+    $("#element-sheet-title").textContent = selectedElement.name;
+    $("#element-role-description").textContent = selectedElement.definition || "";
+    $("#element-record").innerHTML = selectedElement.records.map(record => `<option value="${escapeHTML(record.id)}">${escapeHTML(record.name)}</option>`).join("");
+    $("#element-record").value = selectedElementRecord.id;
+    loadElementRecord();
+    if (focus) $("#element-sheet-title").focus();
+  }
+  writeElementURL();
+}
+
+function renderElementRecord() {
+  const record = selectedElementRecord;
+  const ready = loadedDetail.has(`system:${record.id}`);
+  const pending = ready ? "Not recorded" : "Review details not loaded";
+  $("#element-record-name").textContent = record.name;
+  $("#element-record-description").textContent = record.description;
+  const rows = [
+    ["Operational role", selectedElement.name],
+    ["System family", taxonomyName("system_families", record.system_family)],
+    ["Deployment", record.deployment.map(value => taxonomyName("deployment_modes", value)).join(" · ")],
+    ["License classification", sourceModelName(record.source_model)],
+    ["Material licenses", record.licenses.join(" · ")],
+    ["Local-first", record.local_first === true ? "Yes" : record.local_first === false ? "No" : "Not recorded"],
+    ["Canonical data", ready ? record.canonical_data || "Not recorded" : pending],
+    ["Editorial review date", ready ? record.verified_at || "Not recorded" : pending],
+    ["Recorded limitations", ready ? (record.weaknesses || []).join(" · ") || "None recorded" : pending],
+  ];
+  $("#element-properties").innerHTML = rows.map(([name, value]) => `<tr><th scope="row">${escapeHTML(name)}</th><td>${escapeHTML(value)}</td></tr>`).join("");
+  const params = new URLSearchParams({ collection: "systems", family: selectedElement.family, role: selectedElement.id, sort: "name" });
+  $("#element-browse").href = `?${params}`;
+  $("#element-browse").textContent = `Browse all ${selectedElement.records.length} matching systems →`;
+  params.set("record", `system:${record.id}`);
+  $("#element-detail").href = `?${params}`;
+}
+
+async function loadElementRecord() {
+  const request = ++elementRequest;
+  const record = selectedElementRecord;
+  renderElementRecord();
+  $("#element-retry").hidden = true;
+  $("#element-load-status").textContent = "Loading reviewed details…";
+  await loadDetail("system", record);
+  if (request !== elementRequest) return;
+  renderElementRecord();
+  const ready = loadedDetail.has(`system:${record.id}`);
+  $("#element-load-status").textContent = ready ? `Review details loaded for ${record.name}.` : "Review details could not load. Basic catalog properties remain available.";
+  $("#element-retry").hidden = ready;
+}
+
 // The front door's Finder jobs: the first goal of each direction, opened at
 // the Finder's priority question with that direction and goal answered
 // (openFinderAt, which the job hint under a search already uses).
@@ -765,6 +860,7 @@ function showFrontDoor({ updateURL = true } = {}) {
   if (updateURL) {
     writeDirectoryURL();
     writeScopeURL();
+    writeElementURL();
   }
 }
 
@@ -3037,6 +3133,7 @@ function restoreFromURL({ boot = false } = {}) {
     writeURL(current);
   }
   state.urlReady = true;
+  if (onDoor) selectElement(params.get("element"), params.get("elementRecord"));
   writeDirectoryURL();
   writeScopeURL();
   if (restored.q) loadRestoredSearch(scope, restored.page);
@@ -3262,6 +3359,7 @@ function openComparison() {
 // for a collection, a comparison, and a record.
 function writeViewURL(id) {
   const url = new URL(window.location.href);
+  if (id !== "directory") { url.searchParams.delete("element"); url.searchParams.delete("elementRecord"); }
   if (id !== "explore") Object.keys(RUNTIME_MATRIX_CONTROLS).forEach(key => url.searchParams.delete(key));
   if (id === "directory") url.searchParams.delete("view");
   else url.searchParams.set("view", id);
@@ -3437,6 +3535,22 @@ function bindEvents() {
   initBadgeLegend();
   // The front door's search hands its text to the All search and lands in
   // results, so the first character is the search; the caret follows.
+  $("#element-groups").addEventListener("click", event => {
+    const button = event.target.closest("[data-element]");
+    if (button) selectElement(button.dataset.element, "", { focus: true });
+  });
+  $("#element-record").addEventListener("change", event => {
+    selectedElementRecord = selectedElement.records.find(record => record.id === event.target.value);
+    writeElementURL();
+    loadElementRecord();
+  });
+  $("#element-close").addEventListener("click", () => {
+    const id = selectedElement.id;
+    selectElement(null);
+    document.querySelector(`[data-element="${id}"]`)?.focus();
+  });
+  $("#element-retry").addEventListener("click", loadElementRecord);
+  window.matchMedia("(max-width: 700px)").addEventListener("change", positionElementSheet);
   $("#door-search").addEventListener("input", event => {
     const value = event.target.value;
     if (!value) return;
