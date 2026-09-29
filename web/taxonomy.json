@@ -1392,6 +1392,11 @@
     {
       "id": "workflows",
       "name": "Explicit workflows / graphs"
+    },
+    {
+      "id": "robot_control",
+      "name": "Robot control",
+      "definition": "The agent's model-driven decisions are sent to a physical robot's actuators through a robot interface the system documents for that purpose."
     }
   ],
   "deployment_modes": [

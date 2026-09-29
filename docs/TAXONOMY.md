@@ -39,7 +39,7 @@ Agent projects also record:
 
 - interfaces: terminal, IDE, web app, API / SDK, or library;
 - execution boundaries: host, container, external sandbox, remote cloud, or application-defined;
-- capabilities: code and shell execution, browser control, research, multi-agent coordination, persistent state, MCP, and explicit workflows.
+- capabilities: code and shell execution, browser control, research, multi-agent coordination, persistent state, MCP, explicit workflows, and robot control. Robot control means the agent's model-driven decisions are sent to a physical robot's actuators through a robot interface the system documents for that purpose; a motion API, teach pendant, or waypoint script with nothing said about a model choosing the action is not robot control, and a run path that ends in a simulator is not either.
 
 The agent score measures task reliability, tool use, autonomy, human control, observability and recovery, data sovereignty, interoperability, and maturity.
 

@@ -64,7 +64,7 @@ The taxonomy assigns each license a kind. Validation keeps the two fields cohere
 
 ### Optional provider traits
 
-`provider_relationship` and `model_backends` are an atomic optional pair. Omit both until official support has been reviewed. When present, both must use taxonomy values; `provider_native` requires exactly one backend. Automation and candidate discovery never infer these editorial traits.
+`provider_relationship` and `model_backends` are an atomic optional pair. Omit both until official support has been reviewed. When present, both must use taxonomy values; `provider_native` requires exactly one backend. Automation and candidate discovery never infer these editorial traits, and never infer `robot_control`: a reviewer sets it from the record's own evidence.
 
 ## Timestamp semantics
 
