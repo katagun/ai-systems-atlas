@@ -58,4 +58,4 @@ Labs are never scored, ranked, or sorted by anything but name. Funding, valuatio
 
 ## Current coverage
 
-Forty labs cover all 309 reviewed releases. [`COVERAGE.md`](COVERAGE.md#labs) records how the two batches were chosen and read, and [`LAB_REREAD_2026-09-25.md`](LAB_REREAD_2026-09-25.md) records the direct re-read of every page they cite.
+Forty-one labs cover all 310 reviewed releases. [`COVERAGE.md`](COVERAGE.md#labs) records how the two batches were chosen and read, and [`LAB_REREAD_2026-09-25.md`](LAB_REREAD_2026-09-25.md) records the direct re-read of every page they cite.
