@@ -298,26 +298,75 @@ class HeaderTests(PostFixture):
             with self.subTest(path):
                 html = pages[path]
                 self.assertIn(f'<a class="tab-link" href="{root}">Catalog</a>', html)
-                for kind, slug in (
-                    ("view", "finder"),
-                    ("collection", "models"),
-                    ("collection", "labs"),
-                    ("collection", "specifications"),
-                    ("view", "taxonomy"),
-                    ("view", "api"),
-                ):
-                    self.assertIn(f'href="{root}?{kind}={slug}"', html)
+                self.assertIn(
+                    f'<a class="tab-link" href="{root}?view=finder">Find your fit</a>',
+                    html,
+                )
+                docs_block = re.search(
+                    r'<details class="docs-menu">.*?</details>', html, re.DOTALL
+                )
+                assert docs_block is not None, f"{path} has no Docs menu"
+                for kind, slug, label in build_blog.DOCS:
+                    self.assertIn(
+                        f'<a href="{root}?{kind}={slug}">{label}</a>',
+                        docs_block.group(0),
+                    )
 
     def test_the_blog_link_is_marked_current(self) -> None:
         pages = self.pages()
         self.assertIn(
-            '<a class="tab-link is-active" aria-current="page" href="./">Blog</a>',
+            '<a class="is-active" aria-current="page" href="./">Blog</a>',
             pages["blog/index.html"],
         )
         self.assertIn(
-            '<a class="tab-link is-active" aria-current="page" href="../">Blog</a>',
+            '<a class="is-active" aria-current="page" href="../">Blog</a>',
             pages["blog/newer/index.html"],
         )
+
+    def test_the_blog_header_mirrors_the_directory_navigation(self) -> None:
+        """web/index.html owns the primary navigation; the blog header must
+        carry the same top-level entries and nothing more — Catalog, Find
+        your fit, and a Docs menu — so a nav change cannot land in one and
+        miss the other, and the blog cannot sprout its own collection tabs."""
+        index = (build_blog.ROOT / "web" / "index.html").read_text(encoding="utf-8")
+        tabs = re.search(
+            r'<nav class="tabs" aria-label="Primary navigation">(.*?)</nav>',
+            index,
+            re.DOTALL,
+        )
+        assert tabs is not None, "web/index.html has no primary navigation"
+        app_labels = [
+            match.group(1) if match.group(1) is not None else "Docs"
+            for match in re.finditer(
+                r'<button class="tab[^"]*" data-tab="[^"]+"[^>]*>([^<]+)</button>|<div class="docs-menu">',
+                tabs.group(1),
+            )
+        ]
+        pages = self.pages()
+        for path, _root in (
+            ("blog/index.html", "../"),
+            ("blog/newer/index.html", "../../"),
+        ):
+            with self.subTest(path):
+                html = pages[path]
+                nav = re.search(
+                    r'<nav class="tabs" aria-label="Primary navigation">(.*?)</nav>',
+                    html,
+                    re.DOTALL,
+                )
+                assert nav is not None, f"{path} has no primary navigation"
+                blog_labels = [
+                    match.group(1) if match.group(1) is not None else "Docs"
+                    for match in re.finditer(
+                        r'<a class="tab-link"[^>]*>([^<]+)</a>|<details class="docs-menu">',
+                        nav.group(1),
+                    )
+                ]
+                self.assertEqual(
+                    blog_labels,
+                    app_labels,
+                    f"{path} primary navigation diverges from web/index.html",
+                )
 
     def test_pages_load_the_site_stylesheet_and_fonts_under_their_content_stamp(
         self,
@@ -367,7 +416,7 @@ class HeaderTests(PostFixture):
                     html,
                 )
                 self.assertLess(
-                    html.index('class="suggest-link"'), html.index('id="theme-toggle"')
+                    html.index("<footer>"), html.index('class="suggest-link"')
                 )
                 self.assertLess(
                     html.index('id="theme-toggle"'), html.index('class="github-link"')
@@ -388,14 +437,12 @@ class HeaderTests(PostFixture):
         """The published index.html is the reference, so the two footers cannot drift apart."""
         index = (build_blog.ROOT / "web" / "index.html").read_text(encoding="utf-8")
         match = re.search(
-            r"<footer>(.*?)<span id=\"data-date\"></span></footer>", index
+            r"<footer>.*?</div>(.*?)<span id=\"data-date\"></span></footer>", index
         )
         self.assertIsNotNone(match)
         for path, html in self.pages().items():
             with self.subTest(path):
-                self.assertIn(
-                    f'<footer>{match.group(1)}<span class="footer-meta">', html
-                )
+                self.assertIn(f'{match.group(1)}<span class="footer-meta">', html)
 
 
 class CheckTests(PostFixture):

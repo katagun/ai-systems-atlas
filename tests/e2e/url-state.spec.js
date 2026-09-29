@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { openCollection, openFamily, pressedFamily } = require("./helpers/landing");
+const { openCollection, openFamily, pressedEntry, pressedFamily } = require("./helpers/landing");
 
 test("a family chip, a query, and a filter survive a reload", async ({ page }) => {
   await page.goto("/");
@@ -17,6 +17,7 @@ test("a family chip, a query, and a filter survive a reload", async ({ page }) =
   await expect(page.locator("#project-search")).toHaveValue("graph");
   await expect(page.locator("#license-filter")).toHaveValue("MIT");
   await expect(page.locator("#result-count")).toHaveText(before);
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Systems /);
   await expect(pressedFamily(page)).toHaveAccessibleName(/^Memory /);
 });
 
@@ -66,15 +67,15 @@ test("a family chip opens its family on the first page", async ({ page }) => {
 });
 
 test("every scope's URL keys match its controls, and every control exists", async ({ page }) => {
-  // AtlasCore.SCOPE_URL_PARAMS says which keys a scope writes, and app.js's
+  // AppCore.SCOPE_URL_PARAMS says which keys a scope writes, and app.js's
   // SCOPE_CONTROLS says which control holds each one. A key in only one of
   // them is never written, or always rejected on restore.
   await page.goto("/");
   const problems = await page.evaluate(() => {
     // Both are page globals. SCOPE_CONTROLS is a top-level const in a classic
     // script, so the page reaches it by name, though window does not hold it.
-    /* global AtlasCore, SCOPE_CONTROLS */
-    const params = AtlasCore.SCOPE_URL_PARAMS;
+    /* global AppCore, SCOPE_CONTROLS */
+    const params = AppCore.SCOPE_URL_PARAMS;
     const found = [];
     for (const scope of new Set([...Object.keys(params), ...Object.keys(SCOPE_CONTROLS)])) {
       const urlKeys = Object.keys(params[scope] || {}).sort().join(",");
@@ -107,7 +108,7 @@ test("a record opens while the browser refuses history writes", async ({ page })
   await page.locator("#project-dialog .dialog-close").click();
   await expect(page.locator("#project-dialog")).toBeHidden();
   await openFamily(page, "memory_system");
-  await page.locator('.collection-switcher [data-directory-collection="models"]').click();
+  await openCollection(page, "models");
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   expect(errors).toEqual([]);
 });

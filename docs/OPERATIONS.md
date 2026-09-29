@@ -23,14 +23,16 @@ Synchronization and share-page generation are write operations; the remaining co
 
 ## Pre-commit
 
-Install once per checkout with `pre-commit install`. The whole `verify.yml` gate lives in `.pre-commit-config.yaml`: CI is environment setup plus `pre-commit run --all-files`, and every commit runs the same hooks. Commit-time cost is ~1-2 minutes, dominated by the unit suite and e2e; bypass one check with `SKIP=<hook-id>`, or all of them with `git commit --no-verify` (CI still gates the merge).
+Install once per checkout with `pre-commit install`; the config's `default_install_hook_types` installs both the commit and the push hook. The whole `verify.yml` gate lives in `.pre-commit-config.yaml`. Every hook runs on `git commit` except the two slow suites, the unit tests under coverage (~1.5 min) and the browser e2e (~3.5 min), which carry `stages: [pre-push]` and run on `git push`, so a commit takes seconds and a push that would fail CI never leaves the checkout. Bypass one check with `SKIP=<hook-id>`, or all of them with `git commit --no-verify` or `git push --no-verify` (CI still gates the merge).
 
-No code reaches the remote green-unverified: `pre-commit install --hook-type pre-push` adds the same gate to `git push`, so a push that would fail CI never leaves the checkout. GitHub workflows are a backstop, not the gate.
+CI is environment setup plus pre-commit, split across jobs so the fast hooks report in about a minute while the slow suites run beside them: one job runs `pre-commit run --all-files` (the commit-stage hooks), one runs the unit-suite hook, and two run the browser-suite hook with `ATLAS_E2E_SHARD` set to `1/2` and `2/2`. The gate job `verify` needs all of them and is the one required check. A failed browser job uploads its `test-results/` directory (trace, page snapshot, and error context per failed test) as a workflow artifact for seven days; download it and run `npx playwright show-trace <file>.zip` to see what Linux Chromium saw. Reproduce the whole gate locally with the second command below.
 
 ```bash
 pre-commit install
-pre-commit run --all-files
+pre-commit run --all-files --hook-stage pre-push
 ```
+
+A test that fails without a change in what it tests is a bug with an owner, not a retry. The CI retry of one hides a flake that fails a third of the time and does nothing for one that fails more often, and a single green run is not evidence that a race is gone: on 2026-09-28 the badge-tooltip Escape test passed once on its pull request and then failed fourteen attempts in a row across every open pull request and `main`. Before merging a change to a hover, keyboard, or timing-sensitive browser test, run it repeatedly (`npx playwright test <spec> -g "<title>" --repeat-each=8`), and fix a flake at its cause in the page or the test's setup rather than with a longer wait.
 
 What runs, and where it is configured:
 
@@ -40,7 +42,7 @@ What runs, and where it is configured:
 - Complexity as ratchets, not targets: `C901` at 50 in `pyproject.toml` (today's maximum is 46 in `validate_hn_signals`) and the eslint `complexity` rule at 40 (today's maximum is 39 in `recommendationReasons`). Both fail any new function worse than the worst one already carried. Tighten them by refactoring, never with a `noqa` or an eslint-disable.
 - Test coverage as a ratchet: `uv run coverage run -m unittest discover -s tests` followed by `uv run coverage report`, which enforces `fail_under` in `pyproject.toml` (79 today across `scripts/`). The browser suite reports its own coverage with `node --test --experimental-test-coverage tests/test_web.js` (`web/app-core.js` sits near 100%). Raise the floor by adding tests, never by omitting files.
 - JavaScript through the repo's own `eslint.config.mjs` (which already ignores generated trees), HTML through `htmlhint` (`.htmlhintrc`), stylesheets through `stylelint` (`.stylelintrc.json`), prose through `markdownlint-cli2` (`.markdownlint-cli2.jsonc`) with `--fix` so safe formatting applies on commit, workflows through `yamllint` (`.yamllint.yml`) and `zizmor` (suppressions with justification in `.github/zizmor.yml`), spelling through `codespell` (product names and house spellings in the hook's ignore list; real typos get fixed).
-- Project verification, same hooks locally and in CI: catalog validation, the unit suite under `coverage` with the `fail_under` gate, `compileall`, `node --check` on the browser bundle, the Node web behavior tests, every generated-file freshness check (logos, fonts, asset versions, share pages, app payloads, blog), and the Playwright end-to-end suite (needs `npx playwright install chromium` first; CI installs it before the pre-commit step).
+- Project verification, same hooks locally and in CI: catalog validation, the unit suite under `coverage` with the `fail_under` gate, `compileall`, `node --check` on the browser bundle, the Node web behavior tests, every generated-file freshness check (logos, fonts, asset versions, share pages, app payloads, blog), and the Playwright end-to-end suite (needs `npx playwright install chromium` first; CI installs it, cached by lockfile hash, before the pre-commit step). The unit suite and the e2e suite are the two push-stage hooks; everything else runs on commit.
 - Generated and mirrored files are excluded from the content linters because their builders own them: `web/records/`, `web/app/`, `web/blog/`, `web/fonts/`, synced `web/*.json`, the sitemap, lockfiles, vendored dependencies, transient queues (`hn-signals.json`, `model-candidates.json`, `openrouter-model-leads.json`), and the upstream `models-dev.json` snapshot. The frozen `docs/superpowers/` planning archive is excluded from markdown linting for the same reason: reformatting history buys nothing.
 
 There is deliberately no Prettier hook. Its defaults would reformat the hand-styled `web/app.js`, the compact catalog JSON the generators write with `indent=2`, and long-line prose docs — thousands of churn lines with no defect caught. `ruff format` owns Python, `eslint` owns JavaScript, and the generators own their output.
@@ -586,13 +588,14 @@ uv run python scripts/run_directory_refresh.py --publish   # also push and open/
 
 The runner refuses to start on a dirty working tree or on a `HEAD` that does not match a
 freshly fetched `origin/main` — a refresh must be generated from current main, never from a
-stale or locally modified checkout. It runs the seven generation steps in order, stopping at the
+stale or locally modified checkout. It runs the nine generation steps in order, stopping at the
 first failure, then runs every verification check even after one fails, so a single broken
 record cannot hide the rest, and prints a pass/fail summary. A failed OpenRouter cross-check is
 the one step that does not stop the run: the importer leaves its leads unchanged, and the
 failure is reported in the pull-request body rather than costing the week's GitHub and
 models.dev reads. It stages the same explicit path
-list the retired workflow staged (`STAGED_DIRECTORY_FILES` in the script) — never an unqualified
+list the retired workflow staged (`STAGED_DIRECTORY_FILES` in the script) plus the npm manifests
+its icon-package bump edits (`STAGED_TOOLING_FILES`) — never an unqualified
 `git add -A directory`, which once swept the daily attention-source queue into this weekly
 branch — and, if that leaves nothing staged, says so and exits successfully. Otherwise it
 commits on `automation/directory-refresh` using the maintainer's own git identity, never
@@ -1021,7 +1024,7 @@ blocks the fetcher is not a defect to route around by weakening the fetch guards
 
 `node scripts/build_logos.mjs --check` rebuilds `web/logos.json` in memory and fails when the committed file no longer matches the record map, the published records, or the installed icon-package versions. It also reports every monogram record and flags candidates whose id or name now matches an available icon slug. Three rails keep coverage current:
 
-- `verify.yml` runs the check on every pull request, so a record-map edit or icon-package bump cannot merge without a regenerated `web/logos.json`.
+- `verify.yml` runs the check on every pull request, so a record-map edit or icon-package bump cannot merge without a regenerated `web/logos.json`. Dependabot cannot regenerate it, so `.github/dependabot.yml` ignores `simple-icons` and `@lobehub/icons-static-svg`; the weekly refresh bumps both to their latest release (`npm install --save-exact`) and runs the generator in the same change (`ICON_PACKAGES` in `scripts/run_directory_refresh.py`).
 - The weekly refresh (`scripts/run_directory_refresh.py`) prints the same logo-coverage report as part of its verification summary, surfacing records published without marks and newly available candidates.
 - Dependabot's weekly npm pull requests bump the icon packages; the check fails on those PRs until the file is regenerated, which is when newly added icons become mappable.
 
@@ -1035,7 +1038,7 @@ The site URL follows the repository owner and name. After a transfer or rename, 
 
 ## Repository safeguards
 
-`.github/workflows/verify.yml` is the required CI check. Classic `main` protection requires pull requests, a current `verify` result, conversation resolution, and an up-to-date branch; it blocks force-pushes and deletion. A complementary default-branch security ruleset makes high-or-higher CodeQL findings merge-blocking. Zero required approvals is intentional while the project has one maintainer; require an independent approval when a second maintainer is available.
+`.github/workflows/verify.yml` is the required CI check; its `verify` gate job is the one required context, so the jobs behind it can be split or resharded without touching protection. Classic `main` protection requires pull requests, a passing `verify` result, conversation resolution, and linear history; it blocks force-pushes and deletion. It does not require the branch to be up to date with `main`: with squash merges and linear history that setting only forced every other open pull request to rebase and re-run the seven-minute gate after each merge, which serialised a day's merges into an hour and gave every flake another roll. A pull request whose base moved is still merged as a squash onto current `main`, and the push-triggered `verify` run on `main` plus the deploy's own checks catch a semantic conflict between two green branches; when that happens, revert or fix forward on `main`. A complementary default-branch security ruleset makes high-or-higher CodeQL findings merge-blocking. Zero required approvals is intentional while the project has one maintainer; require an independent approval when a second maintainer is available.
 
 `.github/CODEOWNERS` assigns every path to the maintainer. Ownership is advisory while required approvals are zero; enable **Require review from Code Owners** on `main` once a second maintainer exists.
 

@@ -1,8 +1,8 @@
-(function exposeAtlasCore(root, factory) {
+(function exposeAppCore(root, factory) {
   const api = factory();
   if (typeof module === "object" && module.exports) module.exports = api;
-  else root.AtlasCore = api;
-})(typeof globalThis === "undefined" ? this : globalThis, function createAtlasCore() {
+  else root.AppCore = api;
+})(typeof globalThis === "undefined" ? this : globalThis, function createAppCore() {
   function directoryDefaults() {
     return {
       term: "",
@@ -357,6 +357,10 @@
     robot: ROBOT_VIEW.searchFields,
   };
   const SEARCH_FIELD_WEIGHTS = { name: 50, label: 30, maker: 20, description: 10, text: 3 };
+  // A field that holds the query as a phrase adds this many times its weight,
+  // so a phrase in a label (150) still stays below a name that holds every
+  // query word (200).
+  const PHRASE_FACTOR = 5;
 
   const searchWordCache = new Map();
   function cachedSearchWords(text) {
@@ -367,6 +371,31 @@
       searchWordCache.set(key, words);
     }
     return words;
+  }
+
+  // A field's words in order for the phrase test: its comparable words, with
+  // stop words left out as they are from a query.
+  const phraseWordCache = new Map();
+  function cachedPhraseWords(text) {
+    const key = String(text || "");
+    let words = phraseWordCache.get(key);
+    if (!words) {
+      words = comparableText(key).split(" ").filter(word => word && !SEARCH_STOP_WORDS.has(word));
+      phraseWordCache.set(key, words);
+    }
+    return words;
+  }
+
+  // Whether a text holds the query's words one after another, each matched by
+  // the rules for words outside a name (as typed or by its stem, whole, or by
+  // its start from four letters), with stop words skipped on both sides. So
+  // "self host" and "the self hosted" both find "a self-hosted agent".
+  function holdsPhrase(text, query) {
+    const words = cachedPhraseWords(text);
+    for (let k = 0; k + query.tokens.length <= words.length; k += 1) {
+      if (query.tokens.every((_, j) => queryWordHit([words[k + j]], query, j, false) > 0)) return true;
+    }
+    return false;
   }
 
   // What a record is matched and ordered by. `labelOf(kind, record)` names its
@@ -380,6 +409,9 @@
       .filter(Boolean).join(" ");
     return {
       name: [record.name, record.short_name].filter(Boolean).join(" "),
+      // Each whole name on its own, for the name leads: a short name such as
+      // "ACP" is as much the record's name as "Agent Client Protocol".
+      names: [record.name, record.short_name].filter(Boolean),
       label: labelOf ? labelOf(kind, record) : "",
       maker: maker || "",
       description: record.description || "",
@@ -399,9 +431,12 @@
 
   // A record's match weight: 0 when any query word misses every field, since
   // every word must match. Otherwise the number only orders results; it never
-  // reads a score, stars, or any other merit (ADR 040). The name bonuses also
-  // compare the query as typed, since stemming ("Swarms") and stop words
-  // ("A-MEM") change the stemmed text.
+  // reads a score, stars, or any other merit (ADR 040). For a query of two or
+  // more words, a field other than the name that holds them as a phrase adds
+  // a bonus by its weight, so a record described as "self-hosted" leads one
+  // whose words "self" and "host" sit apart. The name bonuses read each whole
+  // name, a short name included, and also compare the query as typed, since
+  // stemming ("Swarms") and stop words ("A-MEM") change the stemmed text.
   function searchMatch(query, fields) {
     if (!query.tokens.length) return 1;
     const words = Object.fromEntries(Object.keys(SEARCH_FIELD_WEIGHTS).map(field => [field, cachedSearchWords(fields[field])]));
@@ -416,25 +451,45 @@
       if (!best) return 0;
       weight += best;
     }
-    const name = comparableText(fields.name);
+    if (query.tokens.length > 1) {
+      // The weights run heaviest first, so the first field holding the phrase decides.
+      const phraseField = Object.keys(SEARCH_FIELD_WEIGHTS).find(field => field !== "name" && holdsPhrase(fields[field], query));
+      if (phraseField) weight += SEARCH_FIELD_WEIGHTS[phraseField] * PHRASE_FACTOR;
+    }
     const typed = comparableText(query.raw);
-    if (name === query.text || name === typed) return weight + 1000;
-    if (name.startsWith(query.text) || (typed && name.startsWith(typed))) return weight + 400;
+    const names = (fields.names || [fields.name]).map(comparableText);
+    if (names.some(name => name === query.text || name === typed)) return weight + 1000;
+    if (names.some(name => name.startsWith(query.text) || (typed && name.startsWith(typed)))) return weight + 400;
     return nameHasAll ? weight + 200 : weight;
   }
 
   // A split product name still comes first: "lang chain" also tries
-  // "langchain", and a record whose name holds the joined word counts as a
-  // name match. The typed words are joined beside their stems.
+  // "langchain". The joined word counts where a name holds it by the name
+  // rules, or where any field holds it as a whole word; a record whose name
+  // holds every joined word counts as a name match. Otherwise the fields that
+  // hold the joined word whole hold the phrase, and the heaviest earns its
+  // phrase bonus, the name's included, so "lang chain agents" still lists
+  // LangChain first. The typed words are joined beside their stems.
   function recordMatch(query, fields) {
     let weight = searchMatch(query, fields);
     const nameWords = cachedSearchWords(fields.name);
     const join = (list, i) => [...list.slice(0, i), list[i] + list[i + 1], ...list.slice(i + 2)];
     for (let i = 0; i < query.tokens.length - 1; i += 1) {
       const tokens = join(query.tokens, i);
-      const joined = { raw: query.raw, text: tokens.join(" "), tokens, words: join(query.words || query.tokens, i) };
-      if (!tokens.every((_, j) => queryWordHit(nameWords, joined, j, true) > 0)) continue;
-      weight = Math.max(weight, searchMatch(joined, fields) + 300);
+      const words = join(query.words || query.tokens, i);
+      const joined = { raw: query.raw, text: tokens.join(" "), tokens, words };
+      // Most joined words match nothing, so this cheap whole-word test runs first.
+      const whole = Object.keys(SEARCH_FIELD_WEIGHTS).filter(field => {
+        const fieldWords = cachedSearchWords(fields[field]);
+        return fieldWords.includes(tokens[i]) || fieldWords.includes(words[i]);
+      });
+      if (!whole.length && !(queryWordHit(nameWords, joined, i, true) > 0)) continue;
+      const joinedWeight = searchMatch(joined, fields);
+      if (!joinedWeight) continue;
+      const bonus = tokens.every((_, j) => queryWordHit(nameWords, joined, j, true) > 0)
+        ? 300
+        : Math.max(0, ...whole.map(field => SEARCH_FIELD_WEIGHTS[field] * PHRASE_FACTOR));
+      weight = Math.max(weight, joinedWeight + bonus);
     }
     return weight;
   }
@@ -587,59 +642,150 @@
 
   // The Finder goal a query most plausibly names: at least 60% of its words of
   // three letters or more, and at least one, appear in the goal's label or
-  // description. A goal with nothing eligible never matches. Each kept
-  // position is scored with queryWordHit, the better of its stem and its
-  // typed spelling, since a stem is not always a prefix of its own spelling
-  // ("libraries" stems to "library"): a stem-only hit test would miss it.
+  // description. A goal with nothing eligible never matches. A query of one
+  // such word names a goal only when that goal's label holds the word and no
+  // other eligible goal holds it anywhere, so "browser" names a goal while a
+  // generic word such as "agent" or "model" names none, and neither does a
+  // word only a description mentions ("open", in "open-weight"). The goal
+  // matching the most words wins, then the one whose label holds more of
+  // them, then the first listed. Each kept position is scored with
+  // queryWordHit, the better of its stem and its typed spelling, since a stem
+  // is not always a prefix of its own spelling ("libraries" stems to
+  // "library"): a stem-only hit test would miss it.
   function matchFinderGoal(goals, raw) {
     const query = parseSearchQuery(raw);
     const positions = [...query.tokens.keys()].filter(i => query.tokens[i].length >= 3);
     if (!positions.length) return null;
     const needed = Math.max(1, Math.ceil(positions.length * 0.6));
-    let best = null;
+    const matched = [];
     for (const goal of goals) {
       if (!goal.eligible) continue;
       const goalWords = cachedSearchWords(`${goal.label} ${goal.description}`);
       const hits = positions.filter(i => queryWordHit(goalWords, query, i, false) > 0).length;
-      if (hits >= needed && (!best || hits > best.hits)) best = { goal, hits };
+      if (hits < needed) continue;
+      const labelWords = cachedSearchWords(goal.label);
+      matched.push({ goal, hits, labelHits: positions.filter(i => queryWordHit(labelWords, query, i, false) > 0).length });
+    }
+    if (positions.length === 1 && (matched.length !== 1 || !matched[0].labelHits)) return null;
+    let best = null;
+    for (const item of matched) {
+      if (!best || item.hits > best.hits || (item.hits === best.hits && item.labelHits > best.labelHits)) best = item;
     }
     return best ? best.goal : null;
   }
 
-  // Which one switcher chip is pressed. `entries` describes the buttons in
-  // order: { collection, family }, with no family on a collection-wide chip.
-  // A family chip wins over its collection's chip, so choosing Memory never
-  // also presses Systems: the controls are mutually exclusive (docs/WEB.md).
-  function activeSwitcherIndex(entries, { collection, family = "" }) {
-    if (family) {
-      const familyIndex = entries.findIndex(entry => entry.collection === collection && entry.family === family);
-      if (familyIndex !== -1) return familyIndex;
-    }
-    return entries.findIndex(entry => entry.collection === collection && entry.family === undefined);
-  }
+  // The collections the Directory offers, in the order the front door's index
+  // and the results strip list them (Phase 2 spec, section 2). Every entry is
+  // a Directory collection since #345; `kind` stays so a future sibling view
+  // is one word. `emblem` names the card badge whose emblem the entry shows:
+  // the family's own type badge for a system family, else the collection's
+  // first type badge in CARD_BADGES order. All shows the type family's empty
+  // frame, and Robots shows none until its form_factor type badge exists
+  // (ADR 037). `field` is what the tile's categories tally; `facet` is the
+  // URL key that opens the scope narrowed to one.
+  const FAMILY_SHORT_NAMES = { memory_system: "Memory", agent_system: "Agents", assistant_system: "Assistants" };
+  const COLLECTIONS = [
+    { id: "all", name: "Everything", short: "All", kind: "scope", emblem: null, field: null, facet: null },
+    { id: "systems", name: "Systems", short: "Systems", kind: "scope", emblem: "memory-system", field: "system_family", facet: "family" },
+    { id: "models", name: "Models", short: "Models", kind: "scope", emblem: "language-model", field: "model_type", facet: "type" },
+    { id: "inference", name: "Inference services", short: "Services", kind: "scope", emblem: "direct-model-api", field: "service_type", facet: "type" },
+    { id: "runtimes", name: "Local runtimes", short: "Runtimes", kind: "scope", emblem: "desktop-runner", field: "runtime_type", facet: "type" },
+    { id: "packs", name: "Agent packs", short: "Packs", kind: "scope", emblem: "skills-bundle", field: "pack_type", facet: "type" },
+    { id: "robots", name: "Robots", short: "Robots", kind: "scope", emblem: null, field: "form_factor", facet: "formFactor" },
+    { id: "labs", name: "Labs", short: "Labs", kind: "scope", emblem: "ai-company", field: "lab_type", facet: "type" },
+    { id: "specifications", name: "Specifications", short: "Specs", kind: "scope", emblem: "protocol", field: "specification_type", facet: "type" },
+  ];
 
-  // What each switcher chip counts: exactly what its scope lists by default.
-  // Systems and the family chips open on directoryDefaults().status, so they
-  // count active records; All lists everything, archived references
-  // included; Agent packs lists packs beside host-installed systems (ADR 035).
-  function switcherCounts({ projects = [], services = [], runtimes = [], models = [], packs = [], robots = [], labs = [], specifications = [] }) {
+  // What a collection's default view lists, so a tile and a strip entry never
+  // disagree with the grid.
+  function collectionEntries(id, payloads = {}) {
+    const { projects = [], services = [], runtimes = [], models = [], packs = [], robots = [], labs = [], specifications = [] } = payloads;
     const { status } = directoryDefaults();
     const listed = projects.filter(project => !status || project.status === status);
-    const family = id => listed.filter(project => project.system_family === id).length;
-    return {
-      all: projects.length + services.length + runtimes.length + models.length + packs.length + robots.length,
-      systems: listed.length,
-      memory_system: family("memory_system"),
-      agent_system: family("agent_system"),
-      assistant_system: family("assistant_system"),
-      inference: services.length,
-      runtimes: runtimes.length,
-      models: models.length,
-      packs: packs.length + packShapedSystems(projects, {}).length,
-      robots: robots.length,
-      labs: labs.length,
-      specifications: specifications.length,
-    };
+    if (id === "all") return [...projects, ...services, ...runtimes, ...models, ...packs, ...robots];
+    if (id === "systems") return listed;
+    if (id === "models") return models;
+    if (id === "inference") return services;
+    if (id === "runtimes") return runtimes;
+    if (id === "packs") return [...packs, ...packShapedSystems(projects, {})];
+    if (id === "robots") return robots;
+    if (id === "labs") return labs;
+    if (id === "specifications") return specifications;
+    return [];
+  }
+
+  // The count beside a name, and the split where the collection has one:
+  // Models reviewed against imported (ADR 027), Agent packs packs against
+  // host-installed systems (ADR 035), Systems active, All unscored A–Z.
+  function collectionCount(id, payloads = {}) {
+    const count = collectionEntries(id, payloads).length;
+    if (id === "all") return { count, note: "A–Z, no scores" };
+    if (id === "systems") return { count, note: "active" };
+    if (id === "models") {
+      const reviewed = (payloads.models || []).filter(model => model.review_status === "reviewed").length;
+      return { count, note: `${reviewed} reviewed · ${count - reviewed} imported` };
+    }
+    if (id === "packs") {
+      const packs = (payloads.packs || []).length;
+      return { count, note: `${packs} ${packs === 1 ? "pack" : "packs"} · ${count - packs} host-installed` };
+    }
+    return { count, note: "" };
+  }
+
+  function humanize(value) {
+    return String(value).replaceAll("_", " ").replace(/^./, letter => letter.toUpperCase());
+  }
+
+  // A value's reader-facing name is its type badge's name; every type value
+  // has one (docs/WEB.md "Card badges"), except Robots' form factors so far.
+  function typeName(field, value) {
+    const badge = Object.values(CARD_BADGES).find(entry => entry.family === "type" && entry.test && entry.test.field === field && entry.test.equals === value);
+    return badge ? badge.name : humanize(value);
+  }
+
+  // A collection's largest categories, at most `limit`, each with the facet
+  // key and value that opens the scope narrowed to it. Records without the
+  // field (imported model rows, host-installed systems) are not tallied.
+  function collectionCategories(id, payloads = {}, limit = 4) {
+    const collection = COLLECTIONS.find(entry => entry.id === id);
+    if (!collection || !collection.field) return [];
+    const tally = new Map();
+    for (const record of collectionEntries(id, payloads)) {
+      const value = record[collection.field];
+      if (value === undefined || value === null) continue;
+      tally.set(value, (tally.get(value) || 0) + 1);
+    }
+    // Ties break by value A–Z, so the order never depends on record order.
+    return [...tally.entries()]
+      .sort((a, b) => b[1] - a[1] || String(a[0]).localeCompare(String(b[0])))
+      .slice(0, limit)
+      .map(([value, count]) => ({
+        key: collection.facet,
+        value,
+        count,
+        label: id === "systems" ? FAMILY_SHORT_NAMES[value] || humanize(value) : typeName(collection.field, value),
+      }));
+  }
+
+  // Which collection a comparison belongs to, by the comparison's kind.
+  const COMPARISON_COLLECTIONS = { system: "systems", inference: "inference", runtime: "runtimes", model: "models" };
+
+  // The state dot on a collection's entry: a comparison in progress there,
+  // or the Finder's role set applied to Systems. A comparison wins.
+  function collectionState(id, { comparisonKind = null, finderRoles = null } = {}) {
+    if (COMPARISON_COLLECTIONS[comparisonKind] === id) return "compare";
+    if (id === "systems" && finderRoles) return "finder";
+    return null;
+  }
+
+  // A bare Directory URL is the front door; anything that names a scope, a
+  // filter, a comparison, or a record is results (front-door spec, "URL
+  // state and history"). Other views are never the door.
+  function directoryStageFromURL(params) {
+    const view = params.get("view");
+    if (view && view !== "directory") return "results";
+    if (params.has("collection") || params.has("compare") || params.has("record")) return "results";
+    return SCOPE_URL_KEYS.some(key => params.has(key)) ? "results" : "door";
   }
 
   // Every URL parameter a scope writes, with its default. The keys are the
@@ -1306,19 +1452,26 @@
     BADGE_FAMILIES,
     CARD_BADGES,
     CARD_BADGE_SETS,
+    COLLECTIONS,
+    COMPARISON_COLLECTIONS,
+    FAMILY_SHORT_NAMES,
     INACTIVE_STATUSES,
     SCOPE_URL_KEYS,
     SCOPE_URL_PARAMS,
-    activeSwitcherIndex,
     badgeEmblem,
     badgeLegend,
     buildLabIndex,
     cardBadgeGlossary,
     cardBadges,
+    collectionCategories,
+    collectionCount,
+    collectionEntries,
+    collectionState,
     comparableText,
     compareProjects,
     cycleThemePreference,
     directoryDefaults,
+    directoryStageFromURL,
     editDistance,
     familyEmblem,
     filterAndSortProjects,
@@ -1331,6 +1484,7 @@
     filterRobots,
     filterScoredCollection,
     filterSpecifications,
+    holdsPhrase,
     labDistributionModes,
     labRelations,
     labsForRecord,
@@ -1360,7 +1514,6 @@
     sourceNamespace,
     stemQueryWord,
     suggestNames,
-    switcherCounts,
     tokenHit,
     UNLISTED_MODEL_LABEL,
     updateComparisonSelection,

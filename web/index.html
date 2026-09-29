@@ -23,7 +23,7 @@
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=6347e909d4f2">
+  <link rel="stylesheet" href="styles.css?v=8180fcf8ca2b">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -39,7 +39,7 @@
     </div>
     <nav class="tabs" aria-label="Primary navigation">
       <button class="tab is-active" data-tab="directory" aria-current="page">Catalog</button>
-      <button class="tab finder-cta" data-tab="finder">Find your fit</button>
+      <button class="tab" data-tab="finder">Find your fit</button>
       <div class="docs-menu">
         <button class="tab docs-button" type="button" aria-expanded="false" aria-controls="docs-menu-list">Docs</button>
         <ul id="docs-menu-list" class="docs-menu-list" hidden>
@@ -50,7 +50,6 @@
       </div>
     </nav>
     <div class="header-tools">
-      <a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a>
       <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Theme: system" title="Switch between system, light, and dark themes"></button>
       <a class="github-link" href="https://github.com/katagun/ai-systems-atlas" target="_blank" rel="noreferrer" aria-label="GitHub" title="Source on GitHub"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
     </div>
@@ -58,48 +57,22 @@
 
   <main id="main">
     <section id="directory" class="view is-active" aria-labelledby="directory-title">
-      <div class="hero">
-        <div class="hero-copy-block">
-          <p class="eyebrow" id="hero-kicker">Systems, source models, services, and runtimes</p>
-          <h1 id="directory-title" tabindex="-1">Find the AI layer <span>that fits.</span></h1>
-          <p class="hero-copy">One directory for reviewed applications, inference services, and local runtimes plus the complete models.dev source catalog. Imported models are labeled separately from Atlas-reviewed releases.</p>
-          <button class="hero-action" data-open-tab="finder">Need a starting point? Use the finder <span aria-hidden="true">→</span></button>
+      <p class="eyebrow door-kicker" id="hero-kicker">Systems, source models, services, and runtimes</p>
+      <h1 id="directory-title" class="door-title" tabindex="-1">Find the AI layer <span>that fits.</span></h1>
+      <div id="front-door" class="front-door">
+        <div class="front-door-copy">
+          <p class="hero-copy">Reviewed AI systems, models, inference services, local runtimes, agent packs, and robots, each with its terms and evidence. Look up a name, start from a job, or open a collection.</p>
         </div>
-        <div class="atlas-map" aria-hidden="true">
-          <div class="map-toolbar"><span>LIVE INDEX</span><span class="map-status">EVIDENCE REVIEWED</span></div>
-          <div class="map-field">
-            <span class="map-axis map-axis-x">SYSTEM, SERVICE + RUNTIME LANDSCAPE</span>
-            <span class="map-axis map-axis-y">OPERATIONAL FIT</span>
-            <span class="map-node map-memory"><i></i><b>MEMORY</b><small>retain · retrieve</small></span>
-            <span class="map-node map-inference"><i></i><b>INFERENCE</b><small>serve · route</small></span>
-            <span class="map-node map-agent"><i></i><b>AGENTS</b><small>plan · execute</small></span>
-            <span class="map-node map-assistant"><i></i><b>ASSISTANTS</b><small>interact · create</small></span>
-            <span class="map-node map-runtime"><i></i><b>RUNTIMES</b><small>host · execute</small></span>
-            <span class="map-orbit orbit-one"></span>
-            <span class="map-orbit orbit-two"></span>
-            <span class="map-orbit orbit-three"></span>
-            <span class="map-orbit orbit-four"></span>
-            <span class="map-orbit orbit-five"></span>
-          </div>
-        </div>
+        <label class="search-field door-search"><span>Search</span><input id="door-search" type="search" placeholder="Search everything in the Atlas" autocomplete="off"></label>
+        <nav class="door-jobs" aria-label="Start from a job">
+          <p class="door-jobs-label">Start from a job</p>
+          <ul id="door-jobs" role="list"></ul>
+        </nav>
+        <nav id="collection-index" class="collection-index" aria-label="Collections"></nav>
       </div>
+      <nav id="scope-strip" class="scope-strip" aria-label="Directory collections" hidden></nav>
 
-      <nav class="collection-switcher" aria-label="Directory collections">
-        <button class="is-active" data-directory-collection="all" aria-pressed="true"><span>All</span><strong id="all-collection-count"></strong></button>
-        <button data-directory-collection="systems" aria-pressed="false"><span>Systems</span><strong id="system-collection-count"></strong></button>
-        <button data-directory-collection="systems" data-directory-family="memory_system" aria-pressed="false"><span>Memory</span><strong id="memory-collection-count"></strong></button>
-        <button data-directory-collection="systems" data-directory-family="agent_system" aria-pressed="false"><span>Agents</span><strong id="agent-collection-count"></strong></button>
-        <button data-directory-collection="systems" data-directory-family="assistant_system" aria-pressed="false"><span>Assistants</span><strong id="assistant-collection-count"></strong></button>
-        <button data-directory-collection="models" aria-pressed="false"><span>Models</span><strong id="model-collection-count"></strong></button>
-        <button data-directory-collection="labs" aria-pressed="false"><span>Labs</span><strong id="lab-collection-count"></strong></button>
-        <button data-directory-collection="inference" aria-pressed="false"><span>Inference services</span><strong id="inference-collection-count"></strong></button>
-        <button data-directory-collection="runtimes" aria-pressed="false"><span>Local runtimes</span><strong id="runtime-collection-count"></strong></button>
-        <button data-directory-collection="packs" aria-pressed="false"><span>Agent packs</span><strong id="pack-collection-count"></strong></button>
-        <button data-directory-collection="specifications" aria-pressed="false"><span>Specifications</span><strong id="specification-collection-count"></strong></button>
-        <button data-directory-collection="robots" aria-pressed="false" hidden><span>Robots</span><strong id="robot-collection-count"></strong></button>
-      </nav>
-
-      <div id="all-directory-panel" class="collection-panel">
+      <div id="all-directory-panel" class="collection-panel" hidden>
         <section class="control-panel mixed-directory-controls" aria-label="All directory search">
           <label class="search-field"><span>Search</span><input id="all-directory-search" type="search" placeholder="Search systems, models, inference services, local runtimes, agent packs, and robots" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
           <p class="filter-guidance">The whole directory in one list: A–Z, or best match first while you search. Scores stay hidden here, since a score only compares like with like. Choose a collection for its own filters, and its scores where it has them. <button data-open-tab="taxonomy">How comparisons work →</button></p>
@@ -304,7 +277,7 @@
         </article>
         <article>
           <h2>Reuse</h2>
-          <p>Atlas-authored catalog data is licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. The derived <code>models-dev.json</code> snapshot retains models.dev's MIT attribution.</p>
+          <p>Atlas-authored data is licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>. The derived <code>models-dev.json</code> snapshot retains models.dev's MIT attribution.</p>
         </article>
       </div>
 
@@ -455,9 +428,9 @@
     <div id="comparison-dialog-content"></div>
   </dialog>
 
-  <footer><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
-  <script type="application/json" id="data-versions">{"projects.json":"fd0c858cadfb","taxonomy.json":"f0ba4485fb8f","license-evidence.json":"10c0d0bc8d4d","specifications.json":"f6487c60eb84","inference-services.json":"324b3828e171","local-runtimes.json":"c3d85a51fff7","models.json":"129c959797bf","models-dev.json":"ec5e4b8a29fb","logos.json":"8ba040c30961","exclusions.json":"777a4187f003","app/systems.json":"d4ccc62a8ae0","app/inference.json":"6e25b94e9832","app/runtimes.json":"5384dc9974db","app/specifications.json":"ca24fe5a7b32","app/models.json":"4135c4b51d44","app/packs.json":"c12a9cb8a17d","app/labs.json":"af9d1c0a63c9","app/robots.json":"d6e64c3ecd5e","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"e78b84ec74f4","app/search/inference.json":"81f6e0352cc7","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"9dc240fc53f3","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"3b80a047e4bb","app/search/robots.json":"f3ba0fcf79b2","app/detail":"45cafb077562"}</script>
-  <script src="app-core.js?v=0959c0c23196" defer></script>
-  <script src="app.js?v=6a29a4e34dea" defer></script>
+  <footer><div class="footer-actions"><nav class="footer-nav" aria-label="Site map"><a href="./">Catalog</a><a href="?view=finder">Finder</a><a href="?view=taxonomy">Concepts</a><a href="?view=api">Published data</a><a href="blog/">Blog</a></nav><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a></div><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
+  <script type="application/json" id="data-versions">{"projects.json":"fd0c858cadfb","taxonomy.json":"f0ba4485fb8f","license-evidence.json":"10c0d0bc8d4d","specifications.json":"f6487c60eb84","inference-services.json":"c69ac2f333ad","local-runtimes.json":"c3d85a51fff7","models.json":"b206b414f6cf","models-dev.json":"ec5e4b8a29fb","logos.json":"a0ce82f2ea60","exclusions.json":"777a4187f003","app/systems.json":"c329a9af577d","app/inference.json":"484d5f3a729f","app/runtimes.json":"ef7c2001163c","app/specifications.json":"e62146fa677b","app/models.json":"8c6e7576c59f","app/packs.json":"0907bc81836a","app/labs.json":"a67023701d94","app/robots.json":"3b07b04f8f7c","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"e78b84ec74f4","app/search/inference.json":"81f6e0352cc7","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"1c690924d1e6","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"3b80a047e4bb","app/search/robots.json":"f3ba0fcf79b2","app/detail":"7db276b3f46f"}</script>
+  <script src="app-core.js?v=6b0e963fa61c" defer></script>
+  <script src="app.js?v=40b69a695b1d" defer></script>
 </body>
 </html>

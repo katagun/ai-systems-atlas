@@ -300,15 +300,13 @@ def load_posts(root: Path = ROOT) -> list[dict[str, Any]]:
     return posts
 
 
-# The main page's header, reproduced as static markup. Its view tabs are buttons that
-# app.js wires up; here they are links to the same views through the `view` query
-# parameter the app restores on load, or to unified-catalog collections through
-# the `collection` query parameter. The theme control is driven by THEME_SCRIPT.
-VIEWS = (
-    ("view", "finder", "Find your fit"),
-    ("collection", "models", "Models"),
-    ("collection", "labs", "Labs"),
-    ("collection", "specifications", "Specifications"),
+# The main page's header, reproduced as static markup. The entries mirror
+# web/index.html's primary navigation exactly: the Catalog home link and
+# Find your fit as plain links, then a Docs menu holding the explanatory
+# views and the blog itself. Each entry is (url kind, slug, label); the
+# blog's links reach the app through the query parameter the app restores
+# on load. The theme control is driven by THEME_SCRIPT.
+DOCS = (
     ("view", "taxonomy", "Concepts"),
     ("view", "api", "Published data"),
 )
@@ -334,7 +332,7 @@ FOOTER_NOTICES = (
     "<span>Systems score within families. Reviewed models, inference services, and local runtimes "
     "each use a separate score; source imports and specifications are unscored.</span>"
     "<span>Product marks identify their owners' products and imply no affiliation or endorsement.</span>"
-    '<span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" '
+    '<span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" '
     'rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is '
     "Apache-2.0.</span>"
 )
@@ -384,10 +382,17 @@ def asset_versions(root: Path) -> dict[str, str]:
 
 
 def render_header(root: str, blog: str) -> str:
-    """The site header for a page whose path to the site root is ``root``."""
-    views = "".join(
-        f'<a class="tab-link" href="{root}?{kind}={slug}">{label}</a>'
-        for kind, slug, label in VIEWS
+    """The site header for a page whose path to the site root is ``root``.
+
+    It mirrors web/index.html's primary navigation item for item — Catalog,
+    Find your fit, then a Docs menu — so the two headers cannot drift
+    apart; tests/test_blog.py pins the parity. The Docs menu is a native
+    disclosure here because a blog page loads no application script; the
+    shared styles in web/styles.css render it like the app's.
+    """
+    docs = "".join(
+        f'<li><a href="{root}?{kind}={slug}">{label}</a></li>'
+        for kind, slug, label in DOCS
     )
     return (
         '<a class="skip-link" href="#main">Skip to content</a>\n'
@@ -398,14 +403,30 @@ def render_header(root: str, blog: str) -> str:
         '<span class="wm-ceful">ceful</span><span class="wm-coexist">coexist</span><span class="wm-nce">nce</span></span>'
         f"</strong><small>{SITE_TAGLINE}</small></a></div>\n"
         '<nav class="tabs" aria-label="Primary navigation">'
-        f'<a class="tab-link" href="{root}">Catalog</a>{views}'
-        f'<a class="tab-link is-active" aria-current="page" href="{blog}">Blog</a></nav>\n'
+        f'<a class="tab-link" href="{root}">Catalog</a>'
+        f'<a class="tab-link" href="{root}?view=finder">Find your fit</a>'
+        '<details class="docs-menu">'
+        '<summary class="tab-link">Docs</summary>'
+        f'<ul class="docs-menu-list">{docs}'
+        f'<li><a class="is-active" aria-current="page" href="{blog}">Blog</a></li></ul>'
+        "</details></nav>\n"
         '<div class="header-tools">'
-        f'<a class="suggest-link" href="{REPOSITORY}/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a>'
         '<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Theme: system" '
         'title="Switch between system, light, and dark themes"></button>'
         f'<a class="github-link" href="{REPOSITORY}" target="_blank" rel="noreferrer" aria-label="GitHub" title="Source on GitHub">{GITHUB_ICON}</a>'
         "</div>\n</header>"
+    )
+
+
+def render_footer_actions(root: str, blog: str) -> str:
+    """Site navigation and contribution link, shared across blog depths."""
+    return (
+        '<div class="footer-actions"><nav class="footer-nav" aria-label="Site map">'
+        f'<a href="{root}">Catalog</a><a href="{root}?view=finder">Finder</a>'
+        f'<a href="{root}?view=taxonomy">Concepts</a>'
+        f'<a href="{root}?view=api">Published data</a><a href="{blog}">Blog</a></nav>'
+        f'<a class="suggest-link" href="{REPOSITORY}/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a>'
+        "</div>"
     )
 
 
@@ -452,7 +473,7 @@ def _document(
 <body class="writing-page">
 {render_header(root, blog)}
 {main}
-<footer>{FOOTER_NOTICES}<span class="footer-meta">{footer}</span></footer>
+<footer>{render_footer_actions(root, blog)}{FOOTER_NOTICES}<span class="footer-meta">{footer}</span></footer>
 </body>
 </html>
 """

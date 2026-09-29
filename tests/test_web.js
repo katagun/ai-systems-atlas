@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, activeSwitcherIndex, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cycleThemePreference, directoryDefaults, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, switcherCounts, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, COLLECTIONS, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1418,49 +1418,6 @@ test("mergePackScopeEntries unions packs and host-pack systems by name with kind
   assert.deepEqual(mergePackScopeEntries([], []), []);
 });
 
-test("exactly one switcher chip is pressed, and a family chip wins over Systems", () => {
-  const entries = [
-    { collection: "all" },
-    { collection: "systems" },
-    { collection: "systems", family: "memory_system" },
-    { collection: "systems", family: "agent_system" },
-    { collection: "inference" },
-  ];
-  assert.equal(activeSwitcherIndex(entries, { collection: "all" }), 0);
-  assert.equal(activeSwitcherIndex(entries, { collection: "systems" }), 1);
-  assert.equal(activeSwitcherIndex(entries, { collection: "systems", family: "memory_system" }), 2);
-  assert.equal(activeSwitcherIndex(entries, { collection: "systems", family: "agent_system" }), 3);
-  // A family with no chip of its own leaves the collection chip pressed.
-  assert.equal(activeSwitcherIndex(entries, { collection: "systems", family: "robot_system" }), 1);
-  assert.equal(activeSwitcherIndex(entries, { collection: "inference", family: "memory_system" }), 4);
-  assert.equal(activeSwitcherIndex(entries, { collection: "packs" }), -1);
-});
-
-test("each switcher chip counts what its scope lists by default", () => {
-  const systems = [
-    { name: "M1", system_family: "memory_system", status: "active", deployment: [] },
-    { name: "M2", system_family: "memory_system", status: "archived", deployment: [] },
-    { name: "A1", system_family: "agent_system", status: "active", deployment: ["host_pack"] },
-    { name: "A2", system_family: "agent_system", status: "superseded", deployment: [] },
-    { name: "S1", system_family: "assistant_system", status: "active", deployment: [] },
-  ];
-  const counts = switcherCounts({ projects: systems, services: [{}, {}], runtimes: [{}], models: [{}, {}, {}], packs: [{}], robots: [{}, {}, {}, {}] });
-  assert.deepEqual(counts, {
-    all: 5 + 2 + 1 + 3 + 1 + 4,
-    systems: 3,
-    memory_system: 1,
-    agent_system: 1,
-    assistant_system: 1,
-    inference: 2,
-    runtimes: 1,
-    models: 3,
-    packs: 1 + 1,
-    robots: 4,
-    labs: 0,
-    specifications: 0,
-  });
-});
-
 test("a scope writes only the parameters that differ from their defaults, in a fixed order", () => {
   // Beside a query, Name is a sort the reader chose (ruling R-P1-2b).
   assert.deepEqual(
@@ -1659,6 +1616,70 @@ test("a split name is found as a name", () => {
   assert.ok(recordMatch(parseSearchQuery("lang chain"), fields) > 0);
 });
 
+// The joined word is tried against every field, not only names, so "lang
+// chain" also finds a record whose prose says "langchain". That record holds
+// the phrase, so it leads one whose prose only holds "language" and "chain"
+// apart; only a name match earns the split-name lead.
+test("a split name also finds records whose prose holds the joined word", () => {
+  const records = [
+    { id: "cot", name: "Beta Model", description: "A language model trained on chain-of-thought traces.", status: "active", deployment: [] },
+    { id: "lg", name: "Alpha Graph", description: "Graphs built on LangChain.", status: "active", deployment: [] },
+    { id: "lc", name: "LangChain", description: "Framework.", status: "active", deployment: [] },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "lang chain", sort: "match", status: "" }).map(record => record.name), ["LangChain", "Alpha Graph", "Beta Model"]);
+});
+
+// A name holding the joined word earns the phrase bonus at the name's weight,
+// so a product whose name is split in a longer query still leads records
+// that only hold the joined word in their repository.
+test("a split name leads a longer query ahead of records that only mention it", () => {
+  const records = [
+    { id: "aa", name: "Alpha Agents", repo: "langchain-ai/alpha-agents", description: "Agents.", status: "active", deployment: [] },
+    { id: "lc", name: "LangChain", description: "A framework for building agents.", status: "active", deployment: [] },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "lang chain agents", sort: "match", status: "" }).map(record => record.name), ["LangChain", "Alpha Agents"]);
+});
+
+// Words a record holds together, in order, outrank the same words held apart,
+// even when the apart ones land in a weightier field: "self hosted" once
+// listed services typed "Managed inference host" before records described
+// as self-hosted. The phrase is matched word by word under the usual rules,
+// so a stem, a word's start, or a stop word changes nothing.
+test("a phrase a record holds together outranks the same words apart", () => {
+  const labelOf = (kind, record) => (record.id === "host" ? "Managed inference host" : "General work agent");
+  const records = [
+    { id: "host", name: "Alpha Cloud", description: "Serves models on a self-built engine.", status: "active", deployment: [] },
+    { id: "agent", name: "Zeta", description: "A self-hosted assistant.", status: "active", deployment: [] },
+  ];
+  for (const term of ["self hosted", "self host", "self hosting", "the self hosted"]) {
+    assert.deepEqual(filterAndSortProjects(records, { term, sort: "match", status: "", labelOf }).map(record => record.name), ["Zeta", "Alpha Cloud"], term);
+  }
+});
+
+// The phrase bonus stays below the name tiers: a label that holds the query
+// as a phrase still follows a name that holds every query word, though names
+// A–Z alone would put the label's record first.
+test("a phrase in a label never outranks a name that holds every query word", () => {
+  const labelOf = (kind, record) => (record.id === "label" ? "Open source" : "General work agent");
+  const records = [
+    { id: "label", name: "Alpha", description: "A kit.", status: "active", deployment: [] },
+    { id: "name", name: "Source Open Kit", description: "A kit.", status: "active", deployment: [] },
+  ];
+  assert.deepEqual(filterAndSortProjects(records, { term: "open source", sort: "match", status: "", labelOf }).map(record => record.name), ["Source Open Kit", "Alpha"]);
+});
+
+// A short name is a whole name, so the exact-name lead reads it too: "ACP"
+// once tied Agent Client Protocol with a protocol whose short name only holds
+// ACP, and only names A–Z decided between them. The fixture renames one so
+// that A–Z would decide against it.
+test("a short name equal to the query comes first", () => {
+  const specifications = [
+    { id: "commerce", name: "Agentic Commerce Protocol", short_name: "Commerce ACP", description: "Checkout.", status: "published", licenses: [] },
+    { id: "client", name: "Zeta Client Protocol", short_name: "ACP", description: "Editors.", status: "published", licenses: [] },
+  ];
+  assert.deepEqual(filterSpecifications(specifications, { term: "acp" }).map(item => item.name), ["Zeta Client Protocol", "Agentic Commerce Protocol"]);
+});
+
 test("the mixed directory stays A–Z while browsing and orders by match while searching", () => {
   const systems = [{ id: "z", name: "Zeta Agent", description: "An agent.", status: "active", deployment: [] }];
   const runtimes = [{ id: "o", name: "Ollama", maintainer: "Ollama", description: "Runs models.", api_styles: [] }];
@@ -1677,6 +1698,7 @@ test("real-catalog probes: known names first and loose queries answered", () => 
     runtime: nameOf("local_runtime_types", record.runtime_type),
     model: nameOf("model_types", record.model_type),
     pack: nameOf("pack_types", record.pack_type),
+    spec: nameOf("specification_types", record.specification_type),
     robot: nameOf("robot_form_factors", record.form_factor),
   })[kind] || "";
   const boot = name => readWebJSON(`app/${name}.json`);
@@ -1706,6 +1728,29 @@ test("real-catalog probes: known names first and loose queries answered", () => 
   assert.equal(run("claude code")[0], "Claude Code");
   assert.equal(run("lang chain")[0], "LangChain");
   assert.deepEqual(run("self hosted"), run("self-hosted"));
+  assert.deepEqual(run("the self hosted"), run("self hosted"));
+  // A record that says the phrase leads the ones holding its words apart:
+  // "self hosted" once listed services typed "Managed inference host" first.
+  for (const term of ["self hosted", "self host"]) {
+    const [{ kind, record }] = search(term);
+    const leading = searchFields(kind, record, { index: indexOf[kind], labelOf });
+    assert.ok([leading.label, leading.maker, leading.description].some(text => holdsPhrase(text, parseSearchQuery(term))), `${record.name} leads "${term}" without saying it`);
+  }
+  // A split name finds everything the joined one does.
+  const split = new Set(run("lang chain"));
+  for (const name of run("langchain")) assert.ok(split.has(name), `"lang chain" misses ${name}, which "langchain" finds`);
+  // Each specification's short name lists that specification, or one of the
+  // same name, first, and ahead by its match rather than by names A–Z.
+  const { specifications } = boot("specifications");
+  const specificationIndex = index("specifications");
+  for (const { short_name: shortName } of specifications) {
+    const [first, second] = filterSpecifications(specifications, { term: shortName, searchIndex: specificationIndex, labelOf });
+    assert.ok([first.name, first.short_name].some(name => name.toLowerCase() === shortName.toLowerCase()), `"${shortName}" lists ${first.name} first`);
+    if (second) {
+      const weight = item => recordMatch(parseSearchQuery(shortName), searchFields("spec", item, { index: specificationIndex, labelOf }));
+      assert.ok(weight(first) > weight(second), `"${shortName}" lists ${first.name} first only by names A–Z`);
+    }
+  }
   assert.ok(run("gpt").includes("ChatGPT"));
   assert.ok(run("run models locally").length > 0);
   assert.ok(run("memory for agents").length > 0);
@@ -1785,20 +1830,134 @@ test("a query names a Finder job when most of its words appear in it", () => {
     { id: "empty", direction: "memory_system", label: "Run everything locally", description: "Nothing qualifies.", eligible: 0 },
   ];
   assert.equal(matchFinderGoal(goals, "run models locally").id, "personal_machine");
-  assert.equal(matchFinderGoal(goals, "rag").id, "knowledge_assistant");
+  assert.equal(matchFinderGoal(goals, "rag workspace").id, "knowledge_assistant");
   assert.equal(matchFinderGoal(goals, "ai"), null);
   assert.equal(matchFinderGoal(goals, "zebra crossing"), null);
+});
+
+// One word names a job only when that job's label holds it and no other job
+// with records holds it anywhere. A generic word such as "agent" raises no
+// banner, and neither does "rag", which only a description mentions. Among
+// jobs matching as many words, the one whose label holds more of them wins.
+test("one word names a Finder job only when that job's label alone holds it", () => {
+  const goals = [
+    { id: "general_work", direction: "agent_system", label: "Delegate general knowledge work", description: "An end-user agent that plans and completes broad multi-step work.", eligible: 5 },
+    { id: "build_agents", direction: "agent_system", label: "Build and orchestrate agents", description: "A framework for tools, workflows, state, and multi-agent coordination.", eligible: 7 },
+    { id: "knowledge_assistant", direction: "memory_system", label: "Ask questions over documents", description: "A ready-to-use AI knowledge app or RAG workspace.", eligible: 9 },
+    { id: "empty", direction: "memory_system", label: "Summarize documents", description: "Nothing qualifies.", eligible: 0 },
+  ];
+  assert.equal(matchFinderGoal(goals, "agent"), null);
+  assert.equal(matchFinderGoal(goals, "rag"), null);
+  // A job with nothing to shortlist never makes a word ambiguous.
+  assert.equal(matchFinderGoal(goals, "documents").id, "knowledge_assistant");
+  assert.equal(matchFinderGoal(goals, "multi agent").id, "build_agents");
 });
 
 // R-P1-8: matchFinderGoal must score a kept position with queryWordHit (the
 // better of a token's stem and its typed spelling), not with tokenHit on the
 // stem alone. "libraries" stems to "library", which is not a prefix of
-// "libraries", so a stem-only hit test misses a goal description that holds
-// the word as typed. A scratch check (not committed) shows the brief's
-// stem-only tokenHit call returns null for this same input.
+// "libraries", so a stem-only hit test misses a goal label that holds the
+// word as typed. A scratch check (not committed) shows the brief's
+// stem-only tokenHit call returns null for this same input. The word sits in
+// the label because one word names a goal only through its label.
 test("a query names a Finder job by an -ies word matched as typed, not only its stem", () => {
   const goals = [
-    { id: "sdk_builder", direction: "agent_system", label: "Build with an SDK", description: "Build agent libraries.", eligible: 3 },
+    { id: "sdk_builder", direction: "agent_system", label: "Build agent libraries", description: "An SDK for building agents.", eligible: 3 },
   ];
   assert.equal(matchFinderGoal(goals, "libraries").id, "sdk_builder");
+});
+
+const registryPayloads = {
+  projects: [
+    { id: "m1", name: "M1", system_family: "memory_system", status: "active", deployment: [] },
+    { id: "m2", name: "M2", system_family: "memory_system", status: "archived", deployment: [] },
+    { id: "a1", name: "A1", system_family: "agent_system", status: "active", deployment: ["host_pack"] },
+    { id: "a2", name: "A2", system_family: "agent_system", status: "active", deployment: [] },
+    { id: "s1", name: "S1", system_family: "assistant_system", status: "active", deployment: [] },
+  ],
+  services: [
+    { id: "i1", name: "I1", service_type: "direct_model_api" },
+    { id: "i2", name: "I2", service_type: "direct_model_api" },
+    { id: "i3", name: "I3", service_type: "routing_aggregator" },
+  ],
+  runtimes: [{ id: "r1", name: "R1", runtime_type: "desktop_runner" }],
+  models: [
+    { id: "x1", name: "X1", review_status: "reviewed", model_type: "language_model" },
+    { id: "x2", name: "X2", review_status: "reviewed", model_type: "multimodal_language_model" },
+    { id: "x3", name: "X3", review_status: "imported" },
+  ],
+  packs: [{ id: "p1", name: "P1", pack_type: "skills_bundle" }],
+  robots: [{ id: "b1", name: "B1", form_factor: "humanoid" }, { id: "b2", name: "B2", form_factor: "quadruped" }],
+  labs: [{ id: "l1", name: "L1", lab_type: "ai_company" }],
+  specifications: [{ id: "sp1", name: "SP1", specification_type: "protocol" }],
+};
+
+test("the registry lists every collection once, scopes and sibling views alike, in front-door order", () => {
+  assert.deepEqual(COLLECTIONS.map(entry => entry.id), ["all", "systems", "models", "inference", "runtimes", "packs", "robots", "labs", "specifications"]);
+  assert.ok(COLLECTIONS.every(entry => entry.kind === "scope"));
+  // Every emblem names a type badge that exists; All and Robots have none yet.
+  for (const entry of COLLECTIONS) {
+    if (entry.emblem === null) assert.ok(["all", "robots"].includes(entry.id));
+    else assert.equal(CARD_BADGES[entry.emblem].family, "type", entry.id);
+  }
+  assert.equal(COLLECTIONS.find(entry => entry.id === "systems").emblem, "memory-system");
+});
+
+test("each collection counts what its default view lists, with its split", () => {
+  assert.deepEqual(collectionCount("all", registryPayloads), { count: 5 + 3 + 1 + 3 + 1 + 2, note: "A–Z, no scores" });
+  assert.deepEqual(collectionCount("systems", registryPayloads), { count: 4, note: "active" });
+  assert.deepEqual(collectionCount("models", registryPayloads), { count: 3, note: "2 reviewed · 1 imported" });
+  assert.deepEqual(collectionCount("packs", registryPayloads), { count: 2, note: "1 pack · 1 host-installed" });
+  assert.deepEqual(collectionCount("inference", registryPayloads), { count: 3, note: "" });
+  assert.deepEqual(collectionCount("robots", registryPayloads), { count: 2, note: "" });
+  assert.deepEqual(collectionCount("labs", registryPayloads), { count: 1, note: "" });
+  assert.deepEqual(collectionCount("specifications", registryPayloads), { count: 1, note: "" });
+  assert.deepEqual(collectionCount("robots", { ...registryPayloads, robots: [] }), { count: 0, note: "" });
+});
+
+test("a collection's categories are its largest values with the facet that opens them", () => {
+  assert.deepEqual(collectionCategories("systems", registryPayloads), [
+    { key: "family", value: "agent_system", count: 2, label: "Agents" },
+    { key: "family", value: "assistant_system", count: 1, label: "Assistants" },
+    { key: "family", value: "memory_system", count: 1, label: "Memory" },
+  ]);
+  // The tie between assistant_system and memory_system breaks by value, not
+  // by which record happened to come first.
+  assert.deepEqual(
+    collectionCategories("systems", { ...registryPayloads, projects: [...registryPayloads.projects].reverse() }).map(category => category.value),
+    ["agent_system", "assistant_system", "memory_system"]
+  );
+  assert.deepEqual(collectionCategories("inference", registryPayloads), [
+    { key: "type", value: "direct_model_api", count: 2, label: "Direct model API" },
+    { key: "type", value: "routing_aggregator", count: 1, label: "Routing aggregator" },
+  ]);
+  // Imported rows carry no model type, so only reviewed rows are tallied.
+  assert.deepEqual(collectionCategories("models", registryPayloads).map(category => category.value), ["language_model", "multimodal_language_model"]);
+  // Robots have no type badge yet, so the value is humanised.
+  assert.deepEqual(collectionCategories("robots", registryPayloads).map(category => category.label), ["Humanoid", "Quadruped"]);
+  assert.deepEqual(collectionCategories("robots", registryPayloads)[0].key, "formFactor");
+  assert.deepEqual(collectionCategories("all", registryPayloads), []);
+  assert.equal(collectionCategories("inference", registryPayloads, 1).length, 1);
+});
+
+test("a state dot names the collection a comparison or a Finder role set belongs to", () => {
+  assert.equal(collectionState("systems", { comparisonKind: "system", finderRoles: null }), "compare");
+  assert.equal(collectionState("runtimes", { comparisonKind: "runtime", finderRoles: null }), "compare");
+  assert.equal(collectionState("models", { comparisonKind: "model", finderRoles: null }), "compare");
+  assert.equal(collectionState("systems", { comparisonKind: null, finderRoles: ["coding_agent", "coding_agent_workflow"] }), "finder");
+  assert.equal(collectionState("systems", { comparisonKind: "system", finderRoles: ["coding_agent"] }), "compare");
+  assert.equal(collectionState("inference", { comparisonKind: "system", finderRoles: ["coding_agent"] }), null);
+  assert.equal(collectionState("packs", {}), null);
+});
+
+test("a bare URL is the front door; a collection, a filter, a comparison, or a record is results", () => {
+  const stage = query => directoryStageFromURL(new URLSearchParams(query));
+  assert.equal(stage(""), "door");
+  assert.equal(stage("view=directory"), "door");
+  assert.equal(stage("collection=all"), "results");
+  assert.equal(stage("collection=systems&family=memory_system"), "results");
+  assert.equal(stage("q=ollama"), "results");
+  assert.equal(stage("compare=system:aider,kilo-code"), "results");
+  assert.equal(stage("record=system:aider"), "results");
+  assert.equal(stage("view=finder"), "results");
 });

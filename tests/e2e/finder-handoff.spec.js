@@ -5,7 +5,9 @@ const { test, expect } = require("@playwright/test");
 // same evaluate, so nothing can move between the wait and the reading. With
 // `aim`, it first scrolls the element to the middle of the screen, instantly,
 // and reports its centre and whether a click there reaches it. Alongside the
-// element's top it reads the header's bottom edge and the Finder shell's top.
+// element's top it reads the header's bottom edge, the lowest sticky edge
+// (the Directory's scope strip sticks under the header in results), and the
+// Finder shell's top.
 const settle = (page, selector, { aim = false } = {}) => page.locator(selector).evaluate(async (element, aim) => {
   await new Promise(resolve => {
     let last = window.scrollY;
@@ -28,6 +30,10 @@ const settle = (page, selector, { aim = false } = {}) => page.locator(selector).
     top: box.top,
     reached: element.contains(document.elementFromPoint(x, y)),
     headerBottom: document.querySelector(".site-header").getBoundingClientRect().bottom,
+    stickyBottom: Math.max(
+      document.querySelector(".site-header").getBoundingClientRect().bottom,
+      document.querySelector("#scope-strip").getBoundingClientRect().bottom,
+    ),
     shellTop: document.querySelector(".finder-shell").getBoundingClientRect().top,
   };
 }, aim);
@@ -83,13 +89,13 @@ test("Browse matches lands on the results and shows the Finder's role set as a r
   await choose(page, '[data-finder-choice="priority"][data-finder-value="balanced"]');
   await choose(page, "[data-finder-directory]");
 
-  const { top: panelTop, headerBottom: hb } = await settle(page, "#systems-directory-panel");
+  const { top: panelTop, stickyBottom: sb } = await settle(page, "#systems-directory-panel");
   expect(panelTop).toBeLessThan(900);
-  expect(panelTop).toBeGreaterThanOrEqual(hb - 1);
-  // A no-op revealDirectoryResults leaves the panel far below the header,
+  expect(panelTop).toBeGreaterThanOrEqual(sb - 1);
+  // A no-op revealDirectoryResults leaves the panel far below the strip,
   // where activateView's smooth scroll to the top comes to rest; a working
   // one lands its top within the same 12px margin keepFinderInView uses.
-  expect(panelTop).toBeLessThanOrEqual(hb + 13);
+  expect(panelTop).toBeLessThanOrEqual(sb + 13);
   const chip = page.getByRole("button", { name: /Finder: Write and maintain software/ });
   await expect(chip).toBeVisible();
   await expect(page.locator("#result-count")).toContainText("Finder match");

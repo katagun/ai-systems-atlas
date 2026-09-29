@@ -62,6 +62,13 @@ STAGED_DIRECTORY_FILES = (
     "directory/taxonomy.json",
 )
 
+# Tooling the refresh also updates: the icon packages behind web/logos.json. A bump
+# changes the vendored SVG sources, so the logo file must be regenerated in the same
+# change; Dependabot cannot do that, so .github/dependabot.yml ignores these two and
+# the weekly refresh bumps them here, right before regenerating logo coverage.
+ICON_PACKAGES = ("simple-icons", "@lobehub/icons-static-svg")
+STAGED_TOOLING_FILES = ("package.json", "package-lock.json")
+
 OPENROUTER_STEP = "refresh OpenRouter model leads"
 # Steps whose failure is reported instead of stopping the run. The OpenRouter importer
 # writes only unpublished leads and replaces them only on success, so an outage there
@@ -104,6 +111,20 @@ GENERATION_STEPS = (
         ("uv", "run", "python", "scripts/build_share_pages.py"),
         False,
     ),
+    (
+        "bump icon packages",
+        (
+            "npm",
+            "install",
+            "--save-dev",
+            "--save-exact",
+            "--no-audit",
+            "--no-fund",
+            *(f"{package}@latest" for package in ICON_PACKAGES),
+        ),
+        False,
+    ),
+    ("regenerate logo coverage", ("node", "scripts/build_logos.mjs"), False),
     ("regenerate asset versions", ("node", "scripts/build_asset_version.mjs"), False),
 )
 
@@ -223,7 +244,7 @@ def token_env(needs_token: bool, token: str | None) -> dict[str, str] | None:
 def run_generation_steps(
     run, token: str | None
 ) -> tuple[bool, list[tuple[str, int, str]]]:
-    """Run the seven generation steps in order. Stop at the first failure, except in
+    """Run the nine generation steps in order. Stop at the first failure, except in
     REPORTED_STEPS, whose failure is only reported."""
     results: list[tuple[str, int, str]] = []
     for name, command, needs_token in GENERATION_STEPS:
@@ -251,10 +272,11 @@ def reported_step_failed(generation_results: list[tuple[str, int, str]]) -> bool
 
 
 def stage_directory_files(run) -> tuple[int, str]:
-    """Stage the same explicit path list the workflow staged. Never `git add -A directory`."""
+    """Stage the same explicit path list the workflow staged, plus the icon-package
+    manifests the bump step edits. Never `git add -A directory`."""
     web_code, web_output = run(["git", "add", "-A", "web"], ROOT)
     directory_code, directory_output = run(
-        ["git", "add", *STAGED_DIRECTORY_FILES], ROOT
+        ["git", "add", *STAGED_DIRECTORY_FILES, *STAGED_TOOLING_FILES], ROOT
     )
     return (web_code or directory_code), web_output + directory_output
 

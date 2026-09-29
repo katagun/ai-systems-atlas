@@ -3,12 +3,16 @@
 # Install once per checkout:  pre-commit install
 # Run everything (what CI runs):  pre-commit run --all-files
 #
-# Fast checks (ruff, eslint, secrets on staged files) run on `git commit`.
-# The full unit suite, e2e, and generated-file freshness stay in
-# .github/workflows/verify.yml: they are minutes long and need browsers.
+# Every hook runs on `git commit` except the two slow suites, the unit tests
+# under coverage (~1.5 min) and the browser e2e (~3.5 min), which run on
+# `git push` instead (`stages: [pre-push]`). `pre-commit install` installs
+# both hook types through default_install_hook_types below. CI runs the fast
+# hooks in one job and each slow suite in its own job; see verify.yml.
 # Complexity is enforced through ruff C901 (Python, max 50) and the eslint
 # complexity rule (JS, max 30); both are ratchets documented in
 # pyproject.toml and eslint.config.mjs, tightened by refactor, never by noqa.
+
+default_install_hook_types: [pre-commit, pre-push]
 
 repos:
   # Generic file hygiene, language-independent. check-merge-conflict is the
@@ -159,12 +163,13 @@ repos:
         files: ^\.github/workflows/
 
   # Project verification: everything verify.yml runs, so `pre-commit run
-  # --all-files` reproduces CI exactly (CI is env setup plus that one
-  # command). always_run keeps each check on every commit, not just when its
-  # files change; pass_filenames keeps the repo-owned commands intact.
-  # Commit-time cost is ~1-2 minutes, dominated by the unit suite and e2e.
+  # --all-files --hook-stage pre-push` reproduces CI exactly (CI is env setup
+  # plus pre-commit, split across jobs). always_run keeps each check on every
+  # commit or push, not just when its files change; pass_filenames keeps the
+  # repo-owned commands intact. The fast checks here take seconds on commit;
+  # the unit suite and e2e carry `stages: [pre-push]` and run on push.
   # Bypass one check with SKIP=<hook-id>, or all of them with
-  # git commit --no-verify (CI still gates the merge).
+  # git commit --no-verify / git push --no-verify (CI still gates the merge).
   - repo: local
     hooks:
       - id: validate-directory
@@ -189,6 +194,7 @@ repos:
             uv run coverage report
         always_run: true
         pass_filenames: false
+        stages: [pre-push]
 
       - id: python-compileall
         language: system
@@ -256,9 +262,11 @@ repos:
 
       # Needs Playwright browsers: npx playwright install chromium (CI does
       # this before the pre-commit step). Starts its own server per checkout.
+      # CI sets ATLAS_E2E_SHARD to run half the suite per job.
       - id: e2e-browser-tests
         language: system
         name: browser end-to-end tests
         entry: npm run test:e2e
         always_run: true
         pass_filenames: false
+        stages: [pre-push]
