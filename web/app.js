@@ -180,10 +180,11 @@ async function bootstrap() {
   state.reviewedModelCount = models.reviewed_count;
   state.modelSourceCount = models.source_record_count;
   state.modelUnlistedCount = models.unlisted_reviewed_count;
+  state.modelsVerifiedAt = models.verified_at;
   state.taxonomy = taxonomy;
   state.packs = packs.packs;
   state.labs = labs.labs;
-  state.labIndex = AtlasCore.buildLabIndex(state.labs, state.models);
+  state.labIndex = AppCore.buildLabIndex(state.labs, state.models);
   state.robots = robots.robots;
   state.recent = { systems: systems.recent || [], inference: inference.recent || [], runtimes: runtimes.recent || [], specifications: specifications.recent || [], models: models.recent || [], packs: packs.recent || [], labs: labs.recent || [], robots: robots.recent || [] };
   const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at, models.verified_at, models.source_updated_at, packs.verified_at, labs.verified_at, robots.verified_at]
@@ -194,18 +195,6 @@ async function bootstrap() {
   populateFilters();
   populateCollectionFilters();
   populateModelLabFilter();
-  const scope = AtlasCore.scopeFromURL(new URL(window.location.href).searchParams);
-  const restored = restoreScopeFromURL(scope);
-  // Beside a query, the URL names every sort but Best match (scopeURLParams,
-  // rulings R-P1-2 and R-P1-2b). So a link with a query and no sort lists by
-  // match, and a sort it names is one the reader chose, which typing keeps.
-  // A sort the scope cannot take was removed on restore, so it counts as none;
-  // Best match is one, since it is disabled until a query is present. Either
-  // way syncMatchSort runs, so the restored query offers Best match again.
-  if (restored.q?.trim()) {
-    if (restored.sort !== undefined) sortChosenDuringQuery[scope] = true;
-    syncMatchSort(scope);
-  }
   renderStats();
   renderFinder();
   renderDoorJobs();
@@ -213,17 +202,9 @@ async function bootstrap() {
   renderLabs();
   renderSpecifications();
   renderTaxonomy();
+  renderModelAccess();
   bindEvents();
-  const bootParams = new URL(window.location.href).searchParams;
-  if (!restoreComparisonFromURL()) {
-    if (AtlasCore.directoryStageFromURL(bootParams) === "door") showFrontDoor({ updateURL: false });
-    else setDirectoryCollection(bootParams.get("collection") || "all", { updateURL: false });
-  }
-  restoreViewFromURL();
-  restoreRecordFromURL();
-  state.urlReady = true;
-  writeScopeURL();
-  if (restored.q) loadRestoredSearch(scope, restored.page);
+  restoreFromURL({ boot: true });
   // Text typed on the front door before its listener was bound is still a
   // search; it lands in results the way a keystroke after boot would.
   if ($("#door-search").value && state.directoryStage === "door") $("#door-search").dispatchEvent(new Event("input", { bubbles: true }));
@@ -238,7 +219,7 @@ async function bootstrap() {
 function cardMark(record) {
   const icon = state.logos.icons[state.logos.records[record.id]];
   if (icon) return `<span class="card-mark" data-mark="${escapeHTML(record.id)}" aria-hidden="true"><svg viewBox="0 0 24 24">${icon.body}</svg></span>`;
-  return `<span class="card-mark card-monogram" data-mark="${escapeHTML(record.id)}" aria-hidden="true">${escapeHTML(AtlasCore.monogramGlyph(record.name))}</span>`;
+  return `<span class="card-mark card-monogram" data-mark="${escapeHTML(record.id)}" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(record.name))}</span>`;
 }
 
 // The icon bodies are the largest file the page loads and nothing about the
@@ -316,7 +297,15 @@ function writeURL(url, { push = false } = {}) {
     if (push) window.history.pushState(null, "", url);
     else window.history.replaceState(null, "", url);
   } catch {}
+  settledSearch = window.location.search;
 }
+
+// The query string the page last restored or wrote, so the page's state
+// agrees with it. A popstate that arrives with the same one changed only the
+// fragment, as the skip link does, and has nothing to restore: a restore
+// there would reset the grid and forget in-memory state the URL cannot
+// carry, such as the sort from before a query or a Finder role set.
+let settledSearch = null;
 
 function writeDirectoryURL() {
   const url = new URL(window.location.href);
@@ -331,7 +320,7 @@ function writeDirectoryURL() {
 }
 
 // Each scope's URL parameters and the control that holds each one. Keys are
-// AtlasCore.SCOPE_URL_PARAMS keys; selectors are web/index.html's.
+// AppCore.SCOPE_URL_PARAMS keys; selectors are web/index.html's.
 const SCOPE_CONTROLS = {
   all: { q: "#all-directory-search" },
   systems: { q: "#project-search", family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter", deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", capability: "#capability-filter", sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter", sort: "#sort-filter" },
@@ -374,10 +363,10 @@ function allowedScopeValues(scope) {
 function writeScopeURL() {
   if (!state.urlReady) return;
   const url = new URL(window.location.href);
-  AtlasCore.SCOPE_URL_KEYS.forEach(key => url.searchParams.delete(key));
+  AppCore.SCOPE_URL_KEYS.forEach(key => url.searchParams.delete(key));
   const scope = activeScope();
   if (scope) {
-    for (const [key, value] of AtlasCore.scopeURLParams(scope, readScopeControls(scope))) url.searchParams.set(key, value);
+    for (const [key, value] of AppCore.scopeURLParams(scope, readScopeControls(scope))) url.searchParams.set(key, value);
     if (state.page[scope] > 1) url.searchParams.set("page", String(state.page[scope]));
   }
   // Every render and keystroke lands here, so this is the writer that spends
@@ -407,7 +396,7 @@ function syncMatchSort(scope) {
     sortBeforeQuery[scope] ??= select.value;
     select.value = "match";
   } else if (!hasQuery) {
-    if (select.value === "match") select.value = sortBeforeQuery[scope] || AtlasCore.SCOPE_URL_PARAMS[scope].sort;
+    if (select.value === "match") select.value = sortBeforeQuery[scope] || AppCore.SCOPE_URL_PARAMS[scope].sort;
     delete sortBeforeQuery[scope];
     sortChosenDuringQuery[scope] = false;
     if (scope === "systems") updateScoreSortAvailability();
@@ -440,7 +429,7 @@ function restoreScopeFromURL(scope) {
       updateScoreSortAvailability();
     }
   }
-  const { values, rejected } = AtlasCore.readScopeURLParams(scope, url.searchParams, allowedScopeValues(scope));
+  const { values, rejected } = AppCore.readScopeURLParams(scope, url.searchParams, allowedScopeValues(scope));
   for (const [key, value] of Object.entries(values)) {
     if (key === "page") {
       state.page[scope] = value;
@@ -525,7 +514,7 @@ function toggleComparison(kind, id) {
   const collection = comparisonCollection(kind);
   const record = collection ? collection.find(item => item.id === id) : null;
   if (!record) return;
-  state.comparison = AtlasCore.updateComparisonSelection(state.comparison, { kind, profile: record.score_profile, id });
+  state.comparison = AppCore.updateComparisonSelection(state.comparison, { kind, profile: record.score_profile, id });
   renderComparisonControls();
   syncDoorDots();
   writeDirectoryURL();
@@ -566,12 +555,11 @@ function restoreComparisonFromURL() {
   }
   renderComparisonControls();
   writeDirectoryURL();
-  if (ids.length >= 2) openComparison();
   return true;
 }
 
 function populateFilters() {
-  const defaults = AtlasCore.directoryDefaults();
+  const defaults = AppCore.directoryDefaults();
   const family = $("#family-filter");
   state.taxonomy.system_families.forEach(item => family.insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   family.value = defaults.family;
@@ -723,7 +711,7 @@ function updateAdvancedFilterSummary() {
 
 function applyDirectoryDefaults() {
   clearComparison();
-  const defaults = AtlasCore.directoryDefaults();
+  const defaults = AppCore.directoryDefaults();
   state.directoryRoles = null;
   state.directoryRolesLabel = null;
   $("#project-search").value = defaults.term;
@@ -745,7 +733,7 @@ function applyDirectoryDefaults() {
 }
 
 function renderStats() {
-  const { count } = AtlasCore.collectionCount("all", collectionPayloads());
+  const { count } = AppCore.collectionCount("all", collectionPayloads());
   $("#hero-kicker").textContent = `${count} systems, source models, services, runtimes, packs, and robots`;
 }
 
@@ -758,12 +746,12 @@ function collectionPayloads() {
 }
 
 function collectionEmblem(entry) {
-  if (entry.id === "all") return AtlasCore.familyEmblem("type");
-  return entry.emblem ? AtlasCore.badgeEmblem(entry.emblem) : "";
+  if (entry.id === "all") return AppCore.familyEmblem("type");
+  return entry.emblem ? AppCore.badgeEmblem(entry.emblem) : "";
 }
 
 function collectionStateFor(id) {
-  return AtlasCore.collectionState(id, {
+  return AppCore.collectionState(id, {
     comparisonKind: state.comparison.ids.length ? state.comparison.kind : null,
     finderRoles: state.directoryRoles,
   });
@@ -781,7 +769,7 @@ function stateDot(kind) {
 // way a card's mark is: an icon once logos.json lands, a monogram until then.
 function tileMarks(id) {
   const records = (state.recent[id] || [])
-    .map(recordId => AtlasCore.collectionEntries(id, collectionPayloads()).find(record => record.id === recordId))
+    .map(recordId => AppCore.collectionEntries(id, collectionPayloads()).find(record => record.id === recordId))
     .filter(Boolean);
   if (!records.length) return "";
   return `<span class="tile-marks" aria-hidden="true">${records.map(cardMark).join("")}</span>`;
@@ -793,10 +781,10 @@ function tileMarks(id) {
 // and a state dot. It carries no definition; those stay in Taxonomy.
 function renderCollectionIndex() {
   const payloads = collectionPayloads();
-  $("#collection-index").innerHTML = AtlasCore.COLLECTIONS.map(entry => {
-    const { count, note } = AtlasCore.collectionCount(entry.id, payloads);
+  $("#collection-index").innerHTML = AppCore.COLLECTIONS.map(entry => {
+    const { count, note } = AppCore.collectionCount(entry.id, payloads);
     if (count === 0 && entry.id !== "all") return "";
-    const categories = AtlasCore.collectionCategories(entry.id, payloads);
+    const categories = AppCore.collectionCategories(entry.id, payloads);
     const categoryList = categories.length
       ? `<ul class="tile-categories" role="list">${categories.map(category => `<li><button type="button" class="tile-category" data-open-collection="${escapeHTML(entry.id)}" data-facet-key="${escapeHTML(category.key)}" data-facet-value="${escapeHTML(category.value)}">${escapeHTML(category.label)} <strong>${category.count}</strong></button></li>`).join("")}</ul>`
       : "";
@@ -879,14 +867,14 @@ function renderScopeStrip() {
     : focused?.dataset.familyEntry !== undefined ? `[data-family-entry="${focused.dataset.familyEntry}"]` : null;
   const payloads = collectionPayloads();
   let caption = "";
-  const entries = AtlasCore.COLLECTIONS.map(entry => {
-    const { count } = AtlasCore.collectionCount(entry.id, payloads);
+  const entries = AppCore.COLLECTIONS.map(entry => {
+    const { count } = AppCore.collectionCount(entry.id, payloads);
     if (count === 0 && entry.id !== "all") return "";
     const pressed = entry.id === state.directoryCollection;
     if (pressed) caption = `${entry.name} · ${count}`;
     // Robots has no emblem until its form-factor badge exists, and a phone
     // clips every name, so its initial stands in rather than an empty button.
-    const emblem = collectionEmblem(entry) || `<span class="scope-monogram" aria-hidden="true">${escapeHTML(AtlasCore.monogramGlyph(entry.name))}</span>`;
+    const emblem = collectionEmblem(entry) || `<span class="scope-monogram" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(entry.name))}</span>`;
     return `<button type="button" class="scope-entry${pressed ? " is-active" : ""}" data-open-collection="${escapeHTML(entry.id)}" aria-pressed="${pressed}" title="${escapeHTML(entry.name)}">${emblem}<span class="scope-name">${escapeHTML(entry.name)}</span><span class="scope-short" aria-hidden="true">${escapeHTML(entry.short)}</span><strong class="scope-count">${count}</strong>${stateDot(collectionStateFor(entry.id))}</button>`;
   }).join("");
   const familyRow = state.directoryCollection === "systems" ? renderFamilyRow(payloads) : "";
@@ -897,14 +885,14 @@ function renderScopeStrip() {
 
 function renderFamilyRow(payloads) {
   const current = $("#family-filter").value;
-  const categories = AtlasCore.collectionCategories("systems", payloads);
-  const total = AtlasCore.collectionCount("systems", payloads).count;
+  const categories = AppCore.collectionCategories("systems", payloads);
+  const total = AppCore.collectionCount("systems", payloads).count;
   const entry = (value, name, count) => `<button type="button" class="family-entry${value === current ? " is-active" : ""}" data-family-entry="${escapeHTML(value)}" aria-pressed="${value === current}">${escapeHTML(name)} <strong>${count}</strong></button>`;
-  const families = FAMILY_ORDER.map(id => entry(id, AtlasCore.FAMILY_SHORT_NAMES[id], (categories.find(category => category.value === id) || { count: 0 }).count));
+  const families = FAMILY_ORDER.map(id => entry(id, AppCore.FAMILY_SHORT_NAMES[id], (categories.find(category => category.value === id) || { count: 0 }).count));
   return `<div class="family-row" role="group" aria-label="System families">${entry("", "All families", total)}${families.join("")}</div>`;
 }
 
-// The strip sticks under the header above phone widths, so the header's
+// The strip sticks under the header at every width, so the header's
 // live height is a custom property the stylesheet reads. The sticky height
 // is another, html's scroll-padding-top, so focus moving through a grid
 // stops below the header and the strip rather than under them. The strip's
@@ -923,7 +911,7 @@ function syncStickyClearance() {
 // only a lab or a specification answers follows the reader from the All
 // results into Labs or Specifications; the front door itself carries none.
 function openCollection(id, { facet = null } = {}) {
-  const entry = AtlasCore.COLLECTIONS.find(item => item.id === id);
+  const entry = AppCore.COLLECTIONS.find(item => item.id === id);
   if (!entry) return;
   leaveFrontDoor();
   // A category link opens the collection narrowed to that one category, so
@@ -931,7 +919,7 @@ function openCollection(id, { facet = null } = {}) {
   // and Systems keeps its default status, the one its counts are taken at.
   if (facet) {
     clearScopeFacets(id);
-    if (id === "systems") $("#status-filter").value = AtlasCore.directoryDefaults().status;
+    if (id === "systems") $("#status-filter").value = AppCore.directoryDefaults().status;
   }
   if (id === "systems") {
     jumpToDirectoryFamily(facet && facet.key === "family" ? facet.value : "");
@@ -1085,7 +1073,7 @@ function modelModalityRoute(model) {
 // controls and take no tab stop.
 function badgeRow(badges) {
   if (!badges.length) return "";
-  return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AtlasCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
+  return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
 }
 
 // The one control that opens a card's record. Its hidden text names the
@@ -1125,7 +1113,7 @@ function initBadgeTooltip() {
   const show = badge => {
     anchor = badge;
     tooltip.dataset.family = badge.dataset.family;
-    tooltip.querySelector(".badge-tooltip-family").textContent = AtlasCore.BADGE_FAMILIES[badge.dataset.family]?.name || "";
+    tooltip.querySelector(".badge-tooltip-family").textContent = AppCore.BADGE_FAMILIES[badge.dataset.family]?.name || "";
     tooltip.querySelector(".badge-tooltip-name").textContent = badge.dataset.name;
     tooltip.querySelector(".badge-tooltip-definition").textContent = badge.dataset.definition;
     tooltip.hidden = false;
@@ -1201,16 +1189,16 @@ function syncBadgeLegend() {
   const systemFamily = state.directoryCollection === "systems" ? $("#family-filter").value : "";
   // The front door shows no cards, so it has no badges to explain.
   const legend = inDirectory && state.directoryStage === "door" ? null
-    : inDirectory ? AtlasCore.badgeLegend(state.directoryCollection, systemFamily)
-    : ["models", "specifications", "labs"].includes(activeViewId) ? AtlasCore.badgeLegend(activeViewId)
+    : inDirectory ? AppCore.badgeLegend(state.directoryCollection, systemFamily)
+    : ["models", "specifications", "labs"].includes(activeViewId) ? AppCore.badgeLegend(activeViewId)
     : null;
   const shown = Boolean(legend) && $("#comparison-tray").hidden;
   const open = shown && (state.badgeLegendPreference || badgeLegendPreference()) === "open";
   if (legend) {
     $("#badge-legend-items").dataset.mode = legend.mode;
     $("#badge-legend-items").innerHTML = legend.mode === "families"
-      ? legend.families.map(family => `<li data-family="${escapeHTML(family.id)}" title="${escapeHTML(family.meaning)}">${AtlasCore.familyEmblem(family.id)}<span>${escapeHTML(family.name)}</span></li>`).join("")
-      : legend.badges.map(badge => `<li data-family="${escapeHTML(badge.family)}">${AtlasCore.badgeEmblem(badge.id)}<span>${escapeHTML(badge.name)}</span></li>`).join("");
+      ? legend.families.map(family => `<li data-family="${escapeHTML(family.id)}" title="${escapeHTML(family.meaning)}">${AppCore.familyEmblem(family.id)}<span>${escapeHTML(family.name)}</span></li>`).join("")
+      : legend.badges.map(badge => `<li data-family="${escapeHTML(badge.family)}">${AppCore.badgeEmblem(badge.id)}<span>${escapeHTML(badge.name)}</span></li>`).join("");
   }
   strip.hidden = !open;
   chip.hidden = !shown || open;
@@ -1244,7 +1232,7 @@ function packCard(pack, { mixed = false } = {}) {
     <span class="role-badge">${escapeHTML(packHosts(pack))}</span>
     <div class="license-row">${pack.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(pack.description)}</p>
-    ${badgeRow(AtlasCore.cardBadges("pack", pack))}
+    ${badgeRow(AppCore.cardBadges("pack", pack))}
     <div class="card-footer"><span>${footerFacts(starCount(pack), escapeHTML(taxonomyName("pack_install_mechanisms", pack.install_mechanism)))}${pack.status === "active" ? "" : ` · ${escapeHTML(label(pack.status))}`}</span>${detailsButton("data-pack", pack.id, pack.name)}</div>
   </article>`;
 }
@@ -1252,7 +1240,7 @@ function packCard(pack, { mixed = false } = {}) {
 // A lab's other records are joined by the names the catalog already uses for it
 // (ADR 041); the join runs over the boot records this page holds.
 function labRelationsFor(lab) {
-  return AtlasCore.labRelations(lab, {
+  return AppCore.labRelations(lab, {
     models: state.models, projects: state.projects, services: state.inferenceServices,
     runtimes: state.localRuntimes, specifications: state.specifications, packs: state.packs,
   });
@@ -1264,8 +1252,8 @@ const labDistributionOrder = () => state.taxonomy.model_distribution_modes.map(i
 // ranks the lab. The newest reviewed release date is a tracking signal only.
 function labCard(lab) {
   const relations = labRelationsFor(lab);
-  const modes = AtlasCore.labDistributionModes(relations.models, labDistributionOrder());
-  const newest = AtlasCore.releasesNewestFirst(relations.models)[0];
+  const modes = AppCore.labDistributionModes(relations.models, labDistributionOrder());
+  const newest = AppCore.releasesNewestFirst(relations.models)[0];
   const counts = [
     [relations.models.length, "reviewed release", "reviewed releases"],
     [relations.systems.length, "system", "systems"],
@@ -1275,20 +1263,20 @@ function labCard(lab) {
     [relations.packs.length, "agent pack", "agent packs"],
   ].filter(([count]) => count).map(([count, one, many]) => `<span>${count} ${count === 1 ? one : many}</span>`).join("");
   const origin = lab.parent_organization ? `Part of ${lab.parent_organization}` : new URL(lab.url).hostname.replace(/^www\./, "");
-  const newestDate = newest && AtlasCore.releaseDate(newest);
+  const newestDate = newest && AppCore.releaseDate(newest);
   return `<article class="project-card lab-card">
     <div class="card-top"><div class="card-identity">${cardMark(lab)}<div><p class="family-label">${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${escapeHTML(origin)}</div></div></div></div>
     <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
     <p>${escapeHTML(lab.description)}</p>
     <div class="tags">${counts}</div>
-    ${badgeRow(AtlasCore.cardBadges("lab", lab))}
+    ${badgeRow(AppCore.cardBadges("lab", lab))}
     <div class="card-footer"><span>${newestDate ? `Newest reviewed release ${escapeHTML(newestDate)}` : ""}</span>${detailsButton("data-lab", lab.id, lab.name)}</div>
   </article>`;
 }
 
 // A record a lab claims links to that lab, by its own collection's join rule.
 function labLinksMarkup(kind, record) {
-  const labs = AtlasCore.labsForRecord(kind, record, state.labIndex);
+  const labs = AppCore.labsForRecord(kind, record, state.labIndex);
   if (!labs.length) return "";
   return `<p><strong>Lab:</strong> ${labs.map(lab => `<button type="button" class="link-button" data-open-lab="${escapeHTML(lab.id)}">${escapeHTML(lab.name)}</button>`).join(" · ")}</p>`;
 }
@@ -1308,7 +1296,7 @@ function robotCard(robot, { mixed = false } = {}) {
 // Atlas review, so they carry attributed plain text instead of badges.
 function modelSourceMeta(model) {
   const parts = [modelModalityRoute(model), model.source_metadata.family].filter(Boolean);
-  const attribution = AtlasCore.modelMetadataAttribution(model);
+  const attribution = AppCore.modelMetadataAttribution(model);
   return `<div class="card-source-meta" title="${escapeHTML(attribution.cardTitle)}"><span class="visually-hidden">${escapeHTML(attribution.cardPrefix)}</span>${parts.map(part => `<span>${escapeHTML(part)}</span>`).join("")}</div>`;
 }
 
@@ -1324,7 +1312,7 @@ function importedModelCard(model, { mixed = false } = {}) {
     <div class="license-row"><span class="source-badge">models.dev</span><span class="review-badge">Reported license · ${escapeHTML(reportedLicense)}</span></div>
     <p>${escapeHTML(model.description || "Imported provider-independent model metadata from models.dev.")}</p>
     <div class="tags"><span>${escapeHTML(modelModalityRoute(model))}</span>${metadata.family ? `<span>${escapeHTML(metadata.family)}</span>` : ""}<span>${escapeHTML(openWeights)}</span></div>
-    ${badgeRow(AtlasCore.cardBadges("model", model))}
+    ${badgeRow(AppCore.cardBadges("model", model))}
     <div class="card-footer"><span>${escapeHTML(model.source_id)}</span>${detailsButton("data-model", model.id, model.name, "View source details")}</div>
   </article>`;
 }
@@ -1337,7 +1325,7 @@ function mixedSystemCard(record) {
       <span class="role-badge">${escapeHTML(roleName(record.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
       <p>${escapeHTML(record.description)}</p>
-      ${badgeRow(AtlasCore.cardBadges("system", record))}
+      ${badgeRow(AppCore.cardBadges("system", record))}
       <div class="card-footer"><span>${footerFacts(starCount(record), systemStatus(record))}</span>${detailsButton("data-project", record.id, record.name)}</div>
     </article>`;
 }
@@ -1346,7 +1334,7 @@ function renderAllDirectoryEntries() {
   // The mixed directory searches five collections, so it reads five index
   // namespaces; each is absent until that collection's index lands, and the
   // filter falls back to the boot record for whichever is still missing.
-  const entries = AtlasCore.filterDirectoryEntries(state.projects, state.inferenceServices, state.localRuntimes, state.models, {
+  const entries = AppCore.filterDirectoryEntries(state.projects, state.inferenceServices, state.localRuntimes, state.models, {
     term: $("#all-directory-search").value,
     searchIndex: searchIndexes.systems,
     serviceSearchIndex: searchIndexes.inference,
@@ -1359,7 +1347,7 @@ function renderAllDirectoryEntries() {
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   setSearchCount("all", entries.length);
   renderJobHint("all", $("#all-directory-search").value);
-  const paged = AtlasCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
+  const paged = AppCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
   state.page.all = paged.page;
   $("#all-directory-grid").innerHTML = paged.items.map(({ kind, record }) => {
     if (kind === "model") {
@@ -1369,7 +1357,7 @@ function renderAllDirectoryEntries() {
         <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(record.description)}</p>
         ${modelSourceMeta(record)}
-        ${badgeRow(AtlasCore.cardBadges("model", record))}
+        ${badgeRow(AppCore.cardBadges("model", record))}
         <div class="card-footer"><span>Dedicated model-access score</span>${detailsButton("data-model", record.id, record.name)}</div>
       </article>`;
     }
@@ -1380,7 +1368,7 @@ function renderAllDirectoryEntries() {
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Local runtime · ${escapeHTML(taxonomyName("local_runtime_types", record.runtime_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.maintainer)}</div></div></div></div>
         <span class="role-badge">${escapeHTML(record.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
         <p>${escapeHTML(record.description)}</p>
-        ${badgeRow(AtlasCore.cardBadges("runtime", record))}
+        ${badgeRow(AppCore.cardBadges("runtime", record))}
         <div class="card-footer"><span>${starCount(record)}</span>${detailsButton("data-local-runtime", record.id, record.name)}</div>
       </article>`;
     }
@@ -1389,7 +1377,7 @@ function renderAllDirectoryEntries() {
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Inference service · ${escapeHTML(taxonomyName("inference_service_types", record.service_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.operator)}</div></div></div></div>
         <span class="role-badge">${escapeHTML(record.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
         <p>${escapeHTML(record.description)}</p>
-        ${badgeRow(AtlasCore.cardBadges("inference", record))}
+        ${badgeRow(AppCore.cardBadges("inference", record))}
         <div class="card-footer"><span>Dedicated service score</span>${detailsButton("data-inference-service", record.id, record.name)}</div>
       </article>`;
     }
@@ -1407,7 +1395,7 @@ function renderAllDirectoryEntries() {
 }
 
 function filteredProjects(term) {
-  return AtlasCore.filterAndSortProjects(state.projects, {
+  return AppCore.filterAndSortProjects(state.projects, {
     term,
     searchIndex: searchIndexes.systems,
     labelOf: searchLabel,
@@ -1471,7 +1459,7 @@ const COLLECTIONS = {
       <span class="role-badge">${escapeHTML(roleName(project.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${project.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : ""}</div>
       <p>${escapeHTML(project.description)}</p>
-      ${badgeRow(AtlasCore.cardBadges("system", project))}
+      ${badgeRow(AppCore.cardBadges("system", project))}
       <div class="card-footer"><span>${footerFacts(githubSignal, systemStatus(project))}</span><div class="card-actions">${family ? `<button class="compare-toggle" data-compare-kind="system" data-compare-id="${escapeHTML(project.id)}" aria-label="Add ${escapeHTML(project.name)} to comparison" aria-pressed="false">Compare</button>` : ""}${detailsButton("data-project", project.id, project.name)}</div></div>
     </article>`;
     },
@@ -1488,7 +1476,7 @@ const COLLECTIONS = {
       $("#specifications-kicker").textContent = `${state.specifications.length} reviewed specifications`;
       return { suffix: " · Unscored", comparable: false };
     },
-    records: term => AtlasCore.filterSpecifications(state.specifications, {
+    records: term => AppCore.filterSpecifications(state.specifications, {
       term,
       searchIndex: searchIndexes.specifications,
       labelOf: searchLabel,
@@ -1506,7 +1494,7 @@ const COLLECTIONS = {
       <div class="license-row">${specification.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
       <p>${escapeHTML(specification.description)}</p>
       <div class="tags"><span>${escapeHTML(taxonomyName("specification_statuses", specification.status))}</span><span>${escapeHTML(specification.stewards[0])}</span></div>
-      ${badgeRow(AtlasCore.cardBadges("spec", specification))}
+      ${badgeRow(AppCore.cardBadges("spec", specification))}
       <div class="card-footer"><span>${footerFacts(starCount(specification), "No editorial score")}</span>${detailsButton("data-specification", specification.id, specification.name)}</div>
     </article>`;
     },
@@ -1524,7 +1512,7 @@ const COLLECTIONS = {
       $("#labs-kicker").textContent = `${state.labs.length} labs · developers of ${covered} of ${state.reviewedModelCount} reviewed releases`;
       return { suffix: " · Unscored", comparable: false };
     },
-    records: term => AtlasCore.filterLabs(state.labs, {
+    records: term => AppCore.filterLabs(state.labs, {
       term,
       searchIndex: searchIndexes.labs,
       labelOf: searchLabel,
@@ -1547,7 +1535,7 @@ const COLLECTIONS = {
       suffix: ` · ${state.taxonomy.inference_service_score_profile.name}`,
       comparable: true,
     }),
-    records: term => AtlasCore.filterInferenceServices(state.inferenceServices, {
+    records: term => AppCore.filterInferenceServices(state.inferenceServices, {
       term,
       searchIndex: searchIndexes.inference,
       labelOf: searchLabel,
@@ -1561,7 +1549,7 @@ const COLLECTIONS = {
     <div class="card-top"><div class="card-identity">${cardMark(service)}<div><p class="family-label">${escapeHTML(taxonomyName("inference_service_types", service.service_type))}</p><h2>${escapeHTML(service.name)}</h2><div class="repo">${escapeHTML(service.operator)}</div></div></div><div class="score-ring" aria-label="Inference-service score ${escapeHTML(service.score.overall)} out of 10">${escapeHTML(service.score.overall)}</div></div>
     <span class="role-badge">${escapeHTML(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <p>${escapeHTML(service.description)}</p>
-    ${badgeRow(AtlasCore.cardBadges("inference", service))}
+    ${badgeRow(AppCore.cardBadges("inference", service))}
     <div class="card-footer"><span>${escapeHTML(service.model_sources.map(item => taxonomyName("inference_model_sources", item)).join(" · "))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="inference" data-compare-id="${escapeHTML(service.id)}" aria-label="Add ${escapeHTML(service.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-inference-service", service.id, service.name)}</div></div>
   </article>`,
   },
@@ -1577,7 +1565,7 @@ const COLLECTIONS = {
       suffix: ` · ${state.taxonomy.local_runtime_score_profile.name}`,
       comparable: true,
     }),
-    records: term => AtlasCore.filterLocalRuntimes(state.localRuntimes, {
+    records: term => AppCore.filterLocalRuntimes(state.localRuntimes, {
       term,
       searchIndex: searchIndexes.runtimes,
       labelOf: searchLabel,
@@ -1592,7 +1580,7 @@ const COLLECTIONS = {
     <span class="role-badge">${escapeHTML(runtime.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(" · "))}</span>
     <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(runtime.source_model))}</span>${runtime.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
     <p>${escapeHTML(runtime.description)}</p>
-    ${badgeRow(AtlasCore.cardBadges("runtime", runtime))}
+    ${badgeRow(AppCore.cardBadges("runtime", runtime))}
     <div class="card-footer"><span>${footerFacts(starCount(runtime), escapeHTML(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(" · ")))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="runtime" data-compare-id="${escapeHTML(runtime.id)}" aria-label="Add ${escapeHTML(runtime.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-local-runtime", runtime.id, runtime.name)}</div></div>
   </article>`,
   },
@@ -1605,10 +1593,10 @@ const COLLECTIONS = {
     empty: "No models match these filters.",
     open: id => openModel(id),
     context() {
-      $("#models-kicker").textContent = AtlasCore.modelsKickerText(state.modelSourceCount, state.reviewedModelCount, state.modelUnlistedCount);
+      $("#models-kicker").textContent = AppCore.modelsKickerText(state.modelSourceCount, state.reviewedModelCount, state.modelUnlistedCount);
       return { suffix: ` · ${state.reviewedModelCount} Atlas reviewed; source imports are unscored`, comparable: true };
     },
-    records: term => AtlasCore.filterModels(state.models, {
+    records: term => AppCore.filterModels(state.models, {
       term,
       type: $("#model-type-filter").value,
       distribution: $("#model-distribution-filter").value,
@@ -1627,8 +1615,8 @@ const COLLECTIONS = {
         <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
         ${modelSourceMeta(model)}
-        ${badgeRow(AtlasCore.cardBadges("model", model))}
-        <div class="card-footer"><span>${escapeHTML(AtlasCore.modelSourceLabel(model))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-model", model.id, model.name)}</div></div>
+        ${badgeRow(AppCore.cardBadges("model", model))}
+        <div class="card-footer"><span>${escapeHTML(AppCore.modelSourceLabel(model))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-model", model.id, model.name)}</div></div>
       </article>`;
     },
   },
@@ -1641,7 +1629,7 @@ const COLLECTIONS = {
     empty: "No robots match these filters.",
     open: id => openRobot(id),
     context: () => ({ suffix: " · Unscored", comparable: false }),
-    records: term => AtlasCore.filterRobots(state.robots, {
+    records: term => AppCore.filterRobots(state.robots, {
       term,
       searchIndex: searchIndexes.robots,
       labelOf: searchLabel,
@@ -1665,7 +1653,7 @@ function renderCollection(name) {
   $(collection.resultCount).textContent = `${records.length} ${noun}${context.suffix}`;
   setSearchCount(name, records.length);
   renderJobHint(name, $(SCOPE_CONTROLS[name].q).value);
-  const paged = AtlasCore.paginate(records, { page: state.page[collection.pageKey], pageSize: state.pageSize });
+  const paged = AppCore.paginate(records, { page: state.page[collection.pageKey], pageSize: state.pageSize });
   state.page[collection.pageKey] = paged.page;
   const grid = $(collection.grid);
   grid.innerHTML = paged.items.map(record => collection.card(record, context)).join("")
@@ -1688,6 +1676,56 @@ const renderLocalRuntimes = () => renderCollection("runtimes");
 const renderModels = () => renderCollection("models");
 const renderLabs = () => renderCollection("labs");
 
+function modelAccessURL(distribution, sourceModel = "") {
+  const params = new URLSearchParams({ collection: "models", distribution, sort: "name" });
+  if (sourceModel) params.set("sourceModel", sourceModel);
+  return `?${params}`;
+}
+
+const accessPercent = (count, total) => total ? Math.round(count / total * 1000) / 10 : 0;
+
+function modelAccessCell(mode, row) {
+  const share = accessPercent(mode.count, row.count);
+  const contents = `<strong>${mode.count}</strong><span>${share}%</span><span class="access-cell-bar" style="--access-share: ${share}%" aria-hidden="true"></span>`;
+  // Unknown classifications have no catalog facet; never link to a broader
+  // set than the count describes. Zero cells are plain text as well.
+  if (!mode.count || !row.id) return `<td><span class="access-cell">${contents}</span></td>`;
+  const name = `${row.name}, ${mode.name}: ${mode.count} of ${row.count} releases (${share}%). Browse models`;
+  return `<td><a class="access-cell" href="${escapeHTML(modelAccessURL(mode.id, row.id))}" aria-label="${escapeHTML(name)}">${contents}</a></td>`;
+}
+
+function renderModelAccess() {
+  const summary = AppCore.modelAccessSummary(state.models, state.taxonomy.source_models, state.taxonomy.model_distribution_modes);
+  const date = state.modelsVerifiedAt ? ` · Catalog review date ${state.modelsVerifiedAt}` : "";
+  $("#explore-data-note").textContent = `${summary.total} reviewed releases · ${summary.excluded} imported records excluded${date}`;
+  if (!summary.total) {
+    $("#model-access-content").innerHTML = '<p class="notice">No reviewed model releases are available for this view.</p>';
+    return;
+  }
+  const bars = summary.modes.map(mode => {
+    const share = accessPercent(mode.count, summary.total);
+    const contents = `<span class="access-route-label">${escapeHTML(mode.name)}</span><span class="access-route-value"><strong>${mode.count}</strong> / ${summary.total} <span>(${share}%)</span></span><span class="access-route-track" aria-hidden="true"><span style="--access-share: ${share}%"></span></span>`;
+    const name = `${mode.name}: ${mode.count} of ${summary.total} reviewed releases (${share}%). Browse models`;
+    return `<li>${mode.count ? `<a href="${escapeHTML(modelAccessURL(mode.id))}" aria-label="${escapeHTML(name)}">${contents}</a>` : `<div>${contents}</div>`}</li>`;
+  }).join("");
+  const rows = summary.rows.map(row => `<tr><th scope="row">${escapeHTML(row.name)}<small>${row.count} ${row.count === 1 ? "release" : "releases"}</small></th>${row.modes.map(mode => modelAccessCell(mode, row)).join("")}</tr>`).join("");
+  $("#model-access-content").innerHTML = `
+    <section class="access-routes" aria-labelledby="access-routes-title">
+      <div class="explore-section-heading"><h2 id="access-routes-title">Three ways in</h2><p>A release can offer more than one route. Select a bar to browse its models.</p></div>
+      <ul class="access-route-list">${bars}</ul>
+      <div class="access-scale" aria-hidden="true"><span>0%</span><span>100% of reviewed releases</span></div>
+    </section>
+    <section class="access-matrix-section" aria-labelledby="access-matrix-title">
+      <div class="explore-section-heading"><h2 id="access-matrix-title">Access meets licensing</h2><p>Downloadable weights do not imply an open-source license. Select a count to inspect the matching releases and their terms.</p></div>
+      <table class="access-matrix">
+        <caption>Reviewed releases by license classification and access route. Percentages are of each row; routes overlap.</caption>
+        <thead><tr><th scope="col">License classification</th>${summary.modes.map(mode => `<th scope="col">${escapeHTML(mode.name)}</th>`).join("")}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </section>
+    ${summary.missingDistribution ? `<p class="notice">${summary.missingDistribution} reviewed releases have no recorded distribution mode; they remain in the denominators.</p>` : ""}`;
+}
+
 // One lab's releases for the Models view's Lab facet: its reviewed releases and
 // the imported rows in their models.dev namespaces. No lab selected, no filter.
 function labModelIds(labId) {
@@ -1700,7 +1738,7 @@ function labModelIds(labId) {
 // systems (ADR 035). Pack facets narrow only packs; the search term narrows
 // both. Scores stay hidden and comparison stays off, as the scope requires.
 function packScope(term) {
-  const packs = AtlasCore.filterPacks(state.packs, {
+  const packs = AppCore.filterPacks(state.packs, {
     term,
     searchIndex: searchIndexes.packs,
     labelOf: searchLabel,
@@ -1709,12 +1747,12 @@ function packScope(term) {
     install: $("#pack-install-filter").value,
     license: $("#pack-license-filter").value,
   });
-  const systems = AtlasCore.packShapedSystems(state.projects, {
+  const systems = AppCore.packShapedSystems(state.projects, {
     term,
     searchIndex: searchIndexes.systems,
     labelOf: searchLabel,
   });
-  const entries = AtlasCore.mergePackScopeEntries(packs, systems, {
+  const entries = AppCore.mergePackScopeEntries(packs, systems, {
     term, packIndex: searchIndexes.packs, systemIndex: searchIndexes.systems, labelOf: searchLabel,
   });
   return { packs, systems, entries };
@@ -1726,7 +1764,7 @@ function renderPacks() {
   const systemNoun = systems.length === 1 ? "installed system" : "installed systems";
   $("#pack-result-count").textContent = `${packs.length} ${packNoun} · ${systems.length} ${systemNoun} · Scores hidden`;
   setSearchCount("packs", entries.length);
-  const paged = AtlasCore.paginate(entries, { page: state.page.packs, pageSize: state.pageSize });
+  const paged = AppCore.paginate(entries, { page: state.page.packs, pageSize: state.pageSize });
   state.page.packs = paged.page;
   const grid = $("#pack-grid");
   grid.innerHTML = paged.items.map(({ kind, record }) =>
@@ -1963,7 +2001,7 @@ function openFinderAt(direction, goal) {
 function renderJobHint(scope, term) {
   const hint = $(`[data-job-hint="${scope}"]`);
   if (!hint) return;
-  const goal = term.trim() ? AtlasCore.matchFinderGoal(finderGoalEntries(), term) : null;
+  const goal = term.trim() ? AppCore.matchFinderGoal(finderGoalEntries(), term) : null;
   hint.hidden = !goal;
   hint.innerHTML = goal
     ? `<span>Looks like a job: <strong>${escapeHTML(goal.label)}</strong>. The Finder can shortlist from ${goal.eligible} reviewed ${goal.eligible === 1 ? "record" : "records"}.</span><button type="button" class="link-button" data-finder-goal="${escapeHTML(`${goal.direction}:${goal.id}`)}">Open shortlist →</button>`
@@ -1982,7 +2020,7 @@ const SCOPE_RECORDS = {
   systems: () => [["system", state.projects, searchIndexes.systems]],
   inference: () => [["inference", state.inferenceServices, searchIndexes.inference]],
   runtimes: () => [["runtime", state.localRuntimes, searchIndexes.runtimes]],
-  packs: () => [["pack", state.packs, searchIndexes.packs], ["system", AtlasCore.packShapedSystems(state.projects, {}), searchIndexes.systems]],
+  packs: () => [["pack", state.packs, searchIndexes.packs], ["system", AppCore.packShapedSystems(state.projects, {}), searchIndexes.systems]],
   robots: () => [["robot", state.robots, searchIndexes.robots]],
   models: () => [["model", state.models, searchIndexes.models]],
   labs: () => [["lab", state.labs, searchIndexes.labs]],
@@ -1998,10 +2036,10 @@ const SCOPE_RECORDS = {
 // - `elsewhere`: matches of All's kinds outside this scope, which All lists.
 // - `found`: whether anything in the catalog matches at all.
 function emptyResultMatches(scope, term) {
-  const query = AtlasCore.parseSearchQuery(term);
+  const query = AppCore.parseSearchQuery(term);
   const matches = [...SCOPE_RECORDS.all(), ...SCOPE_RECORDS.labs(), ...SCOPE_RECORDS.specifications()]
     .flatMap(([kind, records, index]) => records
-      .filter(record => AtlasCore.recordMatch(query, AtlasCore.searchFields(kind, record, { index, labelOf: searchLabel })) > 0)
+      .filter(record => AppCore.recordMatch(query, AppCore.searchFields(kind, record, { index, labelOf: searchLabel })) > 0)
       .map(record => ({ kind, record })));
   if (scope === "all") return { hidden: [], elsewhere: [], found: matches.length > 0 };
   const own = new Set((SCOPE_RECORDS[scope]?.() || []).flatMap(([, records]) => records));
@@ -2061,7 +2099,7 @@ function searchAllCollections(term) {
 
 // Names compared the way search and suggestNames compare them: a hyphen reads
 // as a space, so "claude squad" names claude-squad.
-const comparableName = text => AtlasCore.comparableText(text);
+const comparableName = text => AppCore.comparableText(text);
 
 // The list lands once, and every search surface repaints, since the suggestion
 // form under any empty result waits for it.
@@ -2120,7 +2158,7 @@ function emptyStateMarkup(scope, fallback) {
   const settled = !catalogIndexesPending();
   const { hidden, elsewhere, found } = settled ? emptyResultMatches(scope, term) : { hidden: [], elsewhere: [], found: false };
   const typed = comparableName(term);
-  const names = AtlasCore.suggestNames(facetedRecords(scope), term).filter(name => comparableName(name) !== typed);
+  const names = AppCore.suggestNames(facetedRecords(scope), term).filter(name => comparableName(name) !== typed);
   const excluded = settled ? excludedEntry(term) : null;
   // The form also waits for the exclusions list, so it never invites review
   // of a name the review already left out.
@@ -2192,7 +2230,7 @@ function renderFinderResults() {
       </div>
       <div class="finder-why"><strong>Why it surfaced</strong><div class="tags">${reasons.map(reason => `<span>${escapeHTML(reason)}</span>`).join("")}</div></div>
       <p class="finder-tradeoff"><strong>Watch for:</strong> ${detailText(isInference || isRuntime ? project.tradeoffs?.[0] : project.weaknesses?.[0])}</p>
-      ${badgeRow(AtlasCore.cardBadges(isInference ? "inference" : isRuntime ? "runtime" : "system", project))}
+      ${badgeRow(AppCore.cardBadges(isInference ? "inference" : isRuntime ? "runtime" : "system", project))}
       <div class="finder-result-footer"><span>${footerFacts(`${escapeHTML(project.score.overall)} / 10 ${escapeHTML(profileLabel || project.score_profile)} score`, starCount(project))}</span>${detailsButton(detailAttribute, project.id, project.name)}</div>
     </article>`).join("")}</div>
     <p class="finder-disclaimer">A curated starting point—not a benchmark of your workload.</p>`;
@@ -2273,13 +2311,13 @@ function renderTaxonomy() {
     `${family.name} roles`,
     state.taxonomy.primary_roles.filter(item => item.family === family.id),
   ]);
-  const glossary = AtlasCore.cardBadgeGlossary();
-  const badgeGroups = Object.entries(AtlasCore.BADGE_FAMILIES).map(([id, family]) => [
+  const glossary = AppCore.cardBadgeGlossary();
+  const badgeGroups = Object.entries(AppCore.BADGE_FAMILIES).map(([id, family]) => [
     `Card badges · ${family.name}`,
     glossary.filter(entry => entry.family === id).map(entry => ({
       name: entry.name,
       definition: `${entry.definition} Shown on: ${entry.scopes.join(", ")}.`,
-      emblem: AtlasCore.badgeEmblem(entry.id),
+      emblem: AppCore.badgeEmblem(entry.id),
       family: id,
     })),
     { lede: family.meaning, badgeFamily: id },
@@ -2669,13 +2707,13 @@ function modelDialogMarkup(model) {
   if (!isReviewedModel(model)) return importedModelDialogMarkup(model);
   const profile = state.taxonomy.model_score_profile;
   const metadata = model.source_metadata;
-  const attribution = AtlasCore.modelMetadataAttribution(model);
+  const attribution = AppCore.modelMetadataAttribution(model);
   const openWeightsLabel = attribution.listed ? "Open weights reported" : "Open weights";
   const licenseLabel = attribution.listed ? "License reported" : "License named by the developer";
   const scoreRows = profile.dimensions.map(dimension => `<tr><td title="${escapeHTML(dimension.definition)}">${escapeHTML(label(dimension.id))} · ${Math.round(dimension.weight * 100)}%</td><td>${detailScore(model.score[dimension.id])}</td></tr>`).join("");
   return `<p class="eyebrow">${escapeHTML(taxonomyName("model_types", model.model_type))} · ${escapeHTML(profile.name)} ${escapeHTML(model.score.overall)}</p><h1>${escapeHTML(model.name)}</h1><p>${escapeHTML(model.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p>${labLinksMarkup("model", model)}<p>${attribution.listed ? `<strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}` : escapeHTML(AtlasCore.UNLISTED_MODEL_LABEL)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p>${model.url ? `<a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a>` : "—"}</p></section>
+      <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p>${labLinksMarkup("model", model)}<p>${attribution.listed ? `<strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}` : escapeHTML(AppCore.UNLISTED_MODEL_LABEL)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p>${model.url ? `<a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a>` : "—"}</p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(model.score.overall)}</td></tr></table><p class="unscored-note">Access and deployability only. This score excludes output quality, benchmark rank, parameter count, price, latency, and throughput.</p></section>
       <section class="detail-block"><h3>Model boundary</h3><p>${detailText(model.access_boundary)}</p><p class="unscored-note">Hosted endpoints, inference services, runtimes, repackagings, fine-tunes, and applications remain separate boundaries.</p></section>
       <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.output))}</p></section>
@@ -2718,10 +2756,10 @@ function labSafetyFrameworkMarkup(lab) {
 // sources. Every joined list is computed from records the page already holds.
 function labDialogMarkup(lab) {
   const relations = labRelationsFor(lab);
-  const releases = AtlasCore.releasesNewestFirst(relations.models);
-  const modes = AtlasCore.labDistributionModes(relations.models, labDistributionOrder());
+  const releases = AppCore.releasesNewestFirst(relations.models);
+  const modes = AppCore.labDistributionModes(relations.models, labDistributionOrder());
   const modeCounts = modes.map(mode => `${escapeHTML(taxonomyName("model_distribution_modes", mode))}: ${relations.models.filter(model => (model.distribution_modes || []).includes(mode)).length}`).join(" · ");
-  const recent = releases.slice(0, LAB_RECENT_RELEASES).map(model => `<li><button type="button" class="link-button" data-open-model="${escapeHTML(model.id)}">${escapeHTML(model.name)}</button><span class="evidence-date">${escapeHTML(AtlasCore.releaseDate(model) || "release date not reported")}</span></li>`).join("");
+  const recent = releases.slice(0, LAB_RECENT_RELEASES).map(model => `<li><button type="button" class="link-button" data-open-model="${escapeHTML(model.id)}">${escapeHTML(model.name)}</button><span class="evidence-date">${escapeHTML(AppCore.releaseDate(model) || "release date not reported")}</span></li>`).join("");
   const total = relations.models.length + relations.sourceRows.length;
   const pending = relations.sourceRows.length
     ? `<p>models.dev also lists ${relations.sourceRows.length} ${relations.sourceRows.length === 1 ? "release" : "releases"} under ${escapeHTML(relations.namespaces.join(", "))} that the Atlas has not reviewed.</p>`
@@ -2959,36 +2997,97 @@ function closeRecordDialogs() {
   RECORD_DIALOG_SELECTORS.forEach(selector => { if ($(selector).open) $(selector).close(); });
 }
 
-function restoreRecordFromURL() {
-  const url = new URL(window.location.href);
-  const raw = url.searchParams.get("record");
-  if (raw === null) return;
-  const reference = AtlasCore.parseRecordReference(raw);
-  if (reference && openRecord(reference.kind, reference.id)) {
-    if (reference.kind === "spec") setDirectoryCollection("specifications", { updateURL: false });
-    if (reference.kind === "model") setDirectoryCollection("models", { updateURL: false });
-    if (reference.kind === "lab") setDirectoryCollection("labs", { updateURL: false });
-    activateView("directory");
-    return;
+// Resets one scope's controls to the defaults its URL parameters assume, so
+// a URL that leaves a parameter out also clears it from the control (Phase 0
+// leftover: Back after closing a record showed older filters than the URL).
+// The sort remembered across a query goes too: it belonged to the state the
+// URL is replacing. A Finder role set has no URL key yet, so it stays when
+// the URL keeps the Systems family it was applied to and names no role of
+// its own (ruling R18): a Back that changes nothing there must not widen
+// the list the Finder chose. Restoring another collection leaves it alone,
+// as a strip switch does.
+function resetScopeControls(scope, params) {
+  const keepFinderRoles = (params.get("family") || "") === $("#family-filter").value && !params.get("role");
+  for (const [key, selector] of Object.entries(SCOPE_CONTROLS[scope] || {})) {
+    const control = $(selector);
+    const fallback = AppCore.SCOPE_URL_PARAMS[scope][key] ?? "";
+    if (control.type === "checkbox") control.checked = fallback === "1";
+    else control.value = fallback;
   }
-  url.searchParams.delete("record");
-  writeURL(url);
+  state.page[scope] = 1;
+  delete sortBeforeQuery[scope];
+  sortChosenDuringQuery[scope] = false;
+  if (scope === "systems" && !keepFinderRoles) {
+    state.directoryRoles = null;
+    state.directoryRolesLabel = null;
+  }
+  if (scope === "systems") populateRoleFilter();
+  // With the query empty this disables Best match again, so the URL's sort is
+  // judged as boot judges it: "match" is never a sort the reader chose.
+  syncMatchSort(scope);
 }
 
-// Back and forward move between record states only: collection and comparison
-// changes replace the current entry, so a popstate is always a record change.
-function syncRecordWithHistory() {
-  // Back from results lands on the entry leaveFrontDoor pushed: a bare
-  // Directory URL, which is the front door.
-  const onDoor = $("#directory").classList.contains("is-active") && state.directoryStage === "door";
-  if (!onDoor && AtlasCore.directoryStageFromURL(new URL(window.location.href).searchParams) === "door") {
-    showFrontDoor({ updateURL: false });
-    activateView("directory");
+// One restore for boot and for every popstate. The URL decides, in order:
+// the view; the scope, where a comparison or a record names its collection
+// before `collection` does (scopeFromURL); that scope's controls, reset
+// first; the comparison; the front door or results; the record. The scope
+// writer is quiet until the end, so a half-restored state never reaches the
+// address bar, and nothing here pushes.
+function restoreFromURL({ boot = false } = {}) {
+  const url = new URL(window.location.href);
+  const params = url.searchParams;
+  const rawView = params.get("view");
+  let view = rawView === null ? "directory" : AppCore.parseViewId(rawView);
+  if (!view) {
+    // A legacy sibling-view URL lands on its unified collection; any other
+    // unknown view is dropped.
+    const alias = AppCore.parseViewAlias(rawView);
+    params.delete("view");
+    if (alias) params.set("collection", alias);
+    writeURL(url);
+    view = "directory";
   }
-  const reference = AtlasCore.parseRecordReference(new URL(window.location.href).searchParams.get("record"));
-  if (reference && openRecord(reference.kind, reference.id)) return;
-  closeRecordDialogs();
-  clearRecordURL();
+  const scope = AppCore.scopeFromURL(params);
+  state.urlReady = false;
+  let restored = {};
+  if (scope) {
+    resetScopeControls(scope, params);
+    restored = restoreScopeFromURL(scope);
+  }
+  const comparisonRestored = restoreComparisonFromURL();
+  if (!comparisonRestored && state.comparison.ids.length) clearComparison({ updateURL: false });
+  const onDoor = view === "directory" && AppCore.directoryStageFromURL(params) === "door";
+  if (onDoor) showFrontDoor({ updateURL: false });
+  else if (scope && !comparisonRestored) setDirectoryCollection(scope, { updateURL: false });
+  activateView(view);
+  // Beside a query, the URL names every sort but Best match (scopeURLParams,
+  // rulings R-P1-2 and R-P1-2b). So a link with a query and no sort lists by
+  // match, and a sort it names is one the reader chose, which typing keeps.
+  // A sort the scope cannot take was removed on restore, so it counts as none.
+  if (scope && restored.q?.trim()) {
+    if (restored.sort !== undefined) sortChosenDuringQuery[scope] = true;
+    syncMatchSort(scope);
+  }
+  // The record is read from the URL as it arrived; an open dialog names it
+  // already, so showRecordDialog writes nothing and nothing pushes.
+  const reference = AppCore.parseRecordReference(params.get("record"));
+  if (!reference || !openRecord(reference.kind, reference.id)) {
+    closeRecordDialogs();
+    // A record the page cannot show leaves the URL, as any value a control
+    // cannot take does.
+    const current = new URL(window.location.href);
+    current.searchParams.delete("record");
+    writeURL(current);
+  }
+  state.urlReady = true;
+  writeDirectoryURL();
+  writeScopeURL();
+  if (restored.q) loadRestoredSearch(scope, restored.page);
+  // A shared comparison link opens its table; Back to a comparison restores
+  // only the selection. It opens last, since its loading notice lives in the
+  // tray, which the view switch above repaints.
+  if (boot && comparisonRestored) openComparison();
+  settledSearch = window.location.search;
 }
 
 // The share link is the record's static preview page, which carries its own
@@ -2996,7 +3095,7 @@ function syncRecordWithHistory() {
 async function copyRecordLink(button) {
   const status = button.parentElement.querySelector("[data-record-link-status]");
   const dialog = button.closest("dialog");
-  const url = new URL(AtlasCore.shareRecordPath(dialog.dataset.recordKind, dialog.dataset.recordId), window.location.href).href;
+  const url = new URL(AppCore.shareRecordPath(dialog.dataset.recordKind, dialog.dataset.recordId), window.location.href).href;
   try {
     await navigator.clipboard.writeText(url);
     status.textContent = "Share link copied.";
@@ -3211,29 +3310,6 @@ function writeViewURL(id) {
   writeURL(url);
 }
 
-function restoreViewFromURL() {
-  const url = new URL(window.location.href);
-  const raw = url.searchParams.get("view");
-  if (raw === null) return;
-  const id = AtlasCore.parseViewId(raw);
-  if (id) {
-    activateView(id);
-    return;
-  }
-  const alias = AtlasCore.parseViewAlias ? AtlasCore.parseViewAlias(raw) : null;
-  if (alias) {
-    // Legacy sibling-view URL: land on the unified collection and drop `view=`.
-    url.searchParams.delete("view");
-    url.searchParams.set("collection", alias);
-    writeURL(url);
-    setDirectoryCollection(alias, { updateURL: false });
-    activateView("directory");
-    return;
-  }
-  url.searchParams.delete("view");
-  writeURL(url);
-}
-
 // A switch hides whatever was pressed inside the old view, so focus would fall
 // to the page. When focus is leaving another view, it lands on the new view's
 // heading instead, or on `focusTarget`, without scrolling. Boot, the header's
@@ -3245,7 +3321,7 @@ function activateView(id, { focusTarget } = {}) {
     setDirectoryCollection(id === "inference-services" ? "inference" : id === "local-runtimes" ? "runtimes" : id === "agent-packs" ? "packs" : "robots");
     id = "directory";
   }
-  const alias = AtlasCore.parseViewAlias ? AtlasCore.parseViewAlias(id) : null;
+  const alias = AppCore.parseViewAlias ? AppCore.parseViewAlias(id) : null;
   if (alias) {
     setDirectoryCollection(alias, { updateURL: false });
     id = "directory";
@@ -3266,7 +3342,7 @@ function activateView(id, { focusTarget } = {}) {
     else item.removeAttribute("aria-current");
   });
   const docsButton = $(".docs-button");
-  const docsActive = id === "taxonomy" || id === "api";
+  const docsActive = id === "taxonomy" || id === "api" || id === "explore";
   if (docsButton) {
     docsButton.classList.toggle("is-active", docsActive);
     if (docsActive) docsButton.setAttribute("aria-current", "page");
@@ -3609,7 +3685,7 @@ function bindEvents() {
   $("#lab-dialog .dialog-close").addEventListener("click", () => $("#lab-dialog").close());
   $("#lab-dialog").addEventListener("click", event => { if (event.target === $("#lab-dialog")) $("#lab-dialog").close(); });
   RECORD_DIALOG_SELECTORS.forEach(selector => $(selector).addEventListener("close", clearRecordURL));
-  window.addEventListener("popstate", syncRecordWithHistory);
+  window.addEventListener("popstate", () => { if (window.location.search !== settledSearch) restoreFromURL(); });
   document.addEventListener("click", event => {
     const button = event.target.closest("[data-copy-record-link]");
     if (button) copyRecordLink(button);
@@ -3690,7 +3766,7 @@ function applyThemePreference(preference) {
 
 function bindTheme() {
   applyThemePreference(readThemePreference());
-  $("#theme-toggle")?.addEventListener("click", () => applyThemePreference(AtlasCore.cycleThemePreference(readThemePreference())));
+  $("#theme-toggle")?.addEventListener("click", () => applyThemePreference(AppCore.cycleThemePreference(readThemePreference())));
   window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncThemeColor);
 }
 

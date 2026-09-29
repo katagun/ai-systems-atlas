@@ -1,8 +1,8 @@
-(function exposeAtlasCore(root, factory) {
+(function exposeAppCore(root, factory) {
   const api = factory();
   if (typeof module === "object" && module.exports) module.exports = api;
-  else root.AtlasCore = api;
-})(typeof globalThis === "undefined" ? this : globalThis, function createAtlasCore() {
+  else root.AppCore = api;
+})(typeof globalThis === "undefined" ? this : globalThis, function createAppCore() {
   function directoryDefaults() {
     return {
       term: "",
@@ -844,17 +844,34 @@
     return { values, rejected };
   }
 
-  // Which scope a URL's filters belong to: the Directory collection it names,
-  // or All. Finder, Taxonomy, and API carry none. Legacy sibling-view URLs
-  // (?view=models|labs|specifications) resolve to their collection so shared
-  // links keep working after the unified catalog move.
+  // Which scope a URL's filters belong to. A legacy sibling-view URL
+  // (?view=models|labs|specifications) names its collection, so shared links
+  // keep working after the unified catalog move; Finder, Taxonomy, and API
+  // own no filters. Otherwise a comparison names its collection, then
+  // `collection`, then a record its own, then All (front-door spec, "URL
+  // state and history"; ruling R17). A record opened from mixed results
+  // keeps the collection it was opened over; a shared record link, which
+  // names none, opens over its own. Deciding this before any control is
+  // restored is what keeps a hand-edited URL from leaving state in a hidden
+  // panel.
+  const RECORD_COLLECTIONS = { system: "systems", inference: "inference", runtime: "runtimes", pack: "packs", robot: "robots", spec: "specifications", model: "models", lab: "labs" };
   function scopeFromURL(params) {
     const view = params.get("view");
     if (["models", "labs", "specifications"].includes(view)) return view;
     if (view && view !== "directory") return null;
-    const collection = params.get("collection");
-    if (["systems", "inference", "runtimes", "packs", "robots", "models", "labs", "specifications"].includes(collection)) return collection;
-    return "all";
+    // The kind comes from the URL, so it is looked up as an own key only, as
+    // record kinds are: "constructor" must not resolve. Without a colon a
+    // comparison names no kind.
+    const compare = params.get("compare") || "";
+    const colon = compare.indexOf(":");
+    const kind = colon > 0 ? compare.slice(0, colon) : "";
+    if (Object.hasOwn(COMPARISON_COLLECTIONS, kind)) return COMPARISON_COLLECTIONS[kind];
+    if (params.has("collection")) {
+      const collection = params.get("collection");
+      return ["systems", "inference", "runtimes", "packs", "robots", "models", "labs", "specifications"].includes(collection) ? collection : "all";
+    }
+    const record = parseRecordReference(params.get("record"));
+    return record ? RECORD_COLLECTIONS[record.kind] ?? "all" : "all";
   }
 
   function paginate(items, { page = 1, pageSize } = {}) {
@@ -899,7 +916,7 @@
   // could resolve an inherited name such as "constructor". Models, labs, and
   // specifications are Directory collections; their legacy view values resolve
   // through VIEW_ALIASES so shared links keep landing on the right collection.
-  const VIEW_IDS = ["directory", "finder", "taxonomy", "api"];
+  const VIEW_IDS = ["directory", "finder", "explore", "taxonomy", "api"];
   const VIEW_ALIASES = { models: "models", labs: "labs", specifications: "specifications" };
   function parseViewId(raw) {
     return typeof raw === "string" && VIEW_IDS.includes(raw) ? raw : null;
@@ -1450,6 +1467,30 @@
     return unlistedCount > 0 ? `${base} · ${unlistedCount} not yet on models.dev` : base;
   }
 
+  // Count reviewed releases, never imported metadata or individual licences.
+  // Distribution modes overlap: one release contributes once to each mode.
+  // Unknown classifications remain visible rather than shrinking denominators.
+  function modelAccessSummary(models, sourceModels, distributionModes) {
+    const reviewed = models.filter(model => model.review_status === "reviewed");
+    const knownSources = new Set(sourceModels.map(item => item.id));
+    const sources = [...sourceModels, { id: "", name: "Not classified" }];
+    const countModes = records => distributionModes.map(mode => ({
+      id: mode.id, name: mode.name,
+      count: records.filter(model => (model.distribution_modes || []).includes(mode.id)).length,
+    }));
+    const rows = sources.map(source => {
+      const records = reviewed.filter(model => (knownSources.has(model.source_model) ? model.source_model : "") === source.id);
+      return { id: source.id, name: source.name, count: records.length, modes: countModes(records) };
+    }).filter(row => row.count > 0);
+    return {
+      total: reviewed.length,
+      excluded: models.length - reviewed.length,
+      modes: countModes(reviewed),
+      rows,
+      missingDistribution: reviewed.filter(model => !distributionModes.some(mode => (model.distribution_modes || []).includes(mode.id))).length,
+    };
+  }
+
   return {
     BADGE_FAMILIES,
     CARD_BADGES,
@@ -1493,6 +1534,7 @@
     matchesProject,
     matchFinderGoal,
     mergePackScopeEntries,
+    modelAccessSummary,
     modelMetadataAttribution,
     modelSourceLabel,
     modelsKickerText,

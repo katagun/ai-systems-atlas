@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, COLLECTIONS, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, COLLECTIONS, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -16,6 +16,45 @@ const projects = [
   { name: "GStack", primary_role: "coding_agent_workflow", system_family: "agent_system", agent_relation: "coding_workflow", architectures: ["git_versioned"], deployment: ["local_cli"], agent_interfaces: ["terminal"], source_model: "mixed_open_source", licenses: ["MIT", "OFL-1.1"], status: "active", local_first: true, stars: 25, score: { overall: 8.6 } },
   { name: "Assistant", primary_role: "general_ai_assistant", system_family: "assistant_system", agent_relation: "agent_enabled_ui", architectures: ["hybrid"], deployment: ["desktop", "managed_cloud", "mobile"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: false, stars: null, score: { overall: 8.8 } },
 ];
+
+test("model access counts overlaps once per release and excludes imported claims", () => {
+  const sourceModels = [{ id: "open_source", name: "Open source" }];
+  const modes = [{ id: "downloadable_weights", name: "Weights" }, { id: "developer_api", name: "API" }];
+  const reviewed = { review_status: "reviewed", source_model: "open_source" };
+  const summary = modelAccessSummary([
+    { ...reviewed, source_id: null, distribution_modes: ["downloadable_weights", "developer_api", "developer_api"], licenses: ["MIT", "Apache-2.0"] },
+    { ...reviewed, distribution_modes: ["developer_api"] },
+    { ...reviewed, review_status: "imported", distribution_modes: ["downloadable_weights"] },
+    { ...reviewed, source_model: "future_classification", distribution_modes: [] },
+    { review_status: "reviewed" },
+  ], sourceModels, modes);
+  assert.equal(summary.total, 4);
+  assert.equal(summary.excluded, 1);
+  assert.deepEqual(summary.modes.map(mode => mode.count), [1, 2]);
+  assert.deepEqual(summary.rows.map(row => [row.id, row.count]), [["open_source", 2], ["", 2]]);
+  assert.equal(summary.missingDistribution, 2);
+  const empty = modelAccessSummary([], sourceModels, modes);
+  assert.equal(empty.total, 0);
+  assert.deepEqual(empty.rows, []);
+  assert.deepEqual(empty.modes.map(mode => mode.count), [0, 0]);
+});
+
+test("model access boot aggregates agree with the canonical reviewed catalog", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const boot = readWebJSON("app/models.json").models;
+  const canonical = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "directory", "models.json"), "utf8")).models;
+  const summary = modelAccessSummary(boot, taxonomy.source_models, taxonomy.model_distribution_modes);
+  assert.equal(summary.total, canonical.length);
+  assert.equal(summary.rows.reduce((total, row) => total + row.count, 0), canonical.length);
+  assert.equal(summary.missingDistribution, 0);
+  for (const row of summary.rows) {
+    for (const mode of row.modes) {
+      const expected = canonical.filter(model => model.source_model === row.id && model.distribution_modes.includes(mode.id));
+      assert.equal(mode.count, expected.length);
+      assert.deepEqual(filterModels(boot, { sourceModel: row.id, distribution: mode.id }).map(model => model.id).sort(), expected.map(model => model.id).sort());
+    }
+  }
+});
 
 test("finder role sets exclude unrelated projects without imposing a local-only threshold", () => {
   const results = filterAndSortProjects(projects, {
@@ -1058,7 +1097,7 @@ test("every primary navigation tab is addressable as a view parameter", () => {
   const tabs = [...html.matchAll(/class="tab[^"]*" data-tab="([a-z-]+)"/g)].map(m => m[1]);
   assert.ok(tabs.length > 0, "index.html has no primary navigation tabs");
   for (const tab of tabs) assert.equal(parseViewId(tab), tab, `${tab} is a tab but not an addressable view`);
-  for (const view of ["taxonomy", "api"]) {
+  for (const view of ["explore", "taxonomy", "api"]) {
     assert.match(html, new RegExp(`data-open-view="${view}"`), `${view} is reachable through the Docs menu`);
     assert.equal(parseViewId(view), view, `${view} is a Docs item but not an addressable view`);
   }
@@ -2007,4 +2046,26 @@ test("a bare URL is the front door; a collection, a filter, a comparison, or a r
   assert.equal(stage("compare=system:aider,kilo-code"), "results");
   assert.equal(stage("record=system:aider"), "results");
   assert.equal(stage("view=finder"), "results");
+});
+
+test("a comparison names the scope before the collection parameter, and a record only without one", () => {
+  const scope = query => scopeFromURL(new URLSearchParams(query));
+  assert.equal(scope(""), "all");
+  assert.equal(scope("collection=systems"), "systems");
+  assert.equal(scope("collection=systems&compare=inference:a,b"), "inference");
+  assert.equal(scope("compare=model:a,b"), "models");
+  assert.equal(scope("record=runtime:ollama"), "runtimes");
+  // An explicit collection keeps a record opened over it (ruling R17).
+  assert.equal(scope("collection=systems&record=pack:superpowers"), "systems");
+  assert.equal(scope("collection=all&record=pack:superpowers"), "all");
+  assert.equal(scope("record=spec:mcp"), "specifications");
+  assert.equal(scope("record=lab:anthropic"), "labs");
+  assert.equal(scope("record=model:x"), "models");
+  // A comparison wins over a record; a malformed reference is ignored.
+  assert.equal(scope("compare=system:a,b&record=runtime:x"), "systems");
+  assert.equal(scope("record=nonsense"), "all");
+  assert.equal(scope("compare=constructor:a,b"), "all");
+  // A comparison without a colon names no kind, so "systemx" is not "system".
+  assert.equal(scope("compare=systemx&collection=inference"), "inference");
+  assert.equal(scope("view=finder&record=system:aider"), null);
 });

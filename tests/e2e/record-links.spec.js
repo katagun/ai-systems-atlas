@@ -75,7 +75,9 @@ test("unknown, malformed, and inherited-property record URLs are discarded witho
 
   for (const raw of ["system:no-such-record", "constructor:ollama", "__proto__:x", "ollama", "runtime:", "spec:kilo-code"]) {
     await page.goto(`/?record=${raw}`);
-    await expect(page.locator("#all-directory-result-count")).toContainText("entries");
+    // A known kind names its collection even when the id is unknown, so the
+    // page settles in that collection's results, or in All's.
+    await expect(pressedEntry(page)).toHaveCount(1);
     await expect(page).not.toHaveURL(/record=/);
     for (const id of ["#project-dialog", "#specification-dialog", "#inference-dialog", "#runtime-dialog", "#model-dialog"]) {
       await expect(page.locator(id)).toBeHidden();

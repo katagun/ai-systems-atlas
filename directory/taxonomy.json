@@ -1643,6 +1643,11 @@
       "kind": "restricted"
     },
     {
+      "id": "LicenseRef-LFM-Open-License-1.0",
+      "name": "LFM Open License v1.0",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-Llama-3.1-AUP",
       "name": "Llama 3.1 Acceptable Use Policy",
       "kind": "restricted"

@@ -38,6 +38,11 @@ async function openFamily(page, family) {
 }
 
 async function openView(page, id) {
+  if (["explore", "taxonomy", "api"].includes(id)) {
+    await page.locator(".docs-button").click();
+    await page.locator(`#docs-menu-list [data-open-view="${id}"]`).click();
+    return;
+  }
   await page.locator(`.tab[data-tab="${id}"]`).click();
 }
 
