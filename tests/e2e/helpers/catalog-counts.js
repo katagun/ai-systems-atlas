@@ -17,6 +17,7 @@ const localRuntimes = read("local-runtimes.json").runtimes;
 const packs = read("packs.json").packs;
 const labs = read("labs.json").labs;
 const robots = read("robots.json").robots;
+const specifications = read("specifications.json").specifications;
 const reviewedModels = read("models.json").models;
 const sourceModels = read("models-dev.json").models;
 const sourceModelIds = new Set(sourceModels.map(model => model.source_id));
@@ -139,6 +140,7 @@ module.exports = {
   localRuntimes: localRuntimes.length,
   packs: packs.length,
   robots: robots.length,
+  specifications: specifications.length,
   hostPackSystems: hostPackSystems.length,
   models,
   reviewedModels: reviewedModels.length,
