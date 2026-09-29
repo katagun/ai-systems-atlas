@@ -842,17 +842,34 @@
     return { values, rejected };
   }
 
-  // Which scope a URL's filters belong to: the Directory collection it names,
-  // or All. Finder, Taxonomy, and API carry none. Legacy sibling-view URLs
-  // (?view=models|labs|specifications) resolve to their collection so shared
-  // links keep working after the unified catalog move.
+  // Which scope a URL's filters belong to. A legacy sibling-view URL
+  // (?view=models|labs|specifications) names its collection, so shared links
+  // keep working after the unified catalog move; Finder, Taxonomy, and API
+  // own no filters. Otherwise a comparison names its collection, then
+  // `collection`, then a record its own, then All (front-door spec, "URL
+  // state and history"; ruling R17). A record opened from mixed results
+  // keeps the collection it was opened over; a shared record link, which
+  // names none, opens over its own. Deciding this before any control is
+  // restored is what keeps a hand-edited URL from leaving state in a hidden
+  // panel.
+  const RECORD_COLLECTIONS = { system: "systems", inference: "inference", runtime: "runtimes", pack: "packs", robot: "robots", spec: "specifications", model: "models", lab: "labs" };
   function scopeFromURL(params) {
     const view = params.get("view");
     if (["models", "labs", "specifications"].includes(view)) return view;
     if (view && view !== "directory") return null;
-    const collection = params.get("collection");
-    if (["systems", "inference", "runtimes", "packs", "robots", "models", "labs", "specifications"].includes(collection)) return collection;
-    return "all";
+    // The kind comes from the URL, so it is looked up as an own key only, as
+    // record kinds are: "constructor" must not resolve. Without a colon a
+    // comparison names no kind.
+    const compare = params.get("compare") || "";
+    const colon = compare.indexOf(":");
+    const kind = colon > 0 ? compare.slice(0, colon) : "";
+    if (Object.hasOwn(COMPARISON_COLLECTIONS, kind)) return COMPARISON_COLLECTIONS[kind];
+    if (params.has("collection")) {
+      const collection = params.get("collection");
+      return ["systems", "inference", "runtimes", "packs", "robots", "models", "labs", "specifications"].includes(collection) ? collection : "all";
+    }
+    const record = parseRecordReference(params.get("record"));
+    return record ? RECORD_COLLECTIONS[record.kind] ?? "all" : "all";
   }
 
   function paginate(items, { page = 1, pageSize } = {}) {

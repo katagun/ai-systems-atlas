@@ -36,6 +36,10 @@ test("a tile opens its collection in results and Back returns to the front door"
   await page.goBack();
   await expect(page.locator("#front-door")).toBeVisible();
   await expect(page).not.toHaveURL(/collection=/);
+  await page.goForward();
+  await expect(page.locator("#inference-directory-panel")).toBeVisible();
+  await expect(page.locator("#front-door")).toBeHidden();
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Inference services \d/);
 });
 
 test("the Everything tile is the A–Z list, and the Models, Labs, and Specifications tiles open their collections", async ({ page }) => {
@@ -393,4 +397,144 @@ test("focus walking back up the results stays clear of the strip", async ({ page
     expect(inGrid, `step ${step}: focus is still in the grid`).toBe(true);
     expect(top, `step ${step}: the focused control sits below the strip`).toBeGreaterThanOrEqual(stripBottom - 1);
   }
+});
+
+test("a record URL with no collection opens over its own collection's results", async ({ page }) => {
+  await page.goto("/?record=runtime:ollama");
+  await expect(page.locator("#runtime-dialog")).toBeVisible();
+  await page.locator("#runtime-dialog .dialog-close").click();
+  await expect(page.locator("#runtimes-directory-panel")).toBeVisible();
+  await expect(page).toHaveURL(/collection=runtimes/);
+  await expect(page).not.toHaveURL(/record=/);
+
+  // A record opened over the All results keeps All (ruling R17).
+  await page.goto("/?collection=all&record=pack:agent-toolkit");
+  await page.reload();
+  await expect(page.locator("#pack-dialog")).toBeVisible();
+  await expect(page.locator("#all-directory-panel")).toBeVisible();
+  await page.locator("#pack-dialog .dialog-close").click();
+  await expect(page.locator("#all-directory-panel")).toBeVisible();
+  await expect(page).toHaveURL(/collection=all/);
+  await expect(page).not.toHaveURL(/record=/);
+});
+
+test("a comparison decides the scope before the collection's filters are applied", async ({ page }) => {
+  await page.goto("/?collection=systems&family=memory_system&compare=inference:openai-api,anthropic-api");
+  await expect(page.locator("#inference-directory-panel")).toBeVisible();
+  await expect(page.locator("#family-filter")).toHaveValue("");
+  await expect(page).not.toHaveURL(/family=/);
+  await expect(page.locator("#comparison-tray")).toBeVisible();
+});
+
+test("Back after closing a record restores the filters the URL carries", async ({ page }) => {
+  await page.goto("/?collection=systems");
+  await page.locator(".advanced-filter-shell summary").click();
+  await page.locator("#license-filter").selectOption("MIT");
+  await expect(page).toHaveURL(/license=MIT/);
+  const before = await page.locator("#result-count").textContent();
+  await page.locator("#project-grid [data-project]").first().click();
+  await expect(page.locator("#project-dialog")).toBeVisible();
+  await page.locator("#project-dialog .dialog-close").click();
+  await page.locator("#license-filter").selectOption("Apache-2.0");
+  await expect(page).toHaveURL(/license=Apache-2\.0/);
+  await page.goBack();
+  await expect(page).toHaveURL(/license=MIT/);
+  await expect(page.locator("#license-filter")).toHaveValue("MIT");
+  await expect(page.locator("#result-count")).toHaveText(before);
+  await expect(page.locator("#project-dialog")).toBeHidden();
+});
+
+// Typing replaces the entry a closed record left, so Back lands on the entry
+// before the record, whose query the box and the results must show.
+test("Back after closing a record restores the query the URL carries", async ({ page }) => {
+  await page.goto("/?collection=systems");
+  const index = page.waitForResponse(response => new URL(response.url()).pathname === "/app/search/systems.json");
+  await page.locator("#project-search").fill("ollama");
+  await index;
+  await page.waitForFunction(() => searchIndexes.systems !== undefined);
+  const before = await page.locator("#result-count").textContent();
+  await page.locator("#project-grid [data-project]").first().click();
+  await expect(page.locator("#project-dialog")).toBeVisible();
+  await page.locator("#project-dialog .dialog-close").click();
+  await page.locator("#project-search").fill("vllm");
+  await expect(page).toHaveURL(/q=vllm/);
+  await page.goBack();
+  await expect(page).toHaveURL(/q=ollama/);
+  await expect(page.locator("#project-search")).toHaveValue("ollama");
+  await expect(page.locator("#result-count")).toHaveText(before);
+  await expect(page.locator("#project-dialog")).toBeHidden();
+});
+
+test("Back and forward move between the front door, results, and a record", async ({ page }) => {
+  await page.goto("/");
+  await openCollection(page, "packs");
+  await page.locator('#pack-grid [data-pack="agent-toolkit"]').click();
+  await expect(page.locator("#pack-dialog")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#pack-dialog")).toBeHidden();
+  await expect(page.locator("#packs-directory-panel")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#front-door")).toBeVisible();
+  await page.goForward();
+  await expect(page.locator("#packs-directory-panel")).toBeVisible();
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Agent packs \d/);
+  await page.goForward();
+  await expect(page.locator("#pack-dialog")).toBeVisible();
+  await expect(page.locator("#packs-directory-panel")).toBeVisible();
+});
+
+// A shared comparison link opens its table; Back to a comparison is not a
+// request for the table, only for the selection the URL carries.
+test("Back to a comparison restores the selection without opening its table", async ({ page }) => {
+  await page.goto("/?collection=systems&family=agent_system&role=coding_agent");
+  await page.locator('#project-grid [data-compare-id="kilo-code"]').click();
+  await page.locator('#project-grid [data-compare-id="aider"]').click();
+  await expect(page).toHaveURL(/compare=system%3Akilo-code%2Caider/);
+  await page.locator('#project-grid [data-project="aider"]').click();
+  await expect(page.locator("#project-dialog")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#project-dialog")).toBeHidden();
+  await expect(page.locator("#comparison-tray-title")).toHaveText("2 items selected");
+  await expect(page.locator("#comparison-dialog")).toBeHidden();
+});
+
+test("a restored query with no sort lands on Best match", async ({ page }) => {
+  await page.goto("/?collection=inference&q=router");
+  await expect(page.locator("#inference-sort-filter")).toHaveValue("match");
+});
+
+// Following the skip link changes only the fragment, which fires popstate;
+// nothing the URL's search carries changed, so nothing is restored.
+test("the skip link restores nothing, so a sort chosen before typing still comes back", async ({ page }) => {
+  await page.goto("/?collection=inference");
+  await page.locator("#inference-sort-filter").selectOption("name");
+  const index = page.waitForResponse(response => new URL(response.url()).pathname === "/app/search/inference.json");
+  await page.locator("#inference-search").fill("router");
+  await index;
+  await page.waitForFunction(() => searchIndexes.inference !== undefined);
+  await expect(page.locator("#inference-sort-filter")).toHaveValue("match");
+  const before = await page.locator("#inference-result-count").textContent();
+  const search = new URL(page.url()).search;
+  await page.locator(".skip-link").focus();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#main$/);
+  expect(new URL(page.url()).search).toBe(search);
+  await expect(page.locator("#inference-sort-filter")).toHaveValue("match");
+  await expect(page.locator("#inference-result-count")).toHaveText(before);
+  await page.locator("#inference-search").fill("");
+  await expect(page.locator("#inference-sort-filter")).toHaveValue("name");
+});
+
+// A sort chosen before typing is what clearing the query gives back, but
+// beside a query the URL names only a sort the reader chose since typing,
+// so a reload forgets the earlier one (BACKLOG, Phase 1 leftover).
+test.fixme("a sort chosen before typing survives a reload and returns when the query is cleared", async ({ page }) => {
+  await page.goto("/?collection=inference");
+  await page.locator("#inference-sort-filter").selectOption("name");
+  await page.locator("#inference-search").fill("router");
+  await expect(page.locator("#inference-sort-filter")).toHaveValue("match");
+  await page.reload();
+  await page.locator("#inference-search").fill("");
+  await expect(page.locator("#inference-sort-filter")).toHaveValue("name");
+  await expect(page).toHaveURL(/sort=name/);
 });
