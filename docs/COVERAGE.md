@@ -23,23 +23,23 @@ Every count below is generated, not transcribed. `uv run python scripts/validate
 <!-- catalog-counts: regenerate with `uv run python scripts/validate_directory.py --counts` -->
 
 ```text
-systems: 208
-  agent_system 133, assistant_system 17, memory_system 58
-  active-choice 196 (archived 9, superseded 3)
+systems: 213
+  agent_system 133, assistant_system 17, memory_system 63
+  active-choice 201 (archived 9, superseded 3)
 specifications: 22
 inference_services: 60
 local_runtimes: 17
 model_releases: 309
 models_dev_source_records: 424
 model_candidates: 6
-system_candidates: 128
+system_candidates: 123
 exclusions: 92
 packs: 8
 labs: 40 covering 309 releases
 robots: 4
 ```
 
-Reading the block: 208 reviewed systems, of which 196 satisfy active-choice coverage because nine are archived and three superseded. The system provisional queue holds 128 candidates. Ninety-two candidates have been excluded with reasons. The separate unscored collections contain 22 specifications, 8 agent packs, 40 labs, and 4 robots; the scored collections hold 60 inference services, 17 local runtimes, and 309 model releases. The models.dev snapshot carries 424 attributed source records, from which 6 further text-output model candidates await complete review.
+The block is the only place these counts are written down, which is why nothing above restates them: a second copy is a second thing to rot. Read `active-choice` as the catalog a reader chooses from — every system minus the archived and superseded ones — and `labs covering N releases` as the share of reviewed model releases whose developer has a labs record, which is the one figure that says whether the labs collection is keeping up with the models collection.
 
 The prose coverage signals, and the numeric columns of the role table below, are editorial and are not generated. This snapshot predates batch 95 and its removal of the four robot candidates, so the queue counts in this paragraph were stale until this revision recomputed them.
 
