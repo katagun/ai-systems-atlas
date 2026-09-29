@@ -654,60 +654,6 @@
       }
     },
     {
-      "repo": "dora-rs/dora",
-      "name": "Dora",
-      "url": "https://github.com/dora-rs/dora",
-      "description": "Dora (Dataflow-Oriented Robotic Architecture) is middleware for composing AI-based robotic applications as low-latency, distributed dataflow pipelines.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": "Apache-2.0",
-      "stars": 3922,
-      "topics": [
-        "dataflow",
-        "embodied-ai",
-        "low-latency",
-        "robotics",
-        "rust"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robot software role decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Ships an installable CLI (cargo install dora-cli) and Python API (pip install dora-rs) with releases, CI, and a public node hub, so a maintained run path is documented. Its documented outcome is a declarative dataflow graph: the node hub lists ready-made nodes for cameras, YOLO, LLMs, and TTS, and the README documents a ROS2 bridge carrying 'bidirectional topics, services, and actions over DDS' between graph nodes and ROS2, where 'actions' is the ROS2 request/feedback/result concept rather than actuation. The README never uses the words actuator, hardware, physical, or VLM, so a model node's output reaching a robot's actuator through this bridge is a reasonable inference from what a ROS2-connected dataflow graph does, not a claim the README makes outright. No existing role names composing a dataflow graph that mixes model node types (LLM, YOLO) with a ROS2 bridge to robot software; the node-hub and LLM-node claims are stated directly in the README's feature list without reading the source tree, but the actuator link is not.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/dora-rs/dora/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "ae5e06d263ca95043cedfd1d14c4eb3474389fb6570dd0d0abc6060c9273e268",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "9700c27ca56309d5458bc986482823b51459669b",
-            "immutable_url": "https://api.github.com/repos/dora-rs/dora/git/blobs/9700c27ca56309d5458bc986482823b51459669b"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/dora-rs/dora/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "7b515bc646ca4e20427bc6a72b8ca5149a0e9b38a77e9a7d0ba5463af5a6cfbc",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "fe9751aa01eb9c7d359209185eb26c8e31f1a15f",
-            "immutable_url": "https://api.github.com/repos/dora-rs/dora/git/blobs/fe9751aa01eb9c7d359209185eb26c8e31f1a15f"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
       "repo": "FailproofAI/failproofai",
       "name": "failproofai",
       "url": "https://github.com/FailproofAI/failproofai",

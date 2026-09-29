@@ -729,6 +729,62 @@
       "useful_lesson": "An agent-shaped harness built for benchmarking models is still a benchmark; adoption as an operational product is the boundary, not agent vocabulary.",
       "excluded_at": "2026-09-25",
       "verified_at": "2026-09-25"
+    },
+    {
+      "name": "Dora",
+      "repo": "dora-rs/dora",
+      "reason": "Dora's README describes \"middleware for composing AI-based robotic applications as low-latency, distributed dataflow pipelines\": a node hub of cameras, YOLO, LLM and TTS nodes, a ROS2 bridge, and a CLI and Python API with tagged releases. The README states no agent loop of its own and never uses the words actuator, hardware, or physical; the wiring from a model's output to an arm driver exists only in the separate dora-hub repository's examples. Reviewed under ADR 045, this fails inclusion-gate condition 2 on the line dario and TreeQuest set: the loop belongs to the authors of the nodes, and Dora owns transport and scheduling between them. It differs from LangGraph, whose documented outcome is the agent's own control flow with state, checkpoints and human control, and from sandbase-harness, which owns its sessions, events and credential vault. The PyPI wheel declares MIT while the repository LICENSE and NOTICE say Apache-2.0; the discrepancy is recorded and does not bear on the decision.",
+      "useful_lesson": "Middleware that carries a model node's output is not the agent whose output it carries; ask whose loop the graph is, and read the README rather than the example repository for what the system claims of itself.",
+      "excluded_at": "2026-09-28",
+      "verified_at": "2026-09-28"
+    },
+    {
+      "name": "Genesis",
+      "repo": "Genesis-Embodied-AI/Genesis",
+      "reason": "Genesis's README calls it \"a simulation platform for physical AI developments\", a physics engine, renderer and compiler, and no sentence states that a model's output is sent to physical hardware. Inclusion-gate condition 2 fails on the line coverage batch 39 drew for MuJoCo, Isaac Lab and robosuite: a physics substrate other software trains or evaluates a model against, never a model operating its own loop.",
+      "useful_lesson": "A simulator is where a policy is trained, not where an agent acts; it stays out however central it is to the ecosystem.",
+      "excluded_at": "2026-09-28",
+      "verified_at": "2026-09-28"
+    },
+    {
+      "name": "robomimic",
+      "repo": "ARISE-Initiative/robomimic",
+      "reason": "robomimic's rendered README frames it as offline imitation-learning and reinforcement-learning algorithms over demonstration datasets, used to reproduce benchmarks; its only real-robot wording sits inside an HTML comment that does not render. Inclusion-gate condition 2 fails on the Isaac Lab line: a training framework whose documented purpose is research workflows, not an agent that plans or acts.",
+      "useful_lesson": "Read the rendered README; a claim inside an HTML comment is not a claim the maintainers make.",
+      "excluded_at": "2026-09-28",
+      "verified_at": "2026-09-28"
+    },
+    {
+      "name": "ROS 2",
+      "repo": "ros2/ros2",
+      "reason": "The ROS 2 meta-repository describes \"a set of software libraries and tools that help you build robot applications\" and documents no learned model, policy, or decision loop of any kind. Inclusion-gate condition 2 fails on the Nav2 line: robot middleware with no model in any documented loop. The repository root carries no LICENSE file; the packages it lists carry their own.",
+      "useful_lesson": "A robot operating system is the substrate an agent's connectors speak to, not an agent.",
+      "excluded_at": "2026-09-28",
+      "verified_at": "2026-09-28"
+    },
+    {
+      "name": "MoveIt 2",
+      "repo": "moveit/moveit2",
+      "reason": "MoveIt 2 describes itself as \"the MoveIt Motion Planning Framework for ROS 2\" and documents classical motion planning with no learned model or policy. Inclusion-gate condition 2 fails on the Nav2 line.",
+      "useful_lesson": "Motion planning that a caller parameterises is programmability, not an AI basis; ADR 037 draws the same line for robots.",
+      "excluded_at": "2026-09-28",
+      "verified_at": "2026-09-28"
+    },
+    {
+      "name": "Isaac ROS Common",
+      "repo": "NVIDIA-ISAAC-ROS/isaac_ros_common",
+      "reason": "The repository holds \"essential packages for building, testing, and using Isaac ROS\": build and DevOps tooling for a ROS 2 package family under a custom NVIDIA EULA, with no learned model or decision loop documented in its README. Inclusion-gate condition 2 fails on the Nav2 line.",
+      "useful_lesson": "Build tooling for a package family is infrastructure below the agent, whatever the family later runs.",
+      "excluded_at": "2026-09-28",
+      "verified_at": "2026-09-28"
+    },
+    {
+      "name": "Open X-Embodiment",
+      "repo": "google-deepmind/open_x_embodiment",
+      "reason": "Open X-Embodiment is primarily a dataset repository, with an RT-1-X checkpoint and an inference notebook as secondary content; no sentence states an action is executed on physical hardware. It is a research input under docs/CURATION.md, not an operational system, and the checkpoint question belongs with the action-policy model decision.",
+      "useful_lesson": "A dataset with a reference checkpoint is a research input; it enters no scored collection.",
+      "excluded_at": "2026-09-28",
+      "verified_at": "2026-09-28"
     }
   ]
 }
