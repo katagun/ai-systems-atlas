@@ -253,15 +253,15 @@ function writeDirectoryURL() {
 // Each scope's URL parameters and the control that holds each one. Keys are
 // AppCore.SCOPE_URL_PARAMS keys; selectors are web/index.html's.
 const SCOPE_CONTROLS = {
-  all: { q: "#all-directory-search" },
-  systems: { q: "#project-search", family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter", deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", capability: "#capability-filter", sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter", sort: "#sort-filter" },
-  inference: { q: "#inference-search", type: "#inference-type-filter", delivery: "#inference-delivery-filter", modelSource: "#inference-model-source-filter", apiStyle: "#inference-api-filter", sort: "#inference-sort-filter" },
-  runtimes: { q: "#runtime-search", type: "#runtime-type-filter", accelerator: "#runtime-accelerator-filter", modelFormat: "#runtime-format-filter", apiStyle: "#runtime-api-filter", sort: "#runtime-sort-filter" },
-  packs: { q: "#pack-search", type: "#pack-type-filter", host: "#pack-host-filter", install: "#pack-install-filter", license: "#pack-license-filter" },
-  robots: { q: "#robot-search", formFactor: "#robot-form-factor-filter", aiBasis: "#robot-ai-basis-filter", availability: "#robot-availability-filter", status: "#robot-status-filter" },
-  models: { q: "#model-search", type: "#model-type-filter", distribution: "#model-distribution-filter", modality: "#model-modality-filter", sourceModel: "#model-source-filter", license: "#model-license-filter", lab: "#model-lab-filter", sort: "#model-sort-filter" },
-  labs: { q: "#lab-search", type: "#lab-type-filter", headquarters: "#lab-country-filter", distribution: "#lab-distribution-filter" },
-  specifications: { q: "#specification-search", type: "#specification-type-filter", scope: "#specification-scope-filter", status: "#specification-status-filter", license: "#specification-license-filter" },
+  all: { q: "#results-search" },
+  systems: { q: "#results-search", family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter", deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", capability: "#capability-filter", sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter", sort: "#sort-filter" },
+  inference: { q: "#results-search", type: "#inference-type-filter", delivery: "#inference-delivery-filter", modelSource: "#inference-model-source-filter", apiStyle: "#inference-api-filter", sort: "#inference-sort-filter" },
+  runtimes: { q: "#results-search", type: "#runtime-type-filter", accelerator: "#runtime-accelerator-filter", modelFormat: "#runtime-format-filter", apiStyle: "#runtime-api-filter", sort: "#runtime-sort-filter" },
+  packs: { q: "#results-search", type: "#pack-type-filter", host: "#pack-host-filter", install: "#pack-install-filter", license: "#pack-license-filter" },
+  robots: { q: "#results-search", formFactor: "#robot-form-factor-filter", aiBasis: "#robot-ai-basis-filter", availability: "#robot-availability-filter", status: "#robot-status-filter" },
+  models: { q: "#results-search", type: "#model-type-filter", distribution: "#model-distribution-filter", modality: "#model-modality-filter", sourceModel: "#model-source-filter", license: "#model-license-filter", lab: "#model-lab-filter", sort: "#model-sort-filter" },
+  labs: { q: "#results-search", type: "#lab-type-filter", headquarters: "#lab-country-filter", distribution: "#lab-distribution-filter" },
+  specifications: { q: "#results-search", type: "#specification-type-filter", scope: "#specification-scope-filter", status: "#specification-status-filter", license: "#specification-license-filter" },
 };
 
 // The scope whose state the URL carries: the Directory's collection while
@@ -280,12 +280,14 @@ function readScopeControls(scope) {
 }
 
 function allowedScopeValues(scope) {
-  return Object.fromEntries(Object.entries(SCOPE_CONTROLS[scope] || {}).map(([key, selector]) => {
+  const allowed = Object.fromEntries(Object.entries(SCOPE_CONTROLS[scope] || {}).map(([key, selector]) => {
     const control = $(selector);
     if (control.type === "checkbox") return [key, new Set(["1"])];
     if (control.tagName === "SELECT") return [key, new Set([...control.options].filter(option => !option.disabled).map(option => option.value))];
     return [key, "text"];
   }));
+  if (MATCH_SORTS[scope]) allowed.browseSort = new Set([...$(MATCH_SORTS[scope]).options].filter(option => !option.disabled && option.value !== "match").map(option => option.value));
+  return allowed;
 }
 
 // Rewrites the active scope's parameters in place: only `record` and
@@ -298,7 +300,9 @@ function writeScopeURL() {
   AppCore.SCOPE_URL_KEYS.forEach(key => url.searchParams.delete(key));
   const scope = activeScope();
   if (scope) {
-    for (const [key, value] of AppCore.scopeURLParams(scope, readScopeControls(scope))) url.searchParams.set(key, value);
+    const values = readScopeControls(scope);
+    if (MATCH_SORTS[scope] && !sortChosenDuringQuery[scope] && sortBeforeQuery[scope]) values.browseSort = sortBeforeQuery[scope];
+    for (const [key, value] of AppCore.scopeURLParams(scope, values)) url.searchParams.set(key, value);
     if (state.page[scope] > 1) url.searchParams.set("page", String(state.page[scope]));
   }
   // Every render and keystroke lands here, so this is the writer that spends
@@ -335,6 +339,96 @@ function syncMatchSort(scope) {
   }
 }
 
+// The one query every collection reads (Phase 3 spec, section 1).
+const currentQuery = () => $("#results-search").value;
+
+function syncMatchSorts() {
+  Object.keys(MATCH_SORTS).forEach(syncMatchSort);
+}
+
+// Empties the one query, as the Finder's handoffs, Clear filters, and the
+// front door do: every collection returns to its first page, and each sort
+// follows the query's end as syncMatchSort decides.
+function clearQuery() {
+  $("#results-search").value = "";
+  Object.keys(state.page).forEach(key => { state.page[key] = 1; });
+  syncMatchSorts();
+}
+
+// One Clear control per collection, one behaviour: the collection's own
+// controls return to their defaults, and the query, which every collection
+// shares, clears everywhere (front-door spec, Phase 1).
+function resetCollection(scope) {
+  if (scope === "systems") applyDirectoryDefaults();
+  else {
+    for (const [key, selector] of Object.entries(SCOPE_CONTROLS[scope])) {
+      if (key !== "q") $(selector).value = AppCore.SCOPE_URL_PARAMS[scope][key] ?? "";
+    }
+  }
+  clearQuery();
+  RESULT_VIEWS[scope].render();
+  // Systems' defaults can change the family, which the strip's second row
+  // shows, so it rebuilds; elsewhere only the counts move.
+  if (scope === "systems") renderScopeStrip();
+  else syncScopeStrip();
+}
+
+// Every search index, loaded once a query is present: the strip counts the
+// query in every collection (CATALOG_INDEXES). One that failed is left to a
+// focused search box to retry, as an empty result leaves it, so a failing
+// index is not asked for again on every keystroke.
+function loadCatalogIndexes() {
+  for (const name of CATALOG_INDEXES) {
+    if (!searchIndexFailed.has(name)) loadSearchIndex(name)?.then(renderSearchSurfaces);
+  }
+}
+
+// Typing repaints once the reader pauses (CR-21): the results, the strip's
+// counts, and the URL follow 150 ms after the last keystroke, while the
+// sort, a control's state rather than a paint, follows at once. The results
+// region says it is busy meanwhile.
+const RESULTS_PAUSE_MS = 150;
+let resultsTimer = null;
+function scheduleResults() {
+  clearTimeout(resultsTimer);
+  $(RESULT_VIEWS[state.directoryCollection].panel).setAttribute("aria-busy", "true");
+  resultsTimer = setTimeout(flushResults, RESULTS_PAUSE_MS);
+}
+
+function flushResults() {
+  clearTimeout(resultsTimer);
+  resultsTimer = null;
+  $$(".collection-panel[aria-busy]").forEach(panel => panel.removeAttribute("aria-busy"));
+  if (!activeScope()) return;
+  RESULT_VIEWS[state.directoryCollection].render();
+  syncScopeStrip();
+}
+
+// A change to the query's text starts every collection on its first page.
+// Typing on continues the same query, so a sort chosen during it stays
+// (docs/WEB.md, Phase 3 spec section 1).
+function onQueryInput() {
+  Object.keys(state.page).forEach(key => { state.page[key] = 1; });
+  syncMatchSorts();
+  if (currentQuery().trim()) loadCatalogIndexes();
+  scheduleResults();
+}
+
+// The one match pass per query and index state, shared by the strip's
+// counts and the empty result's pointers.
+let matchCache = { key: null, matched: new Set() };
+function currentMatches(term = currentQuery()) {
+  const key = `${term}\u0000${CATALOG_INDEXES.filter(name => searchIndexes[name]).join(",")}`;
+  if (matchCache.key !== key) matchCache = { key, matched: AppCore.queryMatches(term, collectionPayloads(), searchIndexes, { labelOf: searchLabel }) };
+  return matchCache.matched;
+}
+
+// The bar speaks for the collection on screen: its search hint and its Sort.
+function syncResultsBar(scope) {
+  $("#results-search").placeholder = RESULT_VIEWS[scope].placeholder;
+  $$("#results-bar [data-sort-scope]").forEach(label => { label.hidden = label.dataset.sortScope !== scope; });
+}
+
 // "12 results" beside a search box while it holds a query.
 function setSearchCount(scope, count) {
   const selector = SCOPE_CONTROLS[scope]?.q;
@@ -365,6 +459,12 @@ function restoreScopeFromURL(scope) {
   for (const [key, value] of Object.entries(values)) {
     if (key === "page") {
       state.page[scope] = value;
+      continue;
+    }
+    // The sort clearing the query returns to; syncMatchSort keeps it
+    // (`sortBeforeQuery[scope] ??= …`).
+    if (key === "browseSort") {
+      sortBeforeQuery[scope] = value;
       continue;
     }
     const control = $(SCOPE_CONTROLS[scope][key]);
@@ -431,8 +531,8 @@ function renderComparisonControls() {
   const tray = $("#comparison-tray");
   if (!tray) return;
   tray.hidden = records.length === 0 || !COMPARISON_VIEWS.includes($(".view.is-active")?.id);
-  // The strip's dots follow the comparison; its render keeps a reader's focus.
-  if (state.directoryStage === "results") renderScopeStrip();
+  // The strip's dots follow the comparison, updated in place.
+  if (state.directoryStage === "results") syncScopeStrip();
   syncBadgeLegend();
   $("#comparison-tray-title").textContent = records.length === 1 ? "1 item selected" : `${records.length} items selected`;
   $("#comparison-tray-items").textContent = records.map(item => item.name).join(" · ");
@@ -646,7 +746,6 @@ function applyDirectoryDefaults() {
   const defaults = AppCore.directoryDefaults();
   state.directoryRoles = null;
   state.directoryRolesLabel = null;
-  $("#project-search").value = defaults.term;
   $("#family-filter").value = defaults.family;
   $("#role-filter").value = defaults.role;
   populateRoleFilter();
@@ -714,7 +813,7 @@ function renderCollectionIndex() {
   const payloads = collectionPayloads();
   $("#collection-index").innerHTML = AppCore.COLLECTIONS.map(entry => {
     const { count, note } = AppCore.collectionCount(entry.id, payloads);
-    if (count === 0 && entry.id !== "all") return "";
+    if (AppCore.collectionHidden(entry.id, payloads)) return "";
     const categories = AppCore.collectionCategories(entry.id, payloads);
     const categoryList = categories.length
       ? `<ul class="tile-categories" role="list">${categories.map(category => `<li><button type="button" class="tile-category" data-open-collection="${escapeHTML(entry.id)}" data-facet-key="${escapeHTML(category.key)}" data-facet-value="${escapeHTML(category.value)}">${escapeHTML(category.label)} <strong>${category.count}</strong></button></li>`).join("")}</ul>`
@@ -857,19 +956,15 @@ function leaveFrontDoor() {
   return true;
 }
 
-// The front door is a clean start: the query of the collection last shown
-// is cleared, so no tile opens with a search the door's empty box never showed.
+// The front door is a clean start: the query is cleared, so no tile opens
+// with a search the door's empty box never showed.
 function showFrontDoor({ updateURL = true } = {}) {
   state.directoryStage = "door";
-  const collection = state.directoryCollection;
-  const query = $(SCOPE_CONTROLS[collection].q);
-  if (query.value) {
-    query.value = "";
-    state.page[collection] = 1;
-    syncMatchSort(collection);
-  }
+  if (currentQuery()) clearQuery();
   $$(".collection-panel").forEach(panel => { panel.hidden = true; });
   $("#scope-strip").hidden = true;
+  $("#results-bar").hidden = true;
+  $("#directory").classList.remove("is-results");
   $("#front-door").hidden = false;
   $("#hero-kicker").hidden = false;
   $("#directory-title").classList.remove("visually-hidden");
@@ -892,6 +987,8 @@ function showResults() {
   $("#hero-kicker").hidden = true;
   $("#directory-title").classList.add("visually-hidden");
   $("#scope-strip").hidden = false;
+  $("#results-bar").hidden = false;
+  $("#directory").classList.add("is-results");
   syncMobileNavigation();
 }
 
@@ -900,62 +997,91 @@ function showResults() {
 // one's name and count read as a caption under the row (styles.css), so nine
 // entries fit a 320 px phone with slack and nothing scrolls sideways. Up to
 // 1407 px each shows its short name, so the row stays one row. Inside Systems
-// a second row lists the families, one pressed.
+// a second row lists the families, one pressed. It is rebuilt only when the
+// collection or the family changes; counts and dots update in place
+// (syncScopeStrip), so a click that lands during a repaint is never lost.
 const FAMILY_ORDER = ["memory_system", "agent_system", "assistant_system"];
 function renderScopeStrip() {
   const strip = $("#scope-strip");
-  // Every grid repaint lands here, so a reader's focus on an entry is put
-  // back on the rebuilt one rather than dropped to the page.
   const focused = strip.contains(document.activeElement) ? document.activeElement : null;
   const focusKey = focused?.dataset.openCollection !== undefined
     ? `[data-open-collection="${focused.dataset.openCollection}"]`
     : focused?.dataset.familyEntry !== undefined ? `[data-family-entry="${focused.dataset.familyEntry}"]` : null;
   const payloads = collectionPayloads();
-  let caption = "";
   const entries = AppCore.COLLECTIONS.map(entry => {
-    const { count } = AppCore.collectionCount(entry.id, payloads);
-    if (count === 0 && entry.id !== "all") return "";
+    if (AppCore.collectionHidden(entry.id, payloads)) return "";
     const pressed = entry.id === state.directoryCollection;
-    if (pressed) caption = `${entry.name} · ${count}`;
     // Keep an initial as a fallback for any future collection without a glyph.
     const emblem = collectionEmblem(entry) || `<span class="scope-monogram" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(entry.name))}</span>`;
-    return `<button type="button" class="scope-entry${pressed ? " is-active" : ""}" data-open-collection="${escapeHTML(entry.id)}" aria-pressed="${pressed}" title="${escapeHTML(entry.name)}">${emblem}<span class="scope-name">${escapeHTML(entry.name)}</span><span class="scope-short" aria-hidden="true">${escapeHTML(entry.short)}</span><strong class="scope-count">${count}</strong>${stateDot(collectionStateFor(entry.id))}</button>`;
+    return `<button type="button" class="scope-entry${pressed ? " is-active" : ""}" data-open-collection="${escapeHTML(entry.id)}" aria-pressed="${pressed}" title="${escapeHTML(entry.name)}">${emblem}<span class="scope-name">${escapeHTML(entry.name)}</span><span class="scope-short" aria-hidden="true">${escapeHTML(entry.short)}</span><strong class="scope-count"></strong><span class="scope-count-label visually-hidden"></span></button>`;
   }).join("");
-  const familyRow = state.directoryCollection === "systems" ? renderFamilyRow(payloads) : "";
-  strip.innerHTML = `<div class="scope-row">${entries}</div><p class="scope-caption" aria-hidden="true">${escapeHTML(caption)}</p>${familyRow}`;
+  const familyRow = state.directoryCollection === "systems" ? renderFamilyRow() : "";
+  strip.innerHTML = `<div class="scope-row">${entries}</div><p class="scope-caption" aria-hidden="true"></p>${familyRow}`;
+  syncScopeStrip();
   if (focusKey) strip.querySelector(focusKey)?.focus({ preventScroll: true });
   syncStickyClearance();
 }
 
-function renderFamilyRow(payloads) {
+function renderFamilyRow() {
   const current = $("#family-filter").value;
-  const categories = AppCore.collectionCategories("systems", payloads);
-  const total = AppCore.collectionCount("systems", payloads).count;
-  const entry = (value, label, count) => `<button type="button" class="family-entry${value === current ? " is-active" : ""}" data-family-entry="${escapeHTML(value)}" aria-pressed="${value === current}">${label} <strong>${count}</strong></button>`;
-  const families = FAMILY_ORDER.map(id => entry(id, escapeHTML(AppCore.FAMILY_SHORT_NAMES[id]), (categories.find(category => category.value === id) || { count: 0 }).count));
+  const entry = (value, label) => `<button type="button" class="family-entry${value === current ? " is-active" : ""}" data-family-entry="${escapeHTML(value)}" aria-pressed="${value === current}">${label} <strong></strong></button>`;
+  const families = FAMILY_ORDER.map(id => entry(id, escapeHTML(AppCore.FAMILY_SHORT_NAMES[id])));
   // A phone shows "All" alone so the row stays one row (styles.css); the
   // clipped rest keeps "All families" the accessible name at every width.
-  return `<div class="family-row" role="group" aria-label="System families">${entry("", 'All<span class="family-rest"> families</span>', total)}${families.join("")}</div>`;
+  return `<div class="family-row" role="group" aria-label="System families">${entry("", 'All<span class="family-rest"> families</span>')}${families.join("")}</div>`;
+}
+
+// Fills the strip's counts, caption, and dots in place. While a query is
+// present each entry counts its matches in its default view and says so;
+// otherwise what that view lists (Phase 3 spec, section 2).
+function syncScopeStrip() {
+  const strip = $("#scope-strip");
+  if (strip.hidden || !strip.firstElementChild) return;
+  const payloads = collectionPayloads();
+  const searching = currentQuery().trim() !== "";
+  const matched = searching ? currentMatches() : null;
+  const counts = searching ? AppCore.collectionMatchCounts(matched, payloads) : null;
+  const matchWord = count => (count === 1 ? " match" : " matches");
+  for (const button of strip.querySelectorAll(".scope-entry")) {
+    const id = button.dataset.openCollection;
+    const count = searching ? counts[id] : AppCore.collectionCount(id, payloads).count;
+    button.querySelector(".scope-count").textContent = String(count);
+    button.querySelector(".scope-count-label").textContent = searching ? matchWord(count) : "";
+    button.querySelector(".state-dot")?.remove();
+    button.insertAdjacentHTML("beforeend", stateDot(collectionStateFor(id)));
+    if (id === state.directoryCollection) {
+      const name = AppCore.COLLECTIONS.find(entry => entry.id === id).name;
+      strip.querySelector(".scope-caption").textContent = `${name} · ${count}${searching ? matchWord(count) : ""}`;
+    }
+  }
+  const families = AppCore.familyMatchCounts(matched, payloads);
+  strip.querySelectorAll(".family-entry").forEach(button => {
+    button.querySelector("strong").textContent = String(families[button.dataset.familyEntry] ?? 0);
+  });
 }
 
 // The strip sticks under the header at every width, so the header's
-// live height is a custom property the stylesheet reads. The sticky height
-// is another, html's scroll-padding-top, so focus moving through a grid
-// stops below the header and the strip rather than under them. The strip's
-// height changes with the family row, so every strip render re-measures.
+// live height is a custom property the stylesheet reads; the strip's is
+// another, which the results bar sticks under above 1000 px. The sticky
+// height is a third, html's scroll-padding-top, so focus moving through a
+// grid stops below the header, the strip, and the bar rather than under
+// them. The strip's height changes with the family row, so every strip
+// render re-measures.
 function syncStickyClearance() {
   const header = $(".site-header");
   if (!header) return;
   document.documentElement.style.setProperty("--header-height", `${header.getBoundingClientRect().height}px`);
+  const strip = $("#scope-strip");
+  document.documentElement.style.setProperty("--strip-height", `${strip && !strip.hidden ? strip.getBoundingClientRect().height : 0}px`);
   document.documentElement.style.setProperty("--sticky-clearance", `${stickyHeight()}px`);
 }
 
 // The one way a tile or a strip entry opens a collection. A facet narrows
 // the collection to one category first; a family goes through
 // jumpToDirectoryFamily so the role and Finder set are cleared as ever.
-// setDirectoryCollection carries the query the reader leaves, so a query
-// only a lab or a specification answers follows the reader from the All
-// results into Labs or Specifications; the front door itself carries none.
+// Every collection reads the one query, so a query only a lab or a
+// specification answers follows the reader from the All results into Labs
+// or Specifications; the front door clears it on arrival.
 function openCollection(id, { facet = null } = {}) {
   const entry = AppCore.COLLECTIONS.find(item => item.id === id);
   if (!entry) return;
@@ -1013,9 +1139,7 @@ function jumpToDirectoryFamily(family) {
 }
 
 function setDirectoryCollection(collection, { updateURL = true, carryQuery = updateURL } = {}) {
-  const selected = ["all", "systems", "inference", "runtimes", "packs", "robots", "models", "labs", "specifications"].includes(collection) ? collection : "all";
-  // Read before the scope changes: the query the reader is leaving.
-  const previousQuery = carryQuery ? $(SCOPE_CONTROLS[state.directoryCollection].q).value : null;
+  const selected = AppCore.COLLECTIONS.some(entry => entry.id === collection) ? collection : "all";
   const compatible = (selected === "systems" && state.comparison.kind === "system")
     || (selected === "inference" && state.comparison.kind === "inference")
     || (selected === "runtimes" && state.comparison.kind === "runtime")
@@ -1024,86 +1148,48 @@ function setDirectoryCollection(collection, { updateURL = true, carryQuery = upd
   state.directoryCollection = selected;
   showResults();
   renderScopeStrip();
-  if (previousQuery !== null) {
-    const input = $(SCOPE_CONTROLS[selected].q);
-    // Changed text is a new query in this scope: it starts on the first page,
-    // and a sort the reader chose for the old text gives way to Best match.
-    if (input.value !== previousQuery) {
-      input.value = previousQuery;
-      state.page[selected] = 1;
-      sortChosenDuringQuery[selected] = false;
-    }
-    syncMatchSort(selected);
-    // A carried query searches what a typed one does: the indexes the box
-    // fetches on focus, with a repaint as each one lands.
-    if (previousQuery.trim()) SEARCH_SCOPES[SCOPE_CONTROLS[selected].q].forEach(name => loadSearchIndex(name)?.then(renderSearchSurfaces));
+  syncResultsBar(selected);
+  // One box holds the query for every collection, so nothing is carried:
+  // the new collection reads it, and its sort follows it.
+  syncMatchSort(selected);
+  if (carryQuery && currentQuery().trim()) loadCatalogIndexes();
+  for (const [name, view] of Object.entries(RESULT_VIEWS)) {
+    $(view.panel).hidden = name !== selected;
+    if (name !== selected) $(view.grid).innerHTML = "";
   }
-  $("#all-directory-panel").hidden = selected !== "all";
-  $("#systems-directory-panel").hidden = selected !== "systems";
-  $("#inference-directory-panel").hidden = selected !== "inference";
-  $("#runtimes-directory-panel").hidden = selected !== "runtimes";
-  $("#packs-directory-panel").hidden = selected !== "packs";
-  $("#robots-directory-panel").hidden = selected !== "robots";
-  $("#models-directory-panel").hidden = selected !== "models";
-  $("#labs-directory-panel").hidden = selected !== "labs";
-  $("#specifications-directory-panel").hidden = selected !== "specifications";
-  const renderers = {
-    all: renderAllDirectoryEntries,
-    systems: renderProjects,
-    inference: renderInferenceServices,
-    runtimes: renderLocalRuntimes,
-    packs: renderPacks,
-    robots: () => renderCollection("robots"),
-    models: renderModels,
-    labs: renderLabs,
-    specifications: renderSpecifications,
-  };
-  for (const [name, grid] of [
-    ["all", "#all-directory-grid"], ["systems", "#project-grid"],
-    ["inference", "#inference-grid"], ["runtimes", "#runtime-grid"], ["packs", "#pack-grid"],
-    ["robots", "#robot-grid"], ["models", "#model-grid"], ["labs", "#lab-grid"],
-    ["specifications", "#specification-grid"],
-  ]) {
-    if (name !== selected) $(grid).innerHTML = "";
-  }
-  renderers[selected]();
+  RESULT_VIEWS[selected].render();
   if (updateURL) writeDirectoryURL();
   syncBadgeLegend();
 }
 
-const PAGE_CONTAINERS = {
-  all: "#all-directory-pager",
-  systems: "#project-pager",
-  inference: "#inference-pager",
-  runtimes: "#runtime-pager",
-  models: "#model-pager",
-  specifications: "#specification-pager",
-  packs: "#pack-pager",
-  labs: "#lab-pager",
-  robots: "#robot-pager",
+// One entry per collection: where its results live, how it paints, its
+// Clear control, and its search box's hint. Every per-collection list reads
+// this table, so a new collection is one entry here and one in
+// AppCore.COLLECTIONS (CR-20; RECORD_DIALOGS is the pattern).
+const RESULT_VIEWS = {
+  all: { panel: "#all-directory-panel", grid: "#all-directory-grid", pager: "#all-directory-pager", count: "#all-directory-result-count", clear: "#reset-all-directory", placeholder: "Search systems, models, services, runtimes, packs, and robots", render: () => renderAllDirectoryEntries() },
+  systems: { panel: "#systems-directory-panel", grid: "#project-grid", pager: "#project-pager", count: "#result-count", clear: "#reset-filters", placeholder: "Search all systems", render: () => renderCollection("systems") },
+  inference: { panel: "#inference-directory-panel", grid: "#inference-grid", pager: "#inference-pager", count: "#inference-result-count", clear: "#reset-inference-filters", placeholder: "Search services and boundaries", render: () => renderCollection("inference") },
+  runtimes: { panel: "#runtimes-directory-panel", grid: "#runtime-grid", pager: "#runtime-pager", count: "#runtime-result-count", clear: "#reset-runtime-filters", placeholder: "Search runtimes and boundaries", render: () => renderCollection("runtimes") },
+  packs: { panel: "#packs-directory-panel", grid: "#pack-grid", pager: "#pack-pager", count: "#pack-result-count", clear: "#reset-pack-filters", placeholder: "Search packs and stewards", render: () => renderPacks() },
+  robots: { panel: "#robots-directory-panel", grid: "#robot-grid", pager: "#robot-pager", count: "#robot-result-count", clear: "#reset-robot-filters", placeholder: "Search robots, makers, and named models", render: () => renderCollection("robots") },
+  models: { panel: "#models-directory-panel", grid: "#model-grid", pager: "#model-pager", count: "#model-result-count", clear: "#reset-model-filters", placeholder: "Search models, developers, and boundaries", render: () => renderCollection("models") },
+  labs: { panel: "#labs-directory-panel", grid: "#lab-grid", pager: "#lab-pager", count: "#lab-result-count", clear: "#reset-lab-filters", placeholder: "Search labs, units, and parent companies", render: () => renderCollection("labs") },
+  specifications: { panel: "#specifications-directory-panel", grid: "#specification-grid", pager: "#specification-pager", count: "#specification-result-count", clear: "#reset-specification-filters", placeholder: "Search specifications and purposes", render: () => renderCollection("specifications") },
 };
 
-function pageRenderer(key) {
-  return {
-    all: renderAllDirectoryEntries, systems: renderProjects, inference: renderInferenceServices,
-    runtimes: renderLocalRuntimes, models: renderModels, specifications: renderSpecifications,
-    packs: renderPacks, labs: renderLabs, robots: () => renderCollection("robots"),
-  }[key];
-}
+const pageRenderer = key => RESULT_VIEWS[key]?.render;
 
 function setPageSize(pageSize) {
   if (!PAGE_SIZE_OPTIONS.includes(pageSize) || pageSize === state.pageSize) return;
   state.pageSize = pageSize;
   writeStoredPageSize(pageSize);
   Object.keys(state.page).forEach(key => { state.page[key] = 1; });
-  pageRenderer(state.directoryCollection)();
-  renderModels();
-  renderLabs();
-  renderSpecifications();
+  RESULT_VIEWS[state.directoryCollection].render();
 }
 
 function renderPager(key, { page, pageCount }) {
-  const container = $(PAGE_CONTAINERS[key]);
+  const container = $(RESULT_VIEWS[key]?.pager);
   if (!container) return;
   container.innerHTML = `
     <label class="pager-size"><span>Show</span>
@@ -1414,7 +1500,7 @@ function renderAllDirectoryEntries() {
   // namespaces; each is absent until that collection's index lands, and the
   // filter falls back to the boot record for whichever is still missing.
   const entries = AppCore.filterDirectoryEntries(state.projects, state.inferenceServices, state.localRuntimes, state.models, {
-    term: $("#all-directory-search").value,
+    term: currentQuery(),
     searchIndex: searchIndexes.systems,
     serviceSearchIndex: searchIndexes.inference,
     runtimeSearchIndex: searchIndexes.runtimes,
@@ -1425,7 +1511,7 @@ function renderAllDirectoryEntries() {
   }, state.packs, state.robots);
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   setSearchCount("all", entries.length);
-  renderJobHint("all", $("#all-directory-search").value);
+  renderJobHint("all", currentQuery());
   const paged = AppCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
   state.page.all = paged.page;
   $("#all-directory-grid").innerHTML = paged.items.map(({ kind, record }) => {
@@ -1724,11 +1810,11 @@ const COLLECTIONS = {
 function renderCollection(name) {
   const collection = COLLECTIONS[name];
   const context = collection.context();
-  const records = collection.records($(SCOPE_CONTROLS[name].q).value);
+  const records = collection.records(currentQuery());
   const noun = collection.noun[records.length === 1 ? 0 : 1];
   $(collection.resultCount).textContent = `${records.length} ${noun}${context.suffix}`;
   setSearchCount(name, records.length);
-  renderJobHint(name, $(SCOPE_CONTROLS[name].q).value);
+  renderJobHint(name, currentQuery());
   const paged = AppCore.paginate(records, { page: state.page[collection.pageKey], pageSize: state.pageSize });
   state.page[collection.pageKey] = paged.page;
   const grid = $(collection.grid);
@@ -1948,7 +2034,7 @@ function packScope(term) {
 }
 
 function renderPacks() {
-  const { packs, systems, entries } = packScope($("#pack-search").value);
+  const { packs, systems, entries } = packScope(currentQuery());
   const packNoun = packs.length === 1 ? "pack" : "packs";
   const systemNoun = systems.length === 1 ? "installed system" : "installed systems";
   $("#pack-result-count").textContent = `${packs.length} ${packNoun} · ${systems.length} ${systemNoun} · Scores hidden`;
@@ -1969,10 +2055,15 @@ function renderPacks() {
 
 // Repaint whatever a search index could have widened. A search box may have a
 // term in it already when its index lands, so this runs for the collection on
-// screen. The others are painted when they open (setDirectoryCollection), so
-// a hidden grid is not repainted here.
+// screen, and the strip's counts. The others are painted when they open
+// (setDirectoryCollection), so a hidden grid is not repainted here. While the
+// reader is still typing, the repaint that waits for the pause reads the
+// index instead, so an index landing mid-word paints nothing (CR-21).
 function renderSearchSurfaces() {
-  pageRenderer(state.directoryCollection)?.();
+  if (!resultsTimer) {
+    pageRenderer(state.directoryCollection)?.();
+    syncScopeStrip();
+  }
   if (state.directoryRoles) renderFinder();
 }
 
@@ -2033,12 +2124,12 @@ function renderFinder() {
   $("#finder-content").innerHTML = content + navigation;
 }
 
-// How much sticks to the top of the viewport. The header sticks only above
-// phone widths, and in results the scope strip sticks under it, so each
-// counts only while it is sticky; a hidden strip measures no height.
+// How much sticks to the top of the viewport: the header, and in results
+// the strip and, above 1000 px, the results bar. Each counts only while it
+// is sticky; a hidden one measures no height.
 function stickyHeight() {
-  const sticky = element => element && getComputedStyle(element).position === "sticky" ? element.getBoundingClientRect().height : 0;
-  return sticky($(".site-header")) + sticky($("#scope-strip"));
+  const sticky = element => element && !element.hidden && getComputedStyle(element).position === "sticky" ? element.getBoundingClientRect().height : 0;
+  return sticky($(".site-header")) + sticky($("#scope-strip")) + sticky($("#results-bar"));
 }
 
 // The sticky height plus the reading margin both Finder scroll corrections
@@ -2115,27 +2206,34 @@ const SCOPE_RECORDS = {
   specifications: () => [["spec", state.specifications, searchIndexes.specifications]],
 };
 
-// What a query still finds when a scope lists nothing for it, across the whole
-// catalog: All's six kinds, then Labs and Specifications, which All leaves
-// out. It runs the matcher every scope's filter runs, with each kind's index
-// once that index has loaded, and every facet ignored.
-// - `hidden`: this scope's own matches. It lists none of them, so its facets
-//   hide every one. All has no facets, so it hides nothing.
-// - `elsewhere`: matches of All's kinds outside this scope, which All lists.
+// What a query still finds when a scope lists nothing for it:
+// - `hidden`: this scope's own matches, which its facets hide. All has no
+//   facets, so it hides nothing.
+// - `elsewhere`: every other collection whose default view lists matches,
+//   with its count, in registry order. From All that is Labs and
+//   Specifications, which All leaves out (Phase 3 spec, section 2).
+// - `searchAll`: whether All lists matches this scope does not.
+// - `others`: how many distinct records outside this scope match.
 // - `found`: whether anything in the catalog matches at all.
 function emptyResultMatches(scope, term) {
   const query = AppCore.parseSearchQuery(term);
-  const matches = [...SCOPE_RECORDS.all(), ...SCOPE_RECORDS.labs(), ...SCOPE_RECORDS.specifications()]
-    .flatMap(([kind, records, index]) => records
-      .filter(record => AppCore.recordMatch(query, AppCore.searchFields(kind, record, { index, labelOf: searchLabel })) > 0)
-      .map(record => ({ kind, record })));
-  if (scope === "all") return { hidden: [], elsewhere: [], found: matches.length > 0 };
-  const own = new Set((SCOPE_RECORDS[scope]?.() || []).flatMap(([, records]) => records));
-  const allKinds = new Set(SCOPE_RECORDS.all().map(([kind]) => kind));
+  const ownGroups = SCOPE_RECORDS[scope]?.() || [];
+  const hidden = scope === "all" ? [] : ownGroups.flatMap(([kind, records, index]) => records
+    .filter(record => AppCore.recordMatch(query, AppCore.searchFields(kind, record, { index, labelOf: searchLabel })) > 0)
+    .map(record => ({ kind, record })));
+  const matched = currentMatches(term);
+  const counts = AppCore.collectionMatchCounts(matched, collectionPayloads());
+  const own = new Set(ownGroups.flatMap(([, records]) => records));
+  const elsewhere = AppCore.COLLECTIONS
+    .filter(entry => entry.id !== scope && entry.id !== "all" && counts[entry.id] > 0)
+    .map(entry => ({ id: entry.id, name: entry.name, count: counts[entry.id] }));
+  const hiddenInAll = hidden.filter(({ kind }) => kind !== "lab" && kind !== "spec").length;
   return {
-    hidden: matches.filter(({ record }) => own.has(record)),
-    elsewhere: matches.filter(({ kind, record }) => allKinds.has(kind) && !own.has(record)),
-    found: matches.length > 0,
+    hidden,
+    elsewhere,
+    searchAll: scope !== "all" && counts.all > hiddenInAll,
+    others: [...matched].filter(record => !own.has(record)).length,
+    found: counts.all + counts.labs + counts.specifications > 0,
   };
 }
 
@@ -2173,17 +2271,14 @@ function clearScopeFacets(scope, { focus = true } = {}) {
   if (focus) $(SCOPE_CONTROLS[scope].q).focus();
 }
 
-// "Search all" under an empty result: lists the query in All, opening the
-// Directory first when another view is active. It writes All's box itself
-// and opens All without a carry, so All searches exactly the text the empty
-// result named. Focusing All's box loads its indexes, as it does for a typed
-// query.
-function searchAllCollections(term) {
+// "Search all" under an empty result lists the one query in All, opening
+// the Directory first when another view is active, and hands the search box
+// focus. The query stays: every collection reads the same one.
+function searchAllCollections() {
   if ($(".view.is-active")?.id !== "directory") activateView("directory");
-  $("#all-directory-search").value = term;
   state.page.all = 1;
   setDirectoryCollection("all", { carryQuery: false });
-  $("#all-directory-search").focus();
+  $("#results-search").focus();
 }
 
 // Names compared the way search and suggestNames compare them: a hyphen reads
@@ -2235,9 +2330,10 @@ function catalogIndexesPending() {
 
 // An empty result names what the reader can do next (R-P1-11, R-P1-15): a
 // match the facets hide is offered back, and a match in another collection is
-// offered through All. The query is suggested for review only when nothing in
-// the catalog answers it and no exclusion names it. An imported models.dev row
-// is not Atlas reviewed, so a hidden count holding one does not say "reviewed".
+// offered through that collection or All. The query is suggested for review
+// only when nothing in the catalog answers it and no exclusion names it. An
+// imported models.dev row is not Atlas reviewed, so a hidden count holding
+// one does not say "reviewed".
 // Until every index has settled, part of the catalog is searched by its boot
 // fields alone, so only did-you-mean, which reads names, and the Finder show.
 function emptyStateMarkup(scope, fallback) {
@@ -2245,7 +2341,7 @@ function emptyStateMarkup(scope, fallback) {
   const term = selector ? $(selector).value : "";
   if (!term.trim()) return `<div class="notice">${fallback}</div>`;
   const settled = !catalogIndexesPending();
-  const { hidden, elsewhere, found } = settled ? emptyResultMatches(scope, term) : { hidden: [], elsewhere: [], found: false };
+  const { hidden, elsewhere, searchAll, others, found } = settled ? emptyResultMatches(scope, term) : { hidden: [], elsewhere: [], searchAll: false, others: 0, found: false };
   const typed = comparableName(term);
   const names = AppCore.suggestNames(facetedRecords(scope), term).filter(name => comparableName(name) !== typed);
   const excluded = settled ? excludedEntry(term) : null;
@@ -2256,7 +2352,10 @@ function emptyStateMarkup(scope, fallback) {
   return `<div class="notice empty-search">
     <p><strong>No matches for “${escapeHTML(term.trim())}”${hidden.length ? " with these filters" : ""}.</strong></p>
     ${hidden.length ? `<p>It matches ${hidden.length} ${reviewed}${hidden.length === 1 ? "record" : "records"} your filters hide. <button type="button" class="link-button" data-empty-unfilter>${hidden.length === 1 ? "Show it" : "Show them"}</button></p>` : ""}
-    ${elsewhere.length ? `<p>It matches ${elsewhere.length} ${elsewhere.length === 1 ? "record" : "records"} in other collections. <button type="button" class="link-button" data-empty-search-all>Search all</button></p>` : ""}
+    ${elsewhere.length || searchAll ? `<p>It matches ${others} ${others === 1 ? "record" : "records"} in other collections: ${[
+      ...elsewhere.map(entry => `<button type="button" class="link-button" data-empty-open-collection="${escapeHTML(entry.id)}">${escapeHTML(entry.name)} ${entry.count}</button>`),
+      ...(searchAll ? ['<button type="button" class="link-button" data-empty-search-all>Search all</button>'] : []),
+    ].join(" · ")}</p>` : ""}
     ${names.length ? `<p>Did you mean ${names.map(name => `<button type="button" class="link-button" data-suggest-query="${escapeHTML(name)}">${escapeHTML(name)}</button>`).join(", ")}?</p>` : ""}
     ${excluded ? `<p><strong>Reviewed and left out:</strong> ${escapeHTML(excluded.name)}. ${escapeHTML(excluded.reason)}</p>` : ""}
     <p><button type="button" class="link-button" data-empty-finder>Try the Finder</button>${suggest ? ` · <a href="${escapeHTML(suggestionURL(term))}" target="_blank" rel="noreferrer">Suggest it for review</a>` : ""}</p>
@@ -2332,7 +2431,7 @@ function applyFinderToDirectory() {
   const goalConfig = AppCore.FINDER_GOALS[direction].find(item => item.id === goal);
   clearComparison();
   if (direction === "local_runtime") {
-    $("#runtime-search").value = "";
+    clearQuery();
     $("#runtime-type-filter").value = goalConfig.runtimeTypes[0];
     $("#runtime-accelerator-filter").value = "";
     $("#runtime-format-filter").value = "";
@@ -2346,7 +2445,7 @@ function applyFinderToDirectory() {
     return;
   }
   if (direction === "inference_service") {
-    $("#inference-search").value = "";
+    clearQuery();
     $("#inference-type-filter").value = goalConfig.serviceTypes[0];
     $("#inference-delivery-filter").value = "";
     $("#inference-model-source-filter").value = "";
@@ -2359,7 +2458,7 @@ function applyFinderToDirectory() {
     revealDirectoryResults();
     return;
   }
-  $("#project-search").value = "";
+  clearQuery();
   $("#family-filter").value = direction;
   populateRoleFilter();
   state.directoryRoles = goalConfig.roles.length > 1 ? [...goalConfig.roles] : null;
@@ -3143,38 +3242,45 @@ function restoreFromURL({ boot = false } = {}) {
     view = "directory";
   }
   const scope = AppCore.scopeFromURL(params);
-  state.urlReady = false;
   let restored = {};
-  if (scope) {
-    resetScopeControls(scope, params);
-    restored = restoreScopeFromURL(scope);
+  let comparisonRestored;
+  let onDoor;
+  // A restore that throws still hands the URL back to the page.
+  try {
+    state.urlReady = false;
+    if (scope) {
+      resetScopeControls(scope, params);
+      restored = restoreScopeFromURL(scope);
+      // Beside a query, the URL names every sort but Best match (scopeURLParams,
+      // rulings R-P1-2 and R-P1-2b). So a link with a query and no sort lists by
+      // match, and a sort it names is one the reader chose, which typing keeps.
+      // A sort the scope cannot take was removed on restore, so it counts as none.
+      // It is marked before the collection switch below, whose syncMatchSort
+      // would otherwise replace it with Best match.
+      if (restored.q?.trim() && restored.sort !== undefined) sortChosenDuringQuery[scope] = true;
+    }
+    comparisonRestored = restoreComparisonFromURL();
+    if (!comparisonRestored && state.comparison.ids.length) clearComparison({ updateURL: false });
+    onDoor = view === "directory" && AppCore.directoryStageFromURL(params) === "door";
+    if (onDoor) showFrontDoor({ updateURL: false });
+    else if (scope && !comparisonRestored) setDirectoryCollection(scope, { updateURL: false });
+    activateView(view);
+    // The one restored query reaches every collection's sort.
+    if (scope && restored.q?.trim()) syncMatchSorts();
+    // The record is read from the URL as it arrived; an open dialog names it
+    // already, so showRecordDialog writes nothing and nothing pushes.
+    const reference = AppCore.parseRecordReference(params.get("record"));
+    if (!reference || !openRecord(reference.kind, reference.id)) {
+      closeRecordDialogs();
+      // A record the page cannot show leaves the URL, as any value a control
+      // cannot take does.
+      const current = new URL(window.location.href);
+      current.searchParams.delete("record");
+      writeURL(current);
+    }
+  } finally {
+    state.urlReady = true;
   }
-  const comparisonRestored = restoreComparisonFromURL();
-  if (!comparisonRestored && state.comparison.ids.length) clearComparison({ updateURL: false });
-  const onDoor = view === "directory" && AppCore.directoryStageFromURL(params) === "door";
-  if (onDoor) showFrontDoor({ updateURL: false });
-  else if (scope && !comparisonRestored) setDirectoryCollection(scope, { updateURL: false });
-  activateView(view);
-  // Beside a query, the URL names every sort but Best match (scopeURLParams,
-  // rulings R-P1-2 and R-P1-2b). So a link with a query and no sort lists by
-  // match, and a sort it names is one the reader chose, which typing keeps.
-  // A sort the scope cannot take was removed on restore, so it counts as none.
-  if (scope && restored.q?.trim()) {
-    if (restored.sort !== undefined) sortChosenDuringQuery[scope] = true;
-    syncMatchSort(scope);
-  }
-  // The record is read from the URL as it arrived; an open dialog names it
-  // already, so showRecordDialog writes nothing and nothing pushes.
-  const reference = AppCore.parseRecordReference(params.get("record"));
-  if (!reference || !openRecord(reference.kind, reference.id)) {
-    closeRecordDialogs();
-    // A record the page cannot show leaves the URL, as any value a control
-    // cannot take does.
-    const current = new URL(window.location.href);
-    current.searchParams.delete("record");
-    writeURL(current);
-  }
-  state.urlReady = true;
   if (onDoor) selectElement(params.get("element"), params.get("elementRecord"));
   writeDirectoryURL();
   writeScopeURL();
@@ -3452,6 +3558,9 @@ function activateView(id, { focusTarget } = {}) {
     else item.removeAttribute("aria-current");
   });
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
+  // A strip rendered while its view was hidden measured no height, so the
+  // sticky clearance, which places the results bar, is taken again here.
+  syncStickyClearance();
   syncMobileNavigation();
   if (id === "explore") restoreRuntimeMatrix();
   if (leaving && leaving.id !== id) {
@@ -3468,14 +3577,7 @@ function activateView(id, { focusTarget } = {}) {
 
 // Which collections a search box can widen, and so which indexes its focus
 // is worth fetching.
-const SEARCH_SCOPES = {
-  "#project-search": ["systems"], "#specification-search": ["specifications"],
-  "#inference-search": ["inference"], "#runtime-search": ["runtimes"],
-  "#model-search": ["models"], "#pack-search": ["packs", "systems"], "#lab-search": ["labs"],
-  "#robot-search": ["robots"],
-  "#all-directory-search": ["systems", "inference", "runtimes", "models", "packs", "robots"],
-  "#door-search": ["systems", "inference", "runtimes", "models", "packs", "robots"],
-};
+const SEARCH_SCOPES = { "#results-search": CATALOG_INDEXES, "#door-search": CATALOG_INDEXES };
 
 // Docs groups the explanatory views so the primary row stays on the catalog
 // loop. It is a plain menu: toggle on click, close on Escape, outside click,
@@ -3529,7 +3631,7 @@ function openMobileSearch() {
   }
   openCollection("all");
   activateView("directory");
-  $("#all-directory-search").focus();
+  $("#results-search").focus();
 }
 
 function initMobileNavigation() {
@@ -3606,7 +3708,6 @@ function bindEvents() {
   syncStickyClearance();
   window.addEventListener("resize", syncStickyClearance);
   for (const [scope, selector] of Object.entries(MATCH_SORTS)) {
-    $(SCOPE_CONTROLS[scope].q).addEventListener("input", () => syncMatchSort(scope));
     $(selector).addEventListener("input", () => {
       if ($(SCOPE_CONTROLS[scope].q).value.trim()) sortChosenDuringQuery[scope] = true;
     });
@@ -3646,7 +3747,7 @@ function bindEvents() {
   });
   // Fetching on focus rather than on the first keystroke usually beats the
   // second character, so the widened results arrive before anyone sees the
-  // narrow ones. The All view searches five collections, so it loads five.
+  // narrow ones. Either box searches every collection, so it loads every index.
   for (const [selector, collections] of Object.entries(SEARCH_SCOPES)) {
     const input = $(selector);
     const loadIndexes = () => {
@@ -3660,10 +3761,10 @@ function bindEvents() {
     // instead of waiting for a second focus cycle.
     if (document.activeElement === input) loadIndexes();
   }
-  $("#all-directory-search").addEventListener("input", () => { state.page.all = 1; renderAllDirectoryEntries(); });
+  $("#results-search").addEventListener("input", onQueryInput);
   initBadgeTooltip();
   initBadgeLegend();
-  // The front door's search hands its text to the All search and lands in
+  // The front door's search hands its text to the results search and lands in
   // results, so the first character is the search; the caret follows.
   $("#element-groups").addEventListener("click", event => {
     const button = event.target.closest("[data-element]");
@@ -3684,16 +3785,11 @@ function bindEvents() {
     const value = event.target.value;
     if (!value) return;
     event.target.value = "";
-    $("#all-directory-search").value = value;
     state.page.all = 1;
+    const target = $("#results-search");
+    target.value = value;
     openCollection("all");
-    // Leaving the door carries the query of the scope last shown, which can
-    // replace the text just typed; the typed text is the search.
-    const target = $("#all-directory-search");
-    if (target.value !== value) {
-      target.value = value;
-      target.dispatchEvent(new Event("input", { bubbles: true }));
-    }
+    target.dispatchEvent(new Event("input", { bubbles: true }));
     target.focus({ preventScroll: true });
     target.setSelectionRange(value.length, value.length);
   });
@@ -3729,95 +3825,15 @@ function bindEvents() {
     renderScopeStrip();
   });
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.directoryRolesLabel = null; state.page.systems = 1; renderProjects(); });
-  ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#capability-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
-  ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.specifications = 1; renderSpecifications(); }));
-  ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.inference = 1; renderInferenceServices(); }));
-  ["#runtime-search", "#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.runtimes = 1; renderLocalRuntimes(); }));
-  ["#model-search", "#model-type-filter", "#model-distribution-filter", "#model-modality-filter", "#model-source-filter", "#model-license-filter", "#model-lab-filter", "#model-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.models = 1; renderModels(); }));
-  ["#lab-search", "#lab-type-filter", "#lab-country-filter", "#lab-distribution-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.labs = 1; renderLabs(); }));
-  ["#pack-search", "#pack-type-filter", "#pack-host-filter", "#pack-install-filter", "#pack-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.packs = 1; renderPacks(); }));
-  ["#robot-search", "#robot-form-factor-filter", "#robot-ai-basis-filter", "#robot-availability-filter", "#robot-status-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.robots = 1; renderCollection("robots"); }));
-  $("#reset-specification-filters").addEventListener("click", () => {
-    $("#specification-search").value = "";
-    $("#specification-type-filter").value = "";
-    $("#specification-scope-filter").value = "";
-    $("#specification-status-filter").value = "";
-    $("#specification-license-filter").value = "";
-    state.page.specifications = 1;
-    renderSpecifications();
-  });
-  $("#reset-inference-filters").addEventListener("click", () => {
-    $("#inference-search").value = "";
-    $("#inference-type-filter").value = "";
-    $("#inference-delivery-filter").value = "";
-    $("#inference-model-source-filter").value = "";
-    $("#inference-api-filter").value = "";
-    $("#inference-sort-filter").value = "score";
-    syncMatchSort("inference");
-    state.page.inference = 1;
-    renderInferenceServices();
-  });
-  $("#reset-runtime-filters").addEventListener("click", () => {
-    $("#runtime-search").value = "";
-    $("#runtime-type-filter").value = "";
-    $("#runtime-accelerator-filter").value = "";
-    $("#runtime-format-filter").value = "";
-    $("#runtime-api-filter").value = "";
-    $("#runtime-sort-filter").value = "score";
-    syncMatchSort("runtimes");
-    state.page.runtimes = 1;
-    renderLocalRuntimes();
-  });
-  $("#reset-model-filters").addEventListener("click", () => {
-    $("#model-search").value = "";
-    $("#model-type-filter").value = "";
-    $("#model-distribution-filter").value = "";
-    $("#model-modality-filter").value = "";
-    $("#model-source-filter").value = "";
-    $("#model-license-filter").value = "";
-    $("#model-lab-filter").value = "";
-    $("#model-sort-filter").value = "score";
-    syncMatchSort("models");
-    state.page.models = 1;
-    renderModels();
-  });
-  $("#reset-pack-filters").addEventListener("click", () => {
-    $("#pack-search").value = "";
-    $("#pack-type-filter").value = "";
-    $("#pack-host-filter").value = "";
-    $("#pack-install-filter").value = "";
-    $("#pack-license-filter").value = "";
-    state.page.packs = 1;
-    renderPacks();
-  });
-  $("#reset-lab-filters").addEventListener("click", () => {
-    $("#lab-search").value = "";
-    $("#lab-type-filter").value = "";
-    $("#lab-country-filter").value = "";
-    $("#lab-distribution-filter").value = "";
-    state.page.labs = 1;
-    renderLabs();
-  });
-  $("#reset-robot-filters").addEventListener("click", () => {
-    $("#robot-search").value = "";
-    $("#robot-form-factor-filter").value = "";
-    $("#robot-ai-basis-filter").value = "";
-    $("#robot-availability-filter").value = "";
-    $("#robot-status-filter").value = "";
-    state.page.robots = 1;
-    renderCollection("robots");
-  });
-  $("#reset-all-directory").addEventListener("click", () => {
-    $("#all-directory-search").value = "";
-    state.page.all = 1;
-    renderAllDirectoryEntries();
-  });
-  $("#reset-filters").addEventListener("click", () => {
-    applyDirectoryDefaults();
-    syncMatchSort("systems");
-    state.page.systems = 1;
-    renderProjects();
-  });
+  ["#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#capability-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
+  ["#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.specifications = 1; renderSpecifications(); }));
+  ["#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.inference = 1; renderInferenceServices(); }));
+  ["#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.runtimes = 1; renderLocalRuntimes(); }));
+  ["#model-type-filter", "#model-distribution-filter", "#model-modality-filter", "#model-source-filter", "#model-license-filter", "#model-lab-filter", "#model-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.models = 1; renderModels(); }));
+  ["#lab-type-filter", "#lab-country-filter", "#lab-distribution-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.labs = 1; renderLabs(); }));
+  ["#pack-type-filter", "#pack-host-filter", "#pack-install-filter", "#pack-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.packs = 1; renderPacks(); }));
+  ["#robot-form-factor-filter", "#robot-ai-basis-filter", "#robot-availability-filter", "#robot-status-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.robots = 1; renderCollection("robots"); }));
+  for (const [scope, view] of Object.entries(RESULT_VIEWS)) $(view.clear).addEventListener("click", () => resetCollection(scope));
   $("#finder-roles-chip").addEventListener("click", () => {
     state.directoryRoles = null;
     state.directoryRolesLabel = null;
@@ -3925,8 +3941,13 @@ function bindEvents() {
       return;
     }
     if (event.target.closest("[data-empty-search-all]")) {
-      const selector = SCOPE_CONTROLS[activeScope()]?.q;
-      if (selector) searchAllCollections($(selector).value);
+      searchAllCollections();
+      return;
+    }
+    const collectionButton = event.target.closest("[data-empty-open-collection]");
+    if (collectionButton) {
+      openCollection(collectionButton.dataset.emptyOpenCollection);
+      $("#results-search").focus();
       return;
     }
     if (event.target.closest("[data-empty-finder]")) activateView("finder");

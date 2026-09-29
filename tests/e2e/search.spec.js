@@ -2,17 +2,19 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { allSearch, collectionEntry, openCollection, openView, pressedEntry } = require("./helpers/landing");
-const { clearFilters, expectFilter, filterControl, recordView, search, searchBox, setFilter, sortControl } = require("./helpers/results");
+const { clearFilters, expectFilter, filterControl, recordView, search, searchBox, setFilter, settled, sortControl } = require("./helpers/results");
 
 // The page binds its search and keyboard listeners once its data has loaded,
 // and paints the All grid right after, so a card on screen means they are live.
 // The All list is results, so the page opens on it rather than the front door.
+// The results repaint once typing pauses, so this waits for that.
 async function searchAll(page, text) {
   await page.goto("/?collection=all");
   await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
   const input = allSearch(page);
   await input.focus();
   await input.fill(text);
+  await settled(page);
 }
 
 // Focusing the All box fetches six search indexes, and each one repaints the
@@ -99,7 +101,7 @@ test("hyphens and spaces ask the same question", async ({ page }) => {
 test("the result count shows beside the box, uncovered, without scrolling", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await searchAll(page, "ollama");
-  const count = page.locator("#all-directory-panel .search-count");
+  const count = page.locator("#results-bar .search-count");
   await expect(count).toHaveText(/^\d+ results?$/);
   const placed = await placeCount(count);
   await expect(count).toBeInViewport();
@@ -121,7 +123,7 @@ test("slash focuses the search box", async ({ page }) => {
   await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
   await page.locator("body").click({ position: { x: 5, y: 300 } });
   await page.keyboard.press("/");
-  await expect(allSearch(page)).toHaveId("all-directory-search");
+  await expect(allSearch(page)).toHaveId("results-search");
   await expect(allSearch(page)).toBeFocused();
 });
 
@@ -251,10 +253,7 @@ test("the Finder's handoff ends an earlier query, so the next query selects Best
   }
 });
 
-// A sort chosen for one query must not outlive it (D9). Text carried in that
-// differs from what the box held is a new query there, so it selects Best
-// match, and clearing it restores the sort from before the box held a query.
-test("a query carried in with new text selects Best match, and clearing it restores the earlier sort", async ({ page }) => {
+test("clearing a query everywhere keeps a sort chosen during it, and the next query starts from that sort", async ({ page }) => {
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
   const sort = sortControl(page, "systems");
@@ -263,34 +262,29 @@ test("a query carried in with new text selects Best match, and clearing it resto
   await sort.selectOption("stars");
   await openCollection(page, "all");
   await clearFilters(page, "all");
-  await allSearch(page).fill("browser");
+  await expect(searchBox(page), "All's Clear control clears the one query").toHaveValue("");
+  await search(page, "browser");
   await openCollection(page, "systems");
-  await expect(searchBox(page, "systems")).toHaveValue("browser");
-  await expect(sort, "a sort chosen for the old text gives way").toHaveValue("match");
+  await expect(searchBox(page)).toHaveValue("browser");
+  await expect(sort, "a new query selects Best match").toHaveValue("match");
   await search(page, "");
-  await expect(sort, "clearing restores the sort from before the first query").toHaveValue("name");
+  await expect(sort, "clearing gives back the sort the reader had before this query").toHaveValue("stars");
 });
 
-// Search all writes All's box alone. Writing the hidden Directory scope's box
-// would make a later carry back look unchanged and keep a stale sort (D9).
-test("Search all from a sibling view leaves the Directory scope's own query alone", async ({ page }) => {
+test("Search all lists the one query in All and keeps it for every collection", async ({ page }) => {
   // Only a system holds this word, so Models lists nothing and offers All.
   const systems = readWeb("app/search/systems.json");
   const [first] = Object.keys(systems);
   await page.route(indexRoute("systems"), route => route.fulfill({ json: withIndexWord(systems, first) }));
-  await page.goto("/?collection=systems");
-  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
-  const sort = sortControl(page, "systems");
-  await search(page, "memory");
-  await sort.selectOption("stars");
-  await openCollection(page, "models");
+  await page.goto("/?collection=models");
   await search(page, INDEX_WORD);
   await page.locator("#model-grid").getByRole("button", { name: "Search all" }).click();
-  await expect(allSearch(page)).toHaveValue(INDEX_WORD);
-  await expect(searchBox(page, "systems"), "Search all writes only All's box").toHaveValue("memory");
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Everything /);
+  await expect(searchBox(page)).toHaveValue(INDEX_WORD);
+  await expect(searchBox(page)).toBeFocused();
   await openCollection(page, "systems");
-  await expect(searchBox(page, "systems")).toHaveValue(INDEX_WORD);
-  await expect(sort).toHaveValue("match");
+  await expect(searchBox(page)).toHaveValue(INDEX_WORD);
+  await expect(sortControl(page, "systems")).toHaveValue("match");
 });
 
 // Best match orders a query's matches, so browsing never offers it (D23). A
@@ -319,10 +313,7 @@ test("Best match is offered only while a query is present", async ({ page }) => 
   await expect(sortControl(page, "inference").locator('option[value="match"]')).toHaveJSProperty("disabled", false);
 });
 
-// A page kept from browsing belongs to another list, so a query carried in
-// with new text starts on the first page. Every service holds this word, so
-// the carried query still fills several pages and no clamp can hide a kept one.
-test("a query carried in with new text starts on the first page", async ({ page }) => {
+test("a changed query starts every collection on its first page", async ({ page }) => {
   const index = readWeb("app/search/inference.json");
   await page.route(indexRoute("inference"), route => route.fulfill({
     json: Object.fromEntries(Object.entries(index).map(([id, text]) => [id, `${text} ${INDEX_WORD}`])),
@@ -331,10 +322,10 @@ test("a query carried in with new text starts on the first page", async ({ page 
   const pager = page.locator("#inference-pager");
   await expect(pager).toContainText("Page 2 of");
   await openCollection(page, "all");
-  await allSearch(page).fill(INDEX_WORD);
+  await search(page, INDEX_WORD);
   await page.waitForFunction(() => searchIndexes.inference !== undefined);
   await openCollection(page, "inference");
-  await expect(searchBox(page, "inference")).toHaveValue(INDEX_WORD);
+  await expect(searchBox(page)).toHaveValue(INDEX_WORD);
   await expect(pager).toContainText(/Page 1 of ([2-9]|\d{2,})/);
 });
 
@@ -443,7 +434,7 @@ test("the exclusions list is fetched once, stamped, and only for a search that f
   const [system] = readWeb("app/systems.json").systems;
   await searchAll(page, system.name);
   await allIndexesLanded(page);
-  await expect(page.locator("#all-directory-panel .search-count")).toHaveText(/^[1-9]\d* results?$/);
+  await expect(page.locator("#results-bar .search-count")).toHaveText(/^[1-9]\d* results?$/);
   expect(fetched, "a search that found something never needs the list").toEqual([]);
 
   // A second empty result while the first fetch is still in flight.
@@ -607,7 +598,7 @@ test("a search one facet hides says so, and showing it clears that facet and kee
   await grid.getByRole("button", { name: "Show it" }).click();
   await expectFilter(page, "inference", "type", "");
   await expect(page.locator("#inference-grid .project-card h2")).toHaveText([service.name]);
-  await expect(page.locator("#inference-directory-panel .search-count")).toHaveText("1 result");
+  await expect(page.locator("#results-bar .search-count")).toHaveText("1 result");
   await expect(searchBox(page, "inference")).toHaveValue(INDEX_WORD);
   await expect(page).toHaveURL(address => address.searchParams.get("q") === INDEX_WORD && !address.searchParams.has("type"));
 });
@@ -687,7 +678,7 @@ test("a query another collection answers offers Search all, not the suggestion f
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
   await search(page, "vLLM");
   const systems = page.locator("#project-grid");
-  await expect(systems).toContainText(/It matches \d+ records? in other collections\./);
+  await expect(systems).toContainText(/It matches \d+ records? in other collections:/);
   await expect(systems.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
   await systems.getByRole("button", { name: "Search all" }).click();
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Everything /);
@@ -750,7 +741,7 @@ test("an empty result waits for every search index before it counts other collec
   expect(exclusions, "no exclusions fetch while an index is pending").toEqual([]);
 
   release();
-  await expect(grid).toContainText("It matches 1 record in other collections.");
+  await expect(grid).toContainText("It matches 1 record in other collections:");
   await expect(grid.getByRole("button", { name: "Search all" })).toBeVisible();
   await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
 

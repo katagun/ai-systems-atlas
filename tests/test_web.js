@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -2095,6 +2095,50 @@ test("each collection counts what its default view lists, with its split", () =>
   assert.deepEqual(collectionCount("labs", registryPayloads), { count: 1, note: "" });
   assert.deepEqual(collectionCount("specifications", registryPayloads), { count: 1, note: "" });
   assert.deepEqual(collectionCount("robots", { ...registryPayloads, robots: [] }), { count: 0, note: "" });
+});
+
+test("one match pass finds each record any collection's search finds", () => {
+  assert.deepEqual([...queryMatches("a1", registryPayloads, {})].map(record => record.id), ["a1"]);
+  assert.equal(queryMatches("", registryPayloads, {}).size, 0);
+  assert.equal(queryMatches("the", registryPayloads, {}).size, 0, "stop words alone match nothing");
+});
+
+test("each collection counts the query's matches its default view lists", () => {
+  const counts = collectionMatchCounts(queryMatches("m", registryPayloads, {}), registryPayloads);
+  assert.equal(counts.all, 2, "All lists the archived M2 as well");
+  assert.equal(counts.systems, 1, "Systems lists active systems only");
+  assert.equal(counts.labs, 0);
+  assert.deepEqual(Object.keys(counts), ["all", "systems", "models", "inference", "runtimes", "packs", "robots", "labs", "specifications"]);
+  const packs = collectionMatchCounts(queryMatches("a1", registryPayloads, {}), registryPayloads);
+  assert.equal(packs.packs, 1, "a host-installed system counts in Agent packs");
+});
+
+test("the family row counts active systems, and only the query's matches while searching", () => {
+  assert.deepEqual(familyMatchCounts(null, registryPayloads), { "": 4, memory_system: 1, agent_system: 2, assistant_system: 1 });
+  assert.deepEqual(familyMatchCounts(queryMatches("m", registryPayloads, {}), registryPayloads), { "": 1, memory_system: 1 });
+});
+
+test("an empty collection is hidden and All never is", () => {
+  assert.equal(collectionHidden("labs", registryPayloads), false);
+  assert.equal(collectionHidden("labs", { ...registryPayloads, labs: [] }), true);
+  assert.equal(collectionHidden("all", {}), false);
+});
+
+test("browseSort is written only beside a query listed by Best match, and never as the default", () => {
+  const params = values => Object.fromEntries(scopeURLParams("inference", values));
+  assert.deepEqual(params({ q: "router", sort: "match", browseSort: "name" }), { q: "router", browseSort: "name" });
+  assert.deepEqual(params({ q: "router", sort: "match", browseSort: "score" }), { q: "router" }, "the default is never written");
+  assert.deepEqual(params({ q: "router", sort: "name", browseSort: "score" }), { q: "router", sort: "name" }, "a sort chosen during the query wins");
+  assert.deepEqual(params({ q: "", sort: "name", browseSort: "score" }), { sort: "name" }, "without a query there is nothing to return to");
+});
+
+test("browseSort restores only beside a query and without a sort", () => {
+  const allowed = { q: "text", sort: new Set(["score", "name"]), browseSort: new Set(["score", "name"]) };
+  const read = query => readScopeURLParams("inference", new URLSearchParams(query), allowed);
+  assert.deepEqual(read("q=router&browseSort=name"), { values: { q: "router", browseSort: "name" }, rejected: [] });
+  assert.deepEqual(read("browseSort=name").rejected, ["browseSort"]);
+  assert.deepEqual(read("q=router&sort=score&browseSort=name").rejected, ["browseSort"]);
+  assert.deepEqual(read("q=router&browseSort=match").rejected, ["browseSort"]);
 });
 
 test("a collection's categories are its largest values with the facet that opens them", () => {

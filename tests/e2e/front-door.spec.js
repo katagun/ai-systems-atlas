@@ -540,7 +540,7 @@ test("the skip link restores nothing, so a sort chosen before typing still comes
 // A sort chosen before typing is what clearing the query gives back, but
 // beside a query the URL names only a sort the reader chose since typing,
 // so a reload forgets the earlier one (BACKLOG, Phase 1 leftover).
-test.fixme("a sort chosen before typing survives a reload and returns when the query is cleared", async ({ page }) => {
+test("a sort chosen before typing survives a reload and returns when the query is cleared", async ({ page }) => {
   await page.goto("/?collection=inference");
   await sortControl(page, "inference").selectOption("name");
   await search(page, "router");

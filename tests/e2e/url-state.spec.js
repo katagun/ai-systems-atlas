@@ -69,7 +69,9 @@ test("a family chip opens its family on the first page", async ({ page }) => {
 test("every scope's URL keys match its controls, and every control exists", async ({ page }) => {
   // AppCore.SCOPE_URL_PARAMS says which keys a scope writes, and app.js's
   // SCOPE_CONTROLS says which control holds each one. A key in only one of
-  // them is never written, or always rejected on restore.
+  // them is never written, or always rejected on restore. `browseSort` is the
+  // one key no control holds: it carries the sort from before a query, so it
+  // belongs to exactly the scopes with a Sort.
   await page.goto("/");
   const problems = await page.evaluate(() => {
     // Both are page globals. SCOPE_CONTROLS is a top-level const in a classic
@@ -78,10 +80,13 @@ test("every scope's URL keys match its controls, and every control exists", asyn
     const params = AppCore.SCOPE_URL_PARAMS;
     const found = [];
     for (const scope of new Set([...Object.keys(params), ...Object.keys(SCOPE_CONTROLS)])) {
-      const urlKeys = Object.keys(params[scope] || {}).sort().join(",");
-      const controlKeys = Object.keys(SCOPE_CONTROLS[scope] || {}).sort().join(",");
+      const owned = params[scope] || {};
+      const controls = SCOPE_CONTROLS[scope] || {};
+      const urlKeys = Object.keys(owned).filter(key => key !== "browseSort").sort().join(",");
+      const controlKeys = Object.keys(controls).sort().join(",");
       if (urlKeys !== controlKeys) found.push(`${scope}: URL keys [${urlKeys}], controls [${controlKeys}]`);
-      for (const [key, selector] of Object.entries(SCOPE_CONTROLS[scope] || {})) {
+      if (Object.hasOwn(owned, "browseSort") !== Object.hasOwn(controls, "sort")) found.push(`${scope}: browseSort and a Sort control go together`);
+      for (const [key, selector] of Object.entries(controls)) {
         if (!document.querySelector(selector)) found.push(`${scope}.${key}: nothing matches ${selector}`);
       }
     }
