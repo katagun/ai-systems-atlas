@@ -2193,7 +2193,7 @@ Before the first commit, message the badge session: the list moves the "grid on 
 
 - Consumes: Tasks 2 and 3's frame (`#results-frame`, `#results-bar`, `RESULT_VIEWS`, `writeScopeURL`, `settled`).
 - Produces:
-  - `CARD_BUILDERS[kind](record, options)` for the kinds `system`, `inference`, `runtime`, `model`, `pack`, `robot`, `lab`, and `spec`;
+  - `CARD_BUILDERS`, keyed by the kinds `system`, `inference`, `runtime`, `model`, `pack`, `robot`, `lab`, and `spec`, each builder called with the record and its options;
   - `state.layout`, which is `"list"` or `"cards"`, and `setLayout(layout)`;
   - markup `#results-frame.is-list` in the list layout, and the `.layout-toggle > button[data-layout][aria-pressed]` buttons;
   - the test helper `setLayout(page, layout)`.
@@ -2359,7 +2359,11 @@ Each comment marks where the moved template goes. The builder returns it with `r
    - `COLLECTIONS.systems.card` becomes `(project, { family }) => systemCard(project, { family })`.
    - `inference`, `runtimes`, `models`, and `specifications` become `service => inferenceCard(service)`, `runtime => runtimeCard(runtime)`, `model => modelCard(model)`, and `specification => specificationCard(specification)`.
    - `labs` and `robots` keep `labCard` and `robotCard`.
-2. **`renderAllDirectoryEntries`'s grid map.** It becomes `paged.items.map(({ kind, record }) => CARD_BUILDERS[kind](record, { mixed: true })).join("")`, followed by the unchanged `|| emptyStateMarkup(…)`.
+2. **`renderAllDirectoryEntries`'s grid map.** It becomes the following, still followed by the unchanged `|| emptyStateMarkup(…)`:
+
+   ```js
+   paged.items.map(({ kind, record }) => CARD_BUILDERS[kind](record, { mixed: true })).join("")
+   ```
 3. **`renderPacks`.** `mixedSystemCard(record)` becomes `systemCard(record, { mixed: true })`.
 4. **Delete `mixedSystemCard`.**
 
