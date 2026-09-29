@@ -113,7 +113,20 @@ The [Directory front-door spec](docs/superpowers/specs/2026-09-24-directory-fron
   - an empty collection opened by URL, or an unknown family, leaves no strip entry pressed;
   - the strip is rebuilt with `innerHTML` on every results repaint, so a click that lands across a repaint is lost;
   - `restoreFromURL` clears `urlReady` with no `try`/`finally`, so a restore that throws leaves it false and the URL stops following the page;
-  - `tileMarks` looks up the collection's entries once per recent id rather than once per tile.
+  - `tileMarks` looks up the collection's entries once per recent id rather than once per tile;
+  - the Catalog tab replaces the results history entry, so Back from the front door can land on an identical front-door entry;
+  - the state dot sits outside `.tile-open`, so no button's accessible name carries it;
+  - the marks test in `tests/e2e/front-door.spec.js` counts marks but never compares them with the payload's `recent` ids;
+  - the collection id whitelists are hardcoded in four places and the hide-when-empty rule in two; derive both from `AppCore.COLLECTIONS`, with a `hidden` field in core;
+  - `recent` for Systems is built from every system record, while the tile resolves the ids among active systems only;
+  - the front-door search hands off to the All search on the first keystroke (a WCAG 3.2.2 change of context), and emblem-only strip entries carry a `title` rather than the badge tooltip; both depart from the spec without a record;
+  - the heading-focus test drives `activateView` directly through `page.evaluate` rather than through a control;
+  - the unknown-record URL test in `tests/e2e/record-links.spec.js` asserts only that one strip entry is pressed, not which collection the page settles in;
+  - `restoreFromURL` activates the view twice when a URL restores a model comparison;
+  - Back to the front door from Systems reopened by its tile drops the in-memory comparison, because the front door's URL carries none; a popstate landing on the front door could keep it;
+  - the phone family row's `.62rem` text and `.56rem` counts are the smallest interactive text on the site; hide the counts on unpressed family entries at phone widths, as the scope row's caption pattern does;
+  - a tile opened from the front door paints the hidden collection once in `clearScopeFacets` and again in `setDirectoryCollection`;
+  - `setPageSize` still repaints the hidden Models, Labs, and Specifications grids.
 - [ ] Retire sibling-view wording that #345 made stale: `docs/DATA_MODEL.md` ("Models is a sibling view because its model-artifact question is distinct from the operational Directory, and Labs is a sibling view because an organization is not a deployable choice"), `docs/TAXONOMY.md` ("Models remains a sibling specialist view, and Specifications remains a separate artifact view"), `docs/MODELS.md` ("Models remains a sibling specialist view"), and ADR 041 ("Labs is a sibling view after Models, like Specifications, rather than a Directory scope" and "Specifications set the precedent for a sibling view") still describe Models, Labs, or Specifications as sibling views; ADR 043 records the supersession.
 - [ ] Decide whether search gets a short reviewed list of synonyms. `note taking` lists nothing, because the records a reader wants say notes, notebook, or personal knowledge, never note-taking, and [ADR 040](docs/adr/040-search-orders-by-match-never-by-score.md) matches words only. Gather such misses in a probe set before adding any list, and pin each entry in the real-catalog probe test in `tests/test_web.js`. Decide at the same time whether Finder goals get a few reviewed keywords. A one-word query now names a goal only through its label, so `sql`, `retrieval`, and `gateway` name none. The multi-word rule still counts a word's start, so `lang chain agents` names "Analyze data with natural language" through "language".
 - [ ] Keep keyboard focus when a late load repaints. A search index or `exclusions.json` that lands after the reader has moved on can replace a focused empty-state button, or the Finder's content, and focus falls to the page body. Re-focus the replaced control by its data attribute, or leave the active view alone. The badge legend's "All badges" link and the Finder's step choices drop focus the same way.

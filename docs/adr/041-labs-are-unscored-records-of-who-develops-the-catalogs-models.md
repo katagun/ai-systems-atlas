@@ -1,8 +1,6 @@
 # ADR 041: Labs are unscored records of who develops the catalog's models
 
-**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order).
-
-**Amended by:** [ADR 043](043-the-directory-opens-on-a-front-door-of-collection-tiles.md) (Labs is a Directory collection with a tile and a strip entry, not a sibling view; labs stay unscored).
+**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order) and [ADR 043](043-the-directory-opens-on-a-front-door-of-collection-tiles.md) (Labs is a Directory collection with a tile and a strip entry, not a sibling view; labs stay unscored).
 
 ## Context
 
