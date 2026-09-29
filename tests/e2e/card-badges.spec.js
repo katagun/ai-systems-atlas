@@ -384,7 +384,7 @@ for (const width of [320, 1440]) {
     await expect(help).toHaveAttribute("open", "");
     await expect(help.locator("dt")).toHaveText(cardBadges("system", openclaw).map(badge => badge.name));
     await expect(help.locator("dd")).toHaveText(cardBadges("system", openclaw).map(badge => badge.definition));
-    await expect(page.locator("dialog[open]")).toHaveCount(0);
+    await expect(recordView(page)).toHaveCount(0);
     await page.keyboard.press("Enter");
     await expect(help).not.toHaveAttribute("open");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
@@ -423,8 +423,8 @@ test("model artifact terms use scoped names and imported licenses stay attribute
   await expect(card.locator(".source-badge")).toHaveText(expected);
   await expect(filterControl(page, "models", "sourceModel").locator(`option[value="${reviewedModel.source_model}"]`)).toHaveText(expected);
   await card.locator(".card-open").click();
-  await expect(page.locator("dialog[open]")).toContainText(`Artifact licensing: ${expected}`);
-  await expect(page.locator("dialog[open]")).toContainText("do not assess training code or training data openness");
+  await expect(recordView(page)).toContainText(`Artifact licensing: ${expected}`);
+  await expect(recordView(page)).toContainText("do not assess training code or training data openness");
   await page.goto(`/?collection=all&q=${encodeURIComponent(reviewedModel.name)}`);
   await expect(page.locator(`#all-directory-grid .project-card:has([data-model="${reviewedModel.id}"]) .source-badge`)).toHaveText(expected);
 });

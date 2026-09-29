@@ -69,10 +69,13 @@ async function expectFilter(page, scope, key, value) {
   await expect(filterControl(page, scope, key)).toHaveValue(value);
 }
 
-// A collection without a Sort control gets a locator that matches nothing, so
-// `toHaveCount(0)` says so.
+// A collection without a Sort control gets a locator on where one would sit: any
+// select whose id ends in "sort-filter" inside its own panel. It matches nothing
+// today, so `toHaveCount(0)` says so, and it fails the day a Sort is added. A
+// scope that is not a collection is a typo, and would read as "no Sort" too.
 function sortControl(page, scope) {
-  return page.locator(SORT_CONTROLS[scope] || "[data-no-sort-control]");
+  if (!Object.hasOwn(SEARCH_BOXES, scope)) throw new Error(`sortControl: "${scope}" is not a collection`);
+  return page.locator(SORT_CONTROLS[scope] || `#${scope}-directory-panel select[id$="sort-filter"]`);
 }
 
 async function clearFilters(page, scope) {
