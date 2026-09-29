@@ -2185,74 +2185,6 @@
       }
     },
     {
-      "repo": "JetBrains/koog",
-      "name": "koog",
-      "url": "https://github.com/JetBrains/koog",
-      "description": "Koog is a JVM (Java and Kotlin) framework for building predictable, fault-tolerant and enterprise-ready AI agents across all platforms – from backend services to Android and iOS, JVM, and even in-browser environments. Koog is based on our AI products expertise and provides proven solutions for complex LLM and AI problems",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 4572,
-      "topics": [
-        "agentframework",
-        "agentic-ai",
-        "agents",
-        "ai",
-        "ai-agents-framework",
-        "aiagentframework",
-        "android-ai",
-        "anthropic",
-        "genai",
-        "generative-ai",
-        "java",
-        "jvm",
-        "kotlin",
-        "ktor",
-        "llm",
-        "mcp",
-        "multi-agent-systems",
-        "ollama",
-        "openai",
-        "spring"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE opens \"Apache License Version 2.0, January 2004\". The README states \"Koog is a Kotlin-based framework designed to build and run AI agents entirely in idiomatic Kotlin and Java API\" whose agents \"can interact with tools, handle complex workflows, and communicate with users\", with graph workflows, retries with state persistence, history compression, MCP and Agent Client Protocol integration, and tracing. The bundle reports no cross-collection hits. Boundary question: none apparent; the record reads as a maintained framework with releases, docs, and provider integrations.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/JetBrains/koog/blob/develop/LICENSE.txt",
-            "kind": "git_blob",
-            "content_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
-            "immutable_url": "https://api.github.com/repos/JetBrains/koog/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/JetBrains/koog/blob/develop/README.md",
-            "kind": "git_blob",
-            "content_sha256": "4d7e917bc714d02b7819c36682d85f9ae5359c4bbfd7ef441c0a834f1ce1f506",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "c0819adee20356d8b27a7879a630d355db8e4321",
-            "immutable_url": "https://api.github.com/repos/JetBrains/koog/git/blobs/c0819adee20356d8b27a7879a630d355db8e4321"
-          }
-        ],
-        "proposed_at": "2026-09-23",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "kaiban-ai/KaibanJS",
       "name": "KaibanJS",
       "url": "https://github.com/kaiban-ai/KaibanJS",
@@ -2834,61 +2766,6 @@
       }
     },
     {
-      "repo": "microsoft/Agents",
-      "name": "Agents",
-      "url": "https://github.com/microsoft/Agents",
-      "description": "The Microsoft 365 Agent SDK simplifies building full stack, multichannel, trusted agents for platforms including M365, Teams, Copilot Studio, and Webchat.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 1061,
-      "topics": [
-        "agents",
-        "bot",
-        "botframework",
-        "copilot",
-        "copilotstudio",
-        "sdk",
-        "teams"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE reads \"MIT License\" with \"Copyright (c) Microsoft Corporation\". The README presents the Microsoft 365 Agents SDK for creating \"an agent 'container' with state, storage, and the ability to manage activities and events\" deployable to Teams, Copilot, and custom channels, with C#, JavaScript, and Python client libraries plus assistant plugins that teach coding assistants the SDK patterns. The bundle reports no cross-collection hits. Boundary question: none apparent beyond confirming the hub repository plus its language repos constitute one reviewable product.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/microsoft/Agents/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "9e841e7a26e4eb057b24511e7b92d42b257a80e5",
-            "immutable_url": "https://api.github.com/repos/microsoft/Agents/git/blobs/9e841e7a26e4eb057b24511e7b92d42b257a80e5"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/microsoft/Agents/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "2638983a92deb0f21bfb98303e119c5261ddd30f5cc7ec28ef53f65647a3b0fa",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "97f7b790e4b07be030fdc885d31282e67eba744d",
-            "immutable_url": "https://api.github.com/repos/microsoft/Agents/git/blobs/97f7b790e4b07be030fdc885d31282e67eba744d"
-          }
-        ],
-        "proposed_at": "2026-09-23",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "microsoft/Webwright",
       "name": "Webwright",
       "url": "https://github.com/microsoft/Webwright",
@@ -3091,53 +2968,6 @@
             "fetched_at": "2026-09-23",
             "blob_sha": "469c40598ad8af18659a354512443489e786edf8",
             "immutable_url": "https://api.github.com/repos/minitap-ai/mobile-use/git/blobs/469c40598ad8af18659a354512443489e786edf8"
-          }
-        ],
-        "proposed_at": "2026-09-23",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "MoonshotAI/kimi-agent-sdk",
-      "name": "kimi-agent-sdk",
-      "url": "https://github.com/MoonshotAI/kimi-agent-sdk",
-      "description": "Kimi Agent SDK provides a programmatic interface to interact with the Kimi CLI",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 575,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE opens \"Apache License Version 2.0, January 2004\". The README states the SDKs \"expose the Kimi CLI agent runtime in your applications\", as \"thin, language-native clients that reuse the same Kimi CLI configuration, tools, skills, and MCP servers\", streaming responses, surfacing approvals and tool calls, in Go, Node.js, and Python with custom-tool registration. The bundle reports no cross-collection hits. Boundary question: whether these thin clients are themselves operational or merely clients of the separately maintained CLI runtime.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/MoonshotAI/kimi-agent-sdk/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
-            "immutable_url": "https://api.github.com/repos/MoonshotAI/kimi-agent-sdk/git/blobs/7a4a3ea2424c09fbe48d455aed1eaa94d9124835"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/MoonshotAI/kimi-agent-sdk/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "d2d7a5c9bf3b77a8e2ab901cbe8e6a061fd370e126782599c2f2b905e867ae1a",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "e48d8c4fcd987e9f2550fb2bb0acbecd307ec9c7",
-            "immutable_url": "https://api.github.com/repos/MoonshotAI/kimi-agent-sdk/git/blobs/e48d8c4fcd987e9f2550fb2bb0acbecd307ec9c7"
           }
         ],
         "proposed_at": "2026-09-23",
@@ -3582,106 +3412,6 @@
             "fetched_at": "2026-09-23",
             "blob_sha": "820d3d96d563fe83b5b41ef98a0bfd5845b9d343",
             "immutable_url": "https://api.github.com/repos/onecli/onecli/git/blobs/820d3d96d563fe83b5b41ef98a0bfd5845b9d343"
-          }
-        ],
-        "proposed_at": "2026-09-23",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "openai/openai-agents-js",
-      "name": "openai-agents-js",
-      "url": "https://github.com/openai/openai-agents-js",
-      "description": "A lightweight, powerful framework for multi-agent workflows and voice agents",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 3807,
-      "topics": [
-        "agents",
-        "openai",
-        "openai-api",
-        "realtime-api",
-        "typescript"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "Dossier complete: pinned MIT license file plus README product evidence, no competing collection hits, no digest errors. Applicable gate: \"A provider-native SDK or harness qualifies only when agent execution—not model API access—is its primary outcome.\" Reviewer to confirm that test in the boundary question below.",
-        "finding": "Licence file says \"MIT License\" with \"Copyright (c) 2025 OpenAI\" and the standard permission grant. README claims \"The OpenAI Agents SDK is a lightweight yet powerful framework for building multi-agent workflows in JavaScript/TypeScript. It is provider-agnostic, supporting OpenAI APIs and more.\" Core concepts listed include agents \"configured with instructions, tools, guardrails, and handoffs\", \"Agents paired with a filesystem workspace and sandbox environment for longer-running work\", and \"Built-in mechanisms for involving humans across agent runs\". No cross-collection hits in the digest. Boundary question: given the OpenAI authorship alongside the provider-agnostic claim, reviewer to confirm that agent execution, not model API access, is the primary outcome.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/openai/openai-agents-js/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "969d1c8178ad9a1ae2ff1e67534151d4cc58a2626274b272f918995bccd3a6ad",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "0b9aa14f1d62dc4f93fd48437369ceff7ff27cd8",
-            "immutable_url": "https://api.github.com/repos/openai/openai-agents-js/git/blobs/0b9aa14f1d62dc4f93fd48437369ceff7ff27cd8"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/openai/openai-agents-js/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "2ff0cb35820f8c937d2627eebb596a4cc9a25f5647e5a4be6f83f5776ad17dcb",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "27196ba2eb95ce411b3549af7bbc05af5f3f4028",
-            "immutable_url": "https://api.github.com/repos/openai/openai-agents-js/git/blobs/27196ba2eb95ce411b3549af7bbc05af5f3f4028"
-          }
-        ],
-        "proposed_at": "2026-09-24",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "openai/swarm",
-      "name": "swarm",
-      "url": "https://github.com/openai/swarm",
-      "description": "Educational framework exploring ergonomic, lightweight multi-agent orchestration. Managed by OpenAI Solution team.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 21974,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE reads \"MIT License\" with \"Copyright (c) 2024 OpenAI\". The README heads the project \"Swarm (experimental, educational)\" and states \"Swarm is now replaced by the OpenAI Agents SDK, which is a production-ready evolution of Swarm\", recommending migration, with stateless handoff-based coordination over the chat completions API. The bundle reports no cross-collection hits. Boundary question: the maintainer names a published successor, so the review should test supersession rather than a fresh listing.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/openai/swarm/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "d831db55645e47ca8e491c5a0e37f1ee744d7b10bf5aa8d50146c795ac0176c0",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "91ba98f3a21392ddd8c0e375f1f01e6d85d9e623",
-            "immutable_url": "https://api.github.com/repos/openai/swarm/git/blobs/91ba98f3a21392ddd8c0e375f1f01e6d85d9e623"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/openai/swarm/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "59245018ba7a6681c116b503428bf573b78494aaaeab7c29ea54d65c901ef3eb",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "bcc1e195f17f6442fba96318fd2288a8c08653ac",
-            "immutable_url": "https://api.github.com/repos/openai/swarm/git/blobs/bcc1e195f17f6442fba96318fd2288a8c08653ac"
           }
         ],
         "proposed_at": "2026-09-23",
@@ -6051,6 +5781,26 @@
         "proposed_at": "2026-09-24",
         "proposer": "candidate-triage"
       }
+    },
+    {
+      "repo": "MoonshotAI/kimi-code",
+      "name": "kimi-code",
+      "url": "https://github.com/MoonshotAI/kimi-code",
+      "description": "Kimi Code CLI, the current Kimi agent runtime CLI that the kimi-agent-sdk thin clients expose; supersedes the archived legacy kimi-cli Python CLI.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.8,
+      "github_detected_license": "MIT",
+      "stars": 7725,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     }
   ]
 }

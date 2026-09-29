@@ -785,6 +785,30 @@
       "useful_lesson": "A dataset with a reference checkpoint is a research input; it enters no scored collection.",
       "excluded_at": "2026-09-28",
       "verified_at": "2026-09-28"
+    },
+    {
+      "name": "swarm",
+      "repo": "openai/swarm",
+      "reason": "The repository heads itself \"Swarm (experimental, educational)\" and the maintainer states Swarm \"is now replaced by the OpenAI Agents SDK, which is a production-ready evolution of Swarm\", recommending migration. It is a superseded predecessor, not an independent reviewable system; the successor is reviewed separately as openai-agents-js.",
+      "useful_lesson": "When the maintainer names a production-ready successor and recommends migration, review the successor once instead of listing both.",
+      "excluded_at": "2026-09-29",
+      "verified_at": "2026-09-29"
+    },
+    {
+      "name": "Agents",
+      "repo": "microsoft/Agents",
+      "reason": "The Microsoft 365 Agents SDK builds full-stack, multichannel delivery for Microsoft 365, Teams, Copilot Studio, and Webchat: its primary outcome is hosting and channel integration on Microsoft's platform rather than agent execution as the SDK's own product. It fails the provider-native SDK gate, which qualifies a provider SDK or harness only when agent execution, not platform or model API access, is its primary outcome.",
+      "useful_lesson": "Multichannel delivery SDKs whose runtime, state, and storage live on the vendor platform are platform integration, not agent-execution frameworks.",
+      "excluded_at": "2026-09-29",
+      "verified_at": "2026-09-29"
+    },
+    {
+      "name": "kimi-agent-sdk",
+      "repo": "MoonshotAI/kimi-agent-sdk",
+      "reason": "The Go, Node.js, and Python SDKs describe themselves as thin, language-native clients that expose the separately maintained Kimi CLI agent runtime, reusing its configuration, tools, skills, and MCP servers. They own no independent agent execution, so the reviewable boundary is the CLI runtime itself, queued separately as MoonshotAI/kimi-code.",
+      "useful_lesson": "Thin clients of a separately maintained agent runtime are pointers to that runtime, not second listings.",
+      "excluded_at": "2026-09-29",
+      "verified_at": "2026-09-29"
     }
   ]
 }

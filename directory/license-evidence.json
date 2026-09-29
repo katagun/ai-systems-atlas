@@ -3612,7 +3612,37 @@
           "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0"
         }
       ]
+    },
+    {
+      "project_id": "openai-agents-js",
+      "repo": "openai/openai-agents-js",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole openai-agents-js repository and the npm packages it publishes",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/openai/openai-agents-js/blob/main/LICENSE",
+          "blob_sha": "0b9aa14f1d62dc4f93fd48437369ceff7ff27cd8",
+          "immutable_url": "https://api.github.com/repos/openai/openai-agents-js/git/blobs/0b9aa14f1d62dc4f93fd48437369ceff7ff27cd8"
+        }
+      ]
+    },
+    {
+      "project_id": "koog",
+      "repo": "JetBrains/koog",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole koog repository and the Maven artifacts it publishes",
+          "kind": "git_blob",
+          "path": "LICENSE.txt",
+          "url": "https://github.com/JetBrains/koog/blob/develop/LICENSE.txt",
+          "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+          "immutable_url": "https://api.github.com/repos/JetBrains/koog/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-09-28"
+  "generated_at": "2026-09-29"
 }
