@@ -1295,9 +1295,13 @@ footer {
   font-size: .76rem;
   text-align: left;
 }
+.footer-actions { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; padding-bottom: 1.25rem; margin-bottom: .9rem; border-bottom: 1px solid var(--line); }
+.footer-nav { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; }
+.footer-nav a { display: inline-flex; align-items: center; min-height: 38px; color: var(--text); font-weight: 600; text-decoration: none; }
+.footer-nav a:hover { color: var(--cyan); text-decoration: underline; text-underline-offset: .25em; }
 footer #data-date, footer .footer-meta {
   grid-column: 2;
-  grid-row: 1 / span 2;
+  grid-row: 2 / span 2;
   font: 500 .68rem var(--font-mono);
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -1334,7 +1338,7 @@ footer #data-date, footer .footer-meta {
 /* Up to tablet width even short names wrap the strip (they measure 898 px,
    so they need a 1001 px viewport for 16 px of slack), so entries are emblems
    only and the pressed entry's name and count read as the caption under the
-   one row. Above phone width the header still sticks and the strip under it. */
+   one row. The strip sticks beneath the header at every width. */
 @media (max-width: 1000px) {
   .scope-strip { padding: .4rem 0 .35rem; }
   .scope-row { flex-wrap: nowrap; gap: .2rem; }
@@ -1349,11 +1353,13 @@ footer #data-date, footer .footer-meta {
 
 @media (max-width: 720px) {
   main, footer { width: min(100% - 1.5rem, 1360px); }
-  .site-header { padding: .75rem; display: flex; flex-wrap: wrap; gap: .65rem; justify-content: space-between; }
-  .header-tools { order: 2; }
+  .site-header { min-height: 64px; padding: .5rem .75rem; grid-template-columns: auto 1fr auto; column-gap: .5rem; }
+  .wordmark { font-size: .85rem; }
+  .header-tools { gap: .25rem; }
+  .theme-toggle, .github-link { width: 32px; height: 36px; }
   .brand small { display: none; }
-  .tabs { order: 3; width: 100%; flex-wrap: wrap; justify-content: center; column-gap: .35rem; row-gap: .1rem; overflow-x: visible; }
-  .tab, .tab-link { flex: 0 0 auto; font-size: .66rem; }
+  .tabs { flex-wrap: nowrap; justify-content: center; gap: .5rem; min-width: 0; }
+  .tab, .tab-link { flex: 0 0 auto; display: inline-flex; align-items: center; min-height: 36px; padding: .3rem 0; font-size: .72rem; white-space: nowrap; }
   /* A button-anchored popup would hang off the viewport on a phone, where
      the Docs entry sits far from the right edge: the menu becomes a sheet
      under the header instead, on both the app and the blog header. */
@@ -1370,11 +1376,6 @@ footer #data-date, footer .footer-meta {
   .front-door .hero-copy { font-size: 1rem; line-height: 1.55; }
   .door-jobs { gap: .4rem; }
   .door-job { padding: .35rem .7rem; font-size: .8rem; }
-  /* Only the strip is sticky on a phone: the app's header scrolls away,
-     which closes the 185 px sticky-header leftover from Phase 0. The blog
-     shares this sheet and has no strip, so its header stays sticky. */
-  body:not(.writing-page) .site-header { position: static; }
-  .scope-strip { top: 0; }
   .view, #directory.view { padding: 2.6rem 0; }
   .definitions, .taxonomy-grid { grid-template-columns: 1fr; }
   .api-facts, .endpoint-list, .api-notes { grid-template-columns: 1fr; }
@@ -1399,6 +1400,13 @@ footer #data-date, footer .footer-meta {
   .comparison-dialog { padding: 1rem; }
   footer { padding: 1.5rem 0 1.75rem; grid-template-columns: 1fr; }
   footer #data-date, footer .footer-meta { grid-column: 1; grid-row: auto; margin-top: .5rem; text-align: left; }
+}
+
+@media (max-width: 360px) {
+  .site-header { padding-inline: .5rem; column-gap: .35rem; }
+  .wordmark { font-size: .75rem; }
+  .tabs { gap: .4rem; }
+  .tab, .tab-link { font-size: .68rem; }
 }
 
 @media (max-width: 460px) {

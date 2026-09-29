@@ -411,11 +411,22 @@ def render_header(root: str, blog: str) -> str:
         f'<li><a class="is-active" aria-current="page" href="{blog}">Blog</a></li></ul>'
         "</details></nav>\n"
         '<div class="header-tools">'
-        f'<a class="suggest-link" href="{REPOSITORY}/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a>'
         '<button id="theme-toggle" class="theme-toggle" type="button" aria-label="Theme: system" '
         'title="Switch between system, light, and dark themes"></button>'
         f'<a class="github-link" href="{REPOSITORY}" target="_blank" rel="noreferrer" aria-label="GitHub" title="Source on GitHub">{GITHUB_ICON}</a>'
         "</div>\n</header>"
+    )
+
+
+def render_footer_actions(root: str, blog: str) -> str:
+    """Site navigation and contribution link, shared across blog depths."""
+    return (
+        '<div class="footer-actions"><nav class="footer-nav" aria-label="Site map">'
+        f'<a href="{root}">Catalog</a><a href="{root}?view=finder">Finder</a>'
+        f'<a href="{root}?view=taxonomy">Concepts</a>'
+        f'<a href="{root}?view=api">Published data</a><a href="{blog}">Blog</a></nav>'
+        f'<a class="suggest-link" href="{REPOSITORY}/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a>'
+        "</div>"
     )
 
 
@@ -462,7 +473,7 @@ def _document(
 <body class="writing-page">
 {render_header(root, blog)}
 {main}
-<footer>{FOOTER_NOTICES}<span class="footer-meta">{footer}</span></footer>
+<footer>{render_footer_actions(root, blog)}{FOOTER_NOTICES}<span class="footer-meta">{footer}</span></footer>
 </body>
 </html>
 """

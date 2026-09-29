@@ -232,7 +232,7 @@ test("results carry a sticky strip with exactly one pressed entry, families insi
   await expect(page.locator("#family-filter")).toHaveValue("memory_system");
 });
 
-test("up to tablet width the strip shows emblems only in one row with slack, sticky under a sticky header only above phones", async ({ page }) => {
+test("up to tablet width the strip shows emblems only in one row with slack, sticky under the header at every width", async ({ page }) => {
   for (const width of [320, 360, 390, 768, 960]) {
     await page.setViewportSize({ width, height: 812 });
     await page.goto("/?collection=runtimes");
@@ -253,14 +253,11 @@ test("up to tablet width the strip shows emblems only in one row with slack, sti
     const nameWidth = await strip.locator(".scope-entry").first().locator(".scope-name").evaluate(element => element.getBoundingClientRect().width);
     expect(nameWidth, `${width}: names are clipped, not shown`).toBeLessThanOrEqual(1);
     await expect(strip).toHaveCSS("position", "sticky");
-    if (width <= 720) {
-      await expect(page.locator(".site-header")).toHaveCSS("position", "static");
-      await expect(strip).toHaveCSS("top", "0px");
-    } else {
-      await expect(page.locator(".site-header")).toHaveCSS("position", "sticky");
-      const headerHeight = await page.locator(".site-header").evaluate(element => element.getBoundingClientRect().height);
-      await expect(strip).toHaveCSS("top", `${headerHeight}px`);
-    }
+    await expect(page.locator(".site-header")).toHaveCSS("position", "sticky");
+    const headerHeight = await page.locator(".site-header").evaluate(element => element.getBoundingClientRect().height);
+    await expect(strip).toHaveCSS("top", `${headerHeight}px`);
+    await page.evaluate(() => window.scrollTo({ top: 500, behavior: "instant" }));
+    expect((await strip.boundingBox()).y).toBe(headerHeight);
   }
 });
 

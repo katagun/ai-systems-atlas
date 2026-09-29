@@ -94,7 +94,7 @@ test("the blog index and its posts are reachable and self-contained", async ({ p
 test("the primary navigation links to the blog", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" });
   await page.locator(".docs-button").click();
-  await page.getByRole("link", { name: "Blog" }).click();
+  await page.locator(".site-header").getByRole("link", { name: "Blog" }).click();
   await expect(page).toHaveURL(/\/blog\/$/);
 });
 

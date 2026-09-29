@@ -416,7 +416,7 @@ class HeaderTests(PostFixture):
                     html,
                 )
                 self.assertLess(
-                    html.index('class="suggest-link"'), html.index('id="theme-toggle"')
+                    html.index("<footer>"), html.index('class="suggest-link"')
                 )
                 self.assertLess(
                     html.index('id="theme-toggle"'), html.index('class="github-link"')
@@ -437,14 +437,12 @@ class HeaderTests(PostFixture):
         """The published index.html is the reference, so the two footers cannot drift apart."""
         index = (build_blog.ROOT / "web" / "index.html").read_text(encoding="utf-8")
         match = re.search(
-            r"<footer>(.*?)<span id=\"data-date\"></span></footer>", index
+            r"<footer>.*?</div>(.*?)<span id=\"data-date\"></span></footer>", index
         )
         self.assertIsNotNone(match)
         for path, html in self.pages().items():
             with self.subTest(path):
-                self.assertIn(
-                    f'<footer>{match.group(1)}<span class="footer-meta">', html
-                )
+                self.assertIn(f'{match.group(1)}<span class="footer-meta">', html)
 
 
 class CheckTests(PostFixture):

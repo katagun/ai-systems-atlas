@@ -900,7 +900,7 @@ function renderFamilyRow(payloads) {
   return `<div class="family-row" role="group" aria-label="System families">${entry("", "All families", total)}${families.join("")}</div>`;
 }
 
-// The strip sticks under the header above phone widths, so the header's
+// The strip sticks under the header at every width, so the header's
 // live height is a custom property the stylesheet reads. The sticky height
 // is another, html's scroll-padding-top, so focus moving through a grid
 // stops below the header and the strip rather than under them. The strip's
