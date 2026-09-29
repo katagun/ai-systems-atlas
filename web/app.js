@@ -732,19 +732,28 @@ let elementGroups = [];
 let selectedElement = null;
 let selectedElementRecord = null;
 let elementRequest = 0;
+let mobileElementFamily = "memory_system";
+const mobileLayout = window.matchMedia("(max-width: 767px)");
 
 function renderElements() {
   elementGroups = AppCore.systemElements(state.projects, state.taxonomy);
   $("#elements-count").textContent = `${elementGroups.reduce((sum, group) => sum + group.count, 0)} active systems · ${elementGroups.reduce((sum, group) => sum + group.roles.length, 0)} operational roles`;
-  $("#element-groups").innerHTML = elementGroups.map(group => `<section class="element-group" data-element-family="${escapeHTML(group.id)}" aria-labelledby="element-family-${escapeHTML(group.id)}">
+  $("#element-family-tabs").innerHTML = elementGroups.map(group => `<button type="button" data-element-family-tab="${escapeHTML(group.id)}" aria-pressed="false" aria-controls="element-group-${escapeHTML(group.id)}">${escapeHTML(AppCore.FAMILY_SHORT_NAMES[group.id] || group.name)}</button>`).join("");
+  $("#element-groups").innerHTML = elementGroups.map(group => `<section class="element-group" id="element-group-${escapeHTML(group.id)}" data-element-family="${escapeHTML(group.id)}" aria-labelledby="element-family-${escapeHTML(group.id)}">
     <div class="element-family-heading"><h3 id="element-family-${escapeHTML(group.id)}">${escapeHTML(group.name)}</h3><span>${group.count} active</span></div>
     <div class="element-tiles">${group.roles.map(role => `<button type="button" class="element-tile" data-element="${escapeHTML(role.id)}" aria-pressed="false" aria-controls="element-sheet"${role.records.length ? "" : " disabled"} aria-label="${escapeHTML(role.name)}, ${role.records.length} active systems. Show reference sheet"><span class="element-count">${role.records.length}</span><span class="element-symbol" aria-hidden="true">${escapeHTML(role.symbol)}</span><span class="element-name">${escapeHTML(role.name)}</span></button>`).join("")}</div></section>`).join("");
+  syncElementFamilies();
+}
+
+function syncElementFamilies() {
+  $$("[data-element-family-tab]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.elementFamilyTab === mobileElementFamily)));
+  $$("[data-element-family]").forEach(group => group.classList.toggle("mobile-family-active", group.dataset.elementFamily === mobileElementFamily));
 }
 
 function positionElementSheet() {
   const sheet = $("#element-sheet");
   const family = selectedElement && document.querySelector(`[data-element-family="${selectedElement.family}"]`);
-  if (family && window.matchMedia("(max-width: 700px)").matches) family.after(sheet);
+  if (family && mobileLayout.matches) family.after(sheet);
   else $("#element-groups").after(sheet);
 }
 
@@ -765,6 +774,8 @@ function selectElement(id, recordId = "", { focus = false } = {}) {
   elementRequest += 1;
   $$("[data-element]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.element === selectedElement?.id)));
   $("#element-sheet").hidden = !selectedElement;
+  if (selectedElement) mobileElementFamily = selectedElement.family;
+  syncElementFamilies();
   positionElementSheet();
   if (selectedElement) {
     $("#element-sheet-title").textContent = selectedElement.name;
@@ -856,6 +867,7 @@ function showFrontDoor({ updateURL = true } = {}) {
   $("#hero-kicker").hidden = false;
   $("#directory-title").classList.remove("visually-hidden");
   syncStickyClearance();
+  syncMobileNavigation();
   renderCollectionIndex();
   syncBadgeLegend();
   if (updateURL) {
@@ -873,6 +885,7 @@ function showResults() {
   $("#hero-kicker").hidden = true;
   $("#directory-title").classList.add("visually-hidden");
   $("#scope-strip").hidden = false;
+  syncMobileNavigation();
 }
 
 // The results strip: one entry per registry entry, the collection pressed.
@@ -3432,6 +3445,7 @@ function activateView(id, { focusTarget } = {}) {
     else item.removeAttribute("aria-current");
   });
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
+  syncMobileNavigation();
   if (id === "explore") restoreRuntimeMatrix();
   if (leaving && leaving.id !== id) {
     const heading = focusTarget || document.getElementById(document.getElementById(id)?.getAttribute("aria-labelledby"));
@@ -3491,6 +3505,91 @@ function initDocsMenu() {
   });
 }
 
+// Mobile navigation uses existing views and search state; no parallel catalog.
+function syncMobileNavigation() {
+  const view = $(".view.is-active")?.id;
+  const active = view === "directory" ? (state.directoryStage === "door" ? "home" : "search")
+    : view === "finder" || view === "explore" ? view : "more";
+  $$("[data-mobile-nav]").forEach(button => {
+    if (button.dataset.mobileNav === active) button.setAttribute("aria-current", "page");
+    else button.removeAttribute("aria-current");
+  });
+}
+
+function openMobileSearch() {
+  if (!$("#directory").classList.contains("is-active") && state.directoryStage !== "door") {
+    try { window.history.pushState(null, "", window.location.href); } catch {}
+  }
+  openCollection("all");
+  activateView("directory");
+  $("#all-directory-search").focus();
+}
+
+function initMobileNavigation() {
+  const more = $("#mobile-more");
+  const tools = $(".header-tools");
+  function syncLayout() {
+    const focused = document.activeElement;
+    const toolsFocused = tools.contains(focused);
+    const moreFocused = more.contains(focused);
+    const focusedFamily = focused?.closest("[data-element-family]")?.dataset.elementFamily;
+    if (more.open) more.close();
+    (mobileLayout.matches ? $("#mobile-tools") : $(".site-header")).append(tools);
+    if (selectedElement) mobileElementFamily = selectedElement.family;
+    else if (focusedFamily) mobileElementFamily = focusedFamily;
+    syncElementFamilies();
+    positionElementSheet();
+    syncStickyClearance();
+    if (toolsFocused && !mobileLayout.matches) focused.focus();
+    else if (moreFocused && !mobileLayout.matches) $(".docs-button").focus();
+    else if (toolsFocused && mobileLayout.matches) $('[data-mobile-nav="more"]').focus();
+  }
+  syncLayout();
+  mobileLayout.addEventListener("change", syncLayout);
+  $("#element-family-tabs").addEventListener("click", event => {
+    const button = event.target.closest("[data-element-family-tab]");
+    if (!button) return;
+    if (selectedElement && selectedElement.family !== button.dataset.elementFamilyTab) selectElement(null);
+    mobileElementFamily = button.dataset.elementFamilyTab;
+    syncElementFamilies();
+  });
+  $("#mobile-nav").addEventListener("click", event => {
+    const button = event.target.closest("[data-mobile-nav]");
+    if (!button) return;
+    const target = button.dataset.mobileNav;
+    if (target === "more") { more.showModal(); return; }
+    if (target === "search") { openMobileSearch(); return; }
+    // A destination switch gets its own history entry, just like catalog links.
+    try { window.history.pushState(null, "", window.location.href); } catch {}
+    if (target === "home") {
+      selectElement(null);
+      activateView("directory");
+      showFrontDoor();
+    } else activateView(target);
+    document.getElementById($(".view.is-active").getAttribute("aria-labelledby"))?.focus({ preventScroll: true });
+  });
+  $("#mobile-more-close").addEventListener("click", () => more.close());
+  more.addEventListener("click", event => {
+    if (event.target === more) more.close();
+    const button = event.target.closest("[data-mobile-view]");
+    if (!button) return;
+    more.close();
+    try { window.history.pushState(null, "", window.location.href); } catch {}
+    activateView(button.dataset.mobileView);
+    document.getElementById($(".view.is-active").getAttribute("aria-labelledby"))?.focus({ preventScroll: true });
+  });
+  // Mobile browsers resize their visual viewport for the keyboard. Hide the
+  // dock only while editing and zoom is unchanged, so it cannot float over keys.
+  const viewport = window.visualViewport;
+  const syncKeyboard = () => {
+    const editing = document.activeElement?.matches("input, textarea, select");
+    document.body.classList.toggle("mobile-keyboard", Boolean(editing && viewport && viewport.scale === 1 && window.innerHeight - viewport.height > 120));
+  };
+  viewport?.addEventListener("resize", syncKeyboard);
+  document.addEventListener("focusin", syncKeyboard);
+  document.addEventListener("focusout", () => requestAnimationFrame(syncKeyboard));
+}
+
 function bindEvents() {
   Object.values(RUNTIME_MATRIX_CONTROLS).forEach(({ selector }) => $(selector).addEventListener("change", updateRuntimeMatrix));
   $("#matrix-reset").addEventListener("click", () => {
@@ -3515,6 +3614,7 @@ function bindEvents() {
     const selector = onDoor ? "#door-search" : SCOPE_CONTROLS[activeScope()]?.q;
     if (!selector) return;
     event.preventDefault();
+    if (onDoor && mobileLayout.matches) { openMobileSearch(); return; }
     $(selector).focus();
   });
   // The Docs menu button carries .tab styling but no data-tab, so the primary
@@ -3526,6 +3626,7 @@ function bindEvents() {
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
   $$('[data-open-view]').forEach(button => button.addEventListener("click", () => { closeDocsMenu(); activateView(button.dataset.openView); }));
   initDocsMenu();
+  initMobileNavigation();
   // The brand mark links home. A plain left click stays in the single-page
   // app on the directory landing view; modified clicks and new tabs follow
   // the href to the site root.
@@ -3572,7 +3673,6 @@ function bindEvents() {
     document.querySelector(`[data-element="${id}"]`)?.focus();
   });
   $("#element-retry").addEventListener("click", loadElementRecord);
-  window.matchMedia("(max-width: 700px)").addEventListener("change", positionElementSheet);
   $("#door-search").addEventListener("input", event => {
     const value = event.target.value;
     if (!value) return;

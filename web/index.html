@@ -23,9 +23,9 @@
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=4c3defceedeb">
+  <link rel="stylesheet" href="styles.css?v=75ffea47b460">
 </head>
-<body>
+<body class="atlas-app">
   <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
     <div class="brand">
@@ -56,13 +56,31 @@
     </div>
   </header>
 
+
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation">
+    <button type="button" data-mobile-nav="home"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="m3 10 9-7 9 7v11h-6v-7H9v7H3Z"/></svg><span>Home</span></button>
+    <button type="button" data-mobile-nav="search"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></svg><span>Search</span></button>
+    <button type="button" data-mobile-nav="finder"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M12 3v19M4 5h14l3 4-3 4H4Z"/></svg><span>Finder</span></button>
+    <button type="button" data-mobile-nav="explore"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M4 3v17h17M8 15l4-5 4 2 5-8"/></svg><span>Explore</span></button>
+    <button type="button" data-mobile-nav="more" aria-haspopup="dialog" aria-controls="mobile-more"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg><span>More</span></button>
+  </nav>
+  <dialog id="mobile-more" class="mobile-more" aria-labelledby="mobile-more-title">
+    <div class="mobile-more-heading"><h2 id="mobile-more-title">More from the Atlas</h2><button type="button" id="mobile-more-close" class="ghost-button">Close</button></div>
+    <nav aria-label="More navigation">
+      <button type="button" data-mobile-view="taxonomy">Concepts</button>
+      <button type="button" data-mobile-view="api">Published data</button>
+      <a href="blog/">Blog</a>
+    </nav>
+    <div id="mobile-tools"></div>
+  </dialog>
+
   <main id="main">
     <section id="directory" class="view is-active" aria-labelledby="directory-title">
       <p class="eyebrow door-kicker" id="hero-kicker">Systems, source models, services, and runtimes</p>
       <h1 id="directory-title" class="door-title" tabindex="-1">The elements of <span>AI systems.</span></h1>
       <div id="front-door" class="front-door">
         <div class="front-door-copy">
-          <p class="hero-copy">Find your AI tools. Know their terms. <a href="?view=explore">Explore the data</a>.</p>
+          <p class="hero-copy">Find your AI tools. Know their terms.<span class="desktop-explore-link"> <a href="?view=explore">Explore the data</a>.</span></p>
         </div>
         <label class="search-field door-search"><span>Search</span><input id="door-search" type="search" placeholder="Search everything in the Atlas" autocomplete="off"></label>
         <nav class="door-jobs" aria-label="Start from a job">
@@ -71,6 +89,7 @@
         </nav>
         <section id="elements" class="elements" aria-labelledby="elements-title">
           <div class="elements-heading"><h2 id="elements-title">Find a system by its role</h2><p id="elements-count"></p></div>
+          <nav id="element-family-tabs" class="element-family-tabs" aria-label="Elements families"></nav>
           <div id="element-groups" class="element-groups"></div>
           <section id="element-sheet" class="element-sheet" aria-labelledby="element-sheet-title" hidden>
             <div class="element-sheet-heading"><div><p class="eyebrow">System properties · reviewed catalog</p><h3 id="element-sheet-title" tabindex="-1"></h3></div><button id="element-close" type="button" class="ghost-button">Close reference sheet</button></div>
@@ -503,6 +522,6 @@
   <footer><div class="footer-actions"><nav class="footer-nav" aria-label="Site map"><a href="./">Catalog</a><a href="?view=finder">Finder</a><a href="?view=explore">Explore</a><a href="?view=taxonomy">Concepts</a><a href="?view=api">Published data</a><a href="blog/">Blog</a></nav><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a></div><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
   <script type="application/json" id="data-versions">{"projects.json":"71d9917d5557","taxonomy.json":"9797c3c30ee1","license-evidence.json":"d6cbb911714a","specifications.json":"f6487c60eb84","inference-services.json":"3adcbc44ceca","local-runtimes.json":"c3d85a51fff7","models.json":"541ef5ef7c71","models-dev.json":"ec5e4b8a29fb","logos.json":"a0ce82f2ea60","exclusions.json":"ff05010648bd","app/systems.json":"fd038c59c916","app/inference.json":"b1f20c24671e","app/runtimes.json":"ef7c2001163c","app/specifications.json":"e62146fa677b","app/models.json":"5808a43cc56c","app/packs.json":"0907bc81836a","app/labs.json":"621781eaa733","app/robots.json":"3b07b04f8f7c","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"e2975e5aaa70","app/search/inference.json":"b26a8d12b53b","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"a292e958eac7","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"2a8a8278c714","app/search/robots.json":"f3ba0fcf79b2","app/detail":"4509213f7994"}</script>
   <script src="app-core.js?v=e5e9d7b4ade3" defer></script>
-  <script src="app.js?v=d2eb26ea9f41" defer></script>
+  <script src="app.js?v=2097676a88f6" defer></script>
 </body>
 </html>

@@ -21,7 +21,7 @@ for (const width of [390, 360, 320]) {
   test(`every navigation item is fully visible at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 });
     await page.goto("/");
-    const fit = await page.locator(".tabs").evaluate(nav => {
+    const fit = await page.locator("#mobile-nav").evaluate(nav => {
       const box = nav.getBoundingClientRect();
       const items = [...nav.querySelectorAll(":scope > *")].map(item => item.getBoundingClientRect());
       return {
@@ -33,7 +33,7 @@ for (const width of [390, 360, 320]) {
     expect(fit.overflow).toBeLessThanOrEqual(0);
     expect(fit.outside).toBe(0);
     if (width === 390) expect(fit.rows).toBe(1);
-    expect(await styleOf(page, ".tab.is-active", "borderTopLeftRadius")).toBe("0px");
+    await expect(page.locator("#mobile-nav")).toBeInViewport();
   });
 }
 
