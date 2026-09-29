@@ -563,6 +563,60 @@ class DirectoryTests(unittest.TestCase):
         self.assertNotIn("algorithmicsuperintelligence/openevolve", excluded_repos)
         self.assertNotIn("AlphaEvolve", excluded_names)
 
+    def test_robot_software_batch_has_evidence_backed_dispositions(self) -> None:
+        """Coverage batch 98: the five ADR 045 candidates and the screened neighbours."""
+        candidates = json.loads(
+            (ROOT / "directory" / "candidates.json").read_text(encoding="utf-8")
+        )
+        exclusions = json.loads(
+            (ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8")
+        )
+        projects = {project["id"]: project for project in self.document["projects"]}
+        queued = {item["repo"]: item for item in candidates["candidates"]}
+        excluded = {item["repo"] for item in exclusions["entries"]}
+
+        for project_id in ("lerobot", "om1"):
+            self.assertEqual(
+                "agent_framework_sdk", projects[project_id]["primary_role"]
+            )
+            self.assertIn("robot_control", projects[project_id]["agent_capabilities"])
+            self.assertIn("host", projects[project_id]["execution_boundaries"])
+        self.assertNotIn("huggingface/lerobot", queued)
+        self.assertNotIn("OpenMind/OM1", queued)
+
+        self.assertEqual(
+            "action-policy model boundary",
+            queued["Physical-Intelligence/openpi"]["triage"]["held_by"],
+        )
+        self.assertEqual(
+            "action-policy model boundary",
+            queued["octo-models/octo"]["triage"]["held_by"],
+        )
+        self.assertEqual(
+            "programme-gated run path",
+            queued["google-deepmind/gemini-robotics-sdk"]["triage"]["held_by"],
+        )
+        self.assertFalse(
+            [
+                item["repo"]
+                for item in candidates["candidates"]
+                if item.get("triage", {}).get("held_by")
+                == "robot software role decision"
+            ]
+        )
+
+        for repo in (
+            "dora-rs/dora",
+            "Genesis-Embodied-AI/Genesis",
+            "ARISE-Initiative/robomimic",
+            "ros2/ros2",
+            "moveit/moveit2",
+            "NVIDIA-ISAAC-ROS/isaac_ros_common",
+            "google-deepmind/open_x_embodiment",
+        ):
+            self.assertIn(repo, excluded, repo)
+        self.assertNotIn("dora-rs/dora", queued)
+
     def test_computer_research_terminal_and_media_agent_batch_has_explicit_boundaries(
         self,
     ) -> None:
