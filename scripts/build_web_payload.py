@@ -155,6 +155,7 @@ BOOT_FIELDS = {
         "parent_organization",
         "catalog_names",
         "systems",
+        "admission_basis",
     ),
     "robots": (
         "id",

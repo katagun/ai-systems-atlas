@@ -128,6 +128,7 @@ TAXONOMY_GROUPS = (
     "pack_hosts",
     "pack_install_mechanisms",
     "lab_types",
+    "lab_admission_bases",
     "lab_channel_kinds",
     "countries",
     "robot_form_factors",
@@ -273,6 +274,7 @@ LAB_REQUIRED = {
     "catalog_names",
     "systems",
     "channels",
+    "admission_basis",
     "evidence",
     "verified_at",
 }
@@ -1741,11 +1743,17 @@ def validate_lab_catalog_names(
     lab: dict[str, Any],
     prefix: str,
     names_by_field: dict[str, set[str]],
+    enum_ids: dict[str, set[str]],
     errors: list[str],
 ) -> set[str]:
-    """Each catalog name must name a record; one must be a reviewed model's developer."""
-    validate_string_list(lab, "catalog_names", None, prefix, errors)
+    """Each catalog name must name a record; a lab needs a reviewed release or a
+    published frontier-model commitment (ADR 044)."""
+    # An announced lab joins to nothing, so it may carry no names at all (ADR 044).
+    validate_string_list(lab, "catalog_names", None, prefix, errors, allow_empty=True)
     values = lab.get("catalog_names")
+    basis = lab.get("admission_basis")
+    if basis not in enum_ids["lab_admission_bases"]:
+        errors.append(f"{prefix}: unknown admission basis")
     if not isinstance(values, list):
         return set()
     names = {name for name in values if isinstance(name, str)}
@@ -1756,10 +1764,19 @@ def validate_lab_catalog_names(
             )
         elif not any(name in field_names for field_names in names_by_field.values()):
             errors.append(f"{prefix}: catalog name {name!r} names no catalog record")
-    if names and not names & names_by_field["developer"]:
+    if basis == "reviewed_release":
+        # The original gate: the organization must have a release in the collection.
+        if not names & names_by_field["developer"]:
+            errors.append(
+                f"{prefix}: develops no reviewed model release, so its admission basis "
+                "must be frontier_announcement (ADR 044)"
+            )
+    # Recorded before any release, so it joins to nothing by construction. A
+    # reviewed release would make the stronger basis the honest one.
+    elif basis == "frontier_announcement" and names & names_by_field["developer"]:
         errors.append(
-            f"{prefix}: develops no reviewed model release; a lab is recorded only "
-            "once the catalog has reviewed a release it developed (ADR 041)"
+            f"{prefix}: has a reviewed model release, so its admission basis must "
+            "be reviewed_release (ADR 044)"
         )
     return names
 
@@ -1917,7 +1934,9 @@ def validate_labs(
             errors.append(f"{prefix}: unknown lab type")
         if lab.get("headquarters") not in enum_ids["countries"]:
             errors.append(f"{prefix}: unknown headquarters country")
-        names = validate_lab_catalog_names(lab, prefix, names_by_field, errors)
+        names = validate_lab_catalog_names(
+            lab, prefix, names_by_field, enum_ids, errors
+        )
         validate_string_list(
             lab, "systems", index.ids, prefix, errors, allow_empty=True
         )

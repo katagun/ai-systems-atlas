@@ -961,6 +961,18 @@
       "definition": "A government-funded, academic, or nonprofit research organization that develops and releases models."
     }
   ],
+  "lab_admission_bases": [
+    {
+      "id": "reviewed_release",
+      "name": "Reviewed release",
+      "definition": "The catalog has reviewed at least one model release the organization developed, so the record joins to that release."
+    },
+    {
+      "id": "frontier_announcement",
+      "name": "Frontier announcement",
+      "definition": "The organization publishes, on its own pages, a statement that it is building frontier models, and the catalog has reviewed no release of its own. The record joins to nothing and says so."
+    }
+  ],
   "lab_channel_kinds": [
     {
       "id": "model_catalog",

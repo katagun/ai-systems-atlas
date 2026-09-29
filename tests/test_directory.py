@@ -1107,6 +1107,8 @@ class DirectoryTests(unittest.TestCase):
             "lab-ornith-ai",
             "lab-perplexity",
             "lab-poolside",
+            "lab-sakana-ai",
+            "lab-safe-superintelligence",
             "lab-stepfun",
             "lab-swiss-ai-initiative",
             "lab-tencent",
@@ -1140,14 +1142,24 @@ class DirectoryTests(unittest.TestCase):
                 "source_model",
             ):
                 self.assertNotIn(field, record, record["id"])
-            self.assertTrue(set(record["catalog_names"]) & developers, record["id"])
+            # ADR 044: a lab joins a reviewed release, or is recorded on its own
+            # published statement of frontier intent and joins to nothing.
+            if record["admission_basis"] == "reviewed_release":
+                self.assertTrue(set(record["catalog_names"]) & developers, record["id"])
+            else:
+                self.assertEqual(record["catalog_names"], [], record["id"])
             self.assertTrue(record["organization_note"].strip(), record["id"])
             for name in record["catalog_names"]:
                 self.assertNotIn(
                     name, claimed, f"{record['id']} and {claimed.get(name)}"
                 )
                 claimed[name] = record["id"]
-        for group in ("lab_types", "lab_channel_kinds", "countries"):
+        for group in (
+            "lab_types",
+            "lab_admission_bases",
+            "lab_channel_kinds",
+            "countries",
+        ):
             self.assertTrue(self.taxonomy[group], group)
 
     def test_robots_are_a_separate_unscored_collection(self) -> None:

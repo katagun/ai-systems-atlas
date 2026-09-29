@@ -4,9 +4,13 @@ Use this guide for the organizations that develop the catalog's reviewed model r
 
 ## Inclusion gate
 
-Add an organization to `directory/labs.json` only when the catalog has reviewed a release it developed: one of its `catalog_names` must equal the `developer` of a record in `models.json`, and validation refuses a lab that fails this. Review the release first under [`MODELS.md`](MODELS.md), then record its developer.
+Every lab states why it is in the collection, in a required `admission_basis` field. The two bases are in the `lab_admission_bases` group, and [ADR 044](adr/044-a-lab-may-be-recorded-on-its-own-published-statement-of-frontier-intent.md) amends ADR 041's gate with the second.
 
-Size, funding, frontier status, popularity, openness, nationality, and licence decide nothing. An organization with no reviewed release is not a lab here, however well known: a service operator that serves other developers' models, a company whose only releases are image, audio, or video generators, or a company with nothing released. It waits until one of its releases is reviewed.
+`reviewed_release` is the original gate: one of the lab's `catalog_names` must equal the `developer` of a record in `models.json`, and validation refuses a lab that fails this. Review the release first under [`MODELS.md`](MODELS.md), then record its developer.
+
+`frontier_announcement` is the narrow exception. The organization publishes, on its own pages, a statement that it is building frontier models, and the catalog has reviewed no release of its own. Its `catalog_names` may be empty, and the record joins to nothing; the dialog says so in words rather than printing an empty list. The two bases are mutually exclusive in both directions, so a lab that acquires a reviewed release must switch to `reviewed_release` and one that has no release cannot borrow the stronger vocabulary. This admits a property of the organization's own pages, not its size, funding, coverage, or reputation; a record admitted because it raised money is a record of the raise.
+
+Size, funding, frontier status, popularity, openness, nationality, and licence decide nothing. A service operator that serves other developers' models, and a company whose only releases are image, audio, or video generators, still wait: none of them publishes a statement that it is building frontier models.
 
 A lab record never replaces a release record, and it never carries a conclusion that belongs to one. Licence, source model, distribution, and access score stay on each release ([ADR 025](adr/025-model-releases-are-independent-curated-records.md)).
 
@@ -58,4 +62,4 @@ Labs are never scored, ranked, or sorted by anything but name. Funding, valuatio
 
 ## Current coverage
 
-Forty-two labs cover all 311 reviewed releases. [`COVERAGE.md`](COVERAGE.md#labs) records how the two batches were chosen and read, and [`LAB_REREAD_2026-09-25.md`](LAB_REREAD_2026-09-25.md) records the direct re-read of every page they cite.
+Forty-three labs cover all 311 reviewed releases. Forty-two are admitted on a reviewed release; one, Safe Superintelligence, on its own published statement of intent. [`COVERAGE.md`](COVERAGE.md#labs) records how the two batches were chosen and read, and [`LAB_REREAD_2026-09-25.md`](LAB_REREAD_2026-09-25.md) records the direct re-read of every page they cite.

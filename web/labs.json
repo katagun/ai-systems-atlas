@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-28",
+  "verified_at": "2026-09-29",
   "labs": [
     {
       "id": "lab-ai-singapore",
@@ -38,7 +38,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-ai21-labs",
@@ -88,7 +89,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-aikido-security",
@@ -132,7 +134,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-alibaba",
@@ -182,7 +185,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-amazon",
@@ -235,7 +239,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-ant-group",
@@ -287,7 +292,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-anthropic",
@@ -345,7 +351,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-arcee-ai",
@@ -397,7 +404,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-bytedance",
@@ -482,7 +490,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-cohere",
@@ -528,7 +537,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-deepseek",
@@ -577,7 +587,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-google",
@@ -653,7 +664,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-ibm",
@@ -712,7 +724,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-liquid-ai",
@@ -794,7 +807,8 @@
           "verified_at": "2026-09-28"
         }
       ],
-      "verified_at": "2026-09-28"
+      "verified_at": "2026-09-28",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-meituan",
@@ -832,7 +846,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-meta",
@@ -888,7 +903,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-microsoft",
@@ -944,7 +960,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-minimax",
@@ -1000,7 +1017,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-mistral-ai",
@@ -1044,7 +1062,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-mixedbread-ai",
@@ -1090,7 +1109,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-moonshot-ai",
@@ -1132,7 +1152,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-motif-technologies",
@@ -1174,7 +1195,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-nvidia",
@@ -1219,7 +1241,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-openai",
@@ -1275,7 +1298,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-openbmb",
@@ -1313,7 +1337,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-ornith-ai",
@@ -1357,7 +1382,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-perplexity",
@@ -1411,7 +1437,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-poolside",
@@ -1465,7 +1492,47 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
+    },
+    {
+      "id": "lab-safe-superintelligence",
+      "name": "Safe Superintelligence",
+      "url": "https://ssi.inc/",
+      "description": "The American company building what it calls safe superintelligence, which it names as its single goal and its entire product roadmap; it has published no model, no API, and no documentation.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "frontier_announcement",
+      "organization_note": "Safe Superintelligence Inc., which calls itself an American company with offices in Palo Alto and Tel Aviv, states on its own site that it started \"the world's first straight-shot SSI lab, with one goal and one product: a safe superintelligence\", and that \"SSI is our mission, our name, and our entire product roadmap\". The pages name no legal form beyond the Inc. in the site title and footer, no registered address, no directors, and no governing terms; there is no privacy policy, terms of service, model catalog, release-notes page, or safety framework, and the /safety path returns not-found. Its GitHub organization exists and publishes no repositories at all, and it has no Hugging Face organization, so neither is listed as a channel: a channel is a page or organization a reader can watch for the lab's work, and an empty account is not one. It is recorded on its own published statement of intent rather than on a release, which is why it joins to nothing in this collection; the safety language on its site is a mission statement rather than a framework, so no framework is recorded. Its own updates page names Ilya Sutskever as CEO and Daniel Levy as President as of July 2025 and records a July 2026 NVIDIA partnership.",
+      "catalog_names": [],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://ssi.inc/updates"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Company site: an American company with offices in Palo Alto and Tel Aviv, building safe superintelligence as its one goal and entire product roadmap",
+          "url": "https://ssi.inc/",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Updates page: Ilya Sutskever formally CEO and Daniel Levy President as of July 3, 2025, and a July 26, 2026 NVIDIA compute partnership",
+          "url": "https://ssi.inc/updates",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Contact page: a comms@ssi.inc address for inquiries and a link to apply",
+          "url": "https://ssi.inc/contact",
+          "verified_at": "2026-09-29"
+        }
+      ],
+      "verified_at": "2026-09-29"
     },
     {
       "id": "lab-sakana-ai",
@@ -1545,7 +1612,8 @@
           "verified_at": "2026-09-28"
         }
       ],
-      "verified_at": "2026-09-28"
+      "verified_at": "2026-09-28",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-xai",
@@ -1603,7 +1671,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-stepfun",
@@ -1653,7 +1722,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-swiss-ai-initiative",
@@ -1701,7 +1771,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-tencent",
@@ -1746,7 +1817,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-thinking-machines-lab",
@@ -1792,7 +1864,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-trendyol",
@@ -1832,7 +1905,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-typesafe-ai",
@@ -1877,7 +1951,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-upstage",
@@ -1923,7 +1998,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-vispark",
@@ -1967,7 +2043,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-vivgrid",
@@ -2001,7 +2078,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-writer",
@@ -2053,7 +2131,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-xiaomi",
@@ -2097,7 +2176,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-z-ai",
@@ -2154,7 +2234,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     }
   ]
 }
