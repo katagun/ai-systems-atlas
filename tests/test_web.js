@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -16,6 +16,36 @@ const projects = [
   { name: "GStack", primary_role: "coding_agent_workflow", system_family: "agent_system", agent_relation: "coding_workflow", architectures: ["git_versioned"], deployment: ["local_cli"], agent_interfaces: ["terminal"], source_model: "mixed_open_source", licenses: ["MIT", "OFL-1.1"], status: "active", local_first: true, stars: 25, score: { overall: 8.6 } },
   { name: "Assistant", primary_role: "general_ai_assistant", system_family: "assistant_system", agent_relation: "agent_enabled_ui", architectures: ["hybrid"], deployment: ["desktop", "managed_cloud", "mobile"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: false, stars: null, score: { overall: 8.8 } },
 ];
+
+test("Elements uses primary roles, active status, taxonomy grouping and alphabetical records", () => {
+  const taxonomy = { system_families: [{ id: "agent", name: "Agents" }], primary_roles: [
+    { id: "coding_agent", family: "agent", name: "Coding agent" },
+    { id: "future_role", family: "agent", name: "Future role" },
+  ] };
+  const rows = systemElements([
+    { id: "b", name: "Beta", system_family: "agent", primary_role: "coding_agent", status: "active", score: { overall: 10 } },
+    { id: "a", name: "Alpha", system_family: "agent", primary_role: "coding_agent", status: "active", score: { overall: 0 } },
+    { id: "old", name: "Old", system_family: "agent", primary_role: "coding_agent", status: "archived" },
+    { id: "wrong", name: "Wrong", system_family: "other", primary_role: "coding_agent", status: "active" },
+  ], taxonomy);
+  assert.equal(rows[0].count, 2);
+  assert.equal(rows[0].roles[0].symbol, "Ca");
+  assert.deepEqual(rows[0].roles[0].records.map(record => record.id), ["a", "b"]);
+  assert.deepEqual(rows[0].roles[1].records, []);
+  assert.equal(rows[0].roles[1].symbol, "Fu");
+  assert.equal(systemElements([], taxonomy)[0].count, 0);
+});
+
+test("Elements covers every active system once with unique role symbols", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const projects = readWebJSON("app/systems.json").systems;
+  const groups = systemElements(projects, taxonomy);
+  const roles = groups.flatMap(group => group.roles);
+  const ids = roles.flatMap(role => role.records.map(record => record.id));
+  assert.deepEqual(ids.slice().sort(), projects.filter(project => project.status === "active").map(project => project.id).sort());
+  assert.equal(new Set(ids).size, ids.length);
+  assert.equal(new Set(roles.map(role => role.symbol)).size, roles.length);
+});
 
 test("deployment summaries retain missing values and count overlapping modes once", () => {
   const taxonomy = { system_families: [{ id: "agent", name: "Agents" }], source_models: [{ id: "open", name: "Open" }], deployment_modes: [{ id: "local", name: "Local" }, { id: "cloud", name: "Cloud" }] };

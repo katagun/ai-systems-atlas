@@ -2,16 +2,16 @@ const { test, expect } = require("@playwright/test");
 const { allSearch, categoryEntry, collectionDot, collectionEntry, entryCount, familyEntry, openCollection, openView, pressedEntry, searchAll } = require("./helpers/landing");
 const counts = require("./helpers/catalog-counts");
 
-test("a bare URL opens the front door with every collection above the fold", async ({ page }) => {
+test("a bare URL opens the Elements front door with search and the role map above the fold", async ({ page }) => {
   for (const [width, height] of [[1440, 900], [375, 812]]) {
     await page.setViewportSize({ width, height });
     await page.goto("/");
     await expect(page.locator("#front-door")).toBeVisible();
     await expect(page.locator(".collection-panel:not([hidden])")).toHaveCount(0);
     await expect(page).not.toHaveURL(/collection=/);
-    const index = page.locator("#collection-index");
+    const index = page.locator("#elements");
     const top = await index.evaluate(element => element.getBoundingClientRect().top + window.scrollY);
-    expect(top, `${width}: the index starts above the fold`).toBeLessThan(height);
+    expect(top, `${width}: the role map starts above the fold`).toBeLessThan(height);
     await expect(page.locator("[data-tile]")).toHaveCount(9);
     await expect(page.locator(".atlas-map")).toHaveCount(0);
   }
@@ -181,9 +181,9 @@ test("a focused tile keeps its focus while the search indexes land", async ({ pa
   await page.goto("/");
   await expect(page.locator("#door-jobs button")).toHaveCount(5);
   await page.locator("#door-search").focus();
-  // Past the five Finder jobs to the first tile's button.
-  for (let step = 0; step < 6; step += 1) await page.keyboard.press("Tab");
+  // The role map precedes the collection index; test the same late-load focus contract.
   const tile = collectionEntry(page, "all");
+  await tile.focus();
   await expect(tile).toBeFocused();
   release();
   await page.waitForFunction(() =>
