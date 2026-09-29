@@ -74,6 +74,56 @@ class WebPayloadTests(unittest.TestCase):
                 "verified_at", json.loads(self.payloads[f"app/{collection}.json"])
             )
 
+    def test_active_system_review_dates_exclude_inactive_and_metadata_dates(
+        self,
+    ) -> None:
+        catalog = {
+            **self.catalog,
+            "projects.json": {
+                **self.catalog["projects.json"],
+                "projects": [
+                    {
+                        "id": "old",
+                        "name": "Old",
+                        "status": "active",
+                        "verified_at": "2026-01-01",
+                    },
+                    {
+                        "id": "new",
+                        "name": "New",
+                        "status": "active",
+                        "verified_at": "2026-09-01",
+                    },
+                    {
+                        "id": "missing",
+                        "name": "Missing",
+                        "status": "active",
+                        "updated_at": "2026-09-28",
+                    },
+                    {
+                        "id": "retired",
+                        "name": "Retired",
+                        "status": "archived",
+                        "verified_at": "2026-09-28",
+                    },
+                ],
+            },
+        }
+        payload = json.loads(build_payloads(catalog)["app/systems.json"])
+        self.assertEqual(
+            payload["active_review_dates"],
+            {
+                "first": "2026-01-01",
+                "last": "2026-09-01",
+                "missing": 1,
+            },
+        )
+        catalog["projects.json"]["projects"] = []
+        payload = json.loads(build_payloads(catalog)["app/systems.json"])
+        self.assertEqual(
+            payload["active_review_dates"], {"first": None, "last": None, "missing": 0}
+        )
+
     def test_search_index_covers_every_record(self) -> None:
         for collection, name, key, _ in COLLECTIONS:
             index = json.loads(self.payloads[f"app/search/{collection}.json"])

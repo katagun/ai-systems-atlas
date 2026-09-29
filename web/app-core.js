@@ -90,6 +90,39 @@
     return 0;
   }
 
+  // Keep localOnly=1 links valid while exposing false separately from missing.
+  function matchesLocalFirst(project, value) {
+    if (value === true || value === "1") return project.local_first === true;
+    if (value === "0") return project.local_first === false;
+    if (value === "unknown") return typeof project.local_first !== "boolean";
+    return true;
+  }
+
+  function systemDeploymentSummary(projects, taxonomy) {
+    const active = projects.filter(project => project.status === "active");
+    const groupRows = (field, groups, columns, matches) => {
+      const known = new Set(groups.map(group => group.id));
+      return [...groups, { id: "", name: "Not classified" }].map(group => {
+        const records = active.filter(project => (known.has(project[field]) ? project[field] : "") === group.id);
+        return { ...group, count: records.length, cells: columns.map(column => ({
+          ...column, count: records.filter(project => matches(project, column.id)).length,
+        })) };
+      }).filter(row => row.count);
+    };
+    const deployments = taxonomy.deployment_modes;
+    const localStates = [{ id: "1", name: "Yes" }, { id: "0", name: "No" }, { id: "unknown", name: "Not recorded" }];
+    return {
+      total: active.length,
+      excluded: projects.length - active.length,
+      deployments,
+      localStates,
+      families: groupRows("system_family", taxonomy.system_families, deployments,
+        (project, id) => (project.deployment || []).includes(id)),
+      licensing: groupRows("source_model", taxonomy.source_models, localStates, matchesLocalFirst),
+      missingDeployment: active.filter(project => !deployments.some(mode => (project.deployment || []).includes(mode.id))).length,
+    };
+  }
+
   function matchesProjectFacets(project, filters) {
     const roles = filters.roles || [];
     return (!filters.family || project.system_family === filters.family) &&
@@ -102,7 +135,7 @@
       (!filters.sourceModel || project.source_model === filters.sourceModel) &&
       (!filters.license || project.licenses.includes(filters.license)) &&
       (!filters.status || project.status === filters.status) &&
-      (!filters.localOnly || project.local_first);
+      matchesLocalFirst(project, filters.localOnly);
   }
 
   function matchesProject(project, filters) {
@@ -679,9 +712,10 @@
   // a Directory collection since #345; `kind` stays so a future sibling view
   // is one word. `emblem` names the card badge whose emblem the entry shows:
   // the family's own type badge for a system family, else the collection's
-  // first type badge in CARD_BADGES order. All shows the type family's empty
-  // frame, and Robots shows none until its form_factor type badge exists
-  // (ADR 037). `field` is what the tile's categories tally; `facet` is the
+  // first type badge in CARD_BADGES order (Agent packs shares the agent head).
+  // All shows the type family's empty
+  // frame; Robots has a navigation-only glyph, independent of form-factor
+  // card badges (ADR 037). `field` is what the tile's categories tally; `facet` is the
   // URL key that opens the scope narrowed to one.
   const FAMILY_SHORT_NAMES = { memory_system: "Memory", agent_system: "Agents", assistant_system: "Assistants" };
   const COLLECTIONS = [
@@ -690,8 +724,8 @@
     { id: "models", name: "Models", short: "Models", kind: "scope", emblem: "language-model", field: "model_type", facet: "type" },
     { id: "inference", name: "Inference services", short: "Services", kind: "scope", emblem: "direct-model-api", field: "service_type", facet: "type" },
     { id: "runtimes", name: "Local runtimes", short: "Runtimes", kind: "scope", emblem: "desktop-runner", field: "runtime_type", facet: "type" },
-    { id: "packs", name: "Agent packs", short: "Packs", kind: "scope", emblem: "skills-bundle", field: "pack_type", facet: "type" },
-    { id: "robots", name: "Robots", short: "Robots", kind: "scope", emblem: null, field: "form_factor", facet: "formFactor" },
+    { id: "packs", name: "Agent packs", short: "Packs", kind: "scope", emblem: "agent-system", field: "pack_type", facet: "type" },
+    { id: "robots", name: "Robots", short: "Robots", kind: "scope", emblem: null, glyph: '<path d="M10 23h12M13 23v-3.5l4.5-4.5M15.5 12l-3-2M19 13l2-2 2 1M21 11l-1-2"/><circle cx="11" cy="9" r="1.7"/><circle cx="17.5" cy="13.5" r="2"/><path d="m10 10.4 3 7.1"/>', field: "form_factor", facet: "formFactor" },
     { id: "labs", name: "Labs", short: "Labs", kind: "scope", emblem: "ai-company", field: "lab_type", facet: "type" },
     { id: "specifications", name: "Specifications", short: "Specs", kind: "scope", emblem: "protocol", field: "specification_type", facet: "type" },
   ];
@@ -1003,7 +1037,7 @@
       definition: "Its main job is planning and taking actions with tools on your behalf.",
       test: { field: "system_family", equals: "agent_system" },
       family: "type",
-      glyph: '<rect x="11" y="12.8" width="10" height="8" rx="2"/><path d="M16 12.8v-2"/><circle class="badge-dot" cx="16" cy="10.1" r=".9"/><circle class="badge-dot" cx="13.9" cy="16.6" r="1"/><circle class="badge-dot" cx="18.1" cy="16.6" r="1"/>',
+      glyph: '<path d="M12 11.5h8l2 2v6l-2 2h-8l-2-2v-6ZM16 11.5V9M8 15v3M24 15v3M14 19h4"/><path d="M13 15.5h1M18 15.5h1"/>',
     },
     "assistant-system": {
       name: "Assistant system",
@@ -1213,7 +1247,9 @@
       definition: "Can use tools and data sources through the Model Context Protocol.",
       test: { field: "agent_capabilities", anyOf: ["mcp"] },
       family: "capability",
-      glyph: '<path d="M13.5 9.5v3.5M18.5 9.5v3.5M11.5 13h9v2.5a4.5 4.5 0 0 1-9 0ZM16 20v2.5"/>',
+      // Official MCP favicon, scaled uniformly into the emblem. Keep the
+      // original paths and stroke proportions; attribution: third_party/mcp-logo-LICENSE.txt.
+      glyph: '<g transform="translate(8.35 8.35) scale(.085)" stroke-width="12"><path d="M18 84.8528L85.8822 16.9706C95.2548 7.59798 110.451 7.59798 119.823 16.9706V16.9706C129.196 26.3431 129.196 41.5391 119.823 50.9117L68.5581 102.177"/><path d="M69.2652 101.47L119.823 50.9117C129.196 41.5391 144.392 41.5391 153.765 50.9117L154.118 51.2652C163.491 60.6378 163.491 75.8338 154.118 85.2063L92.7248 146.6C89.6006 149.724 89.6006 154.789 92.7248 157.913L105.331 170.52"/><path d="M102.853 33.9411L52.6482 84.1457C43.2756 93.5183 43.2756 108.714 52.6482 118.087V118.087C62.0208 127.459 77.2167 127.459 86.5893 118.087L136.794 67.8822"/></g>',
     },
     "editable-by-you": {
       name: "Editable by you",
@@ -1410,6 +1446,11 @@
   function familyEmblem(familyId) {
     return emblemSVG(familyId, "");
   }
+  function collectionEmblem(entry) {
+    if (entry.glyph) return emblemSVG("type", entry.glyph);
+    if (entry.id === "all") return familyEmblem("type");
+    return entry.emblem ? badgeEmblem(entry.emblem) : "";
+  }
 
   // What the Directory legend shows for a scope: the badges its cards can
   // carry, grouped by family, or only the families where cards of every kind
@@ -1506,6 +1547,7 @@
     cardBadges,
     collectionCategories,
     collectionCount,
+    collectionEmblem,
     collectionEntries,
     collectionState,
     comparableText,
@@ -1533,6 +1575,7 @@
     matchFinderGoal,
     mergePackScopeEntries,
     modelAccessSummary,
+    systemDeploymentSummary,
     modelMetadataAttribution,
     modelSourceLabel,
     modelsKickerText,

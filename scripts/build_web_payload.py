@@ -415,6 +415,16 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
             if envelope_key in document
         }
         envelope["recent"] = recent_record_ids(document[key])
+        if collection == "systems":
+            active = [record for record in records if record.get("status") == "active"]
+            dates = sorted(
+                record["verified_at"] for record in active if record.get("verified_at")
+            )
+            envelope["active_review_dates"] = {
+                "first": dates[0] if dates else None,
+                "last": dates[-1] if dates else None,
+                "missing": len(active) - len(dates),
+            }
         if collection == "models":
             envelope.update(
                 {

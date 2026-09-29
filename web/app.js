@@ -205,6 +205,7 @@ async function bootstrap() {
   renderSpecifications();
   renderTaxonomy();
   renderModelAccess();
+  renderSystemDeployment(systems.active_review_dates);
   bindEvents();
   restoreFromURL({ boot: true });
   // Text typed on the front door before its listener was bound is still a
@@ -709,7 +710,7 @@ function updateAdvancedFilterSummary() {
     $("#deployment-filter").value,
     $("#agent-interface-filter").value,
     $("#status-filter").value !== "active" ? $("#status-filter").value || "all" : "",
-    $("#local-filter").checked ? "local" : "",
+    $("#local-filter").value,
   ].filter(Boolean).length;
   $(".advanced-filter-shell summary").textContent = active ? `More filters · ${active} active` : "More filters";
 }
@@ -731,7 +732,7 @@ function applyDirectoryDefaults() {
   $("#agent-interface-filter").value = defaults.agentInterface;
   $("#status-filter").value = defaults.status;
   $("#sort-filter").value = defaults.sort;
-  $("#local-filter").checked = defaults.localOnly;
+  $("#local-filter").value = defaults.localOnly ? "1" : "";
   updateScoreSortAvailability();
   syncBadgeLegend();
 }
@@ -750,8 +751,7 @@ function collectionPayloads() {
 }
 
 function collectionEmblem(entry) {
-  if (entry.id === "all") return AppCore.familyEmblem("type");
-  return entry.emblem ? AppCore.badgeEmblem(entry.emblem) : "";
+  return AppCore.collectionEmblem(entry);
 }
 
 function collectionStateFor(id) {
@@ -879,8 +879,7 @@ function renderScopeStrip() {
     if (count === 0 && entry.id !== "all") return "";
     const pressed = entry.id === state.directoryCollection;
     if (pressed) caption = `${entry.name} · ${count}`;
-    // Robots has no emblem until its form-factor badge exists, and a phone
-    // clips every name, so its initial stands in rather than an empty button.
+    // Keep an initial as a fallback for any future collection without a glyph.
     const emblem = collectionEmblem(entry) || `<span class="scope-monogram" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(entry.name))}</span>`;
     return `<button type="button" class="scope-entry${pressed ? " is-active" : ""}" data-open-collection="${escapeHTML(entry.id)}" aria-pressed="${pressed}" title="${escapeHTML(entry.name)}">${emblem}<span class="scope-name">${escapeHTML(entry.name)}</span><span class="scope-short" aria-hidden="true">${escapeHTML(entry.short)}</span><strong class="scope-count">${count}</strong>${stateDot(collectionStateFor(entry.id))}</button>`;
   }).join("");
@@ -1436,7 +1435,7 @@ function filteredProjects(term) {
     sourceModel: $("#source-model-filter").value,
     license: $("#license-filter").value,
     status: $("#status-filter").value,
-    localOnly: $("#local-filter").checked,
+    localOnly: $("#local-filter").value,
     sort: $("#sort-filter").value
   });
 }
@@ -1778,6 +1777,41 @@ function renderRuntimeMatrix() {
     <table class="runtime-matrix"><caption>${escapeHTML(group)} recorded for the selected runtimes. Names open reviewed details.</caption>
     <thead><tr><th scope="col">Runtime</th>${columns.map(column => `<th scope="col">${escapeHTML(column.name)}</th>`).join("")}</tr></thead>
     <tbody>${body}</tbody></table></div>`;
+}
+
+function systemAnalysisCell(cell, row, facet, rowFacet) {
+  const share = accessPercent(cell.count, row.count);
+  const content = `<strong>${cell.count}</strong><span>${share}%</span>`;
+  const style = `--access-share: ${share}%`;
+  if (!cell.count || !row.id) return `<td><span class="deployment-cell" style="${style}">${content}</span></td>`;
+  const params = new URLSearchParams({ collection: "systems", [rowFacet]: row.id, [facet]: cell.id, sort: "name" });
+  const name = `${row.name}, ${cell.name}: ${cell.count} of ${row.count} active systems (${share}%). Browse systems`;
+  return `<td><a class="deployment-cell" style="${style}" href="?${escapeHTML(params.toString())}" aria-label="${escapeHTML(name)}">${content}</a></td>`;
+}
+
+function systemAnalysisTable(id, caption, heading, rows, columns, facet, rowFacet) {
+  const body = rows.map(row => `<tr><th scope="row">${escapeHTML(row.name)}<small>${row.count} active systems</small></th>${row.cells.map(cell => systemAnalysisCell(cell, row, facet, rowFacet)).join("")}</tr>`).join("");
+  return `<div class="deployment-scroll" role="region" aria-label="${escapeHTML(heading)} table, scroll horizontally for more columns" tabindex="0">
+    <table id="${id}" class="deployment-table"><caption>${escapeHTML(caption)}</caption>
+    <thead><tr><th scope="col">${escapeHTML(heading)}</th>${columns.map(column => `<th scope="col">${escapeHTML(column.name)}</th>`).join("")}</tr></thead>
+    <tbody>${body}</tbody></table></div>`;
+}
+
+function renderSystemDeployment(dates) {
+  const summary = AppCore.systemDeploymentSummary(state.projects, state.taxonomy);
+  const dated = dates?.first ? `Editorial review dates ${dates.first} to ${dates.last}` : "No editorial review dates recorded";
+  $("#deployment-data-note").textContent = `${summary.total} active reviewed systems · ${summary.excluded} inactive records excluded · ${dated} · ${dates?.missing ?? summary.total} without a recorded review date`;
+  if (!summary.total) {
+    $("#system-deployment-content").innerHTML = '<p class="notice">No active reviewed systems are available.</p>';
+    return;
+  }
+  $("#system-deployment-content").innerHTML = systemAnalysisTable("deployment-heatmap",
+    "Deployment by family. Counts and percentages of each row; darker cells indicate a larger share. Deployment modes overlap.",
+    "System family", summary.families, summary.deployments, "deployment", "family")
+    + `<p class="runtime-scroll-hint">Scroll horizontally for every deployment mode. ${summary.missingDeployment} active systems have no recorded deployment mode.</p>
+    <div class="explore-section-heading access-matrix-section"><h3>Is local-first tied to licensing?</h3><p>Each system belongs to exactly one local-first column. Percentages use the license classification’s total.</p></div>`
+    + systemAnalysisTable("local-license-table", "Local-first by license classification. Counts and percentages of each row; Yes, No, and Not recorded sum to the row total.",
+      "License classification", summary.licensing, summary.localStates, "localOnly", "sourceModel");
 }
 
 function modelAccessURL(distribution, sourceModel = "") {
@@ -2379,7 +2413,7 @@ function applyFinderToDirectory() {
   $("#source-model-filter").value = "";
   $("#license-filter").value = "";
   $("#status-filter").value = "active";
-  $("#local-filter").checked = false;
+  $("#local-filter").value = "";
   $("#sort-filter").value = "score";
   syncMatchSort("systems");
   updateScoreSortAvailability();
