@@ -555,6 +555,9 @@ test("the interface filter separates canvas builders from code libraries", async
   await page.goto("/?collection=systems");
 
   const names = page.locator("#project-grid .project-card h2");
+  // The facet is what this test is about, so the page has to be large enough to
+  // hold every library-interface system; one page of 96 lists them all.
+  await page.locator('#project-pager select[aria-label="Results per page"]').selectOption("96");
   await page.locator(".advanced-filter-shell summary").click();
   await page.locator("#agent-interface-filter").selectOption("library");
 

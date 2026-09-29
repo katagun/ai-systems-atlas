@@ -1020,6 +1020,11 @@
       "definition": "Headquartered in Israel (ISO 3166-1 IL)."
     },
     {
+      "id": "jp",
+      "name": "Japan",
+      "definition": "Headquartered in Japan (ISO 3166-1 JP)."
+    },
+    {
       "id": "sg",
       "name": "Singapore",
       "definition": "Headquartered in Singapore (ISO 3166-1 SG)."
@@ -1780,6 +1785,16 @@
     {
       "id": "LicenseRef-Qwen-Community-1.0",
       "name": "Qwen Community License 1.0",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Sakana-API-ToS",
+      "name": "Sakana AI API Platform Terms of Service",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-Sakana-AI-Scientist",
+      "name": "The AI Scientist Source Code License 1.0",
       "kind": "restricted"
     },
     {
