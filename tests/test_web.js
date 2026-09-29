@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1233,7 +1233,7 @@ test("no card can overflow the cap of six: one type badge plus its set's traits"
     assert.deepEqual(ids.slice(0, types.length), types, `${key} must list its type badges first`);
     assert.equal(new Set(types.map(id => CARD_BADGES[id].test.field)).size, 1, `${key} type badges must all test one field`);
     assert.equal(new Set(types.map(id => CARD_BADGES[id].test.equals)).size, types.length, `${key} type badges must test distinct values`);
-    assert.ok(1 + ids.length - types.length <= 6, `${key} can show ${1 + ids.length - types.length} badges`);
+    assert.ok(1 + ids.length - types.length <= MAX_CARD_BADGES, `${key} can show ${1 + ids.length - types.length} badges`);
   }
 });
 
@@ -1284,7 +1284,7 @@ test("specifications, packs, and labs carry only their type; imported rows only 
   assert.deepEqual(cardBadges("model", { review_status: "retracted", model_type: "language_model" }), []);
   assert.deepEqual(cardBadges("toString", { local_first: true }), []);
   assert.deepEqual(cardBadges("system", { system_family: "constructor", local_first: true }), []);
-  assert.deepEqual(cardBadges("robot", robots[0]), []);
+  assert.deepEqual(badgeNames(cardBadges("robot", { form_factor: "quadruped" })), ["Quadruped"]);
 });
 
 // Reviewed-model cards trade their role pill for the same distribution_modes
@@ -1449,6 +1449,7 @@ const TYPE_FIELD_VOCABULARIES = {
   specification_type: "specification_types",
   pack_type: "pack_types",
   lab_type: "lab_types",
+  form_factor: "robot_form_factors",
 };
 
 test("every value a badge tests exists in its taxonomy vocabulary", () => {
@@ -1479,7 +1480,7 @@ test("every value a badge tests exists in its taxonomy vocabulary", () => {
 // value of every type vocabulary must have a type badge in the matching set.
 test("every value of every type vocabulary has a type badge", () => {
   const taxonomy = readWebJSON("taxonomy.json");
-  const setsFor = { system_family: key => key.startsWith("system:"), service_type: key => key === "inference", runtime_type: key => key === "runtime", model_type: key => key === "model", specification_type: key => key === "spec", pack_type: key => key === "pack", lab_type: key => key === "lab" };
+  const setsFor = { system_family: key => key.startsWith("system:"), service_type: key => key === "inference", runtime_type: key => key === "runtime", model_type: key => key === "model", specification_type: key => key === "spec", pack_type: key => key === "pack", lab_type: key => key === "lab", form_factor: key => key === "robot" };
   for (const [field, group] of Object.entries(TYPE_FIELD_VOCABULARIES)) {
     const listed = Object.entries(CARD_BADGE_SETS).filter(([key]) => setsFor[field](key)).flatMap(([, ids]) => ids).filter(id => CARD_BADGES[id].test.field === field);
     const covered = new Set(listed.map(id => CARD_BADGES[id].test.equals));
@@ -1509,6 +1510,7 @@ function publishedBadgeScopes() {
     spec: ["spec", readWebJSON("specifications.json").specifications],
     pack: ["pack", readWebJSON("packs.json").packs],
     lab: ["lab", readWebJSON("labs.json").labs],
+    robot: ["robot", readWebJSON("robots.json").robots],
   };
 }
 
@@ -1530,7 +1532,7 @@ test("every published card carries exactly one type badge, and it leads the row"
   for (const [scope, [kind, records]] of Object.entries(publishedBadgeScopes())) {
     for (const record of records) {
       const badges = cardBadges(kind, record);
-      assert.ok(badges.length > 0 && badges.length <= 6, `${scope}/${record.id} shows ${badges.length} badges`);
+      assert.ok(badges.length > 0 && badges.length <= MAX_CARD_BADGES, `${scope}/${record.id} shows ${badges.length} badges`);
       assert.equal(badges[0].family, "type", `${scope}/${record.id} does not lead with its type`);
       assert.equal(badges.filter(badge => badge.family === "type").length, 1, `${scope}/${record.id} shows more than one type badge`);
     }
@@ -1551,18 +1553,29 @@ test("every field a badge tests reaches the boot payload", () => {
     spec: [readWebJSON("specifications.json").specifications, readWebJSON("app/specifications.json").specifications],
     pack: [readWebJSON("packs.json").packs, readWebJSON("app/packs.json").packs],
     lab: [readWebJSON("labs.json").labs, readWebJSON("app/labs.json").labs],
+    robot: [readWebJSON("robots.json").robots, readWebJSON("app/robots.json").robots],
   };
   for (const [key, ids] of Object.entries(CARD_BADGE_SETS)) {
     const kind = key.split(":")[0];
     const [published, boot] = boots[kind];
     const bootById = new Map(boot.map(record => [record.id, record]));
+    for (const record of published) {
+      const bootRecord = bootById.get(record.id);
+      assert.ok(bootRecord, `${kind}/${record.id} has no boot record`);
+      // Reviewed overlays replace source rows; their parity is checked above.
+      if (kind === "model-source" && bootRecord.review_status === "reviewed") continue;
+      const status = kind === "model-source" ? "imported" : "reviewed";
+      const canonical = kind.startsWith("model") ? { ...record, review_status: status } : record;
+      const badgeKind = kind === "model-source" ? "model" : kind;
+      assert.deepEqual(cardBadges(badgeKind, bootRecord).map(badge => badge.id), cardBadges(badgeKind, canonical).map(badge => badge.id), `${kind}/${record.id} badge IDs/order differ between canonical and boot`);
+    }
     for (const id of ids) {
       const { field } = CARD_BADGES[id].test;
       for (const record of published) {
         if (!(field in record)) continue;
         const bootRecord = bootById.get(record.id);
         assert.ok(bootRecord, `${kind}/${record.id} has no boot record`);
-        assert.ok(field in bootRecord, `${kind}/${record.id} boot record lacks ${field}, which the ${id} badge tests`);
+        assert.deepEqual(bootRecord[field], record[field], `${kind}/${record.id} boot value differs for ${field}, which the ${id} badge tests`);
       }
     }
   }
@@ -2456,4 +2469,36 @@ test("recommendationReasons is finite and chip-bounded for every real record and
       }
     }
   }
+});
+
+
+test("a future overflow cannot silently discard matching facts", () => {
+  const ids = CARD_BADGE_SETS["system:agent_system"];
+  ids.push("editable-by-you");
+  try {
+    const record = { system_family: "agent_system", local_first: true, human_editable: true, execution_boundaries: ["container"], agent_capabilities: ["browser_control", "mcp"], deployment: ["self_hosted"] };
+    const badges = cardBadges("system", record);
+    assert.equal(badges.length, MAX_CARD_BADGES + 1);
+    assert.equal(badges.at(-1).id, "editable-by-you");
+  } finally {
+    ids.pop();
+  }
+});
+
+test("model licensing has complete scoped labels without changing classification IDs", () => {
+  const categories = readWebJSON("taxonomy.json").source_models;
+  const scoped = modelLicenseCategories(categories);
+  assert.deepEqual(scoped.map(item => item.id), categories.map(item => item.id));
+  for (const item of scoped) {
+    assert.ok(item.name && item.definition, `${item.id} needs model-scoped wording`);
+    assert.notEqual(item.definition, categories.find(row => row.id === item.id).definition);
+  }
+  assert.equal(scoped.find(item => item.id === "open_source").name, "Open-licensed artifacts");
+  assert.equal(categories.find(item => item.id === "open_source").name, "Open source");
+});
+
+test("collection symbols have their own explanations independent of shared glyphs", () => {
+  for (const entry of COLLECTIONS) assert.ok(entry.meaning, entry.id);
+  assert.equal(COLLECTIONS.find(entry => entry.id === "packs").emblem, "agent-system");
+  assert.match(COLLECTIONS.find(entry => entry.id === "packs").meaning, /own type badges/);
 });

@@ -80,6 +80,12 @@ A lead is a pointer, never evidence: an aggregator listing does not establish id
 
 A lead that models.dev later lists becomes an ordinary queue candidate, and the next import drops it. The importer prints a `prunable OpenRouter disposition` line for an entry whose route is no longer listed or is now represented; delete those entries.
 
+## Artifact licensing labels
+
+`source_model` remains the human-reviewed classification of the represented release artifacts and every mandatory license or access term. Model UI labels come from `source_models[].model_name` and `model_definition` in the taxonomy, distinct from the software-scoped names for systems and runtimes. `open_source` displays as **Open-licensed artifacts**; downloadable weights remain a separate distribution fact. The exact licenses and release boundary remain visible.
+
+This does not attest the openness of training code, training data, or the complete AI system, and does not claim an assessment against the OSI Open Source AI Definition. No reviewed record is reclassified by this presentation change. A stronger claim requires an explicit evidence standard and human review; imported license strings never become reviewed conclusions. [ADR 047](adr/047-badges-identify-record-facts-and-licensing-stays-scoped-text.md) records the decision. Cards, filters, Explore, comparisons, dialogs, Taxonomy, and share pages must use the same model-specific names and scope.
+
 ## Review workflow
 
 For one record in `directory/model-candidates.json`, or for a release models.dev does not list (see [Releases models.dev does not list](#releases-modelsdev-does-not-list)):

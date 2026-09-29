@@ -227,8 +227,16 @@ def _facts_for(
                 ),
             ),
             (
-                "Source model",
-                taxonomy_name(taxonomy, "source_models", record["source_model"]),
+                "Artifact licensing",
+                next(
+                    item["model_name"]
+                    for item in taxonomy["source_models"]
+                    if item["id"] == record["source_model"]
+                ),
+            ),
+            (
+                "License scope",
+                "Reviewed release artifacts and mandatory terms; not an assessment of training code or training data openness.",
             ),
             ("Licenses", names(taxonomy, "licenses", record["licenses"])),
             ("Boundary", record["access_boundary"]),

@@ -168,6 +168,7 @@ test("every card in every grid and the Finder shortlist leads with exactly one t
     ["/?collection=models", "#model-grid"],
     ["/?collection=specifications", "#specification-grid"],
     ["/?collection=labs", "#lab-grid"],
+    ["/?collection=robots", "#robot-grid"],
   ];
   for (const [url, grid] of grids) {
     await page.goto(url);
@@ -349,4 +350,88 @@ test.describe("on a touch screen", () => {
     await expect(page.locator("#project-dialog")).not.toBeVisible();
     expect(page.url()).toBe(before);
   });
+});
+
+for (const width of [320, 1440]) {
+  test(`badge explanations support slow pointer travel and keyboard disclosure at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto(`/?collection=systems&q=${encodeURIComponent(openclaw.name)}`);
+    await page.waitForFunction(() => searchIndexes.systems !== undefined);
+    await page.addStyleTag({ content: "html { scroll-behavior: auto !important; } .project-card { transition: none !important; transform: none !important; }" });
+    const card = page.locator('#project-grid .project-card:has([data-project="openclaw"])');
+    const emblem = card.locator('[data-badge="mcp"]');
+    await emblem.scrollIntoViewIfNeeded();
+    await emblem.hover();
+    const tooltip = page.locator("#badge-tooltip");
+    await expect(tooltip).toBeVisible();
+    const a = await emblem.boundingBox();
+    const b = await tooltip.boundingBox();
+    const below = b.y >= a.y + a.height;
+    const gapY = below ? (a.y + a.height + b.y) / 2 : (b.y + b.height + a.y) / 2;
+    await page.mouse.move(a.x + a.width / 2, gapY);
+    // Deliberately pause in the gap: a grace timer alone is insufficient.
+    await page.waitForTimeout(600);
+    await expect(tooltip).toBeVisible();
+    await tooltip.locator(".badge-tooltip-definition").hover();
+    await page.waitForTimeout(600);
+    await expect(tooltip).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(tooltip).toBeHidden();
+    const help = card.locator(".badge-help");
+    await help.locator("summary").focus();
+    await page.keyboard.press("Enter");
+    await expect(help).toHaveAttribute("open", "");
+    await expect(help.locator("dt")).toHaveText(cardBadges("system", openclaw).map(badge => badge.name));
+    await expect(help.locator("dd")).toHaveText(cardBadges("system", openclaw).map(badge => badge.definition));
+    await expect(page.locator("dialog[open]")).toHaveCount(0);
+    await page.keyboard.press("Enter");
+    await expect(help).not.toHaveAttribute("open");
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
+}
+
+test("evidence review attention is consistent in Systems, All, Packs and Finder", async ({ page }) => {
+  await page.route("**/app/systems.json*", async route => {
+    const response = await route.fetch();
+    const payload = await response.json();
+    for (const record of payload.systems) record.license_review_status = "review_required";
+    await route.fulfill({ response, json: payload });
+  });
+  for (const [collection, grid] of [["systems", "#project-grid"], ["all", "#all-directory-grid"], ["packs", "#pack-grid"]]) {
+    await page.goto(`/?collection=${collection}`);
+    const cards = page.locator(`${grid} .project-card:has([data-project])`);
+    await expect(cards.first()).toBeVisible();
+    for (const card of await cards.all()) {
+      await expect(card.locator(".review-badge")).toHaveText("Evidence review");
+      await expect(card.locator(".source-badge")).not.toHaveText("");
+      await expect(card.locator('.card-badge[data-name="Evidence review"]')).toHaveCount(0);
+    }
+  }
+  await page.goto("/?view=finder");
+  for (let step = 0; step < 3; step += 1) await page.locator("#finder-content .finder-choice").first().click();
+  const results = page.locator(".finder-result");
+  await expect(results.first()).toBeVisible();
+  for (const result of await results.all()) await expect(result.locator(".review-badge")).toHaveText("Evidence review");
+});
+
+test("model artifact terms use scoped names and imported licenses stay attributed", async ({ page }) => {
+  await page.goto(`/?collection=models&q=${encodeURIComponent(reviewedModel.name)}`);
+  const card = page.locator(`#model-grid .model-card:has([data-model="${reviewedModel.id}"])`);
+  const categories = read("taxonomy.json").source_models;
+  const expected = categories.find(item => item.id === reviewedModel.source_model).model_name;
+  await expect(card.locator(".source-badge")).toHaveText(expected);
+  await expect(page.locator(`#model-source-filter option[value="${reviewedModel.source_model}"]`)).toHaveText(expected);
+  await card.locator(".card-open").click();
+  await expect(page.locator("dialog[open]")).toContainText(`Artifact licensing: ${expected}`);
+  await expect(page.locator("dialog[open]")).toContainText("do not assess training code or training data openness");
+  await page.goto(`/?collection=all&q=${encodeURIComponent(reviewedModel.name)}`);
+  await expect(page.locator(`#all-directory-grid .project-card:has([data-model="${reviewedModel.id}"]) .source-badge`)).toHaveText(expected);
+});
+
+test("Taxonomy explains navigation symbols separately from card facts", async ({ page }) => {
+  await page.goto("/?view=taxonomy");
+  const group = page.locator(".taxonomy-group").filter({ has: page.getByRole("heading", { name: "Collection symbols", exact: true }) });
+  await expect(group.locator(".taxonomy-item")).toHaveCount(9);
+  await expect(group).toContainText("The bot head indicates the agent ecosystem");
+  await expect(group).toContainText("each record has its own form-factor badge");
 });

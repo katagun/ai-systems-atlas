@@ -744,15 +744,15 @@
   // URL key that opens the scope narrowed to one.
   const FAMILY_SHORT_NAMES = { memory_system: "Memory", agent_system: "Agents", assistant_system: "Assistants" };
   const COLLECTIONS = [
-    { id: "all", name: "Everything", short: "All", kind: "scope", emblem: null, field: null, facet: null },
-    { id: "systems", name: "Systems", short: "Systems", kind: "scope", emblem: null, glyph: '<path d="m14.8 12.5-3.1 6M17.2 12.5l3.1 6M13 21h6"/><rect x="13.5" y="7.5" width="5" height="5" rx="1"/><rect x="8" y="18.5" width="5" height="5" rx="1"/><rect x="19" y="18.5" width="5" height="5" rx="1"/>', field: "system_family", facet: "family" },
-    { id: "models", name: "Models", short: "Models", kind: "scope", emblem: "language-model", field: "model_type", facet: "type" },
-    { id: "inference", name: "Inference services", short: "Services", kind: "scope", emblem: "direct-model-api", field: "service_type", facet: "type" },
-    { id: "runtimes", name: "Local runtimes", short: "Runtimes", kind: "scope", emblem: "desktop-runner", field: "runtime_type", facet: "type" },
-    { id: "packs", name: "Agent packs", short: "Packs", kind: "scope", emblem: "agent-system", field: "pack_type", facet: "type" },
-    { id: "robots", name: "Robots", short: "Robots", kind: "scope", emblem: null, glyph: '<path d="M10 23h12M13 23v-3.5l4.5-4.5M15.5 12l-3-2M19 13l2-2 2 1M21 11l-1-2"/><circle cx="11" cy="9" r="1.7"/><circle cx="17.5" cy="13.5" r="2"/><path d="m10 10.4 3 7.1"/>', field: "form_factor", facet: "formFactor" },
-    { id: "labs", name: "Labs", short: "Labs", kind: "scope", emblem: "ai-company", field: "lab_type", facet: "type" },
-    { id: "specifications", name: "Specifications", short: "Specs", kind: "scope", emblem: "protocol", field: "specification_type", facet: "type" },
+    { id: "all", meaning: "Browse systems, models, services, runtimes, packs, and robots together. The empty circle represents mixed record types.", name: "Everything", short: "All", kind: "scope", emblem: null, field: null, facet: null },
+    { id: "systems", meaning: "Browse memory systems, agent systems, and assistants. Connected modules represent the collection, not a database or one system family.", name: "Systems", short: "Systems", kind: "scope", emblem: null, glyph: '<path d="m14.8 12.5-3.1 6M17.2 12.5l3.1 6M13 21h6"/><rect x="13.5" y="7.5" width="5" height="5" rx="1"/><rect x="8" y="18.5" width="5" height="5" rx="1"/><rect x="19" y="18.5" width="5" height="5" rx="1"/>', field: "system_family", facet: "family" },
+    { id: "models", meaning: "Browse reviewed model releases and attributed source records. The collection includes more than language-only models.", name: "Models", short: "Models", kind: "scope", emblem: "language-model", field: "model_type", facet: "type" },
+    { id: "inference", meaning: "Browse managed inference services, including hosts, cloud platforms, and routers.", name: "Inference services", short: "Services", kind: "scope", emblem: "direct-model-api", field: "service_type", facet: "type" },
+    { id: "runtimes", meaning: "Browse software that runs models on hardware you operate, including desktop tools, servers, libraries, and gateways.", name: "Local runtimes", short: "Runtimes", kind: "scope", emblem: "desktop-runner", field: "runtime_type", facet: "type" },
+    { id: "packs", meaning: "Browse agent packs and host-installed systems. The bot head indicates the agent ecosystem; individual pack cards retain their own type badges.", name: "Agent packs", short: "Packs", kind: "scope", emblem: "agent-system", field: "pack_type", facet: "type" },
+    { id: "robots", meaning: "Browse AI robot hardware. The arm represents the collection; each record has its own form-factor badge.", name: "Robots", short: "Robots", kind: "scope", emblem: null, glyph: '<path d="M10 23h12M13 23v-3.5l4.5-4.5M15.5 12l-3-2M19 13l2-2 2 1M21 11l-1-2"/><circle cx="11" cy="9" r="1.7"/><circle cx="17.5" cy="13.5" r="2"/><path d="m10 10.4 3 7.1"/>', field: "form_factor", facet: "formFactor" },
+    { id: "labs", meaning: "Browse organizations that develop AI models and systems. Each organization retains its own lab type.", name: "Labs", short: "Labs", kind: "scope", emblem: "ai-company", field: "lab_type", facet: "type" },
+    { id: "specifications", meaning: "Browse protocols, schemas, conventions, and packaging specifications.", name: "Specifications", short: "Specs", kind: "scope", emblem: "protocol", field: "specification_type", facet: "type" },
   ];
 
   // What a collection's default view lists, so a tile and a strip entry never
@@ -1050,6 +1050,41 @@
   // exactly one, and it restates the type the card's eyebrow prints so the
   // emblem row always leads with the record's kind.
   const CARD_BADGES = {
+    "robot-humanoid": {
+      name: "Humanoid",
+      definition: "A robot with a torso, two arms, and legs or a wheeled base standing in for them, built to work in spaces made for people.",
+      test: { field: "form_factor", equals: "humanoid" },
+      family: "type",
+      glyph: '<circle cx="16" cy="10" r="2"/><path d="M12 14h8v6h-8ZM12 15l-3 4M20 15l3 4M14 20l-2 4M18 20l2 4"/>',
+    },
+    "robot-quadruped": {
+      name: "Quadruped",
+      definition: "A four-legged walking robot.",
+      test: { field: "form_factor", equals: "quadruped" },
+      family: "type",
+      glyph: '<path d="M10 13h11v5H10ZM10 18l-2 5M13 18v5M18 18v5M21 18l2 5M21 13l2-2 1 3"/>',
+    },
+    "robot-arm": {
+      name: "Arm",
+      definition: "A fixed or bench-mounted manipulator with no locomotion of its own.",
+      test: { field: "form_factor", equals: "arm" },
+      family: "type",
+      glyph: '<path d="M10 23h12M13 23v-4l5-5M16 12l-4-3M20 12l2-2 2 1M22 10l-1-2"/><circle cx="11" cy="8" r="2"/><circle cx="18" cy="13" r="2"/>',
+    },
+    "robot-mobile-manipulator": {
+      name: "Mobile manipulator",
+      definition: "One or more arms on a wheeled or tracked base that moves itself.",
+      test: { field: "form_factor", equals: "mobile_manipulator" },
+      family: "type",
+      glyph: '<path d="M9 19h14v3H9ZM14 19v-5l4-3M18 11l3 2 2-2"/><circle cx="12" cy="23" r="1.5"/><circle cx="20" cy="23" r="1.5"/><circle cx="18" cy="10" r="1.5"/>',
+    },
+    "robot-other": {
+      name: "Other",
+      definition: "A robot whose body fits none of the named forms; the record's description says what it is. Never a vehicle, a drone, or a component.",
+      test: { field: "form_factor", equals: "other" },
+      family: "type",
+      glyph: '<path d="m11 9 10 2 2 9-7 4-7-6ZM11 9l5 7 7 4M16 16v8M16 16l5-5"/>',
+    },
     "memory-system": {
       name: "Memory system",
       definition: "Its main job is keeping knowledge: capturing, organizing, and recalling what it is given.",
@@ -1390,7 +1425,8 @@
     },
   };
 
-  // Order is priority: a card shows the first MAX_CARD_BADGES that match. Each
+  // Order is priority: show every match. Tests enforce MAX_CARD_BADGES; never
+  // silently discard a fact if future data exceeds that design budget. Each
   // set opens with its type badges, which all test one field for one value, so
   // exactly one of them matches a well-formed record and it always leads.
   const CARD_BADGE_SETS = {
@@ -1404,6 +1440,7 @@
     spec: ["protocol", "metadata-schema", "instruction-convention", "capability-format", "package-format"],
     pack: ["skills-bundle", "plugin", "process-kit", "vault-bundle", "marketplace"],
     lab: ["ai-company", "technology-company", "public-research"],
+    robot: ["robot-humanoid", "robot-quadruped", "robot-arm", "robot-mobile-manipulator", "robot-other"],
   };
   const CARD_BADGE_SET_NAMES = {
     "system:agent_system": "Agent systems",
@@ -1416,6 +1453,7 @@
     spec: "Specifications",
     pack: "Agent packs",
     lab: "Labs",
+    robot: "Robots",
   };
   const MAX_CARD_BADGES = 6;
 
@@ -1443,7 +1481,6 @@
     if (!key || !Object.hasOwn(CARD_BADGE_SETS, key)) return [];
     return CARD_BADGE_SETS[key]
       .filter(id => matchesBadgeTest(record, CARD_BADGES[id].test))
-      .slice(0, MAX_CARD_BADGES)
       .map(id => ({ id, name: CARD_BADGES[id].name, definition: CARD_BADGES[id].definition, family: CARD_BADGES[id].family }));
   }
 
@@ -1491,6 +1528,7 @@
       : collection === "models" ? ["model", "model-source"]
       : collection === "specifications" ? ["spec"]
       : collection === "labs" ? ["lab"]
+      : collection === "robots" ? ["robot"]
       : [];
     const ids = [...new Set(keys.flatMap(key => (Object.hasOwn(CARD_BADGE_SETS, key) ? CARD_BADGE_SETS[key] : [])))];
     if (!ids.length) return null;
@@ -1502,6 +1540,10 @@
   // ADR 038: Atlas can review a release before models.dev lists it. Such a
   // record has source_id null and metadata written by Atlas, so nothing on
   // the page may credit models.dev for it.
+  // Model licensing describes reviewed artifacts/terms, never training openness.
+  function modelLicenseCategories(sourceModels) {
+    return sourceModels.map(item => ({ ...item, name: item.model_name, definition: item.model_definition }));
+  }
   const UNLISTED_MODEL_LABEL = "Not yet listed on models.dev";
   function modelSourceLabel(model) {
     return model.source_id || UNLISTED_MODEL_LABEL;
@@ -1728,6 +1770,7 @@
   const FINDER_DETAIL_KINDS = { inference_service: "inference", local_runtime: "runtime" };
   return {
     BADGE_FAMILIES,
+    MAX_CARD_BADGES,
     CARD_BADGES,
     CARD_BADGE_SETS,
     COLLECTIONS,
@@ -1782,6 +1825,7 @@
     systemElements,
     modelMetadataAttribution,
     modelSourceLabel,
+    modelLicenseCategories,
     modelsKickerText,
     monogramGlyph,
     normalizeSearchText,

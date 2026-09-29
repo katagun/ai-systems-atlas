@@ -1,6 +1,6 @@
 # ADR 037: Robots are unscored records of what a vendor documents
 
-**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order).
+**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order) and [ADR 047](047-badges-identify-record-facts-and-licensing-stays-scoped-text.md) (form-factor type badges).
 
 ## Context
 
@@ -55,7 +55,7 @@ A cost is still borne by the terse maker: one who publishes neither a named mode
 
 ### Never scored, and what that costs
 
-Robots are never scored, compared, ranked, sorted by popularity, given a Finder goal, or given a card badge. They are listed alphabetically. No comparison surface accepts them, because there is no profile for them to be comparable within.
+Robots are never scored, compared, ranked, sorted by popularity, given a Finder goal, or given a trait badge. Under ADR 047, each robot card leads with one type badge for its reviewed `form_factor`; it makes no claim about AI capability. They are listed alphabetically. No comparison surface accepts them, because there is no profile for them to be comparable within.
 
 The weak point is stated on every record rather than kept in this file, and `not_verified` carries the sentence: the named-model fact is the vendor's own claim, which the Atlas cannot verify, and the evidence is mutable web content. The same holds of a documented interface, which is a promise the maker publishes about its own product; the record reports the promise and nothing more.
 
