@@ -1,8 +1,8 @@
-(function exposeAtlasCore(root, factory) {
+(function exposeAppCore(root, factory) {
   const api = factory();
   if (typeof module === "object" && module.exports) module.exports = api;
-  else root.AtlasCore = api;
-})(typeof globalThis === "undefined" ? this : globalThis, function createAtlasCore() {
+  else root.AppCore = api;
+})(typeof globalThis === "undefined" ? this : globalThis, function createAppCore() {
   function directoryDefaults() {
     return {
       term: "",
