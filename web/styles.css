@@ -307,6 +307,47 @@ a { color: var(--cyan); text-underline-offset: .18em; }
   text-transform: uppercase;
 }
 
+/* Explore reads the existing boot classifications; every mark uses one scale. */
+#explore { max-width: 960px; margin-inline: auto; }
+.explore-heading { margin-bottom: 2.5rem; }
+.explore-heading h1 { font-size: clamp(2.2rem, 4.5vw, 3.8rem); line-height: 1.08; }
+.explore-heading > p:not(.eyebrow):not(.explore-data-note) { color: var(--muted); font-size: 1.1rem; line-height: 1.6; }
+#explore-data-note { font: .75rem var(--font-mono); color: var(--muted); line-height: 1.8; }
+.explore-section-heading h2 { margin: 0 0 .5rem; font: 600 1.6rem var(--font-display); letter-spacing: -.025em; }
+.explore-section-heading p { margin: 0 0 1.5rem; color: var(--muted); max-width: 68ch; }
+.access-route-list { display: grid; gap: 1.4rem; list-style: none; margin: 0; padding: 0; }
+.access-route-list a, .access-route-list li > div { display: grid; grid-template-columns: 1fr auto; gap: .6rem 1rem; color: var(--text); text-decoration: none; }
+.access-route-label { font-weight: 600; }
+.access-route-value { font: .85rem var(--font-mono); align-self: center; }
+.access-route-value > span { color: var(--muted); }
+.access-route-track { grid-column: 1 / -1; height: 1rem; background: var(--panel-2); }
+.access-route-track > span { display: block; width: var(--access-share); height: 100%; background: var(--cyan); }
+.access-route-list a:hover .access-route-label { text-decoration: underline; text-underline-offset: .2em; }
+.access-scale { display: flex; justify-content: space-between; margin-top: .6rem; color: var(--muted); font: .7rem var(--font-mono); }
+.access-matrix-section { margin-top: 3rem; }
+.access-matrix { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.access-matrix caption { text-align: left; color: var(--muted); font-size: .85rem; padding-bottom: 1rem; }
+.access-matrix th, .access-matrix td { padding: .8rem .5rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; overflow-wrap: anywhere; }
+.access-matrix thead th { font-size: .8rem; font-weight: 500; color: var(--muted); }
+.access-matrix th:first-child { width: 31%; padding-left: 0; }
+.access-matrix tbody th { font-size: .95rem; font-weight: 500; }
+.access-matrix small { display: block; margin-top: .3rem; font: .7rem var(--font-mono); color: var(--muted); }
+.access-cell { display: grid; position: relative; grid-template-columns: 1fr auto; gap: .3rem; padding: .7rem .5rem 1rem; font: .8rem var(--font-mono); color: var(--text); text-decoration: none; background: var(--panel-2); }
+.access-cell strong { font-size: 1rem; }
+.access-cell > span:not(.access-cell-bar) { align-self: center; color: var(--muted); }
+.access-cell-bar { position: absolute; bottom: 0; left: 0; height: .25rem; width: var(--access-share); background: var(--cyan); }
+a.access-cell:hover { background: var(--sage-soft); text-decoration: underline; }
+.explore-method { margin-top: 2rem; border-top: 1px solid var(--line); padding-block: 1.2rem; }
+.explore-method summary { cursor: pointer; font-weight: 600; }
+.explore-method p { max-width: 75ch; color: var(--muted); }
+@media (max-width: 600px) {
+  .access-route-list a, .access-route-list li > div { grid-template-columns: 1fr; gap: .4rem; }
+  .access-matrix th, .access-matrix td { padding: .65rem .2rem; }
+  .access-matrix thead th, .access-matrix tbody th { font-size: .75rem; }
+  .access-cell { grid-template-columns: 1fr; padding: .6rem .3rem .8rem; font-size: .7rem; }
+  .access-matrix small { font-size: .7rem; }
+}
+
 .tabs { display: flex; align-self: center; align-items: center; gap: 1.4rem; padding: 0; border: 0; border-radius: 0; background: none; }
 .tab,
 .tab-link {

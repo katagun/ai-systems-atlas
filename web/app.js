@@ -180,6 +180,7 @@ async function bootstrap() {
   state.reviewedModelCount = models.reviewed_count;
   state.modelSourceCount = models.source_record_count;
   state.modelUnlistedCount = models.unlisted_reviewed_count;
+  state.modelsVerifiedAt = models.verified_at;
   state.taxonomy = taxonomy;
   state.packs = packs.packs;
   state.labs = labs.labs;
@@ -201,6 +202,7 @@ async function bootstrap() {
   renderLabs();
   renderSpecifications();
   renderTaxonomy();
+  renderModelAccess();
   bindEvents();
   restoreFromURL({ boot: true });
   // Text typed on the front door before its listener was bound is still a
@@ -1668,6 +1670,56 @@ const renderInferenceServices = () => renderCollection("inference");
 const renderLocalRuntimes = () => renderCollection("runtimes");
 const renderModels = () => renderCollection("models");
 const renderLabs = () => renderCollection("labs");
+
+function modelAccessURL(distribution, sourceModel = "") {
+  const params = new URLSearchParams({ collection: "models", distribution, sort: "name" });
+  if (sourceModel) params.set("sourceModel", sourceModel);
+  return `?${params}`;
+}
+
+const accessPercent = (count, total) => total ? Math.round(count / total * 1000) / 10 : 0;
+
+function modelAccessCell(mode, row) {
+  const share = accessPercent(mode.count, row.count);
+  const contents = `<strong>${mode.count}</strong><span>${share}%</span><span class="access-cell-bar" style="--access-share: ${share}%" aria-hidden="true"></span>`;
+  // Unknown classifications have no catalog facet; never link to a broader
+  // set than the count describes. Zero cells are plain text as well.
+  if (!mode.count || !row.id) return `<td><span class="access-cell">${contents}</span></td>`;
+  const name = `${row.name}, ${mode.name}: ${mode.count} of ${row.count} releases (${share}%). Browse models`;
+  return `<td><a class="access-cell" href="${escapeHTML(modelAccessURL(mode.id, row.id))}" aria-label="${escapeHTML(name)}">${contents}</a></td>`;
+}
+
+function renderModelAccess() {
+  const summary = AppCore.modelAccessSummary(state.models, state.taxonomy.source_models, state.taxonomy.model_distribution_modes);
+  const date = state.modelsVerifiedAt ? ` · Catalog review date ${state.modelsVerifiedAt}` : "";
+  $("#explore-data-note").textContent = `${summary.total} reviewed releases · ${summary.excluded} imported records excluded${date}`;
+  if (!summary.total) {
+    $("#model-access-content").innerHTML = '<p class="notice">No reviewed model releases are available for this view.</p>';
+    return;
+  }
+  const bars = summary.modes.map(mode => {
+    const share = accessPercent(mode.count, summary.total);
+    const contents = `<span class="access-route-label">${escapeHTML(mode.name)}</span><span class="access-route-value"><strong>${mode.count}</strong> / ${summary.total} <span>(${share}%)</span></span><span class="access-route-track" aria-hidden="true"><span style="--access-share: ${share}%"></span></span>`;
+    const name = `${mode.name}: ${mode.count} of ${summary.total} reviewed releases (${share}%). Browse models`;
+    return `<li>${mode.count ? `<a href="${escapeHTML(modelAccessURL(mode.id))}" aria-label="${escapeHTML(name)}">${contents}</a>` : `<div>${contents}</div>`}</li>`;
+  }).join("");
+  const rows = summary.rows.map(row => `<tr><th scope="row">${escapeHTML(row.name)}<small>${row.count} ${row.count === 1 ? "release" : "releases"}</small></th>${row.modes.map(mode => modelAccessCell(mode, row)).join("")}</tr>`).join("");
+  $("#model-access-content").innerHTML = `
+    <section class="access-routes" aria-labelledby="access-routes-title">
+      <div class="explore-section-heading"><h2 id="access-routes-title">Three ways in</h2><p>A release can offer more than one route. Select a bar to browse its models.</p></div>
+      <ul class="access-route-list">${bars}</ul>
+      <div class="access-scale" aria-hidden="true"><span>0%</span><span>100% of reviewed releases</span></div>
+    </section>
+    <section class="access-matrix-section" aria-labelledby="access-matrix-title">
+      <div class="explore-section-heading"><h2 id="access-matrix-title">Access meets licensing</h2><p>Downloadable weights do not imply an open-source license. Select a count to inspect the matching releases and their terms.</p></div>
+      <table class="access-matrix">
+        <caption>Reviewed releases by license classification and access route. Percentages are of each row; routes overlap.</caption>
+        <thead><tr><th scope="col">License classification</th>${summary.modes.map(mode => `<th scope="col">${escapeHTML(mode.name)}</th>`).join("")}</tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </section>
+    ${summary.missingDistribution ? `<p class="notice">${summary.missingDistribution} reviewed releases have no recorded distribution mode; they remain in the denominators.</p>` : ""}`;
+}
 
 // One lab's releases for the Models view's Lab facet: its reviewed releases and
 // the imported rows in their models.dev namespaces. No lab selected, no filter.
@@ -3284,7 +3336,7 @@ function activateView(id, { focusTarget } = {}) {
     else item.removeAttribute("aria-current");
   });
   const docsButton = $(".docs-button");
-  const docsActive = id === "taxonomy" || id === "api";
+  const docsActive = id === "taxonomy" || id === "api" || id === "explore";
   if (docsButton) {
     docsButton.classList.toggle("is-active", docsActive);
     if (docsActive) docsButton.setAttribute("aria-current", "page");

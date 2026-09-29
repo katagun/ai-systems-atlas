@@ -914,7 +914,7 @@
   // could resolve an inherited name such as "constructor". Models, labs, and
   // specifications are Directory collections; their legacy view values resolve
   // through VIEW_ALIASES so shared links keep landing on the right collection.
-  const VIEW_IDS = ["directory", "finder", "taxonomy", "api"];
+  const VIEW_IDS = ["directory", "finder", "explore", "taxonomy", "api"];
   const VIEW_ALIASES = { models: "models", labs: "labs", specifications: "specifications" };
   function parseViewId(raw) {
     return typeof raw === "string" && VIEW_IDS.includes(raw) ? raw : null;
@@ -1465,6 +1465,30 @@
     return unlistedCount > 0 ? `${base} · ${unlistedCount} not yet on models.dev` : base;
   }
 
+  // Count reviewed releases, never imported metadata or individual licences.
+  // Distribution modes overlap: one release contributes once to each mode.
+  // Unknown classifications remain visible rather than shrinking denominators.
+  function modelAccessSummary(models, sourceModels, distributionModes) {
+    const reviewed = models.filter(model => model.review_status === "reviewed");
+    const knownSources = new Set(sourceModels.map(item => item.id));
+    const sources = [...sourceModels, { id: "", name: "Not classified" }];
+    const countModes = records => distributionModes.map(mode => ({
+      id: mode.id, name: mode.name,
+      count: records.filter(model => (model.distribution_modes || []).includes(mode.id)).length,
+    }));
+    const rows = sources.map(source => {
+      const records = reviewed.filter(model => (knownSources.has(model.source_model) ? model.source_model : "") === source.id);
+      return { id: source.id, name: source.name, count: records.length, modes: countModes(records) };
+    }).filter(row => row.count > 0);
+    return {
+      total: reviewed.length,
+      excluded: models.length - reviewed.length,
+      modes: countModes(reviewed),
+      rows,
+      missingDistribution: reviewed.filter(model => !distributionModes.some(mode => (model.distribution_modes || []).includes(mode.id))).length,
+    };
+  }
+
   return {
     BADGE_FAMILIES,
     CARD_BADGES,
@@ -1508,6 +1532,7 @@
     matchesProject,
     matchFinderGoal,
     mergePackScopeEntries,
+    modelAccessSummary,
     modelMetadataAttribution,
     modelSourceLabel,
     modelsKickerText,
