@@ -27,6 +27,11 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
+try:
+    from .json_io import DirectoryDataError, load_document, write_json_atomic_all
+except ImportError:  # Direct script execution places scripts/ on sys.path.
+    from json_io import DirectoryDataError, load_document, write_json_atomic_all
+
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
 CANDIDATES_PATH = DIRECTORY / "model-candidates.json"
@@ -52,16 +57,11 @@ def today() -> str:
     return datetime.now(UTC).date().isoformat()
 
 
-def load_json(path: Path, default: dict[str, Any]) -> dict[str, Any]:
-    if not path.exists():
-        return default
-    return json.loads(path.read_text(encoding="utf-8"))
-
-
-def write_json(path: Path, value: dict[str, Any]) -> None:
-    path.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+# Both helpers live in scripts/json_io.py (CR-14). The write used to be a bare
+# write_text, so an interrupt between the snapshot write and the queue write left
+# the pinned snapshot rewritten and the queue stale while main() still reported
+# that the queue was unchanged.
+load_json = load_document
 
 
 def get_json(url: str, token: str | None) -> tuple[Any, bytes]:
@@ -510,15 +510,22 @@ def run(
         commit,
         observed_at=snapshot_date,
     )
-    write_json(SOURCE_MODELS_PATH, source_document)
-    write_json(CANDIDATES_PATH, document)
+    write_json_atomic_all(
+        [(SOURCE_MODELS_PATH, source_document), (CANDIDATES_PATH, document)]
+    )
     return document
 
 
 def main() -> int:
     try:
         document = run()
-    except (OSError, ValueError, json.JSONDecodeError, urllib.error.URLError) as exc:
+    except (
+        OSError,
+        ValueError,
+        DirectoryDataError,
+        json.JSONDecodeError,
+        urllib.error.URLError,
+    ) as exc:
         print(
             f"models.dev import failed without changing the queue: {exc}",
             file=sys.stderr,

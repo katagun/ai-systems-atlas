@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
+from scripts import build_share_pages
 from scripts.build_blog import blog_sitemap_entries
 from scripts.build_share_pages import (
     COLLECTION_LABELS,
@@ -385,6 +388,80 @@ class SharePageTests(unittest.TestCase):
             set(),
             committed - set(self.pages),
             "web/records holds files the build does not produce",
+        )
+
+
+class SharePageCheckGateTests(unittest.TestCase):
+    """CR-15. The share-page `--check` is the second merge gate, and it was untested.
+
+    `test_committed_share_pages_are_fresh` proves a stale commit fails the suite. These
+    prove the gate itself can still fail, which nothing covered: a `--check` that
+    returned 0 unconditionally would have let any stale share page merge.
+    """
+
+    def _run_check(self, pages: dict[str, str], mutate) -> int:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "web").mkdir()
+            mutate(root / "web")
+            with (
+                patch.object(build_share_pages, "ROOT", root),
+                patch.object(build_share_pages, "load_catalog", return_value={}),
+                patch.object(build_share_pages, "build_pages", return_value=pages),
+            ):
+                return build_share_pages.main(["--check"])
+
+    def test_check_passes_when_every_page_is_fresh(self) -> None:
+        def fresh(web: Path) -> None:
+            (web / "records" / "systems" / "kilo-code").mkdir(parents=True)
+            (web / "records" / "systems" / "kilo-code" / "index.html").write_text(
+                "page", encoding="utf-8"
+            )
+
+        self.assertEqual(
+            0,
+            self._run_check({"records/systems/kilo-code/index.html": "page"}, fresh),
+        )
+
+    def test_check_fails_when_a_page_is_stale(self) -> None:
+        def stale(web: Path) -> None:
+            (web / "records" / "systems" / "kilo-code").mkdir(parents=True)
+            (web / "records" / "systems" / "kilo-code" / "index.html").write_text(
+                "edited by hand", encoding="utf-8"
+            )
+
+        self.assertEqual(
+            1,
+            self._run_check({"records/systems/kilo-code/index.html": "page"}, stale),
+        )
+
+    def test_check_fails_when_a_page_is_missing(self) -> None:
+        def missing(web: Path) -> None:
+            (web / "records").mkdir()
+
+        self.assertEqual(
+            1,
+            self._run_check({"records/systems/kilo-code/index.html": "page"}, missing),
+        )
+
+    def test_check_fails_when_records_holds_a_page_the_builder_does_not_produce(
+        self,
+    ) -> None:
+        """The failure BACKLOG.md recorded surviving until a whole-branch review."""
+
+        def orphan(web: Path) -> None:
+            (web / "records" / "systems" / "kilo-code").mkdir(parents=True)
+            (web / "records" / "systems" / "kilo-code" / "index.html").write_text(
+                "page", encoding="utf-8"
+            )
+            (web / "records" / "packs" / "stray").mkdir(parents=True)
+            (web / "records" / "packs" / "stray" / "index.html").write_text(
+                "stray", encoding="utf-8"
+            )
+
+        self.assertEqual(
+            1,
+            self._run_check({"records/systems/kilo-code/index.html": "page"}, orphan),
         )
 
 

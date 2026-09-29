@@ -33,9 +33,16 @@ from pathlib import Path
 from typing import Any, NamedTuple
 
 try:
+    from .catalog import OPENROUTER_DISPOSITIONS_NAME, OPENROUTER_LEADS_NAME
     from .import_models_dev import stable_model_id
 except ImportError:  # Direct script execution places scripts/ on sys.path.
+    from catalog import OPENROUTER_DISPOSITIONS_NAME, OPENROUTER_LEADS_NAME
     from import_models_dev import stable_model_id
+
+# The two ADR 039 filenames live in the shared registry so this importer and
+# catalog.UNPUBLISHED_DATA cannot disagree about them (CR-16).
+LEADS_NAME = OPENROUTER_LEADS_NAME
+DISPOSITIONS_NAME = OPENROUTER_DISPOSITIONS_NAME
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"

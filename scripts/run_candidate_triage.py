@@ -15,8 +15,10 @@ from typing import Any
 
 try:
     from . import routine_guards
+    from .discovery_sources import candidate_identity
 except ImportError:  # Direct script execution places scripts/ on sys.path.
     import routine_guards
+    from discovery_sources import candidate_identity
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -66,8 +68,8 @@ def unexpected_changes(porcelain: str) -> list[str]:
 
 
 def candidate_key(candidate: dict[str, Any]) -> str:
-    """Identify a candidate the same way the queue and the evidence harness do."""
-    return str(candidate.get("repo") or candidate.get("url") or "").lower()
+    """Identify a candidate; the shared derivation is in discovery_sources (CR-17)."""
+    return candidate_identity(candidate)
 
 
 def index_candidates(

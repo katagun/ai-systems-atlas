@@ -5,6 +5,7 @@ from __future__ import annotations
 import ipaddress
 import re
 import urllib.parse
+from typing import Any
 
 SOURCE_ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 HOST_LABEL_PATTERN = re.compile(r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?")
@@ -146,3 +147,30 @@ def canonical_url_key(value: object) -> str:
         retained_query_parts.append(part)
     query = "&".join(retained_query_parts)
     return urllib.parse.urlunsplit((scheme, netloc, path, query, ""))
+
+
+def candidate_identity(candidate: dict[str, Any]) -> str:
+    """The one key under which a queued candidate is recognised as already known.
+
+    CR-17 in `docs/CODEBASE_REVIEW_2026-09-28.md`. Five call sites derived this key
+    and two derivations were incompatible: `discover_candidates` and
+    `discover_official_candidates` both append into one `candidates` list, then
+    `main()` merged them under different functions, and a repo-less official
+    candidate could be inserted twice under two identities. The GitHub path used
+    `url.lower()` where the official-feed path used `canonical_url_key`, which also
+    drops a default port and a bare trailing slash — so
+    `https://junie.jetbrains.com/docs/` and the same URL with a trailing slash were
+    one candidate on one path and two on the other.
+
+    A repository name is the stronger identity when there is one, because it survives
+    a rename of the project's own web page. A candidate carrying neither a `repo` nor
+    a `url` keys under the empty string rather than raising: that is malformed
+    catalog input, and the record survives the pass for a person to repair.
+    """
+    repo = candidate.get("repo")
+    if repo:
+        return str(repo).lower()
+    url = candidate.get("url")
+    if url:
+        return canonical_url_key(url)
+    return ""

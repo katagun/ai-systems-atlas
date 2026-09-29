@@ -26,10 +26,10 @@ from pathlib import Path
 from typing import Any
 
 try:
-    from .discovery_sources import https_url_host
+    from .discovery_sources import candidate_identity, https_url_host
     from .update_directory import GitHubGetter, github_get
 except ImportError:  # Direct script execution places scripts/ on sys.path.
-    from discovery_sources import https_url_host
+    from discovery_sources import candidate_identity, https_url_host
     from update_directory import GitHubGetter, github_get
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -60,8 +60,8 @@ WEB_REDIRECT_CODES = {301, 302, 303, 307, 308}
 
 
 def candidate_key(candidate: dict[str, Any]) -> str:
-    """Identify a candidate the same way the updater's queue does."""
-    return str(candidate.get("repo") or candidate.get("url") or "").lower()
+    """Identify a candidate; the shared derivation is in discovery_sources (CR-17)."""
+    return candidate_identity(candidate)
 
 
 def untriageable_candidates(candidates: list[dict[str, Any]]) -> list[dict[str, Any]]:

@@ -12,17 +12,15 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
-import stat
 import sys
-import tempfile
 from copy import deepcopy
 from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any, NamedTuple
 
 try:
+    from .json_io import write_json_atomic
     from .validate_directory import (
         Taxonomy,
         stable_model_id,
@@ -32,6 +30,7 @@ try:
         validate_unique_record_ids,
     )
 except ImportError:  # Direct script execution places scripts/ on sys.path.
+    from json_io import write_json_atomic
     from validate_directory import (
         Taxonomy,
         stable_model_id,
@@ -683,23 +682,6 @@ def preflight_link(
     return proposed_models, proposed_candidates, diff
 
 
-def _write_json_atomic(path: Path, value: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(value, ensure_ascii=False, indent=2) + "\n"
-    target_mode = stat.S_IMODE(path.stat().st_mode) if path.exists() else 0o644
-    handle, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
-    temporary_path = Path(temporary_name)
-    try:
-        with os.fdopen(handle, "w", encoding="utf-8") as stream:
-            stream.write(payload)
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.chmod(temporary_path, target_mode)
-        os.replace(temporary_path, path)
-    finally:
-        temporary_path.unlink(missing_ok=True)
-
-
 def _write_both(
     root: Path, proposed_models: dict[str, Any], proposed_candidates: dict[str, Any]
 ) -> None:
@@ -710,10 +692,10 @@ def _write_both(
     original_models = models_path.read_bytes()
     original_candidates = candidates_path.read_bytes()
     try:
-        _write_json_atomic(models_path, proposed_models)
+        write_json_atomic(models_path, proposed_models)
         if proposed_candidates != load_json(candidates_path):
-            _write_json_atomic(candidates_path, proposed_candidates)
-    except Exception:
+            write_json_atomic(candidates_path, proposed_candidates)
+    except BaseException:  # an interrupt must roll back too, not just an error
         models_path.write_bytes(original_models)
         candidates_path.write_bytes(original_candidates)
         raise
@@ -742,7 +724,7 @@ def apply_link(
 def write_draft(path: Path, draft: dict[str, Any]) -> None:
     if path.exists():
         raise PromotionError(f"refusing to overwrite existing review draft: {path}")
-    _write_json_atomic(path, draft)
+    write_json_atomic(path, draft)
 
 
 def build_parser() -> argparse.ArgumentParser:

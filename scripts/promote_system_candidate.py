@@ -12,16 +12,14 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
-import stat
 import sys
-import tempfile
 from copy import deepcopy
 from datetime import date
 from pathlib import Path
 from typing import Any
 
 try:
+    from .json_io import write_json_atomic
     from .validate_directory import (
         validate_candidates,
         validate_exclusions,
@@ -31,6 +29,7 @@ try:
         validate_unique_record_ids,
     )
 except ImportError:  # Direct script execution places scripts/ on sys.path.
+    from json_io import write_json_atomic
     from validate_directory import (
         validate_candidates,
         validate_exclusions,
@@ -328,23 +327,6 @@ def preflight_promotion(
     return proposed_projects, proposed_license_evidence, proposed_candidates
 
 
-def _write_json_atomic(path: Path, value: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(value, ensure_ascii=False, indent=2) + "\n"
-    target_mode = stat.S_IMODE(path.stat().st_mode) if path.exists() else 0o644
-    handle, temporary_name = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
-    temporary_path = Path(temporary_name)
-    try:
-        with os.fdopen(handle, "w", encoding="utf-8") as stream:
-            stream.write(payload)
-            stream.flush()
-            os.fsync(stream.fileno())
-        os.chmod(temporary_path, target_mode)
-        os.replace(temporary_path, path)
-    finally:
-        temporary_path.unlink(missing_ok=True)
-
-
 def apply_promotion(root: Path, draft: dict[str, Any]) -> tuple[int, str]:
     """Apply a preflighted promotion and return remaining count plus project id."""
     proposed_projects, proposed_license_evidence, proposed_candidates = (
@@ -360,10 +342,10 @@ def apply_promotion(root: Path, draft: dict[str, Any]) -> tuple[int, str]:
     original_license_evidence = license_evidence_path.read_bytes()
     original_candidates = candidates_path.read_bytes()
     try:
-        _write_json_atomic(projects_path, proposed_projects)
-        _write_json_atomic(license_evidence_path, proposed_license_evidence)
-        _write_json_atomic(candidates_path, proposed_candidates)
-    except Exception:
+        write_json_atomic(projects_path, proposed_projects)
+        write_json_atomic(license_evidence_path, proposed_license_evidence)
+        write_json_atomic(candidates_path, proposed_candidates)
+    except BaseException:  # an interrupt must roll back too, not just an error
         projects_path.write_bytes(original_projects)
         license_evidence_path.write_bytes(original_license_evidence)
         candidates_path.write_bytes(original_candidates)
@@ -376,7 +358,7 @@ def apply_promotion(root: Path, draft: dict[str, Any]) -> tuple[int, str]:
 def write_draft(path: Path, draft: dict[str, Any]) -> None:
     if path.exists():
         raise PromotionError(f"refusing to overwrite existing review draft: {path}")
-    _write_json_atomic(path, draft)
+    write_json_atomic(path, draft)
 
 
 def build_parser() -> argparse.ArgumentParser:

@@ -16,9 +16,32 @@ Measure coverage across three axes:
 
 Do not add a new family merely to fit a famous product. Add one only when its primary operational outcome cannot be scored coherently by an existing family.
 
-## Snapshot — 2026-09-12
+## Snapshot — 2026-09-28
 
-The reviewed catalog contains 197 systems: fifty-five memory systems, one hundred and twenty-five agent systems, and seventeen assistant systems. Nine records are archived and three are superseded, so 185 satisfy active-choice coverage. The system provisional queue contains forty-three records: twenty-one are actionable and twenty-two are held, thirteen by the robotics scope decision recorded in `BACKLOG.md` and nine by the 2026-09-12 promotion review. Eighty-eight candidates have been excluded with reasons, every one re-verified against current sources on 2026-09-17. The separate collections contain twenty-two unscored specifications, fifty-nine scored inference services, sixteen scored local runtimes, and fifty-three scored model releases; the models.dev queue contains 270 further text-output model candidates awaiting complete review. Every count in this section and the numeric columns of the role table below were recomputed from the canonical files on this date; the coverage-signal prose is older than the counts except where a batch note says otherwise. This snapshot predates batch 95 and its removal of the four robot candidates, so the queue counts in this paragraph are stale.
+Every count below is generated, not transcribed. `uv run python scripts/validate_directory.py --counts` prints the block, `tests/test_documentation.py` asserts this document quotes it verbatim, and a count that moves without a dated edit here fails the suite.
+
+<!-- catalog-counts: regenerate with `uv run python scripts/validate_directory.py --counts` -->
+
+```text
+systems: 208
+  agent_system 133, assistant_system 17, memory_system 58
+  active-choice 196 (archived 9, superseded 3)
+specifications: 22
+inference_services: 60
+local_runtimes: 17
+model_releases: 309
+models_dev_source_records: 424
+model_candidates: 6
+system_candidates: 128
+exclusions: 92
+packs: 8
+labs: 40 covering 309 releases
+robots: 4
+```
+
+Reading the block: 208 reviewed systems, of which 196 satisfy active-choice coverage because nine are archived and three superseded. The system provisional queue holds 128 candidates. Ninety-two candidates have been excluded with reasons. The separate unscored collections contain 22 specifications, 8 agent packs, 40 labs, and 4 robots; the scored collections hold 60 inference services, 17 local runtimes, and 309 model releases. The models.dev snapshot carries 424 attributed source records, from which 6 further text-output model candidates await complete review.
+
+The prose coverage signals, and the numeric columns of the role table below, are editorial and are not generated. This snapshot predates batch 95 and its removal of the four robot candidates, so the queue counts in this paragraph were stale until this revision recomputed them.
 
 ### Local runtimes
 

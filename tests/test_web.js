@@ -1015,9 +1015,12 @@ test("llms.txt's site links use the same origin as the share-page builder", () =
 
 test("llms.txt's Data section lists exactly the published catalog files", () => {
   const llms = fs.readFileSync(path.join(__dirname, "..", "web", "llms.txt"), "utf8");
-  const validate = fs.readFileSync(path.join(__dirname, "..", "scripts", "validate_directory.py"), "utf8");
-  const match = validate.match(/PUBLISHED_DATA = \(([\s\S]*?)\)/);
-  assert.ok(match, "could not find PUBLISHED_DATA in scripts/validate_directory.py");
+  // The published set is defined once, in scripts/catalog.py. It used to be restated
+  // in scripts/validate_directory.py, which is why this test scraped that file's
+  // source; scraping the registry instead means a redefinition there is what fails.
+  const registry = fs.readFileSync(path.join(__dirname, "..", "scripts", "catalog.py"), "utf8");
+  const match = registry.match(/PUBLISHED_DATA = \(([\s\S]*?)\n\)/);
+  assert.ok(match, "could not find PUBLISHED_DATA in scripts/catalog.py");
   const published = [...match[1].matchAll(/"([^"]+)"/g)].map(m => m[1]).sort();
   const dataSection = llms.split("## Data")[1].split("## Reference")[0];
   const linked = [...dataSection.matchAll(/\]\(https:\/\/[^)]*\/([a-z-]+\.json)\)/g)].map(m => m[1]).sort();
@@ -1026,9 +1029,12 @@ test("llms.txt's Data section lists exactly the published catalog files", () => 
 
 test("the API view lists exactly the published catalog files", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
-  const validate = fs.readFileSync(path.join(__dirname, "..", "scripts", "validate_directory.py"), "utf8");
-  const match = validate.match(/PUBLISHED_DATA = \(([\s\S]*?)\)/);
-  assert.ok(match, "could not find PUBLISHED_DATA in scripts/validate_directory.py");
+  // The published set is defined once, in scripts/catalog.py. It used to be restated
+  // in scripts/validate_directory.py, which is why this test scraped that file's
+  // source; scraping the registry instead means a redefinition there is what fails.
+  const registry = fs.readFileSync(path.join(__dirname, "..", "scripts", "catalog.py"), "utf8");
+  const match = registry.match(/PUBLISHED_DATA = \(([\s\S]*?)\n\)/);
+  assert.ok(match, "could not find PUBLISHED_DATA in scripts/catalog.py");
   const published = [...match[1].matchAll(/"([^"]+)"/g)].map(m => m[1]).sort();
   const linked = [...html.matchAll(/class="endpoint-link" href="https:\/\/[^"]*\/([a-z-]+\.json)"/g)].map(m => m[1]).sort();
   assert.deepEqual(linked, published);
@@ -2021,4 +2027,74 @@ test("a comparison names the scope before the collection parameter, and a record
   // A comparison without a colon names no kind, so "systemx" is not "system".
   assert.equal(scope("compare=systemx&collection=inference"), "inference");
   assert.equal(scope("view=finder&record=system:aider"), null);
+});
+
+// CR-12. escapeHTML is a convention, and conventions leak: the score ring at
+// web/app.js:1461 escaped score_profile and then interpolated score.overall raw
+// two tokens later, into both the aria-label and the element text.
+//
+// A general per-site guard is not writable, and the reason is worth recording so
+// the next reader does not try. 299 of app.js's 787 interpolations are internal
+// builders that escape internally — badgeRow, detailsButton, cardMark, taxonomyName —
+// and the file's established idiom is to build a local and escape it at the render
+// boundary. `origin` at :1273, `version` at :1497, and the Finder's `reasons` at
+// :1886 were all unescaped where they were built and escaped by their consumer.
+// Telling "escaped later" from "never escaped" is a dataflow question, so a sweep
+// either misses real leaks or drowns in false positives.
+//
+// What is checkable is a direct sink: a record field interpolated straight into a
+// template that becomes markup, with no local in between. `origin` and `version`
+// are escaped where they are built now, so the same rule covers them. A regression
+// on any entry below fails here, and extending the list is the way to widen it.
+const DIRECT_SINKS = [
+  "score.overall",
+  "description",
+  "research_confidence",
+  "license_note",
+  "current_repo_note",
+  "access_boundary",
+  "parent_organization",
+  "current_version",
+];
+
+const SAFE_WRAPPER = /^(?:escapeHTML|detailText|detailList|detailScore|scoreCell|listCell)\(/;
+
+test("a record field interpolated straight into markup is escaped at the point of use", () => {
+  const app = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
+  const offenders = [];
+  for (const match of app.matchAll(/\$\{([^{}]*)\}/g)) {
+    const expression = match[1].trim();
+    if (SAFE_WRAPPER.test(expression)) continue;
+    const sink = DIRECT_SINKS.find(field => new RegExp(`\\.${field}\\b`).test(expression));
+    if (!sink) continue;
+    const line = app.slice(0, match.index).split("\n").length;
+    offenders.push(`web/app.js:${line} interpolates .${sink} as {${expression}}`);
+  }
+  assert.deepEqual(offenders, [],
+    "record prose reached a template without escaping:\n  " + offenders.join("\n  "));
+});
+
+test("the card score ring escapes the score it prints, in the label and the text", () => {
+  const app = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
+  const ring = app.match(/const score = family \? `[^`]*score-ring[^`]*`/);
+  assert.ok(ring, "could not find the card score ring in web/app.js");
+  const raw = (ring[0].match(/\$\{(?!escapeHTML)/g) || []).length;
+  assert.equal(raw, 0, `the score ring interpolates ${raw} value(s) unescaped: ${ring[0]}`);
+  const escaped = (ring[0].match(/escapeHTML\(/g) || []).length;
+  assert.equal(escaped, 3,
+    `the score ring should escape its profile and both score positions, saw ${escaped}`);
+});
+
+test("escapeHTML encodes every character that can break out of markup", () => {
+  const app = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
+  const set = app.match(/const escapeHTML = \(value = ""\) => String\(value\)\.replace\(\/(?<chars>[^/]*)\/g,[\s\S]*?=> \(\{(?<map>[^}]*)\}/);
+  assert.ok(set, "could not read the escapeHTML character set from web/app.js");
+  const ENCODED = { "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" };
+  for (const [char, encoded] of Object.entries(ENCODED)) {
+    assert.ok(set.groups.chars.includes(char),
+      `escapeHTML no longer encodes ${char}; an unescaped interpolation of it would inject markup`);
+    // The source may quote either side of the pair, so match on the value alone.
+    assert.ok(set.groups.map.includes(`:"${encoded}"`),
+      `escapeHTML maps ${char} to something other than ${encoded}; the map is ${set.groups.map}`);
+  }
 });

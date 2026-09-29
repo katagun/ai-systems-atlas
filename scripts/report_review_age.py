@@ -17,19 +17,18 @@ from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 
+try:
+    from .catalog import COLLECTION_TRIPLES, REVIEW_AGE_ORDER
+except ImportError:  # Direct script execution places scripts/ on sys.path.
+    from catalog import COLLECTION_TRIPLES, REVIEW_AGE_ORDER
+
 ROOT = Path(__file__).resolve().parents[1]
 
-COLLECTIONS = (
-    ("systems", "projects.json", "projects"),
-    ("inference", "inference-services.json", "services"),
-    ("runtimes", "local-runtimes.json", "runtimes"),
-    ("models", "models.json", "models"),
-    ("specifications", "specifications.json", "specifications"),
-    ("packs", "packs.json", "packs"),
-    ("labs", "labs.json", "labs"),
-    ("robots", "robots.json", "robots"),
-)
-COLLECTION_ORDER = {name: index for index, (name, _, _) in enumerate(COLLECTIONS)}
+# The eight collections, projected from the single registry (CR-16). The report prints
+# scored operational collections first and unscored ones after, which is a reporting
+# choice held beside the table rather than a second copy of it.
+COLLECTIONS = COLLECTION_TRIPLES
+COLLECTION_ORDER = {name: index for index, name in enumerate(REVIEW_AGE_ORDER)}
 
 # Refresh timestamps that feed the metadata column. Usually automation-owned, but
 # metadata_verified_at is human-attested on a model with source_id null (ADR 038):

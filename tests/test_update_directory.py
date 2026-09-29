@@ -8,6 +8,7 @@ from pathlib import Path
 from unittest import mock
 
 from scripts import update_directory
+from scripts.discovery_sources import candidate_identity
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -475,6 +476,83 @@ class UpdateDirectoryTests(unittest.TestCase):
         ):
             self.assertNotIn(editorial_field, candidate)
 
+    def test_candidate_identity_is_the_one_derivation(self) -> None:
+        """CR-17. Five sites derived this key; two derivations were incompatible.
+
+        The GitHub path keyed a repo-less candidate by `url.lower()` and the
+        official-feed path by `canonical_url_key`, which also drops a trailing slash and
+        a default port. Both append into one list, so the same product could be queued
+        twice under two identities.
+        """
+        self.assertEqual("owner/name", candidate_identity({"repo": "Owner/Name"}))
+        self.assertEqual(
+            "https://jetbrains.com/ai/docs",
+            candidate_identity({"url": "https://JetBrains.com/ai/docs/"}),
+            "a trailing slash and host case must not make a new identity",
+        )
+        self.assertEqual(
+            "https://vendor.example/api",
+            candidate_identity({"url": "https://vendor.example:443/api"}),
+            "a default port must not make a new identity",
+        )
+        self.assertEqual(
+            "owner/name",
+            candidate_identity({"repo": "owner/name", "url": "https://x.example/"}),
+            "a repository name outranks the url, which a rename would break",
+        )
+        self.assertEqual(
+            "", candidate_identity({}), "malformed input keys under the empty string"
+        )
+
+    def test_official_discovery_does_not_requeue_a_trailing_slash_variant(self) -> None:
+        """The observable half of CR-17, on the pass that can see a repo-less URL."""
+        source = {
+            "id": "jetbrains",
+            "name": "JetBrains",
+            "hub_url": "https://www.jetbrains.com/ai/",
+            "feed_url": "https://www.jetbrains.com/feed.xml",
+            "item_hosts": ["jetbrains.com"],
+        }
+        body = (
+            b'<?xml version="1.0"?><rss><channel><item>'
+            b"<title>Junie coding agent</title>"
+            b"<link>https://jetbrains.com/ai/docs/</link>"
+            b"<description>An enterprise business assistant with connected "
+            b"workplace tools.</description>"
+            b"<pubDate>Wed, 26 Aug 2026 12:00:00 GMT</pubDate>"
+            b"</item></channel></rss>"
+        )
+        candidates, new_count, successes, failures = (
+            update_directory.discover_official_candidates(
+                [{"url": "https://jetbrains.com/ai/docs"}],
+                set(),
+                [source],
+                {"enterprise_work_assistant": "assistant_system"},
+                "2026-09-28",
+                getter=lambda _url, _hosts: body,
+            )
+        )
+        self.assertEqual((0, 1, []), (new_count, successes, failures))
+        self.assertEqual(1, len(candidates))
+
+    def test_neither_discovery_pass_reintroduces_a_local_key_derivation(self) -> None:
+        """Both passes append into one list, so their keys must be the same object."""
+        import inspect
+
+        for function in (
+            update_directory.discover_candidates,
+            update_directory.discover_official_candidates,
+        ):
+            source = inspect.getsource(function)
+            with self.subTest(function=function.__name__):
+                self.assertIn("candidate_identity(item)", source)
+                self.assertNotIn(
+                    'get("repo") or item.get("url")',
+                    source,
+                    "a local url.lower() derivation is back; the two passes would "
+                    "key one list two ways again",
+                )
+
     def test_official_discovery_rejects_external_hosts_and_unsafe_xml(self) -> None:
         source = {
             "id": "vendor-ai",
@@ -705,13 +783,13 @@ class UpdateDirectoryTests(unittest.TestCase):
                 "discover_official_candidates",
                 return_value=([], 0, 0, ["offline"]),
             ),
-            mock.patch.object(update_directory, "write_json") as write_json,
+            mock.patch.object(update_directory, "write_json_atomic_all") as write_group,
             mock.patch.object(update_directory, "sync_web_data") as synchronize,
         ):
             result = update_directory.main()
 
         self.assertEqual(1, result)
-        write_json.assert_not_called()
+        write_group.assert_not_called()
         synchronize.assert_not_called()
 
 

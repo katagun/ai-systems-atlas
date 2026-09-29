@@ -22,9 +22,11 @@ from typing import Any
 try:
     from .build_candidate_evidence import fetch_web_text
     from .discovery_sources import canonical_url_key, https_url_host
+    from .json_io import write_json_atomic
 except ImportError:  # Direct script execution places scripts/ on sys.path.
     from build_candidate_evidence import fetch_web_text
     from discovery_sources import canonical_url_key, https_url_host
+    from json_io import write_json_atomic
 
 ROOT = Path(__file__).resolve().parents[1]
 SIGNALS_PATH = ROOT / "directory" / "hn-signals.json"
@@ -457,7 +459,7 @@ def main(argv: list[str] | None = None) -> int:
         # Fail closed: the existing queue is preserved rather than half-rewritten.
         print(f"error: attention-source sweep failed: {error}", file=sys.stderr)
         return 1
-    SIGNALS_PATH.write_text(json.dumps(document, indent=2) + "\n", encoding="utf-8")
+    write_json_atomic(SIGNALS_PATH, document)
     kept = len(document["signals"])
     if document["source"]["truncated"]:
         # The cap is a deliberate cost guard (search_by_date returns newest-first, so
