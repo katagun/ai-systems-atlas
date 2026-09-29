@@ -206,19 +206,14 @@ uv run python scripts/build_web_payload.py --check
 Confirm the blocking boot payload stays small — this is the number `web/app/` exists to keep down:
 
 ```bash
-uv run python scripts/serve_web.py 8765 &
-sleep 2
-python3 -c "
-import urllib.request, gzip
-total = 0
-for path in ['app/systems.json','app/inference.json','app/runtimes.json','app/specifications.json','app/models.json','app/packs.json','app/labs.json','app/robots.json','taxonomy.json']:
-    body = urllib.request.urlopen(f'http://127.0.0.1:8765/{path}').read()
-    total += len(gzip.compress(body, 9))
-print(f'blocking boot payload: {total/1024:.1f} KB gzipped')"
-kill %1
+uv run python scripts/build_web_payload.py --counts
 ```
 
-Expected: 101.6 KB gzipped, measured 2026-09-29. The 60 KB check threshold stands: anything over it requires checking whether source growth or a detail-only field reached a boot payload. The overage grew from 66.8 KB pre-packs (of which `app/packs.json` adds 0.9 KB) through 68.3 KB and 82.2 KB (2026-09-20) to 90.3 KB before labs, mostly on `app/models.json` source-catalog growth; `app/labs.json` and the three lab taxonomy groups added 2.2 KB with the first fifteen labs, and the second batch of twenty-five, with `none_listed` and seven more countries, 2.0 KB. The overage is tracked in `BACKLOG.md`. It measured 95.7 KB on 2026-09-25 after the Robots collection and the pack and specification star counts merged, and the Models release-date sort adds 0.5 KB by giving imported rows their `release_date`.
+The nine payloads and the per-file breakdown come from the same script that generates them, so the list cannot drift from what `bootstrap()` actually awaits. Expected on 2026-09-29: **100.4 KB gzipped**, with `app/models.json` and `app/systems.json` about two-thirds of it. Reading the files from disk rather than over HTTP is deliberate: it needs no server, no port, and no sleep, and the served bytes are the committed bytes.
+
+The 60 KB budget is exceeded, and the overage is tracked in `BACKLOG.md` under Engineering debt. It grew from 66.8 KB pre-packs (of which `app/packs.json` adds 0.9 KB) through 68.3 KB and 82.2 KB (2026-09-20) to 90.3 KB before labs, mostly on `app/models.json` source-catalog growth; `app/labs.json` and the three lab taxonomy groups added 2.2 KB with the first fifteen labs, and the second batch of twenty-five, with `none_listed` and seven more countries, 2.0 KB. The Robots collection and the pack and specification star counts took it to 95.7 KB on 2026-09-25, and the Models release-date sort added 0.5 KB by giving imported rows their `release_date`.
+
+Do not record the measurement here or in the backlog. A figure written into prose reads as current forever, and on 2026-09-29 the 101.6 KB this section used to state was already 1.2 KB stale — the exact failure `--counts` exists to make visible. Run the command and quote the result in the change that moves it.
 
 Run the rendered browser regression suite. It also guards page health: zero console or page errors across every view, no horizontal overflow at 390px, no request outside the site origin, and record URL restoration (install Chromium once per environment):
 

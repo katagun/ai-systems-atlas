@@ -6,10 +6,15 @@ These payloads are a projection of them shaped for how the page loads: a small
 boot payload per collection, a lazily fetched search index, per-reviewed-record
 detail files, and one shared imported-model detail payload. See
 docs/adr/026-app-payloads-are-a-projection-of-the-published-endpoints.md.
+
+``--counts`` reports the blocking boot payload's gzipped size per file, which is
+the measurement docs/WEB.md's budget is written against. It is a report and
+always exits 0: the budget's gate is the separate ``--check`` below.
 """
 
 from __future__ import annotations
 
+import gzip
 import json
 import shutil
 import sys
@@ -464,9 +469,58 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
     return payloads
 
 
+# The nine payloads `bootstrap()` awaits as one Promise.all, in its own order.
+# Derived from COLLECTIONS so a new collection cannot be added to one without the
+# other, with the shared taxonomy payload appended. docs/WEB.md carries the same
+# list in prose; these two are the ones code reads, and the budget below is
+# measured against what the page actually blocks on.
+BOOT_PAYLOADS = (
+    *(f"app/{collection}.json" for collection, *_ in COLLECTIONS),
+    "taxonomy.json",
+)
+
+# The blocking budget in docs/WEB.md. Measured at 101.6 KB gzipped on 2026-09-29
+# against this 60 KB, so it is currently over; the item in BACKLOG.md that owns
+# the reduction reads the measurement from here rather than restating it.
+BOOT_BUDGET_KB = 60
+
+
+def boot_payload_counts(web: Path) -> list[tuple[str, int]]:
+    """Each blocking boot payload's gzipped size in bytes, largest first.
+
+    Read from disk rather than from a running server, so the number needs no
+    port, no background process, and no sleep. gzip level 9 matches the
+    measurement docs/WEB.md documents, and the served bytes are gzipped the same
+    way by every host the site is deployed to.
+    """
+    sizes: list[tuple[str, int]] = []
+    for path in BOOT_PAYLOADS:
+        target = web / path
+        if not target.exists():
+            continue
+        sizes.append((path, len(gzip.compress(target.read_bytes(), 9))))
+    return sorted(sizes, key=lambda entry: entry[1], reverse=True)
+
+
+def render_boot_counts(sizes: list[tuple[str, int]]) -> str:
+    """Format the boot-payload measurement as a report."""
+    total = sum(size for _, size in sizes)
+    lines = [f"blocking boot payload: {total / 1024:.1f} KB gzipped"]
+    for path, size in sizes:
+        lines.append(f"  {size / 1024:>6.1f} KB  web/{path}")
+    verdict = "over" if total / 1024 > BOOT_BUDGET_KB else "within"
+    lines.append(
+        f"budget: {BOOT_BUDGET_KB} KB — {verdict} by {abs(total / 1024 - BOOT_BUDGET_KB):.1f} KB"
+    )
+    return "\n".join(lines)
+
+
 def main(argv: list[str]) -> int:
     payloads = build_payloads(load_catalog(ROOT))
     web = ROOT / "web"
+    if "--counts" in argv:
+        print(render_boot_counts(boot_payload_counts(web)))
+        return 0
     if "--check" in argv:
         problems = [
             f"web/{path} is missing or stale"

@@ -28,6 +28,7 @@ COLLECTION_SCHEMA = {
 CATALOG_COUNTS_BLOCK = re.compile(
     r"<!-- catalog-counts.*?-->.*?```text\n(?P<block>.*?)```", re.DOTALL
 )
+BACKLOG = ROOT / "BACKLOG.md"
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 CODE_FENCE = re.compile(r"```.*?```", re.DOTALL)
 GENERATED_DIRECTORIES = {
@@ -369,6 +370,132 @@ class DocumentationTests(unittest.TestCase):
             sorted(catalog.REVIEW_AGE_ORDER),
             sorted(name for name, *_ in catalog.COLLECTIONS),
             "REVIEW_AGE_ORDER and COLLECTIONS name different collections",
+        )
+
+    def test_backlog_engineering_anchors_still_resolve(self) -> None:
+        """The Engineering debt section's anchors must point at things that exist.
+
+        These items quote line numbers, function counts, and complexity maxima to
+        size their work, and every one of those drifts on an ordinary merge. On
+        2026-09-29 three stale sets of figures for `web/app.js` were in circulation
+        in the same afternoon (3,694, 3,728, and 3,740), and #382's own verification
+        of seven line anchors was overtaken by #384 minutes later.
+
+        So this asserts the stable property, not the volatile one: a named symbol
+        is still declared, and a cited Python line is still inside its file. A
+        reader sent to `renderers` (933) should find a `renderers`, even though
+        the number beside it is now wrong. Asserting the line numbers themselves
+        would fail on nearly every merge and train people to skip the check, which
+        is worth less than no check at all.
+        """
+        from scripts.measure_engineering import (
+            engineering_debt_section,
+            javascript_anchor_failures,
+            python_line_anchor_failures,
+        )
+
+        section = engineering_debt_section()
+        self.assertIn("### Engineering debt", BACKLOG.read_text(encoding="utf-8"))
+        failures = javascript_anchor_failures(section) + python_line_anchor_failures(
+            section
+        )
+        self.assertEqual([], failures, "; ".join(failures) or "no anchors to check")
+
+    def test_engineering_ratchet_is_not_undercut(self) -> None:
+        """The complexity ratchet must stay above the worst function carried.
+
+        `pyproject.toml` sets `max-complexity` as a ratchet rather than a target:
+        it passes today and fails any new function worse than the worst one already
+        carried. That only holds while the configured value is at or above the live
+        maximum, and nothing in the linter would catch the ratchet being lowered
+        past it — ruff would simply report fewer violations. The live maximum comes
+        from ruff itself rather than a reimplementation, since the claim is about
+        the number ruff computes.
+        """
+        from scripts.measure_engineering import (
+            ROOT as MEASURE_ROOT,
+        )
+        from scripts.measure_engineering import (
+            configured_ratchet,
+            live_max_complexity,
+        )
+
+        configured = configured_ratchet()
+        _, live = live_max_complexity(
+            MEASURE_ROOT / "scripts" / "validate_directory.py"
+        )
+        self.assertGreater(
+            live,
+            0,
+            "ruff reported no complexity, so the ratchet has no measured maximum",
+        )
+        self.assertLessEqual(
+            live,
+            configured,
+            f"live maximum complexity {live} exceeds the configured ratchet "
+            f"{configured}; CR-19's ratchet no longer constrains the worst function",
+        )
+
+    def test_web_app_js_still_declares_global_bindings(self) -> None:
+        """CR-18's premise: `web/app.js` is a classic script sharing globals.
+
+        The finding argues that the file's remaining declarations are reachable
+        from the e2e suite and uncovered by unit tests, which is only true while
+        they sit at global scope in a script with no module boundary. If a change
+        encapsulates the file, the finding stops describing the code and prose
+        that says the opposite becomes misleading — the same class of drift this
+        suite exists to catch, one level up from the counts.
+        """
+        from scripts.measure_engineering import ROOT as MEASURE_ROOT
+        from scripts.measure_engineering import module_level_declarations
+
+        declarations = module_level_declarations(MEASURE_ROOT / "web" / "app.js")
+        self.assertGreater(
+            declarations,
+            0,
+            "web/app.js declares nothing at global scope, so CR-18's description no "
+            "longer matches the file; update the finding rather than leaving it",
+        )
+        source = (MEASURE_ROOT / "web" / "app.js").read_text(encoding="utf-8")
+        self.assertNotIn(
+            "\nexport ",
+            source,
+            "web/app.js grew an export, so it is a module and CR-18's global-scope "
+            "premise needs revisiting",
+        )
+
+    def test_measured_claims_name_a_date(self) -> None:
+        """A measurement quoted in the backlog must say when it was taken.
+
+        The numbers themselves cannot be checked without failing every ordinary
+        commit, but a reader can be told what a number is: a snapshot. This requires
+        a date on any line that asserts a measurement of the code, so a stale
+        figure announces itself instead of reading as current. It is the cheap half
+        of the fix — the anchors above are the half that can be enforced.
+        """
+        text = BACKLOG.read_text(encoding="utf-8")
+        start = text.index("### Engineering debt")
+        section = text[start : text.index("### AI systems papers")]
+        dated = re.compile(r"20\d\d-\d\d-\d\d")
+        undated: list[str] = []
+        for number, line in enumerate(section.splitlines(), start=1):
+            if not line.startswith("- [ ]"):
+                continue
+            # A line that quotes a size and does not date it is a figure that will
+            # silently read as current. Proportions, counts of items, and PR
+            # references are exempt: only a measurement of the tree itself is at
+            # risk, and a line that already carries a date is fine.
+            measures = re.search(
+                r"\b\d{1,3}(?:,\d{3})+\b|\b\d+\s*(?:lines|functions)\b", line
+            )
+            if measures and not dated.search(line):
+                undated.append(f"line {number}: {line[:90]}")
+        self.assertEqual(
+            [],
+            undated,
+            "these lines quote a measurement with no date; add one, or drop the "
+            "figure in favour of `uv run python scripts/measure_engineering.py`: "
+            + "; ".join(undated),
         )
 
 

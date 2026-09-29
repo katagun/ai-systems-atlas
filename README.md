@@ -29,6 +29,13 @@ uv run python scripts/serve_web.py 8765
 
 Open `http://127.0.0.1:8765`.
 
+Sizing a change? Measure it rather than reading a figure out of a document, which is stale within days:
+
+```bash
+uv run python scripts/measure_engineering.py
+uv run python scripts/build_web_payload.py --counts
+```
+
 ## Choose your path
 
 Read only what your task needs:
@@ -45,7 +52,8 @@ Read only what your task needs:
 | Understand JSON fields and timestamp semantics | [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) |
 | Run refreshes or review candidate/license incidents | [`docs/OPERATIONS.md`](docs/OPERATIONS.md) |
 | Change or verify the browser UI | [`docs/WEB.md`](docs/WEB.md) |
-| Review current engineering risks | [`docs/CODEBASE_REVIEW_2026-09-05.md`](docs/CODEBASE_REVIEW_2026-09-05.md) |
+| Review current engineering risks | [`docs/CODEBASE_REVIEW_2026-09-28.md`](docs/CODEBASE_REVIEW_2026-09-28.md), then [`BACKLOG.md`](BACKLOG.md) |
+| Size a refactor before starting it | `uv run python scripts/measure_engineering.py` |
 | Report a vulnerability | [`SECURITY.md`](SECURITY.md) |
 | Contribute a system, specification, or code change | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | Understand expected behavior or report a conduct concern | [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) |
@@ -76,7 +84,7 @@ directory/candidates.json       durable provisional discovery queue
 directory/license-review.json   unresolved license-evidence review queue
 directory/discovery-sources.json allowlisted official discovery feeds
 directory/hn-signals.json       unpublished Hacker News attention-source signal queue
-scripts/                        refresh, synchronization, and validation
+scripts/                        refresh, synchronization, validation, and measurement
 tests/                          Python invariants, web logic tests, and browser E2E tests
 web/                            static directory UI and published data copies
 docs/                           task-focused policy, model, operations, and ADRs
