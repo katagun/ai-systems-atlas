@@ -334,7 +334,7 @@ function writeDirectoryURL() {
 // AtlasCore.SCOPE_URL_PARAMS keys; selectors are web/index.html's.
 const SCOPE_CONTROLS = {
   all: { q: "#all-directory-search" },
-  systems: { q: "#project-search", family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter", deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter", sort: "#sort-filter" },
+  systems: { q: "#project-search", family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter", deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", capability: "#capability-filter", sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter", sort: "#sort-filter" },
   inference: { q: "#inference-search", type: "#inference-type-filter", delivery: "#inference-delivery-filter", modelSource: "#inference-model-source-filter", apiStyle: "#inference-api-filter", sort: "#inference-sort-filter" },
   runtimes: { q: "#runtime-search", type: "#runtime-type-filter", accelerator: "#runtime-accelerator-filter", modelFormat: "#runtime-format-filter", apiStyle: "#runtime-api-filter", sort: "#runtime-sort-filter" },
   packs: { q: "#pack-search", type: "#pack-type-filter", host: "#pack-host-filter", install: "#pack-install-filter", license: "#pack-license-filter" },
@@ -583,6 +583,8 @@ function populateFilters() {
   state.taxonomy.deployment_modes.filter(item => publishedDeployments.has(item.id)).forEach(item => $("#deployment-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   const publishedInterfaces = new Set(state.projects.flatMap(project => project.agent_interfaces || []));
   state.taxonomy.agent_interfaces.filter(item => publishedInterfaces.has(item.id)).forEach(item => $("#agent-interface-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
+  const publishedCapabilities = new Set(state.projects.flatMap(project => project.agent_capabilities || []));
+  state.taxonomy.agent_capabilities.filter(item => publishedCapabilities.has(item.id)).forEach(item => $("#capability-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   const publishedSourceModels = new Set(state.projects.map(project => project.source_model));
   state.taxonomy.source_models.filter(item => publishedSourceModels.has(item.id)).forEach(item => $("#source-model-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   const publishedLicenses = new Set(state.projects.flatMap(project => project.licenses));
@@ -712,6 +714,7 @@ function updateAdvancedFilterSummary() {
     $("#architecture-filter").value,
     $("#deployment-filter").value,
     $("#agent-interface-filter").value,
+    $("#capability-filter").value,
     $("#status-filter").value !== "active" ? $("#status-filter").value || "all" : "",
     $("#local-filter").checked ? "local" : "",
   ].filter(Boolean).length;
@@ -733,6 +736,7 @@ function applyDirectoryDefaults() {
   $("#architecture-filter").value = defaults.architecture;
   $("#deployment-filter").value = defaults.deployment;
   $("#agent-interface-filter").value = defaults.agentInterface;
+  $("#capability-filter").value = defaults.capability;
   $("#status-filter").value = defaults.status;
   $("#sort-filter").value = defaults.sort;
   $("#local-filter").checked = defaults.localOnly;
@@ -1414,6 +1418,7 @@ function filteredProjects(term) {
     architecture: $("#architecture-filter").value,
     deployment: $("#deployment-filter").value,
     agentInterface: $("#agent-interface-filter").value,
+    capability: $("#capability-filter").value,
     sourceModel: $("#source-model-filter").value,
     license: $("#license-filter").value,
     status: $("#status-filter").value,
@@ -2237,6 +2242,7 @@ function applyFinderToDirectory() {
   $("#architecture-filter").value = "";
   $("#deployment-filter").value = "";
   $("#agent-interface-filter").value = "";
+  $("#capability-filter").value = "";
   $("#source-model-filter").value = "";
   $("#license-filter").value = "";
   $("#status-filter").value = "active";
@@ -3440,7 +3446,7 @@ function bindEvents() {
     renderScopeStrip();
   });
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.directoryRolesLabel = null; state.page.systems = 1; renderProjects(); });
-  ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
+  ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#capability-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
   ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.specifications = 1; renderSpecifications(); }));
   ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.inference = 1; renderInferenceServices(); }));
   ["#runtime-search", "#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.runtimes = 1; renderLocalRuntimes(); }));
