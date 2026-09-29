@@ -56,14 +56,13 @@ The rail's groups, the counts, the strip's match counts, step order, related rec
   - `tests/test_documentation.py` checks that every code symbol the backlog's "Engineering debt" section names still exists, and that any measurement there carries a date.
   - When a task deletes or renames a symbol that section names, such as `renderers`, `RECORD_DIALOG_SELECTORS`, or `mixedSystemCard`, the same PR updates or closes the item.
   - Quote code measurements from `uv run python scripts/measure_engineering.py`, never by hand.
-- **No new ADR.** If review finds a decision-level change, the ADR takes 047:
-  - 042 is the badge session's;
-  - 043 is the front door;
-  - 044 is #380;
-  - 045 is robot software;
-  - 046 is Elements (#384).
-
-  Run `git ls-tree --name-only origin/main docs/adr/` right before any PR that adds one.
+- **No new ADR.** If review finds a decision-level change, the ADR takes the next free number on `origin/main` at PR time. On 2026-09-29, 042 was held by the badge session, and 047 was on main twice (#388's badge ADR and #391's research-group ADR), so one of those two will renumber. Run `git ls-tree --name-only origin/main docs/adr/` right before any PR that adds one.
+- **The phone layout of #390.**
+  - Below 768 px a fixed bottom bar, `#mobile-nav`, holds Home, Search, Finder, Explore, and More.
+  - Its Search opens All and focuses All's search box.
+  - It stacks below the badge legend and the comparison tray.
+  - Phase 3's phone measurements stop at whichever of those is highest.
+  - Its modal views (the filter sheet, the full-screen record) sit in the top layer, above it.
 - **Breakpoints and numbers from the spec, verbatim:**
   - Above 1000 px: the rail is visible and the bar is sticky.
   - At 1200 px and wider: the side panel opens.
@@ -828,7 +827,7 @@ function setDirectoryCollection(collection, { updateURL = true, carryQuery = upd
 
    Add `$("#results-bar").hidden = true;` and `$("#directory").classList.remove("is-results");` beside `$("#scope-strip").hidden = true;`. In `showResults`, add `$("#results-bar").hidden = false;` and `$("#directory").classList.add("is-results");` beside `$("#scope-strip").hidden = false;`.
 
-6. In `renderAllDirectoryEntries`, replace both `$("#all-directory-search").value` with `currentQuery()`. In `renderPacks`, replace `$("#pack-search").value` with `currentQuery()`. In `renderCollection`, replace both `$(SCOPE_CONTROLS[name].q).value` with `currentQuery()`.
+6. In the `#mobile-nav` Search handler (#390), replace `$("#all-directory-search").focus();` with `$("#results-search").focus();`. In `renderAllDirectoryEntries`, replace both `$("#all-directory-search").value` with `currentQuery()`. In `renderPacks`, replace `$("#pack-search").value` with `currentQuery()`. In `renderCollection`, replace both `$(SCOPE_CONTROLS[name].q).value` with `currentQuery()`.
 7. In `applyDirectoryDefaults`, delete `$("#project-search").value = defaults.term;`. The query is no longer a Systems default.
 8. In `applyFinderToDirectory`, replace each of `$("#runtime-search").value = "";`, `$("#inference-search").value = "";`, and `$("#project-search").value = "";` with `clearQuery();`.
 9. Replace `searchAllCollections` with:
@@ -1180,10 +1179,11 @@ async function search(page, text, scope) {
 In `tests/e2e/helpers/landing.js`:
 
 - `allSearch` returns `page.locator("#door-search:visible, #results-search:visible")`.
-- `searchAll` becomes:
+- `searchAll` keeps #390's tap on the bottom bar's Search when no search box is on screen, and becomes:
 
 ```js
 async function searchAll(page, text) {
+  if (!await allSearch(page).count()) await page.locator('[data-mobile-nav="search"]').click();
   await allSearch(page).fill(text);
   await require("./results").settled(page);
 }
@@ -2259,7 +2259,7 @@ async function rowsInBand(page, grid) {
     const stuck = [...document.querySelectorAll(".site-header, #scope-strip, #results-bar")]
       .filter(element => !element.hidden && getComputedStyle(element).position === "sticky")
       .reduce((bottom, element) => Math.max(bottom, element.getBoundingClientRect().bottom), 0);
-    const legend = [...document.querySelectorAll("#badge-legend, #badge-legend-chip")]
+    const legend = [...document.querySelectorAll("#badge-legend, #badge-legend-chip, #mobile-nav")]
       .filter(element => !element.hidden && element.getClientRects().length)
       .reduce((top, element) => Math.min(top, element.getBoundingClientRect().top), innerHeight);
     return [...document.querySelectorAll(`${selector} .project-card`)]
@@ -3600,6 +3600,7 @@ In `tests/e2e/helpers/landing.js`, `searchAll` becomes:
 // On the front door the search keeps the reader until Enter, which lands in
 // All's results (Phase 3 task 7); in results it types into the results search.
 async function searchAll(page, text) {
+  if (!await allSearch(page).count()) await page.locator('[data-mobile-nav="search"]').click();
   const box = allSearch(page);
   await box.fill(text);
   if (await page.locator("#door-search").isVisible()) await box.press("Enter");
