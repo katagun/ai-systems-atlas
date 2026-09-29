@@ -19176,7 +19176,7 @@
       "name": "LeRobot",
       "repo": "huggingface/lerobot",
       "url": "https://github.com/huggingface/lerobot",
-      "description": "A PyTorch framework for building robot-controlling agents: policies that take camera observations and a language instruction, and a Robot interface that sends each chosen action to physical hardware.",
+      "description": "A PyTorch framework for building robot-controlling agents: a policy chooses an action from the robot's observation, including vision-language-action policies that take a language instruction, and a Robot interface sends that action to physical hardware.",
       "primary_role": "agent_framework_sdk",
       "secondary_roles": [],
       "agent_relation": "agent_runtime",
@@ -19234,7 +19234,7 @@
       "strengths": [
         "Documented control loop from a policy's decision to a physical robot, across supported arms and humanoids",
         "Vision-language-action policies take a language instruction and act",
-        "Everything runs on the operator's own machine with open weights and datasets"
+        "Installs as a pip package and runs on the operator's own machine"
       ],
       "weaknesses": [
         "Recovery and monitoring are left to the application; the framework ships no supervisor",
