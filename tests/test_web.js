@@ -1931,7 +1931,7 @@ const registryPayloads = {
   specifications: [{ id: "sp1", name: "SP1", specification_type: "protocol" }],
 };
 
-test("the registry lists every collection once, scopes and sibling views alike, in front-door order", () => {
+test("the registry lists every collection once, each a Directory collection, in front-door order", () => {
   assert.deepEqual(COLLECTIONS.map(entry => entry.id), ["all", "systems", "models", "inference", "runtimes", "packs", "robots", "labs", "specifications"]);
   assert.ok(COLLECTIONS.every(entry => entry.kind === "scope"));
   // Every emblem names a type badge that exists; All and Robots have none yet.

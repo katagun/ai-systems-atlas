@@ -1432,6 +1432,16 @@ footer #data-date, footer .footer-meta {
   .front-door .hero-copy { font-size: 1rem; line-height: 1.55; }
   .door-jobs { gap: .4rem; }
   .door-job { padding: .35rem .7rem; font-size: .8rem; }
+  /* Inside Systems the family row stays one row under the caption, so the
+     sticky strip stays under 80 px below the sticky header on a phone:
+     tighter spacing, smaller text, and "All families" reads "All" (its full
+     name stays the accessible name through the clipped rest). */
+  .scope-strip { padding: .3rem 0; }
+  .scope-caption { margin-top: .1rem; font-size: .74rem; line-height: 1.2; }
+  .family-row { flex-wrap: nowrap; gap: .25rem; margin-top: .2rem; }
+  .family-entry { position: relative; padding: .1rem .4rem; font-size: .62rem; line-height: 1.3; white-space: nowrap; }
+  .family-entry strong { font-size: .56rem; }
+  .family-rest { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   .view, #directory.view { padding: 2.6rem 0; }
   .definitions, .taxonomy-grid { grid-template-columns: 1fr; }
   .api-facts, .endpoint-list, .api-notes { grid-template-columns: 1fr; }

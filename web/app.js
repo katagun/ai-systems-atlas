@@ -292,7 +292,8 @@ function comparisonRecords() {
 // on that one budget: a keystroke's scope, a chip's collection, a dialog's
 // record. So an unchanged URL makes no call, and a refused call is dropped
 // rather than stopping whatever asked for it: the page keeps working, and
-// only the address bar falls behind. Only `record` pushes (writeRecordURL).
+// only the address bar falls behind. Two writers push: `record`
+// (writeRecordURL) and leaving the front door (leaveFrontDoor).
 function writeURL(url, { push = false } = {}) {
   if (url.href === window.location.href) return;
   try {
@@ -309,11 +310,15 @@ function writeURL(url, { push = false } = {}) {
 // carry, such as the sort from before a query or a Finder role set.
 let settledSearch = null;
 
+// The front door's URL names no collection and no comparison, so a reload or
+// a Back that lands on it lands on the door (front-door spec, "URL and
+// history"). A comparison in progress stays in memory there, marked by its
+// tile's dot, and returns to the URL when a collection opens.
 function writeDirectoryURL() {
   const url = new URL(window.location.href);
   if (state.directoryStage === "door") url.searchParams.delete("collection");
   else url.searchParams.set("collection", state.directoryCollection);
-  if (state.comparison.ids.length) {
+  if (state.comparison.ids.length && state.directoryStage !== "door") {
     url.searchParams.set("compare", `${state.comparison.kind}:${state.comparison.ids.join(",")}`);
   } else {
     url.searchParams.delete("compare");
@@ -335,8 +340,8 @@ const SCOPE_CONTROLS = {
   specifications: { q: "#specification-search", type: "#specification-type-filter", scope: "#specification-scope-filter", status: "#specification-status-filter", license: "#specification-license-filter" },
 };
 
-// The scope whose state the URL carries: the Directory's collection, or a
-// sibling view that has filters. Finder, Taxonomy, and API carry none.
+// The scope whose state the URL carries: the Directory's collection while
+// results show. The front door, the Finder, Taxonomy, and API carry none.
 function activeScope() {
   const view = $(".view.is-active")?.id;
   if (view === "directory") return state.directoryStage === "door" ? null : state.directoryCollection;
@@ -359,9 +364,10 @@ function allowedScopeValues(scope) {
   }));
 }
 
-// Rewrites the active scope's parameters in place: only `record` pushes
-// history (docs/WEB.md), so Back still closes a dialog. Quiet until the
-// page has restored itself, so boot never writes a half-restored state.
+// Rewrites the active scope's parameters in place: only `record` and
+// leaving the front door push history (docs/WEB.md), so Back still closes a
+// dialog and returns to the door. Quiet until the page has restored itself,
+// so boot never writes a half-restored state.
 function writeScopeURL() {
   if (!state.urlReady) return;
   const url = new URL(window.location.href);
@@ -807,10 +813,13 @@ function renderDoorJobs() {
 // every change inside results keeps replacing (front-door spec, "URL state
 // and history"). Pushing the current URL first, then replacing it with the
 // new state, spends one history call, within WebKit's budget (writeURL).
+// Returns whether it left the door, so a caller can hand on the focus the
+// hidden door held.
 function leaveFrontDoor() {
-  if (state.directoryStage !== "door") return;
+  if (state.directoryStage !== "door") return false;
   try { window.history.pushState(null, "", window.location.href); } catch {}
   state.directoryStage = "results";
+  return true;
 }
 
 // The front door is a clean start: the query of the collection last shown
@@ -885,9 +894,11 @@ function renderFamilyRow(payloads) {
   const current = $("#family-filter").value;
   const categories = AppCore.collectionCategories("systems", payloads);
   const total = AppCore.collectionCount("systems", payloads).count;
-  const entry = (value, name, count) => `<button type="button" class="family-entry${value === current ? " is-active" : ""}" data-family-entry="${escapeHTML(value)}" aria-pressed="${value === current}">${escapeHTML(name)} <strong>${count}</strong></button>`;
-  const families = FAMILY_ORDER.map(id => entry(id, AppCore.FAMILY_SHORT_NAMES[id], (categories.find(category => category.value === id) || { count: 0 }).count));
-  return `<div class="family-row" role="group" aria-label="System families">${entry("", "All families", total)}${families.join("")}</div>`;
+  const entry = (value, label, count) => `<button type="button" class="family-entry${value === current ? " is-active" : ""}" data-family-entry="${escapeHTML(value)}" aria-pressed="${value === current}">${label} <strong>${count}</strong></button>`;
+  const families = FAMILY_ORDER.map(id => entry(id, escapeHTML(AppCore.FAMILY_SHORT_NAMES[id]), (categories.find(category => category.value === id) || { count: 0 }).count));
+  // A phone shows "All" alone so the row stays one row (styles.css); the
+  // clipped rest keeps "All families" the accessible name at every width.
+  return `<div class="family-row" role="group" aria-label="System families">${entry("", 'All<span class="family-rest"> families</span>', total)}${families.join("")}</div>`;
 }
 
 // The strip sticks under the header at every width, so the header's
@@ -911,23 +922,41 @@ function syncStickyClearance() {
 function openCollection(id, { facet = null } = {}) {
   const entry = AppCore.COLLECTIONS.find(item => item.id === id);
   if (!entry) return;
-  leaveFrontDoor();
-  // A category link opens the collection narrowed to that one category, so
-  // its results agree with the count on the link: other facets are cleared,
-  // and Systems keeps its default status, the one its counts are taken at.
-  if (facet) {
-    clearScopeFacets(id);
-    if (id === "systems") $("#status-filter").value = AppCore.directoryDefaults().status;
+  const fromDoor = leaveFrontDoor();
+  if (fromDoor && !facet && id === "systems" && collectionStateFor("systems")) reopenSystems();
+  else {
+    // A tile or a category link opens what its count promises: the facets a
+    // previous visit left set are cleared, and Systems keeps its default
+    // status, the one its counts are taken at. A strip entry in results
+    // keeps the collection's facets as the reader left them.
+    if (facet || fromDoor) {
+      clearScopeFacets(id, { focus: false });
+      if (id === "systems") $("#status-filter").value = AppCore.directoryDefaults().status;
+      state.page[id] = 1;
+    }
+    if (id === "systems") jumpToDirectoryFamily(facet && facet.key === "family" ? facet.value : "");
+    else {
+      if (facet) $(SCOPE_CONTROLS[id][facet.key]).value = facet.value;
+      setDirectoryCollection(id);
+    }
   }
-  if (id === "systems") {
-    jumpToDirectoryFamily(facet && facet.key === "family" ? facet.value : "");
-    return;
+  // The door that held the pressed tile or link is hidden now, so focus
+  // moves to the collection's own entry in the strip rather than the page.
+  if (fromDoor) $('#scope-strip .scope-row [aria-pressed="true"]')?.focus({ preventScroll: true });
+}
+
+// The Systems tile's dot promises a comparison in progress or a Finder role
+// set, so the tile reopens Systems with it, at the Finder's family or the
+// comparison's (as restoreComparisonFromURL chooses it), and with the other
+// facets as the reader left them. The strip's Systems entry still clears
+// both through jumpToDirectoryFamily (Phase 0).
+function reopenSystems() {
+  if (!state.directoryRoles) {
+    $("#family-filter").value = comparisonRecords()[0]?.system_family ?? $("#family-filter").value;
+    populateRoleFilter();
+    updateScoreSortAvailability();
   }
-  if (facet) {
-    $(SCOPE_CONTROLS[id][facet.key]).value = facet.value;
-    state.page[id] = 1;
-  }
-  setDirectoryCollection(id);
+  setDirectoryCollection("systems");
 }
 
 // Opens Systems on one family, or on every family when `family` is empty,
@@ -1855,19 +1884,10 @@ function renderPacks() {
 
 // Repaint whatever a search index could have widened. A search box may have a
 // term in it already when its index lands, so this runs for the collection on
-// screen and for specifications, which live on their own view.
+// screen. The others are painted when they open (setDirectoryCollection), so
+// a hidden grid is not repainted here.
 function renderSearchSurfaces() {
-  const renderers = {
-    all: renderAllDirectoryEntries, systems: renderProjects,
-    inference: renderInferenceServices, runtimes: renderLocalRuntimes,
-    packs: renderPacks, robots: () => renderCollection("robots"),
-  };
-  renderers[state.directoryCollection]?.();
-  // Specifications, Models, and Labs are sibling views rather than directory
-  // collections, so none is in the map above and each repaints every time.
-  renderSpecifications();
-  renderModels();
-  renderLabs();
+  pageRenderer(state.directoryCollection)?.();
   if (state.directoryRoles) renderFinder();
 }
 
@@ -2138,8 +2158,10 @@ function facetedRecords(scope) {
 // "Show it" under an empty result: clears every facet the scope's URL
 // carries, keeping its query and sort, then repaints through each changed
 // control's own input path, so the page, the counts, and the URL follow.
-// Systems also drops a Finder role set, a facet no control holds.
-function clearScopeFacets(scope) {
+// Systems also drops a Finder role set, a facet no control holds. Its search
+// box takes focus, as the button that asked sits in the grid it repaints;
+// openCollection clears a panel still hidden and places focus itself.
+function clearScopeFacets(scope, { focus = true } = {}) {
   if (!SCOPE_CONTROLS[scope]) return;
   if (scope === "systems") {
     state.directoryRoles = null;
@@ -2155,15 +2177,14 @@ function clearScopeFacets(scope) {
   });
   changed.forEach(control => control.dispatchEvent(new Event("input", { bubbles: true })));
   if (!changed.length) pageRenderer(scope)?.();
-  $(SCOPE_CONTROLS[scope].q).focus();
+  if (focus) $(SCOPE_CONTROLS[scope].q).focus();
 }
 
 // "Search all" under an empty result: lists the query in All, opening the
-// Directory from a sibling view (Models, Labs, Specifications). It writes All's
-// box itself rather than carrying the query through the Directory's current
-// scope, whose box a sibling view keeps hidden: text written there would later
-// carry back as unchanged and keep a sort chosen for another query. Focusing
-// All's box loads its indexes, as it does for a typed query.
+// Directory first when another view is active. It writes All's box itself
+// and opens All without a carry, so All searches exactly the text the empty
+// result named. Focusing All's box loads its indexes, as it does for a typed
+// query.
 function searchAllCollections(term) {
   if ($(".view.is-active")?.id !== "directory") activateView("directory");
   $("#all-directory-search").value = term;
@@ -2368,7 +2389,7 @@ function applyFinderToDirectory() {
   revealDirectoryResults();
 }
 
-// The handoff lands on the results the Finder chose, not on the hero above them.
+// The handoff lands on the results the Finder chose, not on the page top above them.
 // The Finder view hides the button that asked for this, so focus moves to the
 // count of what the Finder chose rather than falling to the page, as it does
 // when the Finder chip removes itself. It moves without scrolling, since the

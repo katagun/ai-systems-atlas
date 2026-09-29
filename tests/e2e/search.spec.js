@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
-const { allSearch, collectionEntry, openCollection, pressedEntry } = require("./helpers/landing");
+const { allSearch, collectionEntry, openCollection, openView, pressedEntry } = require("./helpers/landing");
 
 // The page binds its search and keyboard listeners once its data has loaded,
 // and paints the All grid right after, so a card on screen means they are live.
@@ -476,7 +476,7 @@ test("an empty result in another view gains the suggestion form when the exclusi
   await expect.poll(() => fetched.length, "the settled empty result asks for the list").toBe(1);
   // The Finder, not the Catalog tab: the Catalog opens on the front door,
   // which clears the query this test leaves behind in Models.
-  await page.locator('.tab[data-tab="finder"]').click();
+  await openView(page, "finder");
   release();
   await page.waitForFunction(() => Array.isArray(state.exclusions));
   // The grid is hidden with its view, so the link is found by text, not role.
@@ -873,10 +873,10 @@ test("a repaint that lands in another view leaves the comparison tray hidden", a
     .every(key => searchIndexes[key] !== undefined));
 
   for (const [tab, chip, name] of [["finder", null, "models"], [null, "labs", "specifications"]]) {
-    if (tab) await page.locator(`.tab[data-tab="${tab}"]`).click();
+    if (tab) await openView(page, tab);
     else {
       // Collections live inside the Catalog view, so return to it first.
-      await page.locator('.tab[data-tab="directory"]').click();
+      await openView(page, "directory");
       await openCollection(page, chip);
     }
     await expect(tray).toBeHidden();

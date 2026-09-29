@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { familyEntry, openCollection, pressedEntry, searchAll } = require("./helpers/landing");
+const { allSearch, categoryEntry, collectionDot, collectionEntry, entryCount, familyEntry, openCollection, openView, pressedEntry, searchAll } = require("./helpers/landing");
 const counts = require("./helpers/catalog-counts");
 
 test("a bare URL opens the front door with every collection above the fold", async ({ page }) => {
@@ -19,12 +19,22 @@ test("a bare URL opens the front door with every collection above the fold", asy
 
 test("every tile counts what its collection lists, with the Models and packs splits", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator('[data-tile="systems"] .tile-count strong')).toHaveText(String(counts.projectsWithStatus("active")));
-  await expect(page.locator('[data-tile="all"] .tile-count strong')).toHaveText(String(counts.allDirectoryEntries));
-  await expect(page.locator('[data-tile="models"] .tile-count')).toContainText(`${counts.reviewedModels} reviewed`);
-  await expect(page.locator('[data-tile="packs"] .tile-count')).toContainText(`${counts.packs} packs`);
-  await expect(page.locator('[data-tile="labs"] .tile-count strong')).toHaveText(String(counts.labs));
-  await expect(page.locator('[data-tile="robots"] .tile-count strong')).toHaveText(String(counts.robots));
+  const expected = {
+    all: counts.allDirectoryEntries,
+    systems: counts.projectsWithStatus("active"),
+    models: counts.models,
+    inference: counts.inferenceServices,
+    runtimes: counts.localRuntimes,
+    packs: counts.packs + counts.hostPackSystems,
+    robots: counts.robots,
+    labs: counts.labs,
+    specifications: counts.specifications,
+  };
+  for (const [id, count] of Object.entries(expected)) {
+    await expect(page.locator(`[data-tile="${id}"] .tile-count strong`), id).toHaveText(String(count));
+  }
+  await expect(page.locator('[data-tile="models"] .tile-count small')).toHaveText(`${counts.reviewedModels} reviewed · ${counts.models - counts.reviewedModels} imported`);
+  await expect(page.locator('[data-tile="packs"] .tile-count small')).toHaveText(`${counts.packs} packs · ${counts.hostPackSystems} host-installed`);
 });
 
 test("a tile opens its collection in results and Back returns to the front door", async ({ page }) => {
@@ -49,7 +59,7 @@ test("the Everything tile is the A–Z list, and the Models, Labs, and Specifica
   await expect(page).toHaveURL(/collection=all/);
   for (const id of ["models", "labs", "specifications"]) {
     await page.goto("/");
-    await page.locator(`[data-tile="${id}"] .tile-open`).click();
+    await openCollection(page, id);
     await expect(page.locator(`#${id}-directory-panel`)).toBeVisible();
     await expect(page).toHaveURL(new RegExp(`collection=${id}`));
   }
@@ -61,11 +71,11 @@ test("a category link opens the scope narrowed to it", async ({ page }) => {
   await expect(page.locator("#family-filter")).toHaveValue("memory_system");
   await expect(page).toHaveURL(/family=memory_system/);
   await page.goto("/");
-  await page.locator('[data-tile="inference"] [data-facet-value="direct_model_api"]').click();
+  await categoryEntry(page, "inference", "direct_model_api").click();
   await expect(page.locator("#inference-type-filter")).toHaveValue("direct_model_api");
   await expect(page).toHaveURL(/type=direct_model_api/);
   await page.goto("/");
-  await page.locator('[data-tile="labs"] [data-facet-value="ai_company"]').click();
+  await categoryEntry(page, "labs", "ai_company").click();
   await expect(page.locator("#labs-directory-panel")).toBeVisible();
   await expect(page.locator("#lab-type-filter")).toHaveValue("ai_company");
 });
@@ -74,8 +84,8 @@ test("typing on the front door searches everything and lands in results", async 
   await page.goto("/");
   await searchAll(page, "Ollama");
   await expect(page.locator("#all-directory-panel")).toBeVisible();
-  await expect(page.locator("#all-directory-search")).toHaveValue("Ollama");
-  await expect(page.locator("#all-directory-search")).toBeFocused();
+  await expect(allSearch(page)).toHaveValue("Ollama");
+  await expect(allSearch(page)).toBeFocused();
   await expect(page).toHaveURL(/q=Ollama/);
   await expect(page.locator("#all-directory-grid .project-card").first()).toContainText("Ollama");
 });
@@ -90,7 +100,7 @@ test("text typed on the front door before the page finishes loading still search
   await page.goto("/");
   await page.locator("#door-search").fill("Ollama");
   await expect(page.locator("#all-directory-panel")).toBeVisible();
-  await expect(page.locator("#all-directory-search")).toHaveValue("Ollama");
+  await expect(allSearch(page)).toHaveValue("Ollama");
   await expect(page).toHaveURL(/q=Ollama/);
 });
 
@@ -99,10 +109,10 @@ test("text typed on the front door before the page finishes loading still search
 test("text typed on the front door replaces a query left in another collection", async ({ page }) => {
   await page.goto("/?collection=inference&q=vllm");
   await expect(page.locator("#inference-search")).toHaveValue("vllm");
-  await page.locator('.tab[data-tab="directory"]').click();
+  await openView(page, "directory");
   await searchAll(page, "Ollama");
   await expect(page.locator("#all-directory-panel")).toBeVisible();
-  await expect(page.locator("#all-directory-search")).toHaveValue("Ollama");
+  await expect(allSearch(page)).toHaveValue("Ollama");
   await expect(page).toHaveURL(/q=Ollama/);
 });
 
@@ -132,7 +142,7 @@ test("a tile opened from the front door carries no query from the collection las
   await page.goto("/?collection=inference");
   await page.locator("#inference-search").fill("vllm");
   await expect(page).toHaveURL(/q=vllm/);
-  await page.locator('.tab[data-tab="directory"]').click();
+  await openView(page, "directory");
   await expect(page.locator("#front-door")).toBeVisible();
   await openCollection(page, "runtimes");
   await expect(page.locator("#runtimes-directory-panel")).toBeVisible();
@@ -145,8 +155,8 @@ test("a tile opened from the front door carries no query from the collection las
 test("a category link opens its collection narrowed to that category alone", async ({ page }) => {
   await page.goto("/?collection=inference&delivery=reserved_capacity");
   await expect(page.locator("#inference-delivery-filter")).toHaveValue("reserved_capacity");
-  await page.locator('.tab[data-tab="directory"]').click();
-  const link = page.locator('[data-tile="inference"] [data-facet-value="direct_model_api"]');
+  await openView(page, "directory");
+  const link = categoryEntry(page, "inference", "direct_model_api");
   const count = Number(await link.locator("strong").textContent());
   await link.click();
   await expect(page.locator("#inference-type-filter")).toHaveValue("direct_model_api");
@@ -173,7 +183,7 @@ test("a focused tile keeps its focus while the search indexes land", async ({ pa
   await page.locator("#door-search").focus();
   // Past the five Finder jobs to the first tile's button.
   for (let step = 0; step < 6; step += 1) await page.keyboard.press("Tab");
-  const tile = page.locator('[data-tile="all"] .tile-open');
+  const tile = collectionEntry(page, "all");
   await expect(tile).toBeFocused();
   release();
   await page.waitForFunction(() =>
@@ -212,7 +222,7 @@ test("tiles carry the three most recently reviewed marks and no example ranking"
 test("the Directory tab and the brand mark return to the front door", async ({ page }) => {
   await page.goto("/?collection=systems");
   await expect(page.locator("#systems-directory-panel")).toBeVisible();
-  await page.locator('.tab[data-tab="directory"]').click();
+  await openView(page, "directory");
   await expect(page.locator("#front-door")).toBeVisible();
   await expect(page).not.toHaveURL(/collection=/);
   await page.goto("/?collection=runtimes");
@@ -289,7 +299,7 @@ test("above phone widths the strip sticks under the header", async ({ page }) =>
 
 test("a state dot marks a comparison in progress and Finder roles applied", async ({ page }) => {
   await page.goto("/?collection=systems&compare=system:aider,kilo-code");
-  await expect(page.locator('#scope-strip [data-open-collection="systems"] .state-dot.is-compare')).toHaveCount(1);
+  await expect(collectionDot(page, "systems")).toHaveClass(/is-compare/);
   // A compare link opens the comparison itself; close it to reach the tray.
   await page.locator("#comparison-dialog .dialog-close").click();
   await page.locator("#comparison-clear").click();
@@ -299,7 +309,7 @@ test("a state dot marks a comparison in progress and Finder roles applied", asyn
     await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
   }
   await page.locator("[data-finder-directory]").click();
-  await expect(page.locator('#scope-strip [data-open-collection="systems"] .state-dot.is-finder')).toHaveCount(1);
+  await expect(collectionDot(page, "systems")).toHaveClass(/is-finder/);
   await page.locator("#finder-roles-chip").click();
   await expect(page.locator("#scope-strip .state-dot")).toHaveCount(0);
 });
@@ -309,7 +319,7 @@ test("the Systems entry clears a family, and the Models entry opens its collecti
   await openCollection(page, "systems");
   await expect(page.locator("#family-filter")).toHaveValue("");
   await expect(page).not.toHaveURL(/family=/);
-  await page.locator('#scope-strip [data-open-collection="models"]').click();
+  await openCollection(page, "models");
   await expect(page.locator("#models-directory-panel")).toBeVisible();
   await expect(page).toHaveURL(/collection=models/);
 });
@@ -318,7 +328,7 @@ test("the Systems entry clears a family, and the Models entry opens its collecti
 // strip entry must survive it.
 test("a focused strip entry keeps its focus while the grid repaints", async ({ page }) => {
   await page.goto("/?collection=inference");
-  const entry = page.locator('#scope-strip [data-open-collection="runtimes"]');
+  const entry = collectionEntry(page, "runtimes");
   await entry.focus();
   await page.evaluate(() => {
     const input = document.querySelector("#inference-search");
@@ -368,7 +378,7 @@ test("from tablet to wide desktop the strip stays one short row", async ({ page 
   }
   // The short name is shown and the full name stays the accessible name.
   await page.setViewportSize({ width: 1024, height: 768 });
-  const services = page.locator('#scope-strip [data-open-collection="inference"]');
+  const services = collectionEntry(page, "inference");
   await expect(services.locator(".scope-short")).toBeVisible();
   await expect(services).toHaveAccessibleName(/^Inference services \d/);
 });
@@ -540,4 +550,126 @@ test.fixme("a sort chosen before typing survives a reload and returns when the q
   await page.locator("#inference-search").fill("");
   await expect(page.locator("#inference-sort-filter")).toHaveValue("name");
   await expect(page).toHaveURL(/sort=name/);
+});
+
+// Presses Tab until `target` holds focus, as a keyboard reader reaches it.
+async function tabTo(page, target) {
+  for (let step = 0; step < 80; step += 1) {
+    if (await target.evaluate(element => element === document.activeElement)) return;
+    await page.keyboard.press("Tab");
+  }
+  throw new Error("Tab never reached the target");
+}
+
+// Opening a tile hides the front door that held the focused control, so
+// focus moves to the pressed strip entry rather than falling to the page.
+test("a tile or a category link opened by keyboard hands focus to the pressed strip entry", async ({ page }) => {
+  for (const [open, panel, name] of [
+    [page => collectionEntry(page, "inference"), "#inference-directory-panel", /^Inference services \d/],
+    [page => collectionEntry(page, "systems"), "#systems-directory-panel", /^Systems \d/],
+    [page => categoryEntry(page, "inference", "direct_model_api"), "#inference-directory-panel", /^Inference services \d/],
+    [page => familyEntry(page, "memory_system"), "#systems-directory-panel", /^Systems \d/],
+  ]) {
+    await page.goto("/");
+    await expect(page.locator("#door-jobs button")).toHaveCount(5);
+    await page.locator("#door-search").focus();
+    await tabTo(page, open(page));
+    await page.keyboard.press("Enter");
+    await expect(page.locator(panel)).toBeVisible();
+    await expect(pressedEntry(page)).toHaveAccessibleName(name);
+    await expect(pressedEntry(page)).toBeFocused();
+  }
+});
+
+// The front door's URL is bare (spec, "URL and history"): a comparison in
+// progress stays in memory there, so Back from a collection opened from the
+// door lands on the door, and the Systems tile its dot marks reopens it.
+test("a comparison in progress stays off the front door's URL and the Systems tile reopens it", async ({ page }) => {
+  const start = async () => {
+    await page.goto("/?collection=systems&family=agent_system&role=coding_agent");
+    await page.locator('#project-grid [data-compare-id="kilo-code"]').click();
+    await page.locator('#project-grid [data-compare-id="aider"]').click();
+    await expect(page).toHaveURL(/compare=system%3Akilo-code%2Caider/);
+    await openView(page, "directory");
+    await expect(page.locator("#front-door")).toBeVisible();
+  };
+  await start();
+  await expect(page).not.toHaveURL(/compare=/);
+  await expect(collectionDot(page, "systems")).toHaveClass(/is-compare/);
+  await openCollection(page, "inference");
+  await expect(page.locator("#inference-directory-panel")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#front-door")).toBeVisible();
+  await expect(page).not.toHaveURL(/[?&](collection|compare)=/);
+
+  await start();
+  await openCollection(page, "systems");
+  await expect(page.locator("#systems-directory-panel")).toBeVisible();
+  await expect(page.locator("#comparison-tray-title")).toHaveText("2 items selected");
+  await expect(page.locator("#comparison-tray-items")).toContainText("Kilo Code");
+  await expect(page.locator("#comparison-tray-items")).toContainText("Aider");
+  await expect(page.locator("#family-filter")).toHaveValue("agent_system");
+  await expect(page).toHaveURL(/compare=system%3Akilo-code%2Caider/);
+});
+
+test("the Systems tile reopens a Finder role set its dot marks", async ({ page }) => {
+  await page.goto("/?view=finder");
+  for (const value of ["agent_system", "coding", "balanced"]) {
+    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
+  }
+  await page.locator("[data-finder-directory]").click();
+  await expect(page.locator("#finder-roles-chip")).toBeVisible();
+  const before = await page.locator("#result-count").textContent();
+  await openView(page, "directory");
+  await expect(page.locator("#front-door")).toBeVisible();
+  await expect(collectionDot(page, "systems")).toHaveClass(/is-finder/);
+  await openCollection(page, "systems");
+  await expect(page.locator("#finder-roles-chip")).toBeVisible();
+  await expect(page.locator("#result-count")).toHaveText(before);
+  await expect(collectionDot(page, "systems")).toHaveClass(/is-finder/);
+});
+
+// A tile promises its collection's default view, so facets a previous visit
+// left set are cleared on the way in, as a category link's are.
+test("a tile opens what its count promises, whatever the last visit left set", async ({ page }) => {
+  await page.goto("/");
+  const count = await entryCount(page, "inference");
+  await openCollection(page, "inference");
+  await page.locator("#inference-delivery-filter").selectOption("reserved_capacity");
+  await expect(page).toHaveURL(/delivery=reserved_capacity/);
+  await page.goBack();
+  await expect(page.locator("#front-door")).toBeVisible();
+  await openCollection(page, "inference");
+  await expect(page.locator("#inference-delivery-filter")).toHaveValue("");
+  await expect(page).toHaveURL(address => [...address.searchParams.keys()].join(",") === "collection"
+    && address.searchParams.get("collection") === "inference");
+  await expect(page.locator("#inference-result-count")).toContainText(new RegExp(`^${count} services?\\b`));
+});
+
+// Inside Systems the family row stays one row on a phone, so the sticky strip
+// stays short under the sticky header.
+test("inside Systems on a phone the strip stays short and the family row fits one row", async ({ page }) => {
+  for (const [width, height] of [[320, 640], [375, 812]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto("/?collection=systems");
+    const strip = page.locator("#scope-strip");
+    const row = strip.locator(".family-row");
+    await expect(row.locator(".family-entry")).toHaveCount(4);
+    const [stripHeight, rowWidth, frame, rows] = await settled(page, () => {
+      const element = document.querySelector("#scope-strip .family-row");
+      return [
+        document.querySelector("#scope-strip").getBoundingClientRect().height,
+        element.lastElementChild.getBoundingClientRect().right - element.getBoundingClientRect().left,
+        element.clientWidth,
+        new Set([...element.children].map(entry => entry.getBoundingClientRect().top)).size,
+      ];
+    });
+    expect(rows, `${width}: the family row is one row`).toBe(1);
+    expect(frame - rowWidth, `${width}: the family row leaves at least 16 px`).toBeGreaterThanOrEqual(16);
+    expect(stripHeight, `${width}: the strip is at most 80 px tall`).toBeLessThanOrEqual(80);
+    await expect(row.locator(".family-entry").first()).toHaveAccessibleName(/^All families \d/);
+    await expect(familyEntry(page, "memory_system")).toHaveAccessibleName(/^Memory \d/);
+    await expect(familyEntry(page, "agent_system")).toHaveAccessibleName(/^Agents \d/);
+    await expect(familyEntry(page, "assistant_system")).toHaveAccessibleName(/^Assistants \d/);
+  }
 });

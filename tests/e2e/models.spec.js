@@ -1,6 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
-const { collectionEntry, entryCount, openCollection } = require("./helpers/landing");
+const { collectionEntry, entryCount, openCollection, viewTab } = require("./helpers/landing");
 
 const QWEN = "model-alibaba-qwen2-5-coder-0-5b";
 const DEEPSEEK = "model-deepseek-deepseek-v4-pro";
@@ -8,7 +8,7 @@ const DEEPSEEK = "model-deepseek-deepseek-v4-pro";
 test("Models exposes every source record and keeps Atlas reviews distinct", async ({ page }) => {
   await page.goto("/?collection=models");
 
-  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(viewTab(page, "directory")).toHaveClass(/is-active/);
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   await expect(page.locator("#model-result-count")).toHaveText(
     `${catalogCounts.models} models · ${catalogCounts.reviewedModels} Atlas reviewed; source imports are unscored`,
@@ -88,7 +88,7 @@ test("the Directory's collections include Models and its complete source count",
   await expect(collectionEntry(page, "models")).toBeVisible();
   expect(await entryCount(page, "models")).toBe(catalogCounts.models);
   await openCollection(page, "models");
-  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(viewTab(page, "directory")).toHaveClass(/is-active/);
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   await expect(page.locator("#model-result-count")).toContainText(`${catalogCounts.models} models`);
 });
@@ -113,7 +113,7 @@ test("Models comparisons stay inside the model-access profile and restore from t
   await page.locator("#comparison-dialog .dialog-close").click();
 
   await page.reload();
-  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(viewTab(page, "directory")).toHaveClass(/is-active/);
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   await expect(page.locator("#comparison-dialog")).toBeVisible();
   await expect(page).toHaveURL(/collection=models/);
