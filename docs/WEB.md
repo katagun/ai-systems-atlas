@@ -140,6 +140,16 @@ Cards paint from the boot payload, so any field a badge tests must be in `BOOT_F
 - The page makes no request outside its own origin: fonts, marks, and data are all served from `web/`.
 - The header carries a three-state theme control that cycles system, light, and dark. System leaves the root unstamped so the OS preference decides; light and dark stamp `data-theme` on the root, persist in `localStorage` under `theme`, and are re-applied by an inline script in `index.html` before first paint so a reload never flashes the wrong palette. An explicit choice always beats the OS. The control's accessible name states the current choice, and the `theme-color` meta follows the active background. Share pages follow the OS preference only. Blog pages carry the same stylesheet, the same pre-paint stamp, and their own copy of the control in one inline script, so a choice made anywhere holds everywhere (see `docs/BLOG.md`).
 
+## Explore
+
+`?view=explore` opens the model-access overview from the catalog introduction, Docs menu, or footer (including the blog shell). It reads only the existing model boot payload and taxonomy, with no new request or detail hydration. `AppCore.modelAccessSummary` includes only `review_status: reviewed`, including releases not yet listed on models.dev, and never substitutes reported source metadata for reviewed classifications.
+
+Distribution bars count releases carrying each mode, with all reviewed releases as denominator. The semantic license-classification table uses each row's release count as denominator. Modes overlap: a release counts once in every mode it carries, regardless of the number of licenses. Unknown classifications get a visible row, and missing distribution modes stay in the denominators with an explanatory notice. Empty reviewed data gets an empty state. The page names the reviewed count, excluded imported count, and model collection review date; it claims neither market share nor model quality.
+
+Nonzero bars and classified table cells are ordinary links to the existing Models distribution and source-model filters, sorted by name. They create a navigation history entry so Back returns to Explore; zero and unclassified cells have no misleading drill-down. No scores or comparison controls appear in Explore. All labels come from taxonomy and every dynamic text or URL is escaped. Shared theme tokens cover the bars and table in both palettes.
+
+Verify every nonzero table link against canonical model counts, distribution-link keyboard activation, model-dialog Back behavior, reload and Back to Explore, and table readability without page overflow at 1440px, 390px, and 320px in both themes (`tests/e2e/explore.spec.js`).
+
 ## Change surfaces
 
 | Change | Primary location |

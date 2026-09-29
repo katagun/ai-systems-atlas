@@ -307,6 +307,7 @@ def load_posts(root: Path = ROOT) -> list[dict[str, Any]]:
 # blog's links reach the app through the query parameter the app restores
 # on load. The theme control is driven by THEME_SCRIPT.
 DOCS = (
+    ("view", "explore", "Explore"),
     ("view", "taxonomy", "Concepts"),
     ("view", "api", "Published data"),
 )
@@ -423,7 +424,7 @@ def render_footer_actions(root: str, blog: str) -> str:
     return (
         '<div class="footer-actions"><nav class="footer-nav" aria-label="Site map">'
         f'<a href="{root}">Catalog</a><a href="{root}?view=finder">Finder</a>'
-        f'<a href="{root}?view=taxonomy">Concepts</a>'
+        f'<a href="{root}?view=explore">Explore</a><a href="{root}?view=taxonomy">Concepts</a>'
         f'<a href="{root}?view=api">Published data</a><a href="{blog}">Blog</a></nav>'
         f'<a class="suggest-link" href="{REPOSITORY}/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a>'
         "</div>"

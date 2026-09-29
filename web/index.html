@@ -23,7 +23,7 @@
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=8180fcf8ca2b">
+  <link rel="stylesheet" href="styles.css?v=5d50f883b682">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -43,6 +43,7 @@
       <div class="docs-menu">
         <button class="tab docs-button" type="button" aria-expanded="false" aria-controls="docs-menu-list">Docs</button>
         <ul id="docs-menu-list" class="docs-menu-list" hidden>
+          <li><button type="button" data-open-view="explore">Explore</button></li>
           <li><button type="button" data-open-view="taxonomy">Concepts</button></li>
           <li><button type="button" data-open-view="api">Published data</button></li>
           <li><a href="blog/">Blog</a></li>
@@ -61,7 +62,7 @@
       <h1 id="directory-title" class="door-title" tabindex="-1">Find the AI layer <span>that fits.</span></h1>
       <div id="front-door" class="front-door">
         <div class="front-door-copy">
-          <p class="hero-copy">Reviewed AI systems, models, inference services, local runtimes, agent packs, and robots, each with its terms and evidence. Look up a name, start from a job, or open a collection.</p>
+          <p class="hero-copy">Reviewed AI systems, models, inference services, local runtimes, agent packs, and robots, each with its terms and evidence. Look up a name, start from a job, or <a href="?view=explore">explore the data</a>.</p>
         </div>
         <label class="search-field door-search"><span>Search</span><input id="door-search" type="search" placeholder="Search everything in the Atlas" autocomplete="off"></label>
         <nav class="door-jobs" aria-label="Start from a job">
@@ -227,6 +228,23 @@
         <section id="specification-grid" class="project-grid specification-grid" aria-label="Reviewed specifications"></section>
         <nav id="specification-pager" class="pager" aria-label="Specifications pagination"></nav>
       </div>
+    </section>
+
+    <section id="explore" class="view" aria-labelledby="explore-title">
+      <div class="section-heading explore-heading">
+        <p class="eyebrow">Explore the data · Models</p>
+        <h1 id="explore-title" tabindex="-1">How can you access a model?</h1>
+        <p>Downloadable weights, developer APIs, and third-party hosts overlap. Explore how access and licensing intersect among releases reviewed in Atlas.</p>
+        <p id="explore-data-note" class="explore-data-note"></p>
+      </div>
+      <div id="model-access-content"></div>
+      <details class="explore-method">
+        <summary>About these counts</summary>
+        <p>Each Atlas-reviewed model release counts once in its license classification and once in every documented distribution mode it carries. A model with several licenses still counts as one release. Distribution columns overlap and must not be added together.</p>
+        <p>Percentages in the bars use all reviewed releases; percentages in the table use the number of releases in that row. Zero means no matching reviewed record in this catalog, not that a route cannot exist. Counts describe Atlas coverage, not market share or model quality.</p>
+        <p>These views use Atlas-reviewed classifications, not models.dev reported licenses or open-weight flags. Imported records are excluded. Review dates describe the catalog, not release dates or a fresh check of every model.</p>
+        <p><a href="models.json">Reviewed model data (JSON)</a> · <a href="?view=taxonomy">Classification definitions</a></p>
+      </details>
     </section>
 
     <section id="finder" class="view" aria-labelledby="finder-title">
@@ -428,9 +446,9 @@
     <div id="comparison-dialog-content"></div>
   </dialog>
 
-  <footer><div class="footer-actions"><nav class="footer-nav" aria-label="Site map"><a href="./">Catalog</a><a href="?view=finder">Finder</a><a href="?view=taxonomy">Concepts</a><a href="?view=api">Published data</a><a href="blog/">Blog</a></nav><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a></div><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
+  <footer><div class="footer-actions"><nav class="footer-nav" aria-label="Site map"><a href="./">Catalog</a><a href="?view=finder">Finder</a><a href="?view=explore">Explore</a><a href="?view=taxonomy">Concepts</a><a href="?view=api">Published data</a><a href="blog/">Blog</a></nav><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a></div><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
   <script type="application/json" id="data-versions">{"projects.json":"fd0c858cadfb","taxonomy.json":"f0ba4485fb8f","license-evidence.json":"10c0d0bc8d4d","specifications.json":"f6487c60eb84","inference-services.json":"c69ac2f333ad","local-runtimes.json":"c3d85a51fff7","models.json":"b206b414f6cf","models-dev.json":"ec5e4b8a29fb","logos.json":"a0ce82f2ea60","exclusions.json":"777a4187f003","app/systems.json":"c329a9af577d","app/inference.json":"484d5f3a729f","app/runtimes.json":"ef7c2001163c","app/specifications.json":"e62146fa677b","app/models.json":"8c6e7576c59f","app/packs.json":"0907bc81836a","app/labs.json":"a67023701d94","app/robots.json":"3b07b04f8f7c","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"e78b84ec74f4","app/search/inference.json":"81f6e0352cc7","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"1c690924d1e6","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"3b80a047e4bb","app/search/robots.json":"f3ba0fcf79b2","app/detail":"7db276b3f46f"}</script>
-  <script src="app-core.js?v=06c8d0589b02" defer></script>
-  <script src="app.js?v=b8f738ef2f1e" defer></script>
+  <script src="app-core.js?v=a05872b78237" defer></script>
+  <script src="app.js?v=3c678e8c5c15" defer></script>
 </body>
 </html>
