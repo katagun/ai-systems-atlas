@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, COLLECTIONS, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, COLLECTIONS, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelAccessSummary, systemDeploymentSummary, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -16,6 +16,53 @@ const projects = [
   { name: "GStack", primary_role: "coding_agent_workflow", system_family: "agent_system", agent_relation: "coding_workflow", architectures: ["git_versioned"], deployment: ["local_cli"], agent_interfaces: ["terminal"], source_model: "mixed_open_source", licenses: ["MIT", "OFL-1.1"], status: "active", local_first: true, stars: 25, score: { overall: 8.6 } },
   { name: "Assistant", primary_role: "general_ai_assistant", system_family: "assistant_system", agent_relation: "agent_enabled_ui", architectures: ["hybrid"], deployment: ["desktop", "managed_cloud", "mobile"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: false, stars: null, score: { overall: 8.8 } },
 ];
+
+test("deployment summaries retain missing values and count overlapping modes once", () => {
+  const taxonomy = { system_families: [{ id: "agent", name: "Agents" }], source_models: [{ id: "open", name: "Open" }], deployment_modes: [{ id: "local", name: "Local" }, { id: "cloud", name: "Cloud" }] };
+  const record = { status: "active", system_family: "agent", source_model: "open" };
+  const summary = systemDeploymentSummary([
+    { ...record, deployment: ["local", "cloud", "local"], local_first: true },
+    { ...record, deployment: ["cloud"], local_first: false },
+    { ...record },
+    { ...record, system_family: "future", source_model: "future" },
+    { ...record, status: "archived", deployment: ["local"], local_first: true },
+  ], taxonomy);
+  assert.equal(summary.total, 4);
+  assert.equal(summary.excluded, 1);
+  assert.equal(summary.missingDeployment, 2);
+  assert.deepEqual(summary.families.map(row => row.cells.map(cell => cell.count)), [[1, 2], [0, 0]]);
+  assert.deepEqual(summary.licensing.map(row => row.cells.map(cell => cell.count)), [[1, 1, 1], [0, 0, 1]]);
+  assert.equal(systemDeploymentSummary([], taxonomy).total, 0);
+  assert.deepEqual(systemDeploymentSummary([], taxonomy).families, []);
+});
+
+test("system analysis cells reconcile to canonical records and catalog filters", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const boot = readWebJSON("app/systems.json").systems;
+  const canonical = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "directory", "projects.json"), "utf8")).projects;
+  const summary = systemDeploymentSummary(boot, taxonomy);
+  assert.equal(summary.total, canonical.filter(record => record.status === "active").length);
+  for (const [rows, rowFacet, cellFacet] of [[summary.families, "family", "deployment"], [summary.licensing, "sourceModel", "localOnly"]]) {
+    assert.equal(rows.reduce((sum, row) => sum + row.count, 0), summary.total);
+    for (const row of rows) for (const cell of row.cells) {
+      const filters = { ...directoryDefaults(), [rowFacet]: row.id, [cellFacet]: cell.id };
+      const expected = filterAndSortProjects(canonical, filters).map(record => record.id).sort();
+      assert.equal(cell.count, expected.length);
+      assert.deepEqual(filterAndSortProjects(boot, filters).map(record => record.id).sort(), expected);
+    }
+  }
+  assert.equal(summary.missingDeployment, 0);
+});
+
+test("local-first filters distinguish false and missing while retaining old true links", () => {
+  const records = [{ id: "yes", local_first: true }, { id: "no", local_first: false }, { id: "missing" }];
+  const ids = localOnly => records.filter(record => matchesProject(record, { localOnly })).map(record => record.id);
+  assert.deepEqual(ids(true), ["yes"]);
+  assert.deepEqual(ids("1"), ["yes"]);
+  assert.deepEqual(ids("0"), ["no"]);
+  assert.deepEqual(ids("unknown"), ["missing"]);
+  assert.deepEqual(ids(false), ["yes", "no", "missing"]);
+});
 
 test("model access counts overlaps once per release and excludes imported claims", () => {
   const sourceModels = [{ id: "open_source", name: "Open source" }];

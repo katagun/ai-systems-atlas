@@ -83,6 +83,12 @@ for (const theme of ["light", "dark"]) {
         await expect.poll(() => scroll.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
       }
     }
+    for (const table of ["#deployment-heatmap", "#local-license-table"]) {
+      const scroll = page.locator(table).locator("..");
+      await scroll.focus();
+      await page.keyboard.press("ArrowRight");
+      await expect.poll(() => scroll.evaluate(element => element.scrollLeft)).toBeGreaterThan(0);
+    }
     await page.getByText("About these counts", { exact: true }).click();
     await expect(page.locator(".explore-method")).toContainText("not market share");
     expect(external).toEqual([]);
@@ -147,4 +153,44 @@ test("runtime matrix handles empty slices and invalid URL values without inventi
   await expect(page.locator(".runtime-matrix")).toHaveCount(0);
   await openView(page, "directory");
   await expect(page).not.toHaveURL(/runtimeAccelerator|runtimeFormat|matrix=/);
+});
+
+
+test("system analysis cells match active catalog slices and preserve exploration history", async ({ page }) => {
+  const { projects } = require("../../directory/projects.json");
+  const active = projects.filter(project => project.status === "active");
+  await page.goto("/?view=explore#deployment-title");
+  await expect(page.locator("#deployment-data-note")).toContainText(`${active.length} active reviewed systems`);
+  const links = await page.locator(".deployment-table a").evaluateAll(items => items.map(item => ({ href: item.getAttribute("href"), count: Number(item.querySelector("strong").textContent) })));
+  expect(links.length).toBeGreaterThan(0);
+  for (const { href, count } of links) {
+    const params = new URLSearchParams(href.slice(1));
+    const matches = active.filter(project => (!params.has("family") || project.system_family === params.get("family"))
+      && (!params.has("deployment") || project.deployment.includes(params.get("deployment")))
+      && (!params.has("sourceModel") || project.source_model === params.get("sourceModel"))
+      && (!params.has("localOnly") || project.local_first === (params.get("localOnly") === "1")));
+    expect(count).toBe(matches.length);
+  }
+  for (const selector of ['#deployment-heatmap a', '#local-license-table a[href*="localOnly=1"]', '#local-license-table a[href*="localOnly=0"]']) {
+    const link = page.locator(selector).first();
+    const count = await link.locator("strong").textContent();
+    const href = await link.getAttribute("href");
+    await link.focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("#result-count")).toContainText(`${count} `);
+    await page.reload();
+    await expect(page.locator("#result-count")).toContainText(`${count} `);
+    const params = new URLSearchParams(href.slice(1));
+    if (params.has("localOnly")) await expect(page.locator("#local-filter")).toHaveValue(params.get("localOnly"));
+    await page.locator("#project-grid [data-project]").first().click();
+    await expect(page.locator("#project-dialog")).toBeVisible();
+    await page.goBack();
+    await expect(page.locator("#project-dialog")).not.toBeVisible();
+    await page.goBack();
+    await expect(page.locator("#system-deployment")).toBeVisible();
+    await expect(page).toHaveURL(/view=explore#deployment-title/);
+  }
+  await page.goto("/?collection=systems&localOnly=unknown");
+  await expect(page.locator("#local-filter")).toHaveValue("unknown");
+  await expect(page.locator("#project-grid .project-card")).toHaveCount(0);
 });

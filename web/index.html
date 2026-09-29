@@ -23,7 +23,7 @@
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=7b038b7396b4">
+  <link rel="stylesheet" href="styles.css?v=7464b0b96449">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -100,7 +100,7 @@
               <label><span>Deployment</span><select id="deployment-filter"><option value="">All deployments</option></select></label>
               <label><span>Interface</span><select id="agent-interface-filter"><option value="">All interfaces</option></select></label>
               <label><span>Status</span><select id="status-filter"><option value="active">Active</option><option value="">All</option><option value="archived">Archived</option><option value="superseded">Superseded</option><option value="removed">Unavailable</option></select></label>
-              <label class="check-field"><input id="local-filter" type="checkbox"><span>Local-first</span></label>
+              <label><span>Local-first</span><select id="local-filter"><option value="">Any</option><option value="1">Yes</option><option value="0">No</option><option value="unknown">Not recorded</option></select></label>
             </div>
           </details>
           <p class="filter-guidance">Choose one family to compare editorial scores. All-family browsing is unscored. <button data-open-tab="taxonomy">How comparisons work →</button></p>
@@ -231,7 +231,7 @@
     </section>
 
     <section id="explore" class="view" aria-labelledby="explore-title">
-      <nav class="explore-sections" aria-label="Explore topics"><a href="#explore-title">Model access</a><a href="#runtime-matrix-title">Local runtimes</a></nav>
+      <nav class="explore-sections" aria-label="Explore topics"><a href="#explore-title">Model access</a><a href="#runtime-matrix-title">Local runtimes</a><a href="#deployment-title">System deployment</a></nav>
       <div class="section-heading explore-heading">
         <p class="eyebrow">Explore the data · Models</p>
         <h1 id="explore-title" tabindex="-1">How can you access a model?</h1>
@@ -265,6 +265,22 @@
         <div id="runtime-matrix-content"></div>
         <p><a id="runtime-matrix-browse" href="?collection=runtimes&amp;sort=name">Browse these runtimes in the catalog →</a></p>
         <p><a href="local-runtimes.json">Reviewed runtime data (JSON)</a></p>
+      </section>
+      <section id="system-deployment" class="runtime-features" aria-labelledby="deployment-title">
+        <div class="explore-section-heading">
+          <p class="eyebrow">Explore the data · Systems</p>
+          <h2 id="deployment-title" tabindex="-1">Where can you run a system?</h2>
+          <p>Compare recorded deployment options across families, then see how local-first storage intersects with licensing. Select a count to inspect its systems.</p>
+          <p id="deployment-data-note" class="explore-data-note"></p>
+        </div>
+        <div id="system-deployment-content"></div>
+        <details class="deployment-method">
+          <summary>How to read these tables</summary>
+          <p>Only active, reviewed systems count. Each system counts once per recorded deployment mode, so deployment columns overlap. Percentages and heat intensity use each row’s total; a zero means no matching catalog record, not an impossible deployment. Missing deployment values remain in the denominator.</p>
+          <p>Local-first describes where a system keeps its working content by default and whether its vendor retains it. It does not mean all model execution happens locally. “No” includes libraries that keep no content of their own; “Not recorded” is separate from false. License classification does not imply local-first behavior.</p>
+          <p>These are catalog counts, not market share, quality rankings, or tests of the products. Editorial review dates describe recorded reviews, not release dates or a new verification today.</p>
+          <p><a href="projects.json">Reviewed system data (JSON)</a> · <a href="?view=taxonomy">Trait and classification definitions</a></p>
+        </details>
       </section>
     </section>
 
@@ -468,8 +484,8 @@
   </dialog>
 
   <footer><div class="footer-actions"><nav class="footer-nav" aria-label="Site map"><a href="./">Catalog</a><a href="?view=finder">Finder</a><a href="?view=explore">Explore</a><a href="?view=taxonomy">Concepts</a><a href="?view=api">Published data</a><a href="blog/">Blog</a></nav><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a></div><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
-  <script type="application/json" id="data-versions">{"projects.json":"fd0c858cadfb","taxonomy.json":"104b814e7a33","license-evidence.json":"10c0d0bc8d4d","specifications.json":"f6487c60eb84","inference-services.json":"c69ac2f333ad","local-runtimes.json":"c3d85a51fff7","models.json":"e2ef8de48926","models-dev.json":"ec5e4b8a29fb","logos.json":"a0ce82f2ea60","exclusions.json":"777a4187f003","app/systems.json":"c329a9af577d","app/inference.json":"484d5f3a729f","app/runtimes.json":"ef7c2001163c","app/specifications.json":"e62146fa677b","app/models.json":"48fb77c740db","app/packs.json":"0907bc81836a","app/labs.json":"9510e68980eb","app/robots.json":"3b07b04f8f7c","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"e78b84ec74f4","app/search/inference.json":"81f6e0352cc7","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"cfb012c547ca","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"4b2ac46e495d","app/search/robots.json":"f3ba0fcf79b2","app/detail":"a04771772441"}</script>
-  <script src="app-core.js?v=59e658c7f9f2" defer></script>
-  <script src="app.js?v=9f3edadfcfff" defer></script>
+  <script type="application/json" id="data-versions">{"projects.json":"fd0c858cadfb","taxonomy.json":"104b814e7a33","license-evidence.json":"10c0d0bc8d4d","specifications.json":"f6487c60eb84","inference-services.json":"c69ac2f333ad","local-runtimes.json":"c3d85a51fff7","models.json":"e2ef8de48926","models-dev.json":"ec5e4b8a29fb","logos.json":"a0ce82f2ea60","exclusions.json":"777a4187f003","app/systems.json":"3dacb094bd13","app/inference.json":"484d5f3a729f","app/runtimes.json":"ef7c2001163c","app/specifications.json":"e62146fa677b","app/models.json":"48fb77c740db","app/packs.json":"0907bc81836a","app/labs.json":"9510e68980eb","app/robots.json":"3b07b04f8f7c","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"e78b84ec74f4","app/search/inference.json":"81f6e0352cc7","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"cfb012c547ca","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"4b2ac46e495d","app/search/robots.json":"f3ba0fcf79b2","app/detail":"a04771772441"}</script>
+  <script src="app-core.js?v=87fd840ee2fd" defer></script>
+  <script src="app.js?v=18078b484280" defer></script>
 </body>
 </html>
