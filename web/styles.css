@@ -547,6 +547,18 @@ h1 {
 .element-symbol { color: var(--element-ink); font: 500 1.8rem var(--font-mono); letter-spacing: -.06em; }
 .element-count { position: absolute; top: .55rem; right: .6rem; color: var(--muted); font: .7rem var(--font-mono); }
 .element-name { font: .73rem/1.3 var(--font-body); overflow-wrap: anywhere; }
+/* Keep previews subordinate to role symbols and names. */
+.element-marks { display: flex; align-items: center; gap: .2rem; min-height: 20px; color: var(--muted); font: .65rem var(--font-mono); }
+.element-marks .card-mark { width: 20px; height: 20px; border: 0; background: transparent; }
+.element-marks .card-mark svg { width: 16px; height: 16px; }
+.element-marks .card-monogram { font-size: .65rem; }
+.element-more-mobile { display: none; }
+#element-record-name { display: flex; align-items: center; gap: .6rem; }
+#element-record-name > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+@media (max-width: 767px) {
+  .element-marks .card-mark:nth-child(3), .element-more-desktop { display: none; }
+  .element-more-mobile { display: inline; }
+}
 .element-note { margin-block: 1rem 0; color: var(--muted); font: .75rem/1.6 var(--font-body); max-width: 95ch; }
 .element-sheet { grid-column: 1 / -1; margin-block: 1.5rem; padding: 1.5rem; background: var(--panel); border: 1px solid var(--line); border-top: 3px solid var(--text); border-radius: var(--radius); }
 .element-sheet[hidden] { display: none; }
@@ -1694,7 +1706,7 @@ footer #data-date, footer .footer-meta {
   .atlas-app .element-family-heading { border: 0; padding: 0; margin-bottom: .5rem; }
   .atlas-app .element-family-heading h3 { font-size: .8rem; }
   .atlas-app .element-tiles, .atlas-app .element-group[data-element-family="assistant_system"] .element-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .atlas-app .element-tile { min-height: 94px; padding: .5rem; gap: .4rem; }
+  .atlas-app .element-tile { min-height: 94px; padding: .5rem; gap: .3rem; }
   .atlas-app .element-symbol { font-size: 1.5rem; }
   .atlas-app .element-name { font-size: .7rem; }
   .atlas-app .element-note { font-size: .7rem; line-height: 1.45; margin-top: .65rem; }

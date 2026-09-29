@@ -46,12 +46,12 @@ test("mobile navigation restores search and sheets through history and handles M
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/?element=coding_agent&elementRecord=aider");
   await expect(page.locator('[data-element-family-tab="agent_system"]')).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#element-record-name")).toHaveText("Aider");
+  await expect(page.locator("#element-record-name")).toHaveAccessibleName("Aider");
   await searchAll(page, "Ollama");
   await expect(page.locator("#all-directory-search")).toBeFocused();
   await expect(page).toHaveURL(/q=Ollama/);
   await page.goBack();
-  await expect(page.locator("#element-record-name")).toHaveText("Aider");
+  await expect(page.locator("#element-record-name")).toHaveAccessibleName("Aider");
   await page.locator('[data-element-family-tab="memory_system"]').click();
   await expect(page.locator("#element-sheet")).toBeHidden();
   await expect(page).not.toHaveURL(/element=/);

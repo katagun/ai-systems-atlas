@@ -735,13 +735,20 @@ let elementRequest = 0;
 let mobileElementFamily = "memory_system";
 const mobileLayout = window.matchMedia("(max-width: 767px)");
 
+// Records already follow the sheet's alphabetical order; previews imply no rank.
+function elementMarks(records) {
+  if (!records.length) return "";
+  const remaining = limit => records.length > limit ? `+${records.length - limit}` : "";
+  return `<span class="element-marks" aria-hidden="true" title="Examples in alphabetical order: ${escapeHTML(records.slice(0, 3).map(record => record.name).join(", "))}">${records.slice(0, 3).map(cardMark).join("")}<span class="element-more-desktop">${remaining(3)}</span><span class="element-more-mobile">${remaining(2)}</span></span>`;
+}
+
 function renderElements() {
   elementGroups = AppCore.systemElements(state.projects, state.taxonomy);
   $("#elements-count").textContent = `${elementGroups.reduce((sum, group) => sum + group.count, 0)} active systems · ${elementGroups.reduce((sum, group) => sum + group.roles.length, 0)} operational roles`;
   $("#element-family-tabs").innerHTML = elementGroups.map(group => `<button type="button" data-element-family-tab="${escapeHTML(group.id)}" aria-pressed="false" aria-controls="element-group-${escapeHTML(group.id)}">${escapeHTML(AppCore.FAMILY_SHORT_NAMES[group.id] || group.name)}</button>`).join("");
   $("#element-groups").innerHTML = elementGroups.map(group => `<section class="element-group" id="element-group-${escapeHTML(group.id)}" data-element-family="${escapeHTML(group.id)}" aria-labelledby="element-family-${escapeHTML(group.id)}">
     <div class="element-family-heading"><h3 id="element-family-${escapeHTML(group.id)}">${escapeHTML(group.name)}</h3><span>${group.count} active</span></div>
-    <div class="element-tiles">${group.roles.map(role => `<button type="button" class="element-tile" data-element="${escapeHTML(role.id)}" aria-pressed="false" aria-controls="element-sheet"${role.records.length ? "" : " disabled"} aria-label="${escapeHTML(role.name)}, ${role.records.length} active systems. Show reference sheet"><span class="element-count">${role.records.length}</span><span class="element-symbol" aria-hidden="true">${escapeHTML(role.symbol)}</span><span class="element-name">${escapeHTML(role.name)}</span></button>`).join("")}</div></section>`).join("");
+    <div class="element-tiles">${group.roles.map(role => `<button type="button" class="element-tile" data-element="${escapeHTML(role.id)}" aria-pressed="false" aria-controls="element-sheet"${role.records.length ? "" : " disabled"} aria-label="${escapeHTML(role.name)}, ${role.records.length} active systems. Show reference sheet"><span class="element-count">${role.records.length}</span><span class="element-symbol" aria-hidden="true">${escapeHTML(role.symbol)}</span><span class="element-name">${escapeHTML(role.name)}</span>${elementMarks(role.records)}</button>`).join("")}</div></section>`).join("");
   syncElementFamilies();
 }
 
@@ -792,7 +799,7 @@ function renderElementRecord() {
   const record = selectedElementRecord;
   const ready = loadedDetail.has(`system:${record.id}`);
   const pending = ready ? "Not recorded" : "Review details not loaded";
-  $("#element-record-name").textContent = record.name;
+  $("#element-record-name").innerHTML = `${cardMark(record)}<span>${escapeHTML(record.name)}</span>`;
   $("#element-record-description").textContent = record.description;
   const rows = [
     ["Operational role", selectedElement.name],
