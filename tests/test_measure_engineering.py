@@ -39,9 +39,10 @@ class EngineeringMeasurementTests(unittest.TestCase):
     def test_global_bindings_are_column_zero_only(self) -> None:
         """The scope claim rests on indent, so an indented declaration must not count.
 
-        `renderers` is declared two spaces in and is a function-local binding. If
-        the count took any indent it would report a closure as a global, and CR-18's
-        "shared globals" premise would rest on a miscount.
+        `dataDate` is declared two spaces in, inside `bootstrap`, and is a
+        function-local binding. If the count took any indent it would report a
+        closure as a global, and CR-18's "shared globals" premise would rest on a
+        miscount.
         """
         with tempfile.TemporaryDirectory() as tmp:
             target = Path(tmp) / "sample.js"
@@ -53,7 +54,7 @@ class EngineeringMeasurementTests(unittest.TestCase):
             names = measure.declared_names(target)
         self.assertIn("outer", names)
         self.assertIn("inner", names, "anchor resolution asks existence, not scope")
-        self.assertIn("renderers", measure.declared_names(APP_JS))
+        self.assertIn("dataDate", measure.declared_names(APP_JS))
 
     def test_python_facts_count_accumulators_from_the_signature(self) -> None:
         """`errors` is counted as a declared parameter, in any position.

@@ -383,8 +383,8 @@ class DocumentationTests(unittest.TestCase):
 
         So this asserts the stable property, not the volatile one: a named symbol
         is still declared, and a cited Python line is still inside its file. A
-        reader sent to `renderers` (933) should find a `renderers`, even though
-        the number beside it is now wrong. Asserting the line numbers themselves
+        reader sent to `syncMatchSort` (319) should find a `syncMatchSort`, even
+        though the number beside it is now wrong. Asserting the line numbers themselves
         would fail on nearly every merge and train people to skip the check, which
         is worth less than no check at all.
         """

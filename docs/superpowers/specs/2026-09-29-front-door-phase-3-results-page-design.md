@@ -102,11 +102,10 @@ The nine `.collection-panel` sections keep their ids and become each collection'
 **One query.** The query is one value that every collection reads:
 
 - **Switching scope keeps it.** `setDirectoryCollection(collection, { updateURL, carryQuery })` keeps its signature and its meaning: `carryQuery: false` leaves the query as it is.
-- **Callers that must clear the query clear it themselves, as today:** the Finder's handoffs and Clear filters. The callers that pass `false`, directly or through `updateURL: false`, all expect the query kept:
+- **Callers that must clear the query clear it themselves:** the Finder's handoffs, Clear filters, and "Browse all in Models", whose label promises all of a lab's releases, newest first. The callers that pass `false`, directly or through `updateURL: false`, all expect the query kept:
   - boot and every popstate, through `restoreFromURL`;
   - comparison restore;
   - "Search all";
-  - "Browse all in Models";
   - the pack-to-specification link;
   - the legacy `?view=` alias.
 - **What a query change resets.** `docs/WEB.md` rules that "text that differs from what the box held is a new query". With one box:
@@ -138,7 +137,7 @@ While a query is present, every strip entry, the pressed entry's caption, and th
 - **Smaller phone family row.** At phone widths the unpressed family entries hide their counts, as the scope row's caption pattern does. That closes the follow-up about the site's smallest interactive text.
 - **Heard as well as seen.** Every entry carries its count as visually hidden text, so a screen reader hears it where the count is not shown (at 1000 px and below the count is `display: none`). That closes the follow-up "the phone strip's caption is `aria-hidden`, so a screen reader hears no count for the pressed entry".
 
-**The empty-result pointers leftover closes.** "It matches N records in other collections" names each collection that has matches, "Labs 3 · Specifications 1", and each name is a button that opens that collection with the query. This covers All: Labs and Specifications are exactly All's other collections. From another scope, the buttons name every other collection with matches. "Search all" stays where All's own kinds hold matches. An end-to-end test starts on the front door, types `hangzhou`, and follows the Labs button.
+**The empty-result pointers leftover closes.** "It matches records in other collections:" names each collection that has matches, "Labs 3 · Specifications 1", and each name is a button that opens that collection with the query. This covers All: Labs and Specifications are exactly All's other collections. From another scope, the buttons name every other collection with matches. "Search all" stays where All's own kinds hold matches. An end-to-end test starts on the front door, types `hangzhou`, and follows the Labs button. The line gives no total: Systems and Agent packs share records, so no single total agrees with the buttons (ruling R-T2-5).
 
 ### 3. The filter rail
 

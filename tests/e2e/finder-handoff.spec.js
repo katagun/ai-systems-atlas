@@ -8,8 +8,8 @@ const { closeRecord, recordView } = require("./helpers/results");
 // `aim`, it first scrolls the element to the middle of the screen, instantly,
 // and reports its centre and whether a click there reaches it. Alongside the
 // element's top it reads the header's bottom edge, the lowest sticky edge
-// (the Directory's scope strip sticks under the header in results), and the
-// Finder shell's top.
+// (in results the Directory's scope strip sticks under the header, and above
+// 1000 px the results bar under the strip), and the Finder shell's top.
 const settle = (page, selector, { aim = false } = {}) => page.locator(selector).evaluate(async (element, aim) => {
   await new Promise(resolve => {
     let last = window.scrollY;
@@ -35,6 +35,7 @@ const settle = (page, selector, { aim = false } = {}) => page.locator(selector).
     stickyBottom: Math.max(
       document.querySelector(".site-header").getBoundingClientRect().bottom,
       document.querySelector("#scope-strip").getBoundingClientRect().bottom,
+      document.querySelector("#results-bar").getBoundingClientRect().bottom,
     ),
     shellTop: document.querySelector(".finder-shell").getBoundingClientRect().top,
   };

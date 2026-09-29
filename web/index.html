@@ -23,7 +23,7 @@
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=afbd0391ea88">
+  <link rel="stylesheet" href="styles.css?v=834bed2c70c9">
 </head>
 <body class="atlas-app">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -107,13 +107,19 @@
         <nav id="collection-index" class="collection-index" aria-label="Collections"></nav>
       </div>
       <nav id="scope-strip" class="scope-strip" aria-label="Directory collections" hidden></nav>
+      <div id="results-bar" class="results-bar" hidden>
+        <label class="search-field results-search"><span class="visually-hidden">Search</span><input id="results-search" type="search" placeholder="Search systems, models, services, runtimes, packs, and robots" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
+        <div class="results-sort">
+          <label data-sort-scope="systems" hidden><span class="visually-hidden">Sort</span><select id="sort-filter"><option value="match" disabled>Best match</option><option value="score">Editorial score</option><option value="stars">GitHub stars</option><option value="name" selected>Name</option></select></label>
+          <label data-sort-scope="inference" hidden><span class="visually-hidden">Sort</span><select id="inference-sort-filter"><option value="match" disabled>Best match</option><option value="score" selected>Service score</option><option value="name">Name</option></select></label>
+          <label data-sort-scope="runtimes" hidden><span class="visually-hidden">Sort</span><select id="runtime-sort-filter"><option value="match" disabled>Best match</option><option value="score" selected>Runtime score</option><option value="name">Name</option></select></label>
+          <label data-sort-scope="models" hidden><span class="visually-hidden">Sort</span><select id="model-sort-filter"><option value="match" disabled>Best match</option><option value="score" selected>Review and access score</option><option value="release">Release date, newest first</option><option value="name">Name</option></select></label>
+        </div>
+      </div>
 
       <div id="all-directory-panel" class="collection-panel" hidden>
-        <section class="control-panel mixed-directory-controls" aria-label="All directory search">
-          <label class="search-field"><span>Search</span><input id="all-directory-search" type="search" placeholder="Search systems, models, inference services, local runtimes, agent packs, and robots" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
-          <p class="filter-guidance">The whole directory in one list: A–Z, or best match first while you search. Scores stay hidden here, since a score only compares like with like. Choose a collection for its own filters, and its scores where it has them. <button data-open-tab="taxonomy">How comparisons work →</button></p>
-        </section>
         <div class="result-row"><p id="all-directory-result-count" aria-live="polite"></p><button id="reset-all-directory" class="ghost-button">Clear search</button></div>
+        <p class="scope-note" data-scope-note="all">The whole directory in one list: A–Z, or best match first while you search. Scores stay hidden here, since a score only compares like with like. Choose a collection for its own filters, and its scores where it has them. <button data-open-tab="taxonomy">How comparisons work →</button></p>
         <div class="job-hint" data-job-hint="all" hidden></div>
         <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems, model releases, inference services, local runtimes, agent packs, and robots"></section>
         <nav id="all-directory-pager" class="pager" aria-label="All-directory pagination"></nav>
@@ -121,10 +127,8 @@
 
       <div id="systems-directory-panel" class="collection-panel" hidden>
         <section class="control-panel" id="directory-controls" aria-label="System filters">
-          <label class="search-field"><span>Search</span><input id="project-search" type="search" placeholder="Search all systems" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
           <label><span>Family</span><select id="family-filter"><option value="">All families</option></select></label>
           <label><span>Role</span><select id="role-filter"><option value="">All roles</option></select></label>
-          <label><span>Sort</span><select id="sort-filter"><option value="match" disabled>Best match</option><option value="score">Editorial score</option><option value="stars">GitHub stars</option><option value="name" selected>Name</option></select></label>
           <details class="advanced-filter-shell">
             <summary>More filters</summary>
             <div class="advanced-filters">
@@ -139,9 +143,9 @@
               <label><span>Local-first</span><select id="local-filter"><option value="">Any</option><option value="1">Yes</option><option value="0">No</option><option value="unknown">Not recorded</option></select></label>
             </div>
           </details>
-          <p class="filter-guidance">Choose one family to compare editorial scores. All-family browsing is unscored. <button data-open-tab="taxonomy">How comparisons work →</button></p>
         </section>
         <div class="result-row"><button id="finder-roles-chip" class="filter-chip" type="button" hidden></button><p id="result-count" aria-live="polite" tabindex="-1"></p><button id="reset-filters" class="ghost-button">Clear filters</button></div>
+        <p class="scope-note" data-scope-note="systems">Choose one family to compare editorial scores. All-family browsing is unscored. <button data-open-tab="taxonomy">How comparisons work →</button></p>
         <div class="job-hint" data-job-hint="systems" hidden></div>
         <section id="project-grid" class="project-grid" aria-label="Reviewed systems"></section>
         <nav id="project-pager" class="pager" aria-label="Systems pagination"></nav>
@@ -149,15 +153,13 @@
 
       <div id="inference-directory-panel" class="collection-panel" hidden>
         <section class="control-panel inference-controls" aria-label="Inference service filters">
-          <label class="search-field"><span>Search</span><input id="inference-search" type="search" placeholder="Search services and boundaries" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
           <label><span>Type</span><select id="inference-type-filter"><option value="">All types</option></select></label>
           <label><span>Delivery</span><select id="inference-delivery-filter"><option value="">All delivery modes</option></select></label>
           <label><span>Model source</span><select id="inference-model-source-filter"><option value="">All model sources</option></select></label>
           <label><span>API style</span><select id="inference-api-filter"><option value="">All API styles</option></select></label>
-          <label><span>Sort</span><select id="inference-sort-filter"><option value="match" disabled>Best match</option><option value="score" selected>Service score</option><option value="name">Name</option></select></label>
-          <p class="filter-guidance">Scores compare stable service operations across types. Filter for workload fit before treating overall as a shortlist. <button data-open-tab="taxonomy">How scoring works →</button></p>
         </section>
         <div class="result-row"><p id="inference-result-count" aria-live="polite" tabindex="-1"></p><button id="reset-inference-filters" class="ghost-button">Clear filters</button></div>
+        <p class="scope-note" data-scope-note="inference">Scores compare stable service operations across types. Filter for workload fit before treating overall as a shortlist. <button data-open-tab="taxonomy">How scoring works →</button></p>
         <div class="job-hint" data-job-hint="inference" hidden></div>
         <section id="inference-grid" class="project-grid inference-grid" aria-label="Reviewed inference services"></section>
         <nav id="inference-pager" class="pager" aria-label="Inference services pagination"></nav>
@@ -165,15 +167,13 @@
 
       <div id="runtimes-directory-panel" class="collection-panel" hidden>
         <section class="control-panel inference-controls" aria-label="Local runtime filters">
-          <label class="search-field"><span>Search</span><input id="runtime-search" type="search" placeholder="Search runtimes and boundaries" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
           <label><span>Type</span><select id="runtime-type-filter"><option value="">All types</option></select></label>
           <label><span>Accelerator</span><select id="runtime-accelerator-filter"><option value="">All accelerators</option></select></label>
           <label><span>Model format</span><select id="runtime-format-filter"><option value="">All model formats</option></select></label>
           <label><span>API style</span><select id="runtime-api-filter"><option value="">All API styles</option></select></label>
-          <label><span>Sort</span><select id="runtime-sort-filter"><option value="match" disabled>Best match</option><option value="score" selected>Runtime score</option><option value="name">Name</option></select></label>
-          <p class="filter-guidance">Scores compare documented execution capability on hardware you operate. They exclude throughput, latency, and benchmark rank, so filter for hardware and format fit first. <button data-open-tab="taxonomy">How scoring works →</button></p>
         </section>
         <div class="result-row"><p id="runtime-result-count" aria-live="polite" tabindex="-1"></p><button id="reset-runtime-filters" class="ghost-button">Clear filters</button></div>
+        <p class="scope-note" data-scope-note="runtimes">Scores compare documented execution capability on hardware you operate. They exclude throughput, latency, and benchmark rank, so filter for hardware and format fit first. <button data-open-tab="taxonomy">How scoring works →</button></p>
         <div class="job-hint" data-job-hint="runtimes" hidden></div>
         <section id="runtime-grid" class="project-grid inference-grid" aria-label="Reviewed local runtimes"></section>
         <nav id="runtime-pager" class="pager" aria-label="Local runtimes pagination"></nav>
@@ -181,86 +181,66 @@
 
       <div id="packs-directory-panel" class="collection-panel" hidden>
         <section class="control-panel inference-controls" aria-label="Agent pack filters">
-          <label class="search-field"><span>Search</span><input id="pack-search" type="search" placeholder="Search packs and stewards" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
           <label><span>Type</span><select id="pack-type-filter"><option value="">All types</option></select></label>
           <label><span>Host</span><select id="pack-host-filter"><option value="">All hosts</option></select></label>
           <label><span>Install</span><select id="pack-install-filter"><option value="">All install mechanisms</option></select></label>
           <label><span>License</span><select id="pack-license-filter"><option value="">All licenses</option></select></label>
-          <p class="filter-guidance">Packs are documents a host agent installs and reads. They are recorded for what they install, never scored, and never compared. A pack that runs its own code is reviewed as a system instead. <button data-open-tab="taxonomy">How packs are classified →</button></p>
         </section>
         <div class="result-row"><p id="pack-result-count" aria-live="polite"></p><button id="reset-pack-filters" class="ghost-button">Clear filters</button></div>
+        <p class="scope-note" data-scope-note="packs">Packs are documents a host agent installs and reads. They are recorded for what they install, never scored, and never compared. A pack that runs its own code is reviewed as a system instead. <button data-open-tab="taxonomy">How packs are classified →</button></p>
         <section id="pack-grid" class="project-grid inference-grid" aria-label="Reviewed agent packs and scored systems installed as packs"></section>
         <nav id="pack-pager" class="pager" aria-label="Agent packs pagination"></nav>
       </div>
 
       <div id="robots-directory-panel" class="collection-panel" hidden>
         <section class="control-panel inference-controls" aria-label="Robot filters">
-          <label class="search-field"><span>Search</span><input id="robot-search" type="search" placeholder="Search robots, makers, and named models" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
           <label><span>Form</span><select id="robot-form-factor-filter"><option value="">All forms</option></select></label>
           <label><span>AI</span><select id="robot-ai-basis-filter"><option value="">Any</option></select></label>
           <label><span>Availability</span><select id="robot-availability-filter"><option value="">Any availability</option></select></label>
           <label><span>Status</span><select id="robot-status-filter"><option value="">Any status</option></select></label>
-          <p class="filter-guidance">Robots are listed for what their makers document: the models they name or the way they let you run your own, the hardware, how to get one, and the terms. The Atlas does not test robots, so nothing here is scored or compared. <button data-open-tab="taxonomy">How robots are classified →</button></p>
         </section>
         <div class="result-row"><p id="robot-result-count" aria-live="polite"></p><button id="reset-robot-filters" class="ghost-button">Clear filters</button></div>
+        <p class="scope-note" data-scope-note="robots">Robots are listed for what their makers document: the models they name or the way they let you run your own, the hardware, how to get one, and the terms. The Atlas does not test robots, so nothing here is scored or compared. <button data-open-tab="taxonomy">How robots are classified →</button></p>
         <section id="robot-grid" class="project-grid inference-grid" aria-label="Reviewed robots"></section>
         <nav id="robot-pager" class="pager" aria-label="Robots pagination"></nav>
       </div>
 
       <div id="models-directory-panel" class="collection-panel" hidden>
-        <div class="section-heading specifications-heading">
-          <p class="eyebrow" id="models-kicker">models.dev source catalog and Atlas reviews</p>
-          <h2 id="models-title">The model artifacts beneath the stack.</h2>
-          <p>Every provider-independent model record from models.dev is discoverable here, along with releases Atlas has reviewed that models.dev does not list yet. Source imports are visibly unscored; releases with completed Atlas identity, licensing, evidence, and deployability review add the dedicated access score.</p>
-        </div>
         <section class="control-panel inference-controls" aria-label="Model filters">
-          <label class="search-field"><span>Search</span><input id="model-search" type="search" placeholder="Search models, developers, and boundaries" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
           <label><span>Type</span><select id="model-type-filter"><option value="">All types</option></select></label>
           <label><span>Distribution</span><select id="model-distribution-filter"><option value="">All distribution modes</option></select></label>
           <label><span>Modality</span><select id="model-modality-filter"><option value="">All modalities</option></select></label>
           <label><span>Artifact licensing</span><select id="model-source-filter"><option value="">All artifact terms</option></select></label>
           <label><span>License</span><select id="model-license-filter"><option value="">All licenses</option></select></label>
           <label><span>Lab</span><select id="model-lab-filter"><option value="">All labs</option></select></label>
-          <label><span>Sort</span><select id="model-sort-filter"><option value="match" disabled>Best match</option><option value="score" selected>Review and access score</option><option value="release">Release date, newest first</option><option value="name">Name</option></select></label>
-          <p class="filter-guidance">Artifact licensing describes reviewed release artifacts and mandatory terms, not training code or training data openness. Imported source records have no Atlas score. Reviewed scores compare access and deployability only; they exclude output quality, benchmarks, parameter count, current price, latency, and throughput. <button data-open-tab="taxonomy">How scoring works →</button></p>
         </section>
         <div class="result-row"><p id="model-result-count" aria-live="polite"></p><button id="reset-model-filters" class="ghost-button">Clear filters</button></div>
+        <p class="scope-note" data-scope-note="models"><span id="models-kicker" class="scope-note-facts">models.dev source catalog and Atlas reviews</span> Artifact licensing describes reviewed release artifacts and mandatory terms, not training code or training data openness. Imported source records have no Atlas score. Reviewed scores compare access and deployability only; they exclude output quality, benchmarks, parameter count, current price, latency, and throughput. <button data-open-tab="taxonomy">How scoring works →</button></p>
         <section id="model-grid" class="project-grid inference-grid" aria-label="models.dev source records and Atlas-reviewed model releases"></section>
         <nav id="model-pager" class="pager" aria-label="Models pagination"></nav>
       </div>
 
       <div id="labs-directory-panel" class="collection-panel" hidden>
-        <div class="section-heading specifications-heading">
-          <p class="eyebrow" id="labs-kicker">The organizations behind the models</p>
-          <h2 id="labs-title">Who develops the models.</h2>
-          <p>Every lab here developed a release the Atlas has reviewed. Its record gathers what the catalog already holds about it, from releases and services to systems, runtimes, specifications, and packs, and lists where it publishes. Labs are recorded, never scored or ranked.</p>
-        </div>
         <section class="control-panel specification-controls" aria-label="Lab filters">
-          <label class="search-field"><span>Search</span><input id="lab-search" type="search" placeholder="Search labs, units, and parent companies" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
           <label><span>Type</span><select id="lab-type-filter"><option value="">All types</option></select></label>
           <label><span>Headquarters</span><select id="lab-country-filter"><option value="">All countries</option></select></label>
           <label><span>Releases</span><select id="lab-distribution-filter"><option value="">Any distribution</option></select></label>
-          <p class="filter-guidance">A lab is listed once the Atlas has reviewed a release it developed. Releases keeps a lab with at least one reviewed release distributed that way; each release keeps its own licence and score in Models. <button data-open-tab="taxonomy">How labs are classified →</button></p>
         </section>
         <div class="result-row"><p id="lab-result-count" aria-live="polite"></p><button id="reset-lab-filters" class="ghost-button">Clear filters</button></div>
+        <p class="scope-note" data-scope-note="labs"><span id="labs-kicker" class="scope-note-facts">The organizations behind the models</span> A lab is listed once the Atlas has reviewed a release it developed. Releases keeps a lab with at least one reviewed release distributed that way; each release keeps its own licence and score in Models. <button data-open-tab="taxonomy">How labs are classified →</button></p>
         <section id="lab-grid" class="project-grid inference-grid" aria-label="Labs that develop reviewed model releases"></section>
         <nav id="lab-pager" class="pager" aria-label="Labs pagination"></nav>
       </div>
 
       <div id="specifications-directory-panel" class="collection-panel" hidden>
-        <div class="section-heading specifications-heading">
-          <p class="eyebrow" id="specifications-kicker">Interoperability artifacts</p>
-          <h2 id="specifications-title">The contracts between systems.</h2>
-          <p>Protocols, instruction conventions, and package formats—classified by what they connect, with no cross-purpose score.</p>
-        </div>
         <section class="control-panel specification-controls" aria-label="Specification filters">
-          <label class="search-field"><span>Search</span><input id="specification-search" type="search" placeholder="Search specifications and purposes" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
           <label><span>Type</span><select id="specification-type-filter"><option value="">All types</option></select></label>
           <label><span>Scope</span><select id="specification-scope-filter"><option value="">All scopes</option></select></label>
           <label><span>Status</span><select id="specification-status-filter"><option value="">All statuses</option></select></label>
           <label><span>License</span><select id="specification-license-filter"><option value="">All licenses</option></select></label>
         </section>
         <div class="result-row"><p id="specification-result-count" aria-live="polite"></p><button id="reset-specification-filters" class="ghost-button">Clear</button></div>
+        <p class="scope-note" data-scope-note="specifications"><span id="specifications-kicker" class="scope-note-facts">Interoperability artifacts</span> Protocols, instruction conventions, and package formats, classified by what they connect, with no cross-purpose score.</p>
         <section id="specification-grid" class="project-grid specification-grid" aria-label="Reviewed specifications"></section>
         <nav id="specification-pager" class="pager" aria-label="Specifications pagination"></nav>
       </div>
@@ -521,7 +501,7 @@
 
   <footer><div class="footer-actions"><nav class="footer-nav" aria-label="Site map"><a href="./">Catalog</a><a href="?view=finder">Finder</a><a href="?view=explore">Explore</a><a href="?view=taxonomy">Concepts</a><a href="?view=api">Published data</a><a href="blog/">Blog</a></nav><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a></div><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
   <script type="application/json" id="data-versions">{"projects.json":"71d9917d5557","taxonomy.json":"9797c3c30ee1","license-evidence.json":"d6cbb911714a","specifications.json":"f6487c60eb84","inference-services.json":"3adcbc44ceca","local-runtimes.json":"c3d85a51fff7","models.json":"541ef5ef7c71","models-dev.json":"ec5e4b8a29fb","logos.json":"a0ce82f2ea60","exclusions.json":"ff05010648bd","app/systems.json":"fd038c59c916","app/inference.json":"b1f20c24671e","app/runtimes.json":"ef7c2001163c","app/specifications.json":"e62146fa677b","app/models.json":"5808a43cc56c","app/packs.json":"0907bc81836a","app/labs.json":"621781eaa733","app/robots.json":"3b07b04f8f7c","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"e2975e5aaa70","app/search/inference.json":"b26a8d12b53b","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"a292e958eac7","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"2a8a8278c714","app/search/robots.json":"f3ba0fcf79b2","app/detail":"4509213f7994"}</script>
-  <script src="app-core.js?v=e5e9d7b4ade3" defer></script>
-  <script src="app.js?v=a6ccef8ecbe2" defer></script>
+  <script src="app-core.js?v=3f999e56480a" defer></script>
+  <script src="app.js?v=d9f3f6da4f28" defer></script>
 </body>
 </html>

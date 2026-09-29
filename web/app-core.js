@@ -791,6 +791,48 @@
     return { count, note: "" };
   }
 
+  // An empty collection offers no tile and no strip entry; All always does.
+  function collectionHidden(id, payloads = {}) {
+    return id !== "all" && collectionCount(id, payloads).count === 0;
+  }
+
+  // One match pass over the whole catalog for a query: the set of records
+  // any collection's search finds, each kind read through its own search
+  // index once that index has landed (Phase 3 spec, section 1). The strip's
+  // counts and an empty result's pointers both read it; the results keep
+  // their own ranked pass, which also orders them.
+  const MATCH_GROUPS = [
+    ["system", "projects", "systems"], ["inference", "services", "inference"], ["runtime", "runtimes", "runtimes"],
+    ["model", "models", "models"], ["pack", "packs", "packs"], ["robot", "robots", "robots"],
+    ["lab", "labs", "labs"], ["spec", "specifications", "specifications"],
+  ];
+  function queryMatches(term, payloads = {}, indexes = {}, { labelOf } = {}) {
+    const query = parseSearchQuery(term);
+    const matched = new Set();
+    if (!query.tokens.length) return matched;
+    for (const [kind, payloadKey, indexKey] of MATCH_GROUPS) {
+      for (const record of payloads[payloadKey] || []) {
+        if (recordMatch(query, searchFields(kind, record, { index: indexes[indexKey], labelOf })) > 0) matched.add(record);
+      }
+    }
+    return matched;
+  }
+
+  // What each collection's default view lists of a query's matches: the
+  // strip's counts while searching, in registry order.
+  function collectionMatchCounts(matched, payloads = {}) {
+    return Object.fromEntries(COLLECTIONS.map(entry => [entry.id, collectionEntries(entry.id, payloads).filter(record => matched.has(record)).length]));
+  }
+
+  // The Systems family row: active systems per family, and while a query is
+  // present only its matches (`matched` is null without one). "" is All families.
+  function familyMatchCounts(matched, payloads = {}) {
+    const listed = collectionEntries("systems", payloads).filter(record => !matched || matched.has(record));
+    const counts = { "": listed.length };
+    for (const record of listed) counts[record.system_family] = (counts[record.system_family] || 0) + 1;
+    return counts;
+  }
+
   function humanize(value) {
     return String(value).replaceAll("_", " ").replace(/^./, letter => letter.toUpperCase());
   }
@@ -855,12 +897,12 @@
   // is Best match (scopeURLParams).
   const SCOPE_URL_PARAMS = {
     all: { q: "" },
-    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name" },
-    inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", sort: "score" },
-    runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", sort: "score" },
+    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name", browseSort: "" },
+    inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", sort: "score", browseSort: "" },
+    runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", sort: "score", browseSort: "" },
     packs: { q: "", type: "", host: "", install: "", license: "" },
     robots: { q: "", formFactor: "", aiBasis: "", availability: "", status: "" },
-    models: { q: "", type: "", distribution: "", modality: "", sourceModel: "", license: "", lab: "", sort: "score" },
+    models: { q: "", type: "", distribution: "", modality: "", sourceModel: "", license: "", lab: "", sort: "score", browseSort: "" },
     labs: { q: "", type: "", headquarters: "", distribution: "" },
     specifications: { q: "", type: "", scope: "", status: "", license: "" },
   };
@@ -869,12 +911,18 @@
   // A query lists by Best match unless the reader chose another sort, so
   // while one is present the URL leaves out "match" and names any other sort,
   // the browsing default included. A reload or a shared link then restores
-  // the sort the reader chose (ruling R-P1-2b).
+  // the sort the reader chose (ruling R-P1-2b). Beside a query still listed
+  // by Best match, `browseSort` carries the sort clearing the query returns
+  // to, when that is not the default (Phase 3 spec, section 8).
   function scopeURLParams(scope, values = {}) {
+    const owned = SCOPE_URL_PARAMS[scope] || {};
     const searching = String(values.q ?? "").trim() !== "";
-    return Object.entries(SCOPE_URL_PARAMS[scope] || {})
-      .filter(([key, fallback]) => values[key] !== undefined
-        && String(values[key]) !== (key === "sort" && searching ? "match" : fallback))
+    return Object.entries(owned)
+      .filter(([key, fallback]) => {
+        if (values[key] === undefined) return false;
+        if (key === "browseSort") return searching && values.sort === "match" && values[key] !== "" && values[key] !== owned.sort;
+        return String(values[key]) !== (key === "sort" && searching ? "match" : fallback);
+      })
       .map(([key]) => [key, String(values[key])]);
   }
 
@@ -890,6 +938,14 @@
       if (key === "page" || !params.has(key)) continue;
       const value = params.get(key);
       const accepts = allowed[key];
+      // A browsing sort means something only beside a query the URL lists by
+      // Best match, so it is refused without a query or beside a chosen sort.
+      if (key === "browseSort") {
+        const query = String(params.get("q") || "").trim();
+        if (key in owned && query && !params.has("sort") && accepts instanceof Set && accepts.has(value)) values[key] = value;
+        else rejected.push(key);
+        continue;
+      }
       if (key in owned && (accepts === "text" || (accepts instanceof Set && accepts.has(value)))) values[key] = value;
       else rejected.push(key);
     }
@@ -925,7 +981,7 @@
     if (Object.hasOwn(COMPARISON_COLLECTIONS, kind)) return COMPARISON_COLLECTIONS[kind];
     if (params.has("collection")) {
       const collection = params.get("collection");
-      return ["systems", "inference", "runtimes", "packs", "robots", "models", "labs", "specifications"].includes(collection) ? collection : "all";
+      return COLLECTIONS.some(entry => entry.id === collection) ? collection : "all";
     }
     const record = parseRecordReference(params.get("record"));
     return record ? RECORD_COLLECTIONS[record.kind] ?? "all" : "all";
@@ -1794,6 +1850,8 @@
     collectionCount,
     collectionEmblem,
     collectionEntries,
+    collectionHidden,
+    collectionMatchCounts,
     collectionState,
     comparableText,
     compareProjects,
@@ -1803,6 +1861,7 @@
     directoryStageFromURL,
     editDistance,
     familyEmblem,
+    familyMatchCounts,
     filterAndSortProjects,
     filterDirectoryEntries,
     filterInferenceServices,
@@ -1836,6 +1895,7 @@
     parseViewAlias,
     parseViewId,
     priorityBoost,
+    queryMatches,
     readScopeURLParams,
     recommendationReasons,
     recordMatch,
