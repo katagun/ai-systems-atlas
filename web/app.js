@@ -750,8 +750,7 @@ function collectionPayloads() {
 }
 
 function collectionEmblem(entry) {
-  if (entry.id === "all") return AppCore.familyEmblem("type");
-  return entry.emblem ? AppCore.badgeEmblem(entry.emblem) : "";
+  return AppCore.collectionEmblem(entry);
 }
 
 function collectionStateFor(id) {
@@ -879,8 +878,7 @@ function renderScopeStrip() {
     if (count === 0 && entry.id !== "all") return "";
     const pressed = entry.id === state.directoryCollection;
     if (pressed) caption = `${entry.name} · ${count}`;
-    // Robots has no emblem until its form-factor badge exists, and a phone
-    // clips every name, so its initial stands in rather than an empty button.
+    // Keep an initial as a fallback for any future collection without a glyph.
     const emblem = collectionEmblem(entry) || `<span class="scope-monogram" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(entry.name))}</span>`;
     return `<button type="button" class="scope-entry${pressed ? " is-active" : ""}" data-open-collection="${escapeHTML(entry.id)}" aria-pressed="${pressed}" title="${escapeHTML(entry.name)}">${emblem}<span class="scope-name">${escapeHTML(entry.name)}</span><span class="scope-short" aria-hidden="true">${escapeHTML(entry.short)}</span><strong class="scope-count">${count}</strong>${stateDot(collectionStateFor(entry.id))}</button>`;
   }).join("");
