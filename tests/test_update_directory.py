@@ -353,6 +353,25 @@ class UpdateDirectoryTests(unittest.TestCase):
         )
         self.assertEqual("multi_agent_orchestrator", role)
 
+    def test_robot_software_reaches_the_candidate_queue_as_a_framework(self) -> None:
+        """ADR 044 routes robot software to agent_framework_sdk, so discovery must see it."""
+        cases = (
+            "Middleware for composing AI-based robotic applications as dataflow pipelines",
+            "A modular AI hardware-abstraction layer that lets LLM-driven agents control humanoid robots",
+            "Vision-language-action policies for real-world manipulation",
+            "Teleoperation and policy training for quadruped robots",
+        )
+        for description in cases:
+            with self.subTest(description=description):
+                role, confidence = update_directory.classify(description)
+                self.assertEqual("agent_framework_sdk", role)
+                self.assertGreaterEqual(confidence, 0.82)
+
+    def test_ros_alone_is_not_a_robot_software_signal(self) -> None:
+        """The openpilot lesson: a topic match is not a model in the loop, and ROS is middleware."""
+        role, confidence = update_directory.classify("ROS 2 client library for Rust")
+        self.assertTrue(role is None or confidence < 0.75, (role, confidence))
+
     def test_agent_harness_does_not_need_memory_wording(self) -> None:
         role, confidence = update_directory.classify(
             "An agent harness with sessions, tools, plugins, and an interactive runtime"

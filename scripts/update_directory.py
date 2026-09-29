@@ -272,6 +272,21 @@ def classify(text: str) -> tuple[str | None, float]:
     ):
         # ADR 023: autonomous scientific-discovery systems take an existing role.
         return "research_agent", max(relevance, 0.82)
+    if any(
+        term in lowered
+        for term in (
+            "robot",
+            "humanoid",
+            "quadruped",
+            "manipulation",
+            "teleoperation",
+            "vision-language-action",
+            "actuator",
+        )
+    ):
+        # ADR 044: robot software takes an existing role; the physical
+        # boundary is a trait. "ROS" is not a signal: it is middleware.
+        return "agent_framework_sdk", max(relevance, 0.82)
     if "research agent" in lowered or "deep research" in lowered:
         return "research_agent", max(relevance, 0.82)
     if "browser agent" in lowered or "computer use agent" in lowered:
