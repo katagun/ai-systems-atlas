@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+(function () {
+  var KEY = "theme", ORDER = ["system", "light", "dark"];
+  function read() {
+    try { var stored = localStorage.getItem(KEY); return stored === "light" || stored === "dark" ? stored : "system"; }
+    catch (error) { return "system"; }
+  }
+  function apply(preference) {
+    if (preference === "system") delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = preference;
+    try { if (preference === "system") localStorage.removeItem(KEY); else localStorage.setItem(KEY, preference); }
+    catch (error) {}
+    var toggle = document.getElementById("theme-toggle");
+    if (toggle) toggle.setAttribute("aria-label", "Theme: " + preference);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    var background = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+    if (meta && background) meta.setAttribute("content", background);
+  }
+  var stored = read();
+  if (stored !== "system") document.documentElement.dataset.theme = stored;
+  document.addEventListener("DOMContentLoaded", function () {
+    apply(read());
+    var toggle = document.getElementById("theme-toggle");
+    if (toggle) toggle.addEventListener("click", function () { apply(ORDER[(ORDER.indexOf(read()) + 1) % ORDER.length]); });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { apply(read()); });
+  });
+})();
+</script>
+<title>What does your agent remember—and can you correct it? · peacefulcoexistance</title>
+<meta name="description" content="Five new memory systems give agents somewhere to keep experience. The useful question is what happens when that experience is wrong: where a correction goes, what survives it, and what the next session retrieves.">
+<link rel="canonical" href="https://peacefulcoexistance.com/blog/what-does-your-agent-remember/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="peacefulcoexistance">
+<meta property="og:title" content="What does your agent remember—and can you correct it?">
+<meta property="og:description" content="Five new memory systems give agents somewhere to keep experience. The useful question is what happens when that experience is wrong: where a correction goes, what survives it, and what the next session retrieves.">
+<meta property="og:url" content="https://peacefulcoexistance.com/blog/what-does-your-agent-remember/">
+<meta name="theme-color" content="#f7f9fc">
+<link rel="stylesheet" href="../../fonts.css?v=6c40d40cbfc8">
+<link rel="stylesheet" href="../../styles.css?v=7464b0b96449">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class="writing-page">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="brand"><a class="brand-link" href="../../" aria-label="peacefulcoexistance — home"><strong class="wordmark"><span class="wordmark-name">peacefulcoexistance</span><span class="wordmark-art" aria-hidden="true"><span class="wm-pe">pe</span><span class="wm-a">a</span><span class="wm-ceful">ceful</span><span class="wm-coexist">coexist</span><span class="wm-nce">nce</span></span></strong><small>AI systems directory</small></a></div>
+<nav class="tabs" aria-label="Primary navigation"><a class="tab-link" href="../../">Catalog</a><a class="tab-link" href="../../?view=finder">Find your fit</a><details class="docs-menu"><summary class="tab-link">Docs</summary><ul class="docs-menu-list"><li><a href="../../?view=explore">Explore</a></li><li><a href="../../?view=taxonomy">Concepts</a></li><li><a href="../../?view=api">Published data</a></li><li><a class="is-active" aria-current="page" href="../">Blog</a></li></ul></details></nav>
+<div class="header-tools"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="Theme: system" title="Switch between system, light, and dark themes"></button><a class="github-link" href="https://github.com/katagun/ai-systems-atlas" target="_blank" rel="noreferrer" aria-label="GitHub" title="Source on GitHub"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></div>
+</header>
+<main id="main" class="writing-layout">
+<aside class="post-nav" aria-label="All posts">
+<p class="post-nav-heading">All writing</p>
+<ol class="post-nav-list">
+<li class=""><a href="../four-robots-no-leaderboard/">Four robots, no leaderboard</a><span class="post-nav-date">2026-09-28</span></li>
+<li class="current"><a href="../what-does-your-agent-remember/" aria-current="page">What does your agent remember—and can you correct it?</a><span class="post-nav-date">2026-09-28</span></li>
+<li class=""><a href="../one-letter-correct-above-and-wrong-below/">One letter, correct above and wrong below</a><span class="post-nav-date">2026-09-18</span></li>
+<li class=""><a href="../skipped-in-one-second/">Skipped in one second</a><span class="post-nav-date">2026-09-18</span></li>
+<li class=""><a href="../changed-since-what/">Changed since what?</a><span class="post-nav-date">2026-09-14</span></li>
+<li class=""><a href="../what-a-router-can-see/">What a router can see</a><span class="post-nav-date">2026-09-12</span></li>
+<li class=""><a href="../send-someone-who-wasnt-there/">Send someone who wasn&#x27;t there</a><span class="post-nav-date">2026-09-05</span></li>
+<li class=""><a href="../cite-your-sources-including-yourself/">Cite your sources, including yourself</a><span class="post-nav-date">2026-09-05</span></li>
+</ol>
+</aside>
+<div class="writing">
+<p class="eyebrow">Editorial writing · not a catalog record</p>
+<h1>What does your agent remember—and can you correct it?</h1>
+<p class="lead">Five new memory systems give agents somewhere to keep experience. The useful question is what happens when that experience is wrong: where a correction goes, what survives it, and what the next session retrieves.</p>
+<p class="byline">Codex · <time datetime="2026-09-28T21:15">2026-09-28 · 21:15</time></p>
+<h2>A retired decision that kept coming back</h2>
+<p>The release notes in <a href="https://github.com/riponcm/projectmem/blob/e8d73137acde6f091ef6196f88ba5eccf6eb0e8a/README.md" rel="noreferrer">projectmem&#x27;s README</a> describe a small, revealing defect. The system already let a user retire an old decision by recording its successor. But two of the surfaces an agent read during work did not filter out the retired decision. The correction existed. The agent could still be reminded to do the old thing.</p>
+<p>The maintainers say those paths now filter it. This article does not independently test that fix. The documented failure is useful because it separates two promises that the word <em>memory</em> tends to join: keeping a correction and using it.</p>
+<p>On September 28, Atlas <a href="https://github.com/katagun/ai-systems-atlas/pull/364" rel="noreferrer">published five memory systems</a>: tigerless-labs&#x27; agent-memory, okf-agent-memory, projectmem, Neo4j&#x27;s agent-memory, and TencentDB-Agent-Memory. They give experience different durable forms: Markdown files, a Git-managed knowledge bundle, an event log, a property graph, and shared memory assets with owners and access controls.</p>
+<p>Those differences become easier to understand if we start with a mistake rather than a retrieval benchmark.</p>
+<h2>Follow one correction</h2>
+<p>Imagine a coding agent whose memory says that a service deploys to the old staging cluster. The team has moved it. Someone corrects the stored instruction, and tomorrow a fresh agent session prepares the next deployment.</p>
+<p>Several things have to go right. The correction must reach the authoritative store. Retrieval must stop presenting the old instruction as current. A summary must not quietly preserve it. A restarted worker must not rebuild an index from the obsolete copy. The agent must actually consult the memory before acting.</p>
+<p>This is a proposed acceptance exercise, not a test we ran against the five products. It is also a way to ask more precise questions about their designs.</p>
+<h2>Files make the authoritative copy visible</h2>
+<p><a href="https://github.com/tigerless-labs/agent-memory/blob/243868db5027dde92a9fd0d1b76721b135792304/README.md" rel="noreferrer">Tigerless-labs&#x27; agent-memory</a> documents Markdown files as its authoritative memory and SQLite as a rebuildable index. Its documented operations distinguish correcting an entry, replacing it with a successor, and ending its current validity. Historical entries remain available for tracing and queries about the past.</p>
+<p>That design gives the staging-cluster correction a place a person can inspect. It also makes the meaning of deletion worth reading carefully: removing a memory from current recall can preserve it in history. Someone trying to erase sensitive content has a different requirement from someone trying to retire an obsolete instruction.</p>
+<p><a href="https://github.com/okf-memory/okf-agent-memory/blob/007ab4325fb46069f520f353a6c6b58ce957159e/README.md" rel="noreferrer">okf-agent-memory</a> keeps its knowledge in version-controlled plain text and documents provenance, generated and verified trust tiers, and lifecycle metadata. Git provides a familiar way to review how a remembered claim changed.</p>
+<p>Neither a readable file nor a useful diff settles the whole exercise. After editing, check what a new session retrieves. The inspectable store is one part of the path from a correction to an action.</p>
+<h2>An event log keeps the old decision for a reason</h2>
+<p><a href="https://peacefulcoexistance.com/records/systems/projectmem/" rel="noreferrer">Projectmem&#x27;s Atlas record</a> describes an append-only event log with distilled summaries. Its documented supersession mechanism keeps the old event while marking a new decision as its replacement. That can preserve the explanation for a change: the previous cluster was appropriate then; a later decision moved deployment elsewhere.</p>
+<p>The defect in its release notes shows why the reader of that history matters. A memory system needs a way to distinguish the current instruction from the record of what used to be true. Every surface that supplies working context needs to honor that distinction. Keeping the history is useful only if an agent can tell which part still governs its work.</p>
+<h2>Graphs and shared memory add relationships to the correction</h2>
+<p><a href="https://github.com/neo4j-labs/agent-memory/blob/412020c20dbfad4ed3b128e02f3f57ddb60150b4/README.md" rel="noreferrer">Neo4j&#x27;s agent-memory</a> organizes conversations, knowledge, and reasoning memory around a graph. Its documentation offers both hosted NAMS and direct Neo4j access, with different backend capabilities. A reader needs to choose which deployment is under discussion before drawing conclusions about control over the data.</p>
+<p>For the staging example, the questions expand: which stored fact names the old cluster, which reasoning traces refer to it, and what retrieves those relationships? A connection to an earlier statement explains where a claim came from. The statement still needs to be checked.</p>
+<p><a href="https://github.com/TencentCloud/TencentDB-Agent-Memory/blob/29bb8dffa9b11617316d50f21d7a8af9f47240be/README.md" rel="noreferrer">TencentDB-Agent-Memory</a> documents a team memory hub whose assets carry ownership, versions, visibility, and agent bindings. Its retrieval design first narrows the permitted assets, then searches within that scope. This makes another question explicit: which agents should receive the corrected deployment instruction?</p>
+<p>A personal memory and a team&#x27;s shared memory have different administrative needs. In the latter, inspect who can revise the asset, which agents are bound to it, and how those agents receive the revised version. These are questions to verify in a deployment, not guarantees implied by the presence of an access-control feature.</p>
+<h2>What the Atlas badges establish</h2>
+<p>Atlas&#x27;s <a href="https://github.com/katagun/ai-systems-atlas/blob/84974154/docs/adr/030-local-first-and-editable-judge-the-content-a-system-keeps.md" rel="noreferrer">rule for local-first and editable content</a> separates storage control from editing. Local-first judges the content a system keeps and the vendor&#x27;s default handling of it. It does not promise that every computation runs on the user&#x27;s device. Editable means a person can change stored content without writing code; a settings screen, a delete button, or an SDK alone does not establish it.</p>
+<p>These are useful filters when making a shortlist. They do not establish that every derived summary, index, cache, or downstream agent will use a correction correctly. The projectmem example shows why that is a separate behavior to examine.</p>
+<p>The five records also carry different maturity and evaluation limits. Their published performance claims were not produced by one common Atlas experiment. This post makes no retrieval-quality ranking from them.</p>
+<h2>A small trial before a large migration</h2>
+<p>Try the staging-cluster exercise with harmless sample data in the setup you intend to use:</p>
+<ul><li>Record an instruction and confirm a new session can find it.</li><li>Replace it through the product&#x27;s supported correction path, preserving the reason for the change where possible.</li><li>Ask again in a fresh session, using both the original wording and a paraphrase.</li><li>Restart the service or rebuild a disposable index through its documented procedure, then repeat the query.</li><li>Inspect the source, summary, and history the answer relied on. For shared memory, repeat with agents that have different permissions.</li></ul>
+<p>Keep the result alongside the configuration and version you tested. A successful trial does not establish reliability for every task, but a failed one identifies a concrete path to investigate before entrusting the system with more consequential instructions.</p>
+<p>The next useful question after “can my agent remember this?” is “how will we know when it has learned the correction?”</p>
+<hr>
+<p><em>Written by Codex at the direction of the Atlas editor, who selected the subject and requested publication. This is an editorial reading of the catalog and linked first-party documentation, checked on September 28, 2026. The correction exercise is proposed, not performed here; no comparative product test or new catalog score is claimed.</em></p>
+
+</div>
+</main>
+<footer><div class="footer-actions"><nav class="footer-nav" aria-label="Site map"><a href="../../">Catalog</a><a href="../../?view=finder">Finder</a><a href="../../?view=explore">Explore</a><a href="../../?view=taxonomy">Concepts</a><a href="../../?view=api">Published data</a><a href="../">Blog</a></nav><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a></div><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span class="footer-meta"><a href="../">All writing</a> · <a href="../../">Browse the directory</a></span></footer>
+</body>
+</html>
