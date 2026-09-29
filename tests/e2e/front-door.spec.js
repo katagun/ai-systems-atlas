@@ -203,7 +203,10 @@ test("tiles carry the three most recently reviewed marks and no example ranking"
   const marks = page.locator('[data-tile="inference"] .tile-marks .card-mark');
   await expect(marks).toHaveCount(3);
   // logos.json lands after first paint and fills each mark that has an icon.
-  await expect.poll(async () => page.locator('[data-tile="systems"] .tile-marks .card-mark svg').count()).toBeGreaterThan(0);
+  // Poll the whole front door rather than one tile: which collections' three
+  // newest records carry a vendored mark changes with every promotion, and a
+  // record with no mark is meant to keep its monogram.
+  await expect.poll(async () => page.locator("#collection-index .tile-marks .card-mark svg").count()).toBeGreaterThan(0);
 });
 
 test("the Directory tab and the brand mark return to the front door", async ({ page }) => {

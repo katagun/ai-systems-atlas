@@ -93,7 +93,7 @@ repos:
         language: system
         name: codespell typo scan
         entry: uvx codespell@2.3.0
-        args: [-L, "slite,asure,grup,unparseable,nce,coexistance,newyorker,commitable,ake,assertin,assertIn"]
+        args: [-L, "slite,asure,grup,unparseable,nce,coexistance,newyorker,commitable,ake,assertin,assertIn,nams"]
         types: [text]
         exclude: |
           (?x)^(
