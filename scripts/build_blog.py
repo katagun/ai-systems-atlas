@@ -332,7 +332,7 @@ FOOTER_NOTICES = (
     "<span>Systems score within families. Reviewed models, inference services, and local runtimes "
     "each use a separate score; source imports and specifications are unscored.</span>"
     "<span>Product marks identify their owners' products and imply no affiliation or endorsement.</span>"
-    '<span>Atlas catalog data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" '
+    '<span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" '
     'rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is '
     "Apache-2.0.</span>"
 )

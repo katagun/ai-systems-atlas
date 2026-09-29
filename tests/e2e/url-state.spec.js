@@ -67,15 +67,15 @@ test("a family chip opens its family on the first page", async ({ page }) => {
 });
 
 test("every scope's URL keys match its controls, and every control exists", async ({ page }) => {
-  // AtlasCore.SCOPE_URL_PARAMS says which keys a scope writes, and app.js's
+  // AppCore.SCOPE_URL_PARAMS says which keys a scope writes, and app.js's
   // SCOPE_CONTROLS says which control holds each one. A key in only one of
   // them is never written, or always rejected on restore.
   await page.goto("/");
   const problems = await page.evaluate(() => {
     // Both are page globals. SCOPE_CONTROLS is a top-level const in a classic
     // script, so the page reaches it by name, though window does not hold it.
-    /* global AtlasCore, SCOPE_CONTROLS */
-    const params = AtlasCore.SCOPE_URL_PARAMS;
+    /* global AppCore, SCOPE_CONTROLS */
+    const params = AppCore.SCOPE_URL_PARAMS;
     const found = [];
     for (const scope of new Set([...Object.keys(params), ...Object.keys(SCOPE_CONTROLS)])) {
       const urlKeys = Object.keys(params[scope] || {}).sort().join(",");

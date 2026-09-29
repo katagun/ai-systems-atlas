@@ -25,12 +25,12 @@ const shared = {
 export default [
   { ignores: ["node_modules/**", "web/records/**", "playwright-report/**", "test-results/**"] },
   {
-    // The browser bundle. AtlasCore is defined by app-core.js, loaded first.
+    // The browser bundle. AppCore is defined by app-core.js, loaded first.
     files: ["web/app.js"],
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: "script",
-      globals: { ...globals.browser, AtlasCore: "readonly" },
+      globals: { ...globals.browser, AppCore: "readonly" },
     },
     rules: shared,
   },
