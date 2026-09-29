@@ -2,7 +2,7 @@
 
 [![Verify](https://github.com/katagun/ai-systems-atlas/actions/workflows/verify.yml/badge.svg)](https://github.com/katagun/ai-systems-atlas/actions/workflows/verify.yml)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
-[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue?logo=python)](pyproject.toml)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue?logo=python)](pyproject.toml)
 [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE)
 [![Data: CC-BY-4.0](https://img.shields.io/badge/data-CC--BY--4.0-lightgrey)](LICENSE-DATA)
 

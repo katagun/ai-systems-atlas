@@ -1244,12 +1244,42 @@ class FinishTests(unittest.TestCase):
         self.assertNotIn(["git", "checkout"], [call[:2] for call in calls])
 
     def test_finish_aborts_when_head_cannot_be_compared_to_origin_main(self) -> None:
+        """`base_read` must be stubbed, or this test reads the operator's own checkout.
+
+        `finish()` takes `base_read` (defaulting to `root_text`, which reads
+        `.candidate-evidence/base-ref.json` out of the primary checkout) to decide which
+        ref to compare HEAD against. Left unstubbed, a machine that has run `prepare`
+        resolves a pinned SHA rather than `origin/main`, the fake never sees the ref it
+        is looking for, and the test passes for the wrong reason — or fails, as it did
+        here, on a machine with that file. The sibling tests already stub it.
+        """
+
+        calls: list[list[str]] = []
+
         def fake_run(command: list[str], _cwd=None) -> tuple[int, str]:
+            calls.append(command)
             if command[:2] == ["git", "rev-parse"] and command[2] == "origin/main":
                 return 128, "fatal: ambiguous argument"
             return 0, ""
 
-        self.assertEqual(1, runner.finish(run=fake_run, read=self.reader()))
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            code = runner.finish(
+                run=fake_run,
+                read=self.reader(),
+                base_read=lambda _path: "origin/main",
+            )
+        self.assertEqual(1, code)
+        self.assertIn("could not compare HEAD against origin/main", stderr.getvalue())
+        # Several later aborts also return 1, so the exit code does not prove which
+        # guard fired. The very next step after this one is the diff against the base,
+        # so asserting that never ran is what pins it: drop the `return 1` and the diff
+        # happens.
+        self.assertNotIn(
+            ["git", "diff"],
+            [call[:2] for call in calls],
+            "finish continued past the compare guard into the diff",
+        )
 
     def test_a_changed_classification_confidence_aborts_before_any_check(self) -> None:
         calls: list[list[str]] = []

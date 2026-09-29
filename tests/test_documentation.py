@@ -6,6 +6,28 @@ from pathlib import Path
 from urllib.parse import unquote
 
 ROOT = Path(__file__).resolve().parents[1]
+EDITORIAL_FIELDS_TABLE = re.compile(
+    r"^## Human-owned editorial fields.*?^\| Collection \| Editorial fields \|"
+    r".*?^\|[-| ]+\|\n(?P<rows>(?:^\|.*\|\n?)+)",
+    re.DOTALL | re.MULTILINE,
+)
+EDITORIAL_ROW = re.compile(
+    r"^\| `(?P<file>[a-z-]+\.json)` \| (?P<fields>.+?) \|$", re.MULTILINE
+)
+FIELD_NAME = re.compile(r"`([a-z0-9_]+)`")
+COLLECTION_SCHEMA = {
+    "projects.json": "PROJECT",
+    "specifications.json": "SPECIFICATION",
+    "packs.json": "PACK",
+    "labs.json": "LAB",
+    "robots.json": "ROBOT",
+    "inference-services.json": "INFERENCE_SERVICE",
+    "local-runtimes.json": "LOCAL_RUNTIME",
+    "models.json": "MODEL",
+}
+CATALOG_COUNTS_BLOCK = re.compile(
+    r"<!-- catalog-counts.*?-->.*?```text\n(?P<block>.*?)```", re.DOTALL
+)
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 CODE_FENCE = re.compile(r"```.*?```", re.DOTALL)
 GENERATED_DIRECTORIES = {
@@ -225,6 +247,129 @@ class DocumentationTests(unittest.TestCase):
             encoding="utf-8"
         )
         self.assertNotIn("workflow_dispatch", workflow)
+
+    # ---- CR-10 through CR-16 -------------------------------------------------
+
+    def _editorial_field_rows(self) -> list[tuple[str, str, list[str]]]:
+        text = (ROOT / "docs" / "DATA_MODEL.md").read_text(encoding="utf-8")
+        table = EDITORIAL_FIELDS_TABLE.search(text)
+        self.assertIsNotNone(
+            table, "docs/DATA_MODEL.md lost its human-owned editorial fields table"
+        )
+        assert table is not None
+        return [
+            (
+                row.group("file"),
+                row.group("fields"),
+                FIELD_NAME.findall(row.group("fields")),
+            )
+            for row in EDITORIAL_ROW.finditer(table.group("rows"))
+        ]
+
+    def test_every_published_collection_names_its_editorial_fields(self) -> None:
+        """CR-10. A collection missing from the table leaves its reserved fields undocumented.
+
+        The project row named `significance` and `confidence`, neither of which is a
+        field, while the real `why_it_matters` and `research_confidence` went undocumented.
+        """
+        listed = {file for file, _, _ in self._editorial_field_rows()}
+        self.assertEqual(
+            set(COLLECTION_SCHEMA),
+            listed,
+            "docs/DATA_MODEL.md editorial-fields table does not match the published collections",
+        )
+
+    def test_documented_editorial_fields_are_real_fields(self) -> None:
+        """CR-10. The table must name fields, not prose that reads like fields."""
+        from scripts import validate_directory as validator
+
+        for file, prose, fields in self._editorial_field_rows():
+            if file not in COLLECTION_SCHEMA:
+                self.fail(
+                    f"docs/DATA_MODEL.md lists {file}, which is not a published collection; "
+                    "add it to COLLECTION_SCHEMA and CATALOG_DOCUMENTS in one change"
+                )
+            prefix = COLLECTION_SCHEMA[file]
+            schema = set(getattr(validator, f"{prefix}_REQUIRED")) | set(
+                getattr(validator, f"{prefix}_OPTIONAL", set())
+            )
+            with self.subTest(collection=file):
+                self.assertTrue(
+                    fields, f"{file} editorial row names no field: {prose!r}"
+                )
+                self.assertEqual(
+                    [],
+                    [name for name in fields if name not in schema],
+                    f"docs/DATA_MODEL.md names fields absent from the {file} schema",
+                )
+
+    def test_coverage_snapshot_quotes_generated_counts(self) -> None:
+        """CR-11. The docs/COVERAGE.md snapshot was wrong by eleven records.
+
+        The counts were transcribed by hand and nothing recomputed them, so a data batch
+        moved the catalog and left the prose asserting a catalog that no longer existed.
+        """
+        from scripts.validate_directory import catalog_counts, counts_markdown, load_all
+
+        text = (ROOT / "docs" / "COVERAGE.md").read_text(encoding="utf-8")
+        block = CATALOG_COUNTS_BLOCK.search(text)
+        self.assertIsNotNone(block, "docs/COVERAGE.md lost its catalog-counts block")
+        assert block is not None
+        self.assertEqual(
+            counts_markdown(catalog_counts(load_all())).strip(),
+            block.group("block").strip(),
+            "docs/COVERAGE.md counts are stale; rerun "
+            "`uv run python scripts/validate_directory.py --counts` and paste the block",
+        )
+
+    def test_every_consumer_projects_from_the_one_catalog_registry(self) -> None:
+        """CR-16. The published-file and collection tables were restated five times.
+
+        A file added to one copy of PUBLISHED_DATA and not the other either never reaches
+        web/ or is never checked for freshness, and neither failure is loud.
+        """
+        from scripts import (
+            build_share_pages,
+            build_web_payload,
+            catalog,
+            report_review_age,
+            run_directory_refresh,
+            sync_web_data,
+            validate_directory,
+        )
+
+        self.assertIs(sync_web_data.PUBLISHED_DATA, catalog.PUBLISHED_DATA)
+        self.assertIs(validate_directory.PUBLISHED_DATA, catalog.PUBLISHED_DATA)
+        self.assertIs(validate_directory.CATALOG_DOCUMENTS, catalog.CATALOG_DOCUMENTS)
+        self.assertIs(validate_directory.MODELS_DEV_REPO, catalog.MODELS_DEV_REPO)
+        self.assertIs(report_review_age.COLLECTIONS, catalog.COLLECTION_TRIPLES)
+        self.assertIs(build_share_pages.COLLECTIONS, catalog.SHARE_DIRECTORIES)
+        self.assertEqual(
+            tuple(row[:4] for row in catalog.COLLECTIONS),
+            build_web_payload.COLLECTIONS,
+        )
+        self.assertEqual(
+            set(catalog.CATALOG_DOCUMENTS) - {"hn-signals.json"},
+            {
+                path.split("/", 1)[1]
+                for path in run_directory_refresh.STAGED_DIRECTORY_FILES
+            },
+        )
+
+    def test_the_collection_registry_agrees_with_the_files_on_disk(self) -> None:
+        """A registry entry for a file that does not exist publishes nothing."""
+        from scripts import catalog
+
+        self.assertEqual(
+            {path.name for path in (ROOT / "directory").glob("*.json")},
+            set(catalog.CATALOG_DOCUMENTS),
+            "directory/ holds a file the catalog registry does not name",
+        )
+        self.assertEqual(
+            sorted(catalog.REVIEW_AGE_ORDER),
+            sorted(name for name, *_ in catalog.COLLECTIONS),
+            "REVIEW_AGE_ORDER and COLLECTIONS name different collections",
+        )
 
 
 if __name__ == "__main__":

@@ -23,10 +23,12 @@ from pathlib import Path
 
 try:
     from .build_blog import blog_sitemap_entries
+    from .catalog import SHARE_DIRECTORIES
     from .lab_relations import lab_relations
     from .page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL, STYLE
 except ImportError:  # Direct script execution places scripts/ on sys.path.
     from build_blog import blog_sitemap_entries
+    from catalog import SHARE_DIRECTORIES
     from lab_relations import lab_relations
     from page_shell import SITE_NAME, SITE_TAGLINE, SITE_URL, STYLE
 
@@ -34,16 +36,7 @@ ROOT = Path(__file__).resolve().parents[1]
 RECORD_ID = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
 
 # kind (as in the application's record URL) -> (directory under web/records, catalog key)
-COLLECTIONS = {
-    "system": ("systems", "projects"),
-    "spec": ("specifications", "specifications"),
-    "inference": ("inference-services", "services"),
-    "runtime": ("local-runtimes", "runtimes"),
-    "model": ("models", "models"),
-    "pack": ("packs", "packs"),
-    "lab": ("labs", "labs"),
-    "robot": ("robots", "robots"),
-}
+COLLECTIONS = SHARE_DIRECTORIES
 COLLECTION_LABELS = {
     "system": "System",
     "spec": "Specification",

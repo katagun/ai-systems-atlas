@@ -6,21 +6,12 @@ from __future__ import annotations
 import shutil
 from pathlib import Path
 
+try:
+    from .catalog import PUBLISHED_DATA
+except ImportError:  # Direct script execution places scripts/ on sys.path.
+    from catalog import PUBLISHED_DATA
+
 ROOT = Path(__file__).resolve().parents[1]
-PUBLISHED_DATA = (
-    "projects.json",
-    "taxonomy.json",
-    "exclusions.json",
-    "license-evidence.json",
-    "specifications.json",
-    "inference-services.json",
-    "local-runtimes.json",
-    "models.json",
-    "models-dev.json",
-    "packs.json",
-    "labs.json",
-    "robots.json",
-)
 
 
 def main() -> int:
