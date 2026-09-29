@@ -886,7 +886,7 @@ class ValidationPolicyTests(unittest.TestCase):
         self.assertEqual(self.lab_errors(self.catalog_with_lab(mutate)), [])
 
     def test_lab_may_be_admitted_on_a_system_it_developed(self) -> None:
-        """ADR 047: a research group joins from a system, not a release.
+        """ADR 048: a research group joins from a system, not a release.
 
         The Stanford shape: no catalog name, because a system record names no
         organization, and one reviewed system in `systems`.

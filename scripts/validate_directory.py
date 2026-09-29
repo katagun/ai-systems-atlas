@@ -1748,7 +1748,7 @@ def validate_lab_catalog_names(
 ) -> set[str]:
     """Each catalog name must name a record; a lab needs a reviewed release, a
     reviewed system it developed, or a published frontier-model commitment
-    (ADR 044, ADR 047)."""
+    (ADR 044, ADR 048)."""
     # An announced lab joins to nothing, so it may carry no names at all (ADR 044).
     validate_string_list(lab, "catalog_names", None, prefix, errors, allow_empty=True)
     values = lab.get("catalog_names")
@@ -1775,10 +1775,10 @@ def validate_lab_catalog_names(
             weaker = "reviewed_system" if systems else "frontier_announcement"
             errors.append(
                 f"{prefix}: develops no reviewed model release, so its admission basis "
-                f"must be {weaker} (ADR 044, ADR 047)"
+                f"must be {weaker} (ADR 044, ADR 048)"
             )
     elif basis == "reviewed_system":
-        # A research group whose reviewed work is a system, not a release (ADR 047).
+        # A research group whose reviewed work is a system, not a release (ADR 048).
         if names & names_by_field["developer"]:
             errors.append(
                 f"{prefix}: has a reviewed model release, so its admission basis must "
@@ -1787,7 +1787,7 @@ def validate_lab_catalog_names(
         elif not systems:
             errors.append(
                 f"{prefix}: develops no reviewed system, so its admission basis must "
-                "be frontier_announcement (ADR 047)"
+                "be frontier_announcement (ADR 048)"
             )
     elif basis == "frontier_announcement":
         # Recorded before any release, so it joins to nothing by construction. A
@@ -1800,7 +1800,7 @@ def validate_lab_catalog_names(
         elif systems:
             errors.append(
                 f"{prefix}: has a reviewed system, so its admission basis must be "
-                "reviewed_system (ADR 047)"
+                "reviewed_system (ADR 048)"
             )
     return names
 

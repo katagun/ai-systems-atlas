@@ -464,6 +464,73 @@ class DocumentationTests(unittest.TestCase):
             "premise needs revisiting",
         )
 
+    def test_adr_numbers_are_unique_and_match_their_titles(self) -> None:
+        """No two ADRs may claim one number, and a filename must state its own.
+
+        On 2026-09-29 a lab ADR was merged as 047 while a badge ADR merged as 047
+        earlier the same afternoon, so `docs/adr/` carried two files claiming one
+        number and every cross-reference silently picked whichever a reader opened
+        first. Nothing else checks this: the link assertions above confirm a cited
+        ADR *exists*, not that the one it names is the one that means. The rule is
+        cheap, so it is enforced rather than remembered.
+        """
+        directory = ROOT / "docs" / "adr"
+        numbered: dict[str, list[str]] = {}
+        for path in sorted(directory.glob("*.md")):
+            match = re.match(r"^(\d{3})-", path.name)
+            self.assertIsNotNone(
+                match, f"{path.name}: an ADR filename must start with its number"
+            )
+            title = path.read_text(encoding="utf-8").splitlines()[0]
+            heading = re.match(r"^# ADR (\d{3}):", title)
+            self.assertIsNotNone(
+                heading,
+                f"{path.name}: first line must be an ADR heading, got {title!r}",
+            )
+            self.assertEqual(
+                match.group(1),
+                heading.group(1),
+                f"{path.name}: filename number does not match its heading {title!r}",
+            )
+            numbered.setdefault(match.group(1), []).append(path.name)
+        duplicates = {n: names for n, names in numbered.items() if len(names) > 1}
+        self.assertEqual(
+            {},
+            duplicates,
+            "these ADR numbers are claimed more than once; renumber the newest: "
+            + "; ".join(f"{n}: {names}" for n, names in sorted(duplicates.items())),
+        )
+
+    def test_adr_cross_references_name_the_adrs_they_cite(self) -> None:
+        """An `ADR nnn` citation in prose must resolve to the nnn ADR on disk.
+
+        The uniqueness test above cannot see a citation that names a number no file
+        claims, which is what a renumber leaves behind: the number is unique and
+        the reference is still wrong.
+        """
+        numbers = {path.name[:3] for path in (ROOT / "docs" / "adr").glob("*.md")}
+        cited: dict[str, list[str]] = {}
+        for path in sorted(ROOT.rglob("*.md")):
+            if any(
+                part in {".git", "node_modules", ".venv", ".claude", ".muse"}
+                for part in path.parts
+            ):
+                continue
+            # A dated design spec and an ADR are both point-in-time records, and a
+            # citation that was right when it was written is not a defect in it.
+            if "adr" in path.parts or "superpowers" in path.parts:
+                continue
+            text = path.read_text(encoding="utf-8", errors="ignore")
+            for number in set(re.findall(r"ADR (\d{3})", text)):
+                if number not in numbers:
+                    cited.setdefault(number, []).append(str(path.relative_to(ROOT)))
+        self.assertEqual(
+            {},
+            cited,
+            "these citations name an ADR number no file in docs/adr claims: "
+            + "; ".join(f"{n}: {paths[:3]}" for n, paths in sorted(cited.items())),
+        )
+
     def test_measured_claims_name_a_date(self) -> None:
         """A measurement quoted in the backlog must say when it was taken.
 
