@@ -2,6 +2,8 @@
 
 **Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order).
 
+**Amended by:** [ADR 043](043-the-directory-opens-on-a-front-door-of-collection-tiles.md) (tiles and the scope strip are the quick filters; Models and Specifications are Directory collections, not sibling views).
+
 ## Context
 
 The Atlas originally exposed operational systems and managed inference services as sibling top-level views. Later work added local runtimes and provider-independent model releases with equally distinct boundaries. Preserving separate schemas, filters, evidence, and score profiles is necessary, but splitting discovery across destinations makes substantial parts of the AI-systems catalog easier to overlook and makes “Directory” sound narrower than the product actually is.

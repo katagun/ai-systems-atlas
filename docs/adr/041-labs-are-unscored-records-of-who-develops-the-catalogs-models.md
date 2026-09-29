@@ -2,6 +2,8 @@
 
 **Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order).
 
+**Amended by:** [ADR 043](043-the-directory-opens-on-a-front-door-of-collection-tiles.md) (Labs is a Directory collection with a tile and a strip entry, not a sibling view; labs stay unscored).
+
 ## Context
 
 The Atlas records what an AI lab ships — reviewed model releases, the managed APIs that serve them, the assistants and agents built on them, and the runtimes and specifications some labs maintain — but not the lab. Each collection names the organization behind a record in its own free-text field, and the strings disagree. Models say `developer`, and the same organization appears as `Google` and `Google DeepMind`, `Alibaba` and `Qwen`, `Cohere` and `Cohere Labs`, `xAI` and `SpaceXAI (xAI)`. Inference services say `operator`, and Zhipu appears under a Singapore entity name for one API and a Beijing entity name for the other. Systems name no organization at all, and every flagship lab assistant, from ChatGPT to Z.ai, has no repository, so not even a GitHub owner links it to its maker.
