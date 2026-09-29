@@ -52,6 +52,10 @@ The rail's groups, the counts, the strip's match counts, step order, related rec
   - focus on the pressed entry after a tile opens by keyboard;
   - the breakpoints at 1000 px and 1407 px.
 - **`setDirectoryCollection(collection, { updateURL = true, carryQuery = updateURL })` keeps its signature and meaning.** `carryQuery: false` leaves the query as it is. Restore on boot and popstate, comparison restore, "Search all", "Browse all in Models", the pack-to-specification link, and the legacy `?view=` alias all pass `false` and expect the query kept. Only the Finder's handoffs and Clear filters clear the query, and they clear it themselves.
+- **Backlog anchors and measurements** (AGENTS rule 18, #385).
+  - `tests/test_documentation.py` checks that every code symbol the backlog's "Engineering debt" section names still exists, and that any measurement there carries a date.
+  - When a task deletes or renames a symbol that section names, such as `renderers`, `RECORD_DIALOG_SELECTORS`, or `mixedSystemCard`, the same PR updates or closes the item.
+  - Quote code measurements from `uv run python scripts/measure_engineering.py`, never by hand.
 - **No new ADR.** If review finds a decision-level change, the ADR takes 047:
   - 042 is the badge session's;
   - 043 is the front door;
@@ -1313,7 +1317,7 @@ In `BACKLOG.md`:
   - "`restoreFromURL` clears `urlReady` with no `try`/`finally`…";
   - "the phone family row's `.62rem` text…";
   - "`setPageSize` still repaints the hidden Models, Labs, and Specifications grids".
-- **CR-20.** In its item, replace everything from "`renderers` (933)" to "Adding a collection currently takes eleven edits." with "The per-collection tables became one `RESULT_VIEWS` table in Phase 3 task 2; the card half remains for task 4."
+- **CR-20.** In its item, replace everything from "`renderers` and `pageRenderer` remain" to "`RECORD_DIALOGS` is the model to follow." with "The per-collection tables became one `RESULT_VIEWS` table in Phase 3 task 2; the card half remains for task 4." `tests/test_documentation.py` checks that every symbol the Engineering debt section names still exists, and this sentence named `renderers`, which this task deletes.
 
 - [ ] **Step 17: Stamp, run the gate, commit, and open the PR**
 
@@ -2144,7 +2148,7 @@ In `docs/WEB.md`, "Content hierarchy":
 
 In "Behavioral contracts":
 
-- Replace '- "More filters" reports how many non-default advanced constraints are active so a collapsed control never hides why results are missing.' with '- Every non-default filter, and a Finder role set, shows as a removable chip above the results, followed by Clear filters, so no active constraint is ever hidden.'
+- Replace '- “More filters” reports how many non-default advanced constraints are active so a collapsed control never hides why results are missing.' (curly quotes, as the file has them) with '- Every non-default filter, and a Finder role set, shows as a removable chip above the results, followed by Clear filters, so no active constraint is ever hidden.'
 - In the "Browse matches" line, replace 'shows as a removable "Finder:" chip beside the result count' with 'shows as a removable "Finder:" chip in the chips row'.
 - In the verification steps, replace "More filters" with "the rail" wherever it appears.
 
