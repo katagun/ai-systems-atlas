@@ -344,13 +344,7 @@ Every other contract Phase 2 listed holds, and so does ADR 046's Elements map, w
 - Labs and Specifications as Catalog collections, which one query and the strip's counts rely on, rest on ADR 043.
 - The full-screen record view is the "existing evidence dialog" that ADR 046's Elements links open. It renders the same record, so ADR 046 needs no amendment.
 
-If later review finds a decision-level change, the ADR takes 047:
-
-- 042 is the badge session's;
-- 043 is the front door;
-- 044 is #380's;
-- 045 is robot software (#373);
-- 046 is Elements (#384).
+If later review finds a decision-level change, the ADR takes the next free number on `origin/main` at PR time. On 2026-09-29, 042 was held by the badge session, and 047 was on main twice (#388's badge ADR and #391's research-group ADR).
 
 `docs/WEB.md` changes in the PR that makes each part true:
 
