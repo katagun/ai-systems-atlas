@@ -5,7 +5,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { collectionEntry, familyEntry, openCollection, pressedEntry, searchAll } = require("./helpers/landing");
-const { recordView, search, searchBox, settled, sortControl } = require("./helpers/results");
+const { closeRecord, recordView, search, searchBox, settled, sortControl } = require("./helpers/results");
 
 // A word no record holds, written into one collection's search index so a
 // test controls exactly which collection answers it.
@@ -112,6 +112,34 @@ test("a restored query survives boot and Back", async ({ page }) => {
   await expect(page).toHaveURL(/q=memory/);
 });
 
+// Back to an entry with no query ends the query in every collection, so a
+// sort chosen during it elsewhere gives way to Best match at the next query.
+test("Back to a URL without a query ends it in every collection's sort", async ({ page }) => {
+  await page.goto("/?collection=systems");
+  await page.locator("#project-grid .project-card").first().click();
+  await expect(recordView(page, "system")).toBeVisible();
+  await closeRecord(page, "system");
+  await search(page, "router");
+  await openCollection(page, "inference");
+  await sortControl(page, "inference").selectOption("name");
+  await page.goBack();
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Systems\b/);
+  await expect(searchBox(page)).toHaveValue("");
+  await search(page, "api");
+  await openCollection(page, "inference");
+  await expect(sortControl(page, "inference"), "a new query selects Best match").toHaveValue("match");
+});
+
+// The strip updates in place, dots included, so a click that lands on a
+// dot during a repaint still reaches it.
+test("a state dot survives the strip's repaints while it still applies", async ({ page }) => {
+  await page.goto("/?collection=systems&family=agent_system&role=coding_agent");
+  await page.locator('#project-grid [data-compare-id="kilo-code"]').click();
+  const dot = await page.locator('#scope-strip [data-open-collection="systems"] .state-dot').elementHandle();
+  await search(page, "agent");
+  expect(await dot.evaluate(element => element.isConnected), "the same dot is still in the strip").toBe(true);
+});
+
 test("typing repaints once the reader pauses", async ({ page }) => {
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
@@ -158,6 +186,39 @@ test("the results bar sticks under the strip above 1000 px and scrolls with the 
   await expect(page.locator("#results-bar")).toHaveCSS("position", "sticky");
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator("#results-bar")).toHaveCSS("position", "static");
+});
+
+// The bar sticks at the strip's measured height, which the webfonts can
+// change after boot has measured it. Scrolling is smooth, so this measures
+// once it has come to rest.
+test("above 1000 px the results bar sits flush under the strip once the fonts have loaded", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=systems");
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  await page.evaluate(() => document.fonts.ready);
+  await page.evaluate(() => window.scrollTo({ top: 1500, behavior: "instant" }));
+  const [stripBottom, barTop] = await page.evaluate(async () => {
+    await new Promise(resolve => {
+      let last = window.scrollY, still = 0;
+      const frame = () => requestAnimationFrame(() => { still = window.scrollY === last ? still + 1 : 0; last = window.scrollY; if (still >= 5) resolve(); else frame(); });
+      frame();
+    });
+    return [document.querySelector("#scope-strip").getBoundingClientRect().bottom, document.querySelector("#results-bar").getBoundingClientRect().top];
+  });
+  expect(Math.abs(barTop - stripBottom), `bar top ${barTop}, strip bottom ${stripBottom}`).toBeLessThan(0.5);
+});
+
+test("results drop the top padding the front door's headline needs, on phones too", async ({ page }) => {
+  for (const [width, height] of [[1440, 900], [390, 844]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto("/");
+    await expect(page.locator("#front-door")).toBeVisible();
+    const door = await page.locator("#directory").evaluate(element => parseFloat(getComputedStyle(element).paddingTop));
+    await page.goto("/?collection=systems");
+    await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+    const results = await page.locator("#directory").evaluate(element => parseFloat(getComputedStyle(element).paddingTop));
+    expect(results, `${width}: results ${results}px, front door ${door}px`).toBeLessThan(door);
+  }
 });
 
 test("each collection's score rule sits in its scope note, and the headings are gone", async ({ page }) => {

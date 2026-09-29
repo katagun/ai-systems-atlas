@@ -131,8 +131,10 @@ async function bootstrap() {
   // search; it lands in results the way a keystroke after boot would.
   if ($("#door-search").value && state.directoryStage === "door") $("#door-search").dispatchEvent(new Event("input", { bubbles: true }));
   loadMarks();
-  // The header's fonts can settle after bindEvents measured it.
+  // The header's and the strip's webfonts can land after this measures them,
+  // so the sticky heights are taken again once every font has loaded.
   syncStickyClearance();
+  document.fonts.ready.then(syncStickyClearance);
 }
 
 // Marks are decorative next to the record name, so they stay hidden from
@@ -351,13 +353,24 @@ function syncMatchSorts() {
   Object.keys(MATCH_SORTS).forEach(syncMatchSort);
 }
 
-// Empties the one query, as the Finder's handoffs, Clear filters, and the
-// front door do: every collection returns to its first page, and each sort
-// follows the query's end as syncMatchSort decides.
+// Every collection back to its first page: a page kept from one list
+// belongs to no other, after a new query or a new page size.
+function resetPages() {
+  Object.keys(state.page).forEach(key => { state.page[key] = 1; });
+}
+
+// What a change to the one query resets: every collection's page, and each
+// sort as syncMatchSort decides (docs/WEB.md, Phase 3 spec section 1).
+function resetForQuery() {
+  resetPages();
+  syncMatchSorts();
+}
+
+// Empties the one query, as the Finder's handoffs, Clear filters, "Browse
+// all in Models", and the front door do.
 function clearQuery() {
   $("#results-search").value = "";
-  Object.keys(state.page).forEach(key => { state.page[key] = 1; });
-  syncMatchSorts();
+  resetForQuery();
 }
 
 // One Clear control per collection, one behaviour: the collection's own
@@ -406,11 +419,9 @@ function flushResults() {
 }
 
 // A change to the query's text starts every collection on its first page.
-// Typing on continues the same query, so a sort chosen during it stays
-// (docs/WEB.md, Phase 3 spec section 1).
+// Typing on continues the same query, so a sort chosen during it stays.
 function onQueryInput() {
-  Object.keys(state.page).forEach(key => { state.page[key] = 1; });
-  syncMatchSorts();
+  resetForQuery();
   if (isSearching()) loadCatalogIndexes();
   scheduleResults();
 }
@@ -1048,8 +1059,13 @@ function syncScopeStrip() {
     const count = searching ? counts[id] : AppCore.collectionCount(id, payloads).count;
     button.querySelector(".scope-count").textContent = String(count);
     button.querySelector(".scope-count-label").textContent = searching ? matchWord(count) : "";
-    button.querySelector(".state-dot")?.remove();
-    button.insertAdjacentHTML("beforeend", stateDot(collectionStateFor(id)));
+    // A dot is replaced only when it changes, so a click on it is not lost.
+    const dot = stateDot(collectionStateFor(id));
+    const current = button.querySelector(".state-dot");
+    if ((current?.outerHTML ?? "") !== dot) {
+      current?.remove();
+      button.insertAdjacentHTML("beforeend", dot);
+    }
     if (id === state.directoryCollection) {
       const name = AppCore.COLLECTIONS.find(entry => entry.id === id).name;
       strip.querySelector(".scope-caption").textContent = `${name} · ${count}${searching ? matchWord(count) : ""}`;
@@ -1185,7 +1201,7 @@ function setPageSize(pageSize) {
   if (!PAGE_SIZE_OPTIONS.includes(pageSize) || pageSize === state.pageSize) return;
   state.pageSize = pageSize;
   writeStoredPageSize(pageSize);
-  Object.keys(state.page).forEach(key => { state.page[key] = 1; });
+  resetPages();
   RESULT_VIEWS[state.directoryCollection].render();
 }
 
@@ -3275,8 +3291,9 @@ function restoreFromURL({ boot = false } = {}) {
     if (onDoor) showFrontDoor({ updateURL: false });
     else if (scope && !comparisonRestored) setDirectoryCollection(scope, { updateURL: false });
     activateView(view);
-    // The one restored query reaches every collection's sort.
-    if (scope && restored.q?.trim()) syncMatchSorts();
+    // The one restored query, or its absence, reaches every collection's
+    // sort, so a sort chosen during a query the URL no longer holds ends too.
+    if (scope) syncMatchSorts();
     // The record is read from the URL as it arrived; an open dialog names it
     // already, so showRecordDialog writes nothing and nothing pushes.
     const reference = AppCore.parseRecordReference(params.get("record"));

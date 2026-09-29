@@ -1682,7 +1682,7 @@ footer #data-date, footer .footer-meta {
   .atlas-app .site-header .tabs { display: none; }
   .atlas-app .brand small { display: none; }
   .atlas-app .wordmark { font-size: 1rem; }
-  .atlas-app #directory.view { padding-top: 1.25rem; }
+  .atlas-app #directory.view:not(.is-results) { padding-top: 1.25rem; }
   .atlas-app .door-kicker { display: none; }
   .atlas-app .door-title { margin-block: 0 .6rem; font-size: 2.2rem; max-width: 22rem; }
   .atlas-app .front-door { gap: .75rem; }
