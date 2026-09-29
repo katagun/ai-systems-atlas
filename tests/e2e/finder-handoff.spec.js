@@ -154,7 +154,7 @@ test("Browse matches opens its matches on their first page", async ({ page }) =>
   await expect(page).not.toHaveURL(/page=/);
 });
 
-test("the Finder chip sits beside the result count, and its × glyph never wraps alone", async ({ page }) => {
+test("the Finder chip sits in the chips row above the result count, and its × glyph never wraps alone", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?view=finder");
   await page.locator('[data-finder-choice="direction"][data-finder-value="agent_system"]').click();
@@ -166,9 +166,10 @@ test("the Finder chip sits beside the result count, and its × glyph never wraps
     const chip = page.locator("#finder-roles-chip");
     const chipBox = await chip.boundingBox();
     const countBox = await page.locator("#result-count").boundingBox();
-    // space-between with no gap centers the count between the chip and Clear
-    // filters (hundreds of px away); beside the chip, the gap is a few px.
-    expect(countBox.x - (chipBox.x + chipBox.width)).toBeLessThan(40);
+    // Every active constraint is a chip in the row above the results
+    // (Phase 3 task 3), so the chip ends before the count begins.
+    await expect(page.locator("#filter-chips #finder-roles-chip")).toBeVisible();
+    expect(chipBox.y + chipBox.height).toBeLessThanOrEqual(countBox.y);
     // A Range over the label text node reports one client rect per wrapped
     // line; the × marker sharing the last line's bottom edge means it wrapped
     // together with the label rather than landing alone on its own line.

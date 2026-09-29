@@ -288,6 +288,21 @@ test("hovering an emblem explains it and Escape dismisses it", async ({ page }) 
   await expect(searchBox(page, "systems")).toHaveValue(openclaw.name);
 });
 
+// On a phone the Key chip is fixed over the bottom of the screen, and while
+// the search box holds a query the chips row pushes the first card's emblems
+// down to it. A tap on an emblem under the chip scrolls first, and a scroll
+// closes the tooltip the tap opens, so the emblem is lifted clear of the
+// chip, instantly, before it is tapped.
+async function liftClearOfKeyChip(page, emblem) {
+  const overlap = await emblem.evaluate(element => {
+    const chip = document.querySelector("#badge-legend-chip");
+    return chip.hidden ? 0 : element.getBoundingClientRect().bottom - chip.getBoundingClientRect().top + 8;
+  });
+  if (overlap > 0) await page.evaluate(top => window.scrollBy({ top, behavior: "instant" }), overlap);
+  // The scroll event lands a frame later, and must land before the tap.
+  await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+}
+
 test("tapping an emblem toggles the tooltip and an outside tap closes it", async ({ browser }) => {
   const context = await browser.newContext({ hasTouch: true, viewport: { width: 390, height: 800 } });
   const page = await context.newPage();
@@ -295,6 +310,7 @@ test("tapping an emblem toggles the tooltip and an outside tap closes it", async
   await search(page, openclaw.name);
   const emblem = page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first();
   const tooltip = page.locator("#badge-tooltip");
+  await liftClearOfKeyChip(page, emblem);
   await emblem.tap();
   await expect(tooltip).toBeVisible();
   const box = await tooltip.boundingBox();
@@ -311,7 +327,9 @@ test("repainting the grid dismisses a tapped tooltip", async ({ browser }) => {
   await page.goto("/?collection=systems");
   await search(page, openclaw.name);
   const tooltip = page.locator("#badge-tooltip");
-  await page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first().tap();
+  const emblem = page.locator('#project-grid .project-card:has([data-project="openclaw"]) .card-badge').first();
+  await liftClearOfKeyChip(page, emblem);
+  await emblem.tap();
   await expect(tooltip).toBeVisible();
   // A touch reader types while the tooltip is up; the grid repaints with the
   // same cards, so nothing scrolls or moves under a pointer to hide it.

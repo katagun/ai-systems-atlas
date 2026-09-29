@@ -298,7 +298,11 @@ test("reviewed provider traits appear only in project details", async ({ page })
   await expect(recordView(page, "system")).toContainText("Model provider support");
   await expect(recordView(page, "system")).toContainText("Provider-native");
   await expect(recordView(page, "system")).toContainText("Anthropic");
-  await expect(page.locator("#directory-controls")).not.toContainText("Provider relationship");
+  // Provider relationship is a record fact, never a filter: the Systems rail,
+  // which lists every Systems filter, offers no such group.
+  const rail = page.locator("#filter-rail");
+  await expect(rail.locator("[data-filter-group]")).not.toHaveCount(0);
+  await expect(rail.locator(".filter-group legend", { hasText: "Provider relationship" })).toHaveCount(0);
 });
 
 test("inference services combine filters and expose the dedicated service score", async ({ page }) => {
@@ -552,13 +556,16 @@ test("the deployment filter reaches vendor-operated systems and reports itself a
   await search(page, "smolagents");
   await expect(names.filter({ hasText: /^smolagents$/ })).toHaveCount(1);
 
+  // The rail cannot choose a value that lists nothing for the query, as
+  // managed_cloud lists nothing for smolagents, so it is chosen while browsing.
+  await search(page, "");
   await setFilter(page, "systems", "deployment", "managed_cloud");
 
   await search(page, "Devin");
   await expect(names.filter({ hasText: /^Devin$/ })).toHaveCount(1);
   await search(page, "smolagents");
   await expect(names.filter({ hasText: /^smolagents$/ })).toHaveCount(0);
-  await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters · 1 active");
+  await expect(page.locator("#filter-chips .filter-chip:visible")).toHaveCount(1);
 });
 
 test("the interface filter separates canvas builders from code libraries", async ({ page }) => {
@@ -572,7 +579,7 @@ test("the interface filter separates canvas builders from code libraries", async
 
   await expect(names.filter({ hasText: /^LangChain$/ })).toHaveCount(1);
   await expect(names.filter({ hasText: /^Devin$/ })).toHaveCount(0);
-  await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters · 1 active");
+  await expect(page.locator("#filter-chips .filter-chip:visible")).toHaveCount(1);
 });
 
 test("the capability filter reaches the agents that carry a capability", async ({ page }) => {
@@ -583,7 +590,7 @@ test("the capability filter reaches the agents that carry a capability", async (
 
   await expect(names.filter({ hasText: /^Browser Use$/ })).toHaveCount(1);
   await expect(names.filter({ hasText: /^Aider$/ })).toHaveCount(0);
-  await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters · 1 active");
+  await expect(page.locator("#filter-chips .filter-chip:visible")).toHaveCount(1);
   await expect(page).toHaveURL(/capability=browser_control/);
 
   await page.reload();

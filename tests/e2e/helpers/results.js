@@ -2,8 +2,8 @@
 // the Clear control, or an open record through here, so Front-door Phase 3
 // can move them into one bar, one rail, and one record view by changing this
 // file alone (Phase 3 spec, "Tests"). The search box and the Sort share the
-// bar already; each collection still has its own filters, Clear control,
-// and record view.
+// bar, and the filters one rail with one Clear filters; each collection
+// still has its own record view.
 const { expect } = require("@playwright/test");
 
 // One search box serves every collection since Phase 3 task 2.
@@ -15,23 +15,18 @@ const FILTER_CONTROLS = {
     family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter",
     deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", capability: "#capability-filter",
     sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter",
+    lab: "#system-lab-filter",
   },
-  inference: { type: "#inference-type-filter", delivery: "#inference-delivery-filter", modelSource: "#inference-model-source-filter", apiStyle: "#inference-api-filter" },
-  runtimes: { type: "#runtime-type-filter", accelerator: "#runtime-accelerator-filter", modelFormat: "#runtime-format-filter", apiStyle: "#runtime-api-filter" },
+  inference: { type: "#inference-type-filter", delivery: "#inference-delivery-filter", modelSource: "#inference-model-source-filter", apiStyle: "#inference-api-filter", lab: "#inference-lab-filter" },
+  runtimes: { type: "#runtime-type-filter", accelerator: "#runtime-accelerator-filter", modelFormat: "#runtime-format-filter", apiStyle: "#runtime-api-filter", lab: "#runtime-lab-filter" },
   packs: { type: "#pack-type-filter", host: "#pack-host-filter", install: "#pack-install-filter", license: "#pack-license-filter" },
   robots: { formFactor: "#robot-form-factor-filter", aiBasis: "#robot-ai-basis-filter", availability: "#robot-availability-filter", status: "#robot-status-filter" },
   models: { type: "#model-type-filter", distribution: "#model-distribution-filter", modality: "#model-modality-filter", sourceModel: "#model-source-filter", license: "#model-license-filter", lab: "#model-lab-filter" },
   labs: { type: "#lab-type-filter", headquarters: "#lab-country-filter", distribution: "#lab-distribution-filter" },
-  specifications: { type: "#specification-type-filter", scope: "#specification-scope-filter", status: "#specification-status-filter", license: "#specification-license-filter" },
+  specifications: { type: "#specification-type-filter", scope: "#specification-scope-filter", status: "#specification-status-filter", license: "#specification-license-filter", lab: "#specification-lab-filter" },
 };
 
 const COLLECTIONS = ["all", "systems", "inference", "runtimes", "packs", "robots", "models", "labs", "specifications"];
-
-const CLEAR_CONTROLS = {
-  all: "#reset-all-directory", systems: "#reset-filters", inference: "#reset-inference-filters",
-  runtimes: "#reset-runtime-filters", packs: "#reset-pack-filters", robots: "#reset-robot-filters",
-  models: "#reset-model-filters", labs: "#reset-lab-filters", specifications: "#reset-specification-filters",
-};
 
 // Keyed by the `record=` URL's kinds.
 const RECORD_VIEWS = {
@@ -59,15 +54,27 @@ function filterControl(page, scope, key) {
   return page.locator(FILTER_CONTROLS[scope][key]);
 }
 
-// Systems folds most of its filters under "More filters": open it first. The
-// shell is the one that holds the control, not whichever shell shows: straight
-// after page.goto the whole panel is still hidden, and a control that is not
-// visible yet must not read as one that is folded away.
+// The rail on wide screens, the sheet from the Filters button on narrow
+// ones (Phase 3 task 3). Systems' family is the strip's row. Straight after
+// page.goto the page may not have booted, and then neither shows yet, so
+// the probe waits for whichever this width offers (ruling R-T1-3).
 async function setFilter(page, scope, key, value) {
-  const control = filterControl(page, scope, key);
-  const shell = page.locator(".advanced-filter-shell").filter({ has: control });
-  if (await shell.count() && !(await shell.evaluate(details => details.open))) await shell.locator("summary").click();
-  await control.selectOption(value);
+  if (scope === "systems" && key === "family") {
+    await require("./landing").openFamily(page, value);
+    await settled(page);
+    return;
+  }
+  await page.locator("#filter-rail:visible, #filters-button:visible").first().waitFor();
+  const rail = page.locator("#filter-rail");
+  const onRail = await rail.isVisible();
+  if (!onRail) await page.locator("#filters-button").click();
+  const container = onRail ? rail : page.locator("#filter-sheet");
+  const group = container.locator(`[data-filter-group="${key}"]`);
+  const more = group.locator("[data-filter-more]");
+  if (await more.isVisible()) await more.click();
+  await group.locator(`input[type="radio"][value="${value}"]`).check();
+  if (!onRail) await page.locator("#filter-sheet-done").click();
+  await settled(page);
 }
 
 async function expectFilter(page, scope, key, value) {
@@ -83,8 +90,13 @@ function sortControl(page, scope) {
   return page.locator(`.results-sort label[data-sort-scope="${scope}"] select`);
 }
 
-async function clearFilters(page, scope) {
-  await page.locator(CLEAR_CONTROLS[scope]).click();
+// One Clear filters serves every collection, and it shows only while
+// something is set: with nothing set there is nothing to clear.
+async function clearFilters(page) {
+  const clear = page.locator("#clear-filters");
+  if (!await clear.isVisible()) return;
+  await clear.click();
+  await settled(page);
 }
 
 function recordView(page, kind) {

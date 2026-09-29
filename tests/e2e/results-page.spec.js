@@ -5,7 +5,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { collectionEntry, familyEntry, openCollection, pressedEntry, searchAll } = require("./helpers/landing");
-const { closeRecord, recordView, search, searchBox, settled, sortControl } = require("./helpers/results");
+const { clearFilters, closeRecord, expectFilter, recordView, search, searchBox, setFilter, settled, sortControl } = require("./helpers/results");
 
 // A word no record holds, written into one collection's search index so a
 // test controls exactly which collection answers it.
@@ -248,4 +248,192 @@ test("on a phone the unpressed family entries hide their counts but keep them in
   await expect(memory.locator("strong")).toHaveCSS("position", "absolute");
   await expect(memory).toHaveAccessibleName(/Memory\s*\d+/);
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Systems\s*\d+/);
+});
+
+test("the rail lists Systems' filters with Role first, and a count equals what choosing it lists", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=systems");
+  const rail = page.locator("#filter-rail");
+  await expect(rail).toBeVisible();
+  await expect(rail.locator(".filter-group legend").first()).toHaveText("Role");
+  const option = rail.locator('[data-filter-group="role"] .filter-option').filter({ has: page.locator(".filter-count") }).nth(1);
+  const count = Number(await option.locator(".filter-count").textContent());
+  await option.locator("input").check();
+  await expect(page.locator("#result-count")).toHaveText(new RegExp(`^${count} projects?\\b`));
+  await expect(page).toHaveURL(/role=/);
+});
+
+test("a group's counts leave its own choice aside, and focus stays while the reader moves through it", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=inference");
+  const group = page.locator('#filter-rail [data-filter-group="type"]');
+  await group.locator("input").nth(1).check();
+  await expect(group.locator(".filter-count").nth(1)).not.toHaveText("0");
+  await group.locator("input").nth(1).focus();
+  await page.keyboard.press("ArrowDown");
+  await settled(page);
+  expect(await page.evaluate(() => document.activeElement?.closest("[data-filter-group]")?.dataset.filterGroup)).toBe("type");
+});
+
+// "me" is a stop word, so the rail counts what browsing lists (ruling R-T2-4).
+test("a query of stop words alone leaves the rail's counts at their browsing values", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=systems");
+  const counts = page.locator("#filter-rail .filter-count");
+  await expect(counts.first()).not.toBeEmpty();
+  const browsing = await counts.allTextContents();
+  await search(page, "me");
+  await expect(counts).toHaveText(browsing);
+});
+
+// The Finder's chip shares the row and stays hidden outside Systems, so the
+// row's chips are the visible ones.
+test("every active filter is a chip, and Clear filters clears them and the query", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=runtimes");
+  await search(page, "server");
+  const option = page.locator('#filter-rail [data-filter-group="type"] input').nth(1);
+  await option.check();
+  await settled(page);
+  const chips = page.locator("#filter-chips .filter-chip:visible");
+  await expect(chips).toHaveCount(1);
+  await expect(chips.first()).toContainText("Type: ");
+  await chips.first().click();
+  await settled(page);
+  await expect(chips).toHaveCount(0);
+  await option.check();
+  await clearFilters(page, "runtimes");
+  await expect(chips).toHaveCount(0);
+  await expect(searchBox(page)).toHaveValue("");
+});
+
+test("on a phone the filters open as a sheet whose button counts the results", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?collection=inference");
+  await expect(page.locator("#filter-rail")).toBeHidden();
+  await page.locator("#filters-button").click();
+  const sheet = page.locator("#filter-sheet");
+  await expect(sheet).toBeVisible();
+  await sheet.locator('[data-filter-group="type"] input').nth(1).check();
+  await settled(page);
+  const shown = Number((await page.locator("#inference-result-count").textContent()).match(/^\d+/)[0]);
+  await expect(page.locator("#filter-sheet-done")).toHaveText(`Show ${shown} ${shown === 1 ? "result" : "results"}`);
+  await page.locator("#filter-sheet-done").click();
+  await expect(sheet).toBeHidden();
+  await expect(page.locator("#filters-button .filters-count")).toHaveText("1");
+});
+
+test("Agent packs count packs only and say so, with no Lab filter", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=packs");
+  await expect(page.locator("#filter-rail .filter-note")).toHaveText("Counts are packs; installed systems follow the search only.");
+  await expect(page.locator('#filter-rail [data-filter-group="lab"]')).toHaveCount(0);
+});
+
+test("the Lab filter narrows inference services to one lab's, and a reload keeps it", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=inference");
+  const labs = page.locator('#filter-rail [data-filter-group="lab"] input:not([value=""])');
+  const value = await labs.first().getAttribute("value");
+  await setFilter(page, "inference", "lab", value);
+  await expect(page).toHaveURL(new RegExp(`lab=${value}`));
+  await page.reload();
+  await expectFilter(page, "inference", "lab", value);
+});
+
+test("a group with one value in use hides until it has two", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=robots");
+  await expect(page.locator('#filter-rail [data-filter-group="formFactor"]')).toBeVisible();
+  await expect(page.locator('#filter-rail [data-filter-group="status"]'), "every robot is active").toHaveCount(0);
+});
+
+// Choosing a role replaces the Finder's role set, so a role outside the set
+// counts what choosing it lists, and can be chosen.
+/* global state */
+test("beside a Finder role set, a role outside it counts what choosing it lists", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?view=finder");
+  for (const value of ["agent_system", "coding", "balanced"]) await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
+  await page.locator("[data-finder-directory]").click();
+  await expect(page.locator("#finder-roles-chip")).toBeVisible();
+  const finderRoles = await page.evaluate(() => state.directoryRoles);
+  const option = page.locator('#filter-rail [data-filter-group="role"] .filter-option')
+    .filter({ has: page.locator(".filter-count") })
+    .filter({ hasNot: page.locator(finderRoles.map(role => `input[value="${role}"]`).join(", ")) })
+    .first();
+  const count = Number(await option.locator(".filter-count").textContent());
+  expect(count, "a role outside the set lists records once chosen").toBeGreaterThan(0);
+  await option.locator("input").check();
+  await expect(page.locator("#result-count")).toHaveText(new RegExp(`^${count} projects?\\b`));
+  await expect(page.locator("#finder-roles-chip")).toBeHidden();
+});
+
+test("Clear filters clears a Lab chosen in Systems", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=systems");
+  const value = await page.locator('#filter-rail [data-filter-group="lab"] input:not([value=""])').first().getAttribute("value");
+  await setFilter(page, "systems", "lab", value);
+  await expect(page).toHaveURL(new RegExp(`lab=${value}`));
+  await clearFilters(page);
+  await expectFilter(page, "systems", "lab", "");
+  await expect(page).not.toHaveURL(/lab=/);
+});
+
+test("the Finder's handoff clears a Lab left set in its collection", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=inference");
+  const value = await page.locator('#filter-rail [data-filter-group="lab"] input:not([value=""])').first().getAttribute("value");
+  await setFilter(page, "inference", "lab", value);
+  await page.getByRole("button", { name: "Find your fit", exact: true }).click();
+  for (const choice of ["inference_service", "route_models", "balanced"]) await page.locator(`[data-finder-choice][data-finder-value="${choice}"]`).click();
+  await page.locator("[data-finder-directory]").click();
+  await expectFilter(page, "inference", "type", "routing_aggregator");
+  await expectFilter(page, "inference", "lab", "");
+});
+
+test("the front door hides the rail and the chips a collection left set", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await openCollection(page, "inference");
+  await page.locator('#filter-rail [data-filter-group="delivery"] input').nth(1).check();
+  await expect(page.locator("#filter-chips")).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#front-door")).toBeVisible();
+  await expect(page.locator("#filter-rail")).toBeHidden();
+  await expect(page.locator("#filter-chips")).toBeHidden();
+});
+
+test("All has no filters, so it offers no Filters button", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?collection=all");
+  await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#filters-button")).toBeHidden();
+  await openCollection(page, "inference");
+  await expect(page.locator("#filters-button")).toBeVisible();
+});
+
+// A chip takes itself off the row, so focus would fall to the page.
+test("removing a chip by keyboard moves focus to the result count", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=inference");
+  await page.locator('#filter-rail [data-filter-group="type"] input').nth(1).check();
+  const chip = page.locator("#filter-chips .filter-chip:visible").first();
+  await chip.focus();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#filter-chips .filter-chip:visible")).toHaveCount(0);
+  await expect(page.locator("#inference-result-count")).toBeFocused();
+});
+
+// A search index landing repaints the results; the chips it did not change
+// stay the same elements, so a reader's focus on one survives.
+/* global RESULT_VIEWS */
+test("a focused chip keeps its focus while the results repaint", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=inference");
+  await page.locator('#filter-rail [data-filter-group="type"] input').nth(1).check();
+  const chip = page.locator("#filter-chips .filter-chip:visible").first();
+  await chip.focus();
+  await page.evaluate(() => RESULT_VIEWS[state.directoryCollection].render());
+  await expect(chip).toBeFocused();
 });

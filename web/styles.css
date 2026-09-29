@@ -645,46 +645,45 @@ h1 {
 .scope-note-facts { color: var(--text); font-weight: 600; }
 .scope-note button { padding: 0; border: 0; background: transparent; color: var(--cyan); cursor: pointer; font-weight: 600; }
 .scope-note button:hover { color: var(--text); }
+/* The rail beside the results above 1000 px; a sheet from the bar's
+   Filters button below it (Phase 3 spec, section 3). The rail ends above
+   the badge legend's measured height, so no value sits under it. The front
+   door hides the frame, whatever layout class it carries. */
+.results-frame { display: block; }
+#results-frame[hidden] { display: none; }
+@media (min-width: 1001px) {
+  .results-frame.has-rail { display: grid; grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
+  .filter-rail { position: sticky; top: calc(var(--sticky-clearance, 0px) + .5rem); max-height: calc(100vh - var(--sticky-clearance, 0px) - var(--legend-h, 0px) - 1rem); overflow-y: auto; padding-right: .25rem; }
+  .filters-button { display: none; }
+}
+@media (max-width: 1000px) {
+  .filter-rail { display: none; }
+}
+.filter-group { margin: 0 0 1rem; padding: 0; border: 0; min-width: 0; }
+.filter-group legend { margin: 0 0 .35rem; padding: 0; color: var(--muted); font: 700 .66rem var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+.filter-option { display: flex; align-items: center; gap: .45rem; padding: .15rem 0; font-size: .82rem; cursor: pointer; }
+/* A value is a plain radio and plain text, not the text field and field
+   caption the page's input and label rules style. */
+.filter-option input { flex: none; width: 1rem; height: 1rem; min-height: 0; margin: 0; padding: 0; accent-color: var(--cyan); }
+.filter-option span { margin: 0; color: inherit; font: inherit; letter-spacing: normal; text-transform: none; }
+.filter-option .filter-count { margin-left: auto; color: var(--muted); font: 500 .7rem var(--font-mono); }
+.filter-option:has(input:disabled) { color: var(--faint); cursor: default; }
+.filter-more { font-size: .78rem; }
+.filter-note { margin: 0 0 .75rem; color: var(--muted); font-size: .72rem; }
+.filter-chips { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin: 0 0 .25rem; }
+.filter-chips[hidden] { display: none; }
+.filter-chip-list { display: contents; }
+.filter-chip { padding: .25rem .6rem; border: 1px solid var(--line); border-radius: var(--radius-pill); background: var(--glass-weak); color: var(--text); font-size: .78rem; cursor: pointer; }
+.filter-chip:hover { border-color: var(--cyan); }
+/* Glues the removal glyph to the chip's last word so a narrow chip never
+   wraps the × onto a line by itself. */
+.filter-chip > span[aria-hidden="true"] { white-space: nowrap; }
+.filter-sheet { width: min(100%, 32rem); max-height: 85vh; margin: auto auto 0; padding: 1rem 1rem 1.25rem; border: 1px solid var(--line); border-radius: var(--radius); border-bottom-left-radius: 0; border-bottom-right-radius: 0; background: var(--panel); color: var(--text); box-shadow: var(--shadow-dialog); }
+.filter-sheet::backdrop { background: var(--backdrop); }
+.filter-sheet h2 { margin: 0 0 .75rem; font: 700 1rem var(--font-display); }
+#filter-sheet-done { width: 100%; margin-top: .5rem; }
 #directory.view.is-results { padding-top: .75rem; }
 
-.control-panel {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: .8rem;
-  margin-top: 1.1rem;
-  padding: 1.05rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--panel-glass);
-  box-shadow: var(--shadow-small);
-  backdrop-filter: blur(18px) saturate(130%);
-}
-.specification-controls {
-  position: static;
-}
-.inference-controls {
-  position: static;
-}
-.advanced-filter-shell {
-  grid-column: 1 / -1;
-  padding-top: .15rem;
-  border-top: 1px solid var(--line);
-}
-.advanced-filter-shell summary {
-  width: fit-content;
-  padding: .65rem .1rem .15rem;
-  color: var(--cyan);
-  cursor: pointer;
-  font-size: .78rem;
-  font-weight: 600;
-}
-.advanced-filter-shell summary:hover { color: var(--text); }
-.advanced-filters {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(130px, 1fr));
-  gap: .8rem;
-  padding-top: .9rem;
-}
 label span {
   display: block;
   margin: 0 0 .42rem .1rem;
@@ -1438,14 +1437,8 @@ footer #data-date, footer .footer-meta {
   white-space: nowrap;
 }
 
-@media (max-width: 1300px) {
-  .control-panel { position: static; }
-}
-
 @media (max-width: 1100px) {
-  .control-panel { grid-template-columns: repeat(2, 1fr); }
   .search-field { grid-column: 1 / -1; }
-  .advanced-filters { grid-template-columns: repeat(2, 1fr); }
   .project-grid { grid-template-columns: repeat(2, 1fr); }
   .finder-choice-grid,
   .finder-choice-grid.direction-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1519,7 +1512,6 @@ footer #data-date, footer .footer-meta {
   .view, #directory.view { padding: 2.6rem 0; }
   .definitions, .taxonomy-grid { grid-template-columns: 1fr; }
   .api-facts, .endpoint-list, .api-notes { grid-template-columns: 1fr; }
-  .control-panel { grid-template-columns: 1fr 1fr; }
   .search-field { grid-column: 1 / -1; }
   .project-grid,
   .finder-results,
@@ -1550,9 +1542,7 @@ footer #data-date, footer .footer-meta {
 }
 
 @media (max-width: 460px) {
-  .control-panel { grid-template-columns: 1fr; }
   .search-field { grid-column: auto; }
-  .advanced-filters { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1605,24 +1595,6 @@ footer #data-date, footer .footer-meta {
   .post-nav { position: static; padding-top: 0; }
   .post-nav-list { grid-template-columns: 1fr; }
 }
-.filter-chip {
-  padding: .3rem .55rem;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-chip);
-  background: var(--panel);
-  color: var(--text);
-  font: 600 .74rem var(--font-body);
-  cursor: pointer;
-}
-.filter-chip:hover { border-color: var(--cyan); }
-/* The row's flex justify-content space-between would otherwise center the
-   count between the chip and Clear filters; pulling the count's own margin
-   keeps it beside the chip and pushes Clear filters to the row's far edge. */
-#result-count { margin-right: auto; }
-/* Glues the removal glyph to the chip's last word so a narrow chip never
-   wraps the × onto a line by itself. */
-.filter-chip > span[aria-hidden="true"] { white-space: nowrap; }
-
 /* The query's result count, beside the input, so typing shows its effect
    without scrolling. The live count in the result row stays the announced one. */
 .search-field { position: relative; }
