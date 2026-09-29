@@ -1658,3 +1658,63 @@ footer #data-date, footer .footer-meta {
 .job-hint .link-button { color: inherit; }
 .empty-search :is(a, .link-button):hover,
 .job-hint .link-button:hover { color: inherit; text-decoration-thickness: 2px; }
+
+/* The app's mobile shell leaves the shared desktop/blog header unchanged. */
+.mobile-nav, .element-family-tabs { display: none; }
+.mobile-more { width: min(32rem, calc(100% - 1.5rem)); padding: 1.25rem; }
+.mobile-more-heading { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.mobile-more-heading h2 { font: 600 1.2rem var(--font-display); }
+.mobile-more nav { display: grid; margin-block: 1rem; }
+.mobile-more nav > * { display: block; min-height: 48px; padding: .75rem 0; border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--text); text-align: left; font: inherit; cursor: pointer; }
+.mobile-more .header-tools { justify-self: stretch; flex-direction: column; gap: .5rem; }
+.mobile-more .theme-toggle, .mobile-more .github-link { width: 100%; min-height: 48px; height: auto; grid-template-columns: 24px 1fr; gap: .75rem; padding: .5rem .75rem; text-align: left; justify-items: start; }
+.mobile-more .theme-toggle::after, .mobile-more .github-link::after { content: attr(aria-label); font: .85rem var(--font-body); }
+
+@media (max-width: 767px) {
+  body.atlas-app { --mobile-nav-h: calc(64px + env(safe-area-inset-bottom, 0px)); padding-bottom: var(--mobile-nav-h); }
+  html:has(body.atlas-app) { scroll-padding-bottom: calc(var(--legend-h, 0px) + 80px + env(safe-area-inset-bottom, 0px)); }
+  .atlas-app .site-header { min-height: 56px; grid-template-columns: 1fr; padding: .5rem 1rem; }
+  .atlas-app .site-header .tabs { display: none; }
+  .atlas-app .brand small { display: none; }
+  .atlas-app .wordmark { font-size: 1rem; }
+  .atlas-app #directory.view { padding-top: 1.25rem; }
+  .atlas-app .door-kicker { display: none; }
+  .atlas-app .door-title { margin-block: 0 .6rem; font-size: 2.2rem; max-width: 22rem; }
+  .atlas-app .front-door { gap: .75rem; }
+  .atlas-app .front-door .hero-copy { margin-bottom: 0; font-size: .95rem; }
+  .atlas-app .desktop-explore-link { display: none; }
+  .atlas-app .door-search, .atlas-app .door-jobs { display: none; }
+  .atlas-app .elements { margin: 0; }
+  .atlas-app .elements > .elements-heading { display: none; }
+  .element-family-tabs { display: flex; margin-bottom: .6rem; border-bottom: 1px solid var(--line); }
+  .element-family-tabs button { flex: 1; min-height: 48px; padding: .5rem .25rem; border: 0; border-bottom: 3px solid transparent; background: none; color: var(--muted); font: 500 .85rem var(--font-body); cursor: pointer; }
+  .element-family-tabs button[aria-pressed="true"] { border-bottom-color: var(--cyan); color: var(--cyan); }
+  .atlas-app .element-groups { display: grid; grid-template-columns: 1fr; gap: .6rem; }
+  .atlas-app .element-group:not(.mobile-family-active) { display: none; }
+  .atlas-app .element-family-heading { border: 0; padding: 0; margin-bottom: .5rem; }
+  .atlas-app .element-family-heading h3 { font-size: .8rem; }
+  .atlas-app .element-tiles, .atlas-app .element-group[data-element-family="assistant_system"] .element-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .atlas-app .element-tile { min-height: 94px; padding: .5rem; gap: .4rem; }
+  .atlas-app .element-symbol { font-size: 1.5rem; }
+  .atlas-app .element-name { font-size: .7rem; }
+  .atlas-app .element-note { font-size: .7rem; line-height: 1.45; margin-top: .65rem; }
+  .atlas-app .element-sheet { margin-block: .5rem; padding: 1rem; }
+  .atlas-app .collection-index-heading { margin: .5rem 0 0; }
+  .atlas-app .collection-index-heading p { display: none; }
+  .atlas-app .collection-index { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
+  .atlas-app .tile { padding: .6rem; }
+  .atlas-app .tile-categories, .atlas-app .tile-marks { display: none; }
+  .atlas-app .tile-open { min-height: 48px; }
+  .atlas-app .tile-name { font-size: .85rem; }
+  .atlas-app .tile-count small { font-size: .65rem; }
+  .atlas-app .tile-wide { order: 1; }
+  .mobile-nav { display: flex; position: fixed; inset: auto 0 0; z-index: 30; min-height: var(--mobile-nav-h); padding: .25rem max(.25rem, env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px) max(.25rem, env(safe-area-inset-left, 0px)); border-top: 1px solid var(--line); background: var(--panel); }
+  .mobile-nav button { display: flex; flex: 1; min-width: 0; min-height: 60px; flex-direction: column; align-items: center; justify-content: center; gap: .25rem; border: 0; background: none; color: var(--muted); font: 500 .7rem var(--font-body); cursor: pointer; }
+  .mobile-nav svg { width: 22px; height: 22px; fill: none; stroke: currentcolor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .mobile-nav button[aria-current="page"] { color: var(--cyan); }
+  .atlas-app .badge-legend { bottom: var(--mobile-nav-h); }
+  .atlas-app .badge-legend-chip, .atlas-app .comparison-tray { bottom: calc(var(--mobile-nav-h) + .75rem); }
+  .atlas-app:has(.comparison-tray:not([hidden])) { padding-bottom: calc(var(--mobile-nav-h) + 180px); }
+  .atlas-app.mobile-keyboard .mobile-nav, .atlas-app.mobile-keyboard .badge-legend, .atlas-app.mobile-keyboard .badge-legend-chip { display: none; }
+  .atlas-app.mobile-keyboard .comparison-tray { position: static; margin: 1rem; width: auto; transform: none; }
+}

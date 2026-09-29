@@ -48,10 +48,17 @@ async function openFamily(page, family) {
 }
 
 function viewTab(page, id) {
-  return page.locator(`.tab[data-tab="${id}"]`);
+  return page.locator(`.tab[data-tab="${id}"]:visible, [data-mobile-nav="${id === "directory" ? "home" : id}"]:visible`);
 }
 
 async function openView(page, id) {
+  if (await page.locator("#mobile-nav").isVisible()) {
+    if (["taxonomy", "api"].includes(id)) {
+      await page.locator('[data-mobile-nav="more"]').click();
+      await page.locator(`[data-mobile-view="${id}"]`).click();
+    } else await viewTab(page, id).click();
+    return;
+  }
   if (["explore", "taxonomy", "api"].includes(id)) {
     await page.locator(".docs-button").click();
     await page.locator(`#docs-menu-list [data-open-view="${id}"]`).click();
@@ -67,6 +74,7 @@ function allSearch(page) {
 // On the front door this fills its search, whose input handler carries the
 // whole value into the All search and lands in results.
 async function searchAll(page, text) {
+  if (!await allSearch(page).count()) await page.locator('[data-mobile-nav="search"]').click();
   await allSearch(page).fill(text);
 }
 

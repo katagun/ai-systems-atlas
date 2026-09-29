@@ -98,10 +98,10 @@ for (const theme of ["light", "dark"]) {
       await page.setViewportSize({ width, height: 900 });
       await expect(page.locator("#element-sheet")).toBeVisible();
       expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(0);
-      if (width <= 700) {
+      if (width <= 767) {
         expect(await page.locator("#element-sheet").evaluate(el => el.previousElementSibling.dataset.elementFamily)).toBe("agent_system");
       }
-      for (const tile of await page.locator("[data-element]").all()) {
+      for (const tile of await page.locator("[data-element]:visible").all()) {
         const box = await tile.boundingBox();
         expect(box.width).toBeGreaterThanOrEqual(44);
         expect(box.height).toBeGreaterThanOrEqual(44);
