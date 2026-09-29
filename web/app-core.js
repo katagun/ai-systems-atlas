@@ -90,6 +90,39 @@
     return 0;
   }
 
+  // Keep localOnly=1 links valid while exposing false separately from missing.
+  function matchesLocalFirst(project, value) {
+    if (value === true || value === "1") return project.local_first === true;
+    if (value === "0") return project.local_first === false;
+    if (value === "unknown") return typeof project.local_first !== "boolean";
+    return true;
+  }
+
+  function systemDeploymentSummary(projects, taxonomy) {
+    const active = projects.filter(project => project.status === "active");
+    const groupRows = (field, groups, columns, matches) => {
+      const known = new Set(groups.map(group => group.id));
+      return [...groups, { id: "", name: "Not classified" }].map(group => {
+        const records = active.filter(project => (known.has(project[field]) ? project[field] : "") === group.id);
+        return { ...group, count: records.length, cells: columns.map(column => ({
+          ...column, count: records.filter(project => matches(project, column.id)).length,
+        })) };
+      }).filter(row => row.count);
+    };
+    const deployments = taxonomy.deployment_modes;
+    const localStates = [{ id: "1", name: "Yes" }, { id: "0", name: "No" }, { id: "unknown", name: "Not recorded" }];
+    return {
+      total: active.length,
+      excluded: projects.length - active.length,
+      deployments,
+      localStates,
+      families: groupRows("system_family", taxonomy.system_families, deployments,
+        (project, id) => (project.deployment || []).includes(id)),
+      licensing: groupRows("source_model", taxonomy.source_models, localStates, matchesLocalFirst),
+      missingDeployment: active.filter(project => !deployments.some(mode => (project.deployment || []).includes(mode.id))).length,
+    };
+  }
+
   function matchesProjectFacets(project, filters) {
     const roles = filters.roles || [];
     return (!filters.family || project.system_family === filters.family) &&
@@ -102,7 +135,7 @@
       (!filters.sourceModel || project.source_model === filters.sourceModel) &&
       (!filters.license || project.licenses.includes(filters.license)) &&
       (!filters.status || project.status === filters.status) &&
-      (!filters.localOnly || project.local_first);
+      matchesLocalFirst(project, filters.localOnly);
   }
 
   function matchesProject(project, filters) {
@@ -1542,6 +1575,7 @@
     matchFinderGoal,
     mergePackScopeEntries,
     modelAccessSummary,
+    systemDeploymentSummary,
     modelMetadataAttribution,
     modelSourceLabel,
     modelsKickerText,
