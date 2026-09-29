@@ -710,6 +710,7 @@ class ValidationPolicyTests(unittest.TestCase):
         "description": "A synthetic lab used to exercise lab validation.",
         "lab_type": "ai_company",
         "headquarters": "us",
+        "admission_basis": "reviewed_release",
         "organization_note": "One name covers the synthetic lab's models and API.",
         "catalog_names": ["Anthropic"],
         "systems": [],
@@ -841,6 +842,48 @@ class ValidationPolicyTests(unittest.TestCase):
             ),
             errors,
         )
+
+    def test_lab_admission_basis_must_be_known_and_must_match_the_join(self) -> None:
+        """ADR 044: the two bases are exclusive in both directions.
+
+        A lab must not borrow `frontier_announcement` while it has a reviewed
+        release, and must not claim `reviewed_release` with no release to join.
+        """
+
+        def as_announced(lab):
+            # Keeps the sample's Anthropic name, so the reviewed release is still
+            # reachable and the basis is the thing that is wrong.
+            lab["admission_basis"] = "frontier_announcement"
+
+        def as_unreviewed(lab):
+            lab["admission_basis"] = "reviewed_release"
+            lab["catalog_names"] = []
+
+        errors = self.lab_errors(self.catalog_with_lab(as_announced))
+        self.assertTrue(
+            any("has a reviewed model release" in e for e in errors), errors
+        )
+
+        errors = self.lab_errors(self.catalog_with_lab(as_unreviewed))
+        self.assertTrue(
+            any("develops no reviewed model release" in e for e in errors), errors
+        )
+
+    def test_lab_rejects_an_unknown_admission_basis(self) -> None:
+        def mutate(lab):
+            lab["admission_basis"] = "vibes"
+
+        errors = self.lab_errors(self.catalog_with_lab(mutate))
+        self.assertTrue(any("unknown admission basis" in e for e in errors), errors)
+
+    def test_announced_lab_may_carry_no_catalog_names(self) -> None:
+        """An announced lab joins to nothing, so an empty list is the normal case."""
+
+        def mutate(lab):
+            lab["admission_basis"] = "frontier_announcement"
+            lab["catalog_names"] = []
+
+        self.assertEqual(self.lab_errors(self.catalog_with_lab(mutate)), [])
 
     def test_lab_is_recorded_only_once_it_developed_a_reviewed_release(self) -> None:
         documents = {

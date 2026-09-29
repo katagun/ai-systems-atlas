@@ -961,6 +961,18 @@
       "definition": "A government-funded, academic, or nonprofit research organization that develops and releases models."
     }
   ],
+  "lab_admission_bases": [
+    {
+      "id": "reviewed_release",
+      "name": "Reviewed release",
+      "definition": "The catalog has reviewed at least one model release the organization developed, so the record joins to that release."
+    },
+    {
+      "id": "frontier_announcement",
+      "name": "Frontier announcement",
+      "definition": "The organization publishes, on its own pages, a statement that it is building frontier models, and the catalog has reviewed no release of its own. The record joins to nothing and says so."
+    }
+  ],
   "lab_channel_kinds": [
     {
       "id": "model_catalog",
@@ -1018,6 +1030,11 @@
       "id": "il",
       "name": "Israel",
       "definition": "Headquartered in Israel (ISO 3166-1 IL)."
+    },
+    {
+      "id": "jp",
+      "name": "Japan",
+      "definition": "Headquartered in Japan (ISO 3166-1 JP)."
     },
     {
       "id": "sg",
@@ -1785,6 +1802,16 @@
     {
       "id": "LicenseRef-Qwen-Community-1.0",
       "name": "Qwen Community License 1.0",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Sakana-API-ToS",
+      "name": "Sakana AI API Platform Terms of Service",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-Sakana-AI-Scientist",
+      "name": "The AI Scientist Source Code License 1.0",
       "kind": "restricted"
     },
     {

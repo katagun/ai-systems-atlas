@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { allSearch, searchAll } = require("./helpers/landing");
+const { allSearch, openView, searchAll } = require("./helpers/landing");
 
 // The card marks and the reviewed license evidence are the two largest files
 // the page can load, and neither is needed to render the directory. These
@@ -173,7 +173,7 @@ test("pressing Compare says the details are loading rather than showing nothing"
 test("a finder shortlist prints an em dash, not a dangling label, when detail never arrives", async ({ page }) => {
   await page.route("**/app/detail/**", route => route.abort());
   await page.goto("/");
-  await page.locator('[data-tab="finder"]').click();
+  await openView(page, "finder");
   for (let step = 0; step < 3; step += 1) {
     await page.locator("#finder-content .finder-choice").first().click();
   }

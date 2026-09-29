@@ -4,12 +4,12 @@
 # Run everything (what CI runs):  pre-commit run --all-files
 #
 # Every hook runs on `git commit` except the two slow suites, the unit tests
-# under coverage (~1.5 min) and the browser e2e (~3.5 min), which run on
+# under coverage (about 192 s here, 93 s in CI) and the browser e2e (3.8 min), which run on
 # `git push` instead (`stages: [pre-push]`). `pre-commit install` installs
 # both hook types through default_install_hook_types below. CI runs the fast
 # hooks in one job and each slow suite in its own job; see verify.yml.
 # Complexity is enforced through ruff C901 (Python, max 50) and the eslint
-# complexity rule (JS, max 30); both are ratchets documented in
+# complexity rule (JS, max 40); both are ratchets documented in
 # pyproject.toml and eslint.config.mjs, tightened by refactor, never by noqa.
 
 default_install_hook_types: [pre-commit, pre-push]
@@ -196,20 +196,12 @@ repos:
         pass_filenames: false
         stages: [pre-push]
 
-      - id: python-compileall
-        language: system
-        name: compile python sources
-        entry: uv run python -m compileall scripts tests
-        always_run: true
-        pass_filenames: false
-
-      - id: node-syntax-check
-        language: system
-        name: node syntax check browser bundle
-        entry: bash
-        args: [-c, node --check web/app-core.js && node --check web/app.js]
-        always_run: true
-        pass_filenames: false
+      # python-compileall and node-syntax-check were removed on 2026-09-28 (CR-24).
+      # Neither could catch anything the linters do not: pyproject selects ruff's E9
+      # syntax and IO rules, which run over every file, and eslint parses web/app.js and
+      # web/app-core.js at ecmaVersion 2023. Both hooks ran in the static CI job and were
+      # restated in docs/OPERATIONS.md as required checks, so the cost was the false
+      # assurance rather than the runtime.
 
       - id: node-web-tests
         language: system

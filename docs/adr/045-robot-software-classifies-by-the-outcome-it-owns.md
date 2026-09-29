@@ -1,4 +1,4 @@
-# ADR 044: Robot software classifies by the outcome it owns
+# ADR 045: Robot software classifies by the outcome it owns
 
 **Status:** Proposed
 

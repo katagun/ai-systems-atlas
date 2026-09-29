@@ -23,7 +23,7 @@ General agent-architecture pattern content — harness shapes, failure taxonomie
 
 Autonomous scientific-discovery systems are not a further role either. They are classified by the operational outcome they own — sourced investigation is `research_agent` — while the discovery mechanism itself, writing and executing code against data or instruments, is carried by `agent_capabilities` and `execution_boundaries` like any other agent trait. See [ADR 023](adr/023-autonomous-science-systems-are-not-a-role.md).
 
-Robot software is not a further role either. A framework a developer builds a robot-controlling agent with is `agent_framework_sdk`, and a system carries `robot_control` in `agent_capabilities` when it meets that capability's definition; the outcome a robot role would have to name, completing physical tasks a person delegates, is written down with the conditions that reopen the question. See [ADR 044](adr/044-robot-software-classifies-by-the-outcome-it-owns.md).
+Robot software is not a further role either. A framework a developer builds a robot-controlling agent with is `agent_framework_sdk`, and a system carries `robot_control` in `agent_capabilities` when it meets that capability's definition; the outcome a robot role would have to name, completing physical tasks a person delegates, is written down with the conditions that reopen the question. See [ADR 045](adr/045-robot-software-classifies-by-the-outcome-it-owns.md).
 
 ## Family 1: memory systems
 

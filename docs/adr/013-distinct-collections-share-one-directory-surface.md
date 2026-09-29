@@ -1,6 +1,6 @@
 # ADR 013: Distinct collections share one Directory surface
 
-**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order).
+**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order) and [ADR 043](043-the-directory-opens-on-a-front-door-of-collection-tiles.md) (tiles and the scope strip are the quick filters; Models and Specifications are Directory collections, not sibling views).
 
 ## Context
 

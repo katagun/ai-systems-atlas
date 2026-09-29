@@ -91,6 +91,39 @@
     return 0;
   }
 
+  // Keep localOnly=1 links valid while exposing false separately from missing.
+  function matchesLocalFirst(project, value) {
+    if (value === true || value === "1") return project.local_first === true;
+    if (value === "0") return project.local_first === false;
+    if (value === "unknown") return typeof project.local_first !== "boolean";
+    return true;
+  }
+
+  function systemDeploymentSummary(projects, taxonomy) {
+    const active = projects.filter(project => project.status === "active");
+    const groupRows = (field, groups, columns, matches) => {
+      const known = new Set(groups.map(group => group.id));
+      return [...groups, { id: "", name: "Not classified" }].map(group => {
+        const records = active.filter(project => (known.has(project[field]) ? project[field] : "") === group.id);
+        return { ...group, count: records.length, cells: columns.map(column => ({
+          ...column, count: records.filter(project => matches(project, column.id)).length,
+        })) };
+      }).filter(row => row.count);
+    };
+    const deployments = taxonomy.deployment_modes;
+    const localStates = [{ id: "1", name: "Yes" }, { id: "0", name: "No" }, { id: "unknown", name: "Not recorded" }];
+    return {
+      total: active.length,
+      excluded: projects.length - active.length,
+      deployments,
+      localStates,
+      families: groupRows("system_family", taxonomy.system_families, deployments,
+        (project, id) => (project.deployment || []).includes(id)),
+      licensing: groupRows("source_model", taxonomy.source_models, localStates, matchesLocalFirst),
+      missingDeployment: active.filter(project => !deployments.some(mode => (project.deployment || []).includes(mode.id))).length,
+    };
+  }
+
   function matchesProjectFacets(project, filters) {
     const roles = filters.roles || [];
     return (!filters.family || project.system_family === filters.family) &&
@@ -104,7 +137,7 @@
       (!filters.sourceModel || project.source_model === filters.sourceModel) &&
       (!filters.license || project.licenses.includes(filters.license)) &&
       (!filters.status || project.status === filters.status) &&
-      (!filters.localOnly || project.local_first);
+      matchesLocalFirst(project, filters.localOnly);
   }
 
   function matchesProject(project, filters) {
@@ -681,9 +714,10 @@
   // a Directory collection since #345; `kind` stays so a future sibling view
   // is one word. `emblem` names the card badge whose emblem the entry shows:
   // the family's own type badge for a system family, else the collection's
-  // first type badge in CARD_BADGES order. All shows the type family's empty
-  // frame, and Robots shows none until its form_factor type badge exists
-  // (ADR 037). `field` is what the tile's categories tally; `facet` is the
+  // first type badge in CARD_BADGES order (Agent packs shares the agent head).
+  // All shows the type family's empty
+  // frame; Robots has a navigation-only glyph, independent of form-factor
+  // card badges (ADR 037). `field` is what the tile's categories tally; `facet` is the
   // URL key that opens the scope narrowed to one.
   const FAMILY_SHORT_NAMES = { memory_system: "Memory", agent_system: "Agents", assistant_system: "Assistants" };
   const COLLECTIONS = [
@@ -692,8 +726,8 @@
     { id: "models", name: "Models", short: "Models", kind: "scope", emblem: "language-model", field: "model_type", facet: "type" },
     { id: "inference", name: "Inference services", short: "Services", kind: "scope", emblem: "direct-model-api", field: "service_type", facet: "type" },
     { id: "runtimes", name: "Local runtimes", short: "Runtimes", kind: "scope", emblem: "desktop-runner", field: "runtime_type", facet: "type" },
-    { id: "packs", name: "Agent packs", short: "Packs", kind: "scope", emblem: "skills-bundle", field: "pack_type", facet: "type" },
-    { id: "robots", name: "Robots", short: "Robots", kind: "scope", emblem: null, field: "form_factor", facet: "formFactor" },
+    { id: "packs", name: "Agent packs", short: "Packs", kind: "scope", emblem: "agent-system", field: "pack_type", facet: "type" },
+    { id: "robots", name: "Robots", short: "Robots", kind: "scope", emblem: null, glyph: '<path d="M10 23h12M13 23v-3.5l4.5-4.5M15.5 12l-3-2M19 13l2-2 2 1M21 11l-1-2"/><circle cx="11" cy="9" r="1.7"/><circle cx="17.5" cy="13.5" r="2"/><path d="m10 10.4 3 7.1"/>', field: "form_factor", facet: "formFactor" },
     { id: "labs", name: "Labs", short: "Labs", kind: "scope", emblem: "ai-company", field: "lab_type", facet: "type" },
     { id: "specifications", name: "Specifications", short: "Specs", kind: "scope", emblem: "protocol", field: "specification_type", facet: "type" },
   ];
@@ -1005,7 +1039,7 @@
       definition: "Its main job is planning and taking actions with tools on your behalf.",
       test: { field: "system_family", equals: "agent_system" },
       family: "type",
-      glyph: '<rect x="11" y="12.8" width="10" height="8" rx="2"/><path d="M16 12.8v-2"/><circle class="badge-dot" cx="16" cy="10.1" r=".9"/><circle class="badge-dot" cx="13.9" cy="16.6" r="1"/><circle class="badge-dot" cx="18.1" cy="16.6" r="1"/>',
+      glyph: '<path d="M12 11.5h8l2 2v6l-2 2h-8l-2-2v-6ZM16 11.5V9M8 15v3M24 15v3M14 19h4"/><path d="M13 15.5h1M18 15.5h1"/>',
     },
     "assistant-system": {
       name: "Assistant system",
@@ -1215,7 +1249,9 @@
       definition: "Can use tools and data sources through the Model Context Protocol.",
       test: { field: "agent_capabilities", anyOf: ["mcp"] },
       family: "capability",
-      glyph: '<path d="M13.5 9.5v3.5M18.5 9.5v3.5M11.5 13h9v2.5a4.5 4.5 0 0 1-9 0ZM16 20v2.5"/>',
+      // Official MCP favicon, scaled uniformly into the emblem. Keep the
+      // original paths and stroke proportions; attribution: third_party/mcp-logo-LICENSE.txt.
+      glyph: '<g transform="translate(8.35 8.35) scale(.085)" stroke-width="12"><path d="M18 84.8528L85.8822 16.9706C95.2548 7.59798 110.451 7.59798 119.823 16.9706V16.9706C129.196 26.3431 129.196 41.5391 119.823 50.9117L68.5581 102.177"/><path d="M69.2652 101.47L119.823 50.9117C129.196 41.5391 144.392 41.5391 153.765 50.9117L154.118 51.2652C163.491 60.6378 163.491 75.8338 154.118 85.2063L92.7248 146.6C89.6006 149.724 89.6006 154.789 92.7248 157.913L105.331 170.52"/><path d="M102.853 33.9411L52.6482 84.1457C43.2756 93.5183 43.2756 108.714 52.6482 118.087V118.087C62.0208 127.459 77.2167 127.459 86.5893 118.087L136.794 67.8822"/></g>',
     },
     "editable-by-you": {
       name: "Editable by you",
@@ -1412,6 +1448,11 @@
   function familyEmblem(familyId) {
     return emblemSVG(familyId, "");
   }
+  function collectionEmblem(entry) {
+    if (entry.glyph) return emblemSVG("type", entry.glyph);
+    if (entry.id === "all") return familyEmblem("type");
+    return entry.emblem ? badgeEmblem(entry.emblem) : "";
+  }
 
   // What the Directory legend shows for a scope: the badges its cards can
   // carry, grouped by family, or only the families where cards of every kind
@@ -1491,6 +1532,177 @@
     };
   }
 
+  const FINDER_DIRECTIONS = [
+    { id: "memory_system", label: "Preserve and use knowledge", description: "Notes, documents, recall, personal knowledge, or durable memory for agents.", cue: "I need a memory system" },
+    { id: "agent_system", label: "Plan and take action", description: "Coding, research, data analysis, browser work, or a framework for building tool-using agents.", cue: "I need an agent system" },
+    { id: "assistant_system", label: "Help across everyday work", description: "A conversational workspace for research, creation, organizational context, or access to several models.", cue: "I need an assistant" },
+    { id: "inference_service", label: "Serve and route models", description: "A managed API, cloud platform, model host, or routing layer for production inference.", cue: "I need an inference service" },
+    { id: "local_runtime", label: "Run models on hardware I operate", description: "A desktop runner, server engine, embeddable library, or self-hosted compatible gateway.", cue: "I need a local runtime" }
+  ];
+  const FINDER_GOALS = {
+    memory_system: [
+      { id: "personal_knowledge", label: "Keep my own notes and knowledge", description: "A workspace for writing, linking, organizing, and revisiting ideas.", roles: ["human_pkm"] },
+      { id: "knowledge_assistant", label: "Ask questions over documents", description: "A ready-to-use AI knowledge app or RAG workspace.", roles: ["ai_knowledge_app"] },
+      { id: "agent_memory", label: "Give agents durable memory", description: "Memory services, temporal context, or a bridge to human-owned knowledge.", roles: ["agent_memory_service", "context_graph_engine", "memory_bridge"] },
+      { id: "ambient_recall", label: "Automatically remember activity", description: "Passive capture for reconstructing digital work and context.", roles: ["ambient_capture"] },
+      { id: "memory_infrastructure", label: "Build a custom memory product", description: "Retrieval or context-graph infrastructure for developers.", roles: ["retrieval_infrastructure", "context_graph_engine"] }
+    ],
+    agent_system: [
+      { id: "general_work", label: "Delegate general knowledge work", description: "An end-user agent that plans and completes broad multi-step work across files, web sources, and applications.", roles: ["general_work_agent"] },
+      { id: "coding", label: "Write and maintain software", description: "An interactive coding agent or a repeatable coding-agent workflow.", roles: ["coding_agent", "coding_agent_workflow"] },
+      { id: "research", label: "Research and synthesize information", description: "A multi-step researcher that gathers sources and produces reports.", roles: ["research_agent"] },
+      { id: "analyze_data", label: "Analyze data with natural language", description: "A text-to-SQL or analytics agent that plans, validates, and explains queries.", roles: ["data_analysis_agent"] },
+      { id: "browser", label: "Operate websites or browsers", description: "An agent specialized in browser and graphical interaction.", roles: ["browser_computer_agent"] },
+      { id: "persistent", label: "Run a persistent, stateful agent", description: "Identity, memory, schedules, skills, and long-running state.", roles: ["stateful_agent_runtime"] },
+      { id: "build_agents", label: "Build and orchestrate agents", description: "A framework for tools, workflows, state, and multi-agent coordination.", roles: ["agent_framework_sdk", "multi_agent_orchestrator"] }
+    ],
+    assistant_system: [
+      { id: "general_assistance", label: "Use one broad AI workspace", description: "A general assistant for research, files, creation, memory, and connected tools.", roles: ["general_ai_assistant"] },
+      { id: "enterprise_work", label: "Work across organizational context", description: "A governed assistant grounded in company data, applications, and business actions.", roles: ["enterprise_work_assistant"] },
+      { id: "model_choice", label: "Use several models in one place", description: "A consistent chat workspace with first-class model and provider choice.", roles: ["multi_model_chat_client"] }
+    ],
+    inference_service: [
+      { id: "model_developer_api", label: "Use a model developer's API", description: "Call first-party model families through their developer's managed service.", serviceTypes: ["direct_model_api"] },
+      { id: "cloud_governance", label: "Deploy through my cloud platform", description: "Use cloud-native identity, regions, networking, and models from several publishers.", serviceTypes: ["cloud_model_platform"] },
+      { id: "host_models", label: "Host selected or custom models", description: "Serve open-weight, third-party, or customer-supplied models on managed infrastructure.", serviceTypes: ["managed_inference_host"] },
+      { id: "route_models", label: "Route across models and providers", description: "Use one API with provider selection, fallback, or routing policy.", serviceTypes: ["routing_aggregator"] }
+    ],
+    local_runtime: [
+      { id: "personal_machine", label: "Run models on my own computer", description: "A packaged runner that manages download, storage, and local serving.", runtimeTypes: ["desktop_runner"] },
+      { id: "serve_workload", label: "Serve a sustained request load", description: "An engine built for batching, concurrency, and multi-accelerator serving.", runtimeTypes: ["server_engine"] },
+      { id: "embed_inference", label: "Embed inference in my own software", description: "A library or binary a host application links rather than operates as a service.", runtimeTypes: ["embedded_library"] },
+      { id: "self_host_endpoint", label: "Self-host one compatible endpoint", description: "A gateway presenting familiar APIs over interchangeable local backends.", runtimeTypes: ["compatibility_gateway"] }
+    ]
+  };
+  const FINDER_PRIORITIES = {
+    memory_system: [
+      { id: "local_editable", label: "Local, inspectable knowledge", description: "Prefer local-first systems with data people can directly inspect or edit." },
+      { id: "local_control", label: "Self-hosting and privacy", description: "Prefer local execution and strong control over stored data." },
+      { id: "easy", label: "Low setup and maintenance", description: "Prefer systems that are easier for an individual to operate." },
+      { id: "portable", label: "Open and interoperable", description: "Prefer portable formats, APIs, and provider flexibility." },
+      { id: "balanced", label: "Best balanced fit", description: "Use the family-specific editorial score as the main tie-breaker." }
+    ],
+    agent_system: [
+      { id: "direct_use", label: "Ready for me to use", description: "Prefer terminal, IDE, or web interfaces over embedded libraries." },
+      { id: "developer", label: "Composable developer framework", description: "Prefer libraries and APIs for building a custom agent product." },
+      { id: "local", label: "Local execution and control", description: "Prefer local-first agents that can operate on the host." },
+      { id: "control", label: "Human control and recovery", description: "Prefer approvals, observability, checkpoints, and recoverability." },
+      { id: "balanced", label: "Best balanced fit", description: "Use the family-specific editorial score as the main tie-breaker." }
+    ],
+    assistant_system: [
+      { id: "tools", label: "Tools and connected apps", description: "Prefer assistants that work across files, search, applications, and actions." },
+      { id: "continuity", label: "Context and memory", description: "Prefer durable projects, conversation continuity, memory controls, and provenance." },
+      { id: "governance", label: "Control and governance", description: "Prefer strong consent, retention, administration, privacy, and deletion controls." },
+      { id: "portable", label: "Model and data portability", description: "Prefer model choice, export, APIs, protocols, and open connectors." },
+      { id: "balanced", label: "Best balanced fit", description: "Use the family-specific editorial score as the main tie-breaker." }
+    ],
+    inference_service: [
+      { id: "governance", label: "Data governance", description: "Prefer documented retention, training-use, privacy, deletion, and tenant controls." },
+      { id: "regions", label: "Regional deployment control", description: "Prefer explicit processing regions, network boundaries, and isolated placement." },
+      { id: "portable", label: "API and serving flexibility", description: "Prefer portable interfaces and several documented capacity or deployment modes." },
+      { id: "resilience", label: "Traffic resilience", description: "Prefer documented routing, fallback, recovery, or multi-region traffic controls." },
+      { id: "balanced", label: "Best balanced fit", description: "Use the inference-service editorial score as the main tie-breaker." }
+    ],
+    local_runtime: [
+      { id: "hardware", label: "Hardware coverage", description: "Prefer runtimes documenting the widest range of processors and accelerators." },
+      { id: "formats", label: "Model format breadth", description: "Prefer runtimes that load the widest range of weight formats and quantizations." },
+      { id: "serving", label: "Concurrent serving", description: "Prefer documented batching, parallel requests, and distributed serving." },
+      { id: "operability", label: "Deployment and visibility", description: "Prefer documented install paths, orchestration, controls, and metrics." },
+      { id: "balanced", label: "Best balanced fit", description: "Use the local-runtime editorial score as the main tie-breaker." }
+    ]
+  };
+  const FINDER_DIRECTION_NAMES = { inference_service: "Inference services", local_runtime: "Local runtimes" };
+  // dataset keys are camelCase; the matching attribute is kebab-case.
+  const datasetAttribute = key => `data-${key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)}`;
+  // A boot record carries only its overall score, so every other dimension this
+  // weighting reads may still be in flight. One undefined turns the whole match
+  // into NaN and the shortlist's order into whatever the sort happened to do, so
+  // a dimension that has not arrived counts as zero — the ordering stays
+  // deterministic, the same way recommendationReasons below stays readable.
+  const scoreDimension = (project, name) => project.score?.[name] ?? 0;
+  function priorityBoost(project, priority) {
+    const dimension = name => scoreDimension(project, name);
+    if (project.score_profile === "inference_service") {
+      if (priority === "governance") return dimension("data_governance") / 2;
+      if (priority === "regions") return dimension("regional_deployment_control") / 2;
+      if (priority === "portable") return dimension("api_interoperability") / 2 + dimension("serving_flexibility") / 4;
+      if (priority === "resilience") return dimension("traffic_resilience") / 2 + dimension("operational_maturity") / 4;
+      return dimension("overall") / 3;
+    }
+    if (project.score_profile === "local_runtime") {
+      if (priority === "hardware") return dimension("hardware_accelerator_coverage") / 2;
+      if (priority === "formats") return dimension("model_format_support") / 2;
+      if (priority === "serving") return dimension("serving_concurrency") / 2 + dimension("api_interoperability") / 4;
+      if (priority === "operability") return dimension("deployment_operations") / 2 + dimension("observability_control") / 4;
+      return dimension("overall") / 3;
+    }
+    if (project.system_family === "memory_system") {
+      if (priority === "local_editable") return (project.local_first ? 2.2 : 0) + (project.human_editable ? 2 : 0) + (project.architectures.includes("plain_files") ? 0.8 : 0);
+      if (priority === "local_control") return (project.local_first ? 3 : 0) + (project.deployment.includes("self_hosted") ? 0.8 : 0) + dimension("data_sovereignty") / 10;
+      if (priority === "easy") return dimension("operational_simplicity") / 2;
+      if (priority === "portable") return dimension("interoperability") / 1.8 + (project.architectures.includes("plain_files") ? 0.6 : 0);
+      return dimension("overall") / 3;
+    }
+    if (project.system_family === "agent_system") {
+      if (priority === "direct_use") return project.agent_interfaces.some(item => ["terminal", "ide", "web_app"].includes(item)) ? 3 : 0;
+      if (priority === "developer") return project.agent_interfaces.some(item => ["library", "api_sdk"].includes(item)) ? 3 : 0;
+      if (priority === "local") return (project.local_first ? 3 : 0) + ((project.execution_boundaries || []).includes("host") ? 1 : 0) + dimension("data_sovereignty") / 10;
+      if (priority === "control") return dimension("human_control") / 3 + dimension("observability_recovery") / 4;
+      return dimension("overall") / 3;
+    }
+    if (priority === "tools") return dimension("tools_integrations") / 2;
+    if (priority === "continuity") return dimension("context_continuity") / 2;
+    if (priority === "governance") return dimension("data_governance") / 3 + dimension("human_control") / 4;
+    if (priority === "portable") return dimension("interoperability") / 1.8;
+    return dimension("overall") / 3;
+  }
+  // A reason chip quotes a score dimension, which only a detail file carries. It
+  // cannot throw, but it can print "Simplicity undefined/10" at a reader when a
+  // detail file never arrived, so every dimension here falls back to an em dash.
+  function recommendationReasons(project, priority, labelOf) {
+    if (project.score_profile === "local_runtime") {
+      const reasons = [labelOf("local_runtime_types", project.runtime_type)];
+      if (priority === "hardware") reasons.push(`Accelerator coverage ${project.score.hardware_accelerator_coverage ?? "—"}/10`);
+      if (priority === "formats") reasons.push(`Model formats ${project.score.model_format_support ?? "—"}/10`);
+      if (priority === "serving") reasons.push(`Serving ${project.score.serving_concurrency ?? "—"}/10`);
+      if (priority === "operability") reasons.push(`Deployment ${project.score.deployment_operations ?? "—"}/10`, `Observability ${project.score.observability_control ?? "—"}/10`);
+      reasons.push(...project.accelerators.slice(0, 2).map(item => labelOf("runtime_accelerators", item)));
+      return [...new Set(reasons)].slice(0, 4);
+    }
+    if (project.score_profile === "inference_service") {
+      const reasons = [labelOf("inference_service_types", project.service_type)];
+      if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance ?? "—"}/10`);
+      if (priority === "regions") reasons.push(`Regional control ${project.score.regional_deployment_control ?? "—"}/10`);
+      if (priority === "portable") reasons.push(`API interoperability ${project.score.api_interoperability ?? "—"}/10`, `Serving flexibility ${project.score.serving_flexibility ?? "—"}/10`);
+      if (priority === "resilience") reasons.push(`Traffic resilience ${project.score.traffic_resilience ?? "—"}/10`);
+      reasons.push(...project.delivery_modes.slice(0, 2).map(item => labelOf("inference_delivery_modes", item)));
+      return [...new Set(reasons)].slice(0, 4);
+    }
+    const reasons = [labelOf("primary_roles", project.primary_role)];
+    if (project.local_first) reasons.push("Local-first");
+    if (project.system_family === "memory_system") {
+      if (project.human_editable) reasons.push("Human-editable data");
+      if (priority === "easy") reasons.push(`Simplicity ${project.score.operational_simplicity ?? "—"}/10`);
+      if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability ?? "—"}/10`);
+    } else if (project.system_family === "agent_system") {
+      const interfaces = project.agent_interfaces.slice(0, 2).map(item => labelOf("agent_interfaces", item));
+      reasons.push(...interfaces);
+      if (priority === "control") reasons.push(`Human control ${project.score.human_control ?? "—"}/10`);
+    } else {
+      if (priority === "tools") reasons.push(`Tools & integrations ${project.score.tools_integrations ?? "—"}/10`);
+      if (priority === "continuity") reasons.push(`Context continuity ${project.score.context_continuity ?? "—"}/10`);
+      if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance ?? "—"}/10`);
+      if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability ?? "—"}/10`);
+    }
+    return [...new Set(reasons)].slice(0, 4);
+  }
+  // The shortlist is the one surface that reads detail for records nobody has
+  // opened: it ranks on the full score dimensions and quotes a tradeoff, and
+  // boot carries neither. So a direction and a goal name a bounded candidate set
+  // — one goal's classifications, a few dozen records at most — and that set is
+  // hydrated before results paint. The fetches start when the goal is chosen, so
+  // the priority question usually covers the wait.
+  const FINDER_DETAIL_KINDS = { inference_service: "inference", local_runtime: "runtime" };
   return {
     BADGE_FAMILIES,
     CARD_BADGES,
@@ -1498,9 +1710,15 @@
     COLLECTIONS,
     COMPARISON_COLLECTIONS,
     FAMILY_SHORT_NAMES,
+    FINDER_DETAIL_KINDS,
+    FINDER_DIRECTIONS,
+    FINDER_DIRECTION_NAMES,
+    FINDER_GOALS,
+    FINDER_PRIORITIES,
     INACTIVE_STATUSES,
     SCOPE_URL_KEYS,
     SCOPE_URL_PARAMS,
+    UNLISTED_MODEL_LABEL,
     badgeEmblem,
     badgeLegend,
     buildLabIndex,
@@ -1508,11 +1726,13 @@
     cardBadges,
     collectionCategories,
     collectionCount,
+    collectionEmblem,
     collectionEntries,
     collectionState,
     comparableText,
     compareProjects,
     cycleThemePreference,
+    datasetAttribute,
     directoryDefaults,
     directoryStageFromURL,
     editDistance,
@@ -1531,10 +1751,11 @@
     labDistributionModes,
     labRelations,
     labsForRecord,
-    matchesProject,
     matchFinderGoal,
+    matchesProject,
     mergePackScopeEntries,
     modelAccessSummary,
+    systemDeploymentSummary,
     modelMetadataAttribution,
     modelSourceLabel,
     modelsKickerText,
@@ -1546,12 +1767,15 @@
     parseSearchQuery,
     parseViewAlias,
     parseViewId,
+    priorityBoost,
     readScopeURLParams,
+    recommendationReasons,
     recordMatch,
     releaseDate,
     releasesNewestFirst,
     scopeFromURL,
     scopeURLParams,
+    scoreDimension,
     searchFields,
     searchWords,
     shareRecordPath,
@@ -1559,7 +1783,6 @@
     stemQueryWord,
     suggestNames,
     tokenHit,
-    UNLISTED_MODEL_LABEL,
     updateComparisonSelection,
   };
 });

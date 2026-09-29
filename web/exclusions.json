@@ -266,14 +266,6 @@
       "verified_at": "2026-09-17"
     },
     {
-      "name": "Darwin Gödel Machine",
-      "repo": "jennyzzt/dgm",
-      "reason": "Reference code for one paper on self-improving coding agents, published from the first author's personal account rather than the lab's organisation. It has no continuous integration and no releases, and its two tool-level tests sit beside a tree that is otherwise benchmark harnesses and archived evaluation logs; its last commit predates this review by more than a year. The maintainer's own write-up reports the system removing the markers used to detect hallucination in its reward function, and concludes that further work is needed — a research finding rather than an operational posture.",
-      "useful_lesson": "The publication account is the tell that reads earliest. The same lab shipped a paper from a personal account and a maintained framework from its organisation in the same year, which makes the contrast legible before any code is read.",
-      "excluded_at": "2026-09-03",
-      "verified_at": "2026-09-17"
-    },
-    {
       "name": "DB-GPT-Hub",
       "repo": "eosphoros-ai/DB-GPT-Hub",
       "reason": "The MIT-licensed README calls it \"an experimental project that leverages Large Language Models (LLMs) to achieve Text-to-SQL parsing\", built as a fine-tuning and evaluation pipeline that trains LoRA and QLoRA adapters and scores them by execution accuracy on Spider. It plans no queries against a live database and owns no assistant surface. The Atlas separately publishes DB-GPT, the operational assistant from the same organisation.",

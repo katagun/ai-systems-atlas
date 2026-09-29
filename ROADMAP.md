@@ -20,6 +20,7 @@ Make the Atlas broad enough to represent important memory, agent, and assistant-
 - Record the organizations that develop reviewed releases as an unscored Labs collection that names them rather than copying other collections, so one page answers who develops a model, where the organization is headquartered, where it publishes, and what else the catalog holds about it, without scoring or ranking an organization or giving it a licence ([ADR 041](docs/adr/041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md)).
 - Maintain an unscored Robots collection for AI robots whose makers name a learned model or document a way to run your own, recording what the maker documents about models, hardware, availability, and terms without scoring, ranking, or comparing machines the Atlas has never operated.
 - Support side-by-side shortlists only within one score profile, preserving collection-specific decision context and shareable URL state.
+- Make the reviewed catalog explorable through auditable counts and source-record drill-downs. Model-access charts, the runtime matrix, and deployment and local-first/licensing analysis establish the surface, with explicit populations, overlapping categories, and missing values rather than claims about the whole market.
 - Detect evidence decay rather than relying on maintainer memory: link and terms-drift checks must reach every collection, not only the records whose license the repository host can detect.
 - Keep editorial age distinguishable from live-metadata age, so a stale review is a visible fact about the record rather than a gap in someone's recollection.
 - Bound delivery failures: a missing detail or collection payload must degrade locally, multi-file updates must not expose mixed generations, malformed URLs must fail validation before they reach the browser, and no unverified revision may reach Pages.
@@ -34,6 +35,7 @@ Reduce repetitive review work while preserving deliberate editorial judgment. Th
 
 - Extend the guarded promotion workflow from model candidates to system candidates; model promotion already refuses incomplete editorial, source-model, license, evidence, identity, date, taxonomy, and score fields.
 - Make repository transfers and renames explicit, recoverable review events that preserve evidence history.
+- Publish reproducible analysis tables from the public catalog, preserving canonical JSON, stable IDs, revision provenance, and the separation between reviewed conclusions and imported metadata. Extend Explore with exact access intersections, coverage diagnostics, and recorded lab relationships; design versioned snapshots before presenting historical change.
 - Add accessibility checks to the browser end-to-end suite the repository already runs, keeping the shipped application dependency-free; keep the Pages deployment path validated and reproducible.
 
 Exit signal: routine catalog maintenance is repeatable, evidence-safe, and documented without relying on maintainer memory.

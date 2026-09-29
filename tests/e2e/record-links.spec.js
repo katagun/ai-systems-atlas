@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { pressedEntry } = require("./helpers/landing");
+const { pressedEntry, viewTab } = require("./helpers/landing");
 
 test("opening a record writes a shareable URL, survives reload, and closes on back", async ({ page }) => {
   await page.goto("/?collection=systems");
@@ -37,7 +37,7 @@ test("a specification record URL opens the Specifications view and its dialog", 
   await expect(page.locator("#specification-dialog")).toBeVisible();
   await expect(page.locator("#specification-dialog-content h1")).toHaveText("Model Context Protocol");
   await page.locator("#specification-dialog .dialog-close").click();
-  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(viewTab(page, "directory")).toHaveClass(/is-active/);
   await expect(page.locator("#specifications-directory-panel")).not.toHaveAttribute("hidden");
 });
 
@@ -56,7 +56,7 @@ test("a model record URL opens the Models view and keeps its distinct boundary",
   await expect(page.locator("#model-dialog-content h1")).toHaveText("Qwen2.5-Coder-0.5B");
   await expect(page.locator("#model-dialog-content")).toContainText("Model boundary");
   await page.locator("#model-dialog .dialog-close").click();
-  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(viewTab(page, "directory")).toHaveClass(/is-active/);
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
 });
 

@@ -413,20 +413,20 @@
     {
       "source_id": "sakana/fugu",
       "disposition": "excluded",
-      "reason": "Dateless moving default routing across undisclosed models with no pinned snapshot, weight repository, or artifact distinct from the Sakana Fugu service behavior.",
-      "decided_at": "2026-09-18"
+      "reason": "Sakana AI's Fugu is a multi-agent orchestration tier whose serving composition the publisher declines to fix: its own product FAQ says the specific models Fugu selects and how it coordinates them are proprietary and not exposed by design, and the release post says the underlying pool is entirely swappable and will grow by incorporating newer models over time. The Atlas models a release as a fixed identity, and this one has no artifact a reader can pin, obtain, or reproduce. It is published as the Sakana AI API inference service instead, where the orchestration is the documented service boundary. Re-read 2026-09-28 against sakana.ai/fugu, sakana.ai/fugu-release, and console.sakana.ai/models.",
+      "decided_at": "2026-09-28"
     },
     {
       "source_id": "sakana/fugu-ultra",
       "disposition": "excluded",
-      "reason": "Moving performance-tier alias resolving to versioned snapshots (v1.0, v1.1, v2.0) with no fixed identity of its own and no downloadable artifact.",
-      "decided_at": "2026-09-18"
+      "reason": "Undated performance tier alias. Sakana AI's console and pricing pages bind the fixed identity to the versioned name fugu-ultra-v2.0 and document earlier v1.0 and v1.1, while models.dev lists the undated fugu-ultra; the tier also inherits the undisclosed, swappable orchestration pool that keeps sakana/fugu out of the collection. Alias rather than release, and the versioned tier is covered by the Sakana AI API inference service. Re-read 2026-09-28 against console.sakana.ai/models and console.sakana.ai/pricing.",
+      "decided_at": "2026-09-28"
     },
     {
       "source_id": "sakana/sakana-namazu",
       "disposition": "excluded",
-      "reason": "Undated alias pointing at the versioned sakana-namazu-v1.0 line with no weight repository or fixed identity of its own.",
-      "decided_at": "2026-09-18"
+      "reason": "Undated alias. Sakana AI's console states that sakana-namazu points to the latest version and currently resolves to sakana-namazu-v1.0, which is published as the reviewed release model-sakana-sakana-namazu-v1-0. The alias moves, so it is not a second release. Re-read 2026-09-28 against console.sakana.ai/models.",
+      "decided_at": "2026-09-28"
     },
     {
       "source_id": "deepreinforce/ornith-1.0-31b",

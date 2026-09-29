@@ -31,6 +31,23 @@ Use this reference when editing JSON or code that consumes it. Taxonomy rational
 
 Run `uv run python scripts/sync_web_data.py` and `uv run python scripts/build_share_pages.py` after manually changing published data.
 
+## Human-owned editorial fields
+
+Working rule 8 reserves these fields for people: automation may sort, rank, or flag on them, and never writes a classification, score, prose, evidence item, confidence, trust record, or `verified_at`. This table is the authoritative list, and `tests/test_documentation.py` asserts every name below is a real field in the matching collection's validator schema, so a renamed or removed field fails the suite rather than leaving a curator to discover it.
+
+| Collection | Editorial fields |
+|---|---|
+| `projects.json` | `strengths`, `weaknesses`, `why_it_matters`, `research_confidence`, `verified_at` |
+| `specifications.json` | `verified_at` |
+| `packs.json` | `verified_at` |
+| `labs.json` | `verified_at` |
+| `robots.json` | `research_confidence`, `verified_at` |
+| `inference-services.json` | `strengths`, `tradeoffs`, `verified_at` |
+| `local-runtimes.json` | `strengths`, `tradeoffs`, `verified_at` |
+| `models.json` | `strengths`, `tradeoffs`, `verified_at` |
+
+Two naming notes, both load-bearing for the builders. Projects carry `weaknesses` where the three scored collections carry `tradeoffs` — the same editorial slot under two names, which the payload builder, the share-page builder, the review-age reporter, and the web renderer each branch on. And `research_confidence` is a project and robot field only, while the other collections express review confidence through `verified_at` and the license evidence they carry. Consolidating either name is an editorial decision with a data migration behind it, not a rename.
+
 The browser presents projects, inference services, local runtimes, and a de-duplicated union of models.dev source rows plus reviewed models through one Directory surface, but that is a presentation-layer union only. Mixed search may normalize shared identity fields for rendering; it never changes a canonical schema or makes scores comparable. Models is a sibling view because its model-artifact question is distinct from the operational Directory, and Labs is a sibling view because an organization is not a deployable choice. See [ADR 013](adr/013-distinct-collections-share-one-directory-surface.md), [ADR 025](adr/025-model-releases-are-independent-curated-records.md), and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
 
 ## Project record
@@ -45,7 +62,7 @@ Fields are grouped by responsibility:
   - `human_editable`: "You can open and change what it keeps, such as notes, memories, or instructions, directly in files or in the app, not only by chatting." True only when a person can change the stored content itself — notes, documents, memories, messages, instructions, or agent and workflow definitions the system stores — without writing code, through files, an editor, or an in-product screen that edits those entries. Configuration alone (keys, model choice, preferences), delete-only or regenerate-only controls, editing only through an API or SDK, and source code an integrator writes for a library to run do not count.
 - **Licensing:** non-empty `licenses`, one `source_model`, and `license_review_status`.
 - **Lifecycle:** `status`.
-- **Editorial review:** score dimensions, strengths, weaknesses, significance, confidence, and `verified_at`.
+- **Editorial review:** score dimensions, `strengths`, `weaknesses`, `why_it_matters`, `research_confidence`, and `verified_at`. These are the human-owned editorial fields: automation may sort, rank, or flag on them, and never writes them (working rule 8).
 - **Live metadata:** stars, forks, open issues, push time, detected license, and their metadata timestamps. These may be null for systems without a public GitHub repository.
 
 All enum values and score dimensions come from `taxonomy.json`. Validation rejects unknown values and incompatible family, role, secondary-role, or score-profile combinations. Every family has exactly one score profile. Agent-operation fields are required only for agent systems; assistants use the shared architecture, retrieval, capture, lifecycle, deployment, provider, and evidence fields.

@@ -19,7 +19,7 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 12. Publish catalog JSON only from `PUBLISHED_DATA` in `scripts/sync_web_data.py`; queues, dispositions, and discovery configuration remain unpublished.
 13. Edit canonical inputs and generators, not generated data copies, app payloads, share pages, blog output, fonts, or logos. Generator locations and asset-version dependencies are in `docs/WEB.md` and `docs/BLOG.md`.
 14. After published catalog edits, run the regeneration sequence below and commit its output; record additions also need logo regeneration per `docs/WEB.md`.
-15. Before completion, run the local validation, lint, test, syntax, and generated-file freshness checks in `.github/workflows/verify.yml`, including `build_web_payload.py --check`.
+15. Before completion, run the local validation, lint, test, syntax, and generated-file freshness checks in [`.pre-commit-config.yaml`](.pre-commit-config.yaml), which `.github/workflows/verify.yml` runs the same hooks from, including `build_web_payload.py --check`.
 16. For published-data or web changes, also exercise the browser verification matrix in `docs/WEB.md`: collection filters, score scopes, comparisons, URL/history restoration, Finder, taxonomy, and every record dialog.
 17. Report only checks actually run, including failures or checks that could not run.
 
@@ -48,7 +48,7 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 
 ## Command reference
 
-Environment setup (Python 3.11+; Node dependencies and Chromium support browser checks):
+Environment setup (Python 3.12+; Node dependencies and Chromium support browser checks):
 
 ```bash
 uv sync --locked

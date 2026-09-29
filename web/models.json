@@ -5,7 +5,7 @@
     "id": "models-dev",
     "name": "models.dev",
     "repo": "anomalyco/models.dev",
-    "commit": "ef71a4865a5821d8cd24f171a0100156a02e808e",
+    "commit": "1bc95312f70441e339d5aa010ad656b9c7706952",
     "url": "https://github.com/anomalyco/models.dev",
     "license": "MIT"
   },
@@ -27868,6 +27868,141 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-sakana-sakana-namazu-v1-0",
+      "source_id": null,
+      "name": "Sakana Namazu v1.0",
+      "developer": "Sakana AI",
+      "url": "https://console.sakana.ai/models?model=sakana-namazu",
+      "description": "Sakana AI's Japanese-specialized language model, served as `sakana-namazu-v1.0` through its own OpenAI-compatible API with a 256K context window, image and document input, and built-in web search and code execution; it is post-trained by Sakana from the open Kimi K2.6 weights and no weights are published.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Sakana Namazu v1.0",
+        "description": "A Japanese-specialized LLM that combines a deep understanding of Japanese culture and business customs with high-performance reasoning, fine-tuned with Sakana AI's in-house data for Japanese language and business workflows",
+        "family": "sakana-namazu",
+        "release_date": "2026-08-03",
+        "last_updated": null,
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": null
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [
+          {
+            "label": "Official product page",
+            "url": "https://sakana.ai/namazu/"
+          }
+        ],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Sakana-API-ToS"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "No weights are published and no model licence exists; the release is served only as an API under the Sakana AI API Platform Terms of Service, effective 28 September 2026, agreed with Sakana AI Co., Ltd. and covering Sakana Namazu among the services the Company provides through its API. The terms grant no right to reverse engineer the service and prohibit using the service or its contents to generate, train, fine-tune, or otherwise develop another machine learning model, including by distillation or extraction, which is what forecloses recovering the post-training from the endpoint. They govern output separately from weights: as between the parties the user owns its outputs, while the user grants the Company a perpetual, irrevocable, royalty-free, sublicensable licence to its content, and content is used for model training by default with a non-retrospective opt-out in the console. The service is unavailable in the EU, EEA, UK, and Switzerland pending GDPR work, and the terms set Japanese law with exclusive Tokyo District Court jurisdiction for users in Japan and California law with AAA arbitration seated in Los Angeles for everyone else. A separately incorporated Usage Policy, effective 21 July 2026, is incorporated by reference and restricts surveillance, CBRNE, cyberattack, election-interference, and unapproved security-evaluation uses.",
+      "license_evidence": [
+        {
+          "kind": "web_terms",
+          "license_id": "LicenseRef-Sakana-API-ToS",
+          "scope": "API access to Sakana Namazu v1.0, including the prohibition on reverse engineering and on training or distilling another model from the service, the content licence the user grants, the default training use of content and its opt-out, the regional exclusions, and the governing-law and dispute-resolution terms",
+          "url": "https://console.sakana.ai/terms-of-service",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web_terms",
+          "license_id": "LicenseRef-Sakana-API-ToS",
+          "scope": "The Usage Policy incorporated into the Terms of Service, restricting surveillance, biometric and profiling uses, CBRN and weapons, illegal activity, cyberattack, self-harm, non-consensual sexual content, minors, election interference, and experimental security evaluation without the Company's written approval",
+          "url": "https://console.sakana.ai/usage-policy",
+          "verified_at": "2026-09-28"
+        }
+      ],
+      "access_boundary": "This record represents the `sakana-namazu-v1.0` release, the fixed model ID Sakana AI's console documents as the current version of its Japanese-specialized line, launched with the API announcement of 3 August 2026. The `sakana-namazu` alias, which the console states points to the latest version and currently resolves to v1.0, is a moving name rather than a second release. The Fugu, Fugu Ultra, Fugu Max, and Fugu Cyber models are separate multi-agent orchestration releases that Sakana explicitly contrasts with this one, the March 2026 Namazu alpha prototypes built on DeepSeek-V3.1-Terminus, Llama 3.1, and gpt-oss-120B are a superseded lineage, the underlying Kimi K2.6 weights are Moonshot AI's release and not Sakana AI's, and the LEAP-style on-premises customization stack Sakana sells is a separate product boundary.",
+      "strengths": [
+        "Sakana AI documents a versioned model ID, the alias that moves to it, a 256K context window, image input by URL or base64, document input to 4 MB, and structured output with text, json_object, and json_schema",
+        "The release is a single in-house model rather than an orchestration layer, which Sakana's own console states directly when it contrasts Namazu with Fugu",
+        "Governing terms, a separate usage policy, and a published per-token price page are all first-party and dated, and the API is documented across Chat Completions, Responses, and Anthropic Messages styles with built-in web search and code execution"
+      ],
+      "tradeoffs": [
+        "No weights are published and the terms prohibit reverse engineering and any training or distillation from the service, so the post-training cannot be inspected or reproduced",
+        "Content is used for model training by default and the opt-out is not retroactive, while the user grants the Company a perpetual, irrevocable, sublicensable licence to its content",
+        "The service is not available in the EU, EEA, UK, or Switzerland while Sakana works toward GDPR compliance, and the model ID is versioned without a published deprecation or retirement policy for the line"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 6,
+        "artifact_availability": 1,
+        "deployment_portability": 1,
+        "serving_reach": 7,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 7,
+        "overall": 4.38
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official console model page: the sakana-namazu-v1.0 model ID, the moving alias, the 256K context window, image and file input, structured output, and the contrast with Fugu",
+          "url": "https://console.sakana.ai/models?model=sakana-namazu",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Official Namazu product page: a Japanese-specialized LLM built on the open Kimi K2.6 and tuned with Sakana AI's in-house data, with the EU, EEA, UK, and Switzerland exclusion",
+          "url": "https://sakana.ai/namazu/",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Sakana AI API Platform Terms of Service, effective 28 September 2026, naming Sakana AI Co., Ltd. and governing the API including Sakana Namazu",
+          "url": "https://console.sakana.ai/terms-of-service",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Official Usage Policy incorporated into the terms, effective 21 July 2026",
+          "url": "https://console.sakana.ai/usage-policy",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Official get-started page: the api.sakana.ai endpoint, the OpenAI SDK base URL, and the Chat Completions, Responses, and Anthropic Messages request styles with built-in web search and code execution",
+          "url": "https://console.sakana.ai/get-started",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Official pricing page: Sakana Namazu billed pay-as-you-go outside the subscription plans",
+          "url": "https://console.sakana.ai/pricing",
+          "verified_at": "2026-09-28"
+        }
+      ],
+      "metadata_verified_at": "2026-09-28",
+      "verified_at": "2026-09-28"
     },
     {
       "id": "model-xai-grok-4-7",

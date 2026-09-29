@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGE_SETS, CARD_BADGES, COLLECTIONS, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchesProject, matchFinderGoal, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelsKickerText, modelSourceLabel, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, readScopeURLParams, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -16,6 +16,53 @@ const projects = [
   { name: "GStack", primary_role: "coding_agent_workflow", system_family: "agent_system", agent_relation: "coding_workflow", architectures: ["git_versioned"], deployment: ["local_cli"], agent_interfaces: ["terminal"], source_model: "mixed_open_source", licenses: ["MIT", "OFL-1.1"], status: "active", local_first: true, stars: 25, score: { overall: 8.6 } },
   { name: "Assistant", primary_role: "general_ai_assistant", system_family: "assistant_system", agent_relation: "agent_enabled_ui", architectures: ["hybrid"], deployment: ["desktop", "managed_cloud", "mobile"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: false, stars: null, score: { overall: 8.8 } },
 ];
+
+test("deployment summaries retain missing values and count overlapping modes once", () => {
+  const taxonomy = { system_families: [{ id: "agent", name: "Agents" }], source_models: [{ id: "open", name: "Open" }], deployment_modes: [{ id: "local", name: "Local" }, { id: "cloud", name: "Cloud" }] };
+  const record = { status: "active", system_family: "agent", source_model: "open" };
+  const summary = systemDeploymentSummary([
+    { ...record, deployment: ["local", "cloud", "local"], local_first: true },
+    { ...record, deployment: ["cloud"], local_first: false },
+    { ...record },
+    { ...record, system_family: "future", source_model: "future" },
+    { ...record, status: "archived", deployment: ["local"], local_first: true },
+  ], taxonomy);
+  assert.equal(summary.total, 4);
+  assert.equal(summary.excluded, 1);
+  assert.equal(summary.missingDeployment, 2);
+  assert.deepEqual(summary.families.map(row => row.cells.map(cell => cell.count)), [[1, 2], [0, 0]]);
+  assert.deepEqual(summary.licensing.map(row => row.cells.map(cell => cell.count)), [[1, 1, 1], [0, 0, 1]]);
+  assert.equal(systemDeploymentSummary([], taxonomy).total, 0);
+  assert.deepEqual(systemDeploymentSummary([], taxonomy).families, []);
+});
+
+test("system analysis cells reconcile to canonical records and catalog filters", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const boot = readWebJSON("app/systems.json").systems;
+  const canonical = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "directory", "projects.json"), "utf8")).projects;
+  const summary = systemDeploymentSummary(boot, taxonomy);
+  assert.equal(summary.total, canonical.filter(record => record.status === "active").length);
+  for (const [rows, rowFacet, cellFacet] of [[summary.families, "family", "deployment"], [summary.licensing, "sourceModel", "localOnly"]]) {
+    assert.equal(rows.reduce((sum, row) => sum + row.count, 0), summary.total);
+    for (const row of rows) for (const cell of row.cells) {
+      const filters = { ...directoryDefaults(), [rowFacet]: row.id, [cellFacet]: cell.id };
+      const expected = filterAndSortProjects(canonical, filters).map(record => record.id).sort();
+      assert.equal(cell.count, expected.length);
+      assert.deepEqual(filterAndSortProjects(boot, filters).map(record => record.id).sort(), expected);
+    }
+  }
+  assert.equal(summary.missingDeployment, 0);
+});
+
+test("local-first filters distinguish false and missing while retaining old true links", () => {
+  const records = [{ id: "yes", local_first: true }, { id: "no", local_first: false }, { id: "missing" }];
+  const ids = localOnly => records.filter(record => matchesProject(record, { localOnly })).map(record => record.id);
+  assert.deepEqual(ids(true), ["yes"]);
+  assert.deepEqual(ids("1"), ["yes"]);
+  assert.deepEqual(ids("0"), ["no"]);
+  assert.deepEqual(ids("unknown"), ["missing"]);
+  assert.deepEqual(ids(false), ["yes", "no", "missing"]);
+});
 
 test("model access counts overlaps once per release and excludes imported claims", () => {
   const sourceModels = [{ id: "open_source", name: "Open source" }];
@@ -629,7 +676,7 @@ test("the systems scope writes the capability to the URL", () => {
   assert.equal(restored.values.capability, "robot_control");
 });
 
-test("robot control has no card badge (ADR 044)", () => {
+test("robot control has no card badge (ADR 045)", () => {
   const tests = Object.values(CARD_BADGES).map(badge => JSON.stringify(badge.test || {}));
   assert.ok(tests.every(test => !test.includes("robot_control")), "a badge tests robot_control");
 });
@@ -1062,9 +1109,12 @@ test("llms.txt's site links use the same origin as the share-page builder", () =
 
 test("llms.txt's Data section lists exactly the published catalog files", () => {
   const llms = fs.readFileSync(path.join(__dirname, "..", "web", "llms.txt"), "utf8");
-  const validate = fs.readFileSync(path.join(__dirname, "..", "scripts", "validate_directory.py"), "utf8");
-  const match = validate.match(/PUBLISHED_DATA = \(([\s\S]*?)\)/);
-  assert.ok(match, "could not find PUBLISHED_DATA in scripts/validate_directory.py");
+  // The published set is defined once, in scripts/catalog.py. It used to be restated
+  // in scripts/validate_directory.py, which is why this test scraped that file's
+  // source; scraping the registry instead means a redefinition there is what fails.
+  const registry = fs.readFileSync(path.join(__dirname, "..", "scripts", "catalog.py"), "utf8");
+  const match = registry.match(/PUBLISHED_DATA = \(([\s\S]*?)\n\)/);
+  assert.ok(match, "could not find PUBLISHED_DATA in scripts/catalog.py");
   const published = [...match[1].matchAll(/"([^"]+)"/g)].map(m => m[1]).sort();
   const dataSection = llms.split("## Data")[1].split("## Reference")[0];
   const linked = [...dataSection.matchAll(/\]\(https:\/\/[^)]*\/([a-z-]+\.json)\)/g)].map(m => m[1]).sort();
@@ -1073,9 +1123,12 @@ test("llms.txt's Data section lists exactly the published catalog files", () => 
 
 test("the API view lists exactly the published catalog files", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
-  const validate = fs.readFileSync(path.join(__dirname, "..", "scripts", "validate_directory.py"), "utf8");
-  const match = validate.match(/PUBLISHED_DATA = \(([\s\S]*?)\)/);
-  assert.ok(match, "could not find PUBLISHED_DATA in scripts/validate_directory.py");
+  // The published set is defined once, in scripts/catalog.py. It used to be restated
+  // in scripts/validate_directory.py, which is why this test scraped that file's
+  // source; scraping the registry instead means a redefinition there is what fails.
+  const registry = fs.readFileSync(path.join(__dirname, "..", "scripts", "catalog.py"), "utf8");
+  const match = registry.match(/PUBLISHED_DATA = \(([\s\S]*?)\n\)/);
+  assert.ok(match, "could not find PUBLISHED_DATA in scripts/catalog.py");
   const published = [...match[1].matchAll(/"([^"]+)"/g)].map(m => m[1]).sort();
   const linked = [...html.matchAll(/class="endpoint-link" href="https:\/\/[^"]*\/([a-z-]+\.json)"/g)].map(m => m[1]).sort();
   assert.deepEqual(linked, published);
@@ -1978,7 +2031,7 @@ const registryPayloads = {
   specifications: [{ id: "sp1", name: "SP1", specification_type: "protocol" }],
 };
 
-test("the registry lists every collection once, scopes and sibling views alike, in front-door order", () => {
+test("the registry lists every collection once, each a Directory collection, in front-door order", () => {
   assert.deepEqual(COLLECTIONS.map(entry => entry.id), ["all", "systems", "models", "inference", "runtimes", "packs", "robots", "labs", "specifications"]);
   assert.ok(COLLECTIONS.every(entry => entry.kind === "scope"));
   // Every emblem names a type badge that exists; All and Robots have none yet.
@@ -2068,4 +2121,309 @@ test("a comparison names the scope before the collection parameter, and a record
   // A comparison without a colon names no kind, so "systemx" is not "system".
   assert.equal(scope("compare=systemx&collection=inference"), "inference");
   assert.equal(scope("view=finder&record=system:aider"), null);
+});
+
+// CR-12. escapeHTML is a convention, and conventions leak: the score ring at
+// web/app.js:1461 escaped score_profile and then interpolated score.overall raw
+// two tokens later, into both the aria-label and the element text.
+//
+// A general per-site guard is not writable, and the reason is worth recording so
+// the next reader does not try. 299 of app.js's 787 interpolations are internal
+// builders that escape internally — badgeRow, detailsButton, cardMark, taxonomyName —
+// and the file's established idiom is to build a local and escape it at the render
+// boundary. `origin` at :1273, `version` at :1497, and the Finder's `reasons` at
+// :1886 were all unescaped where they were built and escaped by their consumer.
+// Telling "escaped later" from "never escaped" is a dataflow question, so a sweep
+// either misses real leaks or drowns in false positives.
+//
+// What is checkable is a direct sink: a record field interpolated straight into a
+// template that becomes markup, with no local in between. `origin` and `version`
+// are escaped where they are built now, so the same rule covers them. A regression
+// on any entry below fails here, and extending the list is the way to widen it.
+const DIRECT_SINKS = [
+  "score.overall",
+  "description",
+  "research_confidence",
+  "license_note",
+  "current_repo_note",
+  "access_boundary",
+  "parent_organization",
+  "current_version",
+];
+
+const SAFE_WRAPPER = /^(?:escapeHTML|detailText|detailList|detailScore|scoreCell|listCell)\(/;
+
+test("a record field interpolated straight into markup is escaped at the point of use", () => {
+  const app = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
+  const offenders = [];
+  for (const match of app.matchAll(/\$\{([^{}]*)\}/g)) {
+    const expression = match[1].trim();
+    if (SAFE_WRAPPER.test(expression)) continue;
+    const sink = DIRECT_SINKS.find(field => new RegExp(`\\.${field}\\b`).test(expression));
+    if (!sink) continue;
+    const line = app.slice(0, match.index).split("\n").length;
+    offenders.push(`web/app.js:${line} interpolates .${sink} as {${expression}}`);
+  }
+  assert.deepEqual(offenders, [],
+    "record prose reached a template without escaping:\n  " + offenders.join("\n  "));
+});
+
+test("the card score ring escapes the score it prints, in the label and the text", () => {
+  const app = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
+  const ring = app.match(/const score = family \? `[^`]*score-ring[^`]*`/);
+  assert.ok(ring, "could not find the card score ring in web/app.js");
+  const raw = (ring[0].match(/\$\{(?!escapeHTML)/g) || []).length;
+  assert.equal(raw, 0, `the score ring interpolates ${raw} value(s) unescaped: ${ring[0]}`);
+  const escaped = (ring[0].match(/escapeHTML\(/g) || []).length;
+  assert.equal(escaped, 3,
+    `the score ring should escape its profile and both score positions, saw ${escaped}`);
+});
+
+test("escapeHTML encodes every character that can break out of markup", () => {
+  const app = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
+  const set = app.match(/const escapeHTML = \(value = ""\) => String\(value\)\.replace\(\/(?<chars>[^/]*)\/g,[\s\S]*?=> \(\{(?<map>[^}]*)\}/);
+  assert.ok(set, "could not read the escapeHTML character set from web/app.js");
+  const ENCODED = { "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" };
+  for (const [char, encoded] of Object.entries(ENCODED)) {
+    assert.ok(set.groups.chars.includes(char),
+      `escapeHTML no longer encodes ${char}; an unescaped interpolation of it would inject markup`);
+    // The source may quote either side of the pair, so match on the value alone.
+    assert.ok(set.groups.map.includes(`:"${encoded}"`),
+      `escapeHTML maps ${char} to something other than ${encoded}; the map is ${set.groups.map}`);
+  }
+});
+
+// --- CR-18: the Finder's ranking and vocabulary, moved out of web/app.js ---
+// docs/WEB.md specifies this weighting in prose and nothing enforced it. These
+// assertions are the enforcement, so a change to the dispatch has to be deliberate.
+
+const taxonomy = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "directory", "taxonomy.json"), "utf8"));
+const taxonomyIds = group => new Set((taxonomy[group] || []).map(item => item.id));
+// The resolver app.js injects as labelOf; it has the same (group, id) shape.
+const labelOf = (group, id) => (taxonomy[group] || []).find(item => item.id === id)?.name || String(id);
+
+test("datasetAttribute turns a camelCase key into the data attribute the DOM reads", () => {
+  assert.equal(datasetAttribute("serviceType"), "data-service-type");
+  assert.equal(datasetAttribute("family"), "data-family");
+  assert.equal(datasetAttribute("modelFormat"), "data-model-format");
+  assert.equal(datasetAttribute("alreadyKebab"), "data-already-kebab");
+  // Every collector reads its key back off the element, so the attribute the
+  // query string builds has to be the one dataset exposes.
+  assert.equal(datasetAttribute("serviceType"), `data-${"serviceType".replace(/[A-Z]/g, l => `-${l.toLowerCase()}`)}`);
+});
+
+test("an undelivered score dimension counts as zero, so a pending weight is never NaN", () => {
+  assert.equal(scoreDimension({ score: { overall: 8 } }, "overall"), 8);
+  assert.equal(scoreDimension({ score: {} }, "human_control"), 0);
+  assert.equal(scoreDimension({}, "human_control"), 0);
+  assert.equal(scoreDimension({ score: { human_control: 0 } }, "human_control"), 0);
+});
+
+test("priorityBoost dispatches on score_profile, never on the field that happens to exist", () => {
+  const inference = { score_profile: "inference_service", score: { data_governance: 10, overall: 5 } };
+  assert.equal(priorityBoost(inference, "governance"), 5);
+  // The same priority over a system profile must read a different dimension, so
+  // a profile swap that forgot the dispatch cannot pass by accident.
+  const system = { score_profile: "system", score: { data_governance: 10, human_control: 6, overall: 5 } };
+  assert.equal(priorityBoost(system, "governance"), 10 / 3 + 6 / 4);
+
+  const runtime = { score_profile: "local_runtime", score: { hardware_accelerator_coverage: 9, overall: 5 } };
+  assert.equal(priorityBoost(runtime, "hardware"), 4.5);
+  assert.equal(priorityBoost(runtime, "balanced"), 5 / 3);
+});
+
+test("priorityBoost's balanced fallback is the profile's own overall score for every profile", () => {
+  const profiles = [
+    { score_profile: "inference_service", score: { overall: 7 } },
+    { score_profile: "local_runtime", score: { overall: 7 } },
+    { system_family: "memory_system", score: { overall: 7 } },
+    { system_family: "agent_system", score: { overall: 7 } },
+    { system_family: "assistant_system", score: { overall: 7 } },
+  ];
+  for (const project of profiles) {
+    assert.equal(priorityBoost(project, "balanced"), 7 / 3,
+      `balanced fell through differently for ${project.score_profile || project.system_family}`);
+  }
+});
+
+test("priorityBoost reads the memory and agent traits its priorities name, not a score", () => {
+  const memory = {
+    system_family: "memory_system",
+    local_first: true, human_editable: true, deployment: ["self_hosted"],
+    architectures: ["plain_files"],
+    score: { data_sovereignty: 5, overall: 7 },
+  };
+  assert.equal(priorityBoost(memory, "local_editable"), 2.2 + 2 + 0.8);
+  assert.equal(priorityBoost(memory, "local_control"), 3 + 0.8 + 0.5);
+  // deployment and architectures are required on every memory record, so the
+  // unguarded .includes above is only safe because the validator guarantees them.
+  const required = new Set(Object.keys(JSON.parse(fs.readFileSync(
+    path.join(__dirname, "..", "directory", "projects.json"), "utf8")).projects[0]));
+  for (const field of ["deployment", "architectures", "local_first", "human_editable", "score"]) {
+    assert.ok(required.has(field), `priorityBoost reads project.${field}, which no project record carries`);
+  }
+
+  const agent = {
+    system_family: "agent_system", local_first: true, execution_boundaries: ["host"],
+    agent_interfaces: ["terminal", "web_app"], score: { data_sovereignty: 5, human_control: 9, observability_recovery: 8, overall: 7 },
+  };
+  assert.equal(priorityBoost(agent, "direct_use"), 3);
+  assert.equal(priorityBoost(agent, "developer"), 0);
+  assert.equal(priorityBoost(agent, "local"), 3 + 1 + 0.5);
+  assert.equal(priorityBoost(agent, "control"), 3 + 2);
+});
+
+test("recommendationReasons prints an em dash, never NaN, for a dimension no detail file carried", () => {
+  const runtime = {
+    score_profile: "local_runtime", runtime_type: "server_engine", accelerators: ["cuda", "rocm"],
+    score: { serving_concurrency: 8 },
+  };
+  const reasons = recommendationReasons(runtime, "serving", labelOf);
+  assert.ok(reasons.includes("Serving 8/10"), reasons.join(" | "));
+  assert.ok(reasons.includes("Server engine"), reasons.join(" | "));
+  // Two accelerators are named, and the taxonomy's own wording, not a raw id.
+  assert.ok(reasons.includes("NVIDIA CUDA"), reasons.join(" | "));
+  assert.ok(reasons.includes("AMD ROCm"), reasons.join(" | "));
+  for (const reason of reasons) {
+    assert.ok(!/undefined|NaN/.test(reason), `a reason chip printed a raw value: ${reason}`);
+  }
+  const missing = recommendationReasons(
+    { score_profile: "inference_service", service_type: "direct_model_api", delivery_modes: ["api"], score: {} },
+    "governance", labelOf);
+  assert.ok(missing.includes("Data governance —/10"), missing.join(" | "));
+});
+
+test("recommendationReasons caps at four and de-duplicates, so a chip row never overflows", () => {
+  const project = {
+    system_family: "memory_system", primary_role: "human_pkm", local_first: true, human_editable: true,
+    architectures: ["plain_files"], score: { operational_simplicity: 7, interoperability: 6, overall: 8 },
+  };
+  for (const priority of FINDER_PRIORITIES.memory_system.map(item => item.id)) {
+    const reasons = recommendationReasons(project, priority, labelOf);
+    assert.ok(reasons.length <= 4, `${priority} produced ${reasons.length} chips`);
+    assert.equal(new Set(reasons).size, reasons.length, `${priority} repeated a chip: ${reasons.join(" | ")}`);
+  }
+});
+
+test("every FINDER_GOALS entry classifies by taxonomy values that still exist", () => {
+  // A goal that names a role or type the taxonomy has dropped matches nothing,
+  // and e2e cannot see it: the direction still renders, just empty.
+  const groups = { roles: "primary_roles", serviceTypes: "inference_service_types", runtimeTypes: "local_runtime_types" };
+  for (const direction of FINDER_DIRECTIONS) {
+    const goals = FINDER_GOALS[direction.id];
+    assert.ok(goals?.length, `no goals for direction ${direction.id}`);
+    for (const goal of goals) {
+      for (const [key, group] of Object.entries(groups)) {
+        for (const value of goal[key] || []) {
+          assert.ok(taxonomyIds(group).has(value),
+            `goal ${direction.id}/${goal.id} classifies on ${key} "${value}", which is not in taxonomy.${group}`);
+        }
+      }
+    }
+  }
+});
+
+test("every direction has priorities, a direction name, and a detail kind", () => {
+  for (const direction of FINDER_DIRECTIONS) {
+    assert.ok(FINDER_PRIORITIES[direction.id]?.length, `no priorities for ${direction.id}`);
+    assert.ok(FINDER_GOALS[direction.id]?.length, `no goals for ${direction.id}`);
+    // Every direction ends in a balanced tie-breaker, so a reader always has one.
+    assert.equal(FINDER_PRIORITIES[direction.id].at(-1).id, "balanced",
+      `${direction.id} does not end its priorities with the balanced tie-breaker`);
+  }
+  // The two profile-scored directions are named in words, not by family id.
+  for (const [id, name] of Object.entries(FINDER_DIRECTION_NAMES)) {
+    assert.ok(FINDER_DIRECTIONS.some(item => item.id === id), `${name} names direction ${id}, which has no tile`);
+  }
+  // FINDER_DETAIL_KINDS names a directory under web/app/detail, not a collection
+  // id, so assert the path exists rather than matching it against COLLECTIONS.
+  const detailRoot = path.join(__dirname, "..", "web", "app", "detail");
+  for (const [id, kind] of Object.entries(FINDER_DETAIL_KINDS)) {
+    assert.ok(fs.existsSync(path.join(detailRoot, kind)),
+      `detail kind ${kind} for ${id} has no directory under web/app/detail, so every load 404s`);
+  }
+  // And a direction with no entry falls back to a kind that does exist.
+  assert.ok(fs.existsSync(path.join(detailRoot, "system")),
+    "the fallback detail kind 'system' has no directory under web/app/detail");
+  for (const direction of FINDER_DIRECTIONS) {
+    const kind = FINDER_DETAIL_KINDS[direction.id] || "system";
+    assert.ok(fs.existsSync(path.join(detailRoot, kind)), `direction ${direction.id} loads an absent detail kind`);
+  }
+});
+
+test("recommendationReasons names an agent's own interfaces, and an assistant's priority", () => {
+  // The agent branch reads agent_interfaces through the taxonomy, the way the
+  // local-runtime and inference branches read their own type.
+  const agent = {
+    system_family: "agent_system", primary_role: "coding_agent", local_first: false,
+    agent_interfaces: ["terminal", "ide", "web_app"], score: { human_control: 7, overall: 8 },
+  };
+  const reasons = recommendationReasons(agent, "control", labelOf);
+  assert.ok(reasons.includes("Human control 7/10"), reasons.join(" | "));
+  assert.ok(reasons.some(reason => /Coding|agent/i.test(reason)), reasons.join(" | "));
+  // Only the first two interfaces are named, so a card's chip row stays short.
+  assert.equal(reasons.length, 4, reasons.join(" | "));
+
+  // The assistant branch has no profile and no trait list, so each priority
+  // contributes exactly one dimension chip.
+  const assistant = {
+    system_family: "assistant_system", primary_role: "general_ai_assistant",
+    score: { tools_integrations: 9, context_continuity: 8, data_governance: 7, interoperability: 6, human_control: 5, overall: 8 },
+  };
+  assert.ok(recommendationReasons(assistant, "tools", labelOf).includes("Tools & integrations 9/10"));
+  assert.ok(recommendationReasons(assistant, "continuity", labelOf).includes("Context continuity 8/10"));
+  assert.ok(recommendationReasons(assistant, "governance", labelOf).includes("Data governance 7/10"));
+  assert.ok(recommendationReasons(assistant, "portable", labelOf).includes("Interoperability 6/10"));
+  // An assistant record is not local-first, so that chip never appears.
+  assert.ok(!recommendationReasons(assistant, "balanced", labelOf).includes("Local-first"));
+});
+
+// The Finder ranks across two collections and three system families, so the
+// dispatch is exercised against the canonical record each one actually ships in.
+function findRecordsByProfile() {
+  const load = file => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "directory", file), "utf8"));
+  const projects = load("projects.json").projects;
+  return {
+    inference_service: load("inference-services.json").services,
+    local_runtime: load("local-runtimes.json").runtimes,
+    memory_system: projects.filter(p => p.system_family === "memory_system"),
+    agent_system: projects.filter(p => p.system_family === "agent_system"),
+    assistant_system: projects.filter(p => p.system_family === "assistant_system"),
+  };
+}
+
+test("priorityBoost is finite for every profile and every priority the Finder offers", () => {
+  // Table-driven over the whole dispatch: a new profile or priority that falls
+  // through to a NaN or undefined reaches a reader as a broken shortlist order.
+  for (const [direction, records] of Object.entries(findRecordsByProfile())) {
+    assert.ok(records.length, `no ${direction} record to exercise the dispatch with`);
+    const project = records[0];
+    for (const { id } of FINDER_PRIORITIES[direction]) {
+      const value = priorityBoost(project, id);
+      assert.ok(Number.isFinite(value),
+        `priorityBoost returned ${value} for ${direction}/${id} on ${project.id}`);
+    }
+    // And on a record whose detail never arrived, where every dimension is absent.
+    const bare = { ...project, score: {} };
+    for (const { id } of FINDER_PRIORITIES[direction]) {
+      assert.ok(Number.isFinite(priorityBoost(bare, id)),
+        `priorityBoost returned ${priorityBoost(bare, id)} for ${direction}/${id} with no score`);
+    }
+  }
+});
+
+test("recommendationReasons is finite and chip-bounded for every real record and priority", () => {
+  for (const [direction, records] of Object.entries(findRecordsByProfile())) {
+    for (const project of records) {
+      for (const { id } of FINDER_PRIORITIES[direction]) {
+        const reasons = recommendationReasons(project, id, labelOf);
+        assert.ok(reasons.length >= 1 && reasons.length <= 4,
+          `${project.id} ${direction}/${id} produced ${reasons.length} chips: ${reasons.join(" | ")}`);
+        for (const reason of reasons) {
+          assert.ok(!/undefined|NaN|\[object/.test(reason),
+            `${project.id} ${direction}/${id} printed a raw value: ${reason}`);
+        }
+      }
+    }
+  }
 });

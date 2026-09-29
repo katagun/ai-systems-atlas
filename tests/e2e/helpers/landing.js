@@ -12,6 +12,16 @@ function familyEntry(page, family) {
   return page.locator(`#collection-index [data-tile="systems"] [data-facet-value="${family}"]:visible, #scope-strip [data-family-entry="${family}"]:visible`);
 }
 
+// A tile's category link, which opens its collection narrowed to one value.
+function categoryEntry(page, id, value) {
+  return page.locator(`#collection-index [data-tile="${id}"] [data-facet-value="${value}"]:visible`);
+}
+
+// The state dot on a collection's tile or strip entry, whichever is on screen.
+function collectionDot(page, id) {
+  return page.locator(`#collection-index [data-tile="${id}"]:visible .state-dot, #scope-strip [data-open-collection="${id}"]:visible .state-dot`);
+}
+
 function pressedEntry(page) {
   return page.locator('#scope-strip .scope-row [aria-pressed="true"]');
 }
@@ -37,13 +47,17 @@ async function openFamily(page, family) {
   await familyEntry(page, family).click();
 }
 
+function viewTab(page, id) {
+  return page.locator(`.tab[data-tab="${id}"]`);
+}
+
 async function openView(page, id) {
   if (["explore", "taxonomy", "api"].includes(id)) {
     await page.locator(".docs-button").click();
     await page.locator(`#docs-menu-list [data-open-view="${id}"]`).click();
     return;
   }
-  await page.locator(`.tab[data-tab="${id}"]`).click();
+  await viewTab(page, id).click();
 }
 
 function allSearch(page) {
@@ -56,4 +70,4 @@ async function searchAll(page, text) {
   await allSearch(page).fill(text);
 }
 
-module.exports = { allSearch, collectionEntry, entryCount, familyCount, familyEntry, openCollection, openFamily, openView, pressedEntry, pressedFamily, searchAll };
+module.exports = { allSearch, categoryEntry, collectionDot, collectionEntry, entryCount, familyCount, familyEntry, openCollection, openFamily, openView, pressedEntry, pressedFamily, searchAll, viewTab };

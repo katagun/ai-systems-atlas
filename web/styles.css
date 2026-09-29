@@ -324,6 +324,19 @@ a { color: var(--cyan); text-underline-offset: .18em; }
 .runtime-matrix td { color: var(--muted); }
 .runtime-matrix .is-recorded { color: var(--cyan); background: var(--tint-cyan); }
 .runtime-matrix thead th { font-weight: 500; }
+.deployment-scroll { max-width: 100%; overflow-x: auto; }
+.deployment-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: .85rem; }
+.deployment-table caption { text-align: left; color: var(--muted); padding: 1rem 0; }
+.deployment-table th, .deployment-table td { padding: .4rem; min-width: 6rem; border-bottom: 1px solid var(--line); }
+.deployment-table th { text-align: left; font-weight: 500; }
+.deployment-table th:first-child { position: sticky; left: 0; z-index: 1; min-width: 8rem; background: var(--bg); }
+.deployment-table small { display: block; margin-top: .4rem; font: .7rem var(--font-mono); color: var(--muted); }
+.deployment-cell { display: grid; gap: .35rem; padding: .8rem; color: var(--text); font: .8rem var(--font-mono); text-decoration: none; background: color-mix(in srgb, var(--cyan) calc(var(--access-share) * .3), var(--panel)); }
+.deployment-cell strong { font-size: 1.05rem; }
+a.deployment-cell:hover { text-decoration: underline; outline: 1px solid var(--cyan); }
+.deployment-method { margin-top: 1.5rem; }
+.deployment-method summary { cursor: pointer; font-weight: 600; }
+.deployment-method p { max-width: 75ch; color: var(--muted); }
 .explore-heading { margin-bottom: 2.5rem; }
 .explore-heading h1 { font-size: clamp(2.2rem, 4.5vw, 3.8rem); line-height: 1.08; }
 .explore-heading > p:not(.eyebrow):not(.explore-data-note) { color: var(--muted); font-size: 1.1rem; line-height: 1.6; }
@@ -1432,6 +1445,16 @@ footer #data-date, footer .footer-meta {
   .front-door .hero-copy { font-size: 1rem; line-height: 1.55; }
   .door-jobs { gap: .4rem; }
   .door-job { padding: .35rem .7rem; font-size: .8rem; }
+  /* Inside Systems the family row stays one row under the caption, so the
+     sticky strip stays under 80 px below the sticky header on a phone:
+     tighter spacing, smaller text, and "All families" reads "All" (its full
+     name stays the accessible name through the clipped rest). */
+  .scope-strip { padding: .3rem 0; }
+  .scope-caption { margin-top: .1rem; font-size: .74rem; line-height: 1.2; }
+  .family-row { flex-wrap: nowrap; gap: .25rem; margin-top: .2rem; }
+  .family-entry { position: relative; padding: .1rem .4rem; font-size: .62rem; line-height: 1.3; white-space: nowrap; }
+  .family-entry strong { font-size: .56rem; }
+  .family-rest { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
   .view, #directory.view { padding: 2.6rem 0; }
   .definitions, .taxonomy-grid { grid-template-columns: 1fr; }
   .api-facts, .endpoint-list, .api-notes { grid-template-columns: 1fr; }

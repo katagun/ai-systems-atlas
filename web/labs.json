@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-25",
+  "verified_at": "2026-09-29",
   "labs": [
     {
       "id": "lab-ai-singapore",
@@ -38,7 +38,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-ai21-labs",
@@ -88,7 +89,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-aikido-security",
@@ -132,7 +134,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-alibaba",
@@ -182,7 +185,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-amazon",
@@ -235,7 +239,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-ant-group",
@@ -287,7 +292,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-anthropic",
@@ -345,7 +351,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-arcee-ai",
@@ -397,7 +404,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-bytedance",
@@ -482,7 +490,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-cohere",
@@ -528,7 +537,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-deepseek",
@@ -577,7 +587,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-google",
@@ -653,7 +664,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-ibm",
@@ -712,7 +724,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-liquid-ai",
@@ -794,7 +807,8 @@
           "verified_at": "2026-09-28"
         }
       ],
-      "verified_at": "2026-09-28"
+      "verified_at": "2026-09-28",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-meituan",
@@ -832,7 +846,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-meta",
@@ -888,7 +903,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-microsoft",
@@ -944,7 +960,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-minimax",
@@ -1000,7 +1017,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-mistral-ai",
@@ -1044,7 +1062,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-mixedbread-ai",
@@ -1090,7 +1109,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-moonshot-ai",
@@ -1132,7 +1152,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-motif-technologies",
@@ -1174,7 +1195,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-nvidia",
@@ -1219,7 +1241,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-openai",
@@ -1275,7 +1298,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-openbmb",
@@ -1313,7 +1337,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-ornith-ai",
@@ -1357,7 +1382,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-perplexity",
@@ -1411,7 +1437,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-poolside",
@@ -1465,457 +1492,128 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
-      "id": "lab-stepfun",
-      "name": "StepFun",
-      "url": "https://www.stepfun.com/",
-      "description": "The AI company that develops the Step models and offers them through the StepFun Open Platform in China and internationally.",
-      "lab_type": "ai_company",
-      "headquarters": "cn",
-      "organization_note": "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology), registered in Xuhui District, Shanghai, develops the models and operates the mainland StepFun Open Platform; StepFun Technology (HK) Limited operates the international platform. The catalog names the developer StepFun and both operating entities, so all three names belong to this record.",
-      "catalog_names": [
-        "StepFun",
-        "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology)",
-        "StepFun Technology (HK) Limited"
-      ],
-      "systems": [],
-      "channels": [
-        {
-          "kind": "model_catalog",
-          "url": "https://platform.stepfun.com/docs/zh/guides/pricing/details"
-        },
-        {
-          "kind": "github",
-          "url": "https://github.com/stepfun-ai"
-        },
-        {
-          "kind": "hugging_face",
-          "url": "https://huggingface.co/stepfun-ai"
-        }
-      ],
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "Platform privacy policy giving the registered address in Xuhui District, Shanghai",
-          "url": "https://platform.stepfun.com/legal/privacy-policy.html",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Mainland platform user agreement: 上海阶跃星辰智能科技股份有限公司 provides the StepFun Open Platform and AI Studio",
-          "url": "https://platform.stepfun.com/docs/zh/agreement/userservice",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "International platform terms: a contract between STEPFUN TECHNOLOGY (HK) LIMITED and the user of the StepFun Open Platform services",
-          "url": "https://platform.stepfun.ai/docs/en/agreement/userservice",
-          "verified_at": "2026-09-25"
-        }
-      ],
-      "verified_at": "2026-09-25"
-    },
-    {
-      "id": "lab-swiss-ai-initiative",
-      "name": "Swiss AI Initiative",
-      "url": "https://www.swiss-ai.org/",
-      "description": "The national research initiative of ETH Zurich and EPFL that develops the Apertus open models.",
-      "lab_type": "public_research",
-      "headquarters": "ch",
-      "organization_note": "The Swiss AI Initiative is a national research effort started in December 2023 as the first initiative of the Swiss National AI Institute, a partnership between the ETH AI Center and the EPFL AI Center; ETH Zurich and EPFL have equal voting power on its steering committee, and it was seeded with compute on the CSCS Alps system and a grant from the ETH Domain. Apertus is developed by the Swiss AI Initiative, and the Apertus site carries the notice of the ETH AI Center and the EPFL AI Center. The pages reviewed name no legal entity for the initiative itself.",
-      "catalog_names": [
-        "Swiss AI Initiative"
-      ],
-      "systems": [],
-      "channels": [
-        {
-          "kind": "model_catalog",
-          "url": "https://apertus-ai.org/pages/documentation/"
-        },
-        {
-          "kind": "github",
-          "url": "https://github.com/swiss-ai"
-        },
-        {
-          "kind": "hugging_face",
-          "url": "https://huggingface.co/swiss-ai"
-        }
-      ],
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "Swiss AI Initiative site: the first initiative of the Swiss National AI Institute, seeded with CSCS compute and an ETH Domain grant",
-          "url": "https://www.swiss-ai.org/",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Organization page: ETH Zurich and EPFL have equal voting power in the Steering Committee, which drives the strategic direction",
-          "url": "https://www.swiss-ai.org/org",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Source of the Apertus website: a fully open foundation model for sovereign AI developed by the Swiss AI Initiative",
-          "url": "https://github.com/swiss-ai/www-apertus",
-          "verified_at": "2026-09-25"
-        }
-      ],
-      "verified_at": "2026-09-25"
-    },
-    {
-      "id": "lab-tencent",
-      "name": "Tencent",
-      "url": "https://www.tencent.com/",
-      "description": "The technology company whose Tencent Hy team develops the Hy models, served through Tencent Cloud TokenHub.",
-      "lab_type": "technology_company",
-      "headquarters": "cn",
-      "organization_note": "Tencent Holdings Limited, incorporated in the Cayman Islands and listed in Hong Kong, is headquartered in Shenzhen. Its Tencent Hy Team develops the Hy models and publishes them under the Tencent-Hunyuan and tencent organizations, and Tencent Cloud operates TokenHub. The catalog names the developer Tencent and the operator Tencent Cloud, so both names belong to this record.",
-      "catalog_names": [
-        "Tencent",
-        "Tencent Cloud"
-      ],
-      "systems": [],
-      "channels": [
-        {
-          "kind": "github",
-          "url": "https://github.com/Tencent-Hunyuan"
-        },
-        {
-          "kind": "hugging_face",
-          "url": "https://huggingface.co/tencent"
-        }
-      ],
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "Tencent article on its headquarters moving into Tencent Building, Shenzhen",
-          "url": "https://www.tencent.com/en-us/articles/80116.html",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Tencent Holdings Limited 2021 annual report: incorporated in the Cayman Islands with limited liability",
-          "url": "https://static.www.tencent.com/uploads/2022/04/07/7c31a327fb1c068906b70ba7ebede899.PDF",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Hy3 repository README: developed by the Tencent Hy Team and released under the Apache License 2.0",
-          "url": "https://github.com/Tencent-Hunyuan/Hy3",
-          "verified_at": "2026-09-25"
-        }
-      ],
-      "verified_at": "2026-09-25"
-    },
-    {
-      "id": "lab-thinking-machines-lab",
-      "name": "Thinking Machines Lab",
-      "url": "https://thinkingmachines.ai/",
-      "description": "The AI research and product company that develops the Inkling models and the Tinker fine-tuning API.",
+      "id": "lab-safe-superintelligence",
+      "name": "Safe Superintelligence",
+      "url": "https://ssi.inc/",
+      "description": "The American company building what it calls safe superintelligence, which it names as its single goal and its entire product roadmap; it has published no model, no API, and no documentation.",
       "lab_type": "ai_company",
       "headquarters": "us",
-      "organization_note": "Thinking Machines Lab, Inc. describes itself as an artificial intelligence research and product company and says it is based in the United States; its terms send court disputes to San Francisco. It develops the Inkling models, publishes their weights under its Hugging Face organization, and runs Tinker.",
-      "catalog_names": [
-        "Thinking Machines Lab"
-      ],
+      "admission_basis": "frontier_announcement",
+      "organization_note": "Safe Superintelligence Inc., which calls itself an American company with offices in Palo Alto and Tel Aviv, states on its own site that it started \"the world's first straight-shot SSI lab, with one goal and one product: a safe superintelligence\", and that \"SSI is our mission, our name, and our entire product roadmap\". The pages name no legal form beyond the Inc. in the site title and footer, no registered address, no directors, and no governing terms; there is no privacy policy, terms of service, model catalog, release-notes page, or safety framework, and the /safety path returns not-found. Its GitHub organization exists and publishes no repositories at all, and it has no Hugging Face organization, so neither is listed as a channel: a channel is a page or organization a reader can watch for the lab's work, and an empty account is not one. It is recorded on its own published statement of intent rather than on a release, which is why it joins to nothing in this collection; the safety language on its site is a mission statement rather than a framework, so no framework is recorded. Its own updates page names Ilya Sutskever as CEO and Daniel Levy as President as of July 2025 and records a July 2026 NVIDIA partnership.",
+      "catalog_names": [],
       "systems": [],
       "channels": [
         {
+          "kind": "news",
+          "url": "https://ssi.inc/updates"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Company site: an American company with offices in Palo Alto and Tel Aviv, building safe superintelligence as its one goal and entire product roadmap",
+          "url": "https://ssi.inc/",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Updates page: Ilya Sutskever formally CEO and Daniel Levy President as of July 3, 2025, and a July 26, 2026 NVIDIA compute partnership",
+          "url": "https://ssi.inc/updates",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Contact page: a comms@ssi.inc address for inquiries and a link to apply",
+          "url": "https://ssi.inc/contact",
+          "verified_at": "2026-09-29"
+        }
+      ],
+      "verified_at": "2026-09-29"
+    },
+    {
+      "id": "lab-sakana-ai",
+      "name": "Sakana AI",
+      "url": "https://sakana.ai/",
+      "description": "The Tokyo-based frontier R&D company that develops the Sakana Namazu models for Japan, the Fugu multi-agent orchestration foundation models, and the AI Scientist and Darwin Gödel Machine research systems.",
+      "lab_type": "ai_company",
+      "headquarters": "jp",
+      "organization_note": "Sakana AI K.K., whose corporate page gives its headquarters as Azabudai Hills Mori JP Tower 22F, Minato-ku, Tokyo, was founded in July 2023 by David Ha, Ren Ito, and Llion Jones and describes itself as a Tokyo-based frontier R&D company. The API platform trades as Sakana AI Co., Ltd. in its terms of service and the site footer reads Sakana AI 株式会社, so the Japanese and English entity strings name the same company rather than separate labs; the catalog keeps both strings because the inference-service record names its operator Sakana AI Co., Ltd. and the model record names its developer Sakana AI. It develops and serves the Sakana Namazu line itself and the Fugu orchestration tiers, and it publishes the Darwin Gödel Machine and ShinkaEvolve systems — the DGM code from the first author's personal account, which is the location Sakana's own page links as the released code. It publishes no frontier-safety, responsible-scaling, or preparedness framework on its own pages: the obvious paths return not-found and it publishes instead a usage policy, a defense policy, and a research safety section on the DGM page, so the field is omitted rather than filled with a usage policy.",
+      "catalog_names": [
+        "Sakana AI",
+        "Sakana AI Co., Ltd."
+      ],
+      "systems": [
+        "darwin-godel-machine",
+        "shinkaevolve"
+      ],
+      "channels": [
+        {
           "kind": "model_catalog",
-          "url": "https://tinker-docs.thinkingmachines.ai/tinker/models/"
+          "url": "https://console.sakana.ai/models"
         },
         {
           "kind": "news",
-          "url": "https://thinkingmachines.ai/news/"
+          "url": "https://sakana.ai/"
         },
         {
           "kind": "github",
-          "url": "https://github.com/thinking-machines-lab"
+          "url": "https://github.com/SakanaAI"
         },
         {
           "kind": "hugging_face",
-          "url": "https://huggingface.co/thinkingmachines"
+          "url": "https://huggingface.co/SakanaAI"
         }
       ],
       "evidence": [
         {
           "kind": "web",
-          "label": "Privacy notice: Thinking Machines Lab, Inc. is an artificial intelligence research and product company, based in the United States",
-          "url": "https://thinkingmachines.ai/legal/privacy/",
-          "verified_at": "2026-09-25"
+          "label": "Corporate page: company name Sakana AI K.K., founded July 2023, headquarters at Azabudai Hills Mori JP Tower 22F, Minato-ku, Tokyo, and a Tokyo-based frontier R&D company founded by David Ha, Ren Ito, and Llion Jones",
+          "url": "https://sakana.ai/company-info/",
+          "verified_at": "2026-09-28"
         },
         {
           "kind": "web",
-          "label": "Service terms of use, with court disputes in San Francisco",
-          "url": "https://thinkingmachines.ai/legal/terms/",
-          "verified_at": "2026-09-25"
+          "label": "Sakana AI API Platform Terms of Service, effective 28 September 2026, naming Sakana AI Co., Ltd. as the Company providing the API",
+          "url": "https://console.sakana.ai/terms-of-service",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Console model reference: the sakana-namazu-v1.0 model ID and its moving alias, and the four Fugu orchestration tiers",
+          "url": "https://console.sakana.ai/models",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Fugu release post: Fugu as a language model trained to call models in an agent pool, with an entirely swappable pool and a fixed training cutoff date",
+          "url": "https://sakana.ai/fugu-release/",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Darwin Gödel Machine page: the system, its self-improvement loop, and the released code it links at github.com/jennyzzt/dgm",
+          "url": "https://sakana.ai/dgm/",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Verified Sakana AI GitHub organization, the publisher of ShinkaEvolve and the AI Scientist repositories",
+          "url": "https://github.com/SakanaAI",
+          "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "SakanaAI Hugging Face organization publishing the Evo-era Japanese models and research checkpoints",
+          "url": "https://huggingface.co/SakanaAI",
+          "verified_at": "2026-09-28"
         }
       ],
-      "verified_at": "2026-09-25"
-    },
-    {
-      "id": "lab-trendyol",
-      "name": "Trendyol",
-      "url": "https://www.trendyol.com/",
-      "description": "The e-commerce company that develops the Trendyol-LLM models for e-commerce tasks in Turkish and English.",
-      "lab_type": "technology_company",
-      "headquarters": "tr",
-      "organization_note": "Trendyol's contact page gives the address of DSM Grup Danışmanlık İletişim ve Satış Ticaret A.Ş., whose copyright its pages carry, in Maslak, Sarıyer, Istanbul, and its about page lists the Trendyol campus in Maslak among its offices. Its principal business is e-commerce, and it publishes the Trendyol-LLM models under its Hugging Face organization.",
-      "catalog_names": [
-        "Trendyol"
-      ],
-      "systems": [],
-      "channels": [
-        {
-          "kind": "hugging_face",
-          "url": "https://huggingface.co/Trendyol"
-        }
-      ],
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "Contact page giving the address of DSM Grup Danışmanlık İletişim ve Satış Ticaret A.Ş. in Maslak, Sarıyer, Istanbul, with the same company's copyright",
-          "url": "https://www.trendyol.com/iletisim",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "About page: one of the largest e-commerce platforms in Türkiye and the region, listing its Maslak campus among its offices",
-          "url": "https://www.trendyol.com/s/meet-us",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Trendyol-LLM-Asure-12B model card: tuned for e-commerce business tasks, with a primary focus on Turkish and English",
-          "url": "https://huggingface.co/Trendyol/Trendyol-LLM-Asure-12B",
-          "verified_at": "2026-09-25"
-        }
-      ],
-      "verified_at": "2026-09-25"
-    },
-    {
-      "id": "lab-typesafe-ai",
-      "name": "TypeSafe AI",
-      "url": "https://typesafe.ai/",
-      "description": "The AI company that develops the Jev models for typed judgments and serves them through its System One API.",
-      "lab_type": "ai_company",
-      "headquarters": "us",
-      "organization_note": "TypeSafe AI, Inc., located at 255 California Street, San Francisco, offers the site, and its team page names a San Francisco office. It develops the Jev models, serves them through the System One API, and publishes its SDKs and agent skills under the typesafe-ai organization. The catalog names the model developer TypeSafe AI and the pack steward TypeSafe AI (typesafe-ai), so both names belong to this record. This catalog's maintenance scripts are a paying customer of the TypeSafe API.",
-      "catalog_names": [
-        "TypeSafe AI",
-        "TypeSafe AI (typesafe-ai)"
-      ],
-      "systems": [],
-      "channels": [
-        {
-          "kind": "model_catalog",
-          "url": "https://docs.typesafe.ai/models"
-        },
-        {
-          "kind": "github",
-          "url": "https://github.com/typesafe-ai"
-        }
-      ],
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "Terms of use: the site is offered by TypeSafe AI, Inc., 255 California St, San Francisco",
-          "url": "https://typesafe.ai/legal/terms",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Team page naming its San Francisco office",
-          "url": "https://typesafe.ai/team",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Master customer agreement between TypeSafe AI, Inc. and its customers, last updated 23 September 2026",
-          "url": "https://typesafe.ai/legal/mca",
-          "verified_at": "2026-09-25"
-        }
-      ],
-      "verified_at": "2026-09-25"
-    },
-    {
-      "id": "lab-upstage",
-      "name": "Upstage",
-      "url": "https://www.upstage.ai/",
-      "description": "The AI company that develops the Solar language models and document-processing engines and builds agents for document workflows on them.",
-      "lab_type": "ai_company",
-      "headquarters": "kr",
-      "organization_note": "Upstage Co., Ltd. (주식회사 업스테이지) gives its business address in Gangnam-gu, Seoul. It develops the Solar models and its document-processing engines, offers them through its console API, and publishes the Solar Open 2 weights on Hugging Face. One name, Upstage, covers the models in the catalog.",
-      "catalog_names": [
-        "Upstage"
-      ],
-      "systems": [],
-      "channels": [
-        {
-          "kind": "model_catalog",
-          "url": "https://console.upstage.ai/docs/models"
-        },
-        {
-          "kind": "news",
-          "url": "https://www.upstage.ai/blog"
-        },
-        {
-          "kind": "github",
-          "url": "https://github.com/UpstageAI"
-        },
-        {
-          "kind": "hugging_face",
-          "url": "https://huggingface.co/upstage"
-        }
-      ],
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "Site footer business information: Upstage Co., Ltd. (주식회사 업스테이지), 22 Teheran-ro 7-gil, Gangnam-gu, Seoul",
-          "url": "https://www.upstage.ai/",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Terms of service giving the Korea Science and Technology Center address, 22 Teheran-ro 7-gil, Gangnam-gu, Seoul",
-          "url": "https://www.upstage.ai/terms-of-service",
-          "verified_at": "2026-09-25"
-        }
-      ],
-      "verified_at": "2026-09-25"
-    },
-    {
-      "id": "lab-vispark",
-      "name": "Vispark",
-      "url": "https://vispark.in/",
-      "description": "The technology company that develops the Vision models alongside music, cloud, and payment services.",
-      "lab_type": "technology_company",
-      "headquarters": "none_listed",
-      "organization_note": "Vispark calls Vision AI its flagship offering, with services spanning music streaming, cloud infrastructure, authentication systems, and payments; its pages say it is made in India and that its Vision model was trained from scratch in India, and its terms are governed by the laws of Punjab, India. The pages reviewed name no legal entity or address, and a governing-law clause does not decide headquarters.",
-      "catalog_names": [
-        "Vispark"
-      ],
-      "systems": [],
-      "channels": [
-        {
-          "kind": "model_catalog",
-          "url": "https://vispark.in/ai"
-        },
-        {
-          "kind": "news",
-          "url": "https://blog.vispark.in/"
-        }
-      ],
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "About page: Vision AI is Vispark's flagship offering, and its services span music streaming, cloud infrastructure, authentication systems, and payment solutions",
-          "url": "https://vispark.in/about",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Vision AI page: India's foundational model",
-          "url": "https://vispark.in/ai",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Terms of service: the site is operated by Vispark under the laws of Punjab, India, with no address given",
-          "url": "https://vispark.in/terms",
-          "verified_at": "2026-09-25"
-        }
-      ],
-      "verified_at": "2026-09-25"
-    },
-    {
-      "id": "lab-vivgrid",
-      "name": "Vivgrid",
-      "url": "https://vivgrid.com/",
-      "description": "The AI agent platform company that runs the Vivgrid managed skills platform for enterprise AI agents and develops the Viv Fast model.",
-      "lab_type": "ai_company",
-      "headquarters": "us",
-      "organization_note": "Vivgrid's privacy policy names Allegro US, LLC as the company behind it, and its site gives Allegro US, LLC's one address, at 2261 Market Street, San Francisco; the licence of its viv repository carries the same copyright. Its site describes Vivgrid as a managed skills platform for enterprise AI agents, and Viv Fast is the release the catalog reviews.",
-      "catalog_names": [
-        "Vivgrid"
-      ],
-      "systems": [],
-      "channels": [
-        {
-          "kind": "github",
-          "url": "https://github.com/vivgrid"
-        }
-      ],
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "Privacy policy naming Allegro US, LLC (Vivgrid), with the site footer's address at 2261 Market Street, San Francisco",
-          "url": "https://vivgrid.com/privacy",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "viv repository licence (Apache License 2.0): copyright Allegro US, LLC",
-          "url": "https://github.com/vivgrid/viv/blob/main/LICENSE",
-          "verified_at": "2026-09-25"
-        }
-      ],
-      "verified_at": "2026-09-25"
-    },
-    {
-      "id": "lab-writer",
-      "name": "Writer",
-      "url": "https://writer.com/",
-      "description": "The AI company that develops the Palmyra models and builds its enterprise agent platform on them.",
-      "lab_type": "ai_company",
-      "headquarters": "us",
-      "organization_note": "Writer, Inc., whose newsroom gives its headquarters at 111 Maiden Lane, San Francisco, takes legal notices there, and its terms are governed by California law. It develops the Palmyra models and serves them through its developer platform. One name, Writer, covers the models in the catalog.",
-      "catalog_names": [
-        "Writer"
-      ],
-      "systems": [],
-      "channels": [
-        {
-          "kind": "model_catalog",
-          "url": "https://dev.writer.com/home/models-overview"
-        },
-        {
-          "kind": "news",
-          "url": "https://writer.com/newsroom/"
-        },
-        {
-          "kind": "github",
-          "url": "https://github.com/writer"
-        },
-        {
-          "kind": "hugging_face",
-          "url": "https://huggingface.co/Writer"
-        }
-      ],
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "Platform services agreement: notices to Writer, Inc., 111 Maiden Lane, San Francisco, under California law",
-          "url": "https://writer.com/legal/platform-services/",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Privacy policy giving the San Francisco mailing address",
-          "url": "https://writer.com/legal/privacy/",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Newsroom giving its headquarters at 111 Maiden Lane, San Francisco",
-          "url": "https://writer.com/newsroom/",
-          "verified_at": "2026-09-25"
-        }
-      ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-28",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-xai",
@@ -1973,7 +1671,468 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
+    },
+    {
+      "id": "lab-stepfun",
+      "name": "StepFun",
+      "url": "https://www.stepfun.com/",
+      "description": "The AI company that develops the Step models and offers them through the StepFun Open Platform in China and internationally.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "organization_note": "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology), registered in Xuhui District, Shanghai, develops the models and operates the mainland StepFun Open Platform; StepFun Technology (HK) Limited operates the international platform. The catalog names the developer StepFun and both operating entities, so all three names belong to this record.",
+      "catalog_names": [
+        "StepFun",
+        "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology)",
+        "StepFun Technology (HK) Limited"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://platform.stepfun.com/docs/zh/guides/pricing/details"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/stepfun-ai"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/stepfun-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Platform privacy policy giving the registered address in Xuhui District, Shanghai",
+          "url": "https://platform.stepfun.com/legal/privacy-policy.html",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Mainland platform user agreement: 上海阶跃星辰智能科技股份有限公司 provides the StepFun Open Platform and AI Studio",
+          "url": "https://platform.stepfun.com/docs/zh/agreement/userservice",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "International platform terms: a contract between STEPFUN TECHNOLOGY (HK) LIMITED and the user of the StepFun Open Platform services",
+          "url": "https://platform.stepfun.ai/docs/en/agreement/userservice",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
+    },
+    {
+      "id": "lab-swiss-ai-initiative",
+      "name": "Swiss AI Initiative",
+      "url": "https://www.swiss-ai.org/",
+      "description": "The national research initiative of ETH Zurich and EPFL that develops the Apertus open models.",
+      "lab_type": "public_research",
+      "headquarters": "ch",
+      "organization_note": "The Swiss AI Initiative is a national research effort started in December 2023 as the first initiative of the Swiss National AI Institute, a partnership between the ETH AI Center and the EPFL AI Center; ETH Zurich and EPFL have equal voting power on its steering committee, and it was seeded with compute on the CSCS Alps system and a grant from the ETH Domain. Apertus is developed by the Swiss AI Initiative, and the Apertus site carries the notice of the ETH AI Center and the EPFL AI Center. The pages reviewed name no legal entity for the initiative itself.",
+      "catalog_names": [
+        "Swiss AI Initiative"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://apertus-ai.org/pages/documentation/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/swiss-ai"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/swiss-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Swiss AI Initiative site: the first initiative of the Swiss National AI Institute, seeded with CSCS compute and an ETH Domain grant",
+          "url": "https://www.swiss-ai.org/",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Organization page: ETH Zurich and EPFL have equal voting power in the Steering Committee, which drives the strategic direction",
+          "url": "https://www.swiss-ai.org/org",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Source of the Apertus website: a fully open foundation model for sovereign AI developed by the Swiss AI Initiative",
+          "url": "https://github.com/swiss-ai/www-apertus",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
+    },
+    {
+      "id": "lab-tencent",
+      "name": "Tencent",
+      "url": "https://www.tencent.com/",
+      "description": "The technology company whose Tencent Hy team develops the Hy models, served through Tencent Cloud TokenHub.",
+      "lab_type": "technology_company",
+      "headquarters": "cn",
+      "organization_note": "Tencent Holdings Limited, incorporated in the Cayman Islands and listed in Hong Kong, is headquartered in Shenzhen. Its Tencent Hy Team develops the Hy models and publishes them under the Tencent-Hunyuan and tencent organizations, and Tencent Cloud operates TokenHub. The catalog names the developer Tencent and the operator Tencent Cloud, so both names belong to this record.",
+      "catalog_names": [
+        "Tencent",
+        "Tencent Cloud"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/Tencent-Hunyuan"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/tencent"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Tencent article on its headquarters moving into Tencent Building, Shenzhen",
+          "url": "https://www.tencent.com/en-us/articles/80116.html",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Tencent Holdings Limited 2021 annual report: incorporated in the Cayman Islands with limited liability",
+          "url": "https://static.www.tencent.com/uploads/2022/04/07/7c31a327fb1c068906b70ba7ebede899.PDF",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Hy3 repository README: developed by the Tencent Hy Team and released under the Apache License 2.0",
+          "url": "https://github.com/Tencent-Hunyuan/Hy3",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
+    },
+    {
+      "id": "lab-thinking-machines-lab",
+      "name": "Thinking Machines Lab",
+      "url": "https://thinkingmachines.ai/",
+      "description": "The AI research and product company that develops the Inkling models and the Tinker fine-tuning API.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "Thinking Machines Lab, Inc. describes itself as an artificial intelligence research and product company and says it is based in the United States; its terms send court disputes to San Francisco. It develops the Inkling models, publishes their weights under its Hugging Face organization, and runs Tinker.",
+      "catalog_names": [
+        "Thinking Machines Lab"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://tinker-docs.thinkingmachines.ai/tinker/models/"
+        },
+        {
+          "kind": "news",
+          "url": "https://thinkingmachines.ai/news/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/thinking-machines-lab"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/thinkingmachines"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy notice: Thinking Machines Lab, Inc. is an artificial intelligence research and product company, based in the United States",
+          "url": "https://thinkingmachines.ai/legal/privacy/",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Service terms of use, with court disputes in San Francisco",
+          "url": "https://thinkingmachines.ai/legal/terms/",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
+    },
+    {
+      "id": "lab-trendyol",
+      "name": "Trendyol",
+      "url": "https://www.trendyol.com/",
+      "description": "The e-commerce company that develops the Trendyol-LLM models for e-commerce tasks in Turkish and English.",
+      "lab_type": "technology_company",
+      "headquarters": "tr",
+      "organization_note": "Trendyol's contact page gives the address of DSM Grup Danışmanlık İletişim ve Satış Ticaret A.Ş., whose copyright its pages carry, in Maslak, Sarıyer, Istanbul, and its about page lists the Trendyol campus in Maslak among its offices. Its principal business is e-commerce, and it publishes the Trendyol-LLM models under its Hugging Face organization.",
+      "catalog_names": [
+        "Trendyol"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/Trendyol"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Contact page giving the address of DSM Grup Danışmanlık İletişim ve Satış Ticaret A.Ş. in Maslak, Sarıyer, Istanbul, with the same company's copyright",
+          "url": "https://www.trendyol.com/iletisim",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "About page: one of the largest e-commerce platforms in Türkiye and the region, listing its Maslak campus among its offices",
+          "url": "https://www.trendyol.com/s/meet-us",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Trendyol-LLM-Asure-12B model card: tuned for e-commerce business tasks, with a primary focus on Turkish and English",
+          "url": "https://huggingface.co/Trendyol/Trendyol-LLM-Asure-12B",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
+    },
+    {
+      "id": "lab-typesafe-ai",
+      "name": "TypeSafe AI",
+      "url": "https://typesafe.ai/",
+      "description": "The AI company that develops the Jev models for typed judgments and serves them through its System One API.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "TypeSafe AI, Inc., located at 255 California Street, San Francisco, offers the site, and its team page names a San Francisco office. It develops the Jev models, serves them through the System One API, and publishes its SDKs and agent skills under the typesafe-ai organization. The catalog names the model developer TypeSafe AI and the pack steward TypeSafe AI (typesafe-ai), so both names belong to this record. This catalog's maintenance scripts are a paying customer of the TypeSafe API.",
+      "catalog_names": [
+        "TypeSafe AI",
+        "TypeSafe AI (typesafe-ai)"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.typesafe.ai/models"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/typesafe-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms of use: the site is offered by TypeSafe AI, Inc., 255 California St, San Francisco",
+          "url": "https://typesafe.ai/legal/terms",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Team page naming its San Francisco office",
+          "url": "https://typesafe.ai/team",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Master customer agreement between TypeSafe AI, Inc. and its customers, last updated 23 September 2026",
+          "url": "https://typesafe.ai/legal/mca",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
+    },
+    {
+      "id": "lab-upstage",
+      "name": "Upstage",
+      "url": "https://www.upstage.ai/",
+      "description": "The AI company that develops the Solar language models and document-processing engines and builds agents for document workflows on them.",
+      "lab_type": "ai_company",
+      "headquarters": "kr",
+      "organization_note": "Upstage Co., Ltd. (주식회사 업스테이지) gives its business address in Gangnam-gu, Seoul. It develops the Solar models and its document-processing engines, offers them through its console API, and publishes the Solar Open 2 weights on Hugging Face. One name, Upstage, covers the models in the catalog.",
+      "catalog_names": [
+        "Upstage"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://console.upstage.ai/docs/models"
+        },
+        {
+          "kind": "news",
+          "url": "https://www.upstage.ai/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/UpstageAI"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/upstage"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Site footer business information: Upstage Co., Ltd. (주식회사 업스테이지), 22 Teheran-ro 7-gil, Gangnam-gu, Seoul",
+          "url": "https://www.upstage.ai/",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Terms of service giving the Korea Science and Technology Center address, 22 Teheran-ro 7-gil, Gangnam-gu, Seoul",
+          "url": "https://www.upstage.ai/terms-of-service",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
+    },
+    {
+      "id": "lab-vispark",
+      "name": "Vispark",
+      "url": "https://vispark.in/",
+      "description": "The technology company that develops the Vision models alongside music, cloud, and payment services.",
+      "lab_type": "technology_company",
+      "headquarters": "none_listed",
+      "organization_note": "Vispark calls Vision AI its flagship offering, with services spanning music streaming, cloud infrastructure, authentication systems, and payments; its pages say it is made in India and that its Vision model was trained from scratch in India, and its terms are governed by the laws of Punjab, India. The pages reviewed name no legal entity or address, and a governing-law clause does not decide headquarters.",
+      "catalog_names": [
+        "Vispark"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://vispark.in/ai"
+        },
+        {
+          "kind": "news",
+          "url": "https://blog.vispark.in/"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "About page: Vision AI is Vispark's flagship offering, and its services span music streaming, cloud infrastructure, authentication systems, and payment solutions",
+          "url": "https://vispark.in/about",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Vision AI page: India's foundational model",
+          "url": "https://vispark.in/ai",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Terms of service: the site is operated by Vispark under the laws of Punjab, India, with no address given",
+          "url": "https://vispark.in/terms",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
+    },
+    {
+      "id": "lab-vivgrid",
+      "name": "Vivgrid",
+      "url": "https://vivgrid.com/",
+      "description": "The AI agent platform company that runs the Vivgrid managed skills platform for enterprise AI agents and develops the Viv Fast model.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "Vivgrid's privacy policy names Allegro US, LLC as the company behind it, and its site gives Allegro US, LLC's one address, at 2261 Market Street, San Francisco; the licence of its viv repository carries the same copyright. Its site describes Vivgrid as a managed skills platform for enterprise AI agents, and Viv Fast is the release the catalog reviews.",
+      "catalog_names": [
+        "Vivgrid"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/vivgrid"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy policy naming Allegro US, LLC (Vivgrid), with the site footer's address at 2261 Market Street, San Francisco",
+          "url": "https://vivgrid.com/privacy",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "viv repository licence (Apache License 2.0): copyright Allegro US, LLC",
+          "url": "https://github.com/vivgrid/viv/blob/main/LICENSE",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
+    },
+    {
+      "id": "lab-writer",
+      "name": "Writer",
+      "url": "https://writer.com/",
+      "description": "The AI company that develops the Palmyra models and builds its enterprise agent platform on them.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "Writer, Inc., whose newsroom gives its headquarters at 111 Maiden Lane, San Francisco, takes legal notices there, and its terms are governed by California law. It develops the Palmyra models and serves them through its developer platform. One name, Writer, covers the models in the catalog.",
+      "catalog_names": [
+        "Writer"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://dev.writer.com/home/models-overview"
+        },
+        {
+          "kind": "news",
+          "url": "https://writer.com/newsroom/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/writer"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/Writer"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Platform services agreement: notices to Writer, Inc., 111 Maiden Lane, San Francisco, under California law",
+          "url": "https://writer.com/legal/platform-services/",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy policy giving the San Francisco mailing address",
+          "url": "https://writer.com/legal/privacy/",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Newsroom giving its headquarters at 111 Maiden Lane, San Francisco",
+          "url": "https://writer.com/newsroom/",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-xiaomi",
@@ -2017,7 +2176,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     },
     {
       "id": "lab-z-ai",
@@ -2074,7 +2234,8 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25"
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release"
     }
   ]
 }

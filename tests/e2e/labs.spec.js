@@ -1,10 +1,11 @@
 const { test, expect } = require("@playwright/test");
+const { viewTab } = require("./helpers/landing");
 const catalogCounts = require("./helpers/catalog-counts");
 
 test("Labs lists every lab by name and filters by type, headquarters, and release distribution", async ({ page }) => {
   await page.goto("/?collection=labs");
 
-  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(viewTab(page, "directory")).toHaveClass(/is-active/);
   await expect(page.locator("#labs-directory-panel")).not.toHaveAttribute("hidden");
   await expect(page.locator("#labs-kicker")).toHaveText(
     `${catalogCounts.labs} labs · developers of ${catalogCounts.labCoveredModels} of ${catalogCounts.reviewedModels} reviewed releases`,
@@ -52,7 +53,7 @@ test("a lab dialog joins the records that name the lab and browses its releases 
 
   // Models continues the dialog's newest-first list instead of the score order.
   await dialog.locator('[data-browse-lab-models="lab-anthropic"]').click();
-  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(viewTab(page, "directory")).toHaveClass(/is-active/);
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
   await expect(page.locator("#model-lab-filter")).toHaveValue("lab-anthropic");
   await expect(page.locator("#model-sort-filter")).toHaveValue("release");

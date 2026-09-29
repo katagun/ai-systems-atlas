@@ -3,7 +3,7 @@ name = "ai-systems-atlas"
 version = "0.1.0"
 description = "A reviewed atlas of operational memory, agent, and assistant systems"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 license = "Apache-2.0"
 authors = [{ name = "Shamil Assylbekov" }]
 dependencies = []
@@ -18,9 +18,15 @@ dev = [
 package = false
 
 [tool.ruff]
-# py311 is the floor pyproject declares, and it is enforced: an f-string trick
-# that only parses on 3.12 shipped undetected because CI only ever ran 3.12.
-target-version = "py311"
+# The floor is 3.12, and the floor is the tested version: verify.yml pins 3.12 in
+# every job, so this catches syntax that parses on 3.13 but not on what CI runs.
+# It was py311 until 2026-09-28, when the floor turned out to be broken rather than
+# merely untested — Python 3.12 made sum() of floats compensated, and the stored
+# editorial scores were computed under 3.12, so validate_directory.py rejected
+# seven records on 3.11 (CR-13 in docs/CODEBASE_REVIEW_2026-09-28.md). Raising the
+# floor is the cheap fix; rounding the weighted sum instead would have meant
+# rewriting human-owned scores, which working rule 8 forbids.
+target-version = "py312"
 
 [tool.ruff.lint]
 select = [

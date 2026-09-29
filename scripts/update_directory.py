@@ -28,18 +28,22 @@ from typing import Any
 try:
     from .build_web_payload import main as build_web_payload
     from .discovery_sources import (
+        candidate_identity,
         canonical_url_key,
         https_url_host,
         validate_discovery_sources,
     )
+    from .json_io import load_document, write_json_atomic_all
     from .sync_web_data import main as sync_web_data
 except ImportError:  # Direct script execution places scripts/ on sys.path.
     from build_web_payload import main as build_web_payload
     from discovery_sources import (
+        candidate_identity,
         canonical_url_key,
         https_url_host,
         validate_discovery_sources,
     )
+    from json_io import load_document, write_json_atomic_all
     from sync_web_data import main as sync_web_data
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -140,17 +144,18 @@ def now_date() -> str:
 
 
 def load_json(path: Path, default: dict[str, Any] | None = None) -> dict[str, Any]:
-    if not path.exists():
-        if default is None:
-            raise FileNotFoundError(path)
-        return default
-    return json.loads(path.read_text(encoding="utf-8"))
+    """Read one canonical document; `default` applies only when the file is absent.
+
+    A file that exists but does not parse raises rather than falling back, so a
+    half-written catalog cannot read as an empty one (CR-14, CR-22).
+    """
+    return load_document(path, default)
 
 
-def write_json(path: Path, value: dict[str, Any]) -> None:
-    path.write_text(
-        json.dumps(value, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
+# The write used to be a bare write_text, and main() called it six times in a row
+# before rebuilding web/ from the result. An interrupt in the middle left three
+# collections refreshed and three stale, with web/ copied from the mixture. The
+# group write restores every file if any one of them fails (CR-14).
 
 
 def github_get(
@@ -294,7 +299,7 @@ def classify(text: str) -> tuple[str | None, float]:
             "actuator",
         )
     ):
-        # ADR 044: robot software takes an existing role; the physical
+        # ADR 045: robot software takes an existing role; the physical
         # boundary is a trait. "ROS" is not a keyword; a ROS package that says
         # "robot" still queues, and a reviewer dismisses it (spec §6).
         return "agent_framework_sdk", max(relevance, 0.82)
@@ -672,9 +677,7 @@ def discover_candidates(
     sleeper: Callable[[float], None] = time.sleep,
 ) -> tuple[list[dict[str, Any]], int, int, list[str]]:
     def candidate_key(item: dict[str, Any]) -> str:
-        # A queued candidate without either key is malformed catalog input, not a
-        # crash: it keys under "" and survives the pass for a human to repair.
-        return str(item.get("repo") or item.get("url") or "").lower()
+        return candidate_identity(item)
 
     candidates = {candidate_key(item): item for item in previous_candidates}
     known = known_projects | set(candidates)
@@ -728,8 +731,7 @@ def discover_official_candidates(
     getter: FeedGetter = feed_get,
 ) -> tuple[list[dict[str, Any]], int, int, list[str]]:
     def candidate_key(item: dict[str, Any]) -> str:
-        repo = item.get("repo")
-        return str(repo).lower() if repo else canonical_url_key(item["url"])
+        return candidate_identity(item)
 
     candidates = {candidate_key(item): item for item in previous_candidates}
     known = {canonical_url_key(value) for value in known_urls} | set(candidates)
@@ -950,18 +952,28 @@ def main() -> int:
         key=lambda project: (project["system_family"], project["name"].lower())
     )
     document["generated_at"] = refreshed_at
-    write_json(PROJECTS_PATH, document)
-    write_json(
-        CANDIDATES_PATH,
-        {"version": "1.0", "updated_at": refreshed_at, "candidates": candidates},
+    # One group, so a failure in any file restores all six (CR-14). The gates above
+    # are already fail-closed; this closes the write half.
+    write_json_atomic_all(
+        [
+            (PROJECTS_PATH, document),
+            (
+                CANDIDATES_PATH,
+                {
+                    "version": "1.0",
+                    "updated_at": refreshed_at,
+                    "candidates": candidates,
+                },
+            ),
+            (
+                LICENSE_REVIEW_PATH,
+                {"version": "1.0", "updated_at": refreshed_at, "entries": reviews},
+            ),
+            (LOCAL_RUNTIMES_PATH, local_runtimes_document),
+            (PACKS_PATH, packs_document),
+            (SPECIFICATIONS_PATH, specifications_document),
+        ]
     )
-    write_json(
-        LICENSE_REVIEW_PATH,
-        {"version": "1.0", "updated_at": refreshed_at, "entries": reviews},
-    )
-    write_json(LOCAL_RUNTIMES_PATH, local_runtimes_document)
-    write_json(PACKS_PATH, packs_document)
-    write_json(SPECIFICATIONS_PATH, specifications_document)
     sync_web_data()
     build_web_payload([])
 

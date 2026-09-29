@@ -58,88 +58,6 @@ const label = value => String(value || "")
 const projectLocation = project => project.repo || new URL(project.url).hostname.replace(/^www\./, "");
 const isReviewedModel = model => model.review_status === "reviewed";
 
-const FINDER_DIRECTIONS = [
-  { id: "memory_system", label: "Preserve and use knowledge", description: "Notes, documents, recall, personal knowledge, or durable memory for agents.", cue: "I need a memory system" },
-  { id: "agent_system", label: "Plan and take action", description: "Coding, research, data analysis, browser work, or a framework for building tool-using agents.", cue: "I need an agent system" },
-  { id: "assistant_system", label: "Help across everyday work", description: "A conversational workspace for research, creation, organizational context, or access to several models.", cue: "I need an assistant" },
-  { id: "inference_service", label: "Serve and route models", description: "A managed API, cloud platform, model host, or routing layer for production inference.", cue: "I need an inference service" },
-  { id: "local_runtime", label: "Run models on hardware I operate", description: "A desktop runner, server engine, embeddable library, or self-hosted compatible gateway.", cue: "I need a local runtime" }
-];
-
-const FINDER_GOALS = {
-  memory_system: [
-    { id: "personal_knowledge", label: "Keep my own notes and knowledge", description: "A workspace for writing, linking, organizing, and revisiting ideas.", roles: ["human_pkm"] },
-    { id: "knowledge_assistant", label: "Ask questions over documents", description: "A ready-to-use AI knowledge app or RAG workspace.", roles: ["ai_knowledge_app"] },
-    { id: "agent_memory", label: "Give agents durable memory", description: "Memory services, temporal context, or a bridge to human-owned knowledge.", roles: ["agent_memory_service", "context_graph_engine", "memory_bridge"] },
-    { id: "ambient_recall", label: "Automatically remember activity", description: "Passive capture for reconstructing digital work and context.", roles: ["ambient_capture"] },
-    { id: "memory_infrastructure", label: "Build a custom memory product", description: "Retrieval or context-graph infrastructure for developers.", roles: ["retrieval_infrastructure", "context_graph_engine"] }
-  ],
-  agent_system: [
-    { id: "general_work", label: "Delegate general knowledge work", description: "An end-user agent that plans and completes broad multi-step work across files, web sources, and applications.", roles: ["general_work_agent"] },
-    { id: "coding", label: "Write and maintain software", description: "An interactive coding agent or a repeatable coding-agent workflow.", roles: ["coding_agent", "coding_agent_workflow"] },
-    { id: "research", label: "Research and synthesize information", description: "A multi-step researcher that gathers sources and produces reports.", roles: ["research_agent"] },
-    { id: "analyze_data", label: "Analyze data with natural language", description: "A text-to-SQL or analytics agent that plans, validates, and explains queries.", roles: ["data_analysis_agent"] },
-    { id: "browser", label: "Operate websites or browsers", description: "An agent specialized in browser and graphical interaction.", roles: ["browser_computer_agent"] },
-    { id: "persistent", label: "Run a persistent, stateful agent", description: "Identity, memory, schedules, skills, and long-running state.", roles: ["stateful_agent_runtime"] },
-    { id: "build_agents", label: "Build and orchestrate agents", description: "A framework for tools, workflows, state, and multi-agent coordination.", roles: ["agent_framework_sdk", "multi_agent_orchestrator"] }
-  ],
-  assistant_system: [
-    { id: "general_assistance", label: "Use one broad AI workspace", description: "A general assistant for research, files, creation, memory, and connected tools.", roles: ["general_ai_assistant"] },
-    { id: "enterprise_work", label: "Work across organizational context", description: "A governed assistant grounded in company data, applications, and business actions.", roles: ["enterprise_work_assistant"] },
-    { id: "model_choice", label: "Use several models in one place", description: "A consistent chat workspace with first-class model and provider choice.", roles: ["multi_model_chat_client"] }
-  ],
-  inference_service: [
-    { id: "model_developer_api", label: "Use a model developer's API", description: "Call first-party model families through their developer's managed service.", serviceTypes: ["direct_model_api"] },
-    { id: "cloud_governance", label: "Deploy through my cloud platform", description: "Use cloud-native identity, regions, networking, and models from several publishers.", serviceTypes: ["cloud_model_platform"] },
-    { id: "host_models", label: "Host selected or custom models", description: "Serve open-weight, third-party, or customer-supplied models on managed infrastructure.", serviceTypes: ["managed_inference_host"] },
-    { id: "route_models", label: "Route across models and providers", description: "Use one API with provider selection, fallback, or routing policy.", serviceTypes: ["routing_aggregator"] }
-  ],
-  local_runtime: [
-    { id: "personal_machine", label: "Run models on my own computer", description: "A packaged runner that manages download, storage, and local serving.", runtimeTypes: ["desktop_runner"] },
-    { id: "serve_workload", label: "Serve a sustained request load", description: "An engine built for batching, concurrency, and multi-accelerator serving.", runtimeTypes: ["server_engine"] },
-    { id: "embed_inference", label: "Embed inference in my own software", description: "A library or binary a host application links rather than operates as a service.", runtimeTypes: ["embedded_library"] },
-    { id: "self_host_endpoint", label: "Self-host one compatible endpoint", description: "A gateway presenting familiar APIs over interchangeable local backends.", runtimeTypes: ["compatibility_gateway"] }
-  ]
-};
-
-const FINDER_PRIORITIES = {
-  memory_system: [
-    { id: "local_editable", label: "Local, inspectable knowledge", description: "Prefer local-first systems with data people can directly inspect or edit." },
-    { id: "local_control", label: "Self-hosting and privacy", description: "Prefer local execution and strong control over stored data." },
-    { id: "easy", label: "Low setup and maintenance", description: "Prefer systems that are easier for an individual to operate." },
-    { id: "portable", label: "Open and interoperable", description: "Prefer portable formats, APIs, and provider flexibility." },
-    { id: "balanced", label: "Best balanced fit", description: "Use the family-specific editorial score as the main tie-breaker." }
-  ],
-  agent_system: [
-    { id: "direct_use", label: "Ready for me to use", description: "Prefer terminal, IDE, or web interfaces over embedded libraries." },
-    { id: "developer", label: "Composable developer framework", description: "Prefer libraries and APIs for building a custom agent product." },
-    { id: "local", label: "Local execution and control", description: "Prefer local-first agents that can operate on the host." },
-    { id: "control", label: "Human control and recovery", description: "Prefer approvals, observability, checkpoints, and recoverability." },
-    { id: "balanced", label: "Best balanced fit", description: "Use the family-specific editorial score as the main tie-breaker." }
-  ],
-  assistant_system: [
-    { id: "tools", label: "Tools and connected apps", description: "Prefer assistants that work across files, search, applications, and actions." },
-    { id: "continuity", label: "Context and memory", description: "Prefer durable projects, conversation continuity, memory controls, and provenance." },
-    { id: "governance", label: "Control and governance", description: "Prefer strong consent, retention, administration, privacy, and deletion controls." },
-    { id: "portable", label: "Model and data portability", description: "Prefer model choice, export, APIs, protocols, and open connectors." },
-    { id: "balanced", label: "Best balanced fit", description: "Use the family-specific editorial score as the main tie-breaker." }
-  ],
-  inference_service: [
-    { id: "governance", label: "Data governance", description: "Prefer documented retention, training-use, privacy, deletion, and tenant controls." },
-    { id: "regions", label: "Regional deployment control", description: "Prefer explicit processing regions, network boundaries, and isolated placement." },
-    { id: "portable", label: "API and serving flexibility", description: "Prefer portable interfaces and several documented capacity or deployment modes." },
-    { id: "resilience", label: "Traffic resilience", description: "Prefer documented routing, fallback, recovery, or multi-region traffic controls." },
-    { id: "balanced", label: "Best balanced fit", description: "Use the inference-service editorial score as the main tie-breaker." }
-  ],
-  local_runtime: [
-    { id: "hardware", label: "Hardware coverage", description: "Prefer runtimes documenting the widest range of processors and accelerators." },
-    { id: "formats", label: "Model format breadth", description: "Prefer runtimes that load the widest range of weight formats and quantizations." },
-    { id: "serving", label: "Concurrent serving", description: "Prefer documented batching, parallel requests, and distributed serving." },
-    { id: "operability", label: "Deployment and visibility", description: "Prefer documented install paths, orchestration, controls, and metrics." },
-    { id: "balanced", label: "Best balanced fit", description: "Use the local-runtime editorial score as the main tie-breaker." }
-  ]
-};
-
 // Content hashes stamped into index.html by scripts/build_asset_version.mjs.
 // They let the catalog files be cached: the URL changes whenever the data does,
 // so `no-store` — which threw away 261 KB of gzipped JSON on every single load,
@@ -205,6 +123,7 @@ async function bootstrap() {
   renderSpecifications();
   renderTaxonomy();
   renderModelAccess();
+  renderSystemDeployment(systems.active_review_dates);
   bindEvents();
   restoreFromURL({ boot: true });
   // Text typed on the front door before its listener was bound is still a
@@ -247,8 +166,7 @@ function taxonomyName(group, id) {
   return state.taxonomy[group].find(item => item.id === id)?.name || label(id);
 }
 const familyName = id => taxonomyName("system_families", id);
-const FINDER_DIRECTION_NAMES = { inference_service: "Inference services", local_runtime: "Local runtimes" };
-const finderDirectionName = id => FINDER_DIRECTION_NAMES[id] || familyName(id);
+const finderDirectionName = id => AppCore.FINDER_DIRECTION_NAMES[id] || familyName(id);
 const roleName = id => taxonomyName("primary_roles", id);
 const relationName = id => taxonomyName("agent_relations", id);
 const architectureName = id => taxonomyName("architectures", id);
@@ -292,7 +210,8 @@ function comparisonRecords() {
 // on that one budget: a keystroke's scope, a chip's collection, a dialog's
 // record. So an unchanged URL makes no call, and a refused call is dropped
 // rather than stopping whatever asked for it: the page keeps working, and
-// only the address bar falls behind. Only `record` pushes (writeRecordURL).
+// only the address bar falls behind. Two writers push: `record`
+// (writeRecordURL) and leaving the front door (leaveFrontDoor).
 function writeURL(url, { push = false } = {}) {
   if (url.href === window.location.href) return;
   try {
@@ -309,11 +228,15 @@ function writeURL(url, { push = false } = {}) {
 // carry, such as the sort from before a query or a Finder role set.
 let settledSearch = null;
 
+// The front door's URL names no collection and no comparison, so a reload or
+// a Back that lands on it lands on the door (front-door spec, "URL and
+// history"). A comparison in progress stays in memory there, marked by its
+// tile's dot, and returns to the URL when a collection opens.
 function writeDirectoryURL() {
   const url = new URL(window.location.href);
   if (state.directoryStage === "door") url.searchParams.delete("collection");
   else url.searchParams.set("collection", state.directoryCollection);
-  if (state.comparison.ids.length) {
+  if (state.comparison.ids.length && state.directoryStage !== "door") {
     url.searchParams.set("compare", `${state.comparison.kind}:${state.comparison.ids.join(",")}`);
   } else {
     url.searchParams.delete("compare");
@@ -335,8 +258,8 @@ const SCOPE_CONTROLS = {
   specifications: { q: "#specification-search", type: "#specification-type-filter", scope: "#specification-scope-filter", status: "#specification-status-filter", license: "#specification-license-filter" },
 };
 
-// The scope whose state the URL carries: the Directory's collection, or a
-// sibling view that has filters. Finder, Taxonomy, and API carry none.
+// The scope whose state the URL carries: the Directory's collection while
+// results show. The front door, the Finder, Taxonomy, and API carry none.
 function activeScope() {
   const view = $(".view.is-active")?.id;
   if (view === "directory") return state.directoryStage === "door" ? null : state.directoryCollection;
@@ -359,9 +282,10 @@ function allowedScopeValues(scope) {
   }));
 }
 
-// Rewrites the active scope's parameters in place: only `record` pushes
-// history (docs/WEB.md), so Back still closes a dialog. Quiet until the
-// page has restored itself, so boot never writes a half-restored state.
+// Rewrites the active scope's parameters in place: only `record` and
+// leaving the front door push history (docs/WEB.md), so Back still closes a
+// dialog and returns to the door. Quiet until the page has restored itself,
+// so boot never writes a half-restored state.
 function writeScopeURL() {
   if (!state.urlReady) return;
   const url = new URL(window.location.href);
@@ -706,7 +630,7 @@ function updateAdvancedFilterSummary() {
     $("#agent-interface-filter").value,
     $("#capability-filter").value,
     $("#status-filter").value !== "active" ? $("#status-filter").value || "all" : "",
-    $("#local-filter").checked ? "local" : "",
+    $("#local-filter").value,
   ].filter(Boolean).length;
   $(".advanced-filter-shell summary").textContent = active ? `More filters · ${active} active` : "More filters";
 }
@@ -729,7 +653,7 @@ function applyDirectoryDefaults() {
   $("#capability-filter").value = defaults.capability;
   $("#status-filter").value = defaults.status;
   $("#sort-filter").value = defaults.sort;
-  $("#local-filter").checked = defaults.localOnly;
+  $("#local-filter").value = defaults.localOnly ? "1" : "";
   updateScoreSortAvailability();
   syncBadgeLegend();
 }
@@ -748,8 +672,7 @@ function collectionPayloads() {
 }
 
 function collectionEmblem(entry) {
-  if (entry.id === "all") return AppCore.familyEmblem("type");
-  return entry.emblem ? AppCore.badgeEmblem(entry.emblem) : "";
+  return AppCore.collectionEmblem(entry);
 }
 
 function collectionStateFor(id) {
@@ -801,8 +724,8 @@ function renderCollectionIndex() {
 // the Finder's priority question with that direction and goal answered
 // (openFinderAt, which the job hint under a search already uses).
 function renderDoorJobs() {
-  $("#door-jobs").innerHTML = FINDER_DIRECTIONS.map(direction => {
-    const goal = FINDER_GOALS[direction.id][0];
+  $("#door-jobs").innerHTML = AppCore.FINDER_DIRECTIONS.map(direction => {
+    const goal = AppCore.FINDER_GOALS[direction.id][0];
     return `<li><button type="button" class="door-job" data-door-direction="${escapeHTML(direction.id)}" data-door-goal="${escapeHTML(goal.id)}">${escapeHTML(goal.label)}</button></li>`;
   }).join("");
 }
@@ -811,10 +734,13 @@ function renderDoorJobs() {
 // every change inside results keeps replacing (front-door spec, "URL state
 // and history"). Pushing the current URL first, then replacing it with the
 // new state, spends one history call, within WebKit's budget (writeURL).
+// Returns whether it left the door, so a caller can hand on the focus the
+// hidden door held.
 function leaveFrontDoor() {
-  if (state.directoryStage !== "door") return;
+  if (state.directoryStage !== "door") return false;
   try { window.history.pushState(null, "", window.location.href); } catch {}
   state.directoryStage = "results";
+  return true;
 }
 
 // The front door is a clean start: the query of the collection last shown
@@ -874,8 +800,7 @@ function renderScopeStrip() {
     if (count === 0 && entry.id !== "all") return "";
     const pressed = entry.id === state.directoryCollection;
     if (pressed) caption = `${entry.name} · ${count}`;
-    // Robots has no emblem until its form-factor badge exists, and a phone
-    // clips every name, so its initial stands in rather than an empty button.
+    // Keep an initial as a fallback for any future collection without a glyph.
     const emblem = collectionEmblem(entry) || `<span class="scope-monogram" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(entry.name))}</span>`;
     return `<button type="button" class="scope-entry${pressed ? " is-active" : ""}" data-open-collection="${escapeHTML(entry.id)}" aria-pressed="${pressed}" title="${escapeHTML(entry.name)}">${emblem}<span class="scope-name">${escapeHTML(entry.name)}</span><span class="scope-short" aria-hidden="true">${escapeHTML(entry.short)}</span><strong class="scope-count">${count}</strong>${stateDot(collectionStateFor(entry.id))}</button>`;
   }).join("");
@@ -889,9 +814,11 @@ function renderFamilyRow(payloads) {
   const current = $("#family-filter").value;
   const categories = AppCore.collectionCategories("systems", payloads);
   const total = AppCore.collectionCount("systems", payloads).count;
-  const entry = (value, name, count) => `<button type="button" class="family-entry${value === current ? " is-active" : ""}" data-family-entry="${escapeHTML(value)}" aria-pressed="${value === current}">${escapeHTML(name)} <strong>${count}</strong></button>`;
-  const families = FAMILY_ORDER.map(id => entry(id, AppCore.FAMILY_SHORT_NAMES[id], (categories.find(category => category.value === id) || { count: 0 }).count));
-  return `<div class="family-row" role="group" aria-label="System families">${entry("", "All families", total)}${families.join("")}</div>`;
+  const entry = (value, label, count) => `<button type="button" class="family-entry${value === current ? " is-active" : ""}" data-family-entry="${escapeHTML(value)}" aria-pressed="${value === current}">${label} <strong>${count}</strong></button>`;
+  const families = FAMILY_ORDER.map(id => entry(id, escapeHTML(AppCore.FAMILY_SHORT_NAMES[id]), (categories.find(category => category.value === id) || { count: 0 }).count));
+  // A phone shows "All" alone so the row stays one row (styles.css); the
+  // clipped rest keeps "All families" the accessible name at every width.
+  return `<div class="family-row" role="group" aria-label="System families">${entry("", 'All<span class="family-rest"> families</span>', total)}${families.join("")}</div>`;
 }
 
 // The strip sticks under the header at every width, so the header's
@@ -915,23 +842,41 @@ function syncStickyClearance() {
 function openCollection(id, { facet = null } = {}) {
   const entry = AppCore.COLLECTIONS.find(item => item.id === id);
   if (!entry) return;
-  leaveFrontDoor();
-  // A category link opens the collection narrowed to that one category, so
-  // its results agree with the count on the link: other facets are cleared,
-  // and Systems keeps its default status, the one its counts are taken at.
-  if (facet) {
-    clearScopeFacets(id);
-    if (id === "systems") $("#status-filter").value = AppCore.directoryDefaults().status;
+  const fromDoor = leaveFrontDoor();
+  if (fromDoor && !facet && id === "systems" && collectionStateFor("systems")) reopenSystems();
+  else {
+    // A tile or a category link opens what its count promises: the facets a
+    // previous visit left set are cleared, and Systems keeps its default
+    // status, the one its counts are taken at. A strip entry in results
+    // keeps the collection's facets as the reader left them.
+    if (facet || fromDoor) {
+      clearScopeFacets(id, { focus: false });
+      if (id === "systems") $("#status-filter").value = AppCore.directoryDefaults().status;
+      state.page[id] = 1;
+    }
+    if (id === "systems") jumpToDirectoryFamily(facet && facet.key === "family" ? facet.value : "");
+    else {
+      if (facet) $(SCOPE_CONTROLS[id][facet.key]).value = facet.value;
+      setDirectoryCollection(id);
+    }
   }
-  if (id === "systems") {
-    jumpToDirectoryFamily(facet && facet.key === "family" ? facet.value : "");
-    return;
+  // The door that held the pressed tile or link is hidden now, so focus
+  // moves to the collection's own entry in the strip rather than the page.
+  if (fromDoor) $('#scope-strip .scope-row [aria-pressed="true"]')?.focus({ preventScroll: true });
+}
+
+// The Systems tile's dot promises a comparison in progress or a Finder role
+// set, so the tile reopens Systems with it, at the Finder's family or the
+// comparison's (as restoreComparisonFromURL chooses it), and with the other
+// facets as the reader left them. The strip's Systems entry still clears
+// both through jumpToDirectoryFamily (Phase 0).
+function reopenSystems() {
+  if (!state.directoryRoles) {
+    $("#family-filter").value = comparisonRecords()[0]?.system_family ?? $("#family-filter").value;
+    populateRoleFilter();
+    updateScoreSortAvailability();
   }
-  if (facet) {
-    $(SCOPE_CONTROLS[id][facet.key]).value = facet.value;
-    state.page[id] = 1;
-  }
-  setDirectoryCollection(id);
+  setDirectoryCollection("systems");
 }
 
 // Opens Systems on one family, or on every family when `family` is empty,
@@ -1264,10 +1209,10 @@ function labCard(lab) {
     [relations.specifications.length, "specification", "specifications"],
     [relations.packs.length, "agent pack", "agent packs"],
   ].filter(([count]) => count).map(([count, one, many]) => `<span>${count} ${count === 1 ? one : many}</span>`).join("");
-  const origin = lab.parent_organization ? `Part of ${lab.parent_organization}` : new URL(lab.url).hostname.replace(/^www\./, "");
+  const origin = lab.parent_organization ? `Part of ${escapeHTML(lab.parent_organization)}` : escapeHTML(new URL(lab.url).hostname.replace(/^www\./, ""));
   const newestDate = newest && AppCore.releaseDate(newest);
   return `<article class="project-card lab-card">
-    <div class="card-top"><div class="card-identity">${cardMark(lab)}<div><p class="family-label">${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${escapeHTML(origin)}</div></div></div></div>
+    <div class="card-top"><div class="card-identity">${cardMark(lab)}<div><p class="family-label">${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
     <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
     <p>${escapeHTML(lab.description)}</p>
     <div class="tags">${counts}</div>
@@ -1412,7 +1357,7 @@ function filteredProjects(term) {
     sourceModel: $("#source-model-filter").value,
     license: $("#license-filter").value,
     status: $("#status-filter").value,
-    localOnly: $("#local-filter").checked,
+    localOnly: $("#local-filter").value,
     sort: $("#sort-filter").value
   });
 }
@@ -1453,7 +1398,7 @@ const COLLECTIONS = {
     records: term => filteredProjects(term),
     card: (project, { family }) => {
 
-    const score = family ? `<div class="score-ring" aria-label="${escapeHTML(project.score_profile)} score ${project.score.overall} out of 10">${project.score.overall}</div>` : "";
+    const score = family ? `<div class="score-ring" aria-label="${escapeHTML(project.score_profile)} score ${escapeHTML(project.score.overall)} out of 10">${escapeHTML(project.score.overall)}</div>` : "";
     // Only this grid sorts by stars, so only its cards explain a missing count.
     const githubSignal = project.stars == null ? "No GitHub metrics" : starCount(project);
     return `<article class="project-card ${escapeHTML(project.system_family)}">
@@ -1489,9 +1434,9 @@ const COLLECTIONS = {
     }),
     card: specification => {
 
-    const version = specification.current_version ? `Version ${specification.current_version}` : taxonomyName("specification_statuses", specification.status);
+    const version = specification.current_version ? `Version ${escapeHTML(specification.current_version)}` : escapeHTML(taxonomyName("specification_statuses", specification.status));
     return `<article class="project-card specification-card">
-      <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("specification_types", specification.specification_type))}</p><h2>${escapeHTML(specification.short_name)}</h2><div class="repo">${escapeHTML(specification.repo || new URL(specification.url).hostname)}</div></div><span class="status-badge">${escapeHTML(version)}</span></div>
+      <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("specification_types", specification.specification_type))}</p><h2>${escapeHTML(specification.short_name)}</h2><div class="repo">${escapeHTML(specification.repo || new URL(specification.url).hostname)}</div></div><span class="status-badge">${version}</span></div>
       <span class="role-badge">${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</span>
       <div class="license-row">${specification.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
       <p>${escapeHTML(specification.description)}</p>
@@ -1644,9 +1589,6 @@ const COLLECTIONS = {
   },
 };
 
-// dataset keys are camelCase; the matching attribute is kebab-case.
-const datasetAttribute = key => `data-${key.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)}`;
-
 function renderCollection(name) {
   const collection = COLLECTIONS[name];
   const context = collection.context();
@@ -1660,7 +1602,7 @@ function renderCollection(name) {
   const grid = $(collection.grid);
   grid.innerHTML = paged.items.map(record => collection.card(record, context)).join("")
     || emptyStateMarkup(name, collection.empty);
-  $$(`[${datasetAttribute(collection.dataset)}]`, grid).forEach(button =>
+  $$(`[${AppCore.datasetAttribute(collection.dataset)}]`, grid).forEach(button =>
     button.addEventListener("click", () => collection.open(button.dataset[collection.dataset])));
   if (context.comparable) {
     bindComparisonButtons(grid);
@@ -1754,6 +1696,41 @@ function renderRuntimeMatrix() {
     <table class="runtime-matrix"><caption>${escapeHTML(group)} recorded for the selected runtimes. Names open reviewed details.</caption>
     <thead><tr><th scope="col">Runtime</th>${columns.map(column => `<th scope="col">${escapeHTML(column.name)}</th>`).join("")}</tr></thead>
     <tbody>${body}</tbody></table></div>`;
+}
+
+function systemAnalysisCell(cell, row, facet, rowFacet) {
+  const share = accessPercent(cell.count, row.count);
+  const content = `<strong>${cell.count}</strong><span>${share}%</span>`;
+  const style = `--access-share: ${share}%`;
+  if (!cell.count || !row.id) return `<td><span class="deployment-cell" style="${style}">${content}</span></td>`;
+  const params = new URLSearchParams({ collection: "systems", [rowFacet]: row.id, [facet]: cell.id, sort: "name" });
+  const name = `${row.name}, ${cell.name}: ${cell.count} of ${row.count} active systems (${share}%). Browse systems`;
+  return `<td><a class="deployment-cell" style="${style}" href="?${escapeHTML(params.toString())}" aria-label="${escapeHTML(name)}">${content}</a></td>`;
+}
+
+function systemAnalysisTable(id, caption, heading, rows, columns, facet, rowFacet) {
+  const body = rows.map(row => `<tr><th scope="row">${escapeHTML(row.name)}<small>${row.count} active systems</small></th>${row.cells.map(cell => systemAnalysisCell(cell, row, facet, rowFacet)).join("")}</tr>`).join("");
+  return `<div class="deployment-scroll" role="region" aria-label="${escapeHTML(heading)} table, scroll horizontally for more columns" tabindex="0">
+    <table id="${id}" class="deployment-table"><caption>${escapeHTML(caption)}</caption>
+    <thead><tr><th scope="col">${escapeHTML(heading)}</th>${columns.map(column => `<th scope="col">${escapeHTML(column.name)}</th>`).join("")}</tr></thead>
+    <tbody>${body}</tbody></table></div>`;
+}
+
+function renderSystemDeployment(dates) {
+  const summary = AppCore.systemDeploymentSummary(state.projects, state.taxonomy);
+  const dated = dates?.first ? `Editorial review dates ${dates.first} to ${dates.last}` : "No editorial review dates recorded";
+  $("#deployment-data-note").textContent = `${summary.total} active reviewed systems · ${summary.excluded} inactive records excluded · ${dated} · ${dates?.missing ?? summary.total} without a recorded review date`;
+  if (!summary.total) {
+    $("#system-deployment-content").innerHTML = '<p class="notice">No active reviewed systems are available.</p>';
+    return;
+  }
+  $("#system-deployment-content").innerHTML = systemAnalysisTable("deployment-heatmap",
+    "Deployment by family. Counts and percentages of each row; darker cells indicate a larger share. Deployment modes overlap.",
+    "System family", summary.families, summary.deployments, "deployment", "family")
+    + `<p class="runtime-scroll-hint">Scroll horizontally for every deployment mode. ${summary.missingDeployment} active systems have no recorded deployment mode.</p>
+    <div class="explore-section-heading access-matrix-section"><h3>Is local-first tied to licensing?</h3><p>Each system belongs to exactly one local-first column. Percentages use the license classification’s total.</p></div>`
+    + systemAnalysisTable("local-license-table", "Local-first by license classification. Counts and percentages of each row; Yes, No, and Not recorded sum to the row total.",
+      "License classification", summary.licensing, summary.localStates, "localOnly", "sourceModel");
 }
 
 function modelAccessURL(distribution, sourceModel = "") {
@@ -1860,19 +1837,10 @@ function renderPacks() {
 
 // Repaint whatever a search index could have widened. A search box may have a
 // term in it already when its index lands, so this runs for the collection on
-// screen and for specifications, which live on their own view.
+// screen. The others are painted when they open (setDirectoryCollection), so
+// a hidden grid is not repainted here.
 function renderSearchSurfaces() {
-  const renderers = {
-    all: renderAllDirectoryEntries, systems: renderProjects,
-    inference: renderInferenceServices, runtimes: renderLocalRuntimes,
-    packs: renderPacks, robots: () => renderCollection("robots"),
-  };
-  renderers[state.directoryCollection]?.();
-  // Specifications, Models, and Labs are sibling views rather than directory
-  // collections, so none is in the map above and each repaints every time.
-  renderSpecifications();
-  renderModels();
-  renderLabs();
+  pageRenderer(state.directoryCollection)?.();
   if (state.directoryRoles) renderFinder();
 }
 
@@ -1905,16 +1873,16 @@ function renderFinder() {
   let content;
   if (step === 0) {
     content = `<div class="finder-question"><p class="eyebrow">Start with the outcome</p><h2>What should it do?</h2><p>Preserve knowledge, carry out delegated work, assist interactively, or serve models through a managed inference layer.</p></div>
-      <div class="finder-choice-grid direction-grid">${FINDER_DIRECTIONS.map(item => finderChoice("direction", item)).join("")}</div>`;
+      <div class="finder-choice-grid direction-grid">${AppCore.FINDER_DIRECTIONS.map(item => finderChoice("direction", item)).join("")}</div>`;
   } else if (step === 1) {
-    const choices = FINDER_GOALS[answers.direction];
+    const choices = AppCore.FINDER_GOALS[answers.direction];
     content = `<div class="finder-question"><p class="eyebrow">${escapeHTML(finderDirectionName(answers.direction))}</p><h2>Choose the closest job.</h2><p>You can broaden the directory afterward.</p></div>
       <div class="finder-choice-grid">${choices.map(item => finderChoice("goal", item)).join("")}</div>`;
   } else if (step === 2) {
     // The shortlist's candidates are known once the goal is: fetch their detail
     // now, while the priority question is on screen.
     ensureFinderDetail();
-    const choices = FINDER_PRIORITIES[answers.direction];
+    const choices = AppCore.FINDER_PRIORITIES[answers.direction];
     content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2 tabindex="-1">What matters most?</h2><p>This adjusts ranking only within the selected score profile.</p></div>
       <div class="finder-choice-grid">${choices.map(item => finderChoice("priority", item)).join("")}</div>`;
   } else {
@@ -1956,98 +1924,6 @@ function keepFinderInView() {
   if (top < clearance) window.scrollBy({ top: top - clearance, behavior: "instant" });
 }
 
-// A boot record carries only its overall score, so every other dimension this
-// weighting reads may still be in flight. One undefined turns the whole match
-// into NaN and the shortlist's order into whatever the sort happened to do, so
-// a dimension that has not arrived counts as zero — the ordering stays
-// deterministic, the same way recommendationReasons below stays readable.
-const scoreDimension = (project, name) => project.score?.[name] ?? 0;
-
-function priorityBoost(project, priority) {
-  const dimension = name => scoreDimension(project, name);
-  if (project.score_profile === "inference_service") {
-    if (priority === "governance") return dimension("data_governance") / 2;
-    if (priority === "regions") return dimension("regional_deployment_control") / 2;
-    if (priority === "portable") return dimension("api_interoperability") / 2 + dimension("serving_flexibility") / 4;
-    if (priority === "resilience") return dimension("traffic_resilience") / 2 + dimension("operational_maturity") / 4;
-    return dimension("overall") / 3;
-  }
-  if (project.score_profile === "local_runtime") {
-    if (priority === "hardware") return dimension("hardware_accelerator_coverage") / 2;
-    if (priority === "formats") return dimension("model_format_support") / 2;
-    if (priority === "serving") return dimension("serving_concurrency") / 2 + dimension("api_interoperability") / 4;
-    if (priority === "operability") return dimension("deployment_operations") / 2 + dimension("observability_control") / 4;
-    return dimension("overall") / 3;
-  }
-  if (project.system_family === "memory_system") {
-    if (priority === "local_editable") return (project.local_first ? 2.2 : 0) + (project.human_editable ? 2 : 0) + (project.architectures.includes("plain_files") ? 0.8 : 0);
-    if (priority === "local_control") return (project.local_first ? 3 : 0) + (project.deployment.includes("self_hosted") ? 0.8 : 0) + dimension("data_sovereignty") / 10;
-    if (priority === "easy") return dimension("operational_simplicity") / 2;
-    if (priority === "portable") return dimension("interoperability") / 1.8 + (project.architectures.includes("plain_files") ? 0.6 : 0);
-    return dimension("overall") / 3;
-  }
-  if (project.system_family === "agent_system") {
-    if (priority === "direct_use") return project.agent_interfaces.some(item => ["terminal", "ide", "web_app"].includes(item)) ? 3 : 0;
-    if (priority === "developer") return project.agent_interfaces.some(item => ["library", "api_sdk"].includes(item)) ? 3 : 0;
-    if (priority === "local") return (project.local_first ? 3 : 0) + ((project.execution_boundaries || []).includes("host") ? 1 : 0) + dimension("data_sovereignty") / 10;
-    if (priority === "control") return dimension("human_control") / 3 + dimension("observability_recovery") / 4;
-    return dimension("overall") / 3;
-  }
-  if (priority === "tools") return dimension("tools_integrations") / 2;
-  if (priority === "continuity") return dimension("context_continuity") / 2;
-  if (priority === "governance") return dimension("data_governance") / 3 + dimension("human_control") / 4;
-  if (priority === "portable") return dimension("interoperability") / 1.8;
-  return dimension("overall") / 3;
-}
-
-// A reason chip quotes a score dimension, which only a detail file carries. It
-// cannot throw, but it can print "Simplicity undefined/10" at a reader when a
-// detail file never arrived, so every dimension here falls back to an em dash.
-function recommendationReasons(project, priority) {
-  if (project.score_profile === "local_runtime") {
-    const reasons = [taxonomyName("local_runtime_types", project.runtime_type)];
-    if (priority === "hardware") reasons.push(`Accelerator coverage ${project.score.hardware_accelerator_coverage ?? "—"}/10`);
-    if (priority === "formats") reasons.push(`Model formats ${project.score.model_format_support ?? "—"}/10`);
-    if (priority === "serving") reasons.push(`Serving ${project.score.serving_concurrency ?? "—"}/10`);
-    if (priority === "operability") reasons.push(`Deployment ${project.score.deployment_operations ?? "—"}/10`, `Observability ${project.score.observability_control ?? "—"}/10`);
-    reasons.push(...project.accelerators.slice(0, 2).map(item => taxonomyName("runtime_accelerators", item)));
-    return [...new Set(reasons)].slice(0, 4);
-  }
-  if (project.score_profile === "inference_service") {
-    const reasons = [taxonomyName("inference_service_types", project.service_type)];
-    if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance ?? "—"}/10`);
-    if (priority === "regions") reasons.push(`Regional control ${project.score.regional_deployment_control ?? "—"}/10`);
-    if (priority === "portable") reasons.push(`API interoperability ${project.score.api_interoperability ?? "—"}/10`, `Serving flexibility ${project.score.serving_flexibility ?? "—"}/10`);
-    if (priority === "resilience") reasons.push(`Traffic resilience ${project.score.traffic_resilience ?? "—"}/10`);
-    reasons.push(...project.delivery_modes.slice(0, 2).map(item => taxonomyName("inference_delivery_modes", item)));
-    return [...new Set(reasons)].slice(0, 4);
-  }
-  const reasons = [roleName(project.primary_role)];
-  if (project.local_first) reasons.push("Local-first");
-  if (project.system_family === "memory_system") {
-    if (project.human_editable) reasons.push("Human-editable data");
-    if (priority === "easy") reasons.push(`Simplicity ${project.score.operational_simplicity ?? "—"}/10`);
-    if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability ?? "—"}/10`);
-  } else if (project.system_family === "agent_system") {
-    const interfaces = project.agent_interfaces.slice(0, 2).map(item => taxonomyName("agent_interfaces", item));
-    reasons.push(...interfaces);
-    if (priority === "control") reasons.push(`Human control ${project.score.human_control ?? "—"}/10`);
-  } else {
-    if (priority === "tools") reasons.push(`Tools & integrations ${project.score.tools_integrations ?? "—"}/10`);
-    if (priority === "continuity") reasons.push(`Context continuity ${project.score.context_continuity ?? "—"}/10`);
-    if (priority === "governance") reasons.push(`Data governance ${project.score.data_governance ?? "—"}/10`);
-    if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability ?? "—"}/10`);
-  }
-  return [...new Set(reasons)].slice(0, 4);
-}
-
-// The shortlist is the one surface that reads detail for records nobody has
-// opened: it ranks on the full score dimensions and quotes a tradeoff, and
-// boot carries neither. So a direction and a goal name a bounded candidate set
-// — one goal's classifications, a few dozen records at most — and that set is
-// hydrated before results paint. The fetches start when the goal is chosen, so
-// the priority question usually covers the wait.
-const FINDER_DETAIL_KINDS = { inference_service: "inference", local_runtime: "runtime" };
 const finderDetailAwaited = new Set();
 
 // The records a Finder goal can draw on: active systems in its family and
@@ -2060,13 +1936,13 @@ function finderGoalRecords(direction, goalConfig) {
 
 function finderCandidates() {
   const { direction, goal } = state.finder.answers;
-  const goalConfig = FINDER_GOALS[direction]?.find(item => item.id === goal);
+  const goalConfig = AppCore.FINDER_GOALS[direction]?.find(item => item.id === goal);
   return goalConfig ? finderGoalRecords(direction, goalConfig) : [];
 }
 
 let finderGoalList = null;
 function finderGoalEntries() {
-  finderGoalList ||= Object.entries(FINDER_GOALS).flatMap(([direction, goals]) =>
+  finderGoalList ||= Object.entries(AppCore.FINDER_GOALS).flatMap(([direction, goals]) =>
     goals.map(goal => ({ ...goal, direction, eligible: finderGoalRecords(direction, goal).length })));
   return finderGoalList;
 }
@@ -2143,8 +2019,10 @@ function facetedRecords(scope) {
 // "Show it" under an empty result: clears every facet the scope's URL
 // carries, keeping its query and sort, then repaints through each changed
 // control's own input path, so the page, the counts, and the URL follow.
-// Systems also drops a Finder role set, a facet no control holds.
-function clearScopeFacets(scope) {
+// Systems also drops a Finder role set, a facet no control holds. Its search
+// box takes focus, as the button that asked sits in the grid it repaints;
+// openCollection clears a panel still hidden and places focus itself.
+function clearScopeFacets(scope, { focus = true } = {}) {
   if (!SCOPE_CONTROLS[scope]) return;
   if (scope === "systems") {
     state.directoryRoles = null;
@@ -2160,15 +2038,14 @@ function clearScopeFacets(scope) {
   });
   changed.forEach(control => control.dispatchEvent(new Event("input", { bubbles: true })));
   if (!changed.length) pageRenderer(scope)?.();
-  $(SCOPE_CONTROLS[scope].q).focus();
+  if (focus) $(SCOPE_CONTROLS[scope].q).focus();
 }
 
 // "Search all" under an empty result: lists the query in All, opening the
-// Directory from a sibling view (Models, Labs, Specifications). It writes All's
-// box itself rather than carrying the query through the Directory's current
-// scope, whose box a sibling view keeps hidden: text written there would later
-// carry back as unchanged and keep a sort chosen for another query. Focusing
-// All's box loads its indexes, as it does for a typed query.
+// Directory first when another view is active. It writes All's box itself
+// and opens All without a carry, so All searches exactly the text the empty
+// result named. Focusing All's box loads its indexes, as it does for a typed
+// query.
 function searchAllCollections(term) {
   if ($(".view.is-active")?.id !== "directory") activateView("directory");
   $("#all-directory-search").value = term;
@@ -2261,7 +2138,7 @@ function ensureFinderDetail() {
   const { direction, goal } = state.finder.answers;
   const key = `${direction}:${goal}`;
   if (finderDetailAwaited.has(key)) return null;
-  const kind = FINDER_DETAIL_KINDS[direction] || "system";
+  const kind = AppCore.FINDER_DETAIL_KINDS[direction] || "system";
   const pending = finderCandidates().map(record => loadDetail(kind, record)).filter(Boolean);
   if (!pending.length) {
     finderDetailAwaited.add(key);
@@ -2272,14 +2149,14 @@ function ensureFinderDetail() {
 
 function recommendedFinderRecords() {
   const { direction, goal, priority } = state.finder.answers;
-  const goalConfig = FINDER_GOALS[direction].find(item => item.id === goal);
+  const goalConfig = AppCore.FINDER_GOALS[direction].find(item => item.id === goal);
   return finderCandidates()
     .map(project => {
       const classificationIndex = direction === "inference_service" ? goalConfig.serviceTypes.indexOf(project.service_type)
         : direction === "local_runtime" ? goalConfig.runtimeTypes.indexOf(project.runtime_type)
         : goalConfig.roles.indexOf(project.primary_role);
-      const match = 6 - classificationIndex * 0.4 + project.score.overall * 0.2 + priorityBoost(project, priority);
-      return { project, match, reasons: recommendationReasons(project, priority) };
+      const match = 6 - classificationIndex * 0.4 + project.score.overall * 0.2 + AppCore.priorityBoost(project, priority);
+      return { project, match, reasons: AppCore.recommendationReasons(project, priority, taxonomyName) };
     })
     .sort((a, b) => b.match - a.match || b.project.score.overall - a.project.score.overall || a.project.name.localeCompare(b.project.name))
     .slice(0, 3);
@@ -2287,8 +2164,8 @@ function recommendedFinderRecords() {
 
 function renderFinderResults() {
   const { direction, goal, priority } = state.finder.answers;
-  const goalConfig = FINDER_GOALS[direction].find(item => item.id === goal);
-  const priorityConfig = FINDER_PRIORITIES[direction].find(item => item.id === priority);
+  const goalConfig = AppCore.FINDER_GOALS[direction].find(item => item.id === goal);
+  const priorityConfig = AppCore.FINDER_PRIORITIES[direction].find(item => item.id === priority);
   const results = recommendedFinderRecords();
   const isInference = direction === "inference_service";
   const isRuntime = direction === "local_runtime";
@@ -2320,7 +2197,7 @@ function renderFinderResults() {
 // earlier browsing, or restored from the URL, belongs to another list.
 function applyFinderToDirectory() {
   const { direction, goal } = state.finder.answers;
-  const goalConfig = FINDER_GOALS[direction].find(item => item.id === goal);
+  const goalConfig = AppCore.FINDER_GOALS[direction].find(item => item.id === goal);
   clearComparison();
   if (direction === "local_runtime") {
     $("#runtime-search").value = "";
@@ -2364,7 +2241,7 @@ function applyFinderToDirectory() {
   $("#source-model-filter").value = "";
   $("#license-filter").value = "";
   $("#status-filter").value = "active";
-  $("#local-filter").checked = false;
+  $("#local-filter").value = "";
   $("#sort-filter").value = "score";
   syncMatchSort("systems");
   updateScoreSortAvailability();
@@ -2374,7 +2251,7 @@ function applyFinderToDirectory() {
   revealDirectoryResults();
 }
 
-// The handoff lands on the results the Finder chose, not on the hero above them.
+// The handoff lands on the results the Finder chose, not on the page top above them.
 // The Finder view hides the button that asked for this, so focus moves to the
 // count of what the Finder chose rather than falling to the page, as it does
 // when the Finder chip removes itself. It moves without scrolling, since the
@@ -2478,7 +2355,7 @@ function systemDialogMarkup(project) {
       ${statusNotice}
       <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${detailText(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(item => taxonomyName("deployment_modes", item)).join(", "))}</p>${labLinksMarkup("system", project)}<p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
       <section class="detail-block"><h3>Licenses and terms</h3>${licenseLinks}${project.license_review_status === "review_required" ? '<p class="notice">The reviewed license evidence may be stale and requires human review.</p>' : ""}</section>
-      <section class="detail-block"><h3>${escapeHTML(scoreProfileName(project.score_profile))}</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${project.score.overall}</td></tr></table></section>
+      <section class="detail-block"><h3>${escapeHTML(scoreProfileName(project.score_profile))}</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${escapeHTML(project.score.overall)}</td></tr></table></section>
       <section class="detail-block"><h3>Strengths</h3>${detailList(project.strengths)}</section>
       <section class="detail-block"><h3>Weaknesses</h3>${detailList(project.weaknesses)}</section>
       <section class="detail-block"><h3>Architecture</h3><p>${project.architectures.map(architectureName).map(escapeHTML).join(" · ")}</p><h3>Retrieval</h3><p>${detailText((project.retrieval_modes || []).map(label).join(" · "))}</p></section>
@@ -2850,11 +2727,18 @@ function labDialogMarkup(lab) {
     ["Agent packs it publishes", relations.packs, "data-open-pack"],
   ].filter(([, records]) => records.length).map(([title, records, attribute]) =>
     `<section class="detail-block"><h3>${title}</h3><p>${labRecordButtons(records, attribute)}</p></section>`).join("");
+  // A lab admitted on a published frontier commitment has nothing to join, and
+  // an empty heading over an empty list would read as a gap in the catalog
+  // rather than as the state the record is in (ADR 044).
+  const announced = lab.admission_basis === "frontier_announcement";
+  const releaseBlock = announced
+    ? `<section class="detail-block"><h3>Reviewed model releases · 0</h3><p>None reviewed. The Atlas has reviewed no release this organization developed, which is why it is recorded on its own published statement of intent rather than on a release. Nothing here is a claim that it has released nothing.</p></section>`
+    : `<section class="detail-block"><h3>Reviewed model releases · ${relations.models.length}</h3><p>${modeCounts}</p><ul class="lab-release-list">${recent}</ul>${pending}<p><button type="button" class="ghost-button" data-browse-lab-models="${escapeHTML(lab.id)}">Browse all ${total} in Models →</button></p></section>`;
   return `<p class="eyebrow">Lab · ${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · Unscored</p><h1>${escapeHTML(lab.name)}</h1><p>${escapeHTML(lab.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Organization</h3><p><strong>Type:</strong> ${escapeHTML(taxonomyName("lab_types", lab.lab_type))}</p><p><strong>Headquarters:</strong> ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p>${lab.parent_organization ? `<p><strong>Parent organization:</strong> ${escapeHTML(lab.parent_organization)}</p>` : ""}<p><strong>Named in the catalog as:</strong> ${escapeHTML(lab.catalog_names.join(" · "))}</p><p><a href="${escapeHTML(lab.url)}" target="_blank" rel="noreferrer">Open official site ↗</a></p></section>
+      <section class="detail-block"><h3>Organization</h3><p><strong>Type:</strong> ${escapeHTML(taxonomyName("lab_types", lab.lab_type))}</p><p><strong>Headquarters:</strong> ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p>${lab.parent_organization ? `<p><strong>Parent organization:</strong> ${escapeHTML(lab.parent_organization)}</p>` : ""}<p><strong>Recorded because:</strong> ${escapeHTML(taxonomyName("lab_admission_bases", lab.admission_basis))}</p>${lab.catalog_names.length ? `<p><strong>Named in the catalog as:</strong> ${escapeHTML(lab.catalog_names.join(" · "))}</p>` : ""}<p><a href="${escapeHTML(lab.url)}" target="_blank" rel="noreferrer">Open official site ↗</a></p></section>
       <section class="detail-block"><h3>How it is organized</h3><p>${detailText(lab.organization_note)}</p></section>
-      <section class="detail-block"><h3>Reviewed model releases · ${relations.models.length}</h3><p>${modeCounts}</p><ul class="lab-release-list">${recent}</ul>${pending}<p><button type="button" class="ghost-button" data-browse-lab-models="${escapeHTML(lab.id)}">Browse all ${total} in Models →</button></p></section>
+      ${releaseBlock}
       <section class="detail-block"><h3>Systems it builds</h3>${relations.systems.length ? `<p>${labRecordButtons(relations.systems, "data-open-project")}</p>` : "<p>None recorded in the catalog.</p>"}</section>
       <section class="detail-block"><h3>Inference services it operates</h3>${relations.services.length ? `<p>${labRecordButtons(relations.services, "data-open-inference")}</p>` : "<p>None recorded in the catalog.</p>"}</section>
       ${others}
@@ -2996,7 +2880,6 @@ function openModel(id) { return openRecordDialog("model", id); }
 function openLab(id) { return openRecordDialog("lab", id); }
 function openRobot(id) { return openRecordDialog("robot", id); }
 
-
 function specificationEvidenceLink(item) {
   if (item.kind === "git_blob") {
     return `<p><strong>${escapeHTML(item.label || item.license_id)}:</strong> ${item.scope ? `${escapeHTML(item.scope)} · ` : ""}<a href="${escapeHTML(item.immutable_url)}" target="_blank" rel="noreferrer">immutable evidence ↗</a> · <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">source path ↗</a></p>`;
@@ -3004,13 +2887,9 @@ function specificationEvidenceLink(item) {
   return `<p><strong>${escapeHTML(item.label || item.license_id)}:</strong> ${item.scope ? `${escapeHTML(item.scope)} · ` : ""}<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed source ↗</a></p>`;
 }
 
-
-
 function inferenceEvidenceLink(item) {
   return `<p><strong>${escapeHTML(item.label)}:</strong> <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed source ↗</a> <span class="evidence-date">${escapeHTML(item.verified_at)}</span></p>`;
 }
-
-
 
 function runtimeLicenseEvidenceLink(item) {
   const source = item.kind === "git_blob"
@@ -3018,8 +2897,6 @@ function runtimeLicenseEvidenceLink(item) {
     : `<a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">reviewed terms ↗</a> <span class="evidence-date">${escapeHTML(item.verified_at)}</span>`;
   return `<p><strong>${escapeHTML(item.license_id)}:</strong> ${escapeHTML(item.scope)} — ${source}</p>`;
 }
-
-
 
 // A record dialog is the shareable unit of the site: opening one writes a
 // `record=kind:id` URL, so the address bar always links to what is on screen.

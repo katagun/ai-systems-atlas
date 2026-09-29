@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
@@ -72,6 +73,56 @@ class WebPayloadTests(unittest.TestCase):
             self.assertIn(
                 "verified_at", json.loads(self.payloads[f"app/{collection}.json"])
             )
+
+    def test_active_system_review_dates_exclude_inactive_and_metadata_dates(
+        self,
+    ) -> None:
+        catalog = {
+            **self.catalog,
+            "projects.json": {
+                **self.catalog["projects.json"],
+                "projects": [
+                    {
+                        "id": "old",
+                        "name": "Old",
+                        "status": "active",
+                        "verified_at": "2026-01-01",
+                    },
+                    {
+                        "id": "new",
+                        "name": "New",
+                        "status": "active",
+                        "verified_at": "2026-09-01",
+                    },
+                    {
+                        "id": "missing",
+                        "name": "Missing",
+                        "status": "active",
+                        "updated_at": "2026-09-28",
+                    },
+                    {
+                        "id": "retired",
+                        "name": "Retired",
+                        "status": "archived",
+                        "verified_at": "2026-09-28",
+                    },
+                ],
+            },
+        }
+        payload = json.loads(build_payloads(catalog)["app/systems.json"])
+        self.assertEqual(
+            payload["active_review_dates"],
+            {
+                "first": "2026-01-01",
+                "last": "2026-09-01",
+                "missing": 1,
+            },
+        )
+        catalog["projects.json"]["projects"] = []
+        payload = json.loads(build_payloads(catalog)["app/systems.json"])
+        self.assertEqual(
+            payload["active_review_dates"], {"first": None, "last": None, "missing": 0}
+        )
 
     def test_search_index_covers_every_record(self) -> None:
         for collection, name, key, _ in COLLECTIONS:
@@ -392,3 +443,63 @@ class WebPayloadTests(unittest.TestCase):
         self.assertEqual(build_web_payload.recent_record_ids(records), ["c", "a", "b"])
         self.assertEqual(build_web_payload.recent_record_ids(records, limit=1), ["c"])
         self.assertEqual(build_web_payload.recent_record_ids([]), [])
+
+
+class WebPayloadCheckGateTests(unittest.TestCase):
+    """CR-15. `--check` is the merge gate, and nothing tested that it can fail.
+
+    `test_committed_output_matches_the_builder` covers the positive direction: a stale
+    commit fails the suite. These cover the negative direction, which is the one that
+    matters for the gate itself — a regression that made `--check` return 0
+    unconditionally would pass every other test in this file.
+    """
+
+    def _run_check(self, payloads: dict[str, str], mutate) -> int:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            (root / "web").mkdir()
+            mutate(root / "web")
+            with (
+                patch.object(build_web_payload, "ROOT", root),
+                patch.object(build_web_payload, "load_catalog", return_value={}),
+                patch.object(
+                    build_web_payload, "build_payloads", return_value=payloads
+                ),
+            ):
+                return build_web_payload.main(["--check"])
+
+    def test_check_passes_when_every_payload_is_fresh(self) -> None:
+        def fresh(web: Path) -> None:
+            (web / "app").mkdir()
+            (web / "app" / "systems.json").write_text("fresh", encoding="utf-8")
+
+        self.assertEqual(0, self._run_check({"app/systems.json": "fresh"}, fresh))
+
+    def test_check_fails_when_a_payload_is_stale(self) -> None:
+        def stale(web: Path) -> None:
+            (web / "app").mkdir()
+            (web / "app" / "systems.json").write_text("stale", encoding="utf-8")
+
+        self.assertEqual(1, self._run_check({"app/systems.json": "fresh"}, stale))
+
+    def test_check_fails_when_a_payload_is_missing(self) -> None:
+        def missing(web: Path) -> None:
+            (web / "app").mkdir()
+
+        self.assertEqual(1, self._run_check({"app/systems.json": "fresh"}, missing))
+
+    def test_check_fails_when_web_holds_a_file_the_builder_does_not_produce(
+        self,
+    ) -> None:
+        """A hand-edited or orphaned payload must not pass as fresh."""
+
+        def orphan(web: Path) -> None:
+            (web / "app").mkdir()
+            (web / "app" / "systems.json").write_text("fresh", encoding="utf-8")
+            (web / "app" / "leftover.json").write_text("{}", encoding="utf-8")
+
+        self.assertEqual(1, self._run_check({"app/systems.json": "fresh"}, orphan))
+
+
+if __name__ == "__main__":
+    unittest.main()

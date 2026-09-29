@@ -358,7 +358,7 @@ class PromoteSystemCandidateTests(unittest.TestCase):
         original_evidence = evidence_path.read_bytes()
         original_candidates = candidates_path.read_bytes()
 
-        real_write = promote_system_candidate._write_json_atomic
+        real_write = promote_system_candidate.write_json_atomic
 
         def flaky_write(path: Path, value: dict) -> None:
             if path.name == "candidates.json":
@@ -368,7 +368,7 @@ class PromoteSystemCandidateTests(unittest.TestCase):
         with (
             mock.patch.object(
                 promote_system_candidate,
-                "_write_json_atomic",
+                "write_json_atomic",
                 side_effect=flaky_write,
             ),
             self.assertRaises(OSError),

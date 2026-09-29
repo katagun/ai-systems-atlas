@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Decide, in ADR 044, that robot software classifies under existing roles with reaching a robot as a trait; make that trait reachable through a Capability filter; then review the five held robot-software candidates and record each verdict.
+**Goal:** Decide, in ADR 045, that robot software classifies under existing roles with reaching a robot as a trait; make that trait reachable through a Capability filter; then review the five held robot-software candidates and record each verdict.
 
 **Architecture:** Two PRs. PR A (Tasks 1–6) lands the decision as a Proposed ADR, one `agent_capabilities` value, a Capability filter on the Systems scope, a discovery rung, and the documentation. PR B (Tasks 7–13) re-fetches the evidence, publishes LeRobot and OM1 as `agent_framework_sdk` records through the guarded promotion script, holds openpi and the Safari SDK under new labels, queues Octo, excludes Dora and six screened neighbours, records coverage batch 96, and sets the ADR to Accepted.
 
@@ -17,7 +17,7 @@
 - No new `execution_boundaries` value, no `perception` value, no validator implication rule, no card badge, no change to `CARD_BADGE_SETS`.
 - The filter control is `<select id="capability-filter">` whose empty option reads "All capabilities"; its key is `capability` in `SCOPE_CONTROLS.systems` (web/app.js), `SCOPE_URL_PARAMS.systems` (web/app-core.js), `directoryDefaults()`, and `matchesProjectFacets`.
 - The discovery rung routes descriptions containing any of `robot`, `humanoid`, `quadruped`, `manipulation`, `teleoperation`, `vision-language-action`, `actuator` to `agent_framework_sdk` with `max(relevance, 0.82)`. "ROS" is not a keyword. `DISCOVERY_QUERIES` is unchanged.
-- ADR file: `docs/adr/044-robot-software-classifies-by-the-outcome-it-owns.md`, title "ADR 044: Robot software classifies by the outcome it owns". Before each PR opens, run `git ls-tree --name-only origin/main docs/adr/`; if a `044-` file exists there, renumber this file and every reference to it to the next free number.
+- ADR file: `docs/adr/045-robot-software-classifies-by-the-outcome-it-owns.md`, title "ADR 045: Robot software classifies by the outcome it owns". Before each PR opens, run `git ls-tree --name-only origin/main docs/adr/`; if a `044-` file exists there, renumber this file and every reference to it to the next free number.
 - Published records: `id` `lerobot` and `om1`, `system_family` `agent_system`, `primary_role` `agent_framework_sdk`, `score_profile` `agent`, `agent_capabilities` containing `robot_control`, `execution_boundaries` containing `host`.
 - Hold labels: openpi and Octo `action-policy model boundary`; Safari SDK `programme-gated run path`.
 - Dates written by this work are `2026-09-28` unless a step says otherwise.
@@ -48,7 +48,7 @@ Add to `tests/test_directory.py`, after `test_provider_relationship_is_a_trait_n
 
 ```python
     def test_robot_control_is_a_capability_not_a_role_or_boundary(self) -> None:
-        """ADR 044: reaching a robot is a trait on agent_capabilities, nothing else."""
+        """ADR 045: reaching a robot is a trait on agent_capabilities, nothing else."""
         capabilities = {item["id"]: item for item in self.taxonomy["agent_capabilities"]}
         self.assertIn("robot_control", capabilities)
         self.assertEqual("Robot control", capabilities["robot_control"]["name"])
@@ -147,7 +147,7 @@ git add directory/taxonomy.json docs/TAXONOMY.md docs/DATA_MODEL.md tests/test_d
 git commit -F - <<'EOF'
 Add robot_control to the agent capabilities
 
-ADR 044 records reaching a robot as a capability, beside browser control,
+ADR 045 records reaching a robot as a capability, beside browser control,
 never as a role or an execution boundary.
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
@@ -365,7 +365,7 @@ Add to `tests/test_update_directory.py` after `test_science_wording_does_not_cap
 
 ```python
     def test_robot_software_reaches_the_candidate_queue_as_a_framework(self) -> None:
-        """ADR 044 routes robot software to agent_framework_sdk, so discovery must see it."""
+        """ADR 045 routes robot software to agent_framework_sdk, so discovery must see it."""
         cases = (
             "Middleware for composing AI-based robotic applications as dataflow pipelines",
             "A modular AI hardware-abstraction layer that lets LLM-driven agents control humanoid robots",
@@ -406,7 +406,7 @@ In `scripts/update_directory.py`, directly after the `return "research_agent", m
             "actuator",
         )
     ):
-        # ADR 044: robot software takes an existing role; the physical
+        # ADR 045: robot software takes an existing role; the physical
         # boundary is a trait. "ROS" is not a signal: it is middleware.
         return "agent_framework_sdk", max(relevance, 0.82)
 ```
@@ -425,7 +425,7 @@ git add scripts/update_directory.py tests/test_update_directory.py
 git commit -F - <<'EOF'
 Route robotics vocabulary to the framework role in discovery
 
-ADR 044's rung mirrors ADR 023's: a relevance floor so the keyword
+ADR 045's rung mirrors ADR 023's: a relevance floor so the keyword
 ladder can see the systems the decision reconsiders itself against.
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
@@ -434,10 +434,10 @@ EOF
 
 ---
 
-### Task 5: ADR 044 and the documentation it routes through
+### Task 5: ADR 045 and the documentation it routes through
 
 **Files:**
-- Create: `docs/adr/044-robot-software-classifies-by-the-outcome-it-owns.md`
+- Create: `docs/adr/045-robot-software-classifies-by-the-outcome-it-owns.md`
 - Modify: `docs/TAXONOMY.md:24` (add a paragraph after the ADR 023 paragraph)
 - Modify: `docs/CURATION.md:5` (scope sentence) and `docs/CURATION.md:33` (add a scope-boundary paragraph after the discovery paragraph)
 - Modify: `docs/WEB.md:18`, `docs/WEB.md:101` (add a filter bullet after it), `docs/WEB.md:45` (badge section, add a sentence)
@@ -452,10 +452,10 @@ EOF
 
 - [ ] **Step 1: Write the ADR**
 
-Create `docs/adr/044-robot-software-classifies-by-the-outcome-it-owns.md` with this content:
+Create `docs/adr/045-robot-software-classifies-by-the-outcome-it-owns.md` with this content:
 
 ````markdown
-# ADR 044: Robot software classifies by the outcome it owns
+# ADR 045: Robot software classifies by the outcome it owns
 
 **Status:** Proposed
 
@@ -548,19 +548,19 @@ No card badge. Two or three records of 133 agent systems is about 2%, and `docs/
 `docs/TAXONOMY.md`, after the ADR 023 paragraph at line 24, add:
 
 ```markdown
-Robot software is not a further role either. A framework a developer builds a robot-controlling agent with is `agent_framework_sdk`, and any system that sends a model's decisions to a robot's actuators carries `robot_control` in `agent_capabilities`; the outcome a robot role would have to name, completing physical tasks a person delegates, is written down with the conditions that reopen the question. See [ADR 044](adr/044-robot-software-classifies-by-the-outcome-it-owns.md).
+Robot software is not a further role either. A framework a developer builds a robot-controlling agent with is `agent_framework_sdk`, and any system that sends a model's decisions to a robot's actuators carries `robot_control` in `agent_capabilities`; the outcome a robot role would have to name, completing physical tasks a person delegates, is written down with the conditions that reopen the question. See [ADR 045](adr/045-robot-software-classifies-by-the-outcome-it-owns.md).
 ```
 
 `docs/CURATION.md` line 5: replace the final clause `a robot never enters `directory/projects.json`, and the robot software and action-policy model decisions in `BACKLOG.md` are still open.` with:
 
 ```markdown
-a robot never enters `directory/projects.json`; software that controls one is a scored system under [ADR 044](adr/044-robot-software-classifies-by-the-outcome-it-owns.md), and the action-policy model decision in `BACKLOG.md` is still open.
+a robot never enters `directory/projects.json`; software that controls one is a scored system under [ADR 045](adr/045-robot-software-classifies-by-the-outcome-it-owns.md), and the action-policy model decision in `BACKLOG.md` is still open.
 ```
 
 `docs/CURATION.md`, after the discovery paragraph at line 33, add:
 
 ```markdown
-A system whose documented behaviour reaches a physical robot qualifies on the operational outcome it owns, not on the reach. A framework or builder whose documented outcome is an agent application that acts on a robot is `agent_framework_sdk`; the reach is `robot_control` in `agent_capabilities`, set from the system's own run-path documentation and never from a motion API alone. A simulator, a benchmark, or a training framework whose README documents no decision loop fails inclusion-gate condition 2 on the coverage batch 39 lines, and a package that exists to run or fine-tune its own named policy checkpoints waits on the action-policy model decision rather than on this scope. See [ADR 044](adr/044-robot-software-classifies-by-the-outcome-it-owns.md).
+A system whose documented behaviour reaches a physical robot qualifies on the operational outcome it owns, not on the reach. A framework or builder whose documented outcome is an agent application that acts on a robot is `agent_framework_sdk`; the reach is `robot_control` in `agent_capabilities`, set from the system's own run-path documentation and never from a motion API alone. A simulator, a benchmark, or a training framework whose README documents no decision loop fails inclusion-gate condition 2 on the coverage batch 39 lines, and a package that exists to run or fine-tune its own named policy checkpoints waits on the action-policy model decision rather than on this scope. See [ADR 045](adr/045-robot-software-classifies-by-the-outcome-it-owns.md).
 ```
 
 `docs/WEB.md` line 18: change `deployment, interface, status, and local-first` to `deployment, interface, capability, status, and local-first`.
@@ -568,19 +568,19 @@ A system whose documented behaviour reaches a physical robot qualifies on the op
 `docs/WEB.md`, after the agent-interface filter bullet at line 101, add:
 
 ```markdown
-- The capability filter is taxonomy-driven, lists only capabilities carried by published projects, and combines with every existing filter. It is how a reader reaches an operational trait such as `robot_control` without a badge. [ADR 044](adr/044-robot-software-classifies-by-the-outcome-it-owns.md)
+- The capability filter is taxonomy-driven, lists only capabilities carried by published projects, and combines with every existing filter. It is how a reader reaches an operational trait such as `robot_control` without a badge. [ADR 045](adr/045-robot-software-classifies-by-the-outcome-it-owns.md)
 ```
 
 `docs/WEB.md` badge section, at the end of the trait-badge paragraph (line 45), add one sentence:
 
 ```markdown
-`robot_control` has no badge: it separates about 2% of agent systems, below the floor, and the agent set already holds six badges; the Capability filter and the record's Agent operation block carry it instead ([ADR 044](adr/044-robot-software-classifies-by-the-outcome-it-owns.md)).
+`robot_control` has no badge: it separates about 2% of agent systems, below the floor, and the agent set already holds six badges; the Capability filter and the record's Agent operation block carry it instead ([ADR 045](adr/045-robot-software-classifies-by-the-outcome-it-owns.md)).
 ```
 
 `docs/ROBOTS.md` line 3, append to the intro paragraph:
 
 ```markdown
-Software that controls a robot is never a robot record: it is a scored system in `directory/projects.json` carrying `robot_control`, under [ADR 044](adr/044-robot-software-classifies-by-the-outcome-it-owns.md).
+Software that controls a robot is never a robot record: it is a scored system in `directory/projects.json` carrying `robot_control`, under [ADR 045](adr/045-robot-software-classifies-by-the-outcome-it-owns.md).
 ```
 
 `AGENTS.md` line 31: change `| Families, roles, deployment, authoring surfaces, provider relationships |` to `| Families, roles, deployment, authoring surfaces, provider relationships, robot software |`.
@@ -588,20 +588,20 @@ Software that controls a robot is never a robot record: it is a scored system in
 `BACKLOG.md` line 72: replace the whole item with:
 
 ```markdown
-- [ ] Review the five robot software candidates held under `robot software role decision` — Dora, OM1, LeRobot, openpi, and the Safari SDK — through the full [`docs/CURATION.md`](docs/CURATION.md) workflow under [ADR 044](docs/adr/044-robot-software-classifies-by-the-outcome-it-owns.md), which routes each and lands `robot_control` and the Capability filter one change ahead of the first record; record the verdicts as coverage batch 96 and set the ADR to Accepted in the same change.
+- [ ] Review the five robot software candidates held under `robot software role decision` — Dora, OM1, LeRobot, openpi, and the Safari SDK — through the full [`docs/CURATION.md`](docs/CURATION.md) workflow under [ADR 045](docs/adr/045-robot-software-classifies-by-the-outcome-it-owns.md), which routes each and lands `robot_control` and the Capability filter one change ahead of the first record; record the verdicts as coverage batch 96 and set the ADR to Accepted in the same change.
 ```
 
 - [ ] **Step 3: Lint and test the documentation**
 
-Run: `export PATH=/usr/local/bin:$PATH && npx --yes markdownlint-cli2 "docs/adr/044-robot-software-classifies-by-the-outcome-it-owns.md" "docs/*.md" "AGENTS.md" "BACKLOG.md"` and `uv run --with pytest python -m pytest tests/test_documentation.py -v`
+Run: `export PATH=/usr/local/bin:$PATH && npx --yes markdownlint-cli2 "docs/adr/045-robot-software-classifies-by-the-outcome-it-owns.md" "docs/*.md" "AGENTS.md" "BACKLOG.md"` and `uv run --with pytest python -m pytest tests/test_documentation.py -v`
 Expected: `0 issues`; all documentation tests PASS (the relative-link test resolves every `adr/044-...` link because the file now exists).
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add docs/adr/044-robot-software-classifies-by-the-outcome-it-owns.md docs/TAXONOMY.md docs/CURATION.md docs/WEB.md docs/ROBOTS.md AGENTS.md BACKLOG.md
+git add docs/adr/045-robot-software-classifies-by-the-outcome-it-owns.md docs/TAXONOMY.md docs/CURATION.md docs/WEB.md docs/ROBOTS.md AGENTS.md BACKLOG.md
 git commit -F - <<'EOF'
-Decide that robot software classifies by the outcome it owns (ADR 044)
+Decide that robot software classifies by the outcome it owns (ADR 045)
 
 No role is minted. Reaching a robot is robot_control, a capability made
 reachable by the Capability filter; the outcome a future role would
@@ -651,14 +651,14 @@ git fetch origin main && git merge --no-edit origin/main
 git ls-tree --name-only origin/main docs/adr/ | /usr/bin/grep -c "^docs/adr/044-"
 ```
 
-Expected: the merge is clean or conflicts only in `web/index.html`'s asset stamp (resolve with `git checkout --theirs web/index.html`, rerun `build_asset_version.mjs`, confirm with `git diff origin/main -- web/index.html | /usr/bin/grep -c "^[-+]" ` that only stamp lines differ). The grep count is `0`; if it is `1`, rename the ADR file to the next free number and update every reference with `/usr/bin/grep -rl "044-robot-software" docs AGENTS.md BACKLOG.md` before continuing.
+Expected: the merge is clean or conflicts only in `web/index.html`'s asset stamp (resolve with `git checkout --theirs web/index.html`, rerun `build_asset_version.mjs`, confirm with `git diff origin/main -- web/index.html | /usr/bin/grep -c "^[-+]" ` that only stamp lines differ). The grep count is `0`; if it is `1`, rename the ADR file to the next free number and update every reference with `/usr/bin/grep -rl "045-robot-software" docs AGENTS.md BACKLOG.md` before continuing.
 
 Push and open:
 
 ```bash
 git push -u origin claude/robot-software-role
-gh pr create --title "Decide that robot software classifies by the outcome it owns (ADR 044)" --body-file - <<'EOF'
-ADR 044, Proposed: no role for robot software; reaching a robot is `robot_control` in `agent_capabilities`, made reachable by a new Capability filter on the Systems scope. No badge. A discovery rung routes robotics vocabulary to `agent_framework_sdk` with a relevance floor. Documentation routed through TAXONOMY, CURATION, DATA_MODEL, WEB, ROBOTS, AGENTS and BACKLOG.
+gh pr create --title "Decide that robot software classifies by the outcome it owns (ADR 045)" --body-file - <<'EOF'
+ADR 045, Proposed: no role for robot software; reaching a robot is `robot_control` in `agent_capabilities`, made reachable by a new Capability filter on the Systems scope. No badge. A discovery rung routes robotics vocabulary to `agent_framework_sdk` with a relevance floor. Documentation routed through TAXONOMY, CURATION, DATA_MODEL, WEB, ROBOTS, AGENTS and BACKLOG.
 
 The five held candidates are reviewed in the following PR, which records coverage batch 96 and sets the ADR to Accepted.
 
@@ -836,7 +836,7 @@ git add directory/projects.json directory/license-evidence.json directory/candid
 git commit -F - <<'EOF'
 Publish LeRobot as a robot-controlling agent framework
 
-Reviewed under ADR 044 on its documented control run path; carries
+Reviewed under ADR 045 on its documented control run path; carries
 robot_control.
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
@@ -945,7 +945,7 @@ git add directory/projects.json directory/license-evidence.json directory/candid
 git commit -F - <<'EOF'
 Publish OM1 as a robot-controlling agent framework
 
-Reviewed under ADR 044; a configured LLM loop whose actions move a
+Reviewed under ADR 045; a configured LLM loop whose actions move a
 robot, with the untagged runtime and hosted default path in weaknesses.
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
@@ -972,7 +972,7 @@ Edit the OM1 candidate in `directory/candidates.json`: set `triage.held_by` to `
 In the `Physical-Intelligence/openpi` candidate, set `triage.held_by` to `"action-policy model boundary"` and append to `triage.finding`:
 
 ```text
- Re-read on 2026-09-28 under ADR 044: the repository has no tags, its PyPI name is a placeholder, its last commit is dated 2026-08-24, and its LICENSE_GEMMA.txt is Google's Gemma Terms of Use whose scope (the checkpoints, the code, or both) is unresolved. Its software exists to run or fine-tune its own three checkpoint families, so the systems question waits on the action-policy model decision, as Isaac GR00T's and OpenVLA's do.
+ Re-read on 2026-09-28 under ADR 045: the repository has no tags, its PyPI name is a placeholder, its last commit is dated 2026-08-24, and its LICENSE_GEMMA.txt is Google's Gemma Terms of Use whose scope (the checkpoints, the code, or both) is unresolved. Its software exists to run or fine-tune its own three checkpoint families, so the systems question waits on the action-policy model decision, as Isaac GR00T's and OpenVLA's do.
 ```
 
 Replace the last-commit date with Task 7's value if it differs.
@@ -982,7 +982,7 @@ Replace the last-commit date with Task 7's value if it differs.
 In the `google-deepmind/gemini-robotics-sdk` candidate, set `triage.held_by` to `"programme-gated run path"` and append to `triage.finding`:
 
 ```text
- Re-read on 2026-09-28 under ADR 044: the README still says most functionality requires joining the Trusted Tester programme, so the run path a reader can adopt is gated; the hold lifts at general availability, on the reasoning ADR 023 recorded for Microsoft Discovery.
+ Re-read on 2026-09-28 under ADR 045: the README still says most functionality requires joining the Trusted Tester programme, so the run path a reader can adopt is gated; the hold lifts at general availability, on the reasoning ADR 023 recorded for Microsoft Discovery.
 ```
 
 - [ ] **Step 3: Queue Octo**
@@ -1006,11 +1006,11 @@ Append a candidate entry, shaped like the openpi one, for `octo-models/octo`:
   "triage": {
     "verdict": "held",
     "held_by": "action-policy model boundary",
-    "rule": "docs/CURATION.md inclusion gate; ADR 044 routing",
-    "finding": "Screened in the ADR 044 comparison-set review. The README's own evaluation section runs the pretrained policy on a real WidowX robot, so the physical reach is stated directly; but the repository is a policy model release with inference and fine-tuning code, the shape batch 39 held Isaac GR00T and OpenVLA in, so it waits on the action-policy model decision rather than on the systems scope. Latest release v1.5 of 2024-05-24.",
+    "rule": "docs/CURATION.md inclusion gate; ADR 045 routing",
+    "finding": "Screened in the ADR 045 comparison-set review. The README's own evaluation section runs the pretrained policy on a real WidowX robot, so the physical reach is stated directly; but the repository is a policy model release with inference and fine-tuning code, the shape batch 39 held Isaac GR00T and OpenVLA in, so it waits on the action-policy model decision rather than on the systems scope. Latest release v1.5 of 2024-05-24.",
     "evidence": [],
     "proposed_at": "2026-09-28",
-    "proposer": "ADR 044 comparison-set screen"
+    "proposer": "ADR 045 comparison-set screen"
   },
   "review_required": ["licensing", "classification", "traits", "editorial_score"]
 }
@@ -1058,7 +1058,7 @@ Append to `exclusions.json`, in the shape of the `dario` entry (`name`, `repo`, 
 {
   "name": "Dora",
   "repo": "dora-rs/dora",
-  "reason": "Dora's README describes \"middleware for composing AI-based robotic applications as low-latency, distributed dataflow pipelines\": a node hub of cameras, YOLO, LLM and TTS nodes, a ROS2 bridge, and a CLI and Python API with tagged releases. The README states no agent loop of its own and never uses the words actuator, hardware, or physical; the wiring from a model's output to an arm driver exists only in the separate dora-hub repository's examples. Reviewed under ADR 044, this fails inclusion-gate condition 2 on the line dario and TreeQuest set: the loop belongs to the authors of the nodes, and Dora owns transport and scheduling between them. It differs from LangGraph, whose documented outcome is the agent's own control flow with state, checkpoints and human control, and from sandbase-harness, which owns its sessions, events and credential vault. The PyPI wheel declares MIT while the repository LICENSE and NOTICE say Apache-2.0; the discrepancy is recorded and does not bear on the decision.",
+  "reason": "Dora's README describes \"middleware for composing AI-based robotic applications as low-latency, distributed dataflow pipelines\": a node hub of cameras, YOLO, LLM and TTS nodes, a ROS2 bridge, and a CLI and Python API with tagged releases. The README states no agent loop of its own and never uses the words actuator, hardware, or physical; the wiring from a model's output to an arm driver exists only in the separate dora-hub repository's examples. Reviewed under ADR 045, this fails inclusion-gate condition 2 on the line dario and TreeQuest set: the loop belongs to the authors of the nodes, and Dora owns transport and scheduling between them. It differs from LangGraph, whose documented outcome is the agent's own control flow with state, checkpoints and human control, and from sandbase-harness, which owns its sessions, events and credential vault. The PyPI wheel declares MIT while the repository LICENSE and NOTICE say Apache-2.0; the discrepancy is recorded and does not bear on the decision.",
   "useful_lesson": "Middleware that carries a model node's output is not the agent whose output it carries; ask whose loop the graph is, and read the README rather than the example repository for what the system claims of itself.",
   "excluded_at": "2026-09-28",
   "verified_at": "2026-09-28"
@@ -1104,11 +1104,11 @@ EOF
 
 ---
 
-### Task 12: Coverage batch 96, the batch test, and ADR 044 Accepted
+### Task 12: Coverage batch 96, the batch test, and ADR 045 Accepted
 
 **Files:**
 - Modify: `docs/COVERAGE.md:21`, `docs/COVERAGE.md:276` (append entry 96 after entry 95)
-- Modify: `docs/adr/044-robot-software-classifies-by-the-outcome-it-owns.md:3`
+- Modify: `docs/adr/045-robot-software-classifies-by-the-outcome-it-owns.md:3`
 - Modify: `BACKLOG.md:72` (remove the item)
 - Test: `tests/test_directory.py`
 
@@ -1121,7 +1121,7 @@ Add to `tests/test_directory.py` after `test_alpha_lineage_batch_has_evidence_ba
 
 ```python
     def test_robot_software_batch_has_evidence_backed_dispositions(self) -> None:
-        """Coverage batch 96: the five ADR 044 candidates and the screened neighbours."""
+        """Coverage batch 96: the five ADR 045 candidates and the screened neighbours."""
         candidates = json.loads(
             (ROOT / "directory" / "candidates.json").read_text(encoding="utf-8")
         )
@@ -1195,7 +1195,7 @@ Update `docs/COVERAGE.md` line 21 so the system total and the agent-system count
 Append after entry 95 (line 276), as one paragraph in the batch format, substituting the counts:
 
 ```markdown
-96. **Robot software, decided and reviewed:** two publishes, three holds, seven exclusions, and the `robot software role decision` label retired, under [ADR 044](adr/044-robot-software-classifies-by-the-outcome-it-owns.md), which mints no role and records reaching a robot as `robot_control` in `agent_capabilities`, reachable through the new Capability filter. `huggingface/lerobot` and `OpenMind/OM1` are published as `agent_framework_sdk` on their documented run paths: LeRobot's README sends a policy's chosen action to a physical robot through its `Robot` interface, and OM1's action plugins "map high-level decisions from one or more LLMs into concrete physical or digital actions". OM1 is a framework, not a runtime: it documents no durable state, skills, schedules, or memory lifecycle, which the runtime definition requires, and ADR 019 forbids stretching a definition. `Physical-Intelligence/openpi` moves to `action-policy model boundary`, because its software exists to run or fine-tune its own checkpoints, and the newly screened `octo-models/octo` joins it; `google-deepmind/gemini-robotics-sdk` waits under `programme-gated run path` for general availability. `dora-rs/dora` is excluded on the dario and TreeQuest line: middleware whose README states no agent loop of its own, distinguished in the entry from LangGraph and sandbase-harness. Twelve neighbours were screened for the comparison set ADR 011 requires; nine were already decided in batch 39 or held under the action-policy boundary, and six new exclusions record Genesis and robomimic on the simulator and training-framework lines, ROS 2, MoveIt 2 and Isaac ROS Common on the Nav2 line, and Open X-Embodiment as a dataset. The ADR 023 tripwire count after this batch is two full-gate systems, so the decision does not reopen by its own result. Every README, LICENSE and release fact was re-fetched on 2026-09-28 and every blob hash recomputed before a record cited it. The candidate queue moved from CANDIDATES_BEFORE to CANDIDATES_AFTER records and the exclusions from EXCLUSIONS_BEFORE to EXCLUSIONS_AFTER.
+96. **Robot software, decided and reviewed:** two publishes, three holds, seven exclusions, and the `robot software role decision` label retired, under [ADR 045](adr/045-robot-software-classifies-by-the-outcome-it-owns.md), which mints no role and records reaching a robot as `robot_control` in `agent_capabilities`, reachable through the new Capability filter. `huggingface/lerobot` and `OpenMind/OM1` are published as `agent_framework_sdk` on their documented run paths: LeRobot's README sends a policy's chosen action to a physical robot through its `Robot` interface, and OM1's action plugins "map high-level decisions from one or more LLMs into concrete physical or digital actions". OM1 is a framework, not a runtime: it documents no durable state, skills, schedules, or memory lifecycle, which the runtime definition requires, and ADR 019 forbids stretching a definition. `Physical-Intelligence/openpi` moves to `action-policy model boundary`, because its software exists to run or fine-tune its own checkpoints, and the newly screened `octo-models/octo` joins it; `google-deepmind/gemini-robotics-sdk` waits under `programme-gated run path` for general availability. `dora-rs/dora` is excluded on the dario and TreeQuest line: middleware whose README states no agent loop of its own, distinguished in the entry from LangGraph and sandbase-harness. Twelve neighbours were screened for the comparison set ADR 011 requires; nine were already decided in batch 39 or held under the action-policy boundary, and six new exclusions record Genesis and robomimic on the simulator and training-framework lines, ROS 2, MoveIt 2 and Isaac ROS Common on the Nav2 line, and Open X-Embodiment as a dataset. The ADR 023 tripwire count after this batch is two full-gate systems, so the decision does not reopen by its own result. Every README, LICENSE and release fact was re-fetched on 2026-09-28 and every blob hash recomputed before a record cited it. The candidate queue moved from CANDIDATES_BEFORE to CANDIDATES_AFTER records and the exclusions from EXCLUSIONS_BEFORE to EXCLUSIONS_AFTER.
 ```
 
 Replace the four capitalised tokens with the computed numbers. If Task 9 held OM1, change "two publishes, three holds" to "one publish, four holds" and rewrite the OM1 sentence to say it waits under `tagged release of the Go runtime` and why.
@@ -1210,9 +1210,9 @@ Run: `export PATH=/usr/local/bin:$PATH && npx --yes markdownlint-cli2 "docs/COVE
 Expected: `0 issues`; tests pass.
 
 ```bash
-git add docs/COVERAGE.md docs/adr/044-robot-software-classifies-by-the-outcome-it-owns.md BACKLOG.md tests/test_directory.py
+git add docs/COVERAGE.md docs/adr/045-robot-software-classifies-by-the-outcome-it-owns.md BACKLOG.md tests/test_directory.py
 git commit -F - <<'EOF'
-Record coverage batch 96 and accept ADR 044
+Record coverage batch 96 and accept ADR 045
 
 Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>
 EOF
@@ -1256,8 +1256,8 @@ Resolve `web/index.html` by `git checkout --theirs web/index.html` and rerunning
 
 ```bash
 git push -u origin claude/robot-software-records
-gh pr create --title "Review the robot software candidates under ADR 044 (coverage batch 96)" --body-file - <<'EOF'
-LeRobot and OM1 published as `agent_framework_sdk` records carrying `robot_control`; openpi and the newly screened Octo held under `action-policy model boundary`; the Safari SDK held under `programme-gated run path`; Dora and six screened neighbours excluded; ManiSkill's entry repointed at its renamed repository; coverage batch 96 recorded; ADR 044 set to Accepted; the backlog item closed.
+gh pr create --title "Review the robot software candidates under ADR 045 (coverage batch 96)" --body-file - <<'EOF'
+LeRobot and OM1 published as `agent_framework_sdk` records carrying `robot_control`; openpi and the newly screened Octo held under `action-policy model boundary`; the Safari SDK held under `programme-gated run path`; Dora and six screened neighbours excluded; ManiSkill's entry repointed at its renamed repository; coverage batch 96 recorded; ADR 045 set to Accepted; the backlog item closed.
 
 Every README, LICENSE and release fact was re-fetched on 2026-09-28 and every blob hash recomputed before a record cited it.
 

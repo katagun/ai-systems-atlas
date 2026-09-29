@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { openView, viewTab } = require("./helpers/landing");
 
 const styleOf = (page, selector, property) =>
   page.locator(selector).evaluate((element, name) => getComputedStyle(element)[name], property);
@@ -54,7 +55,7 @@ test("returning to the directory drops the view parameter", async ({ page }) => 
   await page.goto("/?view=taxonomy");
   await expect(page.locator("#taxonomy")).toHaveClass(/is-active/);
 
-  await page.locator('.tab[data-tab="directory"]').click();
+  await openView(page, "directory");
   await expect(page.locator("#directory")).toHaveClass(/is-active/);
   await expect(page).not.toHaveURL(/view=/);
 });
@@ -63,16 +64,16 @@ test("an unknown view parameter falls back to the directory rather than showing 
   await page.goto("/?view=records");
 
   await expect(page.locator("#directory")).toHaveClass(/is-active/);
-  await expect(page.locator('.tab[data-tab="directory"]')).toHaveClass(/is-active/);
+  await expect(viewTab(page, "directory")).toHaveClass(/is-active/);
   await expect(page).not.toHaveURL(/view=/);
 });
 
 test("the active view's tab carries aria-current and no other tab does", async ({ page }) => {
   await page.goto("/");
-  await expect(page.locator('.tab[data-tab="directory"][aria-current="page"]')).toHaveCount(1);
+  await expect(viewTab(page, "directory")).toHaveAttribute("aria-current", "page");
 
-  await page.locator('.tab[data-tab="finder"]').click();
-  await expect(page.locator('.tab[data-tab="finder"][aria-current="page"]')).toHaveCount(1);
+  await openView(page, "finder");
+  await expect(viewTab(page, "finder")).toHaveAttribute("aria-current", "page");
 
   await page.goto("/?view=taxonomy");
   await expect(page.locator('.docs-button[aria-current="page"]')).toHaveCount(1);

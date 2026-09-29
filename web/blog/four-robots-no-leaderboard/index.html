@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>
+(function () {
+  var KEY = "theme", ORDER = ["system", "light", "dark"];
+  function read() {
+    try { var stored = localStorage.getItem(KEY); return stored === "light" || stored === "dark" ? stored : "system"; }
+    catch (error) { return "system"; }
+  }
+  function apply(preference) {
+    if (preference === "system") delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = preference;
+    try { if (preference === "system") localStorage.removeItem(KEY); else localStorage.setItem(KEY, preference); }
+    catch (error) {}
+    var toggle = document.getElementById("theme-toggle");
+    if (toggle) toggle.setAttribute("aria-label", "Theme: " + preference);
+    var meta = document.querySelector('meta[name="theme-color"]');
+    var background = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+    if (meta && background) meta.setAttribute("content", background);
+  }
+  var stored = read();
+  if (stored !== "system") document.documentElement.dataset.theme = stored;
+  document.addEventListener("DOMContentLoaded", function () {
+    apply(read());
+    var toggle = document.getElementById("theme-toggle");
+    if (toggle) toggle.addEventListener("click", function () { apply(ORDER[(ORDER.indexOf(read()) + 1) % ORDER.length]); });
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { apply(read()); });
+  });
+})();
+</script>
+<title>Four robots, no leaderboard · peacefulcoexistance</title>
+<meta name="description" content="Atlas now lists Figure 03, NEO, Spot, and Unitree G1. Their records distinguish named models, developer access, and availability, while keeping a clear limit: the catalog has never operated these machines.">
+<link rel="canonical" href="https://peacefulcoexistance.com/blog/four-robots-no-leaderboard/">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="peacefulcoexistance">
+<meta property="og:title" content="Four robots, no leaderboard">
+<meta property="og:description" content="Atlas now lists Figure 03, NEO, Spot, and Unitree G1. Their records distinguish named models, developer access, and availability, while keeping a clear limit: the catalog has never operated these machines.">
+<meta property="og:url" content="https://peacefulcoexistance.com/blog/four-robots-no-leaderboard/">
+<meta name="theme-color" content="#f7f9fc">
+<link rel="stylesheet" href="../../fonts.css?v=6c40d40cbfc8">
+<link rel="stylesheet" href="../../styles.css?v=7464b0b96449">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+</head>
+<body class="writing-page">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="brand"><a class="brand-link" href="../../" aria-label="peacefulcoexistance — home"><strong class="wordmark"><span class="wordmark-name">peacefulcoexistance</span><span class="wordmark-art" aria-hidden="true"><span class="wm-pe">pe</span><span class="wm-a">a</span><span class="wm-ceful">ceful</span><span class="wm-coexist">coexist</span><span class="wm-nce">nce</span></span></strong><small>AI systems directory</small></a></div>
+<nav class="tabs" aria-label="Primary navigation"><a class="tab-link" href="../../">Catalog</a><a class="tab-link" href="../../?view=finder">Find your fit</a><details class="docs-menu"><summary class="tab-link">Docs</summary><ul class="docs-menu-list"><li><a href="../../?view=explore">Explore</a></li><li><a href="../../?view=taxonomy">Concepts</a></li><li><a href="../../?view=api">Published data</a></li><li><a class="is-active" aria-current="page" href="../">Blog</a></li></ul></details></nav>
+<div class="header-tools"><button id="theme-toggle" class="theme-toggle" type="button" aria-label="Theme: system" title="Switch between system, light, and dark themes"></button><a class="github-link" href="https://github.com/katagun/ai-systems-atlas" target="_blank" rel="noreferrer" aria-label="GitHub" title="Source on GitHub"><svg aria-hidden="true" viewBox="0 0 24 24" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a></div>
+</header>
+<main id="main" class="writing-layout">
+<aside class="post-nav" aria-label="All posts">
+<p class="post-nav-heading">All writing</p>
+<ol class="post-nav-list">
+<li class="current"><a href="../four-robots-no-leaderboard/" aria-current="page">Four robots, no leaderboard</a><span class="post-nav-date">2026-09-28</span></li>
+<li class=""><a href="../what-does-your-agent-remember/">What does your agent remember—and can you correct it?</a><span class="post-nav-date">2026-09-28</span></li>
+<li class=""><a href="../one-letter-correct-above-and-wrong-below/">One letter, correct above and wrong below</a><span class="post-nav-date">2026-09-18</span></li>
+<li class=""><a href="../skipped-in-one-second/">Skipped in one second</a><span class="post-nav-date">2026-09-18</span></li>
+<li class=""><a href="../changed-since-what/">Changed since what?</a><span class="post-nav-date">2026-09-14</span></li>
+<li class=""><a href="../what-a-router-can-see/">What a router can see</a><span class="post-nav-date">2026-09-12</span></li>
+<li class=""><a href="../send-someone-who-wasnt-there/">Send someone who wasn&#x27;t there</a><span class="post-nav-date">2026-09-05</span></li>
+<li class=""><a href="../cite-your-sources-including-yourself/">Cite your sources, including yourself</a><span class="post-nav-date">2026-09-05</span></li>
+</ol>
+</aside>
+<div class="writing">
+<p class="eyebrow">Editorial writing · not a catalog record</p>
+<h1>Four robots, no leaderboard</h1>
+<p class="lead">Atlas now lists Figure 03, NEO, Spot, and Unitree G1. Their records distinguish named models, developer access, and availability, while keeping a clear limit: the catalog has never operated these machines.</p>
+<p class="byline">Codex · <time datetime="2026-09-28T21:16">2026-09-28 · 21:16</time></p>
+<h2>A reservation and an SDK answer different questions</h2>
+<p>Someone interested in a household robot and someone looking for a platform to run a learned control policy might start with the same product page. They need different facts from it.</p>
+<p>The first reader wants to know what can be ordered and what work the maker says it performs. The second needs to know which edition permits development, what the interface controls, and where their model can run. A demonstration of a robot handling an object cannot settle all of those questions.</p>
+<p>Atlas&#x27;s <a href="https://github.com/katagun/ai-systems-atlas/pull/316" rel="noreferrer">first four robot records</a> cover Figure 03, NEO, Spot, and Unitree G1. They were reviewed on September 24 and published on September 27. Their purpose is to make the published answers easier to find, with the unanswered questions still visible.</p>
+<p>There is no overall score. Atlas has never operated any of the four machines.</p>
+<h2>The rule needed two ways in</h2>
+<p>The <a href="https://github.com/katagun/ai-systems-atlas/blob/84974154/docs/adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md" rel="noreferrer">Robots collection decision</a> admits a product on either of two documented AI bases. The manufacturer can name a learned model or policy and describe what it controls. Or it can document a supported interface through which a developer can run their own model or policy.</p>
+<p>The second route matters. A robotics platform should not have to advertise a named general-purpose model to be relevant to an AI developer. Conversely, naming a model does not establish that a customer can replace it, access its weights, or use it through an SDK.</p>
+<p>The product also needs an identifiable maker, documented hardware, and a stated availability. Terms are recorded as found, including when relevant terms are not published. A video alone cannot supply the hardware documentation the review requires.</p>
+<p>These conditions establish what the maker documents. They leave the robot&#x27;s behavior in a particular home, factory, or laboratory to evidence the catalog does not possess.</p>
+<h2>Figure 03: a named model with a stated role</h2>
+<p><a href="https://www.figure.ai/helix" rel="noreferrer">Figure&#x27;s Helix page</a> describes a vision-language-action model controlling perception, movement, and reasoning on board Figure 03. That is enough to record a named model and the role the manufacturer assigns it.</p>
+<p><a href="https://peacefulcoexistance.com/records/robots/figure-03/" rel="noreferrer">The Atlas record</a> keeps two separate gaps visible. Its September 24 review found no documented SDK or program for running the reader&#x27;s own model, and it classified availability as announced. The record also cites Figure&#x27;s account of a BMW deployment. An industrial deployment report and a public ordering route are different facts, so both can belong in the same record without resolving each other.</p>
+<p>A reader can follow Figure&#x27;s account of Helix from the record. The catalog does not convert that account into a measured autonomy score.</p>
+<h2>NEO: access to a product is another layer</h2>
+<p><a href="https://www.1x.tech/ai" rel="noreferrer">1X&#x27;s AI documentation</a> names Redwood AI and the 1X World Model, assigning them roles in movement, interaction, and anticipating actions. The descriptions are attributed to 1X throughout <a href="https://peacefulcoexistance.com/records/robots/neo/" rel="noreferrer">NEO&#x27;s record</a>.</p>
+<p>The review records availability as reservation, based on the maker&#x27;s <a href="https://www.1x.tech/order" rel="noreferrer">order page</a>. It also records that the reviewer found no documented way for a buyer to run their own model or policy on NEO. A route toward obtaining the product does not imply a route toward programming its intelligence.</p>
+<p>The order page makes another distinction worth preserving: it describes basic autonomy for early owners and scheduled remote supervision by a 1X expert for unfamiliar complex tasks. A reader assessing a household workflow needs to establish which mode a particular demonstration or promised task uses. Naming the model does not settle how much human assistance the task needs.</p>
+<p>This distinction changes what a prospective user needs to ask. Someone seeking help with a household task needs evidence about that task under their conditions. Someone seeking a research platform needs evidence about the development interface. The model names help identify the maker&#x27;s account of the product; they answer neither practical question by themselves.</p>
+<h2>Spot: an interface makes a different promise</h2>
+<p>Boston Dynamics documents a concrete path through Spot&#x27;s <a href="https://dev.bostondynamics.com/docs/concepts/network_compute_bridge" rel="noreferrer">Network Compute Bridge</a>. A developer can run a model on an attached compute payload or a networked server, receive its results, and use a client script to command the robot. The documentation illustrates the arrangement with an object detector.</p>
+<p>That makes the interface useful evidence for the collection&#x27;s second admission route. It describes where computation runs and how the result reaches a program controlling the robot. It does not establish that any model connected this way can reliably perform a particular physical task.</p>
+<p><a href="https://peacefulcoexistance.com/records/robots/spot/" rel="noreferrer">Spot&#x27;s record</a> also distinguishes that bridge from the Joint Control API, whose documented access requires a special-permissions licence. The phrase “has an SDK” loses important information unless the reader follows it to the control surface they actually need.</p>
+<h2>Unitree G1: the edition matters</h2>
+<p><a href="https://www.unitree.com/g1/" rel="noreferrer">Unitree&#x27;s product page</a> lists secondary development for the G1 EDU rather than the basic G1. <a href="https://github.com/unitreerobotics/unitree_rl_gym" rel="noreferrer">Its policy-training repository</a> documents a route from simulation to deployment on a physical robot, including G1.</p>
+<p>The <a href="https://peacefulcoexistance.com/records/robots/unitree-g1/" rel="noreferrer">Atlas record</a> keeps the edition distinction beside developer access and availability. Its review records the basic G1 as orderable, with a backorder notice, while the EDU purchase goes through sales.</p>
+<p>This is a useful example of why a model interface belongs beside the exact product variant. A reader who sees an order button and a policy repository on the same manufacturer&#x27;s sites still needs to establish that the unit they are obtaining supports the intended development path. The existence of both pages is not that assurance.</p>
+<h2>What an unscored record can still tell you</h2>
+<p>These records help narrow a question before anyone attempts a comparison. They let a reader distinguish:</p>
+<ul><li>A manufacturer naming its own model from documenting an interface for yours.</li><li>An announced product, a reservation, an enterprise sales route, and an orderable variant.</li><li>Published hardware specifications from measured performance in the reader&#x27;s environment.</li><li>SDK terms from the terms governing the robot as a purchased product.</li></ul>
+<p>A useful shortlist can come from those distinctions without an overall winner. For some readers, a missing developer interface ends the search. For others, the relevant next step is a task demonstration under agreed conditions or a conversation with the seller about the precise configuration.</p>
+<p>Giving each machine a score would require further judgments about autonomy, reliability, and control that the catalog cannot substantiate from these documents. Combining the makers&#x27; hardware figures would not solve that problem: the records establish no shared workload or measurement procedure for comparing them.</p>
+<h2>The sentence that travels with every record</h2>
+<p>Every robot record includes its own explanation of what Atlas has not verified. The named models and interfaces remain the maker&#x27;s claims. The evidence links allow a reader to inspect those claims, while the review date says when the catalog read them. Vendor pages can change afterward.</p>
+<p>That limit should remain visible when the record is opened from search or shared on its own. A reader should not have to find this article to discover that the machine has never been tested by the catalog.</p>
+<p>The <a href="https://peacefulcoexistance.com/?collection=robots" rel="noreferrer">Robots collection</a> therefore offers a starting point for investigation: four products, their documented access paths, the terms and availability found at review, and the questions still owed a direct answer. Before treating a demo as a purchasing or engineering decision, establish which of those questions it actually answers.</p>
+<hr>
+<p><em>Written by Codex at the direction of the Atlas editor, who selected the subject and requested publication. This post uses the four catalog reviews dated September 24, 2026, and linked first-party documentation reread for this article on September 28. It reports documented claims; Atlas has not operated, benchmarked, or independently verified the behavior of these robots.</em></p>
+
+</div>
+</main>
+<footer><div class="footer-actions"><nav class="footer-nav" aria-label="Site map"><a href="../../">Catalog</a><a href="../../?view=finder">Finder</a><a href="../../?view=explore">Explore</a><a href="../../?view=taxonomy">Concepts</a><a href="../../?view=api">Published data</a><a href="../">Blog</a></nav><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a></div><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span class="footer-meta"><a href="../">All writing</a> · <a href="../../">Browse the directory</a></span></footer>
+</body>
+</html>

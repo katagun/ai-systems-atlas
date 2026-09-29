@@ -72,6 +72,21 @@
       ]
     },
     {
+      "project_id": "agent-memory",
+      "repo": "tigerless-labs/agent-memory",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Entire repository under the MIT licence (LICENSE)",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/tigerless-labs/agent-memory/blob/main/LICENSE",
+          "blob_sha": "36314997443758dae060c5b828fcbb4a09a47e8b",
+          "immutable_url": "https://api.github.com/repos/tigerless-labs/agent-memory/git/blobs/36314997443758dae060c5b828fcbb4a09a47e8b"
+        }
+      ]
+    },
+    {
       "project_id": "agenticseek",
       "repo": "Fosowl/agenticSeek",
       "items": [
@@ -728,6 +743,21 @@
       ]
     },
     {
+      "project_id": "darwin-godel-machine",
+      "repo": "jennyzzt/dgm",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Darwin Gödel Machine repository, its Python source, prompts, and the swe_bench and polyglot evaluation code",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/jennyzzt/dgm/blob/main/LICENSE",
+          "blob_sha": "ba43cb811f1fdc963d9601012bb51f69c2598ca0",
+          "immutable_url": "https://api.github.com/repos/jennyzzt/dgm/git/blobs/ba43cb811f1fdc963d9601012bb51f69c2598ca0"
+        }
+      ]
+    },
+    {
       "project_id": "db-gpt",
       "repo": "eosphoros-ai/DB-GPT",
       "items": [
@@ -989,6 +1019,21 @@
           "url": "https://github.com/FlowiseAI/Flowise/blob/9291856d1ea4a4ceea9f8fef8ce14f4f6c81e8eb/packages/server/src/enterprise/LICENSE.md",
           "blob_sha": "462c48dc6de78a52abaafa1f89cda55291dadc0a",
           "immutable_url": "https://api.github.com/repos/FlowiseAI/Flowise/git/blobs/462c48dc6de78a52abaafa1f89cda55291dadc0a"
+        }
+      ]
+    },
+    {
+      "project_id": "flue",
+      "repo": "withastro/flue",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "monorepo, including the runtime, CLI, Vite plugin, client SDK, React bindings, and the database, telemetry, and channel packages",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/withastro/flue/blob/main/LICENSE",
+          "blob_sha": "78adfdd7f79b88a077c7cc5533bbfb7d0c4e3c33",
+          "immutable_url": "https://api.github.com/repos/withastro/flue/git/blobs/78adfdd7f79b88a077c7cc5533bbfb7d0c4e3c33"
         }
       ]
     },
@@ -2073,6 +2118,21 @@
       ]
     },
     {
+      "project_id": "neo4j-agent-memory",
+      "repo": "neo4j-labs/agent-memory",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Entire repository under the Apache License 2.0 (LICENSE)",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/neo4j-labs/agent-memory/blob/main/LICENSE",
+          "blob_sha": "6f0851e41f2a01e3492a98c4d6645c86cbf7fb7a",
+          "immutable_url": "https://api.github.com/repos/neo4j-labs/agent-memory/git/blobs/6f0851e41f2a01e3492a98c4d6645c86cbf7fb7a"
+        }
+      ]
+    },
+    {
       "project_id": "nerve",
       "repo": "ClickHouse/nerve",
       "items": [
@@ -2183,6 +2243,21 @@
       ]
     },
     {
+      "project_id": "okf-agent-memory",
+      "repo": "okf-memory/okf-agent-memory",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Entire repository under the MIT licence (LICENSE)",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/okf-memory/okf-agent-memory/blob/develop/LICENSE",
+          "blob_sha": "e789485f3da41fd23cf6e77c897d6031a3055449",
+          "immutable_url": "https://api.github.com/repos/okf-memory/okf-agent-memory/git/blobs/e789485f3da41fd23cf6e77c897d6031a3055449"
+        }
+      ]
+    },
+    {
       "project_id": "omnigent",
       "repo": "omnigent-ai/omnigent",
       "items": [
@@ -2285,6 +2360,26 @@
           "kind": "web_terms",
           "url": "https://www.elastic.co/licensing/elastic-license",
           "verified_at": "2026-09-15"
+        }
+      ]
+    },
+    {
+      "project_id": "openai-agents-api",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "OpenAI Terms of Use, the base agreement governing use of the Services",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/terms-of-use/",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "OpenAI Service Terms sections 1 (API use), 2 (Beta Services), and 4 (Codex and code generation)",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-25"
         }
       ]
     },
@@ -2628,6 +2723,21 @@
           "url": "https://github.com/PrimeIntellect-ai/prime-agent/blob/main/LICENSE",
           "blob_sha": "e15dcd837b11cfb1f627e388561f3ea6405097c1",
           "immutable_url": "https://api.github.com/repos/PrimeIntellect-ai/prime-agent/git/blobs/e15dcd837b11cfb1f627e388561f3ea6405097c1"
+        }
+      ]
+    },
+    {
+      "project_id": "projectmem",
+      "repo": "riponcm/projectmem",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Entire repository under the MIT licence (LICENSE)",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/riponcm/projectmem/blob/main/LICENSE",
+          "blob_sha": "5fd1813fcf8fe3bdbda8d6bdb3c3ae01247ffb92",
+          "immutable_url": "https://api.github.com/repos/riponcm/projectmem/git/blobs/5fd1813fcf8fe3bdbda8d6bdb3c3ae01247ffb92"
         }
       ]
     },
@@ -3180,6 +3290,21 @@
       ]
     },
     {
+      "project_id": "tencentdb-agent-memory",
+      "repo": "TencentCloud/TencentDB-Agent-Memory",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "server_team component under the MIT licence (server_team/LICENSE); README asserts MIT repository-wide",
+          "kind": "git_blob",
+          "path": "server_team/LICENSE",
+          "url": "https://github.com/TencentCloud/TencentDB-Agent-Memory/blob/main/server_team/LICENSE",
+          "blob_sha": "86fd8a122221fc402da9fd64724172d08c6bbbd3",
+          "immutable_url": "https://api.github.com/repos/TencentCloud/TencentDB-Agent-Memory/git/blobs/86fd8a122221fc402da9fd64724172d08c6bbbd3"
+        }
+      ]
+    },
+    {
       "project_id": "trilium",
       "repo": "TriliumNext/Trilium",
       "items": [
@@ -3225,6 +3350,19 @@
       ]
     },
     {
+      "project_id": "venice-ai",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Venice.ai end-user assistant, applications, content-generation features, and related service software",
+          "kind": "web_terms",
+          "url": "https://venice.ai/legal/tos",
+          "verified_at": "2026-08-28"
+        }
+      ]
+    },
+    {
       "project_id": "vercel-ai-sdk",
       "repo": "vercel/ai",
       "items": [
@@ -3245,19 +3383,6 @@
           "url": "https://github.com/vercel/ai/blob/main/packages/provider-utils/src/to-json-schema/zod3-to-json-schema/LICENSE",
           "blob_sha": "b3b48f8f4534527adca8cd26cd424ae94e69b983",
           "immutable_url": "https://api.github.com/repos/vercel/ai/git/blobs/b3b48f8f4534527adca8cd26cd424ae94e69b983"
-        }
-      ]
-    },
-    {
-      "project_id": "venice-ai",
-      "repo": null,
-      "items": [
-        {
-          "license_id": "LicenseRef-Proprietary",
-          "scope": "Venice.ai end-user assistant, applications, content-generation features, and related service software",
-          "kind": "web_terms",
-          "url": "https://venice.ai/legal/tos",
-          "verified_at": "2026-08-28"
         }
       ]
     },
@@ -3424,19 +3549,6 @@
       ]
     },
     {
-      "project_id": "zep-cloud",
-      "repo": null,
-      "items": [
-        {
-          "license_id": "LicenseRef-Proprietary",
-          "scope": "Zep proprietary agent-memory platform, APIs, SDKs, and dashboard",
-          "kind": "web_terms",
-          "url": "https://www.getzep.com/legal/terms/",
-          "verified_at": "2026-08-28"
-        }
-      ]
-    },
-    {
       "project_id": "zcode",
       "repo": null,
       "items": [
@@ -3450,112 +3562,15 @@
       ]
     },
     {
-      "project_id": "flue",
-      "repo": "withastro/flue",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "monorepo, including the runtime, CLI, Vite plugin, client SDK, React bindings, and the database, telemetry, and channel packages",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/withastro/flue/blob/main/LICENSE",
-          "blob_sha": "78adfdd7f79b88a077c7cc5533bbfb7d0c4e3c33",
-          "immutable_url": "https://api.github.com/repos/withastro/flue/git/blobs/78adfdd7f79b88a077c7cc5533bbfb7d0c4e3c33"
-        }
-      ]
-    },
-    {
-      "project_id": "openai-agents-api",
+      "project_id": "zep-cloud",
       "repo": null,
       "items": [
         {
           "license_id": "LicenseRef-Proprietary",
-          "scope": "OpenAI Terms of Use, the base agreement governing use of the Services",
+          "scope": "Zep proprietary agent-memory platform, APIs, SDKs, and dashboard",
           "kind": "web_terms",
-          "url": "https://openai.com/policies/terms-of-use/",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "license_id": "LicenseRef-Proprietary",
-          "scope": "OpenAI Service Terms sections 1 (API use), 2 (Beta Services), and 4 (Codex and code generation)",
-          "kind": "web_terms",
-          "url": "https://openai.com/policies/service-terms/",
-          "verified_at": "2026-09-25"
-        }
-      ]
-    },
-    {
-      "project_id": "agent-memory",
-      "repo": "tigerless-labs/agent-memory",
-      "items": [
-        {
-          "license_id": "MIT",
-          "scope": "Entire repository under the MIT licence (LICENSE)",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/tigerless-labs/agent-memory/blob/main/LICENSE",
-          "blob_sha": "36314997443758dae060c5b828fcbb4a09a47e8b",
-          "immutable_url": "https://api.github.com/repos/tigerless-labs/agent-memory/git/blobs/36314997443758dae060c5b828fcbb4a09a47e8b"
-        }
-      ]
-    },
-    {
-      "project_id": "okf-agent-memory",
-      "repo": "okf-memory/okf-agent-memory",
-      "items": [
-        {
-          "license_id": "MIT",
-          "scope": "Entire repository under the MIT licence (LICENSE)",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/okf-memory/okf-agent-memory/blob/develop/LICENSE",
-          "blob_sha": "e789485f3da41fd23cf6e77c897d6031a3055449",
-          "immutable_url": "https://api.github.com/repos/okf-memory/okf-agent-memory/git/blobs/e789485f3da41fd23cf6e77c897d6031a3055449"
-        }
-      ]
-    },
-    {
-      "project_id": "projectmem",
-      "repo": "riponcm/projectmem",
-      "items": [
-        {
-          "license_id": "MIT",
-          "scope": "Entire repository under the MIT licence (LICENSE)",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/riponcm/projectmem/blob/main/LICENSE",
-          "blob_sha": "5fd1813fcf8fe3bdbda8d6bdb3c3ae01247ffb92",
-          "immutable_url": "https://api.github.com/repos/riponcm/projectmem/git/blobs/5fd1813fcf8fe3bdbda8d6bdb3c3ae01247ffb92"
-        }
-      ]
-    },
-    {
-      "project_id": "neo4j-agent-memory",
-      "repo": "neo4j-labs/agent-memory",
-      "items": [
-        {
-          "license_id": "Apache-2.0",
-          "scope": "Entire repository under the Apache License 2.0 (LICENSE)",
-          "kind": "git_blob",
-          "path": "LICENSE",
-          "url": "https://github.com/neo4j-labs/agent-memory/blob/main/LICENSE",
-          "blob_sha": "6f0851e41f2a01e3492a98c4d6645c86cbf7fb7a",
-          "immutable_url": "https://api.github.com/repos/neo4j-labs/agent-memory/git/blobs/6f0851e41f2a01e3492a98c4d6645c86cbf7fb7a"
-        }
-      ]
-    },
-    {
-      "project_id": "tencentdb-agent-memory",
-      "repo": "TencentCloud/TencentDB-Agent-Memory",
-      "items": [
-        {
-          "license_id": "MIT",
-          "scope": "server_team component under the MIT licence (server_team/LICENSE); README asserts MIT repository-wide",
-          "kind": "git_blob",
-          "path": "server_team/LICENSE",
-          "url": "https://github.com/TencentCloud/TencentDB-Agent-Memory/blob/main/server_team/LICENSE",
-          "blob_sha": "86fd8a122221fc402da9fd64724172d08c6bbbd3",
-          "immutable_url": "https://api.github.com/repos/TencentCloud/TencentDB-Agent-Memory/git/blobs/86fd8a122221fc402da9fd64724172d08c6bbbd3"
+          "url": "https://www.getzep.com/legal/terms/",
+          "verified_at": "2026-08-28"
         }
       ]
     }

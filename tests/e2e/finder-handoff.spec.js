@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { collectionDot, openCollection, openView } = require("./helpers/landing");
 
 // Reads where an element sits once the page stops scrolling. It first waits
 // until scrollY holds still for five animation frames, then measures in the
@@ -140,7 +141,7 @@ test("Browse matches opens its matches on their first page", async ({ page }) =>
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?collection=systems&page=3");
   await expect(page.locator("#project-pager .pager-nav span")).toContainText("Page 3 of");
-  await page.locator('.tab[data-tab="finder"]').click();
+  await openView(page, "finder");
   await page.locator('[data-finder-choice="direction"][data-finder-value="agent_system"]').click();
   await page.locator('[data-finder-choice="goal"][data-finder-value="coding"]').click();
   await page.locator('[data-finder-choice="priority"][data-finder-value="balanced"]').click();
@@ -202,7 +203,7 @@ test("Back after closing a record keeps the Finder's role set", async ({ page })
   await expect(page.locator("#finder-roles-chip")).toBeVisible();
   await expect(page.locator("#result-count")).toContainText("Finder match");
   await expect(page.locator("#result-count")).toHaveText(before);
-  await expect(page.locator('#scope-strip [data-open-collection="systems"] .state-dot.is-finder')).toHaveCount(1);
+  await expect(collectionDot(page, "systems")).toHaveClass(/is-finder/);
 
   // A Back inside another collection leaves Systems alone, as a strip switch
   // does. The Systems strip entry clears the family by design, so the way
@@ -210,17 +211,17 @@ test("Back after closing a record keeps the Finder's role set", async ({ page })
   await page.locator("#project-grid [data-project]").first().click();
   await page.locator("#project-dialog .dialog-close").click();
   await expect(page.locator("#project-dialog")).toBeHidden();
-  await page.locator('#scope-strip [data-open-collection="inference"]').click();
+  await openCollection(page, "inference");
   await page.locator("#inference-grid [data-inference-service]").first().click();
   await expect(page.locator("#inference-dialog")).toBeVisible();
   await page.goBack();
   await expect(page.locator("#inference-dialog")).toBeHidden();
   await expect(page.locator("#inference-directory-panel")).toBeVisible();
-  await expect(page.locator('#scope-strip [data-open-collection="systems"] .state-dot.is-finder')).toHaveCount(1);
+  await expect(collectionDot(page, "systems")).toHaveClass(/is-finder/);
   await page.goBack();
   await expect(page.locator("#systems-directory-panel")).toBeVisible();
   await expect(page.locator("#finder-roles-chip")).toBeVisible();
   await expect(page.locator("#result-count")).toContainText("Finder match");
   await expect(page.locator("#result-count")).toHaveText(before);
-  await expect(page.locator('#scope-strip [data-open-collection="systems"] .state-dot.is-finder')).toHaveCount(1);
+  await expect(collectionDot(page, "systems")).toHaveClass(/is-finder/);
 });

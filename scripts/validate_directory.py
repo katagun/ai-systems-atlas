@@ -6,12 +6,14 @@ from __future__ import annotations
 import json
 import math
 import re
+import sys
 import urllib.parse
 from datetime import date, datetime
 from pathlib import Path
 from typing import Any, NamedTuple
 
 try:
+    from . import catalog
     from . import import_openrouter as openrouter
     from .discovery_sources import (
         canonical_url_key,
@@ -20,6 +22,7 @@ try:
     )
     from .lab_relations import lab_relations, organization_names, source_namespace
 except ImportError:  # Direct script execution places scripts/ on sys.path.
+    import catalog
     import import_openrouter as openrouter
     from discovery_sources import (
         canonical_url_key,
@@ -30,34 +33,13 @@ except ImportError:  # Direct script execution places scripts/ on sys.path.
 
 ROOT = Path(__file__).resolve().parents[1]
 DIRECTORY = ROOT / "directory"
-# Kept equal to scripts/promote_model_candidate.py's constant of the same name; a
-# null-source record (ADR 038) may cite no evidence URL under this prefix.
-MODELS_DEV_REPO = "https://github.com/anomalyco/models.dev"
-PUBLISHED_DATA = (
-    "projects.json",
-    "taxonomy.json",
-    "exclusions.json",
-    "license-evidence.json",
-    "specifications.json",
-    "inference-services.json",
-    "local-runtimes.json",
-    "models.json",
-    "models-dev.json",
-    "packs.json",
-    "labs.json",
-    "robots.json",
-)
-CATALOG_DOCUMENTS = (
-    *PUBLISHED_DATA,
-    "candidates.json",
-    "model-candidates.json",
-    "model-dispositions.json",
-    openrouter.LEADS_NAME,
-    openrouter.DISPOSITIONS_NAME,
-    "license-review.json",
-    "discovery-sources.json",
-    "hn-signals.json",
-)
+# Every published file, every unpublished queue, and the collection table are
+# defined once in scripts/catalog.py (CR-16). They used to be restated here and
+# in sync_web_data.py, with no test keeping the two PUBLISHED_DATA tuples equal, and
+# the collection table restated in four more modules.
+CATALOG_DOCUMENTS = catalog.CATALOG_DOCUMENTS
+MODELS_DEV_REPO = catalog.MODELS_DEV_REPO
+PUBLISHED_DATA = catalog.PUBLISHED_DATA
 ID_PATTERN = re.compile(r"[a-z0-9][a-z0-9-]*")
 REPO_PATTERN = re.compile(r"[^/\s]+/[^/\s]+")
 SHA_PATTERN = re.compile(r"[0-9a-f]{40}")
@@ -146,6 +128,7 @@ TAXONOMY_GROUPS = (
     "pack_hosts",
     "pack_install_mechanisms",
     "lab_types",
+    "lab_admission_bases",
     "lab_channel_kinds",
     "countries",
     "robot_form_factors",
@@ -291,6 +274,7 @@ LAB_REQUIRED = {
     "catalog_names",
     "systems",
     "channels",
+    "admission_basis",
     "evidence",
     "verified_at",
 }
@@ -1759,11 +1743,17 @@ def validate_lab_catalog_names(
     lab: dict[str, Any],
     prefix: str,
     names_by_field: dict[str, set[str]],
+    enum_ids: dict[str, set[str]],
     errors: list[str],
 ) -> set[str]:
-    """Each catalog name must name a record; one must be a reviewed model's developer."""
-    validate_string_list(lab, "catalog_names", None, prefix, errors)
+    """Each catalog name must name a record; a lab needs a reviewed release or a
+    published frontier-model commitment (ADR 044)."""
+    # An announced lab joins to nothing, so it may carry no names at all (ADR 044).
+    validate_string_list(lab, "catalog_names", None, prefix, errors, allow_empty=True)
     values = lab.get("catalog_names")
+    basis = lab.get("admission_basis")
+    if basis not in enum_ids["lab_admission_bases"]:
+        errors.append(f"{prefix}: unknown admission basis")
     if not isinstance(values, list):
         return set()
     names = {name for name in values if isinstance(name, str)}
@@ -1774,10 +1764,19 @@ def validate_lab_catalog_names(
             )
         elif not any(name in field_names for field_names in names_by_field.values()):
             errors.append(f"{prefix}: catalog name {name!r} names no catalog record")
-    if names and not names & names_by_field["developer"]:
+    if basis == "reviewed_release":
+        # The original gate: the organization must have a release in the collection.
+        if not names & names_by_field["developer"]:
+            errors.append(
+                f"{prefix}: develops no reviewed model release, so its admission basis "
+                "must be frontier_announcement (ADR 044)"
+            )
+    # Recorded before any release, so it joins to nothing by construction. A
+    # reviewed release would make the stronger basis the honest one.
+    elif basis == "frontier_announcement" and names & names_by_field["developer"]:
         errors.append(
-            f"{prefix}: develops no reviewed model release; a lab is recorded only "
-            "once the catalog has reviewed a release it developed (ADR 041)"
+            f"{prefix}: has a reviewed model release, so its admission basis must "
+            "be reviewed_release (ADR 044)"
         )
     return names
 
@@ -1935,7 +1934,9 @@ def validate_labs(
             errors.append(f"{prefix}: unknown lab type")
         if lab.get("headquarters") not in enum_ids["countries"]:
             errors.append(f"{prefix}: unknown headquarters country")
-        names = validate_lab_catalog_names(lab, prefix, names_by_field, errors)
+        names = validate_lab_catalog_names(
+            lab, prefix, names_by_field, enum_ids, errors
+        )
         validate_string_list(
             lab, "systems", index.ids, prefix, errors, allow_empty=True
         )
@@ -4055,6 +4056,15 @@ def model_link_pending(
     )
 
 
+def load_all(directory: Path = DIRECTORY) -> dict[str, dict[str, Any]]:
+    """Load every canonical document once, for the reporting path.
+
+    `validate()` builds the same map and discarded it, so `main()` re-read thirteen
+    files from disk and parsed models.json three times (CR-15).
+    """
+    return {name: load_document(directory, name) for name in CATALOG_DOCUMENTS}
+
+
 def validate(root: Path = ROOT) -> list[str]:
     """Validate the canonical catalog, its review queues, and the published copies."""
     directory = root / "directory"
@@ -4107,6 +4117,12 @@ def validate(root: Path = ROOT) -> list[str]:
     models_value = validate_models(catalog["models.json"], tax, errors)
     source_models_value = validate_models_dev(catalog["models-dev.json"], tax, errors)
     validate_model_source_links(models_value, source_models_value, errors)
+    if catalog["models.json"].get("source", {}).get("commit") != catalog[
+        "models-dev.json"
+    ].get("source", {}).get("commit"):
+        errors.append(
+            "models.json: source commit differs from the models-dev.json snapshot"
+        )
     if catalog["model-candidates.json"].get("source") != catalog["models-dev.json"].get(
         "source"
     ):
@@ -4229,37 +4245,95 @@ def validate(root: Path = ROOT) -> list[str]:
     return errors
 
 
-def main() -> int:
+def catalog_counts(catalog: dict[str, dict[str, Any]]) -> dict[str, Any]:
+    """Every count docs/COVERAGE.md publishes, derived from one loaded catalog.
+
+    CR-11. That document carried a dated snapshot paragraph whose numbers were
+    transcribed by hand and recomputed by nobody, so a data batch moved the catalog and
+    left the prose describing one that no longer existed. The snapshot now quotes a
+    block this function renders, and a test compares the two.
+    """
+    projects = catalog["projects.json"]["projects"]
+    models = catalog["models.json"]["models"]
+    labs = catalog["labs.json"]["labs"]
+    lab_names = {name for lab in labs for name in lab["catalog_names"]}
+    families = sorted({project["system_family"] for project in projects})
+    return {
+        "systems": len(projects),
+        "by_family": {
+            family: sum(project["system_family"] == family for project in projects)
+            for family in families
+        },
+        "active_choice": sum(
+            project.get("status") not in {"archived", "superseded"}
+            for project in projects
+        ),
+        "archived": sum(project.get("status") == "archived" for project in projects),
+        "superseded": sum(
+            project.get("status") == "superseded" for project in projects
+        ),
+        "specifications": len(catalog["specifications.json"]["specifications"]),
+        "inference_services": len(catalog["inference-services.json"]["services"]),
+        "local_runtimes": len(catalog["local-runtimes.json"]["runtimes"]),
+        "model_releases": len(models),
+        "models_dev_source_records": len(catalog["models-dev.json"]["models"]),
+        "model_candidates": len(catalog["model-candidates.json"]["candidates"]),
+        "packs": len(catalog["packs.json"]["packs"]),
+        "labs": len(labs),
+        "labs_covered_releases": sum(
+            model["developer"] in lab_names for model in models
+        ),
+        "robots": len(catalog["robots.json"]["robots"]),
+        "system_candidates": len(catalog["candidates.json"]["candidates"]),
+        "exclusions": len(catalog["exclusions.json"]["entries"]),
+    }
+
+
+def counts_markdown(counts: dict[str, Any]) -> str:
+    """Render catalog_counts() as the fenced block docs/COVERAGE.md quotes verbatim."""
+    families = counts["by_family"]
+    return "\n".join(
+        [
+            f"systems: {counts['systems']}",
+            "  "
+            + ", ".join(f"{family} {families[family]}" for family in sorted(families)),
+            f"  active-choice {counts['active_choice']} "
+            f"(archived {counts['archived']}, superseded {counts['superseded']})",
+            f"specifications: {counts['specifications']}",
+            f"inference_services: {counts['inference_services']}",
+            f"local_runtimes: {counts['local_runtimes']}",
+            f"model_releases: {counts['model_releases']}",
+            f"models_dev_source_records: {counts['models_dev_source_records']}",
+            f"model_candidates: {counts['model_candidates']}",
+            f"system_candidates: {counts['system_candidates']}",
+            f"exclusions: {counts['exclusions']}",
+            f"packs: {counts['packs']}",
+            f"labs: {counts['labs']} covering {counts['labs_covered_releases']} releases",
+            f"robots: {counts['robots']}",
+        ]
+    )
+
+
+def main(argv: list[str] | None = None) -> int:
     errors = validate()
     if errors:
         raise SystemExit("\n".join(errors))
-    data = load("projects.json")
-    families = sorted({project["system_family"] for project in data["projects"]})
-    counts = {
-        family: sum(project["system_family"] == family for project in data["projects"])
-        for family in families
-    }
-    specification_count = len(load("specifications.json")["specifications"])
-    inference_service_count = len(load("inference-services.json")["services"])
-    local_runtime_count = len(load("local-runtimes.json")["runtimes"])
-    model_count = len(load("models.json")["models"])
-    source_model_count = len(load("models-dev.json")["models"])
-    pack_count = len(load("packs.json")["packs"])
-    labs = load("labs.json")["labs"]
-    lab_names = {name for lab in labs for name in lab["catalog_names"]}
-    covered = sum(
-        model["developer"] in lab_names for model in load("models.json")["models"]
-    )
-    robot_count = len(load("robots.json")["robots"])
+    counts = catalog_counts(load_all())
+    if "--counts" in (sys.argv[1:] if argv is None else argv):
+        print(counts_markdown(counts))
+        return 0
+    families = counts["by_family"]
     print(
-        f"validated {len(data['projects'])} projects with reviewed license evidence: "
-        f"{counts}; {specification_count} unscored specifications; "
-        f"{inference_service_count} scored inference services; "
-        f"{local_runtime_count} scored local runtimes; {model_count} scored model releases; "
-        f"{pack_count} unscored agent packs; "
-        f"{len(labs)} unscored labs developing {covered} of the reviewed model releases; "
-        f"{robot_count} unscored robots; "
-        f"{source_model_count} attributed models.dev source records"
+        f"validated {counts['systems']} projects with reviewed license evidence: "
+        f"{families}; {counts['specifications']} unscored specifications; "
+        f"{counts['inference_services']} scored inference services; "
+        f"{counts['local_runtimes']} scored local runtimes; "
+        f"{counts['model_releases']} scored model releases; "
+        f"{counts['packs']} unscored agent packs; "
+        f"{counts['labs']} unscored labs developing "
+        f"{counts['labs_covered_releases']} of the reviewed model releases; "
+        f"{counts['robots']} unscored robots; "
+        f"{counts['models_dev_source_records']} attributed models.dev source records"
     )
     for model_id, source_id in model_link_pending(
         load("models.json")["models"], load("model-candidates.json")["candidates"]
