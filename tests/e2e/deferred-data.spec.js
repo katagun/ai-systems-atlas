@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { allSearch, openView, searchAll } = require("./helpers/landing");
+const { recordHeading, recordView, search, searchBox } = require("./helpers/results");
 
 // The card marks and the reviewed license evidence are the two largest files
 // the page can load, and neither is needed to render the directory. These
@@ -20,11 +21,11 @@ test("license evidence is left unfetched until a record is opened", async ({ pag
   await expect(page.locator('#project-grid .card-mark[data-mark] svg').first()).toBeVisible();
   expect(requested.filter(path => path.endsWith("/license-evidence.json"))).toHaveLength(0);
 
-  await page.locator("#project-search").fill("Kilo Code");
+  await search(page, "Kilo Code");
   await page.locator('#project-grid [data-project="kilo-code"]').click();
 
-  await expect(page.locator("#project-dialog h1")).toHaveText("Kilo Code");
-  await expect(page.locator("#dialog-content").getByText("immutable evidence")).toBeVisible();
+  await expect(recordHeading(page, "system")).toHaveText("Kilo Code");
+  await expect(recordView(page, "system").getByText("immutable evidence")).toBeVisible();
   expect(requested.filter(path => path.endsWith("/license-evidence.json"))).toHaveLength(1);
 });
 
@@ -32,17 +33,17 @@ test("a record dialog falls back to its license ids when the evidence never arri
   await page.route("**/license-evidence.json*", route => route.abort());
   await page.goto("/?collection=systems&record=system:kilo-code");
 
-  await expect(page.locator("#project-dialog h1")).toHaveText("Kilo Code");
-  const licensing = page.locator("#dialog-content .detail-block").filter({ hasText: "Licenses and terms" });
+  await expect(recordHeading(page, "system")).toHaveText("Kilo Code");
+  const licensing = recordView(page, "system").locator(".detail-block").filter({ hasText: "Licenses and terms" });
   await expect(licensing).toContainText("MIT");
-  await expect(page.locator("#dialog-content [data-copy-record-link]")).toBeVisible();
+  await expect(recordView(page, "system").locator("[data-copy-record-link]")).toBeVisible();
 });
 
 test("the directory renders complete when the card marks never arrive", async ({ page }) => {
   await page.route("**/logos.json*", route => route.abort());
   await page.goto("/?collection=systems");
 
-  await page.locator("#project-search").fill("Kilo Code");
+  await search(page, "Kilo Code");
   const card = page.locator('#project-grid .project-card').first();
   await expect(card.locator("h2")).toHaveText("Kilo Code");
   await expect(card.locator('.card-mark[data-mark="kilo-code"]')).toHaveClass(/card-monogram/);
@@ -69,21 +70,21 @@ test("boot fetches payloads, not the published endpoints", async ({ page }) => {
 
 test("a deep-linked record fetches its detail and renders the full dialog", async ({ page }) => {
   await page.goto("/?collection=systems&record=system:kilo-code");
-  await expect(page.locator("#project-dialog h1")).toHaveText("Kilo Code");
-  const strengths = page.locator("#dialog-content .detail-block").filter({ hasText: "Strengths" });
+  await expect(recordHeading(page, "system")).toHaveText("Kilo Code");
+  const strengths = recordView(page, "system").locator(".detail-block").filter({ hasText: "Strengths" });
   await expect(strengths.locator("li").first()).toBeVisible();
-  await expect(page.locator("#dialog-content .score-table tr")).not.toHaveCount(1);
+  await expect(recordView(page, "system").locator(".score-table tr")).not.toHaveCount(1);
 });
 
 test("focusing search loads the index and widens the results", async ({ page }) => {
   const requested = dataRequests(page);
   await page.goto("/?collection=systems");
-  await page.locator("#project-search").focus();
+  await searchBox(page, "systems").focus();
   await expect.poll(() => requested.filter(path => path.endsWith("/app/search/systems.json")).length).toBe(1);
 
   // "allowlist" appears only in the editorial prose the index carries, never
   // in a boot record, so a match here proves the index is doing the widening.
-  await page.locator("#project-search").fill("allowlist");
+  await search(page, "allowlist");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
 });
 
@@ -112,7 +113,7 @@ test("a restored comparison renders every score row", async ({ page }) => {
 test("the page still renders when a payload class never arrives", async ({ page }) => {
   await page.route("**/app/search/**", route => route.abort());
   await page.goto("/?collection=systems");
-  await page.locator("#project-search").fill("kilo");
+  await search(page, "kilo");
   await expect(page.locator('#project-grid [data-project="kilo-code"]')).toBeVisible();
 });
 
@@ -187,10 +188,10 @@ test("a record dialog prints an em dash under a heading whose detail never arriv
   await page.route("**/app/detail/**", route => route.abort());
   await page.goto("/?collection=runtimes&record=runtime:ollama");
 
-  await expect(page.locator("#runtime-dialog h1")).toHaveText("Ollama");
-  const hardware = page.locator("#runtime-dialog-content .detail-block").filter({ hasText: "Hardware requirements" });
+  await expect(recordHeading(page, "runtime")).toHaveText("Ollama");
+  const hardware = recordView(page, "runtime").locator(".detail-block").filter({ hasText: "Hardware requirements" });
   await expect(hardware.locator("p")).toHaveText("—");
-  await expect(page.locator("#runtime-dialog-content")).not.toContainText("undefined");
+  await expect(recordView(page, "runtime")).not.toContainText("undefined");
 });
 
 // The dash has to hold for every heading and every bold label, not just the
@@ -215,21 +216,21 @@ const blankBodies = content => content.evaluate(root => {
 });
 
 const BLANK_CHECKS = [
-  ["an agent system", "/?collection=systems&record=system:kilo-code", "#dialog-content", "Kilo Code"],
-  ["a memory system", "/?collection=systems&record=system:activitywatch", "#dialog-content", "ActivityWatch"],
-  ["an assistant system", "/?collection=systems&record=system:chatgpt", "#dialog-content", "ChatGPT"],
-  ["a specification", "/?record=spec:mcp", "#specification-dialog-content", "Model Context Protocol"],
-  ["an inference service", "/?record=inference:openai-api", "#inference-dialog-content", "OpenAI API"],
-  ["a local runtime", "/?collection=runtimes&record=runtime:ollama", "#runtime-dialog-content", "Ollama"],
-  ["a model release", "/?record=model:model-anthropic-claude-sonnet-4-6", "#model-dialog-content", "Claude Sonnet 4.6"],
+  ["an agent system", "/?collection=systems&record=system:kilo-code", "system", "Kilo Code"],
+  ["a memory system", "/?collection=systems&record=system:activitywatch", "system", "ActivityWatch"],
+  ["an assistant system", "/?collection=systems&record=system:chatgpt", "system", "ChatGPT"],
+  ["a specification", "/?record=spec:mcp", "spec", "Model Context Protocol"],
+  ["an inference service", "/?record=inference:openai-api", "inference", "OpenAI API"],
+  ["a local runtime", "/?collection=runtimes&record=runtime:ollama", "runtime", "Ollama"],
+  ["a model release", "/?record=model:model-anthropic-claude-sonnet-4-6", "model", "Claude Sonnet 4.6"],
 ];
 
-for (const [kind, url, selector, name] of BLANK_CHECKS) {
+for (const [kind, url, recordKind, name] of BLANK_CHECKS) {
   test(`the dialog for ${kind} leaves no blank body when detail never arrives`, async ({ page }) => {
     await page.route("**/app/detail/**", route => route.abort());
     await page.goto(url);
 
-    const content = page.locator(selector);
+    const content = recordView(page, recordKind);
     await expect(content.locator("h1")).toHaveText(name);
     expect(await blankBodies(content)).toEqual([]);
     await expect(content).not.toContainText("undefined");
@@ -240,7 +241,7 @@ test("a strengths list prints one em dash when detail never arrives", async ({ p
   await page.route("**/app/detail/**", route => route.abort());
   await page.goto("/?collection=systems&record=system:kilo-code");
 
-  const strengths = page.locator("#dialog-content .detail-block").filter({ hasText: "Strengths" });
+  const strengths = recordView(page, "system").locator(".detail-block").filter({ hasText: "Strengths" });
   await expect(strengths.locator("li")).toHaveText(["—"]);
 });
 
@@ -253,7 +254,7 @@ test("a score table built from the profile prints a dash in every cell detail wo
   await page.route("**/app/detail/**", route => route.abort());
   await page.goto("/?record=inference:openai-api");
 
-  const table = page.locator("#inference-dialog-content .score-table");
+  const table = recordView(page, "inference").locator(".score-table");
   await expect(table.locator("tr")).not.toHaveCount(1);
   const dimensions = table.locator("tr").filter({ hasNotText: "Overall" });
   await expect(dimensions.locator("td").nth(1)).toHaveText("—");
@@ -268,15 +269,15 @@ test("a deep-linked model boots from its payload and fetches its own detail", as
   const requested = dataRequests(page);
   await page.goto("/?record=model:model-anthropic-claude-sonnet-4-6");
 
-  await expect(page.locator("#model-dialog h1")).toHaveText("Claude Sonnet 4.6");
+  await expect(recordHeading(page, "model")).toHaveText("Claude Sonnet 4.6");
   expect(requested.filter(path => path.endsWith("/app/models.json"))).toHaveLength(1);
   expect(requested.filter(path => path.endsWith("/models.json") && !path.includes("/app/"))).toHaveLength(0);
   expect(requested.filter(path =>
     path.endsWith("/app/detail/model/model-anthropic-claude-sonnet-4-6.json"))).toHaveLength(1);
 
-  const strengths = page.locator("#model-dialog-content .detail-block").filter({ hasText: "Strengths" });
+  const strengths = recordView(page, "model").locator(".detail-block").filter({ hasText: "Strengths" });
   await expect(strengths.locator("li").first()).not.toHaveText("—");
-  const dimensions = page.locator("#model-dialog-content .score-table tr").filter({ hasNotText: "Overall" });
+  const dimensions = recordView(page, "model").locator(".score-table tr").filter({ hasNotText: "Overall" });
   expect(await dimensions.locator("td:nth-child(2)").allInnerTexts()).not.toContain("—");
 });
 
@@ -284,7 +285,7 @@ test("a model dialog degrades to dashes when its detail never arrives", async ({
   await page.route("**/app/detail/**", route => route.abort());
   await page.goto("/?record=model:model-anthropic-claude-sonnet-4-6");
 
-  const content = page.locator("#model-dialog-content");
+  const content = recordView(page, "model");
   await expect(content.locator("h1")).toHaveText("Claude Sonnet 4.6");
   // The overall score is a card field, so it survives; every dimension is
   // detail-only, and detailScore is null-safe so a real 0 still prints as 0.
@@ -303,13 +304,13 @@ test("focusing the model search loads the models index and widens the results", 
   await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
   expect(requested.filter(path => path.includes("/app/search/"))).toHaveLength(0);
 
-  await page.locator("#model-search").focus();
+  await searchBox(page, "models").focus();
   await expect.poll(() => requested.filter(path => path.endsWith("/app/search/models.json")).length).toBe(1);
 
   // "retirement" appears only in the reviewed prose the index carries, never in
   // a boot record, so a match here proves the index is doing the widening.
   // Past the default 24: high-scoring reviewed records share the term.
   await page.locator('#model-pager select[aria-label="Results per page"]').selectOption("96");
-  await page.locator("#model-search").fill("retirement");
+  await search(page, "retirement");
   await expect(page.locator('#model-grid [data-model="model-anthropic-claude-sonnet-4-6"]')).toBeVisible();
 });

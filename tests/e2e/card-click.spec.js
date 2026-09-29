@@ -1,12 +1,13 @@
 const { test, expect } = require("@playwright/test");
 const { openFamily } = require("./helpers/landing");
+const { recordView, search } = require("./helpers/results");
 
 // Typing searches the boot records at once, and focusing the box fetches the
 // systems search index, which repaints the grid when it lands. Tests measure
 // after that repaint, so the card they measure is the card they click.
 async function searchSystems(page, term) {
   const index = page.waitForResponse(response => new URL(response.url()).pathname === "/app/search/systems.json");
-  await page.locator("#project-search").fill(term);
+  await search(page, term);
   await index;
   // The page stores the index and repaints in the same step, so once the
   // page holds it the repaint is done. searchIndexes is an app.js global.
@@ -77,7 +78,7 @@ test("clicking a card's title opens its record", async ({ page }) => {
   const aimed = await aim(card.locator("h2"));
   expect(aimed.hit, "the title's spot reaches the card's details target").toBe("details");
   await page.mouse.click(aimed.x, aimed.y);
-  await expect(page.locator("#project-dialog")).toBeVisible();
+  await expect(recordView(page, "system")).toBeVisible();
   await expect(page).toHaveURL(/record=system%3Aaider|record=system:aider/);
 });
 
@@ -93,7 +94,7 @@ test("clicking beside a card's emblems opens its record", async ({ page }) => {
   expect(aimed.inTarget, "the spot lies outside the emblem row").toBe(false);
   expect(aimed.hit, "the spot reaches the card's details target").toBe("details");
   await page.mouse.click(aimed.x, aimed.y);
-  await expect(page.locator("#project-dialog")).toBeVisible();
+  await expect(recordView(page, "system")).toBeVisible();
   await expect(page).toHaveURL(/record=system%3Aaider|record=system:aider/);
 });
 
@@ -109,7 +110,7 @@ test("clicking between two emblems opens neither the record nor a tooltip", asyn
   const before = page.url();
   await page.mouse.click(aimed.x, aimed.y);
   await expect(page.locator("#badge-tooltip")).toBeHidden();
-  await expect(page.locator("#project-dialog")).not.toBeVisible();
+  await expect(recordView(page, "system")).not.toBeVisible();
   expect(page.url()).toBe(before);
 });
 
@@ -125,7 +126,7 @@ test("clicking beside a reviewed-model card's source line opens its record", asy
   expect(aimed.inTarget, "the spot lies outside the source line").toBe(false);
   expect(aimed.hit, "the spot reaches the card's details target").toBe("details");
   await page.mouse.click(aimed.x, aimed.y);
-  await expect(page.locator("#model-dialog")).toBeVisible();
+  await expect(recordView(page, "model")).toBeVisible();
   await expect(page).toHaveURL(url => url.searchParams.get("record") === `model:${id}`);
 });
 
@@ -167,21 +168,21 @@ test("clicking a Finder result's body opens that result's record", async ({ page
   await description.evaluate(element => element.scrollIntoView({ block: "center", behavior: "instant" }));
   const box = await description.boundingBox();
   await page.mouse.click(box.x + box.width / 2, box.y + box.height / 2);
-  await expect(page.locator("#project-dialog")).toBeVisible();
+  await expect(recordView(page, "system")).toBeVisible();
   await expect(page).toHaveURL(url => url.searchParams.get("record") === `system:${id}`);
 });
 
 test("the details control names the record it opens", async ({ page }) => {
   await page.goto("/?collection=systems");
-  await page.locator("#project-search").fill("Aider");
+  await search(page, "Aider");
   await expect(page.getByRole("button", { name: "View details for Aider" })).toBeVisible();
 });
 
 test("Compare toggles without opening the record", async ({ page }) => {
   await page.goto("/?collection=systems");
   await openFamily(page, "agent_system");
-  await page.locator("#project-search").fill("Aider");
+  await search(page, "Aider");
   await page.locator('#project-grid .compare-toggle[data-compare-id="aider"]').click();
-  await expect(page.locator("#project-dialog")).not.toBeVisible();
+  await expect(recordView(page, "system")).not.toBeVisible();
   await expect(page.locator("#comparison-tray")).toBeVisible();
 });

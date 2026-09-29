@@ -2,6 +2,7 @@ const { test, expect } = require("@playwright/test");
 const { projects } = require("../../directory/projects.json");
 const taxonomy = require("../../directory/taxonomy.json");
 const { openCollection, openView } = require("./helpers/landing");
+const { expectFilter, recordHeading, recordView } = require("./helpers/results");
 const active = projects.filter(record => record.status === "active");
 const coding = active.filter(record => record.primary_role === "coding_agent").sort((a, b) => a.name.localeCompare(b.name));
 
@@ -40,14 +41,14 @@ test("reference sheets restore URL, exact catalog slices and record navigation",
   await page.reload();
   await expect(page.locator("#element-record")).toHaveValue(chosen.id);
   await page.locator("#element-browse").click();
-  await expect(page.locator("#role-filter")).toHaveValue("coding_agent");
+  await expectFilter(page, "systems", "role", "coding_agent");
   await expect(page.locator("#result-count")).toContainText(`${coding.length} `);
   await expect(page).not.toHaveURL(/element=/);
   await page.goBack();
   await expect(page.locator("#element-record")).toHaveValue(chosen.id);
   await page.locator("#element-detail").click();
-  await expect(page.locator("#project-dialog")).toBeVisible();
-  await expect(page.locator("#project-dialog h1")).toHaveText(chosen.name);
+  await expect(recordView(page, "system")).toBeVisible();
+  await expect(recordHeading(page, "system")).toHaveText(chosen.name);
   await page.goBack();
   await expect(page.locator("#element-record")).toHaveValue(chosen.id);
   await openCollection(page, "runtimes");

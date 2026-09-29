@@ -11,6 +11,18 @@ const {
   pressedFamily,
   searchAll,
 } = require("./helpers/landing");
+const {
+  clearFilters,
+  closeRecord,
+  expectFilter,
+  filterControl,
+  recordHeading,
+  recordView,
+  search,
+  searchBox,
+  setFilter,
+  sortControl,
+} = require("./helpers/results");
 
 test("searching G finds GBrain and GStack across all families", async ({ page }) => {
   await page.goto("/");
@@ -48,9 +60,9 @@ test("common Directory search discovers model releases without exposing their sc
   await expect(card.locator(".compare-toggle")).toHaveCount(0);
 
   await card.locator('[data-model="model-openai-gpt-4-1"]').click();
-  await expect(page.locator("#model-dialog")).toBeVisible();
-  await expect(page.locator("#model-dialog-content h1")).toHaveText("GPT-4.1");
-  await expect(page.locator("#model-dialog-content")).toContainText("Model boundary");
+  await expect(recordView(page, "model")).toBeVisible();
+  await expect(recordHeading(page, "model")).toHaveText("GPT-4.1");
+  await expect(recordView(page, "model")).toContainText("Model boundary");
 });
 
 test("common Directory search includes unreviewed models.dev source records", async ({ page }) => {
@@ -63,8 +75,8 @@ test("common Directory search includes unreviewed models.dev source records", as
   await expect(card.locator(".score-ring")).toHaveCount(0);
   await expect(card.locator(".compare-toggle")).toHaveCount(0);
   await card.locator('[data-model="model-google-veo-3-1-fast-generate-preview"]').click();
-  await expect(page.locator("#model-dialog-content h1")).toHaveText("Veo 3.1 Fast Preview");
-  await expect(page.locator("#model-dialog-content")).toContainText("Output: Video");
+  await expect(recordHeading(page, "model")).toHaveText("Veo 3.1 Fast Preview");
+  await expect(recordView(page, "model")).toContainText("Output: Video");
 });
 
 test("canonical and repository links use the AI Systems Atlas slug", async ({ page }) => {
@@ -84,16 +96,15 @@ test("superseded systems leave the active view and link to their successor", asy
   await page.goto("/?collection=systems");
 
   const names = page.locator("#project-grid .project-card h2");
-  await page.locator("#project-search").fill("AutoGen");
+  await search(page, "AutoGen");
   await expect(names.filter({ hasText: /^AutoGen$/ })).toHaveCount(0);
 
-  await page.locator("#project-search").fill("");
-  await page.locator(".advanced-filter-shell summary").click();
-  await page.locator("#status-filter").selectOption("superseded");
+  await search(page, "");
+  await setFilter(page, "systems", "status", "superseded");
   await expect(names).toHaveText(["AutoGen", "Semantic Kernel", "SWE-agent"]);
 
   await page.locator('#project-grid [data-project="autogen"]').click();
-  const dialog = page.locator("#project-dialog");
+  const dialog = recordView(page, "system");
   await expect(dialog.locator(".status-notice")).toContainText("The review below stands");
   await expect(dialog.locator("h1")).toHaveText("AutoGen");
 
@@ -125,24 +136,24 @@ test("the local runtimes scope filters, sorts, and opens its own detail dialog",
   const names = page.locator("#runtime-grid .project-card h2");
   await expect(names.first()).toHaveText("vLLM");
 
-  await page.locator("#runtime-type-filter").selectOption("desktop_runner");
+  await setFilter(page, "runtimes", "type", "desktop_runner");
   await expect(names).toHaveCount(4);
-  await page.locator("#runtime-accelerator-filter").selectOption("vulkan");
+  await setFilter(page, "runtimes", "accelerator", "vulkan");
   await expect(names).toHaveText(["LM Studio"]);
 
-  await page.locator("#reset-runtime-filters").click();
-  await page.locator("#runtime-sort-filter").selectOption("name");
+  await clearFilters(page, "runtimes");
+  await sortControl(page, "runtimes").selectOption("name");
   await expect(names.first()).toHaveText("exo");
 
-  await page.locator("#runtime-search").fill("Ollama Cloud");
+  await search(page, "Ollama Cloud");
   // Every word must match somewhere, and exo's prose mentions both Ollama and a
   // cloud service, so the list orders by Best match, which puts Ollama first.
-  await page.locator("#runtime-sort-filter").selectOption("match");
+  await sortControl(page, "runtimes").selectOption("match");
   await expect(names.first()).toHaveText("Ollama");
   await page.locator('#runtime-grid [data-local-runtime="ollama"]').click();
-  await expect(page.locator("#runtime-dialog")).toBeVisible();
-  await expect(page.locator("#runtime-dialog-content .eyebrow")).toContainText("Local-runtime score");
-  await expect(page.locator("#runtime-dialog-content")).toContainText("Runtime boundary");
+  await expect(recordView(page, "runtime")).toBeVisible();
+  await expect(recordView(page, "runtime").locator(".eyebrow")).toContainText("Local-runtime score");
+  await expect(recordView(page, "runtime")).toContainText("Runtime boundary");
 });
 
 test("local runtimes compare inside their own profile and clear across scopes", async ({ page }) => {
@@ -194,8 +205,8 @@ test("mixed browsing surfaces local runtimes without scores or comparison", asyn
   await expect(page.locator("#all-directory-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#all-directory-grid .compare-toggle")).toHaveCount(0);
   await page.locator('#all-directory-grid [data-local-runtime="sglang"]').click();
-  await expect(page.locator("#runtime-dialog")).toBeVisible();
-  await expect(page.locator("#runtime-dialog-content h1")).toHaveText("SGLang");
+  await expect(recordView(page, "runtime")).toBeVisible();
+  await expect(recordHeading(page, "runtime")).toHaveText("SGLang");
 });
 
 test("the finder guides a local runtime path into the runtimes scope", async ({ page }) => {
@@ -212,7 +223,7 @@ test("the finder guides a local runtime path into the runtimes scope", async ({ 
 
   await page.locator("[data-finder-directory]").click();
   await expect(page).toHaveURL(/collection=runtimes/);
-  await expect(page.locator("#runtime-type-filter")).toHaveValue("server_engine");
+  await expectFilter(page, "runtimes", "type", "server_engine");
 });
 
 test("the unified directory distinguishes and opens systems and inference services", async ({ page }) => {
@@ -224,15 +235,15 @@ test("the unified directory distinguishes and opens systems and inference servic
   await expect(serviceCard.locator(".family-label")).toContainText("Inference service · Direct model API");
   await expect(serviceCard.locator(".score-ring")).toHaveCount(0);
   await serviceCard.getByRole("button", { name: /^View details for / }).click();
-  await expect(page.locator("#inference-dialog")).toContainText("Inference-service score");
-  await page.locator("#inference-dialog .dialog-close").click();
+  await expect(recordView(page, "inference")).toContainText("Inference-service score");
+  await closeRecord(page, "inference");
 
   await searchAll(page, "Kilo Code");
   const systemCard = page.locator("#all-directory-grid .project-card");
   await expect(systemCard).toHaveCount(1);
   await expect(systemCard.locator(".family-label")).toContainText("System · Agent system");
   await systemCard.getByRole("button", { name: /^View details for / }).click();
-  await expect(page.locator("#project-dialog")).toContainText("Kilo Code");
+  await expect(recordView(page, "system")).toContainText("Kilo Code");
 });
 
 test("the unified Directory remains usable at a narrow viewport", async ({ page }) => {
@@ -244,7 +255,7 @@ test("the unified Directory remains usable at a narrow viewport", async ({ page 
   await searchAll(page, "AI21 Studio");
   await expect(page.locator("#all-directory-grid .project-card h2")).toHaveText("AI21 Studio");
   await openCollection(page, "inference");
-  await expect(page.locator("#inference-search")).toBeVisible();
+  await expect(searchBox(page, "inference")).toBeVisible();
   await expect(page.locator("#inference-grid .score-ring").first()).toBeVisible();
 });
 
@@ -253,14 +264,14 @@ test("vendor instruction conventions are searchable and inspectable", async ({ p
   await openCollection(page, "specifications");
 
   for (const name of ["copilot-instructions.md", "GEMINI.md", ".clinerules/"]) {
-    await page.locator("#specification-search").fill(name);
+    await search(page, name);
     await expect(page.locator("#specification-grid .project-card h2")).toHaveText(name);
   }
 
-  await page.locator("#specification-search").fill("GEMINI.md");
+  await search(page, "GEMINI.md");
   await page.getByRole("button", { name: /^View details for / }).click();
-  await expect(page.locator("#specification-dialog")).toContainText("Gemini CLI");
-  await expect(page.locator("#specification-dialog")).toContainText("Specifications are classified, not scored");
+  await expect(recordView(page, "spec")).toContainText("Gemini CLI");
+  await expect(recordView(page, "spec")).toContainText("Specifications are classified, not scored");
 });
 
 test("new protocol layers are searchable and keep their boundaries distinct", async ({ page }) => {
@@ -268,25 +279,25 @@ test("new protocol layers are searchable and keep their boundaries distinct", as
   await openCollection(page, "specifications");
 
   for (const name of ["WebMCP", "OASF", "ANP", "AP2", "UCP", "Commerce ACP"]) {
-    await page.locator("#specification-search").fill(name);
+    await search(page, name);
     await expect(page.locator("#specification-grid .project-card h2")).toHaveText(name);
   }
 
-  await page.locator("#specification-search").fill("OASF");
+  await search(page, "OASF");
   await page.getByRole("button", { name: /^View details for / }).click();
-  await expect(page.locator("#specification-dialog")).toContainText("Metadata schema");
-  await expect(page.locator("#specification-dialog")).toContainText("Agent identity and discovery");
+  await expect(recordView(page, "spec")).toContainText("Metadata schema");
+  await expect(recordView(page, "spec")).toContainText("Agent identity and discovery");
 });
 
 test("reviewed provider traits appear only in project details", async ({ page }) => {
   await page.goto("/");
   await openCollection(page, "systems");
-  await page.locator("#project-search").fill("Claude Code");
+  await search(page, "Claude Code");
   await page.locator('#project-grid button[data-project="claude-code"]').click();
 
-  await expect(page.locator("#project-dialog")).toContainText("Model provider support");
-  await expect(page.locator("#project-dialog")).toContainText("Provider-native");
-  await expect(page.locator("#project-dialog")).toContainText("Anthropic");
+  await expect(recordView(page, "system")).toContainText("Model provider support");
+  await expect(recordView(page, "system")).toContainText("Provider-native");
+  await expect(recordView(page, "system")).toContainText("Anthropic");
   await expect(page.locator("#directory-controls")).not.toContainText("Provider relationship");
 });
 
@@ -302,55 +313,55 @@ test("inference services combine filters and expose the dedicated service score"
     `${catalogCounts.inferenceServices} services · Inference-service score`,
   );
   await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("Microsoft Foundry Models");
-  await page.locator("#inference-sort-filter").selectOption("name");
+  await sortControl(page, "inference").selectOption("name");
   await expect(page.locator("#inference-grid .project-card h2").first()).toHaveText("abliteration.ai");
-  await page.locator("#inference-sort-filter").selectOption("score");
-  await page.locator("#inference-search").fill("Bedrock");
-  await page.locator("#inference-type-filter").selectOption("cloud_model_platform");
-  await page.locator("#inference-delivery-filter").selectOption("reserved_capacity");
-  await page.locator("#inference-model-source-filter").selectOption("customer_supplied");
-  await page.locator("#inference-api-filter").selectOption("openai_compatible");
+  await sortControl(page, "inference").selectOption("score");
+  await search(page, "Bedrock");
+  await setFilter(page, "inference", "type", "cloud_model_platform");
+  await setFilter(page, "inference", "delivery", "reserved_capacity");
+  await setFilter(page, "inference", "modelSource", "customer_supplied");
+  await setFilter(page, "inference", "apiStyle", "openai_compatible");
   await expect(page.locator("#inference-grid .project-card h2")).toHaveText("Amazon Bedrock");
   await expect(page.locator("#inference-grid .score-ring")).toHaveText("8.9");
 
   await page.getByRole("button", { name: /^View details for / }).click();
-  await expect(page.locator("#inference-dialog")).toContainText("Service boundary");
-  await expect(page.locator("#inference-dialog")).toContainText("Governing terms");
-  await expect(page.locator("#inference-dialog")).toContainText("Inference-service score");
-  await expect(page.locator("#inference-dialog")).toContainText("Overall");
-  await expect(page.locator("#inference-dialog")).toContainText("excludes model quality");
+  await expect(recordView(page, "inference")).toContainText("Service boundary");
+  await expect(recordView(page, "inference")).toContainText("Governing terms");
+  await expect(recordView(page, "inference")).toContainText("Inference-service score");
+  await expect(recordView(page, "inference")).toContainText("Overall");
+  await expect(recordView(page, "inference")).toContainText("excludes model quality");
 });
 
 test("assistant systems filter, score, and open without agent-only fields", async ({ page }) => {
   await page.goto("/");
   await openCollection(page, "systems");
 
-  await page.locator("#family-filter").selectOption("assistant_system");
+  await setFilter(page, "systems", "family", "assistant_system");
   await expect(page.locator("#result-count")).toContainText("Assistant-system score");
-  await expect(page.locator("#role-filter option")).toContainText([
+  await expect(filterControl(page, "systems", "role").locator("option")).toContainText([
     "All roles",
     "General AI assistant",
     "Enterprise work assistant",
     "Multi-model chat client",
   ]);
 
-  await page.locator("#role-filter").selectOption("multi_model_chat_client");
+  await setFilter(page, "systems", "role", "multi_model_chat_client");
   await expect(page.locator("#project-grid .project-card h2")).toHaveText(["Jan", "LibreChat", "T3 Chat", "Venice.ai"]);
   await page.locator('#project-grid button[data-project="t3-chat"]').click();
-  await expect(page.locator("#project-dialog")).toContainText("Assistant-system score");
-  await expect(page.locator("#project-dialog")).toContainText("Context & continuity");
-  await expect(page.locator("#project-dialog")).toContainText("LicenseRef-Proprietary");
+  await expect(recordView(page, "system")).toContainText("Assistant-system score");
+  await expect(recordView(page, "system")).toContainText("Context & continuity");
+  await expect(recordView(page, "system")).toContainText("LicenseRef-Proprietary");
 });
 
 test("scores remain hidden across families and visible within the assistant family", async ({ page }) => {
   await page.goto("/");
   await openCollection(page, "systems");
 
-  await expect(page.locator("#family-filter")).toHaveValue("");
+  await expectFilter(page, "systems", "family", "");
   await expect(page.locator("#project-grid .score-ring")).toHaveCount(0);
-  await expect(page.locator('#sort-filter option[value="score"]')).toHaveAttribute("disabled", "");
+  await expect(sortControl(page, "systems").locator('option[value="score"]')).toHaveAttribute("disabled", "");
 
-  await page.locator("#family-filter").selectOption("assistant_system");
+  await setFilter(page, "systems", "family", "assistant_system");
   await expect(page.locator("#result-count")).toContainText(
     `${catalogCounts.projectsInFamily("assistant_system")} projects · Assistant-system score`,
   );
@@ -358,7 +369,7 @@ test("scores remain hidden across families and visible within the assistant fami
   const assistantCards = page.locator("#project-grid .project-card");
   await expect(assistantCards.first()).toBeVisible();
   await expect(page.locator("#project-grid .score-ring")).toHaveCount(await assistantCards.count());
-  await expect(page.locator('#sort-filter option[value="score"]')).not.toHaveAttribute("disabled", "");
+  await expect(sortControl(page, "systems").locator('option[value="score"]')).not.toHaveAttribute("disabled", "");
 });
 
 test("the Memory, Agents, and Assistants chips jump straight into their filtered, scored family", async ({ page }) => {
@@ -370,20 +381,20 @@ test("the Memory, Agents, and Assistants chips jump straight into their filtered
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Systems /);
   await expect(pressedFamily(page)).toHaveAccessibleName(/^Memory /);
   await expect(familyEntry(page, "agent_system")).toHaveAttribute("aria-pressed", "false");
-  await expect(page.locator("#family-filter")).toHaveValue("memory_system");
+  await expectFilter(page, "systems", "family", "memory_system");
   await expect(page.locator("#project-grid .score-ring").first()).toBeVisible();
   await expect(page.locator("#result-count")).toContainText("Memory-system score");
 
   await openFamily(page, "agent_system");
   await expect(familyEntry(page, "memory_system")).toHaveAttribute("aria-pressed", "false");
   await expect(pressedFamily(page)).toHaveAccessibleName(/^Agents /);
-  await expect(page.locator("#family-filter")).toHaveValue("agent_system");
+  await expectFilter(page, "systems", "family", "agent_system");
   await expect(page.locator("#result-count")).toContainText("Agent-system score");
 
   await openFamily(page, "assistant_system");
   await expect(familyEntry(page, "agent_system")).toHaveAttribute("aria-pressed", "false");
   await expect(pressedFamily(page)).toHaveAccessibleName(/^Assistants /);
-  await expect(page.locator("#family-filter")).toHaveValue("assistant_system");
+  await expectFilter(page, "systems", "family", "assistant_system");
   await expect(page.locator("#result-count")).toContainText("Assistant-system score");
 });
 
@@ -392,12 +403,12 @@ test("system comparisons require one family and restore from a shareable URL", a
   await openCollection(page, "systems");
   await expect(page.locator("#project-grid .compare-toggle")).toHaveCount(0);
 
-  await page.locator("#family-filter").selectOption("agent_system");
-  await page.locator("#project-search").fill("Kilo Code");
+  await setFilter(page, "systems", "family", "agent_system");
+  await search(page, "Kilo Code");
   await page.locator('#project-grid [data-compare-id="kilo-code"]').click();
-  await page.locator("#project-search").fill("Hermes Agent");
+  await search(page, "Hermes Agent");
   await page.locator('#project-grid [data-compare-id="hermes-agent"]').click();
-  await page.locator("#project-search").fill("");
+  await search(page, "");
   await expect(page.locator("#comparison-tray-title")).toHaveText("2 items selected");
   await expect(page.locator("#comparison-tray-items")).toContainText("Kilo Code");
   await expect(page).toHaveURL(/compare=system%3Akilo-code%2Chermes-agent/);
@@ -411,7 +422,7 @@ test("system comparisons require one family and restore from a shareable URL", a
   await page.locator("#comparison-dialog .dialog-close").click();
 
   await page.reload();
-  await expect(page.locator("#family-filter")).toHaveValue("agent_system");
+  await expectFilter(page, "systems", "family", "agent_system");
   await expect(page.locator("#comparison-dialog")).toBeVisible();
   await expect(page.locator("#comparison-tray-title")).toHaveText("2 items selected");
   await page.locator("#comparison-dialog .dialog-close").click();
@@ -439,13 +450,13 @@ test("comparison URLs reject cross-profile selections", async ({ page }) => {
   await expect(page).not.toHaveURL(/compare=/);
   await expect(page.locator("#comparison-tray")).toBeHidden();
   await expect(page.locator("#comparison-dialog")).toBeHidden();
-  await expect(page.locator("#family-filter")).toHaveValue("");
+  await expectFilter(page, "systems", "family", "");
 });
 
 test("notable provider assistants are searchable and license-labeled", async ({ page }) => {
   await page.goto("/");
   await openCollection(page, "systems");
-  await page.locator("#family-filter").selectOption("assistant_system");
+  await setFilter(page, "systems", "family", "assistant_system");
 
   for (const name of [
     "Claude",
@@ -457,7 +468,7 @@ test("notable provider assistants are searchable and license-labeled", async ({ 
     "Perplexity",
     "Z.ai",
   ]) {
-    await page.locator("#project-search").fill(name);
+    await search(page, name);
     const exactCard = page
       .locator("#project-grid .project-card")
       .filter({ has: page.getByRole("heading", { name, exact: true }) });
@@ -478,8 +489,8 @@ test("Perplexity assistant, Computer, and API remain distinct directory records"
   const assistantCard = cards.filter({ has: page.getByRole("heading", { name: "Perplexity", exact: true }) });
   await expect(assistantCard.locator(".family-label")).toContainText("System · Assistant system");
   await assistantCard.getByRole("button", { name: /^View details for / }).click();
-  await expect(page.locator("#project-dialog")).toContainText("Assistant-system score");
-  await expect(page.locator("#project-dialog")).toContainText("Multi-provider");
+  await expect(recordView(page, "system")).toContainText("Assistant-system score");
+  await expect(recordView(page, "system")).toContainText("Multi-provider");
 });
 
 test("reviewed named agent additions are searchable", async ({ page }) => {
@@ -487,7 +498,7 @@ test("reviewed named agent additions are searchable", async ({ page }) => {
   await openCollection(page, "systems");
 
   for (const name of ["Kilo Code", "Hermes Agent", "Replit Agent", "Cua", "PRAXIST Beta", "Open Grok", "Warp", "Higgsfield Supercomputer"]) {
-    await page.locator("#project-search").fill(name);
+    await search(page, name);
     // Search is full-text, so another record that names this one — a memory tool
     // listing the agents it supports, say — may match too. The named record must be
     // found; it need not be the only result.
@@ -509,8 +520,8 @@ test("finder offers assistant outcomes and preserves the selected role", async (
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Systems /);
   await expect(pressedFamily(page)).toHaveAccessibleName(/^Assistants /);
   await expect(page).toHaveURL(/collection=systems/);
-  await expect(page.locator("#family-filter")).toHaveValue("assistant_system");
-  await expect(page.locator("#role-filter")).toHaveValue("multi_model_chat_client");
+  await expectFilter(page, "systems", "family", "assistant_system");
+  await expectFilter(page, "systems", "role", "multi_model_chat_client");
 });
 
 test("finder recommends inference services without crossing score profiles", async ({ page }) => {
@@ -523,30 +534,29 @@ test("finder recommends inference services without crossing score profiles", asy
   await expect(page.locator(".finder-results .finder-result")).toHaveCount(3);
   await expect(page.locator(".finder-results .family-label").first()).toHaveText("Routing aggregator");
   await page.locator(".finder-results [data-finder-inference]").first().click();
-  await expect(page.locator("#inference-dialog")).toContainText("Inference-service score");
-  await page.locator("#inference-dialog .dialog-close").click();
+  await expect(recordView(page, "inference")).toContainText("Inference-service score");
+  await closeRecord(page, "inference");
 
   await page.getByRole("button", { name: "Browse matches →" }).click();
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Inference services /);
   await expect(page).toHaveURL(/collection=inference/);
-  await expect(page.locator("#inference-type-filter")).toHaveValue("routing_aggregator");
+  await expectFilter(page, "inference", "type", "routing_aggregator");
 });
 
 test("the deployment filter reaches vendor-operated systems and reports itself as active", async ({ page }) => {
   await page.goto("/?collection=systems");
 
   const names = page.locator("#project-grid .project-card h2");
-  await page.locator("#project-search").fill("Devin");
+  await search(page, "Devin");
   await expect(names.filter({ hasText: /^Devin$/ })).toHaveCount(1);
-  await page.locator("#project-search").fill("smolagents");
+  await search(page, "smolagents");
   await expect(names.filter({ hasText: /^smolagents$/ })).toHaveCount(1);
 
-  await page.locator(".advanced-filter-shell summary").click();
-  await page.locator("#deployment-filter").selectOption("managed_cloud");
+  await setFilter(page, "systems", "deployment", "managed_cloud");
 
-  await page.locator("#project-search").fill("Devin");
+  await search(page, "Devin");
   await expect(names.filter({ hasText: /^Devin$/ })).toHaveCount(1);
-  await page.locator("#project-search").fill("smolagents");
+  await search(page, "smolagents");
   await expect(names.filter({ hasText: /^smolagents$/ })).toHaveCount(0);
   await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters · 1 active");
 });
@@ -558,8 +568,7 @@ test("the interface filter separates canvas builders from code libraries", async
   // The facet is what this test is about, so the page has to be large enough to
   // hold every library-interface system; one page of 96 lists them all.
   await page.locator('#project-pager select[aria-label="Results per page"]').selectOption("96");
-  await page.locator(".advanced-filter-shell summary").click();
-  await page.locator("#agent-interface-filter").selectOption("library");
+  await setFilter(page, "systems", "agentInterface", "library");
 
   await expect(names.filter({ hasText: /^LangChain$/ })).toHaveCount(1);
   await expect(names.filter({ hasText: /^Devin$/ })).toHaveCount(0);
@@ -570,8 +579,7 @@ test("the capability filter reaches the agents that carry a capability", async (
   await page.goto("/?collection=systems");
 
   const names = page.locator("#project-grid .project-card h2");
-  await page.locator(".advanced-filter-shell summary").click();
-  await page.locator("#capability-filter").selectOption("browser_control");
+  await setFilter(page, "systems", "capability", "browser_control");
 
   await expect(names.filter({ hasText: /^Browser Use$/ })).toHaveCount(1);
   await expect(names.filter({ hasText: /^Aider$/ })).toHaveCount(0);
@@ -579,7 +587,7 @@ test("the capability filter reaches the agents that carry a capability", async (
   await expect(page).toHaveURL(/capability=browser_control/);
 
   await page.reload();
-  await expect(page.locator("#capability-filter")).toHaveValue("browser_control");
+  await expectFilter(page, "systems", "capability", "browser_control");
   await expect(names.filter({ hasText: /^Browser Use$/ })).toHaveCount(1);
   await expect(names.filter({ hasText: /^Aider$/ })).toHaveCount(0);
 });
@@ -615,10 +623,10 @@ test("systems pagination navigates pages, resets on filter change, and applies a
   await expect(names.first()).toHaveText(firstPageFirstName);
 
   await page.locator("#project-pager [data-pager-next]").click();
-  await page.locator("#project-search").fill("Devin");
+  await search(page, "Devin");
   await expect(pagerText).toHaveText("Page 1 of 1");
 
-  await page.locator("#project-search").fill("");
+  await search(page, "");
   await page.locator("#project-pager select").selectOption("48");
   await expect(pagerText).toHaveText(`Page 1 of ${activePages(48)}`);
   await page.reload();
@@ -633,28 +641,28 @@ test("the agent packs scope filters, opens its own dialog, and never scores or c
   await expect(page.locator("#pack-result-count")).toContainText(`${catalogCounts.packs} packs · ${catalogCounts.hostPackSystems} installed systems · Scores hidden`);
   await expect(page.locator("#pack-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#pack-grid .compare-toggle")).toHaveCount(0);
-  await expect(page.locator("#pack-sort-filter")).toHaveCount(0);
+  await expect(sortControl(page, "packs")).toHaveCount(0);
 
-  await page.locator("#pack-type-filter").selectOption("marketplace");
+  await setFilter(page, "packs", "type", "marketplace");
   const names = page.locator("#pack-grid .project-card h2");
   await expect(page.locator('#pack-grid [data-pack="agent-toolkit"]')).toHaveCount(1);
   await expect(page.locator('#pack-grid [data-pack="claude-code-tresor"]')).toHaveCount(0);
   // Pack facets describe packs, not systems: the host-installed systems stay listed.
   await expect(names.filter({ hasText: /^Superpowers$/ })).toHaveCount(1);
 
-  await page.locator("#reset-pack-filters").click();
-  await page.locator("#pack-search").fill("tresor");
+  await clearFilters(page, "packs");
+  await search(page, "tresor");
   await expect(names).toHaveText(["claude-code-tresor"]);
   await page.locator('#pack-grid [data-pack="claude-code-tresor"]').click();
-  await expect(page.locator("#pack-dialog")).toBeVisible();
-  await expect(page.locator("#pack-dialog-content .eyebrow")).toContainText("Unscored");
-  await expect(page.locator("#pack-dialog-content")).toContainText("What it installs");
+  await expect(recordView(page, "pack")).toBeVisible();
+  await expect(recordView(page, "pack").locator(".eyebrow")).toContainText("Unscored");
+  await expect(recordView(page, "pack")).toContainText("What it installs");
   await expect(page).toHaveURL(/record=pack(%3A|:)claude-code-tresor/);
 
   await page.reload();
-  await expect(page.locator("#pack-dialog")).toBeVisible();
+  await expect(recordView(page, "pack")).toBeVisible();
   await page.goBack();
-  await expect(page.locator("#pack-dialog")).toBeHidden();
+  await expect(recordView(page, "pack")).toBeHidden();
 });
 
 test("mixed browsing surfaces agent packs without scores or comparison", async ({ page }) => {
@@ -669,9 +677,9 @@ test("mixed browsing surfaces agent packs without scores or comparison", async (
 
 test("a packaging-format link in a pack dialog opens the specification", async ({ page }) => {
   await page.goto("/?record=pack:claude-code-tresor");
-  await page.locator('#pack-dialog-content [data-open-spec="agent-skills"]').click();
-  await expect(page.locator("#specification-dialog")).toBeVisible();
-  await expect(page.locator("#specification-dialog-content h1")).toHaveText("Agent Skills");
+  await recordView(page, "pack").locator('[data-open-spec="agent-skills"]').click();
+  await expect(recordView(page, "spec")).toBeVisible();
+  await expect(recordHeading(page, "spec")).toHaveText("Agent Skills");
   // The pack dialog's queued close event must not strip the successor's record URL.
   await expect(page).toHaveURL(/record=spec(%3A|:)agent-skills/);
   await expect(page).not.toHaveURL(/record=pack/);
@@ -695,21 +703,20 @@ test("the packs scope lists scored systems installed as packs inline without sco
   await expect(page.locator("#pack-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#pack-grid .compare-toggle")).toHaveCount(0);
 
-  await page.locator("#pack-search").fill("Superpowers");
+  await search(page, "Superpowers");
   await expect(cards).toHaveText(["Superpowers"]);
 
   await page.locator('#pack-grid [data-project="superpowers"]').click();
-  await expect(page.locator("#project-dialog")).toBeVisible();
+  await expect(recordView(page, "system")).toBeVisible();
   await expect(page).toHaveURL(/record=system(%3A|:)superpowers/);
   // Deployment reads in the taxonomy's words, not a humanized identifier.
-  await expect(page.locator("#dialog-content")).toContainText("Deployment: Local CLI, Installed into a host agent");
-  await expect(page.locator("#dialog-content")).not.toContainText("Host Pack");
+  await expect(recordView(page, "system")).toContainText("Deployment: Local CLI, Installed into a host agent");
+  await expect(recordView(page, "system")).not.toContainText("Host Pack");
 });
 
 test("the systems deployment filter reaches systems installed into a host agent", async ({ page }) => {
   await page.goto("/?collection=systems");
-  await page.locator(".advanced-filter-shell summary").click();
-  await page.locator("#deployment-filter").selectOption("host_pack");
+  await setFilter(page, "systems", "deployment", "host_pack");
   const names = page.locator("#project-grid .project-card h2");
   await expect(names.filter({ hasText: /^Superpowers$/ })).toHaveCount(1);
 });

@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { collectionEntry, openCollection, openView, searchAll } = require("./helpers/landing");
+const { closeRecord, recordHeading, recordView, search } = require("./helpers/results");
 
 const VIEWS = ["Catalog", "Find your fit", "Concepts", "Published data"];
 
@@ -21,7 +22,7 @@ test("every view and a detail dialog render without console or page errors", asy
   await openView(page, "directory");
   await searchAll(page, "Kilo Code");
   await page.locator('#all-directory-grid [data-project="kilo-code"]').click();
-  await expect(page.locator("#project-dialog h1")).toHaveText("Kilo Code");
+  await expect(recordHeading(page, "system")).toHaveText("Kilo Code");
 
   expect(errors).toEqual([]);
 });
@@ -44,15 +45,15 @@ test("no view overflows the page horizontally at 390px", async ({ page }) => {
   await openView(page, "directory");
   await openCollection(page, "runtimes");
   await page.locator("#runtime-grid [data-local-runtime=\"ollama\"]").click();
-  const dialogOverflow = await page.locator("#runtime-dialog").evaluate(dialog => dialog.scrollWidth - dialog.clientWidth);
+  const dialogOverflow = await recordView(page, "runtime").evaluate(dialog => dialog.scrollWidth - dialog.clientWidth);
   expect(dialogOverflow).toBeLessThanOrEqual(0);
-  await page.locator("#runtime-dialog .dialog-close").click();
+  await closeRecord(page, "runtime");
   await openView(page, "directory");
   await openCollection(page, "models");
   // Narrow first: high-scoring new records sort above older ones.
-  await page.locator("#model-search").fill("Qwen2.5-Coder-0.5B");
+  await search(page, "Qwen2.5-Coder-0.5B");
   await page.locator('[data-model="model-alibaba-qwen2-5-coder-0-5b"]').click();
-  const modelDialogOverflow = await page.locator("#model-dialog").evaluate(dialog => dialog.scrollWidth - dialog.clientWidth);
+  const modelDialogOverflow = await recordView(page, "model").evaluate(dialog => dialog.scrollWidth - dialog.clientWidth);
   expect(modelDialogOverflow).toBeLessThanOrEqual(0);
 });
 
