@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-27",
+  "updated_at": "2026-09-29",
   "candidates": [
     {
       "repo": "aden-hive/hive",
@@ -1292,6 +1292,47 @@
       }
     },
     {
+      "repo": "HarnessRouter/harnessrouter",
+      "name": "harnessrouter",
+      "url": "https://github.com/HarnessRouter/harnessrouter",
+      "description": "HarnessRouter Community Edition: the self-hosted, Apache-2.0 edition of the unified interface for agent harnesses. Run Codex, Claude Code, Hermes, PI, DSH, and more through one API, with sessions, streaming, files, cancellation, and failure handling. Implements the Unified Harness Protocol (UHP), an open standard. Your keys, your infrastructure.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.83,
+      "github_detected_license": "Apache-2.0",
+      "stars": 2775,
+      "topics": [
+        "agent-api",
+        "agent-framework",
+        "agent-harness",
+        "ai-agents",
+        "ai-infrastructure",
+        "coding-agent",
+        "conformance-testing",
+        "deepseek-harness",
+        "harness-engineering",
+        "hermes",
+        "llm",
+        "open-protocol",
+        "open-source",
+        "open-standard",
+        "pi-coding-agent",
+        "self-hosted",
+        "uhp",
+        "unified-api",
+        "unified-harness-protocol",
+        "unified-interface"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "HKUDS/DeepCode",
       "name": "DeepCode",
       "url": "https://github.com/HKUDS/DeepCode",
@@ -1754,6 +1795,31 @@
     },
     {
       "repo": null,
+      "name": "Norton Neo",
+      "url": "https://neobrowser.ai/",
+      "description": "Gen Digital's security-focused browser whose built-in AI chat reads open tabs as context, keeps memories across sessions that the user can view, edit, or delete, keeps conversation history on the device by default, and can summarize Gmail threads, draft replies, and check Google Calendar.",
+      "proposed_system_family": "assistant_system",
+      "proposed_primary_role": "general_ai_assistant",
+      "classification_confidence": 0.6,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "ai-browser",
+        "local-chat-history",
+        "official-product",
+        "privacy"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
       "name": "NotebookLM",
       "url": "https://notebooklm.google.com/",
       "description": "Google knowledge workspace for durable source collections, grounded answers with citations, and generated research and learning artifacts.",
@@ -1821,6 +1887,31 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Siri AI",
+      "url": "https://www.apple.com/apple-intelligence/",
+      "description": "Apple's conversational assistant, rolling out as a beta from 14 September 2026, that answers from personal context across messages, email, and photos, reads the screen, draws on the web, takes actions in apps, and keeps conversations in a dedicated Siri app synced through iCloud across a user's devices.",
+      "proposed_system_family": "assistant_system",
+      "proposed_primary_role": "general_ai_assistant",
+      "classification_confidence": 0.85,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "official-product",
+        "on-device",
+        "personal-context",
+        "voice-assistant"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
       "review_required": [
         "licensing",
         "classification",
@@ -3054,6 +3145,74 @@
       }
     },
     {
+      "repo": "n8n-io/n8n",
+      "name": "n8n",
+      "url": "https://github.com/n8n-io/n8n",
+      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.8,
+      "github_detected_license": "NOASSERTION",
+      "stars": 205773,
+      "topics": [
+        "ai",
+        "apis",
+        "automation",
+        "cli",
+        "data-flow",
+        "development",
+        "integration-framework",
+        "integrations",
+        "ipaas",
+        "low-code",
+        "low-code-platform",
+        "mcp",
+        "mcp-client",
+        "mcp-server",
+        "n8n",
+        "no-code",
+        "self-hosted",
+        "typescript",
+        "workflow",
+        "workflow-automation"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-23",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
+        "finding": "Licence file says: \"Sustainable Use License\" with \"You may use or modify the software only for your own internal business purposes\" and \"personal use\" README claims: \"n8n – The Platform for AI Agents and Workflow Automation\" and \"Fair-code platform to build and deploy AI agents and workflows. Combine a visual canvas with custom code\". It lists multi-step AI workflows with logic, tool use, human approvals, and observability, plus self-host or cloud deployment, and notes it is \"distributed under the [Sustainable Use License]\" with an Enterprise License for additional features. No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the product spans visual workflow automation and multi-step agents, so review must fix the operational boundary to assess; the fair-code licence pairing also needs source-model treatment at review.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/n8n-io/n8n/blob/master/LICENSE.md",
+            "kind": "git_blob",
+            "content_sha256": "d2f621f59aa4c10eab79b6333e59d9d3d5b53307dcfd16dbd75e40e679e84965",
+            "fetched_at": "2026-09-24",
+            "blob_sha": "f85f59baa906530c26cee26e0c9ddd6bd5f86dbd",
+            "immutable_url": "https://api.github.com/repos/n8n-io/n8n/git/blobs/f85f59baa906530c26cee26e0c9ddd6bd5f86dbd"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/n8n-io/n8n/blob/master/README.md",
+            "kind": "git_blob",
+            "content_sha256": "75c64f04b8b1e7d435496f6ebd2dbf3ea5ff7d3ff3d944d7fcf98cf1a7df2242",
+            "fetched_at": "2026-09-24",
+            "blob_sha": "21909fae00cbad4f18af84d2948752445051a915",
+            "immutable_url": "https://api.github.com/repos/n8n-io/n8n/git/blobs/21909fae00cbad4f18af84d2948752445051a915"
+          }
+        ],
+        "proposed_at": "2026-09-24",
+        "proposer": "candidate-triage"
+      }
+    },
+    {
       "repo": "nanocoai/nanoclaw",
       "name": "nanoclaw",
       "url": "https://github.com/nanocoai/nanoclaw",
@@ -3302,6 +3461,74 @@
         "proposed_at": "2026-09-04",
         "proposer": "robotics scope screening"
       }
+    },
+    {
+      "repo": "NVlabs/SoL-Pi",
+      "name": "SoL-Pi",
+      "url": "https://github.com/NVlabs/SoL-Pi",
+      "description": "SoL-Pi: Scaling Auto-Research Loops for Efficient Agent Harnesses",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.83,
+      "github_detected_license": "MIT",
+      "stars": 3206,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "octo-models/octo",
+      "name": "Octo",
+      "url": "https://github.com/octo-models/octo",
+      "description": "Octo is a generalist robot policy trained on Open X-Embodiment data, with code to fine-tune it and to run it on a real WidowX robot.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": "MIT",
+      "stars": 1789,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-28",
+      "triage": {
+        "verdict": "held",
+        "held_by": "action-policy model boundary",
+        "rule": "docs/CURATION.md inclusion gate; ADR 045 routing",
+        "finding": "Screened in the ADR 045 comparison-set review. The README's own evaluation section runs the pretrained policy on a real WidowX robot, so the physical reach is stated directly; but the repository is a policy model release with inference and fine-tuning code, the shape batch 39 held Isaac GR00T and OpenVLA in, so it waits on the action-policy model decision rather than on the systems scope. Latest release v1.5 of 2024-05-24.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/octo-models/octo/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "057e41b4866d4c1c19eaf8882c5f1551594476f1b2193f52ec626833381de262",
+            "fetched_at": "2026-09-28",
+            "blob_sha": "b33cd8e7df1bb51243e060e14b5a14741cb06032",
+            "immutable_url": "https://api.github.com/repos/octo-models/octo/git/blobs/b33cd8e7df1bb51243e060e14b5a14741cb06032"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/octo-models/octo/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "8c891a7dd06fdaa873aa011ff0b2773a3ccfe6d123f6b9a9fc589db718aec1d1",
+            "fetched_at": "2026-09-28",
+            "blob_sha": "239522dcb0271245b5486e598a98737d445b3cd6",
+            "immutable_url": "https://api.github.com/repos/octo-models/octo/git/blobs/239522dcb0271245b5486e598a98737d445b3cd6"
+          }
+        ],
+        "proposed_at": "2026-09-28",
+        "proposer": "ADR 045 comparison-set screen"
+      },
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "onecli/onecli",
@@ -3557,6 +3784,68 @@
         ],
         "proposed_at": "2026-09-04",
         "proposer": "robotics scope screening"
+      }
+    },
+    {
+      "repo": "oritera/Cairn",
+      "name": "Cairn",
+      "url": "https://github.com/oritera/Cairn",
+      "description": "A AI general-purpose state-space search engine, validated first on autonomous penetration testing.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.8,
+      "github_detected_license": "AGPL-3.0",
+      "stars": 2984,
+      "topics": [
+        "ai",
+        "ai-agent",
+        "ai-cybersecurity",
+        "ai-hacker",
+        "ai-hacking",
+        "blackbox-testing",
+        "ctf",
+        "ctf-tools",
+        "llm",
+        "penetration-testing",
+        "pentesting",
+        "red-teaming",
+        "security-automation",
+        "security-tools"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-23",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
+        "finding": "Licence file says: \"GNU AFFERO GENERAL PUBLIC LICENSE\" with \"Version 3, 19 November 2007\". README claims: \"Cairn is a general-purpose problem-solving engine.\" and \"It defines no roles, no workflows. Given an origin and a goal, it searches for a path through an unknown state space.\" Workers are agent loops: \"Agent Workers run an OODA loop — Observe the full graph, Orient to the current state, Decide on next intents, Act to explore — and write their findings back as new Facts.\" Execution runs through outside CLIs: \"Supported worker backends: **Claude Code**, **Codex**, and **Pi**.\" The only reported validation is autonomous penetration testing (hackathon result table), and the repo carries an authorized-use-only disclaimer: \"it is intended to be used only in environments where you have explicit authorization to operate\". No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the engine claims general problem solving but the evidence validates it on penetration testing so far, and workers run through outside CLIs, so review must fix the operational outcome to assess; the disclaimer belongs in the risk record.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/oritera/Cairn/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+            "fetched_at": "2026-09-24",
+            "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+            "immutable_url": "https://api.github.com/repos/oritera/Cairn/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/oritera/Cairn/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "e8b302969405935bdb4a1f523a8b50f7f217204644a96e86490ca1a1c00600e1",
+            "fetched_at": "2026-09-24",
+            "blob_sha": "8041f9205fdc48d551d65b1d17b51ad3c163f28d",
+            "immutable_url": "https://api.github.com/repos/oritera/Cairn/git/blobs/8041f9205fdc48d551d65b1d17b51ad3c163f28d"
+          }
+        ],
+        "proposed_at": "2026-09-24",
+        "proposer": "candidate-triage"
       }
     },
     {
@@ -4092,6 +4381,26 @@
       }
     },
     {
+      "repo": "rinadelph/Agent-MCP",
+      "name": "Agent-MCP",
+      "url": "https://github.com/rinadelph/Agent-MCP",
+      "description": "Agent-MCP is a framework for creating multi-agent systems that enables coordinated, efficient AI collaboration through the Model Context Protocol (MCP). The system is designed for developers building AI applications that benefit from multiple specialized agents working in parallel on different aspects of a project.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "multi_agent_orchestrator",
+      "classification_confidence": 0.8,
+      "github_detected_license": "NOASSERTION",
+      "stars": 1300,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "ros/urdfdom",
       "name": "urdfdom",
       "url": "https://github.com/ros/urdfdom",
@@ -4239,6 +4548,44 @@
         "proposed_at": "2026-09-23",
         "proposer": "candidate-triage"
       }
+    },
+    {
+      "repo": "ruvnet/RuVector",
+      "name": "RuVector",
+      "url": "https://github.com/ruvnet/RuVector",
+      "description": "RuVector provides High Performance, Real-Time decisions and agent memory , Self-Learning Ai, Vector GNN DB built in Rust.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "agent_memory_service",
+      "classification_confidence": 0.8,
+      "github_detected_license": "MIT",
+      "stars": 4527,
+      "topics": [
+        "ai",
+        "ai-ocr",
+        "attention-mechanism",
+        "gnn",
+        "gnn-model",
+        "gnns",
+        "graph",
+        "graph-neural-networks",
+        "llm-inference",
+        "low-latency",
+        "mincut",
+        "neo4j",
+        "ocr",
+        "onnx",
+        "rust",
+        "vector",
+        "wasm"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "SciSharp/BotSharp",
@@ -4950,6 +5297,53 @@
       }
     },
     {
+      "repo": "TREE-Ind/Unreal-Agent",
+      "name": "Unreal-Agent",
+      "url": "https://github.com/TREE-Ind/Unreal-Agent",
+      "description": "A collection of Unreal Engine 5 Editor Utility widgets powered by GPT3/4",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.7,
+      "github_detected_license": "Apache-2.0",
+      "stars": 234,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-23",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
+        "finding": "Licence file says: \"Apache License\" with \"Version 2.0, January 2004\". README claims: \"Unreal Agent is an **AI-powered editor copilot** for Unreal Engine.\" It states \"It runs *inside* the editor as a dockable tab, talks to OpenAI’s GPT models, and can **inspect and modify your project** using Python, scene queries, screenshots, and external tools.\" The agent loop is action-based: \"Agent is instructed to **change the project/level for you**, not just give instructions.\" Requirements pin the host: \"Unreal Engine 5.6.0\" and \"Your OpenAI (or compatible) API key.\" No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the product runs only inside the Unreal editor and needs a model API key, so review must establish the deployment scope and provider coupling from official support statements.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/TREE-Ind/Unreal-Agent/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+            "fetched_at": "2026-09-24",
+            "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+            "immutable_url": "https://api.github.com/repos/TREE-Ind/Unreal-Agent/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/TREE-Ind/Unreal-Agent/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "fe3399d84f52c9b2a8a5b1e1f3d65bae457b2317f9875aa6ede6f1c6efdef1ed",
+            "fetched_at": "2026-09-24",
+            "blob_sha": "2d707edff8193b4ff1a370364cef363ff1ec8c46",
+            "immutable_url": "https://api.github.com/repos/TREE-Ind/Unreal-Agent/git/blobs/2d707edff8193b4ff1a370364cef363ff1ec8c46"
+          }
+        ],
+        "proposed_at": "2026-09-24",
+        "proposer": "candidate-triage"
+      }
+    },
+    {
       "repo": "truefoundry/trueforge",
       "name": "trueforge",
       "url": "https://github.com/truefoundry/trueforge",
@@ -5126,6 +5520,40 @@
         "proposed_at": "2026-09-24",
         "proposer": "candidate-triage"
       }
+    },
+    {
+      "repo": "undefined-ui/second-brain-os",
+      "name": "second-brain-os",
+      "url": "https://github.com/undefined-ui/second-brain-os",
+      "description": "An AI second brain that maintains itself. Full guide, starter vault, agent skills and scripts for a self-organizing knowledge base in Claude Code and Obsidian.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "human_pkm",
+      "classification_confidence": 1.0,
+      "github_detected_license": "MIT",
+      "stars": 813,
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "knowledge-graph",
+        "knowledge-management",
+        "llm",
+        "mcp",
+        "obsidian",
+        "personal-knowledge-base",
+        "pkm",
+        "second-brain"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "vastsa/PI-Desktop",
@@ -5518,6 +5946,62 @@
       }
     },
     {
+      "repo": "zai-org/ZCode",
+      "name": "ZCode",
+      "url": "https://github.com/zai-org/ZCode",
+      "description": "Z.ai's coding agent harness. Powerful, intelligent, extensible.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.82,
+      "github_detected_license": "Apache-2.0",
+      "stars": 7163,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "ZhengyiLuo/AgentsDock",
+      "name": "AgentsDock",
+      "url": "https://github.com/ZhengyiLuo/AgentsDock",
+      "description": "Self-hosted server with desktop and mobile clients for running Claude Code, Codex, and Cursor chats on a machine the user controls, with persistent history, scheduled recurring jobs, digests, persistent terminals, and scoped chat sharing; the installed agent command lines do the model work.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent_workflow",
+      "classification_confidence": 0.55,
+      "github_detected_license": "Apache-2.0",
+      "stars": 79,
+      "topics": [
+        "agentic-ide",
+        "agentic-research",
+        "ai-agents",
+        "ai-research",
+        "claude-code",
+        "codex",
+        "cross-platform",
+        "developer-tools",
+        "electron",
+        "react-native",
+        "remote-development",
+        "research-tools",
+        "self-hosted",
+        "tmux",
+        "typescript"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "zylon-ai/private-gpt",
       "name": "private-gpt",
       "url": "https://github.com/zylon-ai/private-gpt",
@@ -5567,317 +6051,6 @@
         "proposed_at": "2026-09-24",
         "proposer": "candidate-triage"
       }
-    },
-    {
-      "repo": "n8n-io/n8n",
-      "name": "n8n",
-      "url": "https://github.com/n8n-io/n8n",
-      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "NOASSERTION",
-      "stars": 205773,
-      "topics": [
-        "ai",
-        "apis",
-        "automation",
-        "cli",
-        "data-flow",
-        "development",
-        "integration-framework",
-        "integrations",
-        "ipaas",
-        "low-code",
-        "low-code-platform",
-        "mcp",
-        "mcp-client",
-        "mcp-server",
-        "n8n",
-        "no-code",
-        "self-hosted",
-        "typescript",
-        "workflow",
-        "workflow-automation"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-23",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
-        "finding": "Licence file says: \"Sustainable Use License\" with \"You may use or modify the software only for your own internal business purposes\" and \"personal use\" README claims: \"n8n – The Platform for AI Agents and Workflow Automation\" and \"Fair-code platform to build and deploy AI agents and workflows. Combine a visual canvas with custom code\". It lists multi-step AI workflows with logic, tool use, human approvals, and observability, plus self-host or cloud deployment, and notes it is \"distributed under the [Sustainable Use License]\" with an Enterprise License for additional features. No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the product spans visual workflow automation and multi-step agents, so review must fix the operational boundary to assess; the fair-code licence pairing also needs source-model treatment at review.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/n8n-io/n8n/blob/master/LICENSE.md",
-            "kind": "git_blob",
-            "content_sha256": "d2f621f59aa4c10eab79b6333e59d9d3d5b53307dcfd16dbd75e40e679e84965",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "f85f59baa906530c26cee26e0c9ddd6bd5f86dbd",
-            "immutable_url": "https://api.github.com/repos/n8n-io/n8n/git/blobs/f85f59baa906530c26cee26e0c9ddd6bd5f86dbd"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/n8n-io/n8n/blob/master/README.md",
-            "kind": "git_blob",
-            "content_sha256": "75c64f04b8b1e7d435496f6ebd2dbf3ea5ff7d3ff3d944d7fcf98cf1a7df2242",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "21909fae00cbad4f18af84d2948752445051a915",
-            "immutable_url": "https://api.github.com/repos/n8n-io/n8n/git/blobs/21909fae00cbad4f18af84d2948752445051a915"
-          }
-        ],
-        "proposed_at": "2026-09-24",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "TREE-Ind/Unreal-Agent",
-      "name": "Unreal-Agent",
-      "url": "https://github.com/TREE-Ind/Unreal-Agent",
-      "description": "A collection of Unreal Engine 5 Editor Utility widgets powered by GPT3/4",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.7,
-      "github_detected_license": "Apache-2.0",
-      "stars": 234,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-23",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
-        "finding": "Licence file says: \"Apache License\" with \"Version 2.0, January 2004\". README claims: \"Unreal Agent is an **AI-powered editor copilot** for Unreal Engine.\" It states \"It runs *inside* the editor as a dockable tab, talks to OpenAI’s GPT models, and can **inspect and modify your project** using Python, scene queries, screenshots, and external tools.\" The agent loop is action-based: \"Agent is instructed to **change the project/level for you**, not just give instructions.\" Requirements pin the host: \"Unreal Engine 5.6.0\" and \"Your OpenAI (or compatible) API key.\" No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the product runs only inside the Unreal editor and needs a model API key, so review must establish the deployment scope and provider coupling from official support statements.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/TREE-Ind/Unreal-Agent/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
-            "immutable_url": "https://api.github.com/repos/TREE-Ind/Unreal-Agent/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/TREE-Ind/Unreal-Agent/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "fe3399d84f52c9b2a8a5b1e1f3d65bae457b2317f9875aa6ede6f1c6efdef1ed",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "2d707edff8193b4ff1a370364cef363ff1ec8c46",
-            "immutable_url": "https://api.github.com/repos/TREE-Ind/Unreal-Agent/git/blobs/2d707edff8193b4ff1a370364cef363ff1ec8c46"
-          }
-        ],
-        "proposed_at": "2026-09-24",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "oritera/Cairn",
-      "name": "Cairn",
-      "url": "https://github.com/oritera/Cairn",
-      "description": "A AI general-purpose state-space search engine, validated first on autonomous penetration testing.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "AGPL-3.0",
-      "stars": 2984,
-      "topics": [
-        "ai",
-        "ai-agent",
-        "ai-cybersecurity",
-        "ai-hacker",
-        "ai-hacking",
-        "blackbox-testing",
-        "ctf",
-        "ctf-tools",
-        "llm",
-        "penetration-testing",
-        "pentesting",
-        "red-teaming",
-        "security-automation",
-        "security-tools"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-23",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
-        "finding": "Licence file says: \"GNU AFFERO GENERAL PUBLIC LICENSE\" with \"Version 3, 19 November 2007\". README claims: \"Cairn is a general-purpose problem-solving engine.\" and \"It defines no roles, no workflows. Given an origin and a goal, it searches for a path through an unknown state space.\" Workers are agent loops: \"Agent Workers run an OODA loop — Observe the full graph, Orient to the current state, Decide on next intents, Act to explore — and write their findings back as new Facts.\" Execution runs through outside CLIs: \"Supported worker backends: **Claude Code**, **Codex**, and **Pi**.\" The only reported validation is autonomous penetration testing (hackathon result table), and the repo carries an authorized-use-only disclaimer: \"it is intended to be used only in environments where you have explicit authorization to operate\". No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the engine claims general problem solving but the evidence validates it on penetration testing so far, and workers run through outside CLIs, so review must fix the operational outcome to assess; the disclaimer belongs in the risk record.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/oritera/Cairn/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
-            "immutable_url": "https://api.github.com/repos/oritera/Cairn/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/oritera/Cairn/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "e8b302969405935bdb4a1f523a8b50f7f217204644a96e86490ca1a1c00600e1",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "8041f9205fdc48d551d65b1d17b51ad3c163f28d",
-            "immutable_url": "https://api.github.com/repos/oritera/Cairn/git/blobs/8041f9205fdc48d551d65b1d17b51ad3c163f28d"
-          }
-        ],
-        "proposed_at": "2026-09-24",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "ZhengyiLuo/AgentsDock",
-      "name": "AgentsDock",
-      "url": "https://github.com/ZhengyiLuo/AgentsDock",
-      "description": "Self-hosted server with desktop and mobile clients for running Claude Code, Codex, and Cursor chats on a machine the user controls, with persistent history, scheduled recurring jobs, digests, persistent terminals, and scoped chat sharing; the installed agent command lines do the model work.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent_workflow",
-      "classification_confidence": 0.55,
-      "github_detected_license": "Apache-2.0",
-      "stars": 79,
-      "topics": [
-        "agentic-ide",
-        "agentic-research",
-        "ai-agents",
-        "ai-research",
-        "claude-code",
-        "codex",
-        "cross-platform",
-        "developer-tools",
-        "electron",
-        "react-native",
-        "remote-development",
-        "research-tools",
-        "self-hosted",
-        "tmux",
-        "typescript"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-14",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Siri AI",
-      "url": "https://www.apple.com/apple-intelligence/",
-      "description": "Apple's conversational assistant, rolling out as a beta from 14 September 2026, that answers from personal context across messages, email, and photos, reads the screen, draws on the web, takes actions in apps, and keeps conversations in a dedicated Siri app synced through iCloud across a user's devices.",
-      "proposed_system_family": "assistant_system",
-      "proposed_primary_role": "general_ai_assistant",
-      "classification_confidence": 0.85,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "official-product",
-        "on-device",
-        "personal-context",
-        "voice-assistant"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-14",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Norton Neo",
-      "url": "https://neobrowser.ai/",
-      "description": "Gen Digital's security-focused browser whose built-in AI chat reads open tabs as context, keeps memories across sessions that the user can view, edit, or delete, keeps conversation history on the device by default, and can summarize Gmail threads, draft replies, and check Google Calendar.",
-      "proposed_system_family": "assistant_system",
-      "proposed_primary_role": "general_ai_assistant",
-      "classification_confidence": 0.6,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "ai-browser",
-        "local-chat-history",
-        "official-product",
-        "privacy"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-14",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "octo-models/octo",
-      "name": "Octo",
-      "url": "https://github.com/octo-models/octo",
-      "description": "Octo is a generalist robot policy trained on Open X-Embodiment data, with code to fine-tune it and to run it on a real WidowX robot.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": "MIT",
-      "stars": 1789,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-28",
-      "triage": {
-        "verdict": "held",
-        "held_by": "action-policy model boundary",
-        "rule": "docs/CURATION.md inclusion gate; ADR 045 routing",
-        "finding": "Screened in the ADR 045 comparison-set review. The README's own evaluation section runs the pretrained policy on a real WidowX robot, so the physical reach is stated directly; but the repository is a policy model release with inference and fine-tuning code, the shape batch 39 held Isaac GR00T and OpenVLA in, so it waits on the action-policy model decision rather than on the systems scope. Latest release v1.5 of 2024-05-24.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/octo-models/octo/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "057e41b4866d4c1c19eaf8882c5f1551594476f1b2193f52ec626833381de262",
-            "fetched_at": "2026-09-28",
-            "blob_sha": "b33cd8e7df1bb51243e060e14b5a14741cb06032",
-            "immutable_url": "https://api.github.com/repos/octo-models/octo/git/blobs/b33cd8e7df1bb51243e060e14b5a14741cb06032"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/octo-models/octo/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "8c891a7dd06fdaa873aa011ff0b2773a3ccfe6d123f6b9a9fc589db718aec1d1",
-            "fetched_at": "2026-09-28",
-            "blob_sha": "239522dcb0271245b5486e598a98737d445b3cd6",
-            "immutable_url": "https://api.github.com/repos/octo-models/octo/git/blobs/239522dcb0271245b5486e598a98737d445b3cd6"
-          }
-        ],
-        "proposed_at": "2026-09-28",
-        "proposer": "ADR 045 comparison-set screen"
-      },
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
     }
   ]
 }

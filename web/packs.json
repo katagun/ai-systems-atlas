@@ -54,8 +54,8 @@
         }
       ],
       "verified_at": "2026-09-17",
-      "stars": 2502,
-      "stars_verified_at": "2026-09-24"
+      "stars": 2509,
+      "stars_verified_at": "2026-09-29"
     },
     {
       "id": "ai-berkshire",
@@ -110,8 +110,8 @@
           "immutable_url": "https://api.github.com/repos/xbtlin/ai-berkshire/git/blobs/5ae8c2370d31077f12cb9abcf4dee788eee52206"
         }
       ],
-      "stars": 16522,
-      "stars_verified_at": "2026-09-25",
+      "stars": 16571,
+      "stars_verified_at": "2026-09-29",
       "verified_at": "2026-09-25"
     },
     {
@@ -159,8 +159,8 @@
         }
       ],
       "verified_at": "2026-09-16",
-      "stars": 3537,
-      "stars_verified_at": "2026-09-24"
+      "stars": 3569,
+      "stars_verified_at": "2026-09-29"
     },
     {
       "id": "claude-code-tresor",
@@ -208,7 +208,7 @@
       ],
       "verified_at": "2026-09-16",
       "stars": 778,
-      "stars_verified_at": "2026-09-24"
+      "stars_verified_at": "2026-09-29"
     },
     {
       "id": "second-brain-llm-wiki",
@@ -264,8 +264,8 @@
         }
       ],
       "verified_at": "2026-09-17",
-      "stars": 724,
-      "stars_verified_at": "2026-09-24"
+      "stars": 732,
+      "stars_verified_at": "2026-09-29"
     },
     {
       "id": "second-brain-starter",
@@ -309,8 +309,8 @@
         }
       ],
       "verified_at": "2026-09-16",
-      "stars": 789,
-      "stars_verified_at": "2026-09-24"
+      "stars": 791,
+      "stars_verified_at": "2026-09-29"
     },
     {
       "id": "typesafe-agent-skills",
@@ -388,8 +388,8 @@
         }
       ],
       "verified_at": "2026-09-20",
-      "stars": 2074,
-      "stars_verified_at": "2026-09-24"
+      "stars": 2416,
+      "stars_verified_at": "2026-09-29"
     },
     {
       "id": "unity-skills",
@@ -446,8 +446,8 @@
           "immutable_url": "https://api.github.com/repos/Unity-Technologies/skills/git/blobs/cd2c1b05ae70dadc72ace45b5d9ff8daac3f8d71"
         }
       ],
-      "stars": 971,
-      "stars_verified_at": "2026-09-25",
+      "stars": 1005,
+      "stars_verified_at": "2026-09-29",
       "verified_at": "2026-09-25"
     }
   ]
