@@ -126,6 +126,32 @@ test("typing repaints once the reader pauses", async ({ page }) => {
   expect(await page.evaluate(() => window.urlWrites)).toBeLessThanOrEqual(2);
 });
 
+// A keystroke that finds an index still loading must not chain one more
+// repaint onto it, or a slow index repaints once per keystroke when it lands.
+/* global searchIndexes */
+test("an index that lands after typing repaints once, however many keystrokes it waited through", async ({ page }) => {
+  let release;
+  const held = new Promise(resolve => { release = resolve; });
+  await page.route("**/app/search/systems.json*", async route => {
+    await held;
+    await route.continue();
+  });
+  await page.goto("/?collection=systems");
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  await searchBox(page).pressSequentially("memory", { delay: 20 });
+  await settled(page);
+  // The other indexes land and repaint first, so only the held one is counted.
+  await page.waitForFunction(() => ["inference", "runtimes", "models", "packs", "robots", "labs", "specifications"].every(key => searchIndexes[key] !== undefined));
+  await page.evaluate(() => {
+    window.gridPaints = 0;
+    new MutationObserver(records => { window.gridPaints += records.length; }).observe(document.querySelector("#project-grid"), { childList: true });
+  });
+  release();
+  await page.waitForFunction(() => searchIndexes.systems !== undefined);
+  await page.evaluate(() => new Promise(requestAnimationFrame));
+  expect(await page.evaluate(() => window.gridPaints), "the held index repaints the grid once").toBe(1);
+});
+
 test("the results bar sticks under the strip above 1000 px and scrolls with the page on phones", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/?collection=systems");

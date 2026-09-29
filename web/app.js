@@ -379,13 +379,9 @@ function resetCollection(scope) {
 }
 
 // Every search index, loaded once a query is present: the strip counts the
-// query in every collection (CATALOG_INDEXES). One that failed is left to a
-// focused search box to retry, as an empty result leaves it, so a failing
-// index is not asked for again on every keystroke.
+// query in every collection (CATALOG_INDEXES).
 function loadCatalogIndexes() {
-  for (const name of CATALOG_INDEXES) {
-    if (!searchIndexFailed.has(name)) loadSearchIndex(name)?.then(renderSearchSurfaces);
-  }
+  for (const name of CATALOG_INDEXES) fetchSearchIndex(name);
 }
 
 // Typing repaints once the reader pauses (CR-21): the results, the strip's
@@ -2864,6 +2860,16 @@ function loadSearchIndex(collection) {
   return searchIndexRequests[collection];
 }
 
+// Starts one index's fetch and repaints once it lands, but only for a fetch
+// this call starts: a keystroke that finds the index already on its way adds
+// no second repaint to it (CR-21). A failed index waits for a focused search
+// box, the one caller that passes `retry`, as an empty result leaves it.
+function fetchSearchIndex(collection, { retry = false } = {}) {
+  if (searchIndexes[collection] || searchIndexRequests[collection]) return;
+  if (searchIndexFailed.has(collection) && !retry) return;
+  loadSearchIndex(collection).then(renderSearchSurfaces);
+}
+
 const reportedCapability = value => value == null ? "Not reported" : value ? "Yes" : "No";
 const reportedTokenLimit = value => value == null ? "Not reported" : Intl.NumberFormat("en").format(value);
 
@@ -3755,9 +3761,7 @@ function bindEvents() {
   for (const [selector, collections] of Object.entries(SEARCH_SCOPES)) {
     const input = $(selector);
     const loadIndexes = () => {
-      for (const collection of collections) {
-        loadSearchIndex(collection)?.then(renderSearchSurfaces);
-      }
+      for (const collection of collections) fetchSearchIndex(collection, { retry: true });
     };
     input.addEventListener("focus", loadIndexes);
     // Boot data can take longer to parse as catalogs grow. If someone focuses
