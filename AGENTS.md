@@ -22,6 +22,7 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 15. Before completion, run the local validation, lint, test, syntax, and generated-file freshness checks in [`.pre-commit-config.yaml`](.pre-commit-config.yaml), which `.github/workflows/verify.yml` runs the same hooks from, including `build_web_payload.py --check`.
 16. For published-data or web changes, also exercise the browser verification matrix in `docs/WEB.md`: collection filters, score scopes, comparisons, URL/history restoration, Finder, taxonomy, and every record dialog.
 17. Report only checks actually run, including failures or checks that could not run.
+18. Measure code instead of transcribing it. A line count, function count, or file size written into prose is stale within days, and on 2026-09-29 three different figures for `web/app.js` were in circulation in one afternoon. Run `uv run python scripts/measure_engineering.py` or `build_web_payload.py --counts` and quote the result; when a document must carry a measurement, date it. `tests/test_documentation.py` asserts the claims that do not churn — that a cited symbol still exists and that a ratchet is not undercut — so prefer those to restating a number.
 
 ## Topic map
 
@@ -45,6 +46,7 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 | Blog content and shared page shell | [Blog](docs/BLOG.md) |
 | Coverage gaps, direction, priorities | [Coverage](docs/COVERAGE.md), [Roadmap](ROADMAP.md), [Backlog](BACKLOG.md) |
 | Linting, formatting, pre-commit hooks | [Operations](docs/OPERATIONS.md) |
+| Engineering-debt measurements, complexity ratchet, stale prose figures | `scripts/measure_engineering.py` |
 
 ## Command reference
 
@@ -70,3 +72,10 @@ The complete check list lives in [.pre-commit-config.yaml](.pre-commit-config.ya
 The fast hooks run on commit and the unit and browser suites on push; `pre-commit run --all-files --hook-stage pre-push` reproduces CI exactly, browser suite included.
 Browser tests (`npm run test:e2e`) start their own server. An exploratory server is available with
 `uv run python scripts/serve_web.py 8765`.
+
+Measurements, on demand and never transcribed:
+
+```bash
+uv run python scripts/measure_engineering.py          # line and function counts, complexity ratchet
+uv run python scripts/build_web_payload.py --counts   # blocking boot payload against its 60 KB budget
+```
