@@ -3566,60 +3566,6 @@
       }
     },
     {
-      "repo": "OpenMind/OM1",
-      "name": "OM1",
-      "url": "https://github.com/OpenMind/OM1",
-      "description": "OM1 is a modular AI hardware-abstraction layer that lets LLM-driven agents control heterogeneous robots over ROS2 and Zenoh.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.25,
-      "github_detected_license": "MIT",
-      "stars": 2904,
-      "topics": [
-        "llm",
-        "multiagent",
-        "robotics",
-        "ros2",
-        "zenoh"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robot software role decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Ships pre-built binaries for four platforms plus a documented build-from-source path, with a five-minute quick start that gets a running instance talking. Its documented outcome is a runtime that takes camera, microphone, LIDAR, and web input, routes it through a configurable choice of LLM and VLM providers, and issues physical actions -- motion, autonomous navigation, and spoken conversation -- on humanoid and quadruped robots as well as simulators. No existing role names a runtime whose delegated outcomes include moving a physical body rather than only files, applications, or the web, and the property is stated directly in the README's opening description and quick-start walkthrough without reading the source tree.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/OpenMind/OM1/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "b9a9bb3a9cf647cbcb7727e456be2c69b9638b06b58794a7f86d50bda60c795b",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "50deb2fe3b68f0f239d8fc911201a72c57840764",
-            "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/50deb2fe3b68f0f239d8fc911201a72c57840764"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/OpenMind/OM1/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "346d8a3f9ea734e02cbce9ebcc9969b18f28242badd1078360168a09e0e2f37c",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0",
-            "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
       "repo": "openvla/openvla",
       "name": "OpenVLA",
       "url": "https://github.com/openvla/openvla",
