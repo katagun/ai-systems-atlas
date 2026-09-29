@@ -196,6 +196,7 @@ The system payload includes only an `active_review_dates` summary (first, last, 
 | names and definitions | `directory/taxonomy.json` |
 | collection registry, tiles, and strip | `web/app-core.js` `COLLECTIONS`, `collectionCount`, `collectionCategories`, `collectionState`, and `directoryStageFromURL`; `web/app.js` `renderCollectionIndex`, `renderScopeStrip`, and `openCollection`; each payload's `recent` ids are written by `scripts/build_web_payload.py` |
 | landing navigation in browser tests | `tests/e2e/helpers/landing.js`; no spec reaches a collection, a family, a view, or the mixed search by its own selector. `tests/e2e/front-door.spec.js`, the markup's own spec, may read tile and strip elements, their counts, and `#door-search`, the front door's own input, directly, but every click on a collection, a family, a tab, or the mixed search goes through the helper there too |
+| results controls in browser tests | `tests/e2e/helpers/results.js`; no spec names a collection's search box, a filter, a Sort or Clear control, or a record view by its own selector |
 
 Prefer taxonomy-driven labels. Keep HTML escaping at every data-to-markup boundary.
 

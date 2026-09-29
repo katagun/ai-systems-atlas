@@ -2,6 +2,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { allSearch, searchAll } = require("./helpers/landing");
+const { search, searchBox } = require("./helpers/results");
 
 // Expectations come from the published files the page loads, and each fixture
 // asserts the property it was chosen for, so a data change fails with a clear
@@ -86,12 +87,12 @@ const visibleLineCount = element => {
 
 test("landing cards show the star count of starred systems and runtimes", async ({ page }) => {
   await page.goto("/");
-  const search = allSearch(page);
+  const input = allSearch(page);
 
-  await search.fill(superpowers.name);
+  await input.fill(superpowers.name);
   await expectStars(page.locator('#all-directory-grid .project-card:has([data-project="superpowers"])'), superpowers);
 
-  await search.fill(ollama.name);
+  await input.fill(ollama.name);
   await expectStars(page.locator('#all-directory-grid .project-card:has([data-local-runtime="ollama"])'), ollama);
 });
 
@@ -123,7 +124,7 @@ test("Local runtimes cards show the star count beside the model formats", async 
   const formatName = taxonomy.runtime_model_formats.find(format => format.id === ollama.model_formats[0]).name;
 
   await page.goto("/?collection=runtimes");
-  await page.locator("#runtime-search").fill(ollama.name);
+  await search(page, ollama.name);
   const card = page.locator('#runtime-grid .project-card:has([data-local-runtime="ollama"])');
 
   await expectStars(card, ollama);
@@ -150,14 +151,14 @@ for (const width of [390, 1280]) {
 
 test("host-installed systems in Agent packs show their star count", async ({ page }) => {
   await page.goto("/?collection=packs");
-  await page.locator("#pack-search").fill(superpowers.name);
+  await search(page, superpowers.name);
 
   await expectStars(page.locator('#pack-grid .project-card:has([data-project="superpowers"])'), superpowers);
 });
 
 test("agent pack cards show their star count beside the install mechanism", async ({ page }) => {
   await page.goto("/?collection=packs");
-  await page.locator("#pack-search").fill(agentToolkit.name);
+  await search(page, agentToolkit.name);
   const card = page.locator('#pack-grid .project-card:has([data-pack="agent-toolkit"])');
 
   await expectStars(card, agentToolkit);
@@ -170,7 +171,7 @@ test("agent pack cards show their star count beside the install mechanism", asyn
 
 test("specification cards show their star count beside the score note", async ({ page }) => {
   await page.goto("/?collection=specifications");
-  await page.locator("#specification-search").fill("Model Context Protocol");
+  await search(page, "Model Context Protocol");
   const card = page.locator('#specification-grid .project-card:has([data-specification="mcp"])');
 
   await expectStars(card, mcpSpec);
@@ -226,13 +227,13 @@ test("a star count never splits from its star on a narrow Finder card", async ({
 
 test("Systems cards show the star count and say when a record has none", async ({ page }) => {
   await page.goto("/?collection=systems");
-  const search = page.locator("#project-search");
+  const input = searchBox(page, "systems");
 
-  await search.fill(superpowers.name);
+  await input.fill(superpowers.name);
   await expectStars(page.locator('#project-grid .project-card:has([data-project="superpowers"])'), superpowers);
 
   // Only Systems sorts by stars, so only its cards explain why a record sorts last.
-  await search.fill(chatgpt.name);
+  await input.fill(chatgpt.name);
   const card = page.locator('#project-grid .project-card:has([data-project="chatgpt"])');
   await expect(card.locator(".card-footer")).toContainText("No GitHub metrics");
   await expect(card.locator(".card-stars")).toHaveCount(0);
@@ -240,17 +241,17 @@ test("Systems cards show the star count and say when a record has none", async (
 
 test("outside Systems, a card without a star count makes no GitHub claim", async ({ page }) => {
   await page.goto("/");
-  const search = allSearch(page);
-  await search.fill(chatgpt.name);
+  const input = allSearch(page);
+  await input.fill(chatgpt.name);
   await expectNoGitHubClaim(page.locator('#all-directory-grid .project-card:has([data-project="chatgpt"])'));
-  await search.fill(lmStudio.name);
+  await input.fill(lmStudio.name);
   await expectNoGitHubClaim(page.locator('#all-directory-grid .project-card:has([data-local-runtime="lm-studio"])'));
 
   await page.goto("/?collection=runtimes");
-  await page.locator("#runtime-search").fill(lmStudio.name);
+  await search(page, lmStudio.name);
   await expectNoGitHubClaim(page.locator('#runtime-grid .project-card:has([data-local-runtime="lm-studio"])'));
 
   await page.goto("/?collection=specifications");
-  await page.locator("#specification-search").fill("Cursor Project");
+  await search(page, "Cursor Project");
   await expectNoGitHubClaim(page.locator('#specification-grid .project-card:has([data-specification="cursor-rules"])'));
 });

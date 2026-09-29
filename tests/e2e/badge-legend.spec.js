@@ -1,6 +1,7 @@
 const { test, expect } = require("@playwright/test");
 const { badgeLegend } = require("../../web/app-core.js");
 const { openCollection, openFamily } = require("./helpers/landing");
+const { setFilter } = require("./helpers/results");
 
 const escapeRegExp = text => text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 // Accelerator badges (apple-metal, amd-rocm, npu) draw mono letters (MTL, ROC,
@@ -28,9 +29,9 @@ test("the legend lists the active scope's badges and follows the scope", async (
   await expect(items(page)).toHaveText(names(badgeLegend("systems", "memory_system")));
 
   // The family select widens back out to every system family, as the All
-  // families entry does. This exercises the #family-filter input listener's
+  // families entry does. This exercises the family filter's input listener's
   // syncBadgeLegend() call.
-  await page.locator("#family-filter").selectOption("");
+  await setFilter(page, "systems", "family", "");
   await expect(items(page)).toHaveText(names(badgeLegend("systems")));
 });
 

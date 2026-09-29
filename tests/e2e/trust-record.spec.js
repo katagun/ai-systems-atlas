@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { recordView } = require("./helpers/results");
 
 // A trust record is an optional, unscored, human-owned block on a service. No
 // published record carries one until the first review batch lands, so these
@@ -67,7 +68,7 @@ test("a service without a trust record says it has not been examined", async ({ 
   const errors = collectPageErrors(page);
   await serveWithoutTrust(page, "openai-api");
   await page.goto("/?record=inference:openai-api");
-  const block = page.locator('#inference-dialog-content [data-trust="absent"]');
+  const block = recordView(page, "inference").locator('[data-trust="absent"]');
   await expect(block).toContainText("Trust record · unscored");
   await expect(block).toContainText("Not yet examined for trust properties.");
   expect(errors).toEqual([]);
@@ -77,7 +78,7 @@ test("a reviewed service renders six statuses and its finding, none as a score",
   const errors = collectPageErrors(page);
   await serveTrust(page, "openrouter", TRUST);
   await page.goto("/?record=inference:openrouter");
-  const block = page.locator('#inference-dialog-content [data-trust="findings"]');
+  const block = recordView(page, "inference").locator('[data-trust="findings"]');
   await expect(block).toContainText("Trust record · unscored");
   await expect(block.locator(".trust-table tr")).toHaveCount(6);
   await expect(block.locator(".trust-table tr").first()).toContainText("Response integrity");
@@ -93,7 +94,7 @@ test("a reviewed service renders six statuses and its finding, none as a score",
 test("a reviewed service with no findings never reads as clean", async ({ page }) => {
   await serveTrust(page, "openrouter", { ...TRUST, findings: [] });
   await page.goto("/?record=inference:openrouter");
-  const block = page.locator('#inference-dialog-content [data-trust="reviewed"]');
+  const block = recordView(page, "inference").locator('[data-trust="reviewed"]');
   await expect(block).toContainText("Reviewed on 2026-09-18; no admissible third-party finding recorded.");
   await expect(block).toContainText("Absence of a finding is not evidence of safety.");
 });
@@ -109,7 +110,7 @@ test("a closed finding shows its resolution beside the claim", async ({ page }) 
   };
   await serveTrust(page, "openrouter", closed);
   await page.goto("/?record=inference:openrouter");
-  const block = page.locator('#inference-dialog-content [data-trust="findings"]');
+  const block = recordView(page, "inference").locator('[data-trust="findings"]');
   await expect(block).toContainText("Operator response: The operator states caches are keyed per API key.");
   await expect(block).toContainText("Closed: Per-key cache scoping is now documented.");
 });
@@ -117,10 +118,10 @@ test("a closed finding shows its resolution beside the claim", async ({ page }) 
 test("a service whose detail has not loaded yet never reads as unexamined", async ({ page }) => {
   await page.route("**/app/detail/inference/openai-api.json*", route => route.abort());
   await page.goto("/?record=inference:openai-api");
-  const pending = page.locator('#inference-dialog-content [data-trust="pending"]');
+  const pending = recordView(page, "inference").locator('[data-trust="pending"]');
   await expect(pending).toBeVisible();
   await expect(pending).toContainText("Trust record · unscored");
-  await expect(page.locator('#inference-dialog-content [data-trust="absent"]')).toHaveCount(0);
+  await expect(recordView(page, "inference").locator('[data-trust="absent"]')).toHaveCount(0);
 });
 
 test("a comparison shows six unscored trust rows and marks unreviewed records as not examined", async ({ page }) => {

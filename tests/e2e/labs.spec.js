@@ -1,6 +1,7 @@
 const { test, expect } = require("@playwright/test");
 const { viewTab } = require("./helpers/landing");
 const catalogCounts = require("./helpers/catalog-counts");
+const { clearFilters, expectFilter, recordHeading, recordView, search, setFilter, sortControl } = require("./helpers/results");
 
 test("Labs lists every lab by name and filters by type, headquarters, and release distribution", async ({ page }) => {
   await page.goto("/?collection=labs");
@@ -17,22 +18,22 @@ test("Labs lists every lab by name and filters by type, headquarters, and releas
   await expect(page.locator("#lab-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#lab-grid .compare-toggle")).toHaveCount(0);
 
-  await page.locator("#lab-type-filter").selectOption("technology_company");
+  await setFilter(page, "labs", "type", "technology_company");
   await expect(page.locator("#lab-grid .lab-card h2")).toHaveText(
     catalogCounts.labNames(lab => lab.lab_type === "technology_company"),
   );
-  await page.locator("#reset-lab-filters").click();
-  await page.locator("#lab-country-filter").selectOption("cn");
+  await clearFilters(page, "labs");
+  await setFilter(page, "labs", "headquarters", "cn");
   await expect(page.locator("#lab-grid .lab-card h2")).toHaveText(catalogCounts.labNames(lab => lab.headquarters === "cn"));
-  await page.locator("#reset-lab-filters").click();
-  await page.locator("#lab-distribution-filter").selectOption("downloadable_weights");
+  await clearFilters(page, "labs");
+  await setFilter(page, "labs", "distribution", "downloadable_weights");
   await expect(page.locator("#lab-grid .lab-card h2")).toHaveText(
     catalogCounts.labsWithReleaseDistribution("downloadable_weights"),
   );
 
   // The organization note is detail-only; the search index still reaches it.
-  await page.locator("#reset-lab-filters").click();
-  await page.locator("#lab-search").fill("Hangzhou");
+  await clearFilters(page, "labs");
+  await search(page, "Hangzhou");
   await expect(page.locator("#lab-grid .lab-card h2")).toHaveText(catalogCounts.labsMatching("Hangzhou"));
 });
 
@@ -40,7 +41,7 @@ test("a lab dialog joins the records that name the lab and browses its releases 
   await page.goto("/?collection=labs");
   await page.locator('#lab-grid [data-lab="lab-anthropic"]').click();
 
-  const dialog = page.locator("#lab-dialog-content");
+  const dialog = recordView(page, "lab");
   await expect(dialog.locator("h1")).toHaveText("Anthropic");
   await expect(page).toHaveURL(/record=lab(%3A|:)lab-anthropic/);
   const releases = catalogCounts.reviewedModelsDevelopedBy("lab-anthropic");
@@ -55,23 +56,23 @@ test("a lab dialog joins the records that name the lab and browses its releases 
   await dialog.locator('[data-browse-lab-models="lab-anthropic"]').click();
   await expect(viewTab(page, "directory")).toHaveClass(/is-active/);
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
-  await expect(page.locator("#model-lab-filter")).toHaveValue("lab-anthropic");
-  await expect(page.locator("#model-sort-filter")).toHaveValue("release");
+  await expectFilter(page, "models", "lab", "lab-anthropic");
+  await expect(sortControl(page, "models")).toHaveValue("release");
   await page.locator('#model-pager select[aria-label="Results per page"]').selectOption("96");
   await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(
     catalogCounts.reviewedModelsDevelopedByNewestFirst("lab-anthropic"),
   );
 
-  await page.locator("#reset-model-filters").click();
-  await expect(page.locator("#model-lab-filter")).toHaveValue("");
-  await expect(page.locator("#model-sort-filter")).toHaveValue("score");
+  await clearFilters(page, "models");
+  await expectFilter(page, "models", "lab", "");
+  await expect(sortControl(page, "models")).toHaveValue("score");
 });
 
 test("a lab dialog fits a phone screen with its longest channel URL and name", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   for (const id of [catalogCounts.labIdWithLongestChannel, catalogCounts.labIdWithLongestNameWord]) {
     await page.goto(`/?collection=labs&record=lab:${id}`);
-    const dialog = page.locator("#lab-dialog");
+    const dialog = recordView(page, "lab");
     // Channels are detail-only; measure once they have painted.
     await expect(dialog.locator(".lab-channel-link").first()).toBeVisible();
     expect(await dialog.evaluate(element => element.scrollWidth - element.clientWidth), id).toBe(0);
@@ -80,7 +81,7 @@ test("a lab dialog fits a phone screen with its longest channel URL and name", a
 
 test("a lab admitted on a system explains its empty release join instead of listing nothing", async ({ page }) => {
   await page.goto(`/?collection=labs&record=lab:${catalogCounts.labIdWithBasis("reviewed_system")}`);
-  const dialog = page.locator("#lab-dialog-content");
+  const dialog = recordView(page, "lab");
   await expect(dialog.locator("h1")).toHaveText("Stanford NLP Group");
   await expect(dialog).toContainText("Recorded because:");
   await expect(dialog).toContainText("Reviewed system");
@@ -100,11 +101,11 @@ test("a lab admitted on a system explains its empty release join instead of list
 
 test("a model dialog links to the lab that developed the release", async ({ page }) => {
   await page.goto("/?collection=models&record=model:model-deepseek-deepseek-v4-pro");
-  await expect(page.locator("#model-dialog-content h1")).toHaveText("DeepSeek V4 Pro");
+  await expect(recordHeading(page, "model")).toHaveText("DeepSeek V4 Pro");
 
-  await page.locator('#model-dialog-content [data-open-lab="lab-deepseek"]').click();
-  await expect(page.locator("#lab-dialog-content h1")).toHaveText("DeepSeek");
-  await expect(page.locator("#model-dialog")).toHaveJSProperty("open", false);
+  await recordView(page, "model").locator('[data-open-lab="lab-deepseek"]').click();
+  await expect(recordHeading(page, "lab")).toHaveText("DeepSeek");
+  await expect(recordView(page, "model")).toBeHidden();
   await expect(page).toHaveURL(/record=lab(%3A|:)lab-deepseek/);
 });
 
@@ -117,5 +118,5 @@ test("a lab share page names the organization and opens the lab in the Atlas", a
 
   await page.getByRole("link", { name: /Open in the directory/ }).click();
   await expect(page).toHaveURL(/record=lab(%3A|:)lab-anthropic/);
-  await expect(page.locator("#lab-dialog h1")).toHaveText("Anthropic");
+  await expect(recordHeading(page, "lab")).toHaveText("Anthropic");
 });

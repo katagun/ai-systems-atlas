@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { openCollection, openView, searchAll } = require("./helpers/landing");
+const { searchBox } = require("./helpers/results");
 
 for (const theme of ["light", "dark"]) {
   test(`mobile Elements families, compact collections and dock fit in ${theme}`, async ({ page }) => {
@@ -48,7 +49,7 @@ test("mobile navigation restores search and sheets through history and handles M
   await expect(page.locator('[data-element-family-tab="agent_system"]')).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("#element-record-name")).toHaveAccessibleName("Aider");
   await searchAll(page, "Ollama");
-  await expect(page.locator("#all-directory-search")).toBeFocused();
+  await expect(searchBox(page, "all")).toBeFocused();
   await expect(page).toHaveURL(/q=Ollama/);
   await page.goBack();
   await expect(page.locator("#element-record-name")).toHaveAccessibleName("Aider");
@@ -97,7 +98,7 @@ test("the dock steps aside for a keyboard-sized viewport change while searching"
     window.visualViewport.dispatchEvent(new Event("resize"));
   });
   await expect(page.locator("#mobile-nav")).toBeHidden();
-  await expect(page.locator("#all-directory-search")).toBeFocused();
+  await expect(searchBox(page, "all")).toBeFocused();
   await page.evaluate(() => {
     delete window.visualViewport.height;
     window.visualViewport.dispatchEvent(new Event("resize"));

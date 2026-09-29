@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { openView } = require("./helpers/landing");
+const { expectFilter, recordHeading, recordView } = require("./helpers/results");
 const { models } = require("../../directory/models.json");
 const taxonomy = require("../../directory/taxonomy.json");
 const { runtimes } = require("../../directory/local-runtimes.json");
@@ -26,8 +27,8 @@ test("Explore counts reviewed releases and every matrix link matches its catalog
     await page.goto(`/${href}`);
     await expect(page.locator("#model-result-count")).toContainText(`${count} ${count === 1 ? "model" : "models"} ·`);
     await expect(page.locator("#model-grid .imported-model-card")).toHaveCount(0);
-    await expect(page.locator("#model-source-filter")).toHaveValue(params.get("sourceModel"));
-    await expect(page.locator("#model-distribution-filter")).toHaveValue(params.get("distribution"));
+    await expectFilter(page, "models", "sourceModel", params.get("sourceModel"));
+    await expectFilter(page, "models", "distribution", params.get("distribution"));
   }
   expect(errors).toEqual([]);
 });
@@ -42,13 +43,13 @@ test("distribution links, record dialogs, reload and Back preserve the explorati
   const link = page.locator(".access-route-list a").first();
   await link.focus();
   await page.keyboard.press("Enter");
-  await expect(page.locator("#model-distribution-filter")).toHaveValue("downloadable_weights");
+  await expectFilter(page, "models", "distribution", "downloadable_weights");
   await page.reload();
-  await expect(page.locator("#model-distribution-filter")).toHaveValue("downloadable_weights");
+  await expectFilter(page, "models", "distribution", "downloadable_weights");
   await page.locator("#model-grid [data-model]").first().click();
-  await expect(page.locator("#model-dialog")).toBeVisible();
+  await expect(recordView(page, "model")).toBeVisible();
   await page.goBack();
-  await expect(page.locator("#model-dialog")).not.toBeVisible();
+  await expect(recordView(page, "model")).not.toBeVisible();
   await page.goBack();
   await expect(page.locator("#explore")).toBeVisible();
   await page.reload();
@@ -122,15 +123,15 @@ test("runtime filters, catalog handoff, details and Back restore the matrix", as
   await expect(page.locator("#matrix-format")).toHaveValue("gguf");
   await expect(page.locator("#matrix-columns")).toHaveValue("api_styles");
   await page.locator("#runtime-matrix-browse").click();
-  await expect(page.locator("#runtime-accelerator-filter")).toHaveValue("metal");
-  await expect(page.locator("#runtime-format-filter")).toHaveValue("gguf");
+  await expectFilter(page, "runtimes", "accelerator", "metal");
+  await expectFilter(page, "runtimes", "modelFormat", "gguf");
   await expect(page.locator("#runtime-grid .project-card")).toHaveCount(matches.length);
   await page.goBack();
   await expect(page.locator("#matrix-format")).toHaveValue("gguf");
   const first = page.locator(".runtime-matrix tbody a").first();
   const name = await first.textContent();
   await first.click();
-  await expect(page.locator("#runtime-dialog h1")).toHaveText(name);
+  await expect(recordHeading(page, "runtime")).toHaveText(name);
   await page.goBack();
   await expect(page.locator("#explore")).toBeVisible();
   await expect(page.locator("#matrix-columns")).toHaveValue("api_styles");
@@ -181,16 +182,16 @@ test("system analysis cells match active catalog slices and preserve exploration
     await page.reload();
     await expect(page.locator("#result-count")).toContainText(`${count} `);
     const params = new URLSearchParams(href.slice(1));
-    if (params.has("localOnly")) await expect(page.locator("#local-filter")).toHaveValue(params.get("localOnly"));
+    if (params.has("localOnly")) await expectFilter(page, "systems", "localOnly", params.get("localOnly"));
     await page.locator("#project-grid [data-project]").first().click();
-    await expect(page.locator("#project-dialog")).toBeVisible();
+    await expect(recordView(page, "system")).toBeVisible();
     await page.goBack();
-    await expect(page.locator("#project-dialog")).not.toBeVisible();
+    await expect(recordView(page, "system")).not.toBeVisible();
     await page.goBack();
     await expect(page.locator("#system-deployment")).toBeVisible();
     await expect(page).toHaveURL(/view=explore#deployment-title/);
   }
   await page.goto("/?collection=systems&localOnly=unknown");
-  await expect(page.locator("#local-filter")).toHaveValue("unknown");
+  await expectFilter(page, "systems", "localOnly", "unknown");
   await expect(page.locator("#project-grid .project-card")).toHaveCount(0);
 });

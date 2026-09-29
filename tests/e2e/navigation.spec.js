@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { openView, viewTab } = require("./helpers/landing");
+const { searchBox } = require("./helpers/results");
 
 const styleOf = (page, selector, property) =>
   page.locator(selector).evaluate((element, name) => getComputedStyle(element)[name], property);
@@ -83,7 +84,7 @@ test("a legacy sibling-view URL lands on its unified collection", async ({ page 
   await page.goto("/?view=models&q=gemma");
   await expect(page.locator("#directory")).toHaveClass(/is-active/);
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
-  await expect(page.locator("#model-search")).toHaveValue("gemma");
+  await expect(searchBox(page, "models")).toHaveValue("gemma");
   await expect(page).not.toHaveURL(/view=models/);
   await expect(page).toHaveURL(/collection=models/);
 });

@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { collectionDot, openCollection, openView } = require("./helpers/landing");
+const { closeRecord, recordView } = require("./helpers/results");
 
 // Reads where an element sits once the page stops scrolling. It first waits
 // until scrollY holds still for five animation frames, then measures in the
@@ -196,9 +197,9 @@ test("Back after closing a record keeps the Finder's role set", async ({ page })
   await expect(page.locator("#finder-roles-chip")).toBeVisible();
   const before = await page.locator("#result-count").textContent();
   await page.locator("#project-grid [data-project]").first().click();
-  await expect(page.locator("#project-dialog")).toBeVisible();
-  await page.locator("#project-dialog .dialog-close").click();
-  await expect(page.locator("#project-dialog")).toBeHidden();
+  await expect(recordView(page, "system")).toBeVisible();
+  await closeRecord(page, "system");
+  await expect(recordView(page, "system")).toBeHidden();
   await page.goBack();
   await expect(page.locator("#finder-roles-chip")).toBeVisible();
   await expect(page.locator("#result-count")).toContainText("Finder match");
@@ -209,13 +210,13 @@ test("Back after closing a record keeps the Finder's role set", async ({ page })
   // does. The Systems strip entry clears the family by design, so the way
   // back into Systems is Back to the entry the Finder landed on.
   await page.locator("#project-grid [data-project]").first().click();
-  await page.locator("#project-dialog .dialog-close").click();
-  await expect(page.locator("#project-dialog")).toBeHidden();
+  await closeRecord(page, "system");
+  await expect(recordView(page, "system")).toBeHidden();
   await openCollection(page, "inference");
   await page.locator("#inference-grid [data-inference-service]").first().click();
-  await expect(page.locator("#inference-dialog")).toBeVisible();
+  await expect(recordView(page, "inference")).toBeVisible();
   await page.goBack();
-  await expect(page.locator("#inference-dialog")).toBeHidden();
+  await expect(recordView(page, "inference")).toBeHidden();
   await expect(page.locator("#inference-directory-panel")).toBeVisible();
   await expect(collectionDot(page, "systems")).toHaveClass(/is-finder/);
   await page.goBack();
