@@ -12,7 +12,7 @@ ADR 013 kept Specifications, and ADR 041 kept Labs, as sibling views beside the 
 
 ## Decision
 
-A bare Directory URL opens the front door. It holds the headline, one supporting sentence, one search across every collection, the first Finder job of each direction, and an index with one tile per collection. Choosing a tile opens results, where a sticky strip lists the same collections. Tiles and the strip render from one registry, `AtlasCore.COLLECTIONS`, so a new collection is one entry, hidden while empty.
+A bare Directory URL opens the front door. It holds the headline, one supporting sentence, one search across every collection, the first Finder job of each direction, and an index with one tile per collection. Choosing a tile opens results, where a sticky strip lists the same collections. Tiles and the strip render from one registry, `AppCore.COLLECTIONS`, so a new collection is one entry, hidden while empty.
 
 Tiles and strip entries are the Directory's quick filters. ADR 013's "a visible quick-filter destination" and "reachable from the quick filters" mean a tile on the front door and an entry in the strip. Every collection, Models, Labs, and Specifications included, is a Directory collection with a tile and a strip entry. Legacy `?view=models|labs|specifications` URLs alias to the collection. This supersedes the sibling-view rule of ADR 013 and ADR 041 for the Directory's navigation. Their data rules stand: collections share no canonical schema, and labs stay unscored.
 
