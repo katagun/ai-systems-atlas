@@ -5,7 +5,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { collectionEntry, familyEntry, openCollection, pressedEntry, searchAll } = require("./helpers/landing");
-const { search, searchBox, settled } = require("./helpers/results");
+const { recordView, search, searchBox, settled, sortControl } = require("./helpers/results");
 
 // A word no record holds, written into one collection's search index so a
 // test controls exactly which collection answers it.
@@ -80,6 +80,26 @@ test("an empty result's collection buttons count where the matches are, when two
   await grid.locator('[data-empty-open-collection="packs"]').click();
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Agent packs\b/);
   await expect(page.locator("#pack-grid .project-card h2")).toHaveText(["ECC"]);
+});
+
+// A lab's name, not its models, answers "hangzhou", so "Browse all in Models"
+// lists nothing unless it clears the search its label promises to widen.
+test("Browse all in Models clears the search and lists the lab's releases newest first", async ({ page }) => {
+  await page.goto("/");
+  await searchAll(page, "hangzhou");
+  await page.locator('#all-directory-grid [data-empty-open-collection="labs"]').click();
+  const lab = page.locator("#lab-grid [data-lab]").first();
+  const id = await lab.getAttribute("data-lab");
+  await lab.click();
+  await recordView(page, "lab").locator(`[data-browse-lab-models="${id}"]`).click();
+  await expect(page.locator("#models-directory-panel")).toBeVisible();
+  await expect(searchBox(page)).toHaveValue("");
+  await expect(sortControl(page, "models")).toHaveValue("release");
+  await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
+  await search(page, "reasoning");
+  await expect(sortControl(page, "models")).toHaveValue("match");
+  await search(page, "");
+  await expect(sortControl(page, "models"), "clearing a later query returns to release").toHaveValue("release");
 });
 
 test("a restored query survives boot and Back", async ({ page }) => {

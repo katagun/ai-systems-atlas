@@ -3004,9 +3004,12 @@ function bindLabDialogLinks() {
 }
 
 // The grid continues the dialog's newest-first release list rather than
-// switching to the access-score order.
+// switching to the access-score order. Its label promises all of the lab's
+// releases, so it clears the search first, as the Finder's handoff does, and
+// release is then the sort clearing a later query returns to.
 function browseLabModels(labId) {
   $("#lab-dialog").close();
+  clearQuery();
   $("#model-lab-filter").value = labId;
   $("#model-sort-filter").value = "release";
   state.page.models = 1;

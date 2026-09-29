@@ -51,7 +51,7 @@ The rail's groups, the counts, the strip's match counts, step order, related rec
   - a comparison kept out of the front door's URL;
   - focus on the pressed entry after a tile opens by keyboard;
   - the breakpoints at 1000 px and 1407 px.
-- **`setDirectoryCollection(collection, { updateURL = true, carryQuery = updateURL })` keeps its signature and meaning.** `carryQuery: false` leaves the query as it is. Restore on boot and popstate, comparison restore, "Search all", "Browse all in Models", the pack-to-specification link, and the legacy `?view=` alias all pass `false` and expect the query kept. Only the Finder's handoffs and Clear filters clear the query, and they clear it themselves.
+- **`setDirectoryCollection(collection, { updateURL = true, carryQuery = updateURL })` keeps its signature and meaning.** `carryQuery: false` leaves the query as it is. Restore on boot and popstate, comparison restore, "Search all", the pack-to-specification link, and the legacy `?view=` alias all pass `false` and expect the query kept. Only the Finder's handoffs, Clear filters, and "Browse all in Models" clear the query, and they clear it themselves.
 - **Backlog anchors and measurements** (AGENTS rule 18, #385).
   - `tests/test_documentation.py` checks that every code symbol the backlog's "Engineering debt" section names still exists, and that any measurement there carries a date.
   - When a task deletes or renames a symbol that section names, such as `renderers`, `RECORD_DIALOG_SELECTORS`, or `mixedSystemCard`, the same PR updates or closes the item.

@@ -102,11 +102,10 @@ The nine `.collection-panel` sections keep their ids and become each collection'
 **One query.** The query is one value that every collection reads:
 
 - **Switching scope keeps it.** `setDirectoryCollection(collection, { updateURL, carryQuery })` keeps its signature and its meaning: `carryQuery: false` leaves the query as it is.
-- **Callers that must clear the query clear it themselves, as today:** the Finder's handoffs and Clear filters. The callers that pass `false`, directly or through `updateURL: false`, all expect the query kept:
+- **Callers that must clear the query clear it themselves:** the Finder's handoffs, Clear filters, and "Browse all in Models", whose label promises all of a lab's releases, newest first. The callers that pass `false`, directly or through `updateURL: false`, all expect the query kept:
   - boot and every popstate, through `restoreFromURL`;
   - comparison restore;
   - "Search all";
-  - "Browse all in Models";
   - the pack-to-specification link;
   - the legacy `?view=` alias.
 - **What a query change resets.** `docs/WEB.md` rules that "text that differs from what the box held is a new query". With one box:
