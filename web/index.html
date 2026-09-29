@@ -23,7 +23,7 @@
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=5d50f883b682">
+  <link rel="stylesheet" href="styles.css?v=3777a0022aee">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -232,6 +232,7 @@
     </section>
 
     <section id="explore" class="view" aria-labelledby="explore-title">
+      <nav class="explore-sections" aria-label="Explore topics"><a href="#explore-title">Model access</a><a href="#runtime-matrix-title">Local runtimes</a></nav>
       <div class="section-heading explore-heading">
         <p class="eyebrow">Explore the data · Models</p>
         <h1 id="explore-title" tabindex="-1">How can you access a model?</h1>
@@ -246,6 +247,26 @@
         <p>These views use Atlas-reviewed classifications, not models.dev reported licenses or open-weight flags. Imported records are excluded. Review dates describe the catalog, not release dates or a fresh check of every model.</p>
         <p><a href="models.json">Reviewed model data (JSON)</a> · <a href="?view=taxonomy">Classification definitions</a></p>
       </details>
+      <section id="runtime-features" class="runtime-features" aria-labelledby="runtime-matrix-title">
+        <div class="explore-section-heading">
+          <p class="eyebrow">Explore the data · Local runtimes</p>
+          <h2 id="runtime-matrix-title" tabindex="-1">What runs on your hardware?</h2>
+          <p>Explore documented accelerators, model formats, and API styles. Open a runtime for its hardware requirements, build-specific limits, and evidence.</p>
+          <p id="runtime-matrix-date" class="explore-data-note"></p>
+        </div>
+        <div class="runtime-matrix-controls">
+          <label><span>Accelerator</span><select id="matrix-accelerator"><option value="">All accelerators</option></select></label>
+          <label><span>Model format</span><select id="matrix-format"><option value="">All formats</option></select></label>
+          <label><span>Show columns</span><select id="matrix-columns"><option value="accelerators">Hardware</option><option value="model_formats">Model formats</option><option value="api_styles">API styles</option></select></label>
+          <button id="matrix-reset" type="button" class="ghost-button">Reset matrix</button>
+        </div>
+        <p id="runtime-matrix-count" aria-live="polite"></p>
+        <p id="runtime-matrix-note" class="runtime-matrix-note">● Recorded in the review · — Not recorded. Features can depend on the build, backend, and model; a row does not guarantee every combination works together. API compatibility does not imply full endpoint parity.</p>
+        <p class="runtime-scroll-hint">Scroll the table horizontally to see every column.</p>
+        <div id="runtime-matrix-content"></div>
+        <p><a id="runtime-matrix-browse" href="?collection=runtimes&amp;sort=name">Browse these runtimes in the catalog →</a></p>
+        <p><a href="local-runtimes.json">Reviewed runtime data (JSON)</a></p>
+      </section>
     </section>
 
     <section id="finder" class="view" aria-labelledby="finder-title">
@@ -450,6 +471,6 @@
   <footer><div class="footer-actions"><nav class="footer-nav" aria-label="Site map"><a href="./">Catalog</a><a href="?view=finder">Finder</a><a href="?view=explore">Explore</a><a href="?view=taxonomy">Concepts</a><a href="?view=api">Published data</a><a href="blog/">Blog</a></nav><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a></div><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
   <script type="application/json" id="data-versions">{"projects.json":"fd0c858cadfb","taxonomy.json":"5545823e6b11","license-evidence.json":"10c0d0bc8d4d","specifications.json":"f6487c60eb84","inference-services.json":"c69ac2f333ad","local-runtimes.json":"c3d85a51fff7","models.json":"bf658793f9c6","models-dev.json":"ec5e4b8a29fb","logos.json":"a0ce82f2ea60","exclusions.json":"777a4187f003","app/systems.json":"c329a9af577d","app/inference.json":"484d5f3a729f","app/runtimes.json":"ef7c2001163c","app/specifications.json":"e62146fa677b","app/models.json":"48fb77c740db","app/packs.json":"0907bc81836a","app/labs.json":"9510e68980eb","app/robots.json":"3b07b04f8f7c","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"e78b84ec74f4","app/search/inference.json":"81f6e0352cc7","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"cfb012c547ca","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"4b2ac46e495d","app/search/robots.json":"f3ba0fcf79b2","app/detail":"a04771772441"}</script>
   <script src="app-core.js?v=aef6c72988af" defer></script>
-  <script src="app.js?v=2195a215e317" defer></script>
+  <script src="app.js?v=cb6cfb634b33" defer></script>
 </body>
 </html>

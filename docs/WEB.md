@@ -143,13 +143,17 @@ Cards paint from the boot payload, so any field a badge tests must be in `BOOT_F
 
 ## Explore
 
-`?view=explore` opens the model-access overview from the catalog introduction, Docs menu, or footer (including the blog shell). It reads only the existing model boot payload and taxonomy, with no new request or detail hydration. `AppCore.modelAccessSummary` includes only `review_status: reviewed`, including releases not yet listed on models.dev, and never substitutes reported source metadata for reviewed classifications.
+`?view=explore` opens the model-access overview and runtime feature matrix from the catalog introduction, Docs menu, or footer (including the blog shell). Explore uses the same content width and gutters as the landing page, without a narrower view-specific cap. It reads only the existing model and runtime boot payloads and taxonomy, with no new request or detail hydration until a record is opened. `AppCore.modelAccessSummary` includes only `review_status: reviewed`, including releases not yet listed on models.dev, and never substitutes reported source metadata for reviewed classifications.
 
 Distribution bars count releases carrying each mode, with all reviewed releases as denominator. The semantic license-classification table uses each row's release count as denominator. Modes overlap: a release counts once in every mode it carries, regardless of the number of licenses. Unknown classifications get a visible row, and missing distribution modes stay in the denominators with an explanatory notice. Empty reviewed data gets an empty state. The page names the reviewed count, excluded imported count, and model collection review date; it claims neither market share nor model quality.
 
 Nonzero bars and classified table cells are ordinary links to the existing Models distribution and source-model filters, sorted by name. They create a navigation history entry so Back returns to Explore; zero and unclassified cells have no misleading drill-down. No scores or comparison controls appear in Explore. All labels come from taxonomy and every dynamic text or URL is escaped. Shared theme tokens cover the bars and table in both palettes.
 
 Verify every nonzero table link against canonical model counts, distribution-link keyboard activation, model-dialog Back behavior, reload and Back to Explore, and table readability without page overflow at 1440px, 390px, and 320px in both themes (`tests/e2e/explore.spec.js`).
+
+The runtime matrix lists runtimes alphabetically, with combined accelerator and format filters. The column selector shows hardware, model formats, or API styles; columns come from taxonomy values present anywhere in the reviewed runtime collection and remain stable as filters narrow rows. A dot means the trait is recorded; a dash means not recorded, never unsupported. The legend preserves build, backend, and model exceptions and disclaims full API parity and arbitrary combinations. No score is shown. The wide semantic table scrolls inside its own focusable region with sticky runtime names, keeping the page itself inside the shared gutters on phones.
+
+`runtimeAccelerator`, `runtimeFormat`, and `matrix` preserve the selected slice and column group in the Explore URL. Invalid values fall back to their defaults and leave the URL; leaving Explore removes these parameters. Catalog and record links carry the selected runtime filters, and Back restores the matrix. Empty slices show an explicit message and Reset matrix clears all choices. Tests verify each displayed cell against canonical reviewed traits, combined filtering, catalog and dialog handoffs, reload/Back, invalid URL values, and empty slices.
 
 ## Change surfaces
 
