@@ -2863,7 +2863,7 @@ function labDialogMarkup(lab) {
     `<section class="detail-block"><h3>${title}</h3><p>${labRecordButtons(records, attribute)}</p></section>`).join("");
   // A lab whose join to Models is empty explains it in the words its basis calls
   // for, because an empty heading over an empty list reads as a gap in the catalog
-  // rather than as the state the record is in (ADR 044, ADR 047).
+  // rather than as the state the record is in (ADR 044, ADR 048).
   const announced = lab.admission_basis === "frontier_announcement";
   const systemBased = lab.admission_basis === "reviewed_system";
   const noReleases = !relations.models.length;

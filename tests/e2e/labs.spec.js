@@ -85,7 +85,7 @@ test("a lab admitted on a system explains its empty release join instead of list
   await expect(dialog).toContainText("Recorded because:");
   await expect(dialog).toContainText("Reviewed system");
 
-  // ADR 047: a research group joins from a system, so the Models block is empty
+  // ADR 048: a research group joins from a system, so the Models block is empty
   // and has to say why rather than print a bare zero over an empty list.
   const releases = dialog.locator(".detail-block").filter({ hasText: "Reviewed model releases" });
   await expect(releases.locator("h3")).toHaveText("Reviewed model releases · 0");

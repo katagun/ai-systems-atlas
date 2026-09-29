@@ -1,4 +1,4 @@
-# ADR 047: A research group may be admitted on a system it developed
+# ADR 048: A research group may be admitted on a system it developed
 
 **Status:** Accepted. Amends [ADR 041](041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md) and [ADR 044](044-a-lab-may-be-recorded-on-its-own-published-statement-of-frontier-intent.md).
 
