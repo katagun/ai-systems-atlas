@@ -105,6 +105,17 @@ class PromoteModelCandidateTests(unittest.TestCase):
             (directory / name).write_bytes((ROOT / "directory" / name).read_bytes())
         self.queue = queue
 
+        # ADR 042: a new review records the maker-risk flag in an examined state.
+        self.record["flags"] = [
+            {
+                "kind": "maker_risk_safeguards",
+                "status": "no_statement_found",
+                "url": self.record["url"],
+                "verified_at": self.record["verified_at"],
+                "research_confidence": "high",
+            }
+        ]
+
     def tearDown(self) -> None:
         self.temporary.cleanup()
 
@@ -536,6 +547,34 @@ class PromoteModelCandidateTests(unittest.TestCase):
         for bad in ("2026-09-03", "2999-01-01", "yesterday"):
             with self.subTest(bad=bad), self.assertRaises(PromotionError):
                 preflight_link(self.root, twin["id"], self.candidate["source_id"], bad)
+
+    def test_draft_scaffolds_a_blank_maker_risk_flag(self) -> None:
+        draft = build_draft(self.candidate, self.queue)
+
+        self.assertEqual(
+            [
+                {
+                    "kind": "maker_risk_safeguards",
+                    "status": "",
+                    "url": "",
+                    "verified_at": "",
+                    "research_confidence": "",
+                }
+            ],
+            draft["flags"],
+        )
+
+    def test_review_without_a_maker_risk_flag_is_rejected(self) -> None:
+        record = deepcopy(self.record)
+        del record["flags"]
+        with self.assertRaisesRegex(PromotionError, "maker_risk_safeguards"):
+            preflight_promotion(self.root, record)
+
+    def test_gap_review_also_needs_the_maker_risk_flag(self) -> None:
+        record = self.gap_record()
+        record["flags"] = []
+        with self.assertRaisesRegex(PromotionError, "maker_risk_safeguards"):
+            preflight_promotion(self.root, record)
 
 
 if __name__ == "__main__":
