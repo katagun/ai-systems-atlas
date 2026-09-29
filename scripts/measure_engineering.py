@@ -44,8 +44,9 @@ JS_DECLARATION = re.compile(r"^(?:async function|function|const|let|var)\s+(\w+)
 
 # Anchor resolution asks a different question from the global-scope count: does
 # this name exist as a declaration *anywhere* in the file, at any indent? A
-# backlog anchor like `renderers` (933) names a function-local binding two
-# spaces in, not a global one, and existence is the property worth checking.
+# backlog anchor can name a function-local binding two spaces in, such as
+# `dataDate` inside `bootstrap`, not a global one, and existence is the
+# property worth checking.
 JS_DECLARATION_ANY_INDENT = re.compile(
     r"^\s*(?:async function|function|const|let|var)\s+(\w+)", re.MULTILINE
 )
@@ -261,7 +262,7 @@ def node_export_count(path: Path) -> int:
 def symbol_anchor(line: str) -> tuple[str, str] | None:
     """Read one `name` (1234) or `name` at 1234 anchor out of a line of prose.
 
-    Anchors arrive in two shapes in BACKLOG.md — ``renderers`` (933) and
+    Anchors arrive in two shapes in BACKLOG.md — ``syncMatchSort`` (319) and
     ``RECORD_DIALOGS`` at 2780 — so both are recognised. Only a JavaScript
     classic script is checked for existence; a Python line number is a
     different kind of claim and is handled by its own reader.

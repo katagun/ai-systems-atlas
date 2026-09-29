@@ -105,8 +105,8 @@ test("text typed on the front door before the page finishes loading still search
   await expect(page).toHaveURL(/q=Ollama/);
 });
 
-// Leaving the door carries the query of the collection last shown; the text
-// typed on the door must win over it.
+// The front door clears the query a collection left behind, so the text
+// typed on the door is the search.
 test("text typed on the front door replaces a query left in another collection", async ({ page }) => {
   await page.goto("/?collection=inference&q=vllm");
   await expect(searchBox(page, "inference")).toHaveValue("vllm");
@@ -537,9 +537,9 @@ test("the skip link restores nothing, so a sort chosen before typing still comes
   await expect(sortControl(page, "inference")).toHaveValue("name");
 });
 
-// A sort chosen before typing is what clearing the query gives back, but
-// beside a query the URL names only a sort the reader chose since typing,
-// so a reload forgets the earlier one (BACKLOG, Phase 1 leftover).
+// A sort chosen before typing is what clearing the query gives back. Beside
+// a query still listed by Best match the URL carries it as browseSort, so a
+// reload keeps it (Phase 3 spec, section 8).
 test("a sort chosen before typing survives a reload and returns when the query is cleared", async ({ page }) => {
   await page.goto("/?collection=inference");
   await sortControl(page, "inference").selectOption("name");

@@ -221,9 +221,22 @@ test("results drop the top padding the front door's headline needs, on phones to
   }
 });
 
-test("each collection's score rule sits in its scope note, and the headings are gone", async ({ page }) => {
+test("each collection's score rule sits in its scope note under its result count, and the headings are gone", async ({ page }) => {
   await page.goto("/?collection=models");
-  await expect(page.locator('[data-scope-note="models"]')).toContainText("Imported source records have no Atlas score");
+  for (const [id, rule] of [
+    ["all", "Scores stay hidden here"],
+    ["systems", "Choose one family to compare editorial scores"],
+    ["inference", "Scores compare stable service operations across types"],
+    ["runtimes", "Scores compare documented execution capability"],
+    ["packs", "never scored, and never compared"],
+    ["robots", "nothing here is scored or compared"],
+    ["models", "Imported source records have no Atlas score"],
+    ["labs", "each release keeps its own licence and score in Models"],
+    ["specifications", "with no cross-purpose score"],
+  ]) {
+    await expect(page.locator(`#${id}-directory-panel > .result-row + [data-scope-note="${id}"]`), id).toContainText(rule);
+  }
+  await expect(page.locator('[data-scope-note="models"] #models-kicker, [data-scope-note="labs"] #labs-kicker, [data-scope-note="specifications"] #specifications-kicker')).toHaveCount(3);
   await expect(page.locator("#models-kicker")).not.toBeEmpty();
   await expect(page.locator(".collection-panel .section-heading, .collection-panel .filter-guidance")).toHaveCount(0);
 });

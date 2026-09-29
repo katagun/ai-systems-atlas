@@ -17,8 +17,9 @@ async function searchAll(page, text) {
   await settled(page);
 }
 
-// Focusing the All box fetches six search indexes, and each one repaints the
-// grid as it lands, so a count read before they all land can still grow.
+// Focusing the search box fetches every search index, and each of All's six
+// repaints the grid as it lands, so a count read before they all land can
+// still grow.
 /* global searchIndexes */
 const allIndexesLanded = page => page.waitForFunction(() =>
   ["systems", "inference", "runtimes", "models", "packs", "robots"].every(key => searchIndexes[key] !== undefined));
@@ -330,8 +331,8 @@ test("a changed query starts every collection on its first page", async ({ page 
 });
 
 test("a carried query searches the same text a typed one does", async ({ page }) => {
-  // Focusing the Systems box fetches only the Systems index, so the
-  // Inference index is fetched for the carried query or not at all.
+  // A query fetches every collection's index, so the one query reaches
+  // Inference with its index, and lists what typing it there lists.
   let requested = false;
   page.on("request", request => {
     if (new URL(request.url()).pathname === "/app/search/inference.json") requested = true;
@@ -708,10 +709,10 @@ test("a query another collection answers offers Search all, not the suggestion f
   await expect(systems.getByRole("button", { name: "Search all" })).toHaveCount(0);
 });
 
-// An empty result judges the whole catalog, and the Systems box loads only its
-// own index, so the empty result loads the rest itself. Until they land it
-// offers nothing that judges the catalog: no count, no suggestion form, and
-// no exclusions fetch. Here only a model holds the query, in its held index.
+// An empty result judges the whole catalog, so it waits for every search
+// index a query loads. Until they land it offers nothing that judges the
+// catalog: no collection button, no suggestion form, and no exclusions
+// fetch. Here only a model holds the query, in its held index.
 test("an empty result waits for every search index before it counts other collections", async ({ page }) => {
   const models = readWeb("app/search/models.json");
   const [first] = Object.keys(models);

@@ -1180,9 +1180,11 @@ function setDirectoryCollection(collection, { updateURL = true, carryQuery = upd
 }
 
 // One entry per collection: where its results live, how it paints, its
-// Clear control, and its search box's hint. Every per-collection list reads
-// this table, so a new collection is one entry here and one in
-// AppCore.COLLECTIONS (CR-20; RECORD_DIALOGS is the pattern).
+// Clear control, and its search box's hint. The collection switch, the
+// pager, the page size, and the Clear controls read this table instead of
+// lists of their own. renderCollection's table (COLLECTIONS below) still
+// names seven of these grids and result counts again, for Phase 3 task 4 to
+// fold into one (CR-20; RECORD_DIALOGS is the pattern).
 const RESULT_VIEWS = {
   all: { panel: "#all-directory-panel", grid: "#all-directory-grid", pager: "#all-directory-pager", count: "#all-directory-result-count", clear: "#reset-all-directory", placeholder: "Search systems, models, services, runtimes, packs, and robots", render: () => renderAllDirectoryEntries() },
   systems: { panel: "#systems-directory-panel", grid: "#project-grid", pager: "#project-pager", count: "#result-count", clear: "#reset-filters", placeholder: "Search all systems", render: () => renderCollection("systems") },
