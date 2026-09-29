@@ -1138,9 +1138,9 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robot software role decision",
+        "held_by": "programme-gated run path",
         "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Publishes a Python SDK (pip install safari-sdk) for accessing, serving, evaluating, and fine-tuning Gemini Robotics checkpoints; the README says most of that functionality requires joining a Trusted Tester program rather than downloading open weights. The README documents a bundled framework whose Embodiments component 'connect agents to physical robot systems' and whose worked example wires a conversational agent to control an Aloha robot, with a Tools component described as letting the agent perform robot control. No existing role names a developer package whose own documentation describes connecting a model-driven agent to physical robot hardware, and this is stated directly in the README's Agent, Embodiments, and Tools sections without reading the source tree.",
+        "finding": "Publishes a Python SDK (pip install safari-sdk) for accessing, serving, evaluating, and fine-tuning Gemini Robotics checkpoints; the README says most of that functionality requires joining a Trusted Tester program rather than downloading open weights. The README documents a bundled framework whose Embodiments component 'connect agents to physical robot systems' and whose worked example wires a conversational agent to control an Aloha robot, with a Tools component described as letting the agent perform robot control. No existing role names a developer package whose own documentation describes connecting a model-driven agent to physical robot hardware, and this is stated directly in the README's Agent, Embodiments, and Tools sections without reading the source tree. Re-read on 2026-09-28 under ADR 045: the README still says most functionality requires joining the Trusted Tester programme, so the run path a reader can adopt is gated; the hold lifts at general availability, on the reasoning ADR 023 recorded for Microsoft Discovery.",
         "evidence": [
           {
             "label": "README",
@@ -3845,9 +3845,9 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robot software role decision",
+        "held_by": "action-policy model boundary",
         "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Publishes an installable Python package (uv/pip) plus three named vision-language-action checkpoint families (pi0, pi0-FAST, pi0.5), downloaded from a hosted bucket rather than bundled in the repository, with documented fine-tuning and serving code. The README's own remote-inference workflow runs the checkpoint on a separate server and streams its predicted action_chunk output to the robot over a websocket connection, and its quickstart shows inference producing that action_chunk from a camera image and a language instruction. No existing role names a package whose delegated outcome is streaming a trained policy's action output to a physical robot rather than to a software tool, and this is stated directly in the README's quickstart and remote-inference sections without reading the source tree.",
+        "finding": "Publishes an installable Python package (uv/pip) plus three named vision-language-action checkpoint families (pi0, pi0-FAST, pi0.5), downloaded from a hosted bucket rather than bundled in the repository, with documented fine-tuning and serving code. The README's own remote-inference workflow runs the checkpoint on a separate server and streams its predicted action_chunk output to the robot over a websocket connection, and its quickstart shows inference producing that action_chunk from a camera image and a language instruction. No existing role names a package whose delegated outcome is streaming a trained policy's action output to a physical robot rather than to a software tool, and this is stated directly in the README's quickstart and remote-inference sections without reading the source tree. Re-read on 2026-09-28 under ADR 045: the repository has no tags, its PyPI name is a placeholder, its last commit is dated 2026-08-24, and its LICENSE_GEMMA.txt is Google's Gemma Terms of Use whose scope (the checkpoints, the code, or both) is unresolved. Its software exists to run or fine-tune its own three checkpoint families, so the systems question waits on the action-policy model decision, as Isaac GR00T's and OpenVLA's do.",
         "evidence": [
           {
             "label": "README",
@@ -5878,6 +5878,54 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-09-14",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "octo-models/octo",
+      "name": "Octo",
+      "url": "https://github.com/octo-models/octo",
+      "description": "Octo is a generalist robot policy trained on Open X-Embodiment data, with code to fine-tune it and to run it on a real WidowX robot.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": "MIT",
+      "stars": 1789,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-28",
+      "triage": {
+        "verdict": "held",
+        "held_by": "action-policy model boundary",
+        "rule": "docs/CURATION.md inclusion gate; ADR 045 routing",
+        "finding": "Screened in the ADR 045 comparison-set review. The README's own evaluation section runs the pretrained policy on a real WidowX robot, so the physical reach is stated directly; but the repository is a policy model release with inference and fine-tuning code, the shape batch 39 held Isaac GR00T and OpenVLA in, so it waits on the action-policy model decision rather than on the systems scope. Latest release v1.5 of 2024-05-24.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/octo-models/octo/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "057e41b4866d4c1c19eaf8882c5f1551594476f1b2193f52ec626833381de262",
+            "fetched_at": "2026-09-28",
+            "blob_sha": "b33cd8e7df1bb51243e060e14b5a14741cb06032",
+            "immutable_url": "https://api.github.com/repos/octo-models/octo/git/blobs/b33cd8e7df1bb51243e060e14b5a14741cb06032"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/octo-models/octo/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "8c891a7dd06fdaa873aa011ff0b2773a3ccfe6d123f6b9a9fc589db718aec1d1",
+            "fetched_at": "2026-09-28",
+            "blob_sha": "239522dcb0271245b5486e598a98737d445b3cd6",
+            "immutable_url": "https://api.github.com/repos/octo-models/octo/git/blobs/239522dcb0271245b5486e598a98737d445b3cd6"
+          }
+        ],
+        "proposed_at": "2026-09-28",
+        "proposer": "ADR 045 comparison-set screen"
+      },
       "review_required": [
         "licensing",
         "classification",
