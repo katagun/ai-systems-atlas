@@ -958,7 +958,7 @@
     {
       "id": "public_research",
       "name": "Public research organization",
-      "definition": "A government-funded, academic, or nonprofit research organization that develops and releases models."
+      "definition": "A government-funded, academic, or nonprofit research organization. Its work may be model releases, research systems the catalog reviews, or a published statement of frontier intent."
     }
   ],
   "lab_admission_bases": [
@@ -966,6 +966,11 @@
       "id": "reviewed_release",
       "name": "Reviewed release",
       "definition": "The catalog has reviewed at least one model release the organization developed, so the record joins to that release."
+    },
+    {
+      "id": "reviewed_system",
+      "name": "Reviewed system",
+      "definition": "The catalog holds a reviewed system record the organization developed, and no reviewed model release of its own, so the record joins to that system instead."
     },
     {
       "id": "frontier_announcement",

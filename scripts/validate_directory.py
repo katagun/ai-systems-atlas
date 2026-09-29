@@ -1746,8 +1746,9 @@ def validate_lab_catalog_names(
     enum_ids: dict[str, set[str]],
     errors: list[str],
 ) -> set[str]:
-    """Each catalog name must name a record; a lab needs a reviewed release or a
-    published frontier-model commitment (ADR 044)."""
+    """Each catalog name must name a record; a lab needs a reviewed release, a
+    reviewed system it developed, or a published frontier-model commitment
+    (ADR 044, ADR 047)."""
     # An announced lab joins to nothing, so it may carry no names at all (ADR 044).
     validate_string_list(lab, "catalog_names", None, prefix, errors, allow_empty=True)
     values = lab.get("catalog_names")
@@ -1757,6 +1758,7 @@ def validate_lab_catalog_names(
     if not isinstance(values, list):
         return set()
     names = {name for name in values if isinstance(name, str)}
+    systems = {item for item in lab.get("systems") or [] if isinstance(item, str)}
     for name in sorted(names):
         if not name.strip() or name != name.strip():
             errors.append(
@@ -1764,20 +1766,42 @@ def validate_lab_catalog_names(
             )
         elif not any(name in field_names for field_names in names_by_field.values()):
             errors.append(f"{prefix}: catalog name {name!r} names no catalog record")
+    # The three bases are ordered from the strongest join to the weakest, so a
+    # record never understates its own join and never hides an absence behind
+    # stronger vocabulary. Each direction is refused, not merely permitted.
     if basis == "reviewed_release":
         # The original gate: the organization must have a release in the collection.
         if not names & names_by_field["developer"]:
+            weaker = "reviewed_system" if systems else "frontier_announcement"
             errors.append(
                 f"{prefix}: develops no reviewed model release, so its admission basis "
-                "must be frontier_announcement (ADR 044)"
+                f"must be {weaker} (ADR 044, ADR 047)"
             )
-    # Recorded before any release, so it joins to nothing by construction. A
-    # reviewed release would make the stronger basis the honest one.
-    elif basis == "frontier_announcement" and names & names_by_field["developer"]:
-        errors.append(
-            f"{prefix}: has a reviewed model release, so its admission basis must "
-            "be reviewed_release (ADR 044)"
-        )
+    elif basis == "reviewed_system":
+        # A research group whose reviewed work is a system, not a release (ADR 047).
+        if names & names_by_field["developer"]:
+            errors.append(
+                f"{prefix}: has a reviewed model release, so its admission basis must "
+                "be reviewed_release (ADR 044)"
+            )
+        elif not systems:
+            errors.append(
+                f"{prefix}: develops no reviewed system, so its admission basis must "
+                "be frontier_announcement (ADR 047)"
+            )
+    elif basis == "frontier_announcement":
+        # Recorded before any release, so it joins to nothing by construction. A
+        # reviewed release would make the stronger basis the honest one.
+        if names & names_by_field["developer"]:
+            errors.append(
+                f"{prefix}: has a reviewed model release, so its admission basis must "
+                "be reviewed_release (ADR 044)"
+            )
+        elif systems:
+            errors.append(
+                f"{prefix}: has a reviewed system, so its admission basis must be "
+                "reviewed_system (ADR 047)"
+            )
     return names
 
 
