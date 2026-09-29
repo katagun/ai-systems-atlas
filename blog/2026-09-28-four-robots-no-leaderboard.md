@@ -29,13 +29,13 @@ These conditions establish what the maker documents. They leave the robot's beha
 
 [Figure's Helix page](https://www.figure.ai/helix) describes a vision-language-action model controlling perception, movement, and reasoning on board Figure 03. That is enough to record a named model and the role the manufacturer assigns it.
 
-[The Atlas record](/records/robots/figure-03/) keeps two separate gaps visible. Its September 24 review found no documented SDK or program for running the reader's own model, and it classified availability as announced. The record also cites Figure's account of a BMW deployment. An industrial deployment report and a public ordering route are different facts, so both can belong in the same record without resolving each other.
+[The Atlas record](https://peacefulcoexistance.com/records/robots/figure-03/) keeps two separate gaps visible. Its September 24 review found no documented SDK or program for running the reader's own model, and it classified availability as announced. The record also cites Figure's account of a BMW deployment. An industrial deployment report and a public ordering route are different facts, so both can belong in the same record without resolving each other.
 
 A reader can follow Figure's account of Helix from the record. The catalog does not convert that account into a measured autonomy score.
 
 ## NEO: access to a product is another layer
 
-[1X's AI documentation](https://www.1x.tech/ai) names Redwood AI and the 1X World Model, assigning them roles in movement, interaction, and anticipating actions. The descriptions are attributed to 1X throughout [NEO's record](/records/robots/neo/).
+[1X's AI documentation](https://www.1x.tech/ai) names Redwood AI and the 1X World Model, assigning them roles in movement, interaction, and anticipating actions. The descriptions are attributed to 1X throughout [NEO's record](https://peacefulcoexistance.com/records/robots/neo/).
 
 The review records availability as reservation, based on the maker's [order page](https://www.1x.tech/order). It also records that the reviewer found no documented way for a buyer to run their own model or policy on NEO. A route toward obtaining the product does not imply a route toward programming its intelligence.
 
@@ -49,13 +49,13 @@ Boston Dynamics documents a concrete path through Spot's [Network Compute Bridge
 
 That makes the interface useful evidence for the collection's second admission route. It describes where computation runs and how the result reaches a program controlling the robot. It does not establish that any model connected this way can reliably perform a particular physical task.
 
-[Spot's record](/records/robots/spot/) also distinguishes that bridge from the Joint Control API, whose documented access requires a special-permissions licence. The phrase “has an SDK” loses important information unless the reader follows it to the control surface they actually need.
+[Spot's record](https://peacefulcoexistance.com/records/robots/spot/) also distinguishes that bridge from the Joint Control API, whose documented access requires a special-permissions licence. The phrase “has an SDK” loses important information unless the reader follows it to the control surface they actually need.
 
 ## Unitree G1: the edition matters
 
 [Unitree's product page](https://www.unitree.com/g1/) lists secondary development for the G1 EDU rather than the basic G1. [Its policy-training repository](https://github.com/unitreerobotics/unitree_rl_gym) documents a route from simulation to deployment on a physical robot, including G1.
 
-The [Atlas record](/records/robots/unitree-g1/) keeps the edition distinction beside developer access and availability. Its review records the basic G1 as orderable, with a backorder notice, while the EDU purchase goes through sales.
+The [Atlas record](https://peacefulcoexistance.com/records/robots/unitree-g1/) keeps the edition distinction beside developer access and availability. Its review records the basic G1 as orderable, with a backorder notice, while the EDU purchase goes through sales.
 
 This is a useful example of why a model interface belongs beside the exact product variant. A reader who sees an order button and a policy repository on the same manufacturer's sites still needs to establish that the unit they are obtaining supports the intended development path. The existence of both pages is not that assurance.
 
@@ -78,7 +78,7 @@ Every robot record includes its own explanation of what Atlas has not verified. 
 
 That limit should remain visible when the record is opened from search or shared on its own. A reader should not have to find this article to discover that the machine has never been tested by the catalog.
 
-The [Robots collection](/?collection=robots) therefore offers a starting point for investigation: four products, their documented access paths, the terms and availability found at review, and the questions still owed a direct answer. Before treating a demo as a purchasing or engineering decision, establish which of those questions it actually answers.
+The [Robots collection](https://peacefulcoexistance.com/?collection=robots) therefore offers a starting point for investigation: four products, their documented access paths, the terms and availability found at review, and the questions still owed a direct answer. Before treating a demo as a purchasing or engineering decision, establish which of those questions it actually answers.
 
 ---
 

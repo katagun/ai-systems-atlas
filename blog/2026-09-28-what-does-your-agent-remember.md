@@ -35,7 +35,7 @@ Neither a readable file nor a useful diff settles the whole exercise. After edit
 
 ## An event log keeps the old decision for a reason
 
-[Projectmem's Atlas record](/records/systems/projectmem/) describes an append-only event log with distilled summaries. Its documented supersession mechanism keeps the old event while marking a new decision as its replacement. That can preserve the explanation for a change: the previous cluster was appropriate then; a later decision moved deployment elsewhere.
+[Projectmem's Atlas record](https://peacefulcoexistance.com/records/systems/projectmem/) describes an append-only event log with distilled summaries. Its documented supersession mechanism keeps the old event while marking a new decision as its replacement. That can preserve the explanation for a change: the previous cluster was appropriate then; a later decision moved deployment elsewhere.
 
 The defect in its release notes shows why the reader of that history matters. A memory system needs a way to distinguish the current instruction from the record of what used to be true. Every surface that supplies working context needs to honor that distinction. Keeping the history is useful only if an agent can tell which part still governs its work.
 
