@@ -344,7 +344,7 @@ function syncMatchSort(scope) {
 // The one query every collection reads (Phase 3 spec, section 1).
 const currentQuery = () => $("#results-search").value;
 
-// Whether a query searches at all: one of stop words alone ("the", "me")
+// Whether a query searches at all: a query of stop words alone ("the", "me")
 // holds no search word, so every filter lists what browsing lists, and the
 // strip and an empty result treat it as browsing too.
 const isSearching = (term = currentQuery()) => AppCore.parseSearchQuery(term).tokens.length > 0;
