@@ -19211,7 +19211,8 @@
       "human_editable": false,
       "provenance": "strong",
       "licenses": [
-        "Apache-2.0"
+        "Apache-2.0",
+        "MIT"
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
@@ -19252,7 +19253,7 @@
       "name": "OM1",
       "repo": "OpenMind/OM1",
       "url": "https://github.com/OpenMind/OM1",
-      "description": "A configurable runtime for building robot-controlling agents: camera, audio, and LIDAR inputs feed an LLM that chooses named actions, and action plugins carry them out on humanoid and quadruped robots or in simulators.",
+      "description": "A configurable framework for building robot-controlling agents: camera, audio, and LIDAR inputs feed an LLM that chooses named actions, and action plugins carry them out on humanoid and quadruped robots or in simulators.",
       "primary_role": "agent_framework_sdk",
       "secondary_roles": [],
       "agent_relation": "agent_runtime",
@@ -19271,8 +19272,7 @@
       ],
       "canonical_data": "json5 agent configurations and system prompts",
       "deployment": [
-        "local_cli",
-        "cloud_optional"
+        "local_cli"
       ],
       "agent_interfaces": [
         "terminal",
@@ -19301,7 +19301,7 @@
         "overall": 6.53
       },
       "strengths": [
-        "An LLM chooses named actions and connectors carry them out on the Unitree Go2, Deep Robotics M20 Pro, Unitree G1, and LimX Tron",
+        "An LLM chooses named actions and connectors carry them out; the README documents a Unitree Go2 movement connector and full autonomy with the BrainPack module on four robots",
         "Inputs, models, and actions are composed in a json5 config file",
         "Ollama is documented as a local substitute for the language model"
       ],
@@ -19320,7 +19320,7 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "stars": 2904,
-      "stars_verified_at": "2026-09-28",
+      "stars_verified_at": "2026-09-04",
       "historical_stars": null,
       "github_detected_license": "MIT"
     }

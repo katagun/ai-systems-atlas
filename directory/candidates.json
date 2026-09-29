@@ -1092,10 +1092,10 @@
             "label": "README",
             "url": "https://github.com/google-deepmind/gemini-robotics-sdk/blob/main/README.md",
             "kind": "git_blob",
-            "content_sha256": "fb10b5979c91654e67ab8b3462ddd8a68382eaa3f343e5254a3fb8b23a29e8bc",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "b0a48c5f1e40f8de6cf4f5f95764887d9c717389",
-            "immutable_url": "https://api.github.com/repos/google-deepmind/gemini-robotics-sdk/git/blobs/b0a48c5f1e40f8de6cf4f5f95764887d9c717389"
+            "content_sha256": "e994460be219cfcabeda77d13b30bb6d9329682c5097ee90415c2ef32b69d48e",
+            "fetched_at": "2026-09-28",
+            "blob_sha": "28dc33308a18fba5a374a788b699f6561c34ddf2",
+            "immutable_url": "https://api.github.com/repos/google-deepmind/gemini-robotics-sdk/git/blobs/28dc33308a18fba5a374a788b699f6561c34ddf2"
           },
           {
             "label": "LICENSE",

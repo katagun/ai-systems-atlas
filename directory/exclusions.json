@@ -733,7 +733,7 @@
     {
       "name": "Dora",
       "repo": "dora-rs/dora",
-      "reason": "Dora's README describes \"middleware for composing AI-based robotic applications as low-latency, distributed dataflow pipelines\": a node hub of cameras, YOLO, LLM and TTS nodes, a ROS2 bridge, and a CLI and Python API with tagged releases. The README states no agent loop of its own and never uses the words actuator, hardware, or physical; the wiring from a model's output to an arm driver exists only in the separate dora-hub repository's examples. Reviewed under ADR 045, this fails inclusion-gate condition 2 on the line dario and TreeQuest set: the loop belongs to the authors of the nodes, and Dora owns transport and scheduling between them. It differs from LangGraph, whose documented outcome is the agent's own control flow with state, checkpoints and human control, and from sandbase-harness, which owns its sessions, events and credential vault. The PyPI wheel declares MIT while the repository LICENSE and NOTICE say Apache-2.0; the discrepancy is recorded and does not bear on the decision.",
+      "reason": "Dora's README describes itself as \"Agentic Dataflow-Oriented Robotic Architecture -- a 100% Rust framework for building real-time robotics and AI applications\": a node hub of cameras, YOLO, LLM and TTS nodes, a ROS2 bridge, and a CLI and Python API with tagged releases. The \"Agentic\" in the name describes how the project is built, not an agent loop Dora runs: the README says it is \"Built and maintained with agentic engineering\", with AI agents doing the code generation, reviews, refactoring, and testing while humans set direction and gate every merge. The README states no agent loop of its own and never uses the words actuator, hardware, or physical; the wiring from a model's output to an arm driver exists only in the separate dora-hub repository's examples. Reviewed under ADR 045, this fails inclusion-gate condition 2 on the line dario and TreeQuest set: the loop belongs to the authors of the nodes, and Dora owns transport and scheduling between them. It differs from LangGraph, whose documented outcome is the agent's own control flow with state, checkpoints and human control, and from sandbase-harness, which owns its sessions, events and credential vault. The PyPI wheel declares MIT while the repository LICENSE and NOTICE say Apache-2.0; the discrepancy is recorded and does not bear on the decision.",
       "useful_lesson": "Middleware that carries a model node's output is not the agent whose output it carries; ask whose loop the graph is, and read the README rather than the example repository for what the system claims of itself.",
       "excluded_at": "2026-09-28",
       "verified_at": "2026-09-28"
@@ -765,7 +765,7 @@
     {
       "name": "MoveIt 2",
       "repo": "moveit/moveit2",
-      "reason": "MoveIt 2 describes itself as \"the MoveIt Motion Planning Framework for ROS 2\" and documents classical motion planning with no learned model or policy. Inclusion-gate condition 2 fails on the Nav2 line.",
+      "reason": "MoveIt 2 describes itself as \"the MoveIt Motion Planning Framework for ROS 2\" and documents motion planning with no learned model or policy. Inclusion-gate condition 2 fails on the Nav2 line.",
       "useful_lesson": "Motion planning that a caller parameterises is programmability, not an AI basis; ADR 037 draws the same line for robots.",
       "excluded_at": "2026-09-28",
       "verified_at": "2026-09-28"

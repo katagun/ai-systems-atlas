@@ -596,6 +596,14 @@ class DirectoryTests(unittest.TestCase):
             "programme-gated run path",
             queued["google-deepmind/gemini-robotics-sdk"]["triage"]["held_by"],
         )
+        self.assertEqual(
+            "action-policy model boundary",
+            queued["NVIDIA/Isaac-GR00T"]["triage"]["held_by"],
+        )
+        self.assertEqual(
+            "action-policy model boundary",
+            queued["openvla/openvla"]["triage"]["held_by"],
+        )
         self.assertFalse(
             [
                 item["repo"]
@@ -613,9 +621,14 @@ class DirectoryTests(unittest.TestCase):
             "moveit/moveit2",
             "NVIDIA-ISAAC-ROS/isaac_ros_common",
             "google-deepmind/open_x_embodiment",
+            "isaac-sim/IsaacLab",
+            "mani-skill/ManiSkill",
+            "ARISE-Initiative/robosuite",
         ):
             self.assertIn(repo, excluded, repo)
         self.assertNotIn("dora-rs/dora", queued)
+
+        self.assertIn("MIT", projects["lerobot"]["licenses"])
 
     def test_computer_research_terminal_and_media_agent_batch_has_explicit_boundaries(
         self,
