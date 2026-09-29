@@ -17,7 +17,7 @@ Measured on branch `claude/fast-filter-nav-redesign-2b3d06` at 3be698f6 on 2026-
 2. The collections are reachable without scrolling past a hero: the index is above the fold on the landing page, and the scope strip is pinned in results.
 3. An entry says what kind of records it holds (its emblem), how many its default view lists, and whether the reader has state in it.
 4. Robots, Papers, and any later collection is one registry entry.
-5. The three Phase 0 leftovers are closed: the phone header's height, the order of URL restore, and Back after closing a record.
+5. The three Phase 0 leftovers are closed: the phone header's height (closed by #367's compact sticky header), the order of URL restore, and Back after closing a record.
 
 ## Non-goals
 
@@ -48,7 +48,7 @@ The atlas map, its orbits, and the hero action button go. The map's legend went 
 |---|---|
 | `id` | `all`, `systems`, `models`, `inference`, `runtimes`, `packs`, `robots`, `labs`, `specifications` |
 | `name`, `short` | "Inference services" and "Services"; the strip uses `short` at phone widths only |
-| `kind` | `scope` (a Directory collection) or `view` (Models, Labs, Specifications open their sibling views, as ADR 008, ADR 013, and ADR 041 require) |
+| `kind` | `scope` (a Directory collection) or `view` (Models, Labs, Specifications open their sibling views, as ADR 008, ADR 013, and ADR 041 require) (superseded on 2026-09-28: #345 made Models, Labs, and Specifications Directory collections; every registry entry is a scope and its tile and strip entry open the collection) |
 | `emblem` | the id of the card badge whose emblem the entry shows: the family's own type badge for Memory, Agents, and Assistants; for a collection with several types, its first type badge in `CARD_BADGES` order (`memory-system` for Systems, `direct-model-api`, `desktop-runner`, `language-model`, `skills-bundle`, `ai-company`, `protocol`). All shows the type family's empty frame, which `familyEmblem("type")` already draws for the legend. Robots reuses nothing until its `form_factor` type badge exists, and shows its name without an emblem until then |
 | `count` | a function of the boot payloads returning what the default view lists, plus an optional split: Systems counts active systems, All counts everything it lists, Agent packs counts packs plus host-installed systems, Models returns `{ total, reviewed, imported }`, Labs and Specifications their record counts |
 | `categories` | a function returning the collection's largest categories with counts, each carrying the facet key and value that opens the scope narrowed to it: families for Systems, `type` values elsewhere, `form_factor` for Robots. At most four |
@@ -58,7 +58,7 @@ The atlas map, its orbits, and the hero action button go. The map's legend went 
 
 ### 3. Tiles
 
-A tile is a button (a link for a `view` entry) carrying, in order:
+A tile is a button (a link for a `view` entry (superseded on 2026-09-28: #345 made Models, Labs, and Specifications Directory collections; every registry entry is a scope and its tile and strip entry open the collection)) carrying, in order:
 
 1. The emblem and the name.
 2. The count. Models prints "428" with "304 reviewed · 124 imported" beside it; Agent packs prints "17" with "8 packs · 9 host-installed"; Systems prints "196" with "active"; All prints "725" with "A–Z, no scores".
@@ -78,7 +78,7 @@ Choosing a tile opens the results state, where the strip replaces the index. It 
 - **720 px and below:** every entry shows its emblem only, and the pressed entry's name and count read as a caption under the row. The other entries carry their name as a tooltip through the existing badge tooltip and as a visually hidden label. Nine emblem-only entries fit a 296 px frame (a 320 px phone) with at least 16 px measured to spare, the slack `docs/WEB.md` requires for CI's Linux Chromium. If a later collection breaks that, the strip wraps to a second row; it never scrolls sideways.
 - **Inside Systems:** a second row lists All families, Memory, Agents, and Assistants with their active counts, one pressed. The Systems entry itself clears the family, role, Finder roles, and comparison through `jumpToDirectoryFamily("")`, as Phase 0 fixed.
 - **State dots** as on tiles, on the entry's corner.
-- **Sticky rule:** at 720 px and below only the strip is sticky; the header scrolls away. That closes the Phase 0 leftover of a 185 px sticky phone header at 360 and 320 px, and `docs/WEB.md` step 23's "tools on the brand row" no longer claims to hold at phone widths. Above 720 px the header stays sticky and the strip sticks under it at the header's measured height.
+- **Sticky rule:** at 720 px and below only the strip is sticky; the header scrolls away. That closes the Phase 0 leftover of a 185 px sticky phone header at 360 and 320 px, and `docs/WEB.md` step 23's "tools on the brand row" no longer claims to hold at phone widths. Above 720 px the header stays sticky and the strip sticks under it at the header's measured height. *Superseded on 2026-09-29 by #367:* the header stays sticky at every width as one compact row (brand, primary navigation, theme control, GitHub link), and the strip sticks directly under it. The 185 px leftover closed through that compact header, not through a header that scrolls away.
 
 The Finder role chip and the result count stay in the result row under the strip, as today.
 
@@ -97,7 +97,7 @@ The front-door spec fixed these rules; Phase 2 makes them true.
 Phase 1 (ranked search, ADR 040) lands first, and `docs/WEB.md` records these by its last task. The front door and the strip must not undo them:
 
 - While a query is present the default sort is Best match, so `restoreFromURL` runs `syncMatchSort(scope)` after restoring a scope whose `sort` is undefined.
-- `activateView` moves focus to the new view's heading when the focused control sat inside the view being hidden; every view heading carries `tabindex="-1"`. Opening a `view` entry from a tile or the strip goes through `activateView`, so the rule holds.
+- `activateView` moves focus to the new view's heading when the focused control sat inside the view being hidden; every view heading carries `tabindex="-1"`. Opening a `view` entry from a tile or the strip goes through `activateView`, so the rule holds (superseded on 2026-09-28: #345 made Models, Labs, and Specifications Directory collections; every registry entry is a scope and its tile and strip entry open the collection).
 - The `<output class="search-count">` in every search field, the `.job-hint` container directly before each of the four Directory grids, and the `.empty-search` state stay beside their grids if the front door moves or re-parents them. The empty state's "Search all" button switches to All carrying the query, and lands on the results state, not the front door.
 - `SCOPE_RECORDS`, `clearScopeFacets`, and `state.exclusions` are state the registry reuses rather than duplicates.
 - The All panel's "Mixed discovery is alphabetical" intro is rewritten by Phase 1 and replaced by the front door's supporting sentence.
