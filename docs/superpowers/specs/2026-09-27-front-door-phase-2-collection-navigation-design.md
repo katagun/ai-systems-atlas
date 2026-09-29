@@ -17,7 +17,7 @@ Measured on branch `claude/fast-filter-nav-redesign-2b3d06` at 3be698f6 on 2026-
 2. The collections are reachable without scrolling past a hero: the index is above the fold on the landing page, and the scope strip is pinned in results.
 3. An entry says what kind of records it holds (its emblem), how many its default view lists, and whether the reader has state in it.
 4. Robots, Papers, and any later collection is one registry entry.
-5. The three Phase 0 leftovers are closed: the phone header's height, the order of URL restore, and Back after closing a record.
+5. The three Phase 0 leftovers are closed: the phone header's height (closed by #367's compact sticky header), the order of URL restore, and Back after closing a record.
 
 ## Non-goals
 
@@ -78,7 +78,7 @@ Choosing a tile opens the results state, where the strip replaces the index. It 
 - **720 px and below:** every entry shows its emblem only, and the pressed entry's name and count read as a caption under the row. The other entries carry their name as a tooltip through the existing badge tooltip and as a visually hidden label. Nine emblem-only entries fit a 296 px frame (a 320 px phone) with at least 16 px measured to spare, the slack `docs/WEB.md` requires for CI's Linux Chromium. If a later collection breaks that, the strip wraps to a second row; it never scrolls sideways.
 - **Inside Systems:** a second row lists All families, Memory, Agents, and Assistants with their active counts, one pressed. The Systems entry itself clears the family, role, Finder roles, and comparison through `jumpToDirectoryFamily("")`, as Phase 0 fixed.
 - **State dots** as on tiles, on the entry's corner.
-- **Sticky rule:** at 720 px and below only the strip is sticky; the header scrolls away. That closes the Phase 0 leftover of a 185 px sticky phone header at 360 and 320 px, and `docs/WEB.md` step 23's "tools on the brand row" no longer claims to hold at phone widths. Above 720 px the header stays sticky and the strip sticks under it at the header's measured height.
+- **Sticky rule:** at 720 px and below only the strip is sticky; the header scrolls away. That closes the Phase 0 leftover of a 185 px sticky phone header at 360 and 320 px, and `docs/WEB.md` step 23's "tools on the brand row" no longer claims to hold at phone widths. Above 720 px the header stays sticky and the strip sticks under it at the header's measured height. *Superseded on 2026-09-29 by #367:* the header stays sticky at every width as one compact row (brand, primary navigation, theme control, GitHub link), and the strip sticks directly under it. The 185 px leftover closed through that compact header, not through a header that scrolls away.
 
 The Finder role chip and the result count stay in the result row under the strip, as today.
 
