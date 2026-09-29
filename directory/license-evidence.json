@@ -3573,6 +3573,21 @@
           "verified_at": "2026-08-28"
         }
       ]
+    },
+    {
+      "project_id": "lerobot",
+      "repo": "huggingface/lerobot",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/huggingface/lerobot/blob/main/LICENSE",
+          "blob_sha": "93baf0c18936131979fdda6a38536cbcef0efccb",
+          "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/93baf0c18936131979fdda6a38536cbcef0efccb"
+        }
+      ]
     }
   ],
   "generated_at": "2026-09-28"

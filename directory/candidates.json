@@ -2034,54 +2034,6 @@
       ]
     },
     {
-      "repo": "huggingface/lerobot",
-      "name": "LeRobot",
-      "url": "https://github.com/huggingface/lerobot",
-      "description": "LeRobot provides models, datasets, and tools in PyTorch for end-to-end robot learning, aiming to make real-world robotics more accessible.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": "Apache-2.0",
-      "stars": 27219,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "triage": {
-        "verdict": "held",
-        "held_by": "robot software role decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Ships an installable PyPI package (pip install lerobot) with a documented training and control run path and a hardware-agnostic Robot interface. Its documented outcome is taking a trained policy's output and sending it straight to physical hardware: the README's own code example reads 'action = model.select_action(obs)' followed by 'robot.send_action(action)', across supported arms, humanoids, and other devices, including vision-language-action policies. No existing role names a framework whose distinguishing behavior is sending a model's output to a physical actuator rather than to a software tool, and the property is shown directly in the README's code example without reading the source tree.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/huggingface/lerobot/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "ba1a9487ce72d9018743997285a1ae29ba1f26c5656c2d97b038bc094b5ef9b2",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "50814df9295864e814a424c26461100f0fee631f",
-            "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/50814df9295864e814a424c26461100f0fee631f"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/huggingface/lerobot/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "0583375a0ec642ec79c447781f34322b0cfa66baff31258214d040f1f6d86d7c",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "a603343cdda0228e53d8d9cdeb355f342f1e8f2c",
-            "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/a603343cdda0228e53d8d9cdeb355f342f1e8f2c"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      },
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "IBM/AssetOpsBench",
       "name": "AssetOpsBench",
       "url": "https://github.com/IBM/AssetOpsBench",
