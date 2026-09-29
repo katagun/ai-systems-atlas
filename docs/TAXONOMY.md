@@ -23,6 +23,8 @@ General agent-architecture pattern content — harness shapes, failure taxonomie
 
 Autonomous scientific-discovery systems are not a further role either. They are classified by the operational outcome they own — sourced investigation is `research_agent` — while the discovery mechanism itself, writing and executing code against data or instruments, is carried by `agent_capabilities` and `execution_boundaries` like any other agent trait. See [ADR 023](adr/023-autonomous-science-systems-are-not-a-role.md).
 
+Robot software is not a further role either. A framework a developer builds a robot-controlling agent with is `agent_framework_sdk`, and a system carries `robot_control` in `agent_capabilities` when it meets that capability's definition; the outcome a robot role would have to name, completing physical tasks a person delegates, is written down with the conditions that reopen the question. See [ADR 045](adr/045-robot-software-classifies-by-the-outcome-it-owns.md).
+
 ## Family 1: memory systems
 
 Memory-system roles are human-first PKM, AI knowledge app / RAG brain, external agent-memory service, temporal context / graph engine, human–agent memory bridge, ambient capture, and retrieval infrastructure.
@@ -39,7 +41,7 @@ Agent projects also record:
 
 - interfaces: terminal, IDE, web app, API / SDK, or library;
 - execution boundaries: host, container, external sandbox, remote cloud, or application-defined;
-- capabilities: code and shell execution, browser control, research, multi-agent coordination, persistent state, MCP, and explicit workflows.
+- capabilities: code and shell execution, browser control, research, multi-agent coordination, persistent state, MCP, explicit workflows, and robot control. Robot control means the agent's model-driven decisions are sent to a physical robot's actuators through a robot interface the system documents for that purpose; a motion API, teach pendant, or waypoint script with nothing said about a model choosing the action is not robot control, and a run path that ends in a simulator is not either.
 
 The agent score measures task reliability, tool use, autonomy, human control, observability and recovery, data sovereignty, interoperability, and maturity.
 

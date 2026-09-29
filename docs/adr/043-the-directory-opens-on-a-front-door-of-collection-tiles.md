@@ -2,7 +2,7 @@
 
 **Status:** Accepted. Amends [ADR 013](013-distinct-collections-share-one-directory-surface.md) and [ADR 041](041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md).
 
-The role navigation and inline reference sheets added by [ADR 045](045-elements-adds-role-navigation-and-reference-sheets.md) precede the collection index. The collection tile and results-strip contracts below remain in force.
+The role navigation and inline reference sheets added by [ADR 046](046-elements-adds-role-navigation-and-reference-sheets.md) precede the collection index. The collection tile and results-strip contracts below remain in force.
 
 ## Context
 

@@ -354,6 +354,46 @@ class UpdateDirectoryTests(unittest.TestCase):
         )
         self.assertEqual("multi_agent_orchestrator", role)
 
+    def test_robot_software_reaches_the_candidate_queue_as_a_framework(self) -> None:
+        """ADR 045 routes robot software to agent_framework_sdk, so discovery must see it."""
+        cases = (
+            "Middleware for composing AI-based robotic applications as dataflow pipelines",
+            "A modular AI hardware-abstraction layer that lets LLM-driven agents control humanoid robots",
+            "Vision-language-action policies for real-world manipulation",
+            "Teleoperation and policy training for quadruped robots",
+        )
+        for description in cases:
+            with self.subTest(description=description):
+                role, confidence = update_directory.classify(description)
+                self.assertEqual("agent_framework_sdk", role)
+                self.assertGreaterEqual(confidence, 0.82)
+
+    def test_specific_agent_rungs_win_over_robotics_vocabulary(self) -> None:
+        """A browser agent that mentions DOM manipulation is still a browser agent."""
+        role, _confidence = update_directory.classify(
+            "A browser agent for DOM manipulation and form filling"
+        )
+        self.assertEqual("browser_computer_agent", role)
+        role, _confidence = update_directory.classify(
+            "An agent harness with sessions and tools for robotic process automation"
+        )
+        self.assertEqual("stateful_agent_runtime", role)
+
+    def test_ros_is_not_a_keyword_but_robot_wording_still_queues(self) -> None:
+        """The openpilot lesson: a topic match is not a model in the loop.
+
+        "ROS" itself is not a keyword, so a description that names ROS without
+        robot wording does not route. A ROS package that says "robot" does
+        route, and costs a provisional queue entry a reviewer dismisses.
+        """
+        role, confidence = update_directory.classify("ROS 2 client library for Rust")
+        self.assertTrue(role is None or confidence < 0.75, (role, confidence))
+        role, confidence = update_directory.classify(
+            "Unified Robot Description Format parser that ROS uses"
+        )
+        self.assertEqual("agent_framework_sdk", role)
+        self.assertGreaterEqual(confidence, 0.82)
+
     def test_agent_harness_does_not_need_memory_wording(self) -> None:
         role, confidence = update_directory.classify(
             "An agent harness with sessions, tools, plugins, and an interactive runtime"

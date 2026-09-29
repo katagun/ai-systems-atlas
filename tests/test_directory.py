@@ -132,6 +132,60 @@ class DirectoryTests(unittest.TestCase):
             "anthropic", {item["id"] for item in self.taxonomy["model_backends"]}
         )
 
+    def test_robot_control_is_a_capability_not_a_role_or_boundary(self) -> None:
+        """ADR 045: reaching a robot is a trait on agent_capabilities, nothing else."""
+        capabilities = {
+            item["id"]: item for item in self.taxonomy["agent_capabilities"]
+        }
+        self.assertIn("robot_control", capabilities)
+        self.assertEqual("Robot control", capabilities["robot_control"]["name"])
+        self.assertNotIn(
+            "robot_control", {item["id"] for item in self.taxonomy["primary_roles"]}
+        )
+        self.assertNotIn(
+            "robot_control",
+            {item["id"] for item in self.taxonomy["execution_boundaries"]},
+        )
+        self.assertNotIn(
+            "perception", {item["id"] for item in self.taxonomy["agent_capabilities"]}
+        )
+        self.assertNotIn(
+            "physical_actuator",
+            {item["id"] for item in self.taxonomy["execution_boundaries"]},
+        )
+
+    def test_validator_accepts_robot_control_and_rejects_unknown_capabilities(
+        self,
+    ) -> None:
+        from scripts.validate_directory import validate_projects, validate_taxonomy
+
+        tax = validate_taxonomy(self.taxonomy, [])
+        framework = next(
+            project
+            for project in self.document["projects"]
+            if project["id"] == "langgraph"
+        )
+        carrying = json.loads(json.dumps(framework))
+        carrying["agent_capabilities"] = ["robot_control"]
+        unknown = json.loads(json.dumps(framework))
+        unknown["agent_capabilities"] = ["actuation"]
+
+        errors: list[str] = []
+        validate_projects(
+            {"generated_at": self.document["generated_at"], "projects": [carrying]},
+            tax,
+            errors,
+        )
+        self.assertEqual([], [e for e in errors if "agent_capabilities" in e], errors)
+
+        errors = []
+        validate_projects(
+            {"generated_at": self.document["generated_at"], "projects": [unknown]},
+            tax,
+            errors,
+        )
+        self.assertTrue(any("agent_capabilities" in e for e in errors), errors)
+
     def test_assistant_family_has_distinct_roles_and_score_profile(self) -> None:
         families = {item["id"] for item in self.taxonomy["system_families"]}
         roles = {item["id"]: item["family"] for item in self.taxonomy["primary_roles"]}
