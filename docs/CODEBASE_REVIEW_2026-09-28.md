@@ -10,7 +10,7 @@ The problems recorded here are not sloppiness. They are the specific debt that a
 
 Of the findings below, CR-09 through CR-13 are confirmed live defects: a violated provenance invariant, a schema document naming fields that do not exist, a coverage snapshot wrong by eleven records, unescaped interpolations, and a declared Python floor that was broken rather than untested. CR-14 through CR-17 close the data-integrity and duplication gaps. CR-18 onward are structural and remain open.
 
-CR-09 through CR-14 and CR-16 and CR-17 were fixed on 2026-09-28 and each fix carries a test that fails if the defect returns. CR-15 is partly resolved: both `--check` merge gates now have negative tests, while the JavaScript coverage floor and the CI job split remain open and are tracked under "Engineering debt" in `BACKLOG.md`.
+CR-09 through CR-14 and CR-16 and CR-17 were fixed on 2026-09-28 and each fix carries a test that fails if the defect returns. CR-18 is partly resolved in the same pass: the five Finder tables and the three ranking helpers moved to `web/app-core.js` behind the file's existing `labelOf` injection seam, and `tests/test_web.js` now covers them, including a table-driven pass over every profile, priority, and real record. CR-15 is partly resolved: both `--check` merge gates now have negative tests, while the JavaScript coverage floor and the CI job split remain open and are tracked under "Engineering debt" in `BACKLOG.md`.
 
 | ID | Severity | Status | Finding |
 |---|---|---|---|
@@ -23,7 +23,7 @@ CR-09 through CR-14 and CR-16 and CR-17 were fixed on 2026-09-28 and each fix ca
 | CR-15 | Medium | Partly resolved | Both `--check` merge gates are untested, and the highest-risk write paths have no coverage |
 | CR-16 | Medium | Resolved | `PUBLISHED_DATA` and the collection table are duplicated across five modules with no equality test |
 | CR-17 | Medium | Resolved | Candidate identity is derived five ways, and two incompatible derivations can insert one candidate twice |
-| CR-18 | Medium | Open | `web/app.js` is 3,694 lines with no unit-test coverage and 247 module-level declarations |
+| CR-18 | Medium | Partly resolved | The Finder's ranking and vocabulary are now pure and unit-tested; the rest of `web/app.js` is still untested and declares 262 module-level bindings |
 | CR-19 | Medium | Open | `scripts/validate_directory.py` is 4,272 lines behind a complexity ratchet that can never be lowered |
 | CR-20 | Low | Open | Fourteen hand-written card templates, three copies of one table, and eleven edit sites per new collection |
 | CR-21 | Low | Open | No search input is debounced, and sibling views repaint on every index arrival |
@@ -222,7 +222,11 @@ The docstring at `scripts/build_candidate_evidence.py:63` states that the queue 
 
 `web/app-core.js` is not purely logic: `emblemSVG` at line 1386 returns an SVG string, and `badgeLettering` at line 961 returns markup. That is the same seam-drawing error as CR-12, in the opposite direction, and it is worth correcting while the file is open.
 
-**Fix.** Move the pure helpers and the Finder constants into `web/app-core.js`, where a `require`-based harness and 96 tested exports already exist, and update `docs/WEB.md:148`. Add a completeness test asserting that every `FINDER_GOALS` entry's `roles`, `serviceTypes`, and `runtimeTypes` name real taxonomy values — a data-shaped assertion that e2e cannot make.
+**Fix, as applied.** `FINDER_DIRECTIONS`, `FINDER_GOALS`, `FINDER_PRIORITIES`, `FINDER_DIRECTION_NAMES`, `FINDER_DETAIL_KINDS`, `priorityBoost`, `scoreDimension`, `datasetAttribute`, and `recommendationReasons` moved to `web/app-core.js`, which now exports 114 names and is exercised by 173 unit tests. `recommendationReasons` reached taxonomy through `taxonomyName` and `roleName`, which read `state.taxonomy`; rather than import app state into the core file, it takes the resolver as a third argument, following the `searchFields(kind, record, { labelOf })` convention already in that file. `web/app.js` dropped from 3,878 to 3,694 lines.
+
+Two things the finding predicted did not hold. Three of the six listed candidates — `syncMatchSort`, `readScopeControls`, and `emptyStateMarkup` — are not pure: they read the DOM and module state, so moving them would have deepened the coupling rather than removing it, and they stay in `app.js` for the e2e suite. And `FINDER_DETAIL_KINDS` values are detail-directory stems (`inference`, `runtime`), not collection ids, so the completeness assertion checks `web/app/detail/<kind>` exists.
+
+On the merged commit `app-core.js` is 99.61% line, 91.62% branch, and 99.49% function, with 173 unit tests. Line coverage is marginally below the 99.81% this file sat at before, and branch coverage below 92.71%, because the rebase brought in concurrent work on `app-core.js` (#375, #377) that added its own uncovered branches alongside the moved dispatch tables. The moved code is covered by a table-driven pass over every profile, priority, and real record; the shortfall is in that concurrent work, not here. The remaining open task is the 240-odd DOM and state declarations in `app.js`, and separating their decisions from their effects where a decision is worth testing on its own.
 
 ### CR-19 — `validate_directory.py` is a 4,272-line module behind a ratchet that cannot be lowered
 

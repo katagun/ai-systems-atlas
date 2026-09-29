@@ -1,6 +1,6 @@
 # Web application
 
-The `web/` directory is a dependency-free static application. `app-core.js` contains pure filtering and sorting behavior; `app.js` owns browser state and rendering.
+The `web/` directory is a dependency-free static application. `app-core.js` contains pure filtering, sorting, and ranking behavior plus the data tables they read; `app.js` owns browser state, the DOM, and rendering. The seam is injection, not a shared global: a helper that needs a taxonomy name or a stored value takes it as an argument (`searchFields(kind, record, { labelOf })`, `recommendationReasons(project, priority, labelOf)`), so the unit suite in `tests/test_web.js` can `require` the file and call it directly. Anything that reads `document`, `localStorage`, or `history` stays in `app.js` and is covered by the e2e suite instead. Markup-returning helpers are the known exception to the seam, because a string is not logic; `emblemSVG` and `badgeLettering` build SVG and badge text respectively.
 
 ## Visual language
 
@@ -163,7 +163,7 @@ The system payload includes only an `active_review_dates` summary (first, last, 
 | Change | Primary location |
 |---|---|
 | filters and sorting | `web/app-core.js` |
-| finder questions and ranking | `web/app.js` finder constants and functions |
+| finder questions and ranking | `web/app-core.js` `FINDER_DIRECTIONS`, `FINDER_GOALS`, `FINDER_PRIORITIES`, `FINDER_DIRECTION_NAMES`, `FINDER_DETAIL_KINDS`, `priorityBoost`, `recommendationReasons`, and `scoreDimension`; `web/app.js` finder rendering, changed together |
 | collection filter facets and search fields | `web/app-core.js` collection view descriptors |
 | rendering and detail dialog | `web/app.js` |
 | lab join rules | `scripts/lab_relations.py` and `web/app-core.js` `labRelations`, changed together |
