@@ -13,6 +13,7 @@
       architecture: "",
       deployment: "",
       agentInterface: "",
+      capability: "",
       sourceModel: "",
       license: "",
       status: "active",
@@ -132,6 +133,7 @@
       (!filters.architecture || project.architectures.includes(filters.architecture)) &&
       (!filters.deployment || project.deployment.includes(filters.deployment)) &&
       (!filters.agentInterface || (project.agent_interfaces || []).includes(filters.agentInterface)) &&
+      (!filters.capability || (project.agent_capabilities || []).includes(filters.capability)) &&
       (!filters.sourceModel || project.source_model === filters.sourceModel) &&
       (!filters.license || project.licenses.includes(filters.license)) &&
       (!filters.status || project.status === filters.status) &&
@@ -830,7 +832,7 @@
   // is Best match (scopeURLParams).
   const SCOPE_URL_PARAMS = {
     all: { q: "" },
-    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name" },
+    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name" },
     inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", sort: "score" },
     runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", sort: "score" },
     packs: { q: "", type: "", host: "", install: "", license: "" },

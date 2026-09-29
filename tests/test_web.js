@@ -3,15 +3,15 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
   { name: "Bridge", primary_role: "memory_bridge", system_family: "memory_system", agent_relation: "external_memory", architectures: ["plain_files"], deployment: ["local_cli"], agent_interfaces: ["library"], source_model: "open_source", licenses: ["MIT"], status: "active", local_first: true, stars: 10, score: { overall: 8 } },
   { name: "Service", primary_role: "agent_memory_service", system_family: "memory_system", agent_relation: "external_memory", architectures: ["vector_index"], deployment: ["library", "managed_cloud", "self_hosted"], agent_interfaces: ["api_sdk", "library"], source_model: "mixed_open_source", licenses: ["Apache-2.0", "CC-BY-4.0"], status: "active", local_first: false, stars: null, score: { overall: 7 } },
-  { name: "Agent", primary_role: "coding_agent", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["git_versioned"], deployment: ["local_cli", "self_hosted"], agent_interfaces: ["terminal", "ide"], source_model: "open_core", licenses: ["MIT", "LicenseRef-Commercial"], status: "active", local_first: true, stars: 20, score: { overall: 10 } },
-  { name: "Work Agent", primary_role: "general_work_agent", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["undisclosed_managed"], deployment: ["managed_cloud"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: false, stars: null, score: { overall: 8.2 } },
-  { name: "SDK", primary_role: "agent_framework_sdk", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["event_log"], deployment: ["library", "self_hosted"], agent_interfaces: ["library", "api_sdk"], source_model: "mixed_source", licenses: ["MIT", "LicenseRef-Proprietary"], status: "active", local_first: false, stars: 15, score: { overall: 8.5 } },
+  { name: "Agent", primary_role: "coding_agent", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["git_versioned"], deployment: ["local_cli", "self_hosted"], agent_interfaces: ["terminal", "ide"], agent_capabilities: ["code_editing", "shell_execution"], source_model: "open_core", licenses: ["MIT", "LicenseRef-Commercial"], status: "active", local_first: true, stars: 20, score: { overall: 10 } },
+  { name: "Work Agent", primary_role: "general_work_agent", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["undisclosed_managed"], deployment: ["managed_cloud"], agent_interfaces: ["web_app"], agent_capabilities: ["browser_control", "research"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: false, stars: null, score: { overall: 8.2 } },
+  { name: "SDK", primary_role: "agent_framework_sdk", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["event_log"], deployment: ["library", "self_hosted"], agent_interfaces: ["library", "api_sdk"], agent_capabilities: ["workflows", "robot_control"], source_model: "mixed_source", licenses: ["MIT", "LicenseRef-Proprietary"], status: "active", local_first: false, stars: 15, score: { overall: 8.5 } },
   { name: "GBrain", primary_role: "agent_memory_service", system_family: "memory_system", agent_relation: "external_memory", architectures: ["git_versioned"], deployment: ["local_cli", "self_hosted"], agent_interfaces: ["terminal"], source_model: "open_source", licenses: ["MIT"], status: "active", local_first: true, stars: 24, score: { overall: 8.7 } },
   { name: "GStack", primary_role: "coding_agent_workflow", system_family: "agent_system", agent_relation: "coding_workflow", architectures: ["git_versioned"], deployment: ["local_cli"], agent_interfaces: ["terminal"], source_model: "mixed_open_source", licenses: ["MIT", "OFL-1.1"], status: "active", local_first: true, stars: 25, score: { overall: 8.6 } },
   { name: "Assistant", primary_role: "general_ai_assistant", system_family: "assistant_system", agent_relation: "agent_enabled_ui", architectures: ["hybrid"], deployment: ["desktop", "managed_cloud", "mobile"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: false, stars: null, score: { overall: 8.8 } },
@@ -131,6 +131,7 @@ test("directory defaults expose every active family without a hidden role constr
     architecture: "",
     deployment: "",
     agentInterface: "",
+    capability: "",
     sourceModel: "",
     license: "",
     status: "active",
@@ -632,6 +633,52 @@ test("the interface filter combines with role rather than replacing it", () => {
   });
 
   assert.deepEqual(results.map(project => project.name), ["SDK"]);
+});
+
+test("capability filtering reaches the agents that carry a capability", () => {
+  const browsers = filterAndSortProjects(projects, { capability: "browser_control", status: "active", sort: "name" });
+  const robots = filterAndSortProjects(projects, { capability: "robot_control", status: "active", sort: "name" });
+
+  assert.deepEqual(browsers.map(project => project.name), ["Work Agent"]);
+  assert.deepEqual(robots.map(project => project.name), ["SDK"]);
+});
+
+test("the capability filter defaults to unset and skips records with no capabilities", () => {
+  assert.equal(directoryDefaults().capability, "");
+  assert.equal(matchesProject(projects[0], { capability: "" }), true);
+  assert.equal(matchesProject(projects[0], { capability: "browser_control" }), false);
+});
+
+test("the capability filter combines with role rather than replacing it", () => {
+  const results = filterAndSortProjects(projects, {
+    role: "agent_framework_sdk",
+    capability: "robot_control",
+    status: "active",
+    sort: "name",
+  });
+  assert.deepEqual(results.map(project => project.name), ["SDK"]);
+  const none = filterAndSortProjects(projects, {
+    role: "coding_agent",
+    capability: "robot_control",
+    status: "active",
+    sort: "name",
+  });
+  assert.deepEqual(none, []);
+});
+
+test("the systems scope writes the capability to the URL", () => {
+  assert.equal(SCOPE_URL_PARAMS.systems.capability, "");
+  const written = scopeURLParams("systems", { capability: "robot_control", status: "active", sort: "name" });
+  assert.deepEqual(written, [["capability", "robot_control"]]);
+  const restored = readScopeURLParams("systems", new URLSearchParams(written), {
+    capability: new Set(["", "robot_control"]),
+  });
+  assert.equal(restored.values.capability, "robot_control");
+});
+
+test("robot control has no card badge (ADR 045)", () => {
+  const tests = Object.values(CARD_BADGES).map(badge => JSON.stringify(badge.test || {}));
+  assert.ok(tests.every(test => !test.includes("robot_control")), "a badge tests robot_control");
 });
 
 test("monogram glyphs use the first alphanumeric character uppercased", () => {

@@ -287,6 +287,22 @@ def classify(text: str) -> tuple[str | None, float]:
         term in lowered for term in ("stateful agent", "agent runtime", "agent harness")
     ):
         return "stateful_agent_runtime", max(relevance, 0.83)
+    if any(
+        term in lowered
+        for term in (
+            "robot",
+            "humanoid",
+            "quadruped",
+            "manipulation",
+            "teleoperation",
+            "vision-language-action",
+            "actuator",
+        )
+    ):
+        # ADR 045: robot software takes an existing role; the physical
+        # boundary is a trait. "ROS" is not a keyword; a ROS package that says
+        # "robot" still queues, and a reviewer dismisses it (spec §6).
+        return "agent_framework_sdk", max(relevance, 0.82)
     if "agent framework" in lowered or "agent sdk" in lowered:
         return "agent_framework_sdk", max(relevance, 0.8)
     if "temporal" in lowered and "graph" in lowered:

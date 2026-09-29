@@ -566,6 +566,24 @@ test("the interface filter separates canvas builders from code libraries", async
   await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters · 1 active");
 });
 
+test("the capability filter reaches the agents that carry a capability", async ({ page }) => {
+  await page.goto("/?collection=systems");
+
+  const names = page.locator("#project-grid .project-card h2");
+  await page.locator(".advanced-filter-shell summary").click();
+  await page.locator("#capability-filter").selectOption("browser_control");
+
+  await expect(names.filter({ hasText: /^Browser Use$/ })).toHaveCount(1);
+  await expect(names.filter({ hasText: /^Aider$/ })).toHaveCount(0);
+  await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters · 1 active");
+  await expect(page).toHaveURL(/capability=browser_control/);
+
+  await page.reload();
+  await expect(page.locator("#capability-filter")).toHaveValue("browser_control");
+  await expect(names.filter({ hasText: /^Browser Use$/ })).toHaveCount(1);
+  await expect(names.filter({ hasText: /^Aider$/ })).toHaveCount(0);
+});
+
 test("directory cards carry product marks with monogram fallbacks", async ({ page }) => {
   await page.goto("/");
 
