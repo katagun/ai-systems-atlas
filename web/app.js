@@ -172,6 +172,7 @@ const roleName = id => taxonomyName("primary_roles", id);
 const relationName = id => taxonomyName("agent_relations", id);
 const architectureName = id => taxonomyName("architectures", id);
 const sourceModelName = id => taxonomyName("source_models", id);
+const modelLicenseName = id => state.taxonomy.source_models.find(item => item.id === id)?.model_name || id;
 const licenseName = id => taxonomyName("licenses", id);
 const scoreProfileName = id => taxonomyName("score_profiles", id);
 const traitNames = (group, values = []) => values.map(id => taxonomyName(group, id)).join(" · ");
@@ -608,7 +609,7 @@ function populateCollectionFilters() {
       const published = new Set(records.flatMap(values));
       state.taxonomy[group]
         .filter(item => published.has(item.id))
-        .forEach(item => $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
+        .forEach(item => $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(selector === "#model-source-filter" ? item.model_name : item.name)}</option>`));
     }
     if (!collection.licenseFilter) continue;
     const licenses = new Set(records.flatMap(item => item.licenses || []));
@@ -1116,7 +1117,7 @@ function modelModalityRoute(model) {
 // controls and take no tab stop.
 function badgeRow(badges) {
   if (!badges.length) return "";
-  return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
+  return `<div class="badge-group"><ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul><details class="badge-help"><summary>Badge meanings</summary><dl>${badges.map(badge => `<dt>${escapeHTML(badge.name)}</dt><dd>${escapeHTML(badge.definition)}</dd>`).join("")}</dl></details></div>`;
 }
 
 // The one control that opens a card's record. Its hidden text names the
@@ -1141,6 +1142,8 @@ const systemStatus = project => project.status === "active" ? "" : `<b class="ar
 // A footer reads its facts in order, a dot between each, skipping any absent.
 const footerFacts = (...facts) => facts.filter(Boolean).join(" · ");
 
+const evidenceReviewLabel = record => record.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : "";
+
 // One tooltip serves every emblem. It is pointer-only help: screen readers
 // already get the same words from each badge's hidden text, so the tooltip is
 // aria-hidden and emblems stay out of the tab order.
@@ -1154,6 +1157,7 @@ function initBadgeTooltip() {
   const hide = () => { tooltip.hidden = true; anchor = null; };
   hideDetachedBadgeTooltip = () => { if (anchor && !anchor.isConnected) hide(); };
   const show = badge => {
+    if (anchor === badge) return;
     anchor = badge;
     tooltip.dataset.family = badge.dataset.family;
     tooltip.querySelector(".badge-tooltip-family").textContent = AppCore.BADGE_FAMILIES[badge.dataset.family]?.name || "";
@@ -1173,6 +1177,15 @@ function initBadgeTooltip() {
   // hover lift slides its emblems under a resting pointer, and a repaint or a
   // clamped scroll does the same. Each hands an emblem a pointerover at the
   // same spot, which must not bring back what the reader dismissed.
+  const inHoverRegion = event => {
+    if (!anchor) return false;
+    const a = anchor.getBoundingClientRect();
+    const b = tooltip.getBoundingClientRect();
+    const inside = box => event.clientX >= box.left && event.clientX <= box.right && event.clientY >= box.top && event.clientY <= box.bottom;
+    // The narrow bridge joins the trigger to the nearest edge of the tooltip.
+    const bridge = { left: Math.min(a.left, b.left), right: Math.max(a.right, Math.min(b.right, a.right)), top: Math.min(a.bottom, b.bottom), bottom: Math.max(a.top, b.top) };
+    return inside(a) || inside(b) || inside(bridge);
+  };
   let pointer = null;
   let dismissedAt = null;
   const movedFrom = (spot, event) => Math.abs(event.clientX - spot.x) > 1 || Math.abs(event.clientY - spot.y) > 1;
@@ -1180,6 +1193,7 @@ function initBadgeTooltip() {
     if (event.pointerType === "touch") return;
     if (dismissedAt && movedFrom(dismissedAt, event)) dismissedAt = null;
     pointer = { x: event.clientX, y: event.clientY };
+    if (anchor && !inHoverRegion(event)) hide();
   }, { passive: true });
   document.addEventListener("pointerover", event => {
     if (event.pointerType === "touch") return;
@@ -1188,10 +1202,11 @@ function initBadgeTooltip() {
     pointer = { x: event.clientX, y: event.clientY };
     const badge = event.target.closest?.(".card-badge");
     if (badge) show(badge);
-    else if (anchor) hide();
+    else if (anchor && !inHoverRegion(event)) hide();
   });
   document.addEventListener("click", event => {
     dismissedAt = null;
+    if (tooltip.contains(event.target)) return;
     const badge = event.target.closest?.(".card-badge");
     if (badge && badge !== anchor) show(badge);
     else hide();
@@ -1330,6 +1345,7 @@ function robotCard(robot, { mixed = false } = {}) {
     <div class="card-top"><div class="card-identity">${cardMark(robot)}<div><p class="family-label">${mixed ? "Robot · " : ""}${escapeHTML(formLabel)}</p><h2>${escapeHTML(robot.name)}</h2><div class="repo">${escapeHTML(robot.manufacturer)}</div></div></div></div>
     <span class="role-badge">${escapeHTML(taxonomyName("robot_availability", robot.availability))}</span>
     <p>${escapeHTML(robot.description)}</p>
+    ${badgeRow(AppCore.cardBadges("robot", robot))}
     <div class="card-footer"><span>${robot.status === "active" ? "Unscored" : escapeHTML(label(robot.status))}</span>${detailsButton("data-robot", robot.id, robot.name)}</div>
   </article>`;
 }
@@ -1366,7 +1382,7 @@ function mixedSystemCard(record) {
   return `<article class="project-card mixed-directory-card ${escapeHTML(record.system_family)}">
       <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div></div>
       <span class="role-badge">${escapeHTML(roleName(record.primary_role))}</span>
-      <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+      <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${evidenceReviewLabel(record)}</div>
       <p>${escapeHTML(record.description)}</p>
       ${badgeRow(AppCore.cardBadges("system", record))}
       <div class="card-footer"><span>${footerFacts(starCount(record), systemStatus(record))}</span>${detailsButton("data-project", record.id, record.name)}</div>
@@ -1397,7 +1413,7 @@ function renderAllDirectoryEntries() {
       if (!isReviewedModel(record)) return importedModelCard(record, { mixed: true });
       return `<article class="project-card model-card mixed-directory-card">
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Model release · ${escapeHTML(taxonomyName("model_types", record.model_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.developer)}</div></div></div></div>
-        <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+        <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(record.description)}</p>
         ${modelSourceMeta(record)}
         ${badgeRow(AppCore.cardBadges("model", record))}
@@ -1500,7 +1516,7 @@ const COLLECTIONS = {
     return `<article class="project-card ${escapeHTML(project.system_family)}">
       <div class="card-top"><div class="card-identity">${cardMark(project)}<div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(projectLocation(project))}</div></div></div>${score}</div>
       <span class="role-badge">${escapeHTML(roleName(project.primary_role))}</span>
-      <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${project.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : ""}</div>
+      <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${evidenceReviewLabel(project)}</div>
       <p>${escapeHTML(project.description)}</p>
       ${badgeRow(AppCore.cardBadges("system", project))}
       <div class="card-footer"><span>${footerFacts(githubSignal, systemStatus(project))}</span><div class="card-actions">${family ? `<button class="compare-toggle" data-compare-kind="system" data-compare-id="${escapeHTML(project.id)}" aria-label="Add ${escapeHTML(project.name)} to comparison" aria-pressed="false">Compare</button>` : ""}${detailsButton("data-project", project.id, project.name)}</div></div>
@@ -1655,7 +1671,7 @@ const COLLECTIONS = {
       if (!isReviewedModel(model)) return importedModelCard(model);
       return `<article class="project-card model-card">
         <div class="card-top"><div class="card-identity">${cardMark(model)}<div><p class="family-label">${escapeHTML(taxonomyName("model_types", model.model_type))}</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(model.developer)}</div></div></div><div class="score-ring" aria-label="Model-access score ${escapeHTML(model.score.overall)} out of 10">${escapeHTML(model.score.overall)}</div></div>
-        <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+        <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
         ${modelSourceMeta(model)}
         ${badgeRow(AppCore.cardBadges("model", model))}
@@ -1848,7 +1864,7 @@ function modelAccessCell(mode, row) {
 }
 
 function renderModelAccess() {
-  const summary = AppCore.modelAccessSummary(state.models, state.taxonomy.source_models, state.taxonomy.model_distribution_modes);
+  const summary = AppCore.modelAccessSummary(state.models, AppCore.modelLicenseCategories(state.taxonomy.source_models), state.taxonomy.model_distribution_modes);
   const date = state.modelsVerifiedAt ? ` · Catalog review date ${state.modelsVerifiedAt}` : "";
   $("#explore-data-note").textContent = `${summary.total} reviewed releases · ${summary.excluded} imported records excluded${date}`;
   if (!summary.total) {
@@ -1869,7 +1885,7 @@ function renderModelAccess() {
       <div class="access-scale" aria-hidden="true"><span>0%</span><span>100% of reviewed releases</span></div>
     </section>
     <section class="access-matrix-section" aria-labelledby="access-matrix-title">
-      <div class="explore-section-heading"><h2 id="access-matrix-title">Access meets licensing</h2><p>Downloadable weights do not imply an open-source license. Select a count to inspect the matching releases and their terms.</p></div>
+      <div class="explore-section-heading"><h2 id="access-matrix-title">Access meets licensing</h2><p>Artifact licensing does not assess training code or training data openness. Downloadable weights alone do not establish open-source AI. Select a count to inspect the matching releases and their terms.</p></div>
       <table class="access-matrix">
         <caption>Reviewed releases by license classification and access route. Percentages are of each row; routes overlap.</caption>
         <thead><tr><th scope="col">License classification</th>${summary.modes.map(mode => `<th scope="col">${escapeHTML(mode.name)}</th>`).join("")}</tr></thead>
@@ -2271,7 +2287,7 @@ function renderFinderResults() {
   const identityRow = record => {
     if (isInference) return `<span class="source-badge">${escapeHTML(record.operator)}</span><span class="license-badge">${escapeHTML(record.terms.label)}</span>`;
     const badge = isRuntime ? record.maintainer : sourceModelName(record.source_model);
-    return `<span class="source-badge">${escapeHTML(badge)}</span>${record.licenses.map(license => `<span class="license-badge" title="${escapeHTML(licenseName(license))}">${escapeHTML(license)}</span>`).join("")}`;
+    return `<span class="source-badge">${escapeHTML(badge)}</span>${record.licenses.map(license => `<span class="license-badge" title="${escapeHTML(licenseName(license))}">${escapeHTML(license)}</span>`).join("")}${isRuntime ? "" : evidenceReviewLabel(record)}`;
   };
   const detailAttribute = isInference ? "data-finder-inference" : isRuntime ? "data-finder-runtime" : "data-finder-project";
   const profileLabel = isInference ? "inference-service" : isRuntime ? "local-runtime" : "";
@@ -2377,7 +2393,9 @@ function renderTaxonomy() {
   ]);
   const groups = [
     ["System families", state.taxonomy.system_families], ...roleGroups,
+    ["Collection symbols", AppCore.COLLECTIONS.map(entry => ({ name: entry.name, definition: entry.meaning, emblem: AppCore.collectionEmblem(entry), family: "type" })), { lede: "Navigation symbols identify collections. Card badges describe individual records; shared artwork does not imply the same record type." }],
     ...badgeGroups,
+    ["Model artifact licensing", AppCore.modelLicenseCategories(state.taxonomy.source_models), { lede: "These labels describe reviewed release artifacts and mandatory terms, not training code or training data openness. Downloadable weights are a separate access fact. Imported records have reported licenses only." }],
     ["AI relationship", state.taxonomy.agent_relations], ["Architecture", state.taxonomy.architectures],
     ["Retrieval modes", state.taxonomy.retrieval_modes], ["Capture modes", state.taxonomy.capture_modes],
     ["Memory lifecycle", state.taxonomy.memory_lifecycle], ["Agent interfaces", state.taxonomy.agent_interfaces],
@@ -2772,7 +2790,7 @@ function modelDialogMarkup(model) {
       <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.output))}</p></section>
       <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("")}<p class="unscored-note">${escapeHTML(attribution.capabilityNote)}</p></section>
       <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>${escapeHTML(openWeightsLabel)}:</strong> ${escapeHTML(reportedCapability(metadata.reported_open_weights))}</p><p><strong>${escapeHTML(licenseLabel)}:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
-      <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(model.source_model))}</p><p>${detailText(model.license_note)}</p>${(model.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Artifact licensing:</strong> ${escapeHTML(modelLicenseName(model.source_model))}</p><p>These labels describe the reviewed release artifacts and mandatory terms; they do not assess training code or training data openness.</p><p>${detailText(model.license_note)}</p>${(model.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>${escapeHTML(attribution.linksHeading)}</h3>${modelSourceLinks(metadata, attribution.noLinksText)}</section>
       <section class="detail-block"><h3>Strengths</h3>${detailList(model.strengths)}</section>
       <section class="detail-block"><h3>Tradeoffs</h3>${detailList(model.tradeoffs)}</section>
@@ -3259,7 +3277,7 @@ function openComparison() {
   } else if (state.comparison.kind === "model") {
     profile = state.taxonomy.model_score_profile;
     eyebrow = profile.name;
-    note = "This comparison covers model access, distribution, and deployability. It excludes output quality, benchmarks, parameter count, current price, latency, and throughput.";
+    note = "This comparison covers model access, distribution, and deployability. Artifact licensing does not assess training code or training data openness. It excludes output quality, benchmarks, parameter count, current price, latency, and throughput.";
     rows = [
       ["Developer", records.map(item => item.developer)],
       ["Model type", records.map(item => taxonomyName("model_types", item.model_type))],
@@ -3278,7 +3296,7 @@ function openComparison() {
         if (!limits) return null;
         return limits.context == null ? "Not reported" : Intl.NumberFormat("en").format(limits.context);
       })],
-      ["Source model", records.map(item => sourceModelName(item.source_model))],
+      ["Artifact licensing", records.map(item => modelLicenseName(item.source_model))],
       ["Licenses", records.map(item => item.licenses.map(value => `${value} — ${licenseName(value)}`).join(" · "))],
       ["Strengths", records.map(item => listCell(item.strengths))],
       ["Tradeoffs", records.map(item => listCell(item.tradeoffs))],
