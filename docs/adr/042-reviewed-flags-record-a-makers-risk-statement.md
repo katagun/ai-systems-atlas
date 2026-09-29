@@ -1,4 +1,4 @@
-# ADR 039: Reviewed flags record a maker's own risk statement
+# ADR 042: Reviewed flags record a maker's own risk statement
 
 - Status: Proposed
 - Date: 2026-09-24

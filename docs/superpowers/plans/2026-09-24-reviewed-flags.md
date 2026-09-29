@@ -8,7 +8,7 @@
 
 **Tech Stack:** Python 3.11 (`uv`, `unittest`), dependency-free browser JavaScript (`node --test`), Playwright, static JSON under `directory/` and `web/`.
 
-**Spec:** `docs/adr/039-reviewed-flags-record-a-makers-risk-statement.md` (owner-approved; every decision in it is binding).
+**Spec:** `docs/adr/042-reviewed-flags-record-a-makers-risk-statement.md` (owner-approved; every decision in it is binding).
 
 **Base:** Written against `origin/main` at `ac74c8f` (which includes #286 card emblems and #289 GitHub stars on card footers) **plus** the model-distribution-badges PR (branch `claude/model-distribution-badges`), which adds `CARD_BADGE_SETS.model`, `cardBadgeSetKey`'s reviewed-model gate, the `badgeLegend("models")` branch, the Models legend in `syncBadgeLegend`, and `badgeRow(AtlasCore.cardBadges("model", …))` on both reviewed-model card renderers. That PR merges before this plan executes. Before Task 1, confirm it is on `main`: `grep -n 'model: \["downloadable-weights"' web/app-core.js` must print one line. If it does not, stop and wait for it.
 
@@ -21,7 +21,7 @@
 - `pre-commit run --all-files` is the gate. It takes minutes, and commits run it too; never use `--no-verify`. Give every `git commit` a timeout of at least 15 minutes and confirm with `git log -1` that it landed; a formatter hook can abort the first attempt, in which case re-add and commit again.
 - Commit trailer: `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
 - Never solve a Playwright click interception with `pointer-events: none`.
-- User-facing copy is plain language. No card, tooltip, dialog, share page, legend, or Taxonomy string uses "high risk", "dangerous", or any other Atlas word for a statement's result; the Atlas only quotes and classifies in the developer's own terms (ADR 039).
+- User-facing copy is plain language. No card, tooltip, dialog, share page, legend, or Taxonomy string uses "high risk", "dangerous", or any other Atlas word for a statement's result; the Atlas only quotes and classifies in the developer's own terms (ADR 042).
 - No real record in `directory/` gains a `flags` field in this plan. The backfill is a separate change.
 - Python tests run with `uv run python -m unittest <module>.<Class>.<test> -v`; the JS logic suite with `/usr/local/bin/node --test tests/test_web.js`.
 - Complexity ratchets: ruff C901 max 50 (Python) and eslint `complexity` max 40 (JS). New logic goes in small helper functions, never inline in `check_targets` or `validate_models`.
@@ -40,7 +40,7 @@
 | `web/app.js` | flag emblem in badge rows, dialog section, Taxonomy groups |
 | `web/styles.css` | `[data-family="flags"]` colour, dialog quote style |
 | `scripts/build_share_pages.py` | "Risk statements" section on reviewed-model share pages |
-| Docs | `docs/DATA_MODEL.md` (T1), `docs/MODELS.md` (T2), `docs/OPERATIONS.md` (T3), `docs/WEB.md` (T4, T7), `AGENTS.md`, `skills/ai-systems-atlas/reference.md`, `BACKLOG.md`, ADR 039 status (T8) |
+| Docs | `docs/DATA_MODEL.md` (T1), `docs/MODELS.md` (T2), `docs/OPERATIONS.md` (T3), `docs/WEB.md` (T4, T7), `AGENTS.md`, `skills/ai-systems-atlas/reference.md`, `BACKLOG.md`, ADR 042 status (T8) |
 
 ## Fixture vocabulary used across tasks
 
@@ -85,7 +85,7 @@ The exact reader-facing sentences, identical in JS and Python:
 Add to `tests/test_validation_policy.py`, inside `ValidationPolicyTests`, after `test_trust_closure_carries_a_dated_first_party_source`:
 
 ```python
-    # ADR 039: a reviewed flag records a developer's own risk-threshold statement.
+    # ADR 042: a reviewed flag records a developer's own risk-threshold statement.
     # The fixture points the first reviewed model at a lab site it cites, so the
     # first-party rule has something to check against.
     FLAG_SITE_URL: ClassVar[str] = "https://www.example-lab.com/models/alpha"
@@ -356,7 +356,7 @@ Insert this block immediately after the closing `],` of `"model_distribution_mod
 ```python
 MODEL_OPTIONAL = {"flags"}
 
-# ADR 039: a reviewed flag records one kind of first-party statement, in the
+# ADR 042: a reviewed flag records one kind of first-party statement, in the
 # steward's own words. Each status has exactly one shape; a found statement on a
 # page that cannot be pinned carries "unpinnable": true in place of the hash.
 MAKER_RISK_FLAG = "maker_risk_safeguards"
@@ -416,7 +416,7 @@ SECOND_LEVEL_LABELS = frozenset({"ac", "co", "com", "edu", "gov", "net", "org"})
 def validate_flag_kinds(
     taxonomy: dict[str, Any], enum_ids: dict[str, set[str]], errors: list[str]
 ) -> dict[str, set[str]]:
-    """Each flag kind names the collections it may appear in (ADR 039)."""
+    """Each flag kind names the collections it may appear in (ADR 042)."""
     if enum_ids["flag_statuses"] != set(FLAG_SHAPES):
         errors.append(f"taxonomy: flag_statuses must be exactly {sorted(FLAG_SHAPES)}")
     items = taxonomy.get("flag_kinds")
@@ -473,7 +473,7 @@ def record_publisher_sites(model: dict[str, Any]) -> set[str]:
     """Sites a reviewed model already cites: its url, evidence, and license evidence.
 
     The models.dev repository is never one: it is attributed source metadata, and
-    models.dev text never establishes a flag (ADR 039, AGENTS.md rule 11).
+    models.dev text never establishes a flag (ADR 042, AGENTS.md rule 11).
     """
     urls: list[object] = [model.get("url")]
     for field in ("evidence", "license_evidence"):
@@ -559,7 +559,7 @@ def validate_model_flag(
 def validate_model_flags(
     model: dict[str, Any], prefix: str, tax: Taxonomy, errors: list[str]
 ) -> None:
-    """A reviewed model's flags: a maker's own statement, never an Atlas verdict (ADR 039).
+    """A reviewed model's flags: a maker's own statement, never an Atlas verdict (ADR 042).
 
     The field is omitted until a reviewer examines the record, which is the third
     state, "not examined". An empty list would claim an examination that says nothing.
@@ -619,7 +619,7 @@ and, immediately before the final `for field in ("metadata_verified_at", "verifi
         if isinstance(record, dict) and "flags" in record:
             errors.append(
                 f"{prefix}: an imported models.dev row carries no Atlas conclusion "
-                "and never carries a flag (ADR 039)"
+                "and never carries a flag (ADR 042)"
             )
 ```
 
@@ -636,7 +636,7 @@ Expected: exits 0 (the real catalog has no flags; `directory/taxonomy.json` diff
 In "## Model record", insert this bullet after the "**Evidence and review:**" bullet:
 
 ```markdown
-- **Reviewed flags (optional):** `flags` is absent until a reviewer examines the record, and "not examined" is a state the app states rather than an absence it hides. When present it is a non-empty list with at most one entry per kind, and each `kind` comes from `flag_kinds` in `taxonomy.json`, which also names the collections a kind may appear in; `maker_risk_safeguards` is allowed on reviewed models only, and imported models.dev rows never carry a flag. A `statement_found` entry has exactly `kind`, `status`, `tier_term` (the developer's own term, verbatim), `domains` (from `flag_domains`), `determination` (from `flag_determinations`), `scope` (from `flag_scopes`), `statement` (quoted verbatim), `url`, `content_sha256`, `verified_at`, and `research_confidence`, except that a page which cannot be pinned carries `"unpinnable": true` in place of `content_sha256`. A `no_statement_found` entry has exactly `kind`, `status`, `url` (the page checked last), `verified_at`, and `research_confidence`. The `url` must sit on a site the record already cites in its `url`, `evidence`, or `license_evidence`, never the models.dev repository, and `verified_at` is on or before the record's. Like a trust status, a flag is exempt from the prose-only rule for operational constraints: it stores the developer's term verbatim rather than an Atlas grade and keeps `determination` and `scope` as separate facts, so what it compresses is only whether a document says something. A flag never affects inclusion, score, rank, sort, the Finder, or comparison; see [ADR 039](adr/039-reviewed-flags-record-a-makers-risk-statement.md).
+- **Reviewed flags (optional):** `flags` is absent until a reviewer examines the record, and "not examined" is a state the app states rather than an absence it hides. When present it is a non-empty list with at most one entry per kind, and each `kind` comes from `flag_kinds` in `taxonomy.json`, which also names the collections a kind may appear in; `maker_risk_safeguards` is allowed on reviewed models only, and imported models.dev rows never carry a flag. A `statement_found` entry has exactly `kind`, `status`, `tier_term` (the developer's own term, verbatim), `domains` (from `flag_domains`), `determination` (from `flag_determinations`), `scope` (from `flag_scopes`), `statement` (quoted verbatim), `url`, `content_sha256`, `verified_at`, and `research_confidence`, except that a page which cannot be pinned carries `"unpinnable": true` in place of `content_sha256`. A `no_statement_found` entry has exactly `kind`, `status`, `url` (the page checked last), `verified_at`, and `research_confidence`. The `url` must sit on a site the record already cites in its `url`, `evidence`, or `license_evidence`, never the models.dev repository, and `verified_at` is on or before the record's. Like a trust status, a flag is exempt from the prose-only rule for operational constraints: it stores the developer's term verbatim rather than an Atlas grade and keeps `determination` and `scope` as separate facts, so what it compresses is only whether a document says something. A flag never affects inclusion, score, rank, sort, the Finder, or comparison; see [ADR 042](adr/042-reviewed-flags-record-a-makers-risk-statement.md).
 ```
 
 Also change the sentence opening "Strict validation rejects extra fields," in the same section to begin "Strict validation rejects extra fields, flags outside their exact shapes,".
@@ -664,7 +664,7 @@ git add directory/taxonomy.json scripts/validate_directory.py tests/test_validat
 git commit -m "$(cat <<'EOF'
 Add reviewed-flag vocabularies and validate flags on reviewed models
 
-ADR 039: flag_kinds, flag_statuses, flag_domains, flag_determinations, and
+ADR 042: flag_kinds, flag_statuses, flag_domains, flag_determinations, and
 flag_scopes join the taxonomy; the validator enforces both entry shapes, a
 first-party URL, the kind's allowed collections, verified_at ordering, and
 refuses flags on imported models.dev rows.
@@ -687,14 +687,14 @@ EOF
 - Consumes: `MAKER_RISK_FLAG` from `scripts/validate_directory.py` (Task 1); `validate_models` now accepts `flags`.
 - Produces: `build_draft(...)["flags"] == [{"kind": "maker_risk_safeguards", "status": "", "url": "", "verified_at": "", "research_confidence": ""}]`; `preflight_promotion` raises `PromotionError` whose message contains `maker_risk_safeguards` when a record has no examined entry.
 
-ADR 039: "From the day this record is implemented, a new model review or line update records a `maker_risk_safeguards` entry in one of the two examined states." The promotion command enforces it for new reviews; line updates are hand edits, so `docs/MODELS.md` carries the rule for them.
+ADR 042: "From the day this record is implemented, a new model review or line update records a `maker_risk_safeguards` entry in one of the two examined states." The promotion command enforces it for new reviews; line updates are hand edits, so `docs/MODELS.md` carries the rule for them.
 
 - [ ] **Step 1: Write the failing tests**
 
 In `tests/test_promote_model_candidate.py`, at the end of `setUp` (after `self.queue = queue`), add:
 
 ```python
-        # ADR 039: a new review records the maker-risk flag in an examined state.
+        # ADR 042: a new review records the maker-risk flag in an examined state.
         self.record["flags"] = [
             {
                 "kind": "maker_risk_safeguards",
@@ -750,7 +750,7 @@ Expected: FAIL: `test_draft_scaffolds_a_blank_maker_risk_flag` with `KeyError: '
 3b. In `build_draft`, add this key to the returned dict directly after `"evidence": evidence,`:
 
 ```python
-        # ADR 039: every new review records the maker-risk flag in an examined
+        # ADR 042: every new review records the maker-risk flag in an examined
         # state; the blank entry fails validation until the reviewer fills it.
         "flags": [
             {
@@ -775,7 +775,7 @@ Expected: FAIL: `test_draft_scaffolds_a_blank_maker_risk_flag` with `KeyError: '
     ):
         errors.append(
             f"flags must record a {MAKER_RISK_FLAG} entry, statement_found or "
-            "no_statement_found, before promotion (ADR 039)"
+            "no_statement_found, before promotion (ADR 042)"
         )
 ```
 
@@ -789,7 +789,7 @@ Expected: PASS, including every existing test.
 5a. In "## Review workflow", replace step 7 with these two steps:
 
 ```markdown
-7. Record the `maker_risk_safeguards` flag ([ADR 039](adr/039-reviewed-flags-record-a-makers-risk-statement.md)). Check the developer's system card, model page, and safety or framework page for this release. If one names this release against a risk threshold, record `statement_found`: the developer's own term verbatim in `tier_term`, the `domains`, `determination`, and `scope` its words support, the sentence or sentences quoted verbatim in `statement`, and the page pinned with `uv run python scripts/check_evidence_links.py --pin URL`, which prints the `content_sha256` to record or says the page is unpinnable, in which case record `"unpinnable": true` instead. Otherwise record `no_statement_found` with the page checked last, normally the framework or system-card index. Before recording either, confirm that the statement names this release, not the family or a product; that the quote is verbatim from a first-party page; that `determination` and `scope` match the words; and, for `no_statement_found`, that all three pages were checked. A statement about a model family, a product built on the model, or a sibling release goes into prose or onto the product's own system record, never into a flag, and models.dev text never establishes one. Research agents may propose an entry; it is accepted only when the owner merges it.
+7. Record the `maker_risk_safeguards` flag ([ADR 042](adr/042-reviewed-flags-record-a-makers-risk-statement.md)). Check the developer's system card, model page, and safety or framework page for this release. If one names this release against a risk threshold, record `statement_found`: the developer's own term verbatim in `tier_term`, the `domains`, `determination`, and `scope` its words support, the sentence or sentences quoted verbatim in `statement`, and the page pinned with `uv run python scripts/check_evidence_links.py --pin URL`, which prints the `content_sha256` to record or says the page is unpinnable, in which case record `"unpinnable": true` instead. Otherwise record `no_statement_found` with the page checked last, normally the framework or system-card index. Before recording either, confirm that the statement names this release, not the family or a product; that the quote is verbatim from a first-party page; that `determination` and `scope` match the words; and, for `no_statement_found`, that all three pages were checked. A statement about a model family, a product built on the model, or a sibling release goes into prose or onto the product's own system record, never into a flag, and models.dev text never establishes one. Research agents may propose an entry; it is accepted only when the owner merges it.
 8. Add dated authoritative evidence, remove the candidate in the same change, synchronize published data, regenerate share pages, and run the full verification suite.
 ```
 
@@ -809,7 +809,7 @@ git add scripts/promote_model_candidate.py tests/test_promote_model_candidate.py
 git commit -m "$(cat <<'EOF'
 Require a maker-risk flag entry on every new model review
 
-ADR 039: init scaffolds a blank maker_risk_safeguards entry and check and
+ADR 042: init scaffolds a blank maker_risk_safeguards entry and check and
 apply refuse a review without an examined one; MODELS.md adds the review
 step and the line-update rule.
 
@@ -836,7 +836,7 @@ EOF
   - CLI `uv run python scripts/check_evidence_links.py --pin URL` printing `content_sha256: <hex>` or a line starting `unpinnable:`.
   - Flag references are named `models:<id>:flags:<index>` and carry kind `flag`.
 
-ADR 039: "Drift fails the evidence check and opens an incident, as terms drift does; the record itself is never edited." The checker records drift in its cache (`terms_drift_detected_at`) and fails with `flag page drift requires review`, which fails the weekly verification and opens or updates the durable `automation-failure` issue, exactly as `web_terms` drift does. It never writes the record: the entry's exact shape has no review field, and AGENTS.md rule 8 forbids automation to change it. An `unpinnable` page is link-checked only, as ADR 037 set.
+ADR 042: "Drift fails the evidence check and opens an incident, as terms drift does; the record itself is never edited." The checker records drift in its cache (`terms_drift_detected_at`) and fails with `flag page drift requires review`, which fails the weekly verification and opens or updates the durable `automation-failure` issue, exactly as `web_terms` drift does. It never writes the record: the entry's exact shape has no review field, and AGENTS.md rule 8 forbids automation to change it. An `unpinnable` page is link-checked only, as ADR 037 set.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -868,7 +868,7 @@ def flag_target(
 
 
 class FlagEvidenceTests(unittest.TestCase):
-    """ADR 039: flag pages are drift-hashed, with the reviewer's pin as the baseline."""
+    """ADR 042: flag pages are drift-hashed, with the reviewer's pin as the baseline."""
 
     def check(self, target, cache, body=FLAG_BODY, **options):
         return check_evidence_links.check_targets(
@@ -992,7 +992,7 @@ Add to `tests/test_review_age.py`, inside `ReviewAgeTests`:
 
 ```python
     def test_reviewed_flag_dates_count_as_evidence_review_dates(self) -> None:
-        """ADR 039: each flag's verified_at is one of the nested dates the report reads."""
+        """ADR 042: each flag's verified_at is one of the nested dates the report reads."""
         model = record(
             "model-alpha",
             "2026-09-13",
@@ -1046,7 +1046,7 @@ def _add_flag_targets(
     the first observation must match. An unpinnable page is link-checked only, since
     its hash never settles (ADR 037). A no_statement_found entry's checked page is
     hashed like terms, so a statement appearing there raises a review. The checker
-    never edits a flag; see ADR 039.
+    never edits a flag; see ADR 042.
     """
     for index, entry in enumerate(flags):
         if not isinstance(entry, dict):
@@ -1236,7 +1236,7 @@ page while reviewing, run
 `uv run python scripts/check_evidence_links.py --pin URL`: it fetches the page twice
 with this normalisation, uses no cache, and prints either the `content_sha256` to record
 or `unpinnable`. See
-[ADR 039](adr/039-reviewed-flags-record-a-makers-risk-statement.md).
+[ADR 042](adr/042-reviewed-flags-record-a-makers-risk-statement.md).
 ```
 
 - [ ] **Step 6: Verify and commit**
@@ -1249,7 +1249,7 @@ git add scripts/check_evidence_links.py scripts/report_review_age.py tests/test_
 git commit -m "$(cat <<'EOF'
 Drift-hash reviewed-flag pages and read flag dates in review age
 
-ADR 039: flag URLs join the terms hashing with the reviewer's pin as the
+ADR 042: flag URLs join the terms hashing with the reviewer's pin as the
 baseline; unpinnable pages are link-checked only; --pin prints the hash a
 flag records; the review-age walk is pinned to include flag dates.
 
@@ -1285,7 +1285,7 @@ In `tests/test_web_payload.py`:
 1b. In `test_every_published_field_lands_in_boot_or_detail`, directly after the `if field == "score": … continue` block, add:
 
 ```python
-                    # A list whose items boot sees in part (ADR 039's flags): boot
+                    # A list whose items boot sees in part (ADR 042's flags): boot
                     # carries each item's keys for its status, detail the whole list.
                     keys_by_status = BOOT_ITEM_FIELDS.get(collection, {}).get(field)
                     if keys_by_status is not None:
@@ -1375,7 +1375,7 @@ In `tests/test_web_payload.py`:
                 self.assertNotIn("flags", entry, entry["id"])
 
     def test_flags_never_reach_search(self) -> None:
-        """A flag never affects the Finder, sort, or search (ADR 039)."""
+        """A flag never affects the Finder, sort, or search (ADR 042)."""
         self.assertNotIn("flags", SEARCH_FIELDS["models"])
         self.assertNotIn("flags", BOOT_FIELDS["models"])
         found = BOOT_ITEM_FIELDS["models"]["flags"]["statement_found"]
@@ -1395,7 +1395,7 @@ Expected: FAIL with `ImportError: cannot import name 'BOOT_ITEM_FIELDS'`.
 ```python
 # List fields a card needs only part of, keyed by each item's status. Boot carries
 # the listed keys of each item; detail carries the whole field, because the field
-# is not in BOOT_FIELDS. ADR 039: a found statement's term, domains, determination,
+# is not in BOOT_FIELDS. ADR 042: a found statement's term, domains, determination,
 # and scope paint and explain the flag emblem; the quote, link, hash, and dates
 # live in the model's detail file, because boot is already over its size budget.
 BOOT_ITEM_FIELDS = {
@@ -1465,7 +1465,7 @@ kill %1
 In `docs/WEB.md`, replace the sentence `Expected: 82.2 KB gzipped, measured 2026-09-20.` with `Expected: X KB gzipped, measured YYYY-MM-DD.`, writing the figure the command printed for X and the date of the run for YYYY-MM-DD, and append the sentence below to the end of that paragraph.
 
 ```markdown
-Reviewed flags ([ADR 039](adr/039-reviewed-flags-record-a-makers-risk-statement.md)) add each entry's `kind` and `status` to `app/models.json`, plus a found statement's `tier_term`, `domains`, `determination`, and `scope` (`BOOT_ITEM_FIELDS`), and the five flag vocabularies add to `taxonomy.json`; the quote, link, hash, and dates stay in detail. No published model carries a flag at this measurement, so the backfill will add to the figure; re-measure after each backfill batch.
+Reviewed flags ([ADR 042](adr/042-reviewed-flags-record-a-makers-risk-statement.md)) add each entry's `kind` and `status` to `app/models.json`, plus a found statement's `tier_term`, `domains`, `determination`, and `scope` (`BOOT_ITEM_FIELDS`), and the five flag vocabularies add to `taxonomy.json`; the quote, link, hash, and dates stay in detail. No published model carries a flag at this measurement, so the backfill will add to the figure; re-measure after each backfill batch.
 ```
 
 - [ ] **Step 6: Verify and commit**
@@ -1478,7 +1478,7 @@ git add scripts/build_web_payload.py tests/test_web_payload.py docs/WEB.md
 git commit -m "$(cat <<'EOF'
 Project reviewed flags to their emblem fields in the models boot payload
 
-ADR 039: boot carries each flag's kind and status, plus a found
+ADR 042: boot carries each flag's kind and status, plus a found
 statement's term, domains, determination, and scope; the quote, link,
 hash, and dates stay in the model's detail file. The boot figure in
 WEB.md is re-measured.
@@ -1510,7 +1510,7 @@ EOF
   - `riskStatementView(record, taxonomy) -> null | { state: "not_examined", text } | { state: "no_statement_found", text, url, verifiedAt, confidence } | { state: "statement_found", pending, heading, sentence, statement, domains, scope, url, verifiedAt, confidence }`, where `pending` is true until the detail file supplies `statement` (and `url`, `verifiedAt`, `confidence` are `null` until then).
   - `badgeEmblem(id)` now accepts a flag kind id; `badgeLegend("models")` leads with `{ id: "maker_risk_safeguards", name: "Maker risk statement", family: "flags" }`; `badgeLegend("all")` families end with `flags`; `badgeLegend("packs")` does not include it.
 
-The All legend also lists the flag family. ADR 039 names only the Models legend, but reviewed-model cards appear in the All grid too, and the `docs/WEB.md` legend contract is that the strip "names the active scope's emblems". Packs never shows a model, so its legend stays three families.
+The All legend also lists the flag family. ADR 042 names only the Models legend, but reviewed-model cards appear in the All grid too, and the `docs/WEB.md` legend contract is that the strip "names the active scope's emblems". Packs never shows a model, so its legend stays three families.
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -1541,7 +1541,7 @@ and replace `assert.deepEqual(ids(badgeLegend("models")), CARD_BADGE_SETS.model)
 1c. Append at the end of `tests/test_web.js`:
 
 ```js
-// Reviewed flags (ADR 039): a developer's own risk-threshold statement, quoted
+// Reviewed flags (ADR 042): a developer's own risk-threshold statement, quoted
 // and classified in its own terms, never an Atlas verdict.
 const FLAG_FOUND = {
   kind: "maker_risk_safeguards", status: "statement_found", tier_term: "Fixture Level 3",
@@ -1677,7 +1677,7 @@ Expected: FAIL: the new tests with `TypeError: cardFlags is not a function` (and
 3a. Add a fourth entry to `BADGE_FAMILIES`, after `platform`:
 
 ```js
-    // Reviewed flags (ADR 039), not badges: the triangle frame the badge
+    // Reviewed flags (ADR 042), not badges: the triangle frame the badge
     // emblems reserved, on a token no other component uses.
     flags: {
       name: "Maker risk statement",
@@ -1720,7 +1720,7 @@ and replace its final `return { mode: "badges", badges: ids.map(…) };` with:
 3d. Directly above `function emblemSVG`, add the flag registry. `badgeEmblem` and `badgeLegend` only read it when called, after the factory body has run, so this position is safe:
 
 ```js
-  // Reviewed flags (ADR 039) are a second tier beside badges. A flag records one
+  // Reviewed flags (ADR 042) are a second tier beside badges. A flag records one
   // kind of first-party statement a record's steward publishes about it, in the
   // steward's own words, never an Atlas verdict. Flags share the emblem drawing
   // but not the badge contract: they are not presence tests, lead the badge row
@@ -1770,7 +1770,7 @@ and replace its final `return { mode: "badges", badges: ids.map(…) };` with:
   }
 
   // Boot carries a found statement's term, domains, determination, and scope
-  // (ADR 039), so the emblem's words never wait for the detail file.
+  // (ADR 042), so the emblem's words never wait for the detail file.
   function flagSentence(entry, developer, taxonomy) {
     const domains = joinPlain(entry.domains.map(id => vocabularyName(taxonomy, "flag_domains", id).toLowerCase()));
     const claim = entry.determination === "determined"
@@ -1865,7 +1865,7 @@ git add web/app-core.js web/app.js web/styles.css web/index.html web/blog tests/
 git commit -m "$(cat <<'EOF'
 Add the reviewed-flags emblem family and flag text to the web core
 
-ADR 039: a triangle flags family on --danger, the maker-risk flag glyph,
+ADR 042: a triangle flags family on --danger, the maker-risk flag glyph,
 cardFlags, the tooltip sentence, the three-state Risk statements view, and
 legend entries in Models and All. Taxonomy keeps flags out of card badges.
 
@@ -1899,7 +1899,7 @@ const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { cardBadges, flagEmblemText, badgeLegend } = require("../../web/app-core.js");
 
-// No published model carries a flag until the ADR 039 backfill lands, so these
+// No published model carries a flag until the ADR 042 backfill lands, so these
 // tests serve one, shaped as the payload builder shapes it: boot carries each
 // entry's kind and status plus a found statement's term, domains,
 // determination, and scope; the model's detail file carries the whole entry.
@@ -2075,7 +2075,7 @@ Expected: FAIL: no `.card-flag` elements and no `[data-reviewed-flags]` group. (
 // reviewed-model cards. Each is an icon-only emblem whose frame names its
 // family; the name and definition ride in visually hidden text for screen
 // readers and in data attributes for the pointer tooltip. Badges are never
-// controls and take no tab stop. Reviewed flags (ADR 039) lead the row,
+// controls and take no tab stop. Reviewed flags (ADR 042) lead the row,
 // outside the badge cap; see flagItem.
 function badgeRow(badges, flags = [], record = null) {
   if (!badges.length && !flags.length) return "";
@@ -2083,7 +2083,7 @@ function badgeRow(badges, flags = [], record = null) {
 }
 
 // A flag's hidden text is its tooltip sentence. Boot carries a found
-// statement's term, domains, determination, and scope (ADR 039), so the card
+// statement's term, domains, determination, and scope (ADR 042), so the card
 // paints the developer's own words without waiting for the detail file.
 function flagItem(flag, record) {
   const text = AtlasCore.flagEmblemText(flag.entry, record.developer, state.taxonomy);
@@ -2104,7 +2104,7 @@ function flagItem(flag, record) {
 3c. In `renderTaxonomy`, after `badgeGroups`, add:
 
 ```js
-  // Reviewed flags (ADR 039): the kind with its emblem, then the vocabularies a
+  // Reviewed flags (ADR 042): the kind with its emblem, then the vocabularies a
   // flag entry uses. "Not examined" is a state, not a stored value.
   const flagFamily = AtlasCore.BADGE_FAMILIES[AtlasCore.FLAG_FAMILY];
   const flagGroups = [
@@ -2155,7 +2155,7 @@ git add web/app.js web/index.html web/blog tests/e2e/reviewed-flags.spec.js
 git commit -m "$(cat <<'EOF'
 Show the maker-risk flag on reviewed-model cards and in Taxonomy
 
-ADR 039: a found statement leads the badge row outside the cap, with the
+ADR 042: a found statement leads the badge row outside the cap, with the
 developer's term, determination, domains, and scope in the tooltip and
 hidden text, painted from boot. Taxonomy gains Reviewed flags.
 
@@ -2324,7 +2324,7 @@ Expected: the five new tests FAIL (no `section[data-risk]`); the comparison test
 3a. In `web/app.js`, directly above `function modelDialogMarkup`, add:
 
 ```js
-// The three states of ADR 039's maker-risk flag, in the developer's own words.
+// The three states of ADR 042's maker-risk flag, in the developer's own words.
 // Boot knows the state and, for a found statement, its term, domains,
 // determination, and scope; the quote, link, date, and confidence arrive with
 // detail. Until then the section says what boot knows, so a found statement
@@ -2356,7 +2356,7 @@ function riskStatementsMarkup(model) {
 4a. After `COLLECTION_LABELS`, add:
 
 ```python
-# ADR 039: the reviewed-model share page carries the same "Risk statements"
+# ADR 042: the reviewed-model share page carries the same "Risk statements"
 # section as the dialog, in the same words (web/app-core.js riskStatementView).
 MAKER_RISK_FLAG = "maker_risk_safeguards"
 FLAG_DISCLAIMER = "This is the developer's own statement, not an Atlas risk rating."
@@ -2485,7 +2485,7 @@ Reviewed flags are a separate tier drawn on the triangle frame; they are not bad
 ```markdown
 ### Reviewed flags
 
-A reviewed flag records one kind of first-party statement a record's steward publishes about it, in the steward's own words, never an Atlas verdict ([ADR 039](adr/039-reviewed-flags-record-a-makers-risk-statement.md)). The only kind is `maker_risk_safeguards`, on reviewed models: `flags` entries in `directory/models.json`, named in the `flag_*` groups of `directory/taxonomy.json`. A flag never affects inclusion, score, rank, sort, search, the Finder, or comparison, and there is no flag filter and no caution notice.
+A reviewed flag records one kind of first-party statement a record's steward publishes about it, in the steward's own words, never an Atlas verdict ([ADR 042](adr/042-reviewed-flags-record-a-makers-risk-statement.md)). The only kind is `maker_risk_safeguards`, on reviewed models: `flags` entries in `directory/models.json`, named in the `flag_*` groups of `directory/taxonomy.json`. A flag never affects inclusion, score, rank, sort, search, the Finder, or comparison, and there is no flag filter and no caution notice.
 
 - Flags reuse the emblem drawing but not the badge contract. `cardFlags()` in `web/app-core.js` paints an emblem only for a `statement_found` entry, in the `flags` family of `BADGE_FAMILIES`: the triangle frame, an exclamation glyph, and `--danger`, a token no other component uses. It leads the card's badge row, outside `MAX_CARD_BADGES`, in Models and in All. A `no_statement_found` entry or an absent one paints nothing on the card; imported models never carry a flag.
 - The boot payload carries each entry's `kind` and `status`, plus a found statement's `tier_term`, `domains`, `determination`, and `scope` (`BOOT_ITEM_FIELDS` in `scripts/build_web_payload.py`), which is enough to paint and explain the emblem; the quote, link, hash, and dates live in the model's detail file. A card therefore paints its flag's full words from boot and never fetches detail to do it. `flagEmblemText()` builds them.
@@ -2512,7 +2512,7 @@ git add web/app.js web/styles.css web/index.html web/blog web/records web/sitema
 git commit -m "$(cat <<'EOF'
 Add a Risk statements section to reviewed-model dialogs and share pages
 
-ADR 039: every reviewed model says which of three states its maker-risk
+ADR 042: every reviewed model says which of three states its maker-risk
 flag is in, quoting a found statement with its link, date, confidence, and
 scope. WEB.md gains the Reviewed flags subsection and a matrix step.
 
@@ -2528,8 +2528,8 @@ EOF
 **Files:**
 - Modify: `AGENTS.md` (rule 8)
 - Modify: `skills/ai-systems-atlas/reference.md` (`models.json` fields; taxonomy groups)
-- Modify: `BACKLOG.md` (the ADR 039 item)
-- Modify: `docs/adr/039-reviewed-flags-record-a-makers-risk-statement.md` (Status)
+- Modify: `BACKLOG.md` (the ADR 042 item)
+- Modify: `docs/adr/042-reviewed-flags-record-a-makers-risk-statement.md` (Status)
 - Test: `tests/test_documentation.py` (existing link and routing checks)
 
 **Interfaces:**
@@ -2549,22 +2549,22 @@ Replace rule 8 with:
 2a. In "## `models.json` record fields", change the field list line to end `…, evidence, metadata_verified_at, verified_at, flags` and add this paragraph after the paragraph that follows it:
 
 ```markdown
-`flags` is optional and never scored. Each entry records a developer's own risk-threshold statement about this release, never an Atlas rating: `{kind: "maker_risk_safeguards", status: "statement_found", tier_term, domains, determination, scope, statement, url, content_sha256 | unpinnable, verified_at, research_confidence}`, or `{kind, status: "no_statement_found", url, verified_at, research_confidence}` when the developer's system card, model page, and framework page name no threshold for it. `tier_term` and `statement` are the developer's own words; `domains`, `determination`, and `scope` come from the `flag_domains`, `flag_determinations`, and `flag_scopes` taxonomy groups. An absent field means the release has not been examined, and `no_statement_found` is not evidence of safety. See [docs/adr/039-reviewed-flags-record-a-makers-risk-statement.md](../../docs/adr/039-reviewed-flags-record-a-makers-risk-statement.md).
+`flags` is optional and never scored. Each entry records a developer's own risk-threshold statement about this release, never an Atlas rating: `{kind: "maker_risk_safeguards", status: "statement_found", tier_term, domains, determination, scope, statement, url, content_sha256 | unpinnable, verified_at, research_confidence}`, or `{kind, status: "no_statement_found", url, verified_at, research_confidence}` when the developer's system card, model page, and framework page name no threshold for it. `tier_term` and `statement` are the developer's own words; `domains`, `determination`, and `scope` come from the `flag_domains`, `flag_determinations`, and `flag_scopes` taxonomy groups. An absent field means the release has not been examined, and `no_statement_found` is not evidence of safety. See [docs/adr/042-reviewed-flags-record-a-makers-risk-statement.md](../../docs/adr/042-reviewed-flags-record-a-makers-risk-statement.md).
 ```
 
 2b. In "## `taxonomy.json` top-level groups", insert `flag_kinds, flag_statuses, flag_domains, flag_determinations, flag_scopes, ` directly after `model_distribution_modes, `.
 
 - [ ] **Step 3: Groom the backlog item**
 
-In `BACKLOG.md`, replace the item beginning "- [ ] Implement ADR 039", which is the reviewed-flags implementation item, with:
+In `BACKLOG.md`, replace the item beginning "- [ ] Implement ADR 042", which is the reviewed-flags implementation item, with:
 
 ```markdown
-- [ ] Backfill `maker_risk_safeguards` flags ([ADR 039](docs/adr/039-reviewed-flags-record-a-makers-risk-statement.md), implemented; every reviewed model reads "Not yet examined." until its batch lands). Work in batches, developers that publish a risk framework first, then the rest with `no_statement_found` entries naming the page checked. Re-fetch every URL and quote by hand, pin each page with `uv run python scripts/check_evidence_links.py --pin URL`, and merge main right before each batch's PR. The review checklist and the evidence rules are in [`docs/MODELS.md`](docs/MODELS.md) "Review workflow" step 7 and [`docs/OPERATIONS.md`](docs/OPERATIONS.md) "Evidence links and terms drift".
+- [ ] Backfill `maker_risk_safeguards` flags ([ADR 042](docs/adr/042-reviewed-flags-record-a-makers-risk-statement.md), implemented; every reviewed model reads "Not yet examined." until its batch lands). Work in batches, developers that publish a risk framework first, then the rest with `no_statement_found` entries naming the page checked. Re-fetch every URL and quote by hand, pin each page with `uv run python scripts/check_evidence_links.py --pin URL`, and merge main right before each batch's PR. The review checklist and the evidence rules are in [`docs/MODELS.md`](docs/MODELS.md) "Review workflow" step 7 and [`docs/OPERATIONS.md`](docs/OPERATIONS.md) "Evidence links and terms drift".
 ```
 
 - [ ] **Step 4: Accept the ADR**
 
-In `docs/adr/039-reviewed-flags-record-a-makers-risk-statement.md`, change `- Status: Proposed` to `- Status: Accepted`.
+In `docs/adr/042-reviewed-flags-record-a-makers-risk-statement.md`, change `- Status: Proposed` to `- Status: Accepted`.
 
 - [ ] **Step 5: Verify**
 
@@ -2577,14 +2577,14 @@ Expected: all up to date.
 Run: `pre-commit run --all-files`
 Expected: every hook passes, browser suite included.
 
-Before opening the PR, fetch `origin/main` and list `docs/adr/` there; if another branch has taken number 039 for a different slug, renumber by slug and update only this branch's own bare references.
+Before opening the PR, fetch `origin/main` and list `docs/adr/` there; if another branch has taken number 042 for a different slug, renumber by slug and update only this branch's own bare references.
 
 - [ ] **Step 6: Commit**
 
 ```bash
-git add AGENTS.md skills/ai-systems-atlas/reference.md BACKLOG.md docs/adr/039-reviewed-flags-record-a-makers-risk-statement.md
+git add AGENTS.md skills/ai-systems-atlas/reference.md BACKLOG.md docs/adr/042-reviewed-flags-record-a-makers-risk-statement.md
 git commit -m "$(cat <<'EOF'
-Accept ADR 039 and amend rule 8 and the agent reference for flags
+Accept ADR 042 and amend rule 8 and the agent reference for flags
 
 AGENTS.md rule 8 adds reviewed flags to the fields automation never
 touches; the agent reference documents the optional flags field and the
@@ -2597,9 +2597,9 @@ EOF
 
 ---
 
-## Spec coverage (self-review against ADR 039)
+## Spec coverage (self-review against ADR 042)
 
-| ADR 039 requirement | Task |
+| ADR 042 requirement | Task |
 |---|---|
 | One kind, `maker_risk_safeguards`, reviewed models only; kinds name their collections | 1 (taxonomy `collections`, validator) |
 | Three states; "not examined" is absence of an entry | 1 (non-empty list rule), 5 (`riskStatementView`), 7 (dialog, share page) |

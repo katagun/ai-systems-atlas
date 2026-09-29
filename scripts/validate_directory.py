@@ -505,7 +505,7 @@ MODEL_REVIEW_REQUIRED = {
 }
 MODEL_OPTIONAL = {"flags"}
 
-# ADR 039: a reviewed flag records one kind of first-party statement, in the
+# ADR 042: a reviewed flag records one kind of first-party statement, in the
 # steward's own words. Each status has exactly one shape; a found statement on a
 # page that cannot be pinned carries "unpinnable": true in place of the hash.
 MAKER_RISK_FLAG = "maker_risk_safeguards"
@@ -794,7 +794,7 @@ class ProjectIndex(NamedTuple):
 def validate_flag_kinds(
     taxonomy: dict[str, Any], enum_ids: dict[str, set[str]], errors: list[str]
 ) -> dict[str, set[str]]:
-    """Each flag kind names the collections it may appear in (ADR 039)."""
+    """Each flag kind names the collections it may appear in (ADR 042)."""
     if enum_ids["flag_statuses"] != set(FLAG_SHAPES):
         errors.append(f"taxonomy: flag_statuses must be exactly {sorted(FLAG_SHAPES)}")
     items = taxonomy.get("flag_kinds")
@@ -2891,7 +2891,7 @@ def record_publisher_sites(model: dict[str, Any]) -> set[str]:
     """Sites a reviewed model already cites: its url, evidence, and license evidence.
 
     The models.dev repository is never one: it is attributed source metadata, and
-    models.dev text never establishes a flag (ADR 039, AGENTS.md rule 11).
+    models.dev text never establishes a flag (ADR 042, AGENTS.md rule 11).
     """
     urls: list[object] = [model.get("url")]
     for field in ("evidence", "license_evidence"):
@@ -2983,7 +2983,7 @@ def validate_model_flag(
 def validate_model_flags(
     model: dict[str, Any], prefix: str, tax: Taxonomy, errors: list[str]
 ) -> None:
-    """A reviewed model's flags: a maker's own statement, never an Atlas verdict (ADR 039).
+    """A reviewed model's flags: a maker's own statement, never an Atlas verdict (ADR 042).
 
     The field is omitted until a reviewer examines the record, which is the third
     state, "not examined". An empty list would claim an examination that says nothing.
@@ -3238,7 +3238,7 @@ def validate_models_dev(
         if isinstance(record, dict) and "flags" in record:
             errors.append(
                 f"{prefix}: an imported models.dev row carries no Atlas conclusion "
-                "and never carries a flag (ADR 039)"
+                "and never carries a flag (ADR 042)"
             )
         if not isinstance(record, dict) or set(record) != {
             "id",

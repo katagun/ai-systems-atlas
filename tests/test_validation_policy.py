@@ -313,7 +313,7 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertEqual([], self.catalog_with_trust(mutate))
 
-    # ADR 039: a reviewed flag records a developer's own risk-threshold statement.
+    # ADR 042: a reviewed flag records a developer's own risk-threshold statement.
     # The fixture points the first reviewed model at a lab site it cites, so the
     # first-party rule has something to check against.
     FLAG_SITE_URL: ClassVar[str] = "https://www.example-lab.com/models/alpha"
