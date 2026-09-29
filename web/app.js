@@ -342,6 +342,11 @@ function syncMatchSort(scope) {
 // The one query every collection reads (Phase 3 spec, section 1).
 const currentQuery = () => $("#results-search").value;
 
+// Whether a query searches at all: one of stop words alone ("the", "me")
+// holds no search word, so every filter lists what browsing lists, and the
+// strip and an empty result treat it as browsing too.
+const isSearching = (term = currentQuery()) => AppCore.parseSearchQuery(term).tokens.length > 0;
+
 function syncMatchSorts() {
   Object.keys(MATCH_SORTS).forEach(syncMatchSort);
 }
@@ -410,7 +415,7 @@ function flushResults() {
 function onQueryInput() {
   Object.keys(state.page).forEach(key => { state.page[key] = 1; });
   syncMatchSorts();
-  if (currentQuery().trim()) loadCatalogIndexes();
+  if (isSearching()) loadCatalogIndexes();
   scheduleResults();
 }
 
@@ -1038,7 +1043,7 @@ function syncScopeStrip() {
   const strip = $("#scope-strip");
   if (strip.hidden || !strip.firstElementChild) return;
   const payloads = collectionPayloads();
-  const searching = currentQuery().trim() !== "";
+  const searching = isSearching();
   const matched = searching ? currentMatches() : null;
   const counts = searching ? AppCore.collectionMatchCounts(matched, payloads) : null;
   const matchWord = count => (count === 1 ? " match" : " matches");
@@ -1152,7 +1157,7 @@ function setDirectoryCollection(collection, { updateURL = true, carryQuery = upd
   // One box holds the query for every collection, so nothing is carried:
   // the new collection reads it, and its sort follows it.
   syncMatchSort(selected);
-  if (carryQuery && currentQuery().trim()) loadCatalogIndexes();
+  if (carryQuery && isSearching()) loadCatalogIndexes();
   for (const [name, view] of Object.entries(RESULT_VIEWS)) {
     $(view.panel).hidden = name !== selected;
     if (name !== selected) $(view.grid).innerHTML = "";
@@ -2339,7 +2344,7 @@ function catalogIndexesPending() {
 function emptyStateMarkup(scope, fallback) {
   const selector = SCOPE_CONTROLS[scope]?.q;
   const term = selector ? $(selector).value : "";
-  if (!term.trim()) return `<div class="notice">${fallback}</div>`;
+  if (!isSearching(term)) return `<div class="notice">${fallback}</div>`;
   const settled = !catalogIndexesPending();
   const { hidden, elsewhere, searchAll, others, found } = settled ? emptyResultMatches(scope, term) : { hidden: [], elsewhere: [], searchAll: false, others: 0, found: false };
   const typed = comparableName(term);

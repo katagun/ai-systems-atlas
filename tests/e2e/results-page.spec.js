@@ -40,6 +40,18 @@ test("while searching, each strip entry counts and names its matches", async ({ 
   await expect(labs).toHaveAccessibleName(/^Labs\s*\d+$/);
 });
 
+test("a query of stop words alone leaves the strip on its browsing counts", async ({ page }) => {
+  await page.goto("/?collection=systems");
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  const counts = page.locator("#scope-strip .scope-count, #scope-strip .family-entry strong");
+  const browsing = await counts.allTextContents();
+  // "me" is a stop word, and it begins "memory": a reader who pauses there is still browsing.
+  await search(page, "me");
+  await expect(counts).toHaveText(browsing);
+  await expect(page.locator("#scope-strip .scope-caption")).not.toContainText("match");
+  for (const entry of await page.locator("#scope-strip .scope-entry").all()) await expect(entry).not.toHaveAccessibleName(/match/);
+});
+
 test("an empty result names the collections that hold matches, from the front door on", async ({ page }) => {
   await onlyInIndex(page, "labs");
   await page.goto("/");

@@ -2097,10 +2097,10 @@ test("each collection counts what its default view lists, with its split", () =>
   assert.deepEqual(collectionCount("robots", { ...registryPayloads, robots: [] }), { count: 0, note: "" });
 });
 
-test("one match pass finds each record any collection's search finds", () => {
+test("one match pass finds what a search finds, and nothing for a query without search words, which callers treat as browsing", () => {
   assert.deepEqual([...queryMatches("a1", registryPayloads, {})].map(record => record.id), ["a1"]);
   assert.equal(queryMatches("", registryPayloads, {}).size, 0);
-  assert.equal(queryMatches("the", registryPayloads, {}).size, 0, "stop words alone match nothing");
+  assert.equal(queryMatches("the", registryPayloads, {}).size, 0, "stop words alone hold no search word, so the pass returns nothing");
 });
 
 test("each collection counts the query's matches its default view lists", () => {
