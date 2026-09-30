@@ -510,9 +510,15 @@ def run(
         commit,
         observed_at=snapshot_date,
     )
-    write_json_atomic_all(
-        [(SOURCE_MODELS_PATH, source_document), (CANDIDATES_PATH, document)]
-    )
+    writes = [(SOURCE_MODELS_PATH, source_document), (CANDIDATES_PATH, document)]
+    # CR-09: models.json must name the snapshot's commit, and this importer is the
+    # only thing that moves the snapshot, so it moves that one envelope field too, in
+    # the same all-or-nothing write. Reviewed records are editorial and stay as read.
+    published_source = published.get("source")
+    if isinstance(published_source, dict) and published_source.get("commit") != commit:
+        published_source["commit"] = commit
+        writes.append((MODELS_PATH, published))
+    write_json_atomic_all(writes)
     return document
 
 

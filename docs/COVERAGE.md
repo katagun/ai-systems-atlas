@@ -16,7 +16,7 @@ Measure coverage across three axes:
 
 Do not add a new family merely to fit a famous product. Add one only when its primary operational outcome cannot be scored coherently by an existing family.
 
-## Snapshot — 2026-09-28
+## Snapshot — 2026-09-29
 
 Every count below is generated, not transcribed. `uv run python scripts/validate_directory.py --counts` prints the block, `tests/test_documentation.py` asserts this document quotes it verbatim, and a count that moves without a dated edit here fails the suite.
 
@@ -30,9 +30,9 @@ specifications: 22
 inference_services: 60
 local_runtimes: 17
 model_releases: 311
-models_dev_source_records: 424
-model_candidates: 6
-system_candidates: 121
+models_dev_source_records: 434
+model_candidates: 15
+system_candidates: 127
 exclusions: 98
 packs: 8
 labs: 45 covering 311 releases
