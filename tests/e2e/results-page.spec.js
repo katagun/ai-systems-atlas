@@ -52,17 +52,21 @@ test("a query of stop words alone leaves the strip on its browsing counts", asyn
   for (const entry of await page.locator("#scope-strip .scope-entry").all()) await expect(entry).not.toHaveAccessibleName(/match/);
 });
 
-test("an empty result names the collections that hold matches, from the front door on", async ({ page }) => {
+// Everything holds every collection, so a term only Labs answers is listed by the
+// scope the search landed in. The empty-state pointer into another collection is for
+// the opposite case: a scope whose own filters hide the match, which the sibling test
+// below covers. Before this, the All grid omitted Labs, so this case was an empty
+// result plus a pointer, and a lab was findable by search but not browsable.
+test("a term only Labs answers is listed in Everything rather than pointed at", async ({ page }) => {
   await onlyInIndex(page, "labs");
   await page.goto("/");
   await searchAll(page, INDEX_WORD);
-  const button = page.locator('#all-directory-grid [data-empty-open-collection="labs"]');
-  await expect(button).toHaveText("Labs 1");
-  await button.click();
-  await expect(pressedEntry(page)).toHaveAccessibleName(/^Labs\b/);
-  await expect(searchBox(page)).toHaveValue(INDEX_WORD);
-  await expect(searchBox(page)).toBeFocused();
-  await expect(page.locator("#lab-grid .project-card")).toHaveCount(1);
+  await expect(page.locator('#all-directory-grid [data-empty-open-collection="labs"]')).toHaveCount(0);
+  const labCard = page.locator("#all-directory-grid .lab-card");
+  await expect(labCard).toHaveCount(1);
+  await labCard.getByRole("button", { name: /^View details for / }).click();
+  await expect(recordView(page, "lab")).toBeVisible();
+  await closeRecord(page, "lab");
 });
 
 // ECC is an agent system installed as a pack, so Systems and Agent packs both
@@ -83,12 +87,14 @@ test("an empty result's collection buttons count where the matches are, when two
 });
 
 // A lab's name, not its models, answers "hangzhou", so "Browse all in Models"
-// lists nothing unless it clears the search its label promises to widen.
+// lists nothing unless it clears the search its label promises to widen. Everything
+// lists the lab now that it holds Labs, so the lab is opened from the All grid rather
+// than from the empty state's pointer into the Labs scope, which this query no longer
+// produces.
 test("Browse all in Models clears the search and lists the lab's releases newest first", async ({ page }) => {
   await page.goto("/");
   await searchAll(page, "hangzhou");
-  await page.locator('#all-directory-grid [data-empty-open-collection="labs"]').click();
-  const lab = page.locator("#lab-grid [data-lab]").first();
+  const lab = page.locator("#all-directory-grid .lab-card [data-lab]").first();
   const id = await lab.getAttribute("data-lab");
   await lab.click();
   await recordView(page, "lab").locator(`[data-browse-lab-models="${id}"]`).click();

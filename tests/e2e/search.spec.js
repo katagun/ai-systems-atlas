@@ -448,7 +448,12 @@ test("the exclusions list is fetched once, stamped, and only for a search that f
   release();
   await page.waitForFunction(() => Array.isArray(state.exclusions));
   expect(fetched, "one fetch serves every empty result").toHaveLength(1);
-  expect(new URL(fetched[0]).searchParams.get("v"), "the list is fetched under its content stamp").toMatch(/^[0-9a-f]{12}$/);
+  // ADR 049: a committed page carries the placeholder and the deploy job writes the
+  // hash, so a served page cannot show a content hash here. The caching guarantee is
+  // asserted against the stamper's own output in tests/test_web.js; what this checks is
+  // that the data fetch is versioned at all, so a future change cannot quietly drop the
+  // query string and leave every reader on a stale list.
+  expect(new URL(fetched[0]).searchParams.get("v"), "the list is fetched under a version stamp").toBe("BUILD");
 });
 
 // The suggestion form waits for the exclusions list, so the list's arrival
@@ -698,15 +703,20 @@ test("a query another collection answers offers Search all, not the suggestion f
   await expect(allSearch(page)).toBeFocused();
   await expect(page).toHaveURL(address => address.searchParams.get("q") === "vLLM" && !address.searchParams.has("view"));
 
-  // Only Specifications answers this one, and All lists no specifications:
-  // no suggestion form, and nothing for Search all to show.
+  // Only Specifications answers this one, so Systems offers neither a suggestion form
+  // nor nothing: Everything holds specifications, so Search all has something to show
+  // and leads to it. This used to expect no Search all button at all, on the comment
+  // "All lists no specifications" -- the omission this fix removed.
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
   await search(page, "Agent2Agent Protocol");
   await expect(systems).toContainText("No matches for “Agent2Agent Protocol”.");
   await expect(systems.getByRole("button", { name: "Try the Finder" })).toBeVisible();
   await expect(systems.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
-  await expect(systems.getByRole("button", { name: "Search all" })).toHaveCount(0);
+  await systems.getByRole("button", { name: "Search all" }).click();
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Everything /);
+  await expect(page.locator("#all-directory-grid .specification-card")).toHaveCount(1);
+  await expect(page.locator("#all-directory-grid .specification-card h2")).toHaveText("A2A");
 });
 
 // An empty result judges the whole catalog, so it waits for every search

@@ -12,7 +12,7 @@ Below 768px the app uses the Elements-first mobile layout from ADR 046: one fami
 
 ## Content hierarchy
 
-The directory landing view is action-first. Keep its always-visible introduction to one short value proposition, one supporting sentence, and the first Finder job of each direction. Its All scope presents systems, the complete models.dev source catalog with reviewed overlays, inference services, local runtimes, agent packs, and robots without merging their canonical records or scores.
+The directory landing view is action-first. Keep its always-visible introduction to one short value proposition, one supporting sentence, and the first Finder job of each direction. Its All scope presents every record the site publishes — systems, the complete models.dev source catalog with reviewed overlays, inference services, local runtimes, agent packs, robots, labs, and specifications — without merging their canonical records or scores. That is the whole of it: the scope is named for holding everything, so its count is the total of every collection's payload rather than a figure maintained beside them, and a collection added later is in the scope without a second edit.
 
 Use progressive disclosure for explanation and specialist controls:
 
@@ -191,7 +191,7 @@ The system payload includes only an `active_review_dates` summary (first, last, 
 | published endpoint reference | `web/index.html` API view, alongside `web/llms.txt` |
 | theme palette and control | `web/styles.css` token blocks, `web/index.html` pre-paint stamp, `web/app.js` theme functions |
 | layout and responsive behavior | `web/styles.css` |
-| asset cache busting | `scripts/build_asset_version.mjs`, run after any change to `web/fonts.css`, `web/styles.css`, `web/app-core.js`, or `web/app.js`; blog pages embed the same `fonts.css` and `styles.css` stamps, so a change to either also needs `scripts/build_blog.py` (see [`BLOG.md`](BLOG.md)) |
+| asset cache busting | none to run. Committed pages carry `?v=BUILD` and the deploy job writes the hashes, so no branch edits a stamp and no asset change causes a merge conflict ([ADR 049](adr/049-committed-pages-carry-an-asset-version-placeholder.md)); `scripts/build_asset_version.mjs` is that single implementation, and its `--check` asserts the committed tree is unstamped |
 | robot filters, cards, and detail dialog | `web/app-core.js` `ROBOT_VIEW` and `filterRobots`, `web/app.js` `robotCard` and `robotDialogMarkup` |
 | static structure and controls | `web/index.html` |
 | names and definitions | `directory/taxonomy.json` |

@@ -52,6 +52,16 @@ jobs:
         run: node --test tests/test_web.js
       - name: Check browser JavaScript syntax
         run: node --check web/app-core.js && node --check web/app.js
+      # ADR 049: this is the only place content hashes are written. Committed pages carry
+      # the placeholder `?v=BUILD`, so no ordinary branch can produce the hash-only merge
+      # conflict this replaces, and `freshness-assets` cannot fail on this step. It runs
+      # after the web tests, which assert the placeholder, and before the upload, so the
+      # published artifact is the stamped tree. Deploying an unstamped page would ship
+      # every reader a cache key that no content ever changes under.
+      - name: Stamp asset versions for deploy
+        run: node scripts/build_asset_version.mjs
+      - name: Check every published reference resolved to a content hash
+        run: node scripts/build_asset_version.mjs --stamped
       - name: Configure GitHub Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
       - name: Upload Pages artifact
