@@ -59,6 +59,13 @@ npx playwright install chromium
 pre-commit install
 ```
 
+`npm ci` is not interchangeable with the install already on disk. `build_logos.mjs` and
+`build_fonts.mjs` copy bytes out of installed packages, and their output records the
+package versions it vendored, so a drifted `node_modules` produces a committed file that
+CI regenerates differently. Both generators now refuse to run until the install matches
+`package-lock.json`; if one refuses, run `npm ci --ignore-scripts` and generate again.
+Never regenerate a committed artifact with a stale install to make a freshness hook pass.
+
 Published catalog regeneration, in order:
 
 ```bash

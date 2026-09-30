@@ -1031,6 +1031,52 @@ function indexHTML() {
   return fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
 }
 
+// A generator that vendors bytes out of node_modules produces a file that CI
+// regenerates from the pinned versions, so a drifted local install is a wrong artifact
+// rather than a wrong check. On 2026-09-30 simple-icons 16.32.0 sat in node_modules
+// against a 16.33.0 pin in both package.json and package-lock.json: every local
+// `--check` passed and CI rejected the committed logos.json on two consecutive runs,
+// because logos.json records the version that produced it. Nothing compared the two, so
+// the guard is the thing that has to exist rather than a note asking for `npm ci`.
+const { assertPinnedInstall, installDrift, pinnedVersion: pinned } = require("../scripts/install_pin.mjs");
+
+test("a generator refuses an install that is not the one CI installs, and says how to fix it", () => {
+  assert.deepEqual(
+    installDrift(["icons", "fonts"], {
+      pinned: name => (name === "icons" ? "16.33.0" : "5.3.0"),
+      installed: name => (name === "icons" ? "16.32.0" : "5.3.0"),
+    }),
+    [{ name: "icons", installed: "16.32.0", locked: "16.33.0", problem: "installed 16.32.0, pinned 16.33.0" }],
+    "one entry per drifted package, naming both versions",
+  );
+  assert.throws(
+    () => assertPinnedInstall(["icons"], { pinned: () => "16.33.0", installed: () => "16.32.0" }),
+    /npm ci --ignore-scripts/,
+    "the error has to name the command that fixes it",
+  );
+  // A package that is merely absent is drift, and `npm ci` fixes it. A name the
+  // lockfile never declared is a repository defect that `npm ci` cannot fix, so it must
+  // not be dressed as a version mismatch with that remedy attached.
+  assert.deepEqual(installDrift(["icons"], { pinned: () => "1.0.0", installed: () => null }).map(d => d.problem), ["not installed"]);
+  assert.throws(() => installDrift(["undeclared"]), /not a declared dependency in package-lock\.json/);
+});
+
+test("this checkout's packages are the pinned ones, which is what makes a passing freshness check mean anything", () => {
+  for (const name of ["@lobehub/icons-static-svg", "simple-icons", "@fontsource/ibm-plex-sans", "@fontsource-variable/bricolage-grotesque", "@fontsource-variable/jetbrains-mono"]) {
+    assert.deepEqual(installDrift([name]), [], `${name} is not installed at the pinned version; run npm ci --ignore-scripts`);
+  }
+  // Both artifacts already record the version that produced them, so a stamp that
+  // disagrees with the lock is the exact shape of the failure and is checkable here
+  // without regenerating either file.
+  const logos = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "web", "logos.json"), "utf8"));
+  assert.equal(logos.sources.simple.version, pinned("simple-icons"), "logos.json records the simple-icons version it was built from");
+  assert.equal(logos.sources.lobe.version, pinned("@lobehub/icons-static-svg"), "logos.json records the lobehub version it was built from");
+  const fonts = fs.readFileSync(path.join(__dirname, "..", "web", "fonts.css"), "utf8");
+  for (const [, name, version] of fonts.matchAll(/(@fontsource[a-z-]*\/[a-z0-9-]+)@([0-9][^ ]*?)(?: \(|$)/gm)) {
+    assert.equal(version, pinned(name), `fonts.css records ${name}@${version}`);
+  }
+});
+
 test("index.html references each web asset under its content hash so a change is never served from a stale cache", () => {
   const references = [...indexHTML().matchAll(/(?:href|src)="([\w./-]+)\?v=([^"]*)"/g)];
   assert.deepEqual(references.map(match => match[1]).sort(), ["app-core.js", "app.js", "fonts.css", "styles.css"]);
