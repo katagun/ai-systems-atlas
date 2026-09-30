@@ -172,53 +172,6 @@
       }
     },
     {
-      "repo": "agentclientprotocol/claude-agent-acp",
-      "name": "claude-agent-acp",
-      "url": "https://github.com/agentclientprotocol/claude-agent-acp",
-      "description": "Use Claude Agent SDK from any ACP client",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 2521,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "ADR 020 operational-boundary comparison",
-        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\" text with \"Copyright 2025 Zed Industries, Inc. and contributors\". The README is titled \"ACP adapter for the Claude Agent SDK\" and says \"This tool implements an ACP agent by using the official\" Claude Agent SDK, supporting \"Tool calls (with permission requests)\", \"Nested subagent transcripts\", \"Interactive (and background) terminals\", and \"Client MCP servers\", plus opt-in goal, session-failure, and permission extensions. It is distributed as an npm package with a preview channel. The bundle reports no cross-collection hits, but by name the Atlas already publishes the Claude Agent SDK as a project record and the Agent Client Protocol as a specification; this repository is published by the protocol's organisation, not by the SDK's vendor. Boundary question: under ADR 020, does exposing the already-published SDK's agent loop to ACP clients, with its added extensions, change the operational boundary enough to earn a separate record, or is it an interface packaging of the Claude Agent SDK that folds into that record?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/agentclientprotocol/claude-agent-acp/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "6ed4f049cce59e05197d585bdf8a39980b45d546d6ea718ee344555f3a867c3a",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "c24b053560354d8261d5132edaa3d30b2d1cb1f3",
-            "immutable_url": "https://api.github.com/repos/agentclientprotocol/claude-agent-acp/git/blobs/c24b053560354d8261d5132edaa3d30b2d1cb1f3"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/agentclientprotocol/claude-agent-acp/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "90be6e06919d7bf620d37afc6144319d7f9bed24e0719802da11ced8910fb492",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "2c9a69de918182900bdc59cf587d64a0a67475c0",
-            "immutable_url": "https://api.github.com/repos/agentclientprotocol/claude-agent-acp/git/blobs/2c9a69de918182900bdc59cf587d64a0a67475c0"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "agentuniverse-ai/agentUniverse",
       "name": "agentUniverse",
       "url": "https://github.com/agentuniverse-ai/agentUniverse",
@@ -550,62 +503,6 @@
       }
     },
     {
-      "repo": "dataease/SQLBot",
-      "name": "SQLBot",
-      "url": "https://github.com/dataease/SQLBot",
-      "description": "🔥 基于大模型和 RAG 的智能问数系统，对话式数据分析神器。Text-to-SQL Generation via LLMs using RAG.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 1.0,
-      "github_detected_license": "NOASSERTION",
-      "stars": 6782,
-      "topics": [
-        "chatbi",
-        "deepseek",
-        "llm",
-        "nl2sql",
-        "rag",
-        "sqlbot",
-        "text-to-sql",
-        "text2sql"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE is headed \"# Open Source License\" and states \"SQLBot is licensed under a modified version of the GNU General Public License version 3 (GPLv3), with the following additional conditions:\" including a logo/copyright-retention clause, signed \"© 2025 FIT2CLOUD, Inc.\"; GitHub reports NOASSERTION. The README (Chinese) describes a \"基于大语言模型和 RAG 的智能问数系统\" that lets users \"实现对话式数据分析（ChatBI）\", generating SQL and visual charts from natural language over configured data sources with workspace isolation, term libraries, calibrating SQL examples, and MCP/embedding integration, deployed via Docker. The bundle reports no cross-collection hits. Boundary question: whether this conversational text-to-SQL and data-analysis product demonstrates the required query planning or refinement, execution, result validation or repair, and an explanation surface; that is exactly what the inclusion gate and the data-analysis scope test put to human review.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/dataease/SQLBot/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "426022abd84da60b733aee2d5f5f2a99b2afab4333bd4ae65f9ad730dd0e52b4",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "042baf3dbf2e597df24aa8b48a0e2839910fd20d",
-            "immutable_url": "https://api.github.com/repos/dataease/SQLBot/git/blobs/042baf3dbf2e597df24aa8b48a0e2839910fd20d"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/dataease/SQLBot/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "dd1cd2d887431e71531d9a681f660967e0acc74c7a25a989d58f7c2e329e7d7f",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "8d34fb9478a62250f8ee57719a857f3f49b76c43",
-            "immutable_url": "https://api.github.com/repos/dataease/SQLBot/git/blobs/8d34fb9478a62250f8ee57719a857f3f49b76c43"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "disler/super-simple-software-factory",
       "name": "super-simple-software-factory",
       "url": "https://github.com/disler/super-simple-software-factory",
@@ -776,74 +673,6 @@
       }
     },
     {
-      "repo": "feder-cr/AIHawk",
-      "name": "AIHawk",
-      "url": "https://github.com/feder-cr/AIHawk",
-      "description": "Open-source AI browser agent for web automation, undetected by anti-bot systems: a web browsing agent on a stealth Firefox that is not flagged as a bot, not blocked, and does not trigger captchas. Plain-English tasks, computer-use agent, browser MCP for Claude Code and Gemini CLI.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "browser_computer_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "MIT",
-      "stars": 30692,
-      "topics": [
-        "agentic-ai",
-        "ai-agent",
-        "ai-automation",
-        "autonomous-agents",
-        "browser",
-        "browser-agent",
-        "claude-code-plugin",
-        "computer-use",
-        "gemini-cli-extension",
-        "job-hunting",
-        "job-search",
-        "lead-generation",
-        "llm-agent",
-        "market-research",
-        "price-monitoring",
-        "productivity",
-        "task-automation",
-        "web-agent",
-        "web-automation",
-        "web-research"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate; ADR 020 operational-boundary comparison",
-        "finding": "The LICENSE is the \"MIT License\" (\"Copyright (c) 2024-2026 AIHawk contributors\"). The README adds that everything \"distributed before 2 September 2026 was released under AGPL-3.0\" and stays under it. The README says \"AIHawk is an anti detect browser and web browsing agent, open source, with an MCP server for coding agents\". It offers two surfaces: an MCP server added to Claude Code, Codex or Gemini CLI, and a standalone web UI with \"Chat on the left, the live browser on the right.\" It says \"It drives the page the way a person would: the pointer moves, keys are pressed.\" It also says \"AIHawk runs on your machine and has no server of its own.\" Models come through the user's OpenRouter key. The README's featured-in links point to 2024 articles whose addresses refer to automated job applications, not to the browser agent described today. The bundle reports no cross-collection hits, and no published record by this name was found. Boundary question: is the current stealth browser agent and MCP server the same operational system that earned the repository's adoption signals? ADR 020 compares operational boundaries, not repositories.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/feder-cr/AIHawk/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "7bd49adceb91947129a3ad60d2131884b60775c54e47b3ef1740a110904a1d8b",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "9036d5efbfaf66e50d1a318d07d08a404aa64250",
-            "immutable_url": "https://api.github.com/repos/feder-cr/AIHawk/git/blobs/9036d5efbfaf66e50d1a318d07d08a404aa64250"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/feder-cr/AIHawk/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "aa9f8d096fca7ead9de8c9aa655dc45e5c6caba4d9186b8d94552de67ae4c383",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "06ebccd1aa7938f09718353a96561c7ff40c0929",
-            "immutable_url": "https://api.github.com/repos/feder-cr/AIHawk/git/blobs/06ebccd1aa7938f09718353a96561c7ff40c0929"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "FoundationAgents/MetaGPT",
       "name": "MetaGPT",
       "url": "https://github.com/FoundationAgents/MetaGPT",
@@ -890,66 +719,6 @@
             "fetched_at": "2026-09-15",
             "blob_sha": "080c02cd99015ca01f5db2c1063473fc22939bec",
             "immutable_url": "https://api.github.com/repos/FoundationAgents/MetaGPT/git/blobs/080c02cd99015ca01f5db2c1063473fc22939bec"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "GD4AI/obsidian-llm-wiki",
-      "name": "obsidian-llm-wiki",
-      "url": "https://github.com/GD4AI/obsidian-llm-wiki",
-      "description": "Karpathy's LLM Wiki implementation plugin for Obsidian - turns notes and PDFs into a linked, LLM-powered knowledge base with entity pages, concept pages, graph-powered Q&A, and local-first privacy.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "human_pkm",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 606,
-      "topics": [
-        "graph-algorithms",
-        "karpathy",
-        "knowledge-graph",
-        "knowledge-management",
-        "llm-wiki",
-        "markdown",
-        "note-taking",
-        "obsidian",
-        "obsidian-plugins",
-        "pdf",
-        "pdf-processing",
-        "privacy-first"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE is the Apache \"Version 2.0, January 2004\" text (\"Copyright 2025-2026 Greener-Dalii\"). The README describes \"An Obsidian plugin that turns your notes into a connected, queryable knowledge base\". It says \"the LLM extracts entities and concepts and generates an interlinked wiki with\" bidirectional links. Queries retrieve context through \"Personalized PageRank over your existing\" link graph rather than embeddings. It says \"The plugin modifies nothing in your original notes\" and writes only new pages under a wiki folder. It documents lint and repair commands, PDF and Office ingest, and more than sixteen model providers including local ones. Its retrieval benchmark is measured \"on the project's own benchmark corpus\". The README also names a sibling repository that ships a headless CLI running the same engine outside Obsidian. The bundle reports no cross-collection hits. Smart Second Brain, a different Obsidian plugin, is a published record, so plugin form alone does not block review. Boundary question: is the record the Obsidian plugin alone, or also the sibling headless CLI built on the same engine?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/GD4AI/obsidian-llm-wiki/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "b669d54594b161f62cb9f6d4f23ff74f8431d50ecd63b6d101913402087cb081",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "5d9ef00e1503fb7c2e2c772ec4ba5dfd3dbd41a6",
-            "immutable_url": "https://api.github.com/repos/GD4AI/obsidian-llm-wiki/git/blobs/5d9ef00e1503fb7c2e2c772ec4ba5dfd3dbd41a6"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/GD4AI/obsidian-llm-wiki/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "6e5ac46570729fa4ff7f9f0e4f5f4fed4009734abbed3ed8bd2bbbe266149787",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "33c0e99c23759f46efb91b2078cb094a5ee3e8cc",
-            "immutable_url": "https://api.github.com/repos/GD4AI/obsidian-llm-wiki/git/blobs/33c0e99c23759f46efb91b2078cb094a5ee3e8cc"
           }
         ],
         "proposed_at": "2026-09-15",
@@ -1222,69 +991,6 @@
             "fetched_at": "2026-09-15",
             "blob_sha": "175e405d6c9c5e0310862c0b52d2650b8f120dcc",
             "immutable_url": "https://api.github.com/repos/gptme/gptme/git/blobs/175e405d6c9c5e0310862c0b52d2650b8f120dcc"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "guy-hartstein/company-research-agent",
-      "name": "company-research-agent",
-      "url": "https://github.com/guy-hartstein/company-research-agent",
-      "description": "An agentic company research tool powered by LangGraph and Tavily that conducts deep diligence on companies using a multi-agent framework. It leverages Google's Gemini 2.5 Flash and OpenAI's GPT-5.1 on the backend for inference.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 2274,
-      "topics": [
-        "agents",
-        "ai",
-        "company",
-        "financial-analysis",
-        "gemini",
-        "gemini-3-flash",
-        "langchain",
-        "langgraph-python",
-        "multi-agent-systems",
-        "openai",
-        "python",
-        "research",
-        "tavily",
-        "tavily-api",
-        "tavily-search"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate; Scope boundaries vertical-agent clause",
-        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\" text with \"Copyright 2025 Guy Hartstein\", matching GitHub's Apache-2.0 detection. The README contradicts it: \"This project is licensed under the MIT License\". A reviewer needs to settle which terms govern. The README describes \"A multi-agent tool that generates comprehensive company research reports.\" and says \"The platform follows an agentic framework with specialized nodes that process data sequentially:\". Those nodes are four research analyzers, a collector, a curator that filters by Tavily relevance score, and briefing and editor steps backed by Gemini and GPT models. It runs as a FastAPI backend with a React frontend, it can be deployed with Docker, and the README links a hosted instance on a tavily.com subdomain. The bundle reports no cross-collection hits, and no published record under this name was found. Boundary question: does a fixed sequential pipeline of research and processing nodes satisfy the vertical-agent requirement of an iterative, tool-using workflow with domain-specific failure and recovery behaviour, or is it a report generator that does not reach that bar?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/guy-hartstein/company-research-agent/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "0db3f5d0676b2d86b5c81d6131c4e9fe5b73b27c715bdfa46c1d4814cee8e948",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "563b12b8bf555029764207b6e5978c52ba3aecce",
-            "immutable_url": "https://api.github.com/repos/guy-hartstein/company-research-agent/git/blobs/563b12b8bf555029764207b6e5978c52ba3aecce"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/guy-hartstein/company-research-agent/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "5d8a37352d2f9cb1c8f26645458618c58a9b1d9ea56d541784fd9c6eff8bd5de",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "bbd90404d6694283445f04133d6fba0a58f80c91",
-            "immutable_url": "https://api.github.com/repos/guy-hartstein/company-research-agent/git/blobs/bbd90404d6694283445f04133d6fba0a58f80c91"
           }
         ],
         "proposed_at": "2026-09-15",

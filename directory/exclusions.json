@@ -809,6 +809,14 @@
       "useful_lesson": "Thin clients of a separately maintained agent runtime are pointers to that runtime, not second listings.",
       "excluded_at": "2026-09-29",
       "verified_at": "2026-09-29"
+    },
+    {
+      "name": "Company Research Agent",
+      "repo": "guy-hartstein/company-research-agent",
+      "reason": "A fixed linear LangGraph pipeline: grounding fans out to four single-pass analyzers, then collector, a deterministic 0.4 Tavily-score curator filter, enricher, briefing, and editor, with no conditional edges, re-querying, replanning, or failure and recovery behavior. The output is a PDF company briefing. It does not meet the research-agent bar of an iterative, tool-using workflow with domain-specific failure and recovery behavior.",
+      "useful_lesson": "A staged graph alone is not an agent loop: without edges back, re-querying on thin results, or repair behavior, a research pipeline is a report generator.",
+      "excluded_at": "2026-09-30",
+      "verified_at": "2026-09-30"
     }
   ]
 }
