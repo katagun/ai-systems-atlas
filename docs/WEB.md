@@ -191,7 +191,7 @@ The system payload includes only an `active_review_dates` summary (first, last, 
 | published endpoint reference | `web/index.html` API view, alongside `web/llms.txt` |
 | theme palette and control | `web/styles.css` token blocks, `web/index.html` pre-paint stamp, `web/app.js` theme functions |
 | layout and responsive behavior | `web/styles.css` |
-| asset cache busting | none to run. Committed pages carry `?v=BUILD` and the deploy job writes the hashes, so no branch edits a stamp and no asset change causes a merge conflict ([ADR 049](adr/049-committed-pages-carry-an-asset-version-placeholder.md)); `scripts/build_asset_version.mjs` is that single implementation, and its `--check` asserts the committed tree is unstamped |
+| asset cache busting | none to run. Committed pages carry `?v=BUILD` and the deploy job writes the hashes, so no branch edits a stamp and no asset change causes a merge conflict ([ADR 050](adr/050-committed-pages-carry-an-asset-version-placeholder.md)); `scripts/build_asset_version.mjs` is that single implementation, and its `--check` asserts the committed tree is unstamped |
 | robot filters, cards, and detail dialog | `web/app-core.js` `ROBOT_VIEW` and `filterRobots`, `web/app.js` `robotCard` and `robotDialogMarkup` |
 | static structure and controls | `web/index.html` |
 | names and definitions | `directory/taxonomy.json` |

@@ -373,7 +373,7 @@ class HeaderTests(PostFixture):
     def test_pages_carry_the_unstamped_placeholder_the_deploy_job_replaces(
         self,
     ) -> None:
-        """ADR 049: a blog page carries the placeholder, never a content hash.
+        """ADR 050: a blog page carries the placeholder, never a content hash.
 
         The hash used to be computed here, which meant an edit to any post rewrote
         the stamp in all nine pages and two branches editing different posts

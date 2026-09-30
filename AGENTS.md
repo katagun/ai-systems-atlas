@@ -68,7 +68,7 @@ uv run python scripts/build_share_pages.py
 ```
 
 Asset stamps are not in that sequence and no branch runs them. A committed page carries
-`?v=BUILD` and the deploy job writes the hashes ([ADR 049](docs/adr/049-committed-pages-carry-an-asset-version-placeholder.md)).
+`?v=BUILD` and the deploy job writes the hashes ([ADR 050](docs/adr/050-committed-pages-carry-an-asset-version-placeholder.md)).
 
 The complete check list lives in [.pre-commit-config.yaml](.pre-commit-config.yaml) and runs in [verify.yml](.github/workflows/verify.yml).
 The fast hooks run on commit and the unit and browser suites on push; `pre-commit run --all-files --hook-stage pre-push` reproduces CI exactly, browser suite included.

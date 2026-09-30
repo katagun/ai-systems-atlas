@@ -1026,7 +1026,7 @@ The hashes are written once per deployment: `.github/workflows/deploy-pages.yml`
 `node scripts/build_asset_version.mjs` after checkout and then `--stamped`, which fails if any published reference is
 not a resolved hash, so a placeholder cannot ship. The `?v=` guarantee itself — that a changed asset is never served
 from a stale cache — is asserted against the stamper's output in `tests/test_web.js` rather than against a committed
-line. [ADR 049](adr/049-committed-pages-carry-an-asset-version-placeholder.md) records the decision and its costs; the
+line. [ADR 050](adr/050-committed-pages-carry-an-asset-version-placeholder.md) records the decision and its costs; the
 deploy step is the only place a hash is written, so nothing in a refresh routine needs regenerating. index.html references.
 
 ## Logo coverage

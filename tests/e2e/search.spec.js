@@ -448,7 +448,7 @@ test("the exclusions list is fetched once, stamped, and only for a search that f
   release();
   await page.waitForFunction(() => Array.isArray(state.exclusions));
   expect(fetched, "one fetch serves every empty result").toHaveLength(1);
-  // ADR 049: a committed page carries the placeholder and the deploy job writes the
+  // ADR 050: a committed page carries the placeholder and the deploy job writes the
   // hash, so a served page cannot show a content hash here. The caching guarantee is
   // asserted against the stamper's own output in tests/test_web.js; what this checks is
   // that the data fetch is versioned at all, so a future change cannot quietly drop the

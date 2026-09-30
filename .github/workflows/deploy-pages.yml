@@ -52,7 +52,7 @@ jobs:
         run: node --test tests/test_web.js
       - name: Check browser JavaScript syntax
         run: node --check web/app-core.js && node --check web/app.js
-      # ADR 049: this is the only place content hashes are written. Committed pages carry
+      # ADR 050: this is the only place content hashes are written. Committed pages carry
       # the placeholder `?v=BUILD`, so no ordinary branch can produce the hash-only merge
       # conflict this replaces, and `freshness-assets` cannot fail on this step. It runs
       # after the web tests, which assert the placeholder, and before the upload, so the

@@ -1035,7 +1035,7 @@ function indexHTML() {
 const { DETAIL_VERSION_KEY, PLACEHOLDER, pageFiles, readDetailTree, readPageAsset, stampAssetVersions, violations } =
   require("../scripts/build_asset_version.mjs");
 
-// ADR 049: committed pages carry PLACEHOLDER, and the deploy job substitutes content
+// ADR 050: committed pages carry PLACEHOLDER, and the deploy job substitutes content
 // hashes. So the committed file cannot be checked for a correct hash any more, and the
 // coverage that check used to give is asserted against the stamper's *output* instead:
 // the guarantee that a changed asset is never served from a stale cache still has to

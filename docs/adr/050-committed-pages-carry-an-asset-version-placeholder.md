@@ -1,4 +1,4 @@
-# ADR 049: Committed pages carry an asset-version placeholder; the deploy job writes the hashes
+# ADR 050: Committed pages carry an asset-version placeholder; the deploy job writes the hashes
 
 **Status:** Accepted. Supersedes the committed-hash convention described in [`docs/WEB.md`](../WEB.md) and the second implementation in `scripts/build_blog.py`.
 
