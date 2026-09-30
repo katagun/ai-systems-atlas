@@ -5801,6 +5801,29 @@
         "traits",
         "editorial_score"
       ]
+    },
+    {
+      "repo": null,
+      "name": "Amp",
+      "url": "https://ampcode.com/",
+      "description": "Agentic coding tool by Amp, an independent company spun off from Sourcegraph in December 2025: CLI, VS Code/JetBrains/Neovim/Zed extensions, and web/Slack surfaces with subagents for code review and library research. Proprietary; distributed via npm as @ampcode/cli.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.75,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "proprietary"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     }
   ]
 }
