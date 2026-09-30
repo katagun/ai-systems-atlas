@@ -181,8 +181,8 @@ The system payload includes only an `active_review_dates` summary (first, last, 
 | rendering and detail dialog | `web/app.js` |
 | lab join rules | `scripts/lab_relations.py` and `web/app-core.js` `labRelations`, changed together |
 | comparison eligibility and selection | `web/app-core.js` and `web/app.js` |
-| card marks and logo vendoring | `scripts/build_logos.mjs`, then regenerate `web/logos.json` |
-| web fonts | `scripts/build_fonts.mjs`, then regenerate `web/fonts.css` and `web/fonts/` |
+| card marks and logo vendoring | `scripts/build_logos.mjs`, then regenerate `web/logos.json`. The marks are vendored out of the installed `@lobehub/icons-static-svg` and `simple-icons` packages and the file records their versions, so the generator refuses to run unless the install matches `package-lock.json` (`scripts/install_pin.mjs`) |
+| web fonts | `scripts/build_fonts.mjs`, then regenerate `web/fonts.css` and `web/fonts/`. The `@font-face` blocks and woff2 files are vendored from the installed `@fontsource` packages and the stylesheet names their versions, under the same install guard as the marks |
 | share pages, sitemap, robots | `scripts/build_share_pages.py`, then regenerate `web/records/`, `web/sitemap.xml`, and `web/robots.txt` |
 | app payloads | `scripts/build_web_payload.py`, then regenerate `web/app/`; the tree is generated and must never be hand-edited |
 | filter URL parameters | `web/app-core.js` `SCOPE_URL_PARAMS` and `web/app.js` `SCOPE_CONTROLS`, changed together; `tests/e2e/url-state.spec.js` pins them in step |
@@ -209,10 +209,8 @@ Run the dependency-free logic suite:
 node --check web/app-core.js
 node --check web/app.js
 node --test tests/test_web.js
-node scripts/build_fonts.mjs --check
+uv run python scripts/regenerate.py --check
 node scripts/build_asset_version.mjs --check
-uv run python scripts/build_share_pages.py --check
-uv run python scripts/build_web_payload.py --check
 ```
 
 Confirm the blocking boot payload stays small — this is the number `web/app/` exists to keep down:

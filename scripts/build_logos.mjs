@@ -15,8 +15,14 @@
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { assertPinnedInstall } from "./install_pin.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
+
+// Both marks packages are read from node_modules, and web/logos.json records the
+// versions that produced it, so a drifted install is a wrong artifact rather than a
+// wrong check. Refuse before generating or comparing anything.
+assertPinnedInstall(["@lobehub/icons-static-svg", "simple-icons"]);
 
 const RECORD_MARKS = {
   // Systems — agent

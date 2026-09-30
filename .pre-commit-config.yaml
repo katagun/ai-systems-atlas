@@ -168,8 +168,15 @@ repos:
   # commit or push, not just when its files change; pass_filenames keeps the
   # repo-owned commands intact. The fast checks here take seconds on commit;
   # the unit suite and e2e carry `stages: [pre-push]` and run on push.
-  # Bypass one check with SKIP=<hook-id>, or all of them with
-  # git commit --no-verify / git push --no-verify (CI still gates the merge).
+  # Bypass one check with SKIP=<hook-id>. To skip only the browser suite on a push, use
+  # SKIP=e2e-browser-tests: it is the sole slow hook, and the generated-freshness gate
+  # costs under a second, so there is no reason to lose it along with a four-minute run.
+  #
+  # Prefer SKIP over git push --no-verify / git commit --no-verify, which is all of them.
+  # Nothing in pre-commit can survive --no-verify, including the 0.8s staleness gate, and
+  # that is how web/logos.json reached CI on 2026-09-30 carrying a package version CI did
+  # not install: two pushes went out with the check that would have caught it bypassed.
+  # CI still gates the merge either way.
   - repo: local
     hooks:
       - id: validate-directory
@@ -210,45 +217,30 @@ repos:
         always_run: true
         pass_filenames: false
 
-      - id: freshness-logos
+      # One hook for every generated tree, because the list of them lives in
+      # scripts/regenerate.py and a copy of that list in a second place is a list that
+      # will drift. It replaced five separate freshness hooks, and the reason is concrete:
+      # AGENTS.md's regeneration sequence had already drifted from the set of generators,
+      # omitting build_logos.mjs, build_fonts.mjs, and build_blog.py, so following the
+      # documented steps after a rebase left those three stale. `--check` writes nothing,
+      # reports every failure rather than stopping at the first, and takes under a second
+      # for all six steps, which is what makes it safe to leave on every commit and push.
+      - id: generated-freshness
         language: system
-        name: logo coverage freshness
-        entry: node scripts/build_logos.mjs --check
+        name: generated file freshness
+        entry: uv run python scripts/regenerate.py --check
         always_run: true
         pass_filenames: false
 
-      - id: freshness-fonts
-        language: system
-        name: vendored font freshness
-        entry: node scripts/build_fonts.mjs --check
-        always_run: true
-        pass_filenames: false
-
+      # Deliberately not a step in scripts/regenerate.py, and not a staleness check.
+      # Since ADR 050 this asserts the opposite property: a committed page must carry the
+      # ?v=BUILD placeholder and no content hash, because the hashes are written by the
+      # deploy job. So it guards against a deploy build being committed, and folding it
+      # into the six generated trees would make one failure read as the other.
       - id: freshness-assets
         language: system
         name: asset version freshness
         entry: node scripts/build_asset_version.mjs --check
-        always_run: true
-        pass_filenames: false
-
-      - id: freshness-share-pages
-        language: system
-        name: share page freshness
-        entry: uv run python scripts/build_share_pages.py --check
-        always_run: true
-        pass_filenames: false
-
-      - id: freshness-app-payloads
-        language: system
-        name: app payload freshness
-        entry: uv run python scripts/build_web_payload.py --check
-        always_run: true
-        pass_filenames: false
-
-      - id: freshness-blog
-        language: system
-        name: blog freshness
-        entry: uv run python scripts/build_blog.py --check
         always_run: true
         pass_filenames: false
 

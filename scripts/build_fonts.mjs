@@ -10,6 +10,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { assertPinnedInstall } from "./install_pin.mjs";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const outDir = join(root, "web", "fonts");
@@ -24,6 +25,11 @@ const FACES = [
   { family: "IBM Plex Sans", pkg: "@fontsource/ibm-plex-sans", slug: "ibm-plex-sans", variants: ["400-normal", "500-normal", "600-normal"], css: variant => `${variant.split("-")[0]}.css` },
   { family: "JetBrains Mono", pkg: "@fontsource-variable/jetbrains-mono", slug: "jetbrains-mono", variants: ["wght-normal"], css: () => "wght.css" },
 ];
+
+// The vendored @font-face blocks and woff2 files come from these packages, and
+// web/fonts.css names the versions it vendored, so a drifted install produces output
+// CI will regenerate differently. Refuse before touching the vendored tree.
+assertPinnedInstall(FACES.map(face => face.pkg));
 
 function packageDir(name) {
   const dir = join(root, "node_modules", name);
