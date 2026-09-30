@@ -33,3 +33,38 @@ updates:
       prefix: "chore(npm)"
     labels:
       - dependencies
+  # The seven tool versions outside package.json: three `rev:` entries and four
+  # `uvx tool@version` entries. docs/OPERATIONS.md requires each to be bumped
+  # deliberately, one tool at a time, with the full verification after each --
+  # so these ecosystems open one pull request per tool rather than a sweeping
+  # autoupdate, and the schedule is staggered so two never land together.
+  # A bump is a proposal for that policy, not a substitute for it: review the
+  # diff, since a new codespell dictionary or a stricter ruff default turns a
+  # green tree red for reasons unrelated to the version change.
+  - package-ecosystem: pre-commit
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: America/Denver
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "chore(pre-commit)"
+    labels:
+      - dependencies
+  # ruff and coverage, through uv.lock. The npm entry above keeps two icon
+  # packages out of Dependabot's hands because a bump changes vendored bytes;
+  # Python needs no such carve-out, since no generator reads site-packages.
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:30"
+      timezone: America/Denver
+    open-pull-requests-limit: 2
+    commit-message:
+      prefix: "chore(uv)"
+    labels:
+      - dependencies

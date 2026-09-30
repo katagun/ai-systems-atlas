@@ -1389,7 +1389,7 @@ dialog h1 { overflow-wrap: break-word; }
 .comparison-table thead th:first-child { z-index: 4; background: var(--ink-2); }
 .comparison-table tr:last-child > * { border-bottom: 0; }
 .comparison-table tr > *:last-child { border-right: 0; }
-.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+.detail-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: .8rem; }
 .detail-block { padding: 1.05rem; border: 1px solid var(--line); border-radius: var(--radius-control); background: var(--panel); }
 .detail-block h3 { margin-top: 0; color: var(--text); font-size: 1rem; font-weight: 600; }
 .detail-block p { color: var(--muted); line-height: 1.55; }
@@ -1398,9 +1398,34 @@ dialog h1 { overflow-wrap: break-word; }
 .score-table td { padding: .45rem; border-bottom: 1px solid var(--line); }
 .score-table td:last-child { color: var(--cyan); font-weight: 600; text-align: right; }
 .unscored-note { padding-top: .8rem; border-top: 1px solid var(--line); font-size: .82rem; }
-.trust-table { width: 100%; border-collapse: collapse; }
+/* The trust table spans both grid columns. Three columns of prose do not fit in one
+   385px cell: at 1440px the label column held one word per line. A record's trust record
+   is one thing read down a column rather than four, so it takes the dialog's full width
+   and the other blocks keep their two-up pairing. */
+.detail-block:has(.trust-table) { grid-column: 1 / -1; }
+.trust-table {
+  width: 100%; border-collapse: collapse;
+  /* Fixed layout, because the automatic one sizes every column by its content and the
+     prose column is now wrappable, which leaves the label column with whatever is left. */
+  table-layout: fixed;
+}
 .trust-table td { padding: .45rem; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--muted); line-height: 1.45; }
-.trust-table td:nth-child(2) { white-space: nowrap; font-weight: 600; color: var(--text); }
+.trust-table td:nth-child(1) { width: 26%; }
+/* The status is one of three short enum words, so it never needs to wrap and must not be
+   broken mid-word by the `anywhere` its sibling prose needs. The share has to hold the
+   longest of them plus its own padding, or the word butts against the note beside it. */
+.trust-table td:nth-child(2) { width: 18%; white-space: nowrap; font-weight: 600; color: var(--text); }
+.trust-table td:nth-child(3) { width: 56%; }
+/* A record's own prose, and the URLs its trust notes and license scopes quote, carry
+   runs with no break points. An element's min-content width is its longest such run,
+   so one long URL widens its cell or paragraph, then the block, then the grid track
+   holding it, and the dialog scrolls sideways: on 2026-09-30 every inference dialog
+   did at 390px, the worst by 288px. `anywhere` rather than `break-word` because the
+   min-content width itself has to shrink for the track to shrink; `break-word` only
+   breaks once the line is already too long. `minmax(0, 1fr)` above is the other half,
+   since a `1fr` track floors at its content's min-content width however well that
+   content wraps. The same reason `.lab-channel-link` below carries this already. */
+.detail-block, .detail-block p, .detail-block li, .detail-block td, .detail-block h3, .detail-block h4 { overflow-wrap: anywhere; }
 .detail-block h4 { margin: 1rem 0 .4rem; color: var(--text); font-size: .92rem; font-weight: 600; }
 .evidence-date { margin-left: .35rem; color: var(--muted); font: .7rem var(--font-mono); }
 .lab-release-list { margin: .5rem 0 .8rem; padding: 0; list-style: none; }
@@ -1533,7 +1558,25 @@ footer #data-date, footer .footer-meta {
   .finder-progress > p { grid-column: 1 / -1; text-align: center; }
   .finder-result-heading { align-items: flex-start; flex-direction: column; }
   .finder-result-heading .primary-button { width: 100%; }
-  .detail-grid { grid-template-columns: 1fr; }
+  .detail-grid { grid-template-columns: minmax(0, 1fr); }
+  /* Three columns of prose do not fit a phone: at 390px the label column held one word
+     per line. Each property becomes its own labelled block instead, which is why the
+     status cell carries the property name for a screen reader to read with it rather than
+     relying on a column header it no longer has. The declared column shares are reset,
+     since a percentage still applies to a cell laid out as a block. */
+  .trust-table, .trust-table tbody, .trust-table tr, .trust-table td { display: block; }
+  /* Fixed layout is what sizes the columns from the declared shares, and those shares
+     still bound a cell laid out as a block; without this the label cell stays 68px. Each
+     reset repeats the selector it overrides, since a shorter one is the weaker rule and
+     the desktop share would simply win. */
+  .trust-table { table-layout: auto; }
+  .trust-table td { border-bottom: 0; }
+  .trust-table td:nth-child(1), .trust-table td:nth-child(2), .trust-table td:nth-child(3) { width: auto; }
+  .trust-table tr { padding: .7rem 0; border-bottom: 1px solid var(--line); }
+  .trust-table tr:last-child { border-bottom: 0; }
+  .trust-table td:nth-child(1) { font-weight: 600; color: var(--text); }
+  .trust-table td:nth-child(2) { white-space: normal; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; }
+  .trust-table td:nth-child(3) { margin-top: .3rem; }
   .comparison-tray { align-items: stretch; flex-direction: column; }
   .comparison-tray-actions button { flex: 1; }
   .comparison-heading { align-items: stretch; flex-direction: column; padding-right: 1.5rem; }
