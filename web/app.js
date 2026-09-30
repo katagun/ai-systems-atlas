@@ -2650,15 +2650,28 @@ function systemDialogMarkup(project) {
   const providerDetail = project.provider_relationship && project.model_backends
     ? `<section class="detail-block"><h3>Model provider support</h3><p><strong>Relationship:</strong> ${escapeHTML(taxonomyName("provider_relationships", project.provider_relationship))}</p><p><strong>Reviewed backends:</strong> ${escapeHTML(project.model_backends.map(item => taxonomyName("model_backends", item)).join(" · "))}</p><p class="unscored-note">These traits describe reviewed support, not an inference-service score. Missing traits mean not reviewed.</p></section>`
     : "";
-  const successor = project.superseded_by
-    ? state.projects.find(item => item.id === project.superseded_by)
-    : null;
+  const successor = AppCore.successorSystem(project, state.projects);
   const statusNotice = project.status === "superseded"
     ? `<section class="detail-block status-notice"><h3>Superseded</h3><p>The maintainer designates ${successor ? `<button class="link-button" data-successor="${escapeHTML(successor.id)}">${escapeHTML(successor.name)}</button>` : "a named successor"} as this project's successor. The review below stands; the record is kept as a historical reference rather than a current recommendation.</p></section>`
+    : "";
+  const predecessors = AppCore.predecessorSystems(project, state.projects);
+  const predecessorNotice = predecessors.length
+    ? `<section class="detail-block status-notice"><h3>Superseded predecessor</h3><p>The maintainer superseded ${predecessors.map(item => `<button class="link-button" data-open-project="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`).join(" · ")} with this record. Their reviews stand as historical references.</p></section>`
+    : "";
+  const related = AppCore.relatedSystems(project, state.projects);
+  const moreFromLab = AppCore.moreFromLabSystems(project, { index: state.labIndex, projects: state.projects });
+  const relatedMarkup = `<section class="detail-block"><h3>Related in ${escapeHTML(roleName(project.primary_role))}</h3>${related.length ? `<p>${related.map(item => `<button type="button" class="ghost-button" data-open-project="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`).join(" ")}</p>` : "<p>None recorded.</p>"}</section>`;
+  const moreFromLabMarkup = moreFromLab
+    ? `<section class="detail-block"><h3>More from ${escapeHTML(moreFromLab.lab.name)}</h3><p>${moreFromLab.systems.map(item => `<button type="button" class="ghost-button" data-open-project="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`).join(" ")} <button type="button" class="link-button" data-open-lab="${escapeHTML(moreFromLab.lab.id)}">All from ${escapeHTML(moreFromLab.lab.name)} →</button></p></section>`
+    : "";
+  const boundaryNote = project.current_repo_note
+    ? `<section class="detail-block"><h3>Product boundary</h3><p>${detailText(project.current_repo_note)}</p></section>`
     : "";
   return `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${detailText(project.why_it_matters)}</p>
     <div class="detail-grid">
       ${statusNotice}
+      ${predecessorNotice}
+      ${boundaryNote}
       <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${detailText(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(item => taxonomyName("deployment_modes", item)).join(", "))}</p>${labLinksMarkup("system", project)}<p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
       <section class="detail-block"><h3>Licenses and terms</h3>${licenseLinks}${project.license_review_status === "review_required" ? '<p class="notice">The reviewed license evidence may be stale and requires human review.</p>' : ""}</section>
       <section class="detail-block"><h3>${escapeHTML(scoreProfileName(project.score_profile))}</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${escapeHTML(project.score.overall)}</td></tr></table></section>
@@ -2667,6 +2680,8 @@ function systemDialogMarkup(project) {
       <section class="detail-block"><h3>Architecture</h3><p>${project.architectures.map(architectureName).map(escapeHTML).join(" · ")}</p><h3>Retrieval</h3><p>${detailText((project.retrieval_modes || []).map(label).join(" · "))}</p></section>
       ${providerDetail}
       ${familyDetail}
+      ${relatedMarkup}
+      ${moreFromLabMarkup}
     </div>`;
 }
 
@@ -3111,8 +3126,12 @@ const RECORD_DIALOGS = {
     find: id => state.projects.find(item => item.id === id),
     markup: systemDialogMarkup,
     hydrate: ensureLicenseEvidence,
-    afterRender: () => $$('[data-successor]', $("#dialog-content")).forEach(button =>
-      button.addEventListener("click", () => openProject(button.dataset.successor))),
+    afterRender: () => {
+      $$('[data-successor]', $("#dialog-content")).forEach(button =>
+        button.addEventListener("click", () => openProject(button.dataset.successor)));
+      $$('[data-open-project]', $("#dialog-content")).forEach(button =>
+        button.addEventListener("click", () => openProject(button.dataset.openProject)));
+    },
   },
   spec: {
     dialog: "#specification-dialog",
