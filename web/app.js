@@ -855,7 +855,10 @@ let elementGroups = [];
 let selectedElement = null;
 let selectedElementRecord = null;
 let elementRequest = 0;
-let mobileElementFamily = "memory_system";
+// Phones show one family at a time. Agents leads the tabs and is the family
+// shown until a restored role reveals its own.
+const MOBILE_ELEMENT_FAMILIES = ["agent_system", "memory_system", "assistant_system"];
+let mobileElementFamily = MOBILE_ELEMENT_FAMILIES[0];
 const mobileLayout = window.matchMedia("(max-width: 767px)");
 
 // A role tile previews the organizations that build its systems, so every mark
@@ -892,7 +895,11 @@ function paintElementMarks(root = document) {
 function renderElements() {
   elementGroups = AppCore.systemElements(state.projects, state.taxonomy);
   $("#elements-count").textContent = `${elementGroups.reduce((sum, group) => sum + group.count, 0)} active systems · ${elementGroups.reduce((sum, group) => sum + group.roles.length, 0)} operational roles`;
-  $("#element-family-tabs").innerHTML = elementGroups.map(group => `<button type="button" data-element-family-tab="${escapeHTML(group.id)}" aria-pressed="false" aria-controls="element-group-${escapeHTML(group.id)}">${escapeHTML(AppCore.FAMILY_SHORT_NAMES[group.id] || group.name)}</button>`).join("");
+  const tabGroups = MOBILE_ELEMENT_FAMILIES
+    .map(id => elementGroups.find(group => group.id === id))
+    .filter(Boolean)
+    .concat(elementGroups.filter(group => !MOBILE_ELEMENT_FAMILIES.includes(group.id)));
+  $("#element-family-tabs").innerHTML = tabGroups.map(group => `<button type="button" data-element-family-tab="${escapeHTML(group.id)}" aria-pressed="false" aria-controls="element-group-${escapeHTML(group.id)}">${escapeHTML(AppCore.FAMILY_SHORT_NAMES[group.id] || group.name)}</button>`).join("");
   $("#element-groups").innerHTML = elementGroups.map(group => `<section class="element-group" id="element-group-${escapeHTML(group.id)}" data-element-family="${escapeHTML(group.id)}" aria-labelledby="element-family-${escapeHTML(group.id)}">
     <div class="element-family-heading"><h3 id="element-family-${escapeHTML(group.id)}">${escapeHTML(group.name)}</h3><span>${group.count} active</span></div>
     <div class="element-tiles">${group.roles.map(role => `<button type="button" class="element-tile" data-element="${escapeHTML(role.id)}" aria-pressed="false" aria-controls="element-sheet"${role.records.length ? "" : " disabled"} aria-label="${escapeHTML(role.name)}, ${role.records.length} active systems. Show reference sheet"><span class="element-count">${role.records.length}</span><span class="element-symbol" aria-hidden="true">${escapeHTML(role.symbol)}</span><span class="element-name">${escapeHTML(role.name)}</span>${elementMarks(role)}</button>`).join("")}</div></section>`).join("");
