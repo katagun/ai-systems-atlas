@@ -76,6 +76,10 @@ uv run python scripts/regenerate.py --check  # report every stale tree, write no
 The order is enforced in `scripts/regenerate.py`, not here, because a list of steps in
 prose drifts from the set of generators.
 
+Asset stamps are not in that sequence and no branch runs them. A committed page carries
+`?v=BUILD` and the deploy job writes the hashes
+([ADR 050](docs/adr/050-committed-pages-carry-an-asset-version-placeholder.md)).
+
 Picking up main, and pushing afterwards:
 
 ```bash

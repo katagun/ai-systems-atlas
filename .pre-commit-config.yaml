@@ -232,6 +232,18 @@ repos:
         always_run: true
         pass_filenames: false
 
+      # Deliberately not a step in scripts/regenerate.py, and not a staleness check.
+      # Since ADR 050 this asserts the opposite property: a committed page must carry the
+      # ?v=BUILD placeholder and no content hash, because the hashes are written by the
+      # deploy job. So it guards against a deploy build being committed, and folding it
+      # into the six generated trees would make one failure read as the other.
+      - id: freshness-assets
+        language: system
+        name: asset version freshness
+        entry: node scripts/build_asset_version.mjs --check
+        always_run: true
+        pass_filenames: false
+
       # Needs Playwright browsers: npx playwright install chromium (CI does
       # this before the pre-commit step). Starts its own server per checkout.
       # CI sets ATLAS_E2E_SHARD to run half the suite per job.

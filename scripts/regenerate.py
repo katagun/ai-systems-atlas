@@ -12,6 +12,13 @@ Order is a real constraint, not a preference. `sync_web_data.py` mirrors the can
 catalog into `web/`, and every generator after it reads those mirrors rather than
 `directory/`: `build_logos.mjs` resolves record names from `web/*.json`, so a logos
 build before a sync invents or loses marks.
+`build_asset_version.mjs` is deliberately absent. It writes no committed file: committed
+pages carry the `?v=BUILD` placeholder and the deploy job writes the hashes, per
+[ADR 050](../../docs/adr/050-committed-pages-carry-an-asset-version-placeholder.md).
+Running it here would contradict that, and its `--check` is kept as a separate guard
+against a deploy build being committed -- a different failure from a stale tree, which is
+why folding the two together would make one read as the other.
+
 Two modes, because checking and generating are different acts and conflating them is
 how a stale artifact gets blessed. Plain `regenerate.py` rewrites the tree.
 `--check` writes nothing, runs every step in the same order, and reports **all** the
@@ -40,9 +47,6 @@ STEPS: list[tuple[str, list[str]]] = [
     ("card marks", ["node", "scripts/build_logos.mjs"]),
     ("web fonts", ["node", "scripts/build_fonts.mjs"]),
     ("blog", ["uv", "run", "python", "scripts/build_blog.py"]),
-    # Committed pages carry their asset stamps today. ADR 050 moves the hashes to the
-    # deploy job and this step leaves the order with them; that is a separate branch.
-    ("asset stamps", ["node", "scripts/build_asset_version.mjs"]),
 ]
 
 

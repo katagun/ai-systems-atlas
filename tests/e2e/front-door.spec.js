@@ -119,16 +119,26 @@ test("text typed on the front door replaces a query left in another collection",
 
 // Every lab's name also names its models, so the query is a word only a lab's
 // own record holds (AI Singapore's note names the Infocomm Media Development
-// Authority). The All list finds nothing; opening Labs from the results
-// carries the query in. The front door carries none (a clean start).
+// Authority). This used to be a dead end in Everything -- the All grid summed six
+// collections and omitted Labs, so the reader got an empty result and a pointer into
+// the Labs scope. Everything holds every collection now, so the lab is listed where
+// the search landed, and the pointer into Labs is what a narrower scope is for.
 /* global activateView, searchIndexes */
-test("a query only a lab answers follows the reader from the All results into Labs", async ({ page }) => {
+test("a query only a lab answers lists the lab in Everything, and opens Labs on request", async ({ page }) => {
   await page.goto("/");
   await searchAll(page, "Infocomm");
   await page.waitForFunction(() =>
-    ["systems", "inference", "runtimes", "models", "packs", "robots"].every(key => searchIndexes[key] !== undefined));
-  await expect(page.locator("#all-directory-grid .empty-search")).toBeVisible();
-  await expect(page.locator("#all-directory-grid .project-card")).toHaveCount(0);
+    ["systems", "inference", "runtimes", "models", "packs", "robots", "labs", "specifications"]
+      .every(key => searchIndexes[key] !== undefined));
+  await expect(page.locator("#all-directory-grid .empty-search")).toHaveCount(0);
+  const labCard = page.locator("#all-directory-grid .lab-card");
+  await expect(labCard).toHaveCount(1);
+  await expect(labCard).toContainText("AI Singapore");
+  await labCard.getByRole("button", { name: /^View details for / }).click();
+  await expect(recordView(page, "lab")).toContainText("AI Singapore");
+  await closeRecord(page, "lab");
+
+  // The narrower scope still answers, and carries the query with it.
   await openCollection(page, "labs");
   await expect(page.locator("#labs-directory-panel")).toBeVisible();
   await expect(searchBox(page, "labs")).toHaveValue("Infocomm");

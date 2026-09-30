@@ -1072,7 +1072,16 @@ blocks the fetcher is not a defect to route around by weakening the fetch guards
 
 ## Asset versions
 
-`node scripts/build_asset_version.mjs --check` recomputes the `?v=` query string on every local asset `web/index.html` references (`fonts.css`, `styles.css`, `app-core.js`, `app.js`) from that file's content hash and fails when the committed page carries a different value, so a stylesheet or script change cannot ship under a version a browser has already cached. Regenerate with `node scripts/build_asset_version.mjs` after editing any of those files; `tests/test_web.js` enforces the same rule. The weekly refresh regenerates them too, because a catalog change moves the hash of any published file index.html references.
+`node scripts/build_asset_version.mjs --check` checks the opposite of what it used to. A committed page carries the
+placeholder `?v=BUILD` and never a content hash, so there is nothing to regenerate after editing a stylesheet or a
+script — that is the point, and it is why an asset change no longer produces a hash-only merge conflict. The hook
+fails when a deploy build was committed, when a referenced file no longer exists, or when a page dropped the token.
+The hashes are written once per deployment: `.github/workflows/deploy-pages.yml` runs
+`node scripts/build_asset_version.mjs` after checkout and then `--stamped`, which fails if any published reference is
+not a resolved hash, so a placeholder cannot ship. The `?v=` guarantee itself — that a changed asset is never served
+from a stale cache — is asserted against the stamper's output in `tests/test_web.js` rather than against a committed
+line. [ADR 050](adr/050-committed-pages-carry-an-asset-version-placeholder.md) records the decision and its costs; the
+deploy step is the only place a hash is written, so nothing in a refresh routine needs regenerating. index.html references.
 
 ## Logo coverage
 

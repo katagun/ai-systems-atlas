@@ -16,7 +16,6 @@ else in this repository.
 
 from __future__ import annotations
 
-import hashlib
 import html
 import ipaddress
 import re
@@ -327,6 +326,10 @@ GITHUB_ICON = (
 # the same content stamp build_asset_version.mjs gives index.html, so a browser that
 # cached one under the previous version can never pair it with a newer page.
 ASSETS = ("fonts.css", "styles.css")
+
+# Keep in step with PLACEHOLDER in scripts/build_asset_version.mjs;
+# tests/test_blog.py fails when the two disagree.
+ASSET_VERSION_PLACEHOLDER = "BUILD"
 # The directory page's footer notices, verbatim, so the two footers read as one. Its
 # fourth slot carries the data date there; here it carries the blog's own links.
 FOOTER_NOTICES = (
@@ -371,15 +374,17 @@ THEME_SCRIPT = """<script>
 </script>"""
 
 
-def asset_versions(root: Path) -> dict[str, str]:
-    """Twelve hex characters of each shared asset's SHA-256, as the asset stamper computes."""
-    versions: dict[str, str] = {}
+def assert_shared_assets(root: Path) -> None:
+    """Every shared asset this module links must exist; the stamp itself is not ours.
+
+    A blog page carries ASSET_VERSION_PLACEHOLDER, never a hash, so that an edit to
+    any post cannot rewrite the stamp in all nine pages. `scripts/build_asset_version.mjs`
+    replaces the token with content hashes in the published artifact; that one
+    implementation is why this module no longer computes a hash at all.
+    """
     for name in ASSETS:
-        path = root / "web" / name
-        if not path.is_file():
+        if not (root / "web" / name).is_file():
             raise PostError(f"web/{name} is missing; every blog page links it")
-        versions[name] = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
-    return versions
 
 
 def render_header(root: str, blog: str) -> str:
@@ -438,13 +443,12 @@ def _document(
     body: str,
     root: str,
     footer: str,
-    versions: dict[str, str],
     sidebar: str = "",
 ) -> str:
     """One page. ``root`` is the relative path back to the site root; ``footer`` its links."""
     blog = "./" if root == "../" else root[3:]
     stylesheets = "\n".join(
-        f'<link rel="stylesheet" href="{root}{name}?v={versions[name]}">'
+        f'<link rel="stylesheet" href="{root}{name}?v={ASSET_VERSION_PLACEHOLDER}">'
         for name in ASSETS
     )
     main = (
@@ -512,9 +516,7 @@ def post_nav(posts: list[dict[str, Any]], current_slug: str) -> str:
     )
 
 
-def render_post_page(
-    post: dict[str, Any], posts: list[dict[str, Any]], versions: dict[str, str]
-) -> str:
+def render_post_page(post: dict[str, Any], posts: list[dict[str, Any]]) -> str:
     body = (
         '<p class="eyebrow">Editorial writing · not a catalog record</p>\n'
         f"<h1>{html.escape(post['title'])}</h1>\n"
@@ -530,12 +532,11 @@ def render_post_page(
         body,
         "../../",
         footer,
-        versions,
         sidebar=post_nav(posts, post["slug"]),
     )
 
 
-def render_index_page(posts: list[dict[str, Any]], versions: dict[str, str]) -> str:
+def render_index_page(posts: list[dict[str, Any]]) -> str:
     entries = (
         "\n".join(
             f'<article class="post-card"><h2><a href="{post["slug"]}/">{html.escape(post["title"])}</a></h2>'
@@ -554,19 +555,17 @@ def render_index_page(posts: list[dict[str, Any]], versions: dict[str, str]) -> 
     description = "How the AI Systems Atlas is built, and where it has been wrong."
     # The index sits one level shallower than a post, so its relative links differ.
     footer = '<a href="../">Browse the directory</a>'
-    return _document(
-        "Writing", description, f"{SITE_URL}{POSTS}/", body, "../", footer, versions
-    )
+    return _document("Writing", description, f"{SITE_URL}{POSTS}/", body, "../", footer)
 
 
 def build_pages(root: Path = ROOT) -> dict[str, str]:
     posts = load_posts(root)
-    versions = asset_versions(root)
+    assert_shared_assets(root)
     pages = {
-        f"{POSTS}/{post['slug']}/index.html": render_post_page(post, posts, versions)
+        f"{POSTS}/{post['slug']}/index.html": render_post_page(post, posts)
         for post in posts
     }
-    pages[f"{POSTS}/index.html"] = render_index_page(posts, versions)
+    pages[f"{POSTS}/index.html"] = render_index_page(posts)
     return pages
 
 

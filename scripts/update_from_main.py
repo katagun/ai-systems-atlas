@@ -55,8 +55,9 @@ def dirty_files() -> list[str]:
 
 
 def conflicted_files() -> list[str]:
+    # No status prefix here, so no slicing: these are bare paths.
     return [
-        line[3:]
+        line
         for line in git("diff", "--name-only", "--diff-filter=U").stdout.splitlines()
         if line.strip()
     ]
@@ -124,10 +125,11 @@ def main() -> int:
                 for name in stuck:
                     print(f"  {name}")
                 print(
-                    "\nResolve them, then `git add` the files and `git commit` to finish the merge."
-                    "\nThese files are hand-maintained shells, so take the incoming content and re-apply"
-                    "\nyour own edit; do not take either side wholesale. Then run"
-                    "\n`uv run python scripts/regenerate.py` and push once."
+                    "\nResolve each one by hand -- do not take either side wholesale, or you will drop"
+                    "\nwork that only exists on one of them. If a conflicted file is generated, resolve it"
+                    "\nby taking the incoming version and re-running the generator, rather than by hand."
+                    "\nThen `git add` the files, `git commit` to finish the merge, run"
+                    "\n`uv run python scripts/regenerate.py`, and push once."
                 )
                 return CONFLICT
             print(merge.stdout + merge.stderr)
