@@ -47,6 +47,69 @@ async function addArchivedSystems(page, names) {
   await page.route(/\/app\/systems\.json(\?.*)?$/, route => route.fulfill({ json: { ...payload, systems: [...payload.systems, ...added] } }));
 }
 
+// A probe that names a published record fails the moment a data batch adds,
+// renames, or excludes one, which puts the merge gate at the mercy of the
+// catalog rather than of the behaviour under test. So these fixtures add a
+// record the test owns, with a name no real record can hold, and leave the
+// rest of the published catalog in place: the page reads and searches exactly
+// what it reads in production, over one record nobody else can edit.
+//
+// The payload carries the fields a card renders and the index carries the text
+// search matches, so a fixture has to route both or the record either paints
+// nothing or matches nothing.
+async function addFixture(page, { payload, collection, record, indexed }) {
+  const published = readWeb(payload);
+  const [template] = published[collection];
+  await page.route(new RegExp(`/${payload.replace(".", "\\.")}(\\?.*)?$`), route =>
+    route.fulfill({ json: { ...published, [collection]: [...published[collection], { ...template, ...record }] } }));
+  const index = readWeb(`app/search/${collection}.json`);
+  await page.route(indexRoute(collection), route => route.fulfill({ json: { ...index, [record.id]: indexed } }));
+}
+
+// The runtime the exact-name, hyphen, count-placement, and misspelling probes
+// use. Its name is nonsense on purpose: no catalog batch can supply or remove it.
+const FIXTURE_RUNTIME = {
+  id: "snorpel-runtime",
+  name: "Snorpel",
+  description: "A runtime this test adds, running on-premises hardware.",
+  runtime_type: "desktop_runner",
+};
+
+// The specification the cross-collection probes use, for the same reason. The
+// hyphenated word lives in its indexed prose so the hyphen probe has something
+// to split without borrowing a published record's text.
+const FIXTURE_SPEC = {
+  id: "flarnum-protocol",
+  name: "Flarnum Protocol",
+  short_name: "FLARNUM",
+  description: "A specification this test adds.",
+};
+
+// The exact name, its one-letter misspelling, and the hyphenated pair, all
+// derived from the fixture rather than typed.
+const RUNTIME_QUERY = "Snorpel";
+const RUNTIME_TYPO = "Snorpl";
+const HYPHENATED = "on-premises";
+const SPEC_QUERY = "Flarnum Protocol";
+
+async function addRuntimeFixture(page) {
+  await addFixture(page, {
+    payload: "app/runtimes.json",
+    collection: "runtimes",
+    record: FIXTURE_RUNTIME,
+    indexed: `${FIXTURE_RUNTIME.id} ${FIXTURE_RUNTIME.name} ${FIXTURE_RUNTIME.description}`,
+  });
+}
+
+async function addSpecFixture(page) {
+  await addFixture(page, {
+    payload: "app/specifications.json",
+    collection: "specifications",
+    record: FIXTURE_SPEC,
+    indexed: `${FIXTURE_SPEC.id} ${FIXTURE_SPEC.name} ${FIXTURE_SPEC.description}`,
+  });
+}
+
 // Every request the page makes for one path, whatever its content stamp.
 function requestsFor(page, pathname) {
   const urls = [];
@@ -87,21 +150,27 @@ const placeCount = count => count.evaluate(async element => {
 });
 
 test("an exact name comes first", async ({ page }) => {
-  await searchAll(page, "ollama");
-  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
+  await addRuntimeFixture(page);
+  await searchAll(page, RUNTIME_QUERY);
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText(FIXTURE_RUNTIME.name);
 });
 
 test("hyphens and spaces ask the same question", async ({ page }) => {
-  await searchAll(page, "self-hosted");
+  await addRuntimeFixture(page);
+  await searchAll(page, HYPHENATED);
   await allIndexesLanded(page);
+  // Two empty results would agree on a count of zero and prove nothing about the
+  // hyphen rule, so this asserts the fixture is actually matched first.
+  await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
   const hyphenated = await page.locator("#all-directory-result-count").textContent();
-  await allSearch(page).fill("self hosted");
+  await allSearch(page).fill(HYPHENATED.replace("-", " "));
   await expect(page.locator("#all-directory-result-count")).toHaveText(hyphenated);
 });
 
 test("the result count shows beside the box, uncovered, without scrolling", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await searchAll(page, "ollama");
+  await addRuntimeFixture(page);
+  await searchAll(page, RUNTIME_QUERY);
   const count = page.locator("#results-bar .search-count");
   await expect(count).toHaveText(/^\d+ results?$/);
   const placed = await placeCount(count);
@@ -354,12 +423,13 @@ test("a carried query searches the same text a typed one does", async ({ page })
 });
 
 test("a misspelled name offers the right one", async ({ page }) => {
-  await searchAll(page, "olama");
-  const suggestion = page.getByRole("button", { name: "Ollama", exact: true });
+  await addRuntimeFixture(page);
+  await searchAll(page, RUNTIME_TYPO);
+  const suggestion = page.getByRole("button", { name: FIXTURE_RUNTIME.name, exact: true });
   await expect(suggestion).toBeVisible();
   await suggestion.click();
-  await expect(allSearch(page)).toHaveValue("Ollama");
-  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
+  await expect(allSearch(page)).toHaveValue(FIXTURE_RUNTIME.name);
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText(FIXTURE_RUNTIME.name);
   // The choice repaints away, so focus lands back in the search box.
   await expect(allSearch(page)).toBeFocused();
 });
@@ -391,6 +461,9 @@ test("a name the review left out says why, however its hyphen is typed", async (
 });
 
 test("an intent query offers the Finder job and opens its shortlist step", async ({ page }) => {
+  // A goal is only offered when records are eligible for it, so this needs a
+  // desktop-runner runtime whatever the catalog happens to hold.
+  await addRuntimeFixture(page);
   await searchAll(page, "run models locally");
   const hint = page.locator('[data-job-hint="all"]');
   await expect(hint).toContainText("Run models on my own computer");
@@ -402,8 +475,9 @@ test("an intent query offers the Finder job and opens its shortlist step", async
 // The banner is a flex box, and an author display rule overrides the one the
 // hidden attribute brings, so the stylesheet has to restore it.
 test("the job banner shows only while the query names a job", async ({ page }) => {
-  await searchAll(page, "ollama");
-  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
+  await addRuntimeFixture(page);
+  await searchAll(page, RUNTIME_QUERY);
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText(FIXTURE_RUNTIME.name);
   const hint = page.locator('[data-job-hint="all"]');
   await expect(hint).toBeHidden();
   await allSearch(page).fill("run models locally");
@@ -679,29 +753,32 @@ test("a button that switches views hands focus to the new view's heading", async
 // the query. A match in another collection is offered through All, from a
 // Directory scope or from a sibling view (R-P1-15).
 test("a query another collection answers offers Search all, not the suggestion form", async ({ page }) => {
-  // vLLM is a local runtime, so Systems lists nothing for it.
+  // The fixture runtime is a local runtime, so Systems lists nothing for it, and
+  // its name is one no published record holds, so nothing else answers either.
+  await addRuntimeFixture(page);
+  await addSpecFixture(page);
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
-  await search(page, "vLLM");
+  await search(page, RUNTIME_QUERY);
   const systems = page.locator("#project-grid");
   await expect(systems).toContainText("It matches records in other collections:");
   await expect(systems.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
   await systems.getByRole("button", { name: "Search all" }).click();
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Everything /);
-  await expect(allSearch(page)).toHaveValue("vLLM");
-  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("vLLM");
+  await expect(allSearch(page)).toHaveValue(RUNTIME_QUERY);
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText(FIXTURE_RUNTIME.name);
   await expect(allSearch(page)).toBeFocused();
-  await expect(page).toHaveURL(address => address.searchParams.get("q") === "vLLM" && address.searchParams.get("collection") === "all");
+  await expect(page).toHaveURL(address => address.searchParams.get("q") === RUNTIME_QUERY && address.searchParams.get("collection") === "all");
 
   await page.goto("/?collection=specifications");
   await expect(page.locator("#specification-grid .project-card").first()).toBeVisible();
-  await search(page, "vLLM");
+  await search(page, RUNTIME_QUERY);
   await page.locator("#specification-grid").getByRole("button", { name: "Search all" }).click();
   await expect(page.locator("#directory")).toHaveClass(/is-active/);
-  await expect(allSearch(page)).toHaveValue("vLLM");
-  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("vLLM");
+  await expect(allSearch(page)).toHaveValue(RUNTIME_QUERY);
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText(FIXTURE_RUNTIME.name);
   await expect(allSearch(page)).toBeFocused();
-  await expect(page).toHaveURL(address => address.searchParams.get("q") === "vLLM" && !address.searchParams.has("view"));
+  await expect(page).toHaveURL(address => address.searchParams.get("q") === RUNTIME_QUERY && !address.searchParams.has("view"));
 
   // Only Specifications answers this one, so Systems offers neither a suggestion form
   // nor nothing: Everything holds specifications, so Search all has something to show
@@ -709,14 +786,16 @@ test("a query another collection answers offers Search all, not the suggestion f
   // "All lists no specifications" -- the omission this fix removed.
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
-  await search(page, "Agent2Agent Protocol");
-  await expect(systems).toContainText("No matches for “Agent2Agent Protocol”.");
+  await search(page, SPEC_QUERY);
+  await expect(systems).toContainText(`No matches for “${SPEC_QUERY}”.`);
   await expect(systems.getByRole("button", { name: "Try the Finder" })).toBeVisible();
   await expect(systems.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
   await systems.getByRole("button", { name: "Search all" }).click();
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Everything /);
   await expect(page.locator("#all-directory-grid .specification-card")).toHaveCount(1);
-  await expect(page.locator("#all-directory-grid .specification-card h2")).toHaveText("A2A");
+  // A specification card leads with its short name when it has one, as the A2A
+  // card did, so the assertion names the same field the card renders.
+  await expect(page.locator("#all-directory-grid .specification-card h2")).toHaveText(FIXTURE_SPEC.short_name);
 });
 
 // An empty result judges the whole catalog, so it waits for every search

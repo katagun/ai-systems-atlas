@@ -2794,7 +2794,11 @@ function trustBlockMarkup(service) {
   }
   const rows = TRUST_PROPERTY_ORDER.map(name => {
     const item = trust.properties[name];
-    return `<tr><td>${escapeHTML(TRUST_PROPERTY_LABELS[name])}</td><td>${escapeHTML(trustStatusName(item.status))}</td><td>${escapeHTML(item.note)} ${trustSourceLink(item, "source")} <span class="evidence-date">${escapeHTML(item.verified_at)}</span></td></tr>`;
+    // The status cell repeats the property name for a screen reader, because the phone
+    // layout stacks the row into blocks (styles.css, the trust-table rules in the 720px
+    // query) and a stacked cell has no column header left to announce it against.
+    const label = TRUST_PROPERTY_LABELS[name];
+    return `<tr><td>${escapeHTML(label)}</td><td><span class="visually-hidden">${escapeHTML(label)}: </span>${escapeHTML(trustStatusName(item.status))}</td><td>${escapeHTML(item.note)} ${trustSourceLink(item, "source")} <span class="evidence-date">${escapeHTML(item.verified_at)}</span></td></tr>`;
   }).join("");
   const findings = trust.findings.length
     ? `<ul>${trust.findings.map(trustFindingMarkup).join("")}</ul>`

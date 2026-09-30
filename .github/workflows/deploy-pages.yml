@@ -46,6 +46,18 @@ jobs:
           python-version: "3.12"
       - name: Sync environment
         run: uv sync --locked
+      # The web behavior tests include the guard that this checkout's node_modules is the
+      # pinned one (tests/test_web.js, added with scripts/install_pin.mjs). That assertion
+      # reads node_modules, so this job has to install the same tree `verify` does before it
+      # can run them: without it every package reads as absent rather than drifted and the
+      # two runs after #406 failed here, leaving main unpublished.
+      - name: Cache npm downloads
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install Node dependencies
+        run: npm ci --ignore-scripts
       - name: Validate published data
         run: uv run python scripts/validate_directory.py
       - name: Run web behavior tests
