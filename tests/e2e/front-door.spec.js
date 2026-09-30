@@ -8,6 +8,7 @@ test("a bare URL opens the Elements front door with search and the role map abov
     await page.setViewportSize({ width, height });
     await page.goto("/");
     await expect(page.locator("#front-door")).toBeVisible();
+    await expect(page.locator("#directory-title")).toHaveText(`${counts.allDirectoryEntries.toLocaleString("en-US")} elements of AI`);
     await expect(page.locator(".collection-panel:not([hidden])")).toHaveCount(0);
     await expect(page).not.toHaveURL(/collection=/);
     const index = page.locator("#elements");
