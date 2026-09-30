@@ -19366,6 +19366,181 @@
       ],
       "source_model": "proprietary",
       "license_review_status": "verified"
+    },
+    {
+      "id": "openai-agents-js",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "OpenAI Agents SDK for JavaScript",
+      "repo": "openai/openai-agents-js",
+      "url": "https://github.com/openai/openai-agents-js",
+      "description": "JavaScript/TypeScript framework for building multi-agent workflows: instruction-configured agents with tools, guardrails, handoffs, session memory, tracing, sandbox execution, and realtime voice behind a provider-agnostic model contract.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "agent definitions, handoffs, session histories, and run traces",
+      "deployment": [
+        "library"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "external_sandbox",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 3869,
+      "stars_verified_at": "2026-09-29",
+      "historical_stars": null,
+      "current_repo_note": "JavaScript/TypeScript sibling of openai-agents-python (reviewed as openai-agents-sdk); provider coupling is left unreviewed beyond the documented provider-agnostic model-provider contract.",
+      "score": {
+        "task_reliability": 8.0,
+        "tool_use": 8.8,
+        "autonomy": 8.0,
+        "human_control": 8.6,
+        "observability_recovery": 8.4,
+        "data_sovereignty": 6.2,
+        "interoperability": 8.6,
+        "maturity": 8.0,
+        "overall": 8.12
+      },
+      "strengths": [
+        "Small core loop of agents, handoffs, guardrails, and approvals covers multi-agent orchestration with tracing, sessions, and human-in-the-loop built in",
+        "Substitutable model-provider contract plus a Vercel AI SDK adapter keeps the runtime usable beyond OpenAI models",
+        "Sandbox agents, realtime voice agents, and MCP transports ship in one documented package with CI and hosted docs"
+      ],
+      "weaknesses": [
+        "OpenAI models and hosted execution paths remain the most complete and documented route",
+        "Deployment, persistence beyond sessions, permissions, and production hardening stay application-defined",
+        "Named non-OpenAI backends were not individually re-verified in this review"
+      ],
+      "why_it_matters": "Shows the provider-published SDK pattern in JavaScript: an open operational loop with replaceable model, session, and sandbox seams.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-29",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "koog",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Koog",
+      "repo": "JetBrains/koog",
+      "url": "https://github.com/JetBrains/koog",
+      "description": "Kotlin-first framework for building predictable, fault-tolerant AI agents across JVM, Android, iOS, and web targets, with graph workflows, retries, state persistence, history compression, tracing, MCP and ACP integration, and multi-provider LLM support.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "google",
+        "openai",
+        "anthropic",
+        "deepseek",
+        "openrouter",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "agent graph definitions, execution state snapshots, conversation history, and vector retrieval indexes",
+      "deployment": [
+        "library"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "workflows",
+        "mcp",
+        "persistent_state"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 4598,
+      "stars_verified_at": "2026-09-29",
+      "historical_stars": null,
+      "current_repo_note": "Default branch is develop; license evidence pinned from LICENSE.txt on that branch.",
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 8.2,
+        "autonomy": 7.6,
+        "human_control": 7.8,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 7.6,
+        "interoperability": 8.8,
+        "maturity": 6.8,
+        "overall": 7.73
+      },
+      "strengths": [
+        "Kotlin Multiplatform targets across JVM, JS, Wasm, Android, and iOS with Spring and Ktor embedding for enterprise JVM shops",
+        "Reliability machinery is built in: retries, state persistence with restore points, and history compression",
+        "Six maintained provider integrations plus Ollama behind a switchable contract with history adaptation, alongside MCP and ACP support"
+      ],
+      "weaknesses": [
+        "JetBrains incubator status and a develop-branch workflow signal API instability ahead of maturity",
+        "JVM and Kotlin centered; other platforms are reached only through multiplatform targets",
+        "Production hardening, permissions, and cost controls stay application-defined"
+      ],
+      "why_it_matters": "Represents the enterprise-JVM approach to agents: type-safe, fault-tolerant orchestration that meets Kotlin shops where they are.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-29",
+      "github_detected_license": "Apache-2.0"
     }
   ],
   "verified_at": "2026-09-28"
