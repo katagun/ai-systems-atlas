@@ -2499,7 +2499,7 @@ test("priorityBoost reads the memory and agent traits its priorities name, not a
     score: { data_sovereignty: 5, overall: 7 },
   };
   assert.equal(priorityBoost(memory, "local_editable"), 2.2 + 2 + 0.8);
-  assert.equal(priorityBoost(memory, "local_control"), 3 + 0.8 + 0.5);
+  assert.equal(priorityBoost(memory, "local_control"), 1 + 1 + 1);
   // deployment and architectures are required on every memory record, so the
   // unguarded .includes above is only safe because the validator guarantees them.
   const required = new Set(Object.keys(JSON.parse(fs.readFileSync(
@@ -2514,8 +2514,38 @@ test("priorityBoost reads the memory and agent traits its priorities name, not a
   };
   assert.equal(priorityBoost(agent, "direct_use"), 3);
   assert.equal(priorityBoost(agent, "developer"), 0);
-  assert.equal(priorityBoost(agent, "local"), 3 + 1 + 0.5);
+  assert.equal(priorityBoost(agent, "local"), 1 + 1 + 1);
   assert.equal(priorityBoost(agent, "control"), 3 + 2);
+});
+
+test("sovereignty outranks the local_first boolean on the local priorities", () => {
+  // ADR 030 made local_first a data trait (where kept content lives and
+  // whether the vendor keeps it), so on an execution-labelled priority the
+  // boolean alone must not beat the full data-sovereignty range. These two
+  // records disagree on exactly those two inputs.
+  const localLowSov = {
+    system_family: "agent_system", local_first: true, execution_boundaries: ["remote_cloud"],
+    agent_interfaces: ["terminal"], score: { data_sovereignty: 2, overall: 7 },
+  };
+  const remoteHighSov = {
+    system_family: "agent_system", local_first: false, execution_boundaries: ["host"],
+    agent_interfaces: ["terminal"], score: { data_sovereignty: 9, overall: 7 },
+  };
+  assert.ok(priorityBoost(remoteHighSov, "local") > priorityBoost(localLowSov, "local"),
+    `sovereignty 9 without local_first (${priorityBoost(remoteHighSov, "local")}) should beat ` +
+    `local_first with sovereignty 2 (${priorityBoost(localLowSov, "local")})`);
+
+  const memLocalLow = {
+    system_family: "memory_system", local_first: true, deployment: ["managed_cloud"],
+    human_editable: false, architectures: ["plain_files"], score: { data_sovereignty: 2, overall: 7 },
+  };
+  const memRemoteHigh = {
+    system_family: "memory_system", local_first: false, deployment: ["self_hosted"],
+    human_editable: false, architectures: ["plain_files"], score: { data_sovereignty: 9, overall: 7 },
+  };
+  assert.ok(priorityBoost(memRemoteHigh, "local_control") > priorityBoost(memLocalLow, "local_control"),
+    `sovereignty 9 without local_first (${priorityBoost(memRemoteHigh, "local_control")}) should beat ` +
+    `local_first with sovereignty 2 (${priorityBoost(memLocalLow, "local_control")})`);
 });
 
 test("recommendationReasons prints an em dash, never NaN, for a dimension no detail file carried", () => {

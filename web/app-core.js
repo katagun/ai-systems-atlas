@@ -1780,7 +1780,9 @@
     }
     if (project.system_family === "memory_system") {
       if (priority === "local_editable") return (project.local_first ? 2.2 : 0) + (project.human_editable ? 2 : 0) + (project.architectures.includes("plain_files") ? 0.8 : 0);
-      if (priority === "local_control") return (project.local_first ? 3 : 0) + (project.deployment.includes("self_hosted") ? 0.8 : 0) + dimension("data_sovereignty") / 10;
+      // ADR 030 made local_first a data trait, so the boolean is worth half the
+      // sovereignty range: where execution happens (self-hosted) decides first.
+      if (priority === "local_control") return (project.local_first ? 1 : 0) + (project.deployment.includes("self_hosted") ? 1 : 0) + dimension("data_sovereignty") / 5;
       if (priority === "easy") return dimension("operational_simplicity") / 2;
       if (priority === "portable") return dimension("interoperability") / 1.8 + (project.architectures.includes("plain_files") ? 0.6 : 0);
       return dimension("overall") / 3;
@@ -1788,7 +1790,9 @@
     if (project.system_family === "agent_system") {
       if (priority === "direct_use") return project.agent_interfaces.some(item => ["terminal", "ide", "web_app"].includes(item)) ? 3 : 0;
       if (priority === "developer") return project.agent_interfaces.some(item => ["library", "api_sdk"].includes(item)) ? 3 : 0;
-      if (priority === "local") return (project.local_first ? 3 : 0) + ((project.execution_boundaries || []).includes("host") ? 1 : 0) + dimension("data_sovereignty") / 10;
+      // Same rebalance as local_control above: the host boundary judges where
+      // execution happens, local_first judges the data, and sovereignty decides.
+      if (priority === "local") return (project.local_first ? 1 : 0) + ((project.execution_boundaries || []).includes("host") ? 1 : 0) + dimension("data_sovereignty") / 5;
       if (priority === "control") return dimension("human_control") / 3 + dimension("observability_recovery") / 4;
       return dimension("overall") / 3;
     }
