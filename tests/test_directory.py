@@ -1263,12 +1263,19 @@ class DirectoryTests(unittest.TestCase):
                 "source_model",
             ):
                 self.assertNotIn(field, record, record["id"])
-            # ADR 044: a lab joins a reviewed release, or is recorded on its own
-            # published statement of frontier intent and joins to nothing.
+            # ADR 041, 044, 048: a lab either develops a reviewed model release or
+            # it does not, and the three bases are exclusive in both directions. The
+            # invariant is about *developer* names, not about having no names: a lab
+            # on the announced or system basis may still be named by a service it
+            # operates or a runtime it maintains, which is how lab-hugging-face joins
+            # two inference services and a runtime while joining no release.
+            names = set(record["catalog_names"])
             if record["admission_basis"] == "reviewed_release":
-                self.assertTrue(set(record["catalog_names"]) & developers, record["id"])
+                self.assertTrue(names & developers, record["id"])
             else:
-                self.assertEqual(record["catalog_names"], [], record["id"])
+                self.assertEqual(
+                    names & developers, set(), f"{record['id']} names a developer"
+                )
             self.assertTrue(record["organization_note"].strip(), record["id"])
             for name in record["catalog_names"]:
                 self.assertNotIn(

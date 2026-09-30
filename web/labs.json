@@ -668,6 +668,82 @@
       "admission_basis": "reviewed_release"
     },
     {
+      "id": "lab-hugging-face",
+      "name": "Hugging Face",
+      "url": "https://huggingface.co/",
+      "description": "The machine-learning collaboration platform that publishes the SmolLM model family, the smolagents agent framework, and the LeRobot robotics library, and hosts the model, dataset, and Space hub that other developers release on.",
+      "lab_type": "technology_company",
+      "headquarters": "none_listed",
+      "admission_basis": "reviewed_system",
+      "organization_note": "Hugging Face, Inc. is \"a Delaware corporation\" in the only governing document that names it, and its privacy policy names the same entity, so this is one organization and not a parent with a subsidiary; no parent organization is recorded because the entity is the company itself. It states no headquarters. Its careers page calls it \"a remote-first company\", says \"we have spaces in NYC and Paris\", and lists both under Our Offices: 20 Jay Street, Brooklyn, New York 11201, USA, and 124 Rue Réaumur, 75002 Paris, France. Two offices in two countries and no statement of a base is the case docs/LABS.md records as no headquarters listed. Its terms name New York only as the governing law and the exclusive venue for courts, which is not a headquarters statement and is not read as one, and no page reviewed gives the company a postal address: the contact routes are legal@huggingface and privacy@huggingface. It is a technology company rather than an AI company because the hub, the datasets, the Spaces, the libraries, and the storage and enterprise products are its principal business, and its own homepage describes it as \"the platform where the machine learning community collaborates on models, datasets, and applications\", with its own model line one part of that. It is recorded on a system rather than on a release: the catalog has reviewed no model release of its own, so ADR 048's basis applies and the record joins from the two systems it makes, smolagents and LeRobot, both published from the GitHub organization listed as a channel, and both already carrying reviewed Apache-2.0 evidence in this collection. The model line is real and is not claimed here: the SmolLM series is published from its own Hugging Face organization, and whether a SmolLM release can be reviewed is a separate open question, because no repository in that organization ships a licence file and Apache-2.0 appears only as a declaration in a model card header. The catalog already spells the organization \"Hugging Face\", as the operator of two inference services and the maintainer of Text Embeddings Inference, so that is its one catalog name; those services serve other developers' models as well as its own, which is why the record does not treat them as its serving surface. It publishes no frontier-safety, responsible-scaling, preparedness, or risk-management framework: the obvious /safety and /about paths both return an individual user profile page rather than a company page, the terms and privacy policy carry none, and the careers page states only a mission of democratizing machine learning, so the field is omitted rather than filled with a mission statement.",
+      "catalog_names": [
+        "Hugging Face"
+      ],
+      "systems": [
+        "lerobot",
+        "smolagents"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://huggingface.co/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/huggingface"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/HuggingFaceTB"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms of Service: a binding agreement between the user and Hugging Face, Inc., a Delaware corporation, with New York governing law and exclusive New York courts and a legal@huggingface contact",
+          "url": "https://huggingface.co/terms-of-service",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy Policy: Hugging Face, Inc. as the Company, with privacy@huggingface as the contact and no postal address",
+          "url": "https://huggingface.co/privacy",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: a remote-first company with spaces in NYC and Paris, both office addresses (20 Jay Street, Brooklyn NY 11201 USA and 124 Rue Réaumur, 75002 Paris, France), and the mission to democratize good machine learning",
+          "url": "https://huggingface.co/careers",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Homepage: the AI community building the future, described as the platform where the machine learning community collaborates on models, datasets, and applications",
+          "url": "https://huggingface.co/",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "smolagents repository under the organization's own GitHub organization, shipping the verbatim Apache License 2.0 text and published as the reviewed system smolagents",
+          "url": "https://github.com/huggingface/smolagents",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Verified huggingface GitHub organization, from which smolagents and LeRobot are published",
+          "url": "https://github.com/huggingface",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Verified HuggingFaceTB Hugging Face organization, from which the SmolLM weights are published and which is recorded as a channel rather than as a reviewed release",
+          "url": "https://huggingface.co/HuggingFaceTB",
+          "verified_at": "2026-09-29"
+        }
+      ],
+      "verified_at": "2026-09-29"
+    },
+    {
       "id": "lab-ibm",
       "name": "IBM",
       "url": "https://www.ibm.com/",
