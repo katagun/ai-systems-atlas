@@ -789,6 +789,7 @@ function applyDirectoryDefaults() {
 
 function renderStats() {
   const { count } = AppCore.collectionCount("all", collectionPayloads());
+  $("#directory-count").textContent = count.toLocaleString("en-US");
   $("#hero-kicker").textContent = `${count} systems, source models, services, runtimes, packs, and robots`;
 }
 
