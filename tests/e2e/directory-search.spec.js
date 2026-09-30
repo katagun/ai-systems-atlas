@@ -229,14 +229,25 @@ test("the finder guides a local runtime path into the runtimes scope", async ({ 
 test("the unified directory distinguishes and opens systems and inference services", async ({ page }) => {
   await page.goto("/");
 
+  // "AI21 Studio" answers for two collections, and Everything holds both: the service
+  // and the organization that develops models behind it. The lab used to be reachable
+  // only by searching for the lab itself, because the All grid summed six collections
+  // and omitted Labs and Specifications.
   await searchAll(page, "AI21 Studio");
-  const serviceCard = page.locator("#all-directory-grid .project-card");
+  const serviceCard = page.locator("#all-directory-grid .inference-service-card");
+  const labCard = page.locator("#all-directory-grid .lab-card");
   await expect(serviceCard).toHaveCount(1);
+  await expect(labCard).toHaveCount(1);
   await expect(serviceCard.locator(".family-label")).toContainText("Inference service · Direct model API");
   await expect(serviceCard.locator(".score-ring")).toHaveCount(0);
   await serviceCard.getByRole("button", { name: /^View details for / }).click();
   await expect(recordView(page, "inference")).toContainText("Inference-service score");
   await closeRecord(page, "inference");
+
+  // And the same scope opens the lab's own dialog, which the grid had no handler for.
+  await labCard.getByRole("button", { name: /^View details for / }).click();
+  await expect(recordView(page, "lab")).toContainText("AI21 Labs");
+  await closeRecord(page, "lab");
 
   await searchAll(page, "Kilo Code");
   const systemCard = page.locator("#all-directory-grid .project-card");
@@ -253,7 +264,7 @@ test("the unified Directory remains usable at a narrow viewport", async ({ page 
   await expect(collectionEntry(page, "all")).toBeVisible();
   await expect(collectionEntry(page, "inference")).toBeVisible();
   await searchAll(page, "AI21 Studio");
-  await expect(page.locator("#all-directory-grid .project-card h2")).toHaveText("AI21 Studio");
+  await expect(page.locator("#all-directory-grid .project-card h2")).toHaveText(["AI21 Studio", "AI21 Labs"]);
   await openCollection(page, "inference");
   await expect(searchBox(page, "inference")).toBeVisible();
   await expect(page.locator("#inference-grid .score-ring").first()).toBeVisible();
@@ -481,12 +492,16 @@ test("Perplexity assistant, Computer, and API remain distinct directory records"
   await page.goto("/");
   await searchAll(page, "Perplexity");
 
-  const cards = page.locator("#all-directory-grid .project-card");
+  // Perplexity is also an organization in this catalog, so Everything lists a lab card
+  // beside the systems. The three systems still have to stay distinct from each other,
+  // so the distinctness check reads the cards that are not labs.
+  await expect(page.locator("#all-directory-grid .lab-card").filter({ has: page.getByRole("heading", { name: "Perplexity", exact: true }) })).toHaveCount(1);
+  const systemCards = page.locator("#all-directory-grid .project-card:not(.lab-card)");
   for (const name of ["Perplexity", "Perplexity Computer", "Perplexity API"]) {
-    await expect(cards.filter({ has: page.getByRole("heading", { name, exact: true }) })).toHaveCount(1);
+    await expect(systemCards.filter({ has: page.getByRole("heading", { name, exact: true }) })).toHaveCount(1);
   }
 
-  const assistantCard = cards.filter({ has: page.getByRole("heading", { name: "Perplexity", exact: true }) });
+  const assistantCard = systemCards.filter({ has: page.getByRole("heading", { name: "Perplexity", exact: true }) });
   await expect(assistantCard.locator(".family-label")).toContainText("System · Assistant system");
   await assistantCard.getByRole("button", { name: /^View details for / }).click();
   await expect(recordView(page, "system")).toContainText("Assistant-system score");

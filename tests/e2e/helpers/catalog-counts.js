@@ -23,10 +23,16 @@ const sourceModels = read("models-dev.json").models;
 const sourceModelIds = new Set(sourceModels.map(model => model.source_id));
 const models = sourceModels.length + reviewedModels.filter(model => !sourceModelIds.has(model.source_id)).length;
 
-// The All view unions the four scored collections plus unscored agent packs
-// and robots; specifications are their own unscored collection and are not
-// counted here.
-const allDirectoryEntries = projects.length + inferenceServices.length + localRuntimes.length + models + packs.length + robots.length;
+// The All view unions every collection the site publishes: the four scored ones plus
+// the unscored packs, robots, labs, and specifications. This comment used to say
+// specifications "are their own unscored collection and are not counted here", which
+// was written when agent packs were added on 2026-09-16 and never revisited as robots,
+// then labs, then specifications became collections of their own. The web tile counted
+// the same six while the search above it reached all eight, so a lab was findable and
+// unbrowsable at once. Keep this list and COLLECTIONS in app-core.js in step; the tile's
+// own count is asserted against the sum of every collection's payload in test_web.js.
+const allDirectoryEntries = projects.length + inferenceServices.length + localRuntimes.length + models
+  + packs.length + robots.length + labs.length + specifications.length;
 
 function projectsInFamily(family) {
   return projects.filter(project => project.system_family === family).length;

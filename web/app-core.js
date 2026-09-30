@@ -622,14 +622,18 @@
   const DIRECTORY_KINDS = [
     ["system", "searchIndex"], ["inference", "serviceSearchIndex"], ["runtime", "runtimeSearchIndex"],
     ["model", "modelSearchIndex"], ["pack", "packSearchIndex"], ["robot", "robotSearchIndex"],
+    ["lab", "labSearchIndex"], ["spec", "specSearchIndex"],
   ];
 
   // All is A–Z while browsing (ADR 013) and ordered by match while searching,
   // never by score (ADR 040). Each collection reads its own index namespace;
   // a missing one narrows that collection to its boot fields.
-  function filterDirectoryEntries(projects, services, runtimes = [], models = [], filters = {}, packs = [], robots = []) {
+  function filterDirectoryEntries(projects, services, runtimes = [], models = [], filters = {}, packs = [], robots = [], labs = [], specifications = []) {
     const query = parseSearchQuery(filters.term);
-    const lists = { system: projects, inference: services, runtime: runtimes, model: models, pack: packs, robot: robots };
+    const lists = {
+      system: projects, inference: services, runtime: runtimes, model: models,
+      pack: packs, robot: robots, lab: labs, spec: specifications,
+    };
     const entries = [];
     for (const [kind, indexKey] of DIRECTORY_KINDS) {
       for (const record of lists[kind]) {
@@ -761,7 +765,7 @@
   // URL key that opens the scope narrowed to one.
   const FAMILY_SHORT_NAMES = { memory_system: "Memory", agent_system: "Agents", assistant_system: "Assistants" };
   const COLLECTIONS = [
-    { id: "all", meaning: "Browse systems, models, services, runtimes, packs, and robots together. The empty circle represents mixed record types.", name: "Everything", short: "All", kind: "scope", emblem: null, field: null, facet: null },
+    { id: "all", meaning: "Browse systems, models, services, runtimes, packs, robots, labs, and specifications together. The empty circle represents mixed record types.", name: "Everything", short: "All", kind: "scope", emblem: null, field: null, facet: null },
     { id: "systems", meaning: "Browse memory systems, agent systems, and assistants. Connected modules represent the collection, not a database or one system family.", name: "Systems", short: "Systems", kind: "scope", emblem: null, glyph: '<path d="m14.8 12.5-3.1 6M17.2 12.5l3.1 6M13 21h6"/><rect x="13.5" y="7.5" width="5" height="5" rx="1"/><rect x="8" y="18.5" width="5" height="5" rx="1"/><rect x="19" y="18.5" width="5" height="5" rx="1"/>', field: "system_family", facet: "family" },
     { id: "models", meaning: "Browse reviewed model releases and attributed source records. The collection includes more than language-only models.", name: "Models", short: "Models", kind: "scope", emblem: "language-model", field: "model_type", facet: "type" },
     { id: "inference", meaning: "Browse managed inference services, including hosts, cloud platforms, and routers.", name: "Inference services", short: "Services", kind: "scope", emblem: "direct-model-api", field: "service_type", facet: "type" },
@@ -778,7 +782,7 @@
     const { projects = [], services = [], runtimes = [], models = [], packs = [], robots = [], labs = [], specifications = [] } = payloads;
     const { status } = directoryDefaults();
     const listed = projects.filter(project => !status || project.status === status);
-    if (id === "all") return [...projects, ...services, ...runtimes, ...models, ...packs, ...robots];
+    if (id === "all") return [...projects, ...services, ...runtimes, ...models, ...packs, ...robots, ...labs, ...specifications];
     if (id === "systems") return listed;
     if (id === "models") return models;
     if (id === "inference") return services;

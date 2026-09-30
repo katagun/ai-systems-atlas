@@ -1,5 +1,6 @@
 const test = require("node:test");
 const crypto = require("node:crypto");
+const { relative, sep } = require("node:path");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
@@ -1031,36 +1032,73 @@ function indexHTML() {
   return fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
 }
 
-test("index.html references each web asset under its content hash so a change is never served from a stale cache", () => {
-  const references = [...indexHTML().matchAll(/(?:href|src)="([\w./-]+)\?v=([^"]*)"/g)];
-  assert.deepEqual(references.map(match => match[1]).sort(), ["app-core.js", "app.js", "fonts.css", "styles.css"]);
-  for (const [, file, version] of references) {
-    const digest = crypto.createHash("sha256").update(fs.readFileSync(path.join(__dirname, "..", "web", file))).digest("hex").slice(0, 12);
-    assert.equal(version, digest, `${file} is referenced as ?v=${version} but its content hashes to ${digest}; run node scripts/build_asset_version.mjs`);
+const { DETAIL_VERSION_KEY, PLACEHOLDER, pageFiles, readDetailTree, readPageAsset, stampAssetVersions, violations } =
+  require("../scripts/build_asset_version.mjs");
+
+// ADR 050: committed pages carry PLACEHOLDER, and the deploy job substitutes content
+// hashes. So the committed file cannot be checked for a correct hash any more, and the
+// coverage that check used to give is asserted against the stamper's *output* instead:
+// the guarantee that a changed asset is never served from a stale cache still has to
+// hold, it just lives in a function call rather than in a committed line.
+const webRoot = path.join(__dirname, "..", "web");
+const stampedPage = (name = "index.html") => {
+  const page = path.join(webRoot, name);
+  return stampAssetVersions(fs.readFileSync(page, "utf8"), readPageAsset(page), readDetailTree);
+};
+const stampsOf = (html) => new Map([...html.matchAll(/(?:href|src)="([\w./-]+)\?v=([^"]*)"/g)].map(m => [m[1], m[2]]));
+const dataVersionsOf = (html) => JSON.parse(html.match(/id="data-versions">([^<]*)</)[1]);
+
+test("no committed page carries a content hash, which is what makes hash-only merge conflicts impossible", () => {
+  const committed = pageFiles().map(page => violations(page, fs.readFileSync(page, "utf8"))).flat();
+  assert.deepEqual(committed, [], `a deploy build was committed, or a reference is broken:\n  ${committed.join("\n  ")}`);
+  for (const page of pageFiles()) {
+    const html = fs.readFileSync(page, "utf8");
+    for (const [file, version] of stampsOf(html)) {
+      assert.equal(version, PLACEHOLDER, `${page} references ${file} under ?v=${version}, not the placeholder`);
+    }
   }
 });
 
-test("every catalog file app.js fetches is stamped with its content hash so the data can be cached", () => {
-  const stamped = JSON.parse(indexHTML().match(/<script type="application\/json" id="data-versions">([^<]*)<\/script>/)[1]);
-  const fetched = [...fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8")
+test("the deploy stamper resolves every page's references, so one file changed on one branch moves only that file's stamp", () => {
+  const app = stampsOf(stampedPage("index.html"));
+  assert.deepEqual([...app.keys()].sort(), ["app-core.js", "app.js", "fonts.css", "styles.css"]);
+  for (const [file, version] of app) {
+    const digest = crypto.createHash("sha256").update(fs.readFileSync(path.join(webRoot, file))).digest("hex").slice(0, 12);
+    assert.equal(version, digest, `${file} would be published as ?v=${version} but hashes to ${digest}`);
+  }
+  // The blog reaches the same two stylesheets by a different, page-relative path and must
+  // land on the same hashes, which is the whole point of one implementation replacing the
+  // second copy this module used to have in build_blog.py.
+  for (const page of pageFiles().filter(name => name.includes(`${sep}blog${sep}`))) {
+    for (const [file, version] of stampsOf(stampedPage(relative(webRoot, page)))) {
+      const shared = file.replace(/^(\.\.\/)+/, "");
+      assert.equal(version, app.get(shared), `${relative(webRoot, page)} and the app disagree on ${shared}`);
+    }
+  }
+});
+
+test("every catalog file app.js fetches is stamped at deploy so the data can be cached", () => {
+  const fetched = [...fs.readFileSync(path.join(webRoot, "app.js"), "utf8")
     .matchAll(/loadJSON\("([\w./-]+)"\)/g)].map(match => match[1]);
+  const committed = dataVersionsOf(indexHTML());
   for (const file of fetched) {
-    assert.ok(file in stamped, `app.js fetches ${file} but index.html does not stamp it`);
+    assert.ok(file in committed, `app.js fetches ${file} but index.html does not stamp it`);
   }
+  const stamped = dataVersionsOf(stampedPage());
   for (const [file, version] of Object.entries(stamped)) {
-    if (file === "app/detail") continue; // one shared stamp over a directory, not a single file's hash
-    const digest = crypto.createHash("sha256").update(fs.readFileSync(path.join(__dirname, "..", "web", file))).digest("hex").slice(0, 12);
-    assert.equal(version, digest, `${file} is stamped ${version} but hashes to ${digest}; run node scripts/build_asset_version.mjs`);
+    if (file === DETAIL_VERSION_KEY) continue; // one shared stamp over a directory, not a single file's hash
+    const digest = crypto.createHash("sha256").update(fs.readFileSync(path.join(webRoot, file))).digest("hex").slice(0, 12);
+    assert.equal(version, digest, `${file} would be published as ${version} but hashes to ${digest}`);
   }
 });
 
-// The loop above exempts app/detail because it stamps a tree rather than a
-// file. Nothing else checked its value, so a builder whose hashing changed —
-// or one whose stamp depended on where the checkout lived — was invisible
-// here. This recomputes it independently: over the whole tree, in sorted order,
-// under each file's slash-separated path relative to the detail root.
+// The two loops above exempt app/detail because it stamps a tree rather than a file.
+// Nothing else checked its value, so a builder whose hashing changed -- or one whose
+// stamp depended on where the checkout lived -- was invisible here. This recomputes it
+// independently: over the whole tree, in sorted order, under each file's slash-separated
+// path relative to the detail root.
 test("the shared app/detail stamp hashes every detail file's content under a checkout-independent name", () => {
-  const detailRoot = path.join(__dirname, "..", "web", "app", "detail");
+  const detailRoot = path.join(webRoot, "app", "detail");
   const names = fs.readdirSync(detailRoot, { recursive: true })
     .filter(name => fs.statSync(path.join(detailRoot, name)).isFile())
     .map(name => name.split(path.sep).join("/"))
@@ -1072,22 +1110,26 @@ test("the shared app/detail stamp hashes every detail file's content under a che
     hash.update(Buffer.from(name));
     hash.update(fs.readFileSync(path.join(detailRoot, name)));
   }
-  const digest = hash.digest("hex").slice(0, 12);
-  const versions = JSON.parse(indexHTML().match(/id="data-versions">([^<]*)</)[1]);
-  assert.equal(versions["app/detail"], digest,
-    `index.html stamps app/detail ${versions["app/detail"]} but the tree hashes to ${digest}; run node scripts/build_asset_version.mjs`);
+  const versions = dataVersionsOf(stampedPage());
+  assert.equal(versions[DETAIL_VERSION_KEY], hash.digest("hex").slice(0, 12),
+    `app/detail would be published as ${versions[DETAIL_VERSION_KEY]} but the tree hashes to something else`);
 });
 
-test("every app payload class is versioned, with one shared stamp for detail", () => {
-  const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
-  const versions = JSON.parse(html.match(/id="data-versions">([^<]*)</)[1]);
+test("every app payload class is versioned at deploy, with one shared stamp for detail", () => {
+  const versions = dataVersionsOf(stampedPage());
   for (const collection of ["systems", "inference", "runtimes", "specifications", "packs", "labs", "robots"]) {
     assert.match(versions[`app/${collection}.json`], /^[0-9a-f]{12}$/);
     assert.match(versions[`app/search/${collection}.json`], /^[0-9a-f]{12}$/);
   }
-  assert.match(versions["app/detail"], /^[0-9a-f]{12}$/);
+  assert.match(versions[DETAIL_VERSION_KEY], /^[0-9a-f]{12}$/);
   const perRecord = Object.keys(versions).filter(key => key.startsWith("app/detail/"));
   assert.deepEqual(perRecord, [], "detail files share one stamp; they are not versioned individually");
+});
+
+test("the stamper refuses to leave a page half-stamped, so a deploy cannot ship mixed freshness", () => {
+  const once = stampedPage();
+  const twice = stampAssetVersions(once, readPageAsset(path.join(webRoot, "index.html")), readDetailTree);
+  assert.equal(twice, once, "stamping an already-stamped page changed it again");
 });
 
 test("the app does not disable the HTTP cache it just earned a content hash for", () => {
@@ -2133,7 +2175,7 @@ test("the registry lists every collection once, each a Directory collection, in 
 });
 
 test("each collection counts what its default view lists, with its split", () => {
-  assert.deepEqual(collectionCount("all", registryPayloads), { count: 5 + 3 + 1 + 3 + 1 + 2, note: "A–Z, no scores" });
+  assert.deepEqual(collectionCount("all", registryPayloads), { count: 5 + 3 + 1 + 3 + 1 + 2 + 1 + 1, note: "A–Z, no scores" });
   assert.deepEqual(collectionCount("systems", registryPayloads), { count: 4, note: "active" });
   assert.deepEqual(collectionCount("models", registryPayloads), { count: 3, note: "2 reviewed · 1 imported" });
   assert.deepEqual(collectionCount("packs", registryPayloads), { count: 2, note: "1 pack · 1 host-installed" });
@@ -2142,6 +2184,29 @@ test("each collection counts what its default view lists, with its split", () =>
   assert.deepEqual(collectionCount("labs", registryPayloads), { count: 1, note: "" });
   assert.deepEqual(collectionCount("specifications", registryPayloads), { count: 1, note: "" });
   assert.deepEqual(collectionCount("robots", { ...registryPayloads, robots: [] }), { count: 0, note: "" });
+});
+
+test("Everything holds every record the site publishes, so its count cannot drift from the collections", () => {
+  // Not the sum of the eight tile counts: Everything lists archived and superseded
+  // systems too, and counts a host-installed system once, inside projects, where the
+  // Agent packs tile also counts it. What it must equal is every record in every
+  // collection's payload -- so that is the invariant, stated from the payloads.
+  const everyRecord = ["projects", "services", "runtimes", "models", "packs", "robots", "labs", "specifications"]
+    .reduce((total, key) => total + registryPayloads[key].length, 0);
+  assert.equal(collectionCount("all", registryPayloads).count, everyRecord);
+  assert.equal(collectionCount("all", { ...registryPayloads, labs: [], specifications: [] }).count,
+    everyRecord - 2, "emptying a collection has to move the Everything count");
+
+  // The scope's name, its search, and its grid are three separate code paths. The
+  // search reached eight kinds (MATCH_GROUPS) while the grid offered six, which is how
+  // a lab came to be findable and unbrowsable at once.
+  const browsed = new Set(filterDirectoryEntries(
+    registryPayloads.projects, registryPayloads.services, registryPayloads.runtimes, registryPayloads.models,
+    {}, registryPayloads.packs, registryPayloads.robots, registryPayloads.labs, registryPayloads.specifications,
+  ).map(entry => entry.kind));
+  assert.deepEqual([...browsed].sort(), ["inference", "lab", "model", "pack", "robot", "runtime", "spec", "system"]);
+  // And the scope states its own membership, in the one sentence a reader reads.
+  assert.match(COLLECTIONS[0].meaning, /labs, and specifications together/);
 });
 
 test("one match pass finds what a search finds, and nothing for a query without search words, which callers treat as browsing", () => {

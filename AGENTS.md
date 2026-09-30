@@ -65,8 +65,10 @@ Published catalog regeneration, in order:
 uv run python scripts/sync_web_data.py
 uv run python scripts/build_web_payload.py
 uv run python scripts/build_share_pages.py
-node scripts/build_asset_version.mjs
 ```
+
+Asset stamps are not in that sequence and no branch runs them. A committed page carries
+`?v=BUILD` and the deploy job writes the hashes ([ADR 050](docs/adr/050-committed-pages-carry-an-asset-version-placeholder.md)).
 
 The complete check list lives in [.pre-commit-config.yaml](.pre-commit-config.yaml) and runs in [verify.yml](.github/workflows/verify.yml).
 The fast hooks run on commit and the unit and browser suites on push; `pre-commit run --all-files --hook-stage pre-push` reproduces CI exactly, browser suite included.

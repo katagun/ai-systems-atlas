@@ -1472,7 +1472,22 @@ const labDistributionOrder = () => state.taxonomy.model_distribution_modes.map(i
 
 // Every Atlas count on a lab card is a join over reviewed records; nothing on it
 // ranks the lab. The newest reviewed release date is a tracking signal only.
-function labCard(lab) {
+// One specification card serves the Specifications and All grids, which differ only
+// in the mark the family label carries.
+function specificationCard(specification, { mixed = false } = {}) {
+  const version = specification.current_version ? `Version ${escapeHTML(specification.current_version)}` : escapeHTML(taxonomyName("specification_statuses", specification.status));
+  return `<article class="project-card specification-card${mixed ? " mixed-directory-card" : ""}">
+      <div class="card-top"><div><p class="family-label">${mixed ? "Specification · " : ""}${escapeHTML(taxonomyName("specification_types", specification.specification_type))}</p><h2>${escapeHTML(specification.short_name)}</h2><div class="repo">${escapeHTML(specification.repo || new URL(specification.url).hostname)}</div></div><span class="status-badge">${version}</span></div>
+      <span class="role-badge">${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</span>
+      <div class="license-row">${specification.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+      <p>${escapeHTML(specification.description)}</p>
+      <div class="tags"><span>${escapeHTML(taxonomyName("specification_statuses", specification.status))}</span><span>${escapeHTML(specification.stewards[0])}</span></div>
+      ${badgeRow(AppCore.cardBadges("spec", specification))}
+      <div class="card-footer"><span>${footerFacts(starCount(specification), "No editorial score")}</span>${detailsButton("data-specification", specification.id, specification.name)}</div>
+    </article>`;
+}
+
+function labCard(lab, { mixed = false } = {}) {
   const relations = labRelationsFor(lab);
   const modes = AppCore.labDistributionModes(relations.models, labDistributionOrder());
   const newest = AppCore.releasesNewestFirst(relations.models)[0];
@@ -1486,8 +1501,8 @@ function labCard(lab) {
   ].filter(([count]) => count).map(([count, one, many]) => `<span>${count} ${count === 1 ? one : many}</span>`).join("");
   const origin = lab.parent_organization ? `Part of ${escapeHTML(lab.parent_organization)}` : escapeHTML(new URL(lab.url).hostname.replace(/^www\./, ""));
   const newestDate = newest && AppCore.releaseDate(newest);
-  return `<article class="project-card lab-card">
-    <div class="card-top"><div class="card-identity">${cardMark(lab)}<div><p class="family-label">${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
+  return `<article class="project-card lab-card${mixed ? " mixed-directory-card" : ""}">
+    <div class="card-top"><div class="card-identity">${cardMark(lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
     <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
     <p>${escapeHTML(lab.description)}</p>
     <div class="tags">${counts}</div>
@@ -1554,9 +1569,9 @@ function mixedSystemCard(record) {
 }
 
 function renderAllDirectoryEntries() {
-  // The mixed directory searches five collections, so it reads five index
-  // namespaces; each is absent until that collection's index lands, and the
-  // filter falls back to the boot record for whichever is still missing.
+  // The mixed directory searches every collection the site publishes, so it reads
+  // each one's index namespace; each is absent until that collection's index lands,
+  // and the filter falls back to the boot record for whichever is still missing.
   const entries = AppCore.filterDirectoryEntries(state.projects, state.inferenceServices, state.localRuntimes, state.models, {
     term: currentQuery(),
     searchIndex: searchIndexes.systems,
@@ -1565,8 +1580,10 @@ function renderAllDirectoryEntries() {
     modelSearchIndex: searchIndexes.models,
     packSearchIndex: searchIndexes.packs,
     robotSearchIndex: searchIndexes.robots,
+    labSearchIndex: searchIndexes.labs,
+    specSearchIndex: searchIndexes.specifications,
     labelOf: searchLabel,
-  }, state.packs, state.robots);
+  }, state.packs, state.robots, state.labs, state.specifications);
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   setSearchCount("all", entries.length);
   renderJobHint("all", currentQuery());
@@ -1586,6 +1603,8 @@ function renderAllDirectoryEntries() {
     }
     if (kind === "pack") return packCard(record, { mixed: true });
     if (kind === "robot") return robotCard(record, { mixed: true });
+    if (kind === "lab") return labCard(record, { mixed: true });
+    if (kind === "spec") return specificationCard(record, { mixed: true });
     if (kind === "runtime") {
       return `<article class="project-card local-runtime-card mixed-directory-card">
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Local runtime · ${escapeHTML(taxonomyName("local_runtime_types", record.runtime_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.maintainer)}</div></div></div></div>
@@ -1605,13 +1624,15 @@ function renderAllDirectoryEntries() {
       </article>`;
     }
     return mixedSystemCard(record);
-  }).join("") || emptyStateMarkup("all", "No systems, model releases, inference services, local runtimes, agent packs, or robots match this search.");
+  }).join("") || emptyStateMarkup("all", "No systems, model releases, inference services, local runtimes, agent packs, robots, labs, or specifications match this search.");
   $$('[data-project]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   $$('[data-inference-service]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
   $$('[data-local-runtime]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
   $$('[data-model]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openModel(button.dataset.model)));
   $$('[data-pack]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
   $$('[data-robot]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openRobot(button.dataset.robot)));
+  $$('[data-lab]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLab(button.dataset.lab)));
+  $$('[data-specification]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openSpecification(button.dataset.specification)));
   hideDetachedBadgeTooltip();
   renderPager("all", paged);
   if (activeScope() === "all") writeScopeURL();
@@ -1708,19 +1729,7 @@ const COLLECTIONS = {
       status: $("#specification-status-filter").value,
       license: $("#specification-license-filter").value,
     }),
-    card: specification => {
-
-    const version = specification.current_version ? `Version ${escapeHTML(specification.current_version)}` : escapeHTML(taxonomyName("specification_statuses", specification.status));
-    return `<article class="project-card specification-card">
-      <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("specification_types", specification.specification_type))}</p><h2>${escapeHTML(specification.short_name)}</h2><div class="repo">${escapeHTML(specification.repo || new URL(specification.url).hostname)}</div></div><span class="status-badge">${version}</span></div>
-      <span class="role-badge">${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</span>
-      <div class="license-row">${specification.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
-      <p>${escapeHTML(specification.description)}</p>
-      <div class="tags"><span>${escapeHTML(taxonomyName("specification_statuses", specification.status))}</span><span>${escapeHTML(specification.stewards[0])}</span></div>
-      ${badgeRow(AppCore.cardBadges("spec", specification))}
-      <div class="card-footer"><span>${footerFacts(starCount(specification), "No editorial score")}</span>${detailsButton("data-specification", specification.id, specification.name)}</div>
-    </article>`;
-    },
+    card: specification => specificationCard(specification),
   },
   labs: {
     grid: "#lab-grid",
@@ -2282,12 +2291,15 @@ function emptyResultMatches(scope, term) {
   const elsewhere = AppCore.COLLECTIONS
     .filter(entry => entry.id !== scope && entry.id !== "all" && counts[entry.id] > 0)
     .map(entry => ({ id: entry.id, name: entry.name, count: counts[entry.id] }));
-  const hiddenInAll = hidden.filter(({ kind }) => kind !== "lab" && kind !== "spec").length;
+  // Everything holds every collection, so the count to compare against is hidden.length
+  // whole: the two lines this replaced subtracted labs and specifications from the
+  // numerator and added them back to the denominator, which was correct only while
+  // collectionEntries("all") left them out.
   return {
     hidden,
     elsewhere,
-    searchAll: scope !== "all" && counts.all > hiddenInAll,
-    found: counts.all + counts.labs + counts.specifications > 0,
+    searchAll: scope !== "all" && counts.all > hidden.length,
+    found: counts.all > 0,
   };
 }
 

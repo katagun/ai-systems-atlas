@@ -67,6 +67,7 @@ const RECORD_MARKS = {
   "microsoft-foundry-agent-service": "lobe:azureai",
   "mistral-vibe": "lobe:mistral",
   "muse-code": "lobe:meta",
+  openhuman: "lobe:openhuman",
   "openai-agents-sdk": "lobe:openai",
   "openai-agents-api": "lobe:openai",
   openclaw: null, // lobe:openclaw carries gradients the sanitizer rejects
@@ -106,6 +107,7 @@ const RECORD_MARKS = {
   "cerebras-inference": "lobe:cerebras",
   "cloudflare-ai-gateway": "lobe:cloudflare",
   "cloudflare-workers-ai": "lobe:workersai",
+  chutes: "lobe:chutes",
   "cohere-api": "lobe:cohere",
   "databricks-foundation-model-apis": "simple:databricks",
   "deepseek-api": "lobe:deepseek",
@@ -150,12 +152,21 @@ const RECORD_MARKS = {
   ollama: "lobe:ollama",
   "onnxruntime-genai": "simple:onnx",
   "openvino-model-server": "simple:intel",
+  "roo-code": "lobe:roocode",
   "tensorflow-serving": "simple:tensorflow",
   "tensorrt-llm": "lobe:nvidia",
   "text-embeddings-inference": "lobe:huggingface",
   vllm: "lobe:vllm",
   xinference: "lobe:xinference",
   // Models — developer marks for reviewed releases
+  // Perplexity's Sonar family takes the developer's own mark. The build offered
+  // simple:sonar for the base release, and that is SonarQube's brand (source
+  // sonarsource.com), not this one -- a name collision, and the icon family carries
+  // sonarqubeserver, sonarqubecloud and sonarqubeforide separately.
+  "model-perplexity-sonar": "lobe:perplexity",
+  "model-perplexity-sonar-deep-research": "lobe:perplexity",
+  "model-perplexity-sonar-pro": "lobe:perplexity",
+  "model-perplexity-sonar-reasoning-pro": "lobe:perplexity",
   "model-alibaba-qwen2-5-coder-0-5b": "lobe:qwen",  "model-alibaba-qwen3-235b-a22b-instruct-2507": "lobe:qwen",
   "model-alibaba-qwen3-8-max": "lobe:qwen",
   "model-alibaba-qwen3-8-27b": "lobe:qwen",
@@ -258,10 +269,17 @@ function sanitizeBody(svg, key) {
 function loadLobe(slug) {
   const file = join(root, "node_modules/@lobehub/icons-static-svg/icons", `${slug}.svg`);
   const svg = readFileSync(file, "utf8");
-  const viewBox = svg.match(/viewBox="([^"]+)"/)?.[1];
-  if (viewBox !== "0 0 24 24") throw new Error(`lobe:${slug}: unexpected viewBox ${viewBox}`);
+  const viewBox = svg.match(/viewBox="([^"]+)"/)?.[1] ?? "";
+  const [, , width, height] = viewBox.split(" ").map(Number);
+  // Marks are drawn into a 24x24 <svg>. Most are authored on that grid, but a few
+  // square brands ship larger -- chutes.svg is 64x64 -- and those scale to fit rather
+  // than being refused, since a square mark distorts by nothing. A non-square viewBox
+  // is a brand lockup (103x24, 90x24) that would distort, so it stays rejected.
+  if (!(width > 0) || !(height > 0)) throw new Error(`lobe:${slug}: unreadable viewBox ${viewBox}`);
+  if (width !== height) throw new Error(`lobe:${slug}: ${viewBox} is a brand lockup, not a square mark`);
   if (!svg.includes('fill="currentColor"')) throw new Error(`lobe:${slug}: not a currentColor mark`);
-  return sanitizeBody(svg, `lobe:${slug}`);
+  const body = sanitizeBody(svg, `lobe:${slug}`);
+  return width === 24 ? body : `<g transform="scale(${24 / width})">${body}</g>`;
 }
 
 const simpleIcons = await import("simple-icons");
