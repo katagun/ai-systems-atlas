@@ -42,8 +42,49 @@ What runs, and where it is configured:
 - Complexity as ratchets, not targets: `C901` at 50 in `pyproject.toml` (today's maximum is 46 in `validate_hn_signals`) and the eslint `complexity` rule at 40 (today's maximum is 39 in `recommendationReasons`). Both fail any new function worse than the worst one already carried. Tighten them by refactoring, never with a `noqa` or an eslint-disable.
 - Test coverage as a ratchet: `uv run coverage run -m unittest discover -s tests` followed by `uv run coverage report`, which enforces `fail_under` in `pyproject.toml` (79 today across `scripts/`). The browser suite reports its own coverage with `node --test --experimental-test-coverage tests/test_web.js` (`web/app-core.js` sits near 100%). Raise the floor by adding tests, never by omitting files.
 - JavaScript through the repo's own `eslint.config.mjs` (which already ignores generated trees), HTML through `htmlhint` (`.htmlhintrc`), stylesheets through `stylelint` (`.stylelintrc.json`), prose through `markdownlint-cli2` (`.markdownlint-cli2.jsonc`) with `--fix` so safe formatting applies on commit, workflows through `yamllint` (`.yamllint.yml`) and `zizmor` (suppressions with justification in `.github/zizmor.yml`), spelling through `codespell` (product names and house spellings in the hook's ignore list; real typos get fixed).
-- Project verification, same hooks locally and in CI: catalog validation, the unit suite under `coverage` with the `fail_under` gate, `compileall`, `node --check` on the browser bundle, the Node web behavior tests, every generated-file freshness check (logos, fonts, asset versions, share pages, app payloads, blog), and the Playwright end-to-end suite (needs `npx playwright install chromium` first; CI installs it, cached by lockfile hash, before the pre-commit step). The unit suite and the e2e suite are the two push-stage hooks; everything else runs on commit.
+- Project verification, same hooks locally and in CI: catalog validation, the unit suite under `coverage` with the `fail_under` gate, `compileall`, `node --check` on the browser bundle, the Node web behavior tests, every generated-file freshness check (one hook, `scripts/regenerate.py --check`, covering the catalog mirrors, app payloads, share pages, card marks, vendored fonts, the blog, and the asset stamps in dependency order), and the Playwright end-to-end suite (needs `npx playwright install chromium` first; CI installs it, cached by lockfile hash, before the pre-commit step). The unit suite and the e2e suite are the two push-stage hooks; everything else runs on commit.
 - Generated and mirrored files are excluded from the content linters because their builders own them: `web/records/`, `web/app/`, `web/blog/`, `web/fonts/`, synced `web/*.json`, the sitemap, lockfiles, vendored dependencies, transient queues (`hn-signals.json`, `model-candidates.json`, `openrouter-model-leads.json`), and the upstream `models-dev.json` snapshot. The frozen `docs/superpowers/` planning archive is excluded from markdown linting for the same reason: reformatting history buys nothing.
+
+### One command for the generated trees
+
+`uv run python scripts/regenerate.py` regenerates every generated file under `web/`, in
+dependency order, in about a second. `--check` writes nothing, reports **every** stale tree
+rather than stopping at the first, and is the one freshness hook the verification runs. The
+list of generators lives in that script alone.
+
+It had to be consolidated. `AGENTS.md` carried a four-step regeneration sequence that named
+`sync_web_data.py`, `build_web_payload.py`, `build_share_pages.py`, and
+`build_asset_version.mjs`, and omitted `build_logos.mjs`, `build_fonts.mjs`, and
+`build_blog.py` — so following the documented steps after picking up main left three
+generated files stale, and the `freshness-logos` hook rejected the result in CI. A second copy of the generator list is a list that will
+drift, which is what the prose was.
+
+`build_logos.mjs` reads the synced `web/*.json` mirrors rather than `directory/`, so the order
+is a real constraint: a card-mark build before a sync invents or loses marks. `sync_web_data.py`
+gained a `--check` for this reason — it previously accepted the flag silently and wrote
+anyway, so a caller checking for staleness was editing the tree instead of reading it.
+
+### Picking up main
+
+`uv run python scripts/update_from_main.py` merges `origin/main` and regenerates, then reports
+what changed. It refuses on a dirty tree, never rebases, and never commits or pushes.
+
+**Merging rather than rebasing is deliberate.** A rebase replays the branch, and a replay that
+lands on regenerated files conflicts, so the recovery is resolve, regenerate, force-push. The
+force-push is the expensive part: `verify.yml` sets `cancel-in-progress: true`, so each one
+kills the verification run the push just started. On 2026-09-30 that discarded three five-minute
+runs while a branch was brought up to date, and the cost read as the work rather than as the
+merge strategy. A merge needs one push, cancels nothing, and produces one state to push instead
+of one per rebase. The merge commit never reaches main, which is squash-merged, so it costs
+this repository nothing but a non-linear branch history.
+
+### Skipping the browser suite without losing anything else
+
+The e2e suite is the only slow hook — about four minutes, against under a second for the
+generated-freshness gate. `SKIP=e2e-browser-tests` skips only that one. `git push --no-verify`
+skips everything, including the staleness gate, and that is how `web/logos.json` reached CI
+on 2026-09-30 carrying a `simple-icons` version CI did not install: two pushes went out with
+the check that would have caught it bypassed. Nothing in pre-commit can survive `--no-verify`.
 
 There is deliberately no Prettier hook. Its defaults would reformat the hand-styled `web/app.js`, the compact catalog JSON the generators write with `indent=2`, and long-line prose docs — thousands of churn lines with no defect caught. `ruff format` owns Python, `eslint` owns JavaScript, and the generators own their output.
 

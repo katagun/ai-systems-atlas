@@ -209,10 +209,8 @@ Run the dependency-free logic suite:
 node --check web/app-core.js
 node --check web/app.js
 node --test tests/test_web.js
-node scripts/build_fonts.mjs --check
+uv run python scripts/regenerate.py --check
 node scripts/build_asset_version.mjs --check
-uv run python scripts/build_share_pages.py --check
-uv run python scripts/build_web_payload.py --check
 ```
 
 Confirm the blocking boot payload stays small — this is the number `web/app/` exists to keep down:
