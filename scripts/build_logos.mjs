@@ -219,6 +219,7 @@ const RECORD_MARKS = {
   "lab-cohere": "lobe:cohere",
   "lab-deepseek": "lobe:deepseek",
   "lab-google": "lobe:google",
+  "lab-hugging-face": "lobe:huggingface",
   "lab-ibm": "lobe:ibm",
   "lab-meituan": "simple:meituan",
   "lab-meta": "lobe:meta",
@@ -230,6 +231,7 @@ const RECORD_MARKS = {
   "lab-openai": "lobe:openai",
   "lab-perplexity": "lobe:perplexity",
   "lab-poolside": null, // lobe:poolside uses a mask the sanitizer rejects
+  "lab-sakana-ai": "lobe:sakana",
   "lab-stepfun": "lobe:stepfun",
   "lab-tencent": "lobe:tencent",
   "lab-upstage": "lobe:upstage",

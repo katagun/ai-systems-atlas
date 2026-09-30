@@ -275,12 +275,15 @@ LAB_REQUIRED = {
     "systems",
     "channels",
     "admission_basis",
+    "display_order",
     "evidence",
     "verified_at",
 }
 LAB_OPTIONAL = {"parent_organization", "safety_framework"}
 # A lab is recorded, never ranked, and a licence belongs to a release, not to the
-# organization that made it (ADR 041, ADR 025).
+# organization that made it (ADR 041, ADR 025). display_order is a preview
+# precedence, not a ranking: it never reaches a score, a sort in a collection, or
+# a claim about the organization (ADR 049).
 LAB_FORBIDDEN = {
     "score",
     "score_profile",
@@ -292,6 +295,10 @@ LAB_FORBIDDEN = {
     "source_model",
 }
 LAB_ID_PATTERN = re.compile(r"lab-[a-z0-9][a-z0-9-]*")
+# A preview precedence is a positive multiple of ten, so a reviewer can insert a
+# lab between two others without renumbering the collection, and the number never
+# pretends to a precision the ordering does not have (ADR 049).
+LAB_DISPLAY_ORDER_STEP = 10
 LAB_CHANNEL_REQUIRED = {"kind", "url"}
 LAB_SAFETY_FRAMEWORK_REQUIRED = {"title", "url", "verified_at"}
 # A channel of these kinds names an organization, not a page inside one, so the
@@ -1958,6 +1965,15 @@ def validate_labs(
             errors.append(f"{prefix}: unknown lab type")
         if lab.get("headquarters") not in enum_ids["countries"]:
             errors.append(f"{prefix}: unknown headquarters country")
+        if not isinstance(lab.get("display_order"), int) or isinstance(
+            lab.get("display_order"), bool
+        ):
+            errors.append(f"{prefix}: display_order must be an integer")
+        elif lab["display_order"] <= 0 or lab["display_order"] % LAB_DISPLAY_ORDER_STEP:
+            errors.append(
+                f"{prefix}: display_order must be a positive multiple of "
+                f"{LAB_DISPLAY_ORDER_STEP}"
+            )
         names = validate_lab_catalog_names(
             lab, prefix, names_by_field, enum_ids, errors
         )
