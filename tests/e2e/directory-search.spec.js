@@ -110,7 +110,8 @@ test("superseded systems leave the active view and link to their successor", asy
 
   await dialog.locator("[data-successor]").click();
   await expect(dialog.locator("h1")).toHaveText("Microsoft Agent Framework");
-  await expect(dialog.locator(".status-notice")).toHaveCount(0);
+  await expect(dialog.locator(".status-notice")).toHaveCount(1);
+  await expect(dialog.locator(".status-notice")).toContainText("Superseded predecessor");
 });
 
 test("taxonomy documents every local-runtime group and its score weights", async ({ page }) => {
