@@ -547,11 +547,12 @@ h1 {
 .element-symbol { color: var(--element-ink); font: 500 1.8rem var(--font-mono); letter-spacing: -.06em; }
 .element-count { position: absolute; top: .55rem; right: .6rem; color: var(--muted); font: .7rem var(--font-mono); }
 .element-name { font: .73rem/1.3 var(--font-body); overflow-wrap: anywhere; }
-/* Keep previews subordinate to role symbols and names. */
+/* Keep organization previews subordinate to role symbols and names. The strip
+   reserves its height before the logos load and disappears when a role has no
+   lab to preview, so tiles do not resize when the marks arrive. */
 .element-marks { display: flex; align-items: center; gap: .2rem; min-height: 20px; color: var(--muted); font: .65rem var(--font-mono); }
 .element-marks .card-mark { width: 20px; height: 20px; border: 0; background: transparent; }
 .element-marks .card-mark svg { width: 16px; height: 16px; }
-.element-marks .card-monogram { font-size: .65rem; }
 .element-more-mobile { display: none; }
 #element-record-name { display: flex; align-items: center; gap: .6rem; }
 #element-record-name > span:last-child { min-width: 0; overflow-wrap: anywhere; }
