@@ -1820,6 +1820,11 @@
       "kind": "restricted"
     },
     {
+      "id": "LicenseRef-SQLBot-Modified-GPLv3",
+      "name": "SQLBot Modified GPLv3 License",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-Qwen-License-Agreement",
       "name": "Qwen License Agreement",
       "kind": "restricted"

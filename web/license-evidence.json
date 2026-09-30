@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-09-28",
+  "verified_at": "2026-09-30",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -3642,7 +3642,76 @@
           "immutable_url": "https://api.github.com/repos/JetBrains/koog/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
         }
       ]
+    },
+    {
+      "project_id": "claude-agent-acp",
+      "repo": "agentclientprotocol/claude-agent-acp",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "whole repository at the pinned blob",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/agentclientprotocol/claude-agent-acp/blob/main/LICENSE",
+          "blob_sha": "c24b053560354d8261d5132edaa3d30b2d1cb1f3",
+          "immutable_url": "https://api.github.com/repos/agentclientprotocol/claude-agent-acp/git/blobs/c24b053560354d8261d5132edaa3d30b2d1cb1f3"
+        }
+      ]
+    },
+    {
+      "project_id": "sqlbot",
+      "repo": "dataease/SQLBot",
+      "items": [
+        {
+          "license_id": "LicenseRef-SQLBot-Modified-GPLv3",
+          "scope": "whole repository at the pinned blob; additional conditions in the LICENSE file beyond GPLv3",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/dataease/SQLBot/blob/main/LICENSE",
+          "blob_sha": "042baf3dbf2e597df24aa8b48a0e2839910fd20d",
+          "immutable_url": "https://api.github.com/repos/dataease/SQLBot/git/blobs/042baf3dbf2e597df24aa8b48a0e2839910fd20d"
+        }
+      ]
+    },
+    {
+      "project_id": "aihawk",
+      "repo": "feder-cr/AIHawk",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "whole repository at the pinned blob",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/feder-cr/AIHawk/blob/main/LICENSE",
+          "blob_sha": "9036d5efbfaf66e50d1a318d07d08a404aa64250",
+          "immutable_url": "https://api.github.com/repos/feder-cr/AIHawk/git/blobs/9036d5efbfaf66e50d1a318d07d08a404aa64250"
+        }
+      ]
+    },
+    {
+      "project_id": "obsidian-llm-wiki",
+      "repo": "GD4AI/obsidian-llm-wiki",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository source at the pinned blob",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/GD4AI/obsidian-llm-wiki/blob/main/LICENSE",
+          "blob_sha": "5d9ef00e1503fb7c2e2c772ec4ba5dfd3dbd41a6",
+          "immutable_url": "https://api.github.com/repos/GD4AI/obsidian-llm-wiki/git/blobs/5d9ef00e1503fb7c2e2c772ec4ba5dfd3dbd41a6"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "packages bundled into the shipped main.js as listed in the pinned notices file",
+          "kind": "git_blob",
+          "path": "THIRD-PARTY-NOTICES.md",
+          "url": "https://github.com/GD4AI/obsidian-llm-wiki/blob/main/THIRD-PARTY-NOTICES.md",
+          "blob_sha": "536ed32605d9bd95fbe1e0bfe35dd50aafcb2907",
+          "immutable_url": "https://api.github.com/repos/GD4AI/obsidian-llm-wiki/git/blobs/536ed32605d9bd95fbe1e0bfe35dd50aafcb2907"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-09-29"
+  "generated_at": "2026-09-30"
 }

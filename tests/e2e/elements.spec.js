@@ -37,7 +37,7 @@ test("Elements counts primary roles and loads no record detail until selection",
 test("reference sheets restore URL, exact catalog slices and record navigation", async ({ page }) => {
   const chosen = coding[1];
   await page.goto(`/?element=coding_agent&elementRecord=${chosen.id}`);
-  await expect(page.locator("#element-record-name")).toHaveText(chosen.name);
+  await expect(page.locator("#element-record-name")).toHaveAccessibleName(chosen.name);
   await page.reload();
   await expect(page.locator("#element-record")).toHaveValue(chosen.id);
   await page.locator("#element-browse").click();
@@ -68,7 +68,7 @@ test("late or failed detail loads never replace another selected record and can 
   await page.locator("#element-record").selectOption(coding[1].id);
   await expect(page.locator("#element-load-status")).toContainText(`Review details loaded for ${coding[1].name}`);
   release();
-  await expect(page.locator("#element-record-name")).toHaveText(coding[1].name);
+  await expect(page.locator("#element-record-name")).toHaveAccessibleName(coding[1].name);
   await page.route(`**/app/detail/system/${coding[2].id}.json*`, route => route.abort());
   await page.locator("#element-record").selectOption(coding[2].id);
   await expect(page.locator("#element-retry")).toBeVisible();

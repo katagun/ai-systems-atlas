@@ -16,24 +16,24 @@ Measure coverage across three axes:
 
 Do not add a new family merely to fit a famous product. Add one only when its primary operational outcome cannot be scored coherently by an existing family.
 
-## Snapshot — 2026-09-29
+## Snapshot — 2026-09-30
 
 Every count below is generated, not transcribed. `uv run python scripts/validate_directory.py --counts` prints the block, `tests/test_documentation.py` asserts this document quotes it verbatim, and a count that moves without a dated edit here fails the suite.
 
 <!-- catalog-counts: regenerate with `uv run python scripts/validate_directory.py --counts` -->
 
 ```text
-systems: 218
-  agent_system 138, assistant_system 17, memory_system 63
-  active-choice 206 (archived 9, superseded 3)
+systems: 222
+  agent_system 141, assistant_system 17, memory_system 64
+  active-choice 210 (archived 9, superseded 3)
 specifications: 22
 inference_services: 60
 local_runtimes: 17
 model_releases: 311
 models_dev_source_records: 434
 model_candidates: 15
-system_candidates: 124
-exclusions: 101
+system_candidates: 119
+exclusions: 102
 packs: 8
 labs: 45 covering 311 releases
 robots: 4

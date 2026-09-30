@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-29",
+  "generated_at": "2026-09-30",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -19540,6 +19540,310 @@
       "why_it_matters": "Represents the enterprise-JVM approach to agents: type-safe, fault-tolerant orchestration that meets Kotlin shops where they are.",
       "research_confidence": "high",
       "verified_at": "2026-09-29",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "claude-agent-acp",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Claude Agent ACP",
+      "repo": "agentclientprotocol/claude-agent-acp",
+      "url": "https://github.com/agentclientprotocol/claude-agent-acp",
+      "description": "Apache-2.0 adapter that exposes the Claude Agent SDK coding loop to any ACP client through a local CLI.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "ACP session transcripts and tool results, backed by Claude Agent SDK session state on the local host",
+      "deployment": [
+        "local_cli"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 2597,
+      "stars_verified_at": "2026-09-30",
+      "historical_stars": null,
+      "current_repo_note": "Third-party ACP adapter over Anthropic's Claude Agent SDK; the Agent Client Protocol itself is recorded as specification acp, and the SDK as claude-agent-sdk.",
+      "score": {
+        "task_reliability": 6.5,
+        "tool_use": 8.0,
+        "autonomy": 7.0,
+        "human_control": 8.0,
+        "observability_recovery": 7.5,
+        "data_sovereignty": 5.5,
+        "interoperability": 9.0,
+        "maturity": 6.0,
+        "overall": 7.18
+      },
+      "strengths": [
+        "Exposes Claude tool calls, subagents, MCP servers, and terminals to any ACP client",
+        "Permission presentation, edit review, and structured session errors and recovery",
+        "Versioned npm distribution with a preview channel and changelog"
+      ],
+      "weaknesses": [
+        "Pre-1.0 protocol surface still evolving through opt-in extensions",
+        "Model processing is remote via Anthropic even though the agent runs locally",
+        "No adapter-level editable store; coupled to the Claude Agent SDK release line"
+      ],
+      "why_it_matters": "The reference open implementation of a provider coding loop behind an open agent protocol, letting any ACP editor drive Claude.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-30",
+      "github_detected_license": "Apache-2.0",
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "mcp",
+        "workflows"
+      ]
+    },
+    {
+      "id": "sqlbot",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "SQLBot",
+      "repo": "dataease/SQLBot",
+      "url": "https://github.com/dataease/SQLBot",
+      "description": "Docker-deployed conversational text-to-SQL and ChatBI product from DataEase that generates, executes, and repairs queries, with charts and analysis.",
+      "primary_role": "data_analysis_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "relational_db",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "workspace data connections, calibrated SQL examples, term libraries, chat history, and generated charts",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "LicenseRef-SQLBot-Modified-GPLv3"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 6863,
+      "stars_verified_at": "2026-09-30",
+      "historical_stars": null,
+      "current_repo_note": "Modified GPLv3 with logo-retention and contributor terms beyond copyleft. The ChatBI scope covers this Docker-deployed product, not the DataEase BI suite.",
+      "score": {
+        "task_reliability": 7.5,
+        "tool_use": 7.5,
+        "autonomy": 7.0,
+        "human_control": 8.0,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 7.5,
+        "interoperability": 8.5,
+        "maturity": 7.5,
+        "overall": 7.55
+      },
+      "strengths": [
+        "Executes generated SQL and feeds failures back for repair",
+        "Term libraries and calibrated SQL examples that improve with use",
+        "Workspace isolation with fine-grained data permissions, plus MCP and embed integrations"
+      ],
+      "weaknesses": [
+        "Vendor telemetry defaults are unstated",
+        "Modified GPLv3 adds logo-retention and contributor terms beyond copyleft",
+        "Chinese-first documentation with English lagging under docs/"
+      ],
+      "why_it_matters": "A vendor-maintained, self-hosted ChatBI that closes the text-to-SQL loop with execution and repair rather than generation alone.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-30",
+      "github_detected_license": "NOASSERTION",
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing"
+      ]
+    },
+    {
+      "id": "aihawk",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "AIHawk",
+      "repo": "feder-cr/AIHawk",
+      "url": "https://github.com/feder-cr/AIHawk",
+      "description": "MIT-licensed stealth browser agent, served over MCP or a local web UI, that operates pages like a person to stay invisible to anti-bots.",
+      "primary_role": "browser_computer_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "screen"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "browser profiles, cookies, and task transcripts on the local host",
+      "deployment": [
+        "local_cli"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 31725,
+      "stars_verified_at": "2026-09-30",
+      "historical_stars": null,
+      "current_repo_note": "Rewritten from the 2024 job-application tool into the invisible_playwright_mcp stealth browser agent; repository adoption signals predate the rewrite.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 8.0,
+        "autonomy": 7.5,
+        "human_control": 7.0,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 6.5,
+        "interoperability": 8.5,
+        "maturity": 6.0,
+        "overall": 7.18
+      },
+      "strengths": [
+        "Human-like page operation with proxy, profile, and seed identity controls",
+        "MCP server plus Claude Code, Codex, and Gemini CLI plugins and a local web UI",
+        "Any OpenRouter model id, with worked examples and transcripts in articles/"
+      ],
+      "weaknesses": [
+        "Repository adoption signals belong to the earlier job-application product",
+        "Headline anti-bot-evasion positioning implicates target sites' terms of use",
+        "Changing the host exposes an unauthenticated interface, per the README's own warning"
+      ],
+      "why_it_matters": "A widely adopted open browser agent that pairs human-like page operation with open-model routing through OpenRouter.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-30",
+      "github_detected_license": "MIT",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openrouter"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "mcp"
+      ]
+    },
+    {
+      "id": "obsidian-llm-wiki",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Obsidian LLM Wiki",
+      "repo": "GD4AI/obsidian-llm-wiki",
+      "url": "https://github.com/GD4AI/obsidian-llm-wiki",
+      "description": "Marketplace-listed Obsidian plugin that turns vault notes into a connected wiki with embedding-free graph retrieval, multi-format ingest, and 16+ model providers.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "none",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "graph_traversal"
+      ],
+      "capture_modes": [
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "vault notes and generated wiki pages joined by the wiki-link graph",
+      "deployment": [
+        "desktop",
+        "mobile"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0",
+        "MIT"
+      ],
+      "source_model": "mixed_open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 676,
+      "stars_verified_at": "2026-09-30",
+      "historical_stars": null,
+      "current_repo_note": "Covers the karpathywiki Obsidian plugin alone; the headless karpathywiki-cli in green-dalii/obsidian-llm-wiki-cli is a separate dormant product. The shipped main.js bundles MIT-noticed packages listed in THIRD-PARTY-NOTICES.md.",
+      "score": {
+        "second_brain_fit": 8.5,
+        "data_sovereignty": 8.5,
+        "interoperability": 7.0,
+        "memory_intelligence": 8.0,
+        "operational_simplicity": 8.5,
+        "maturity": 7.5,
+        "overall": 8.03
+      },
+      "strengths": [
+        "Personalized PageRank retrieval with no embeddings or vector database",
+        "Marketplace-listed plugin with PDF and Office ingest and an 11-language UI",
+        "Large test suite with per-task cost accounting in the release notes"
+      ],
+      "weaknesses": [
+        "Sibling headless CLI is dormant and outside this record",
+        "Retrieval benchmark is the project's own corpus figure",
+        "Sixteen-provider breadth exceeds what one review can exercise end to end"
+      ],
+      "why_it_matters": "A marketplace plugin proving graph retrieval can carry a personal knowledge wiki without embeddings.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-30",
       "github_detected_license": "Apache-2.0"
     }
   ],
