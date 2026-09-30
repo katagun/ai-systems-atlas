@@ -39,7 +39,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 580
     },
     {
       "id": "lab-ai21-labs",
@@ -90,7 +91,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 220
     },
     {
       "id": "lab-aikido-security",
@@ -135,7 +137,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 520
     },
     {
       "id": "lab-alibaba",
@@ -186,7 +189,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 80
     },
     {
       "id": "lab-amazon",
@@ -240,7 +244,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 70
     },
     {
       "id": "lab-ant-group",
@@ -293,7 +298,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 530
     },
     {
       "id": "lab-anthropic",
@@ -352,7 +358,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 20
     },
     {
       "id": "lab-arcee-ai",
@@ -405,7 +412,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 410
     },
     {
       "id": "lab-bytedance",
@@ -491,7 +499,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 110
     },
     {
       "id": "lab-cohere",
@@ -538,7 +547,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 150
     },
     {
       "id": "lab-deepseek",
@@ -588,7 +598,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 120
     },
     {
       "id": "lab-google",
@@ -665,7 +676,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 30
     },
     {
       "id": "lab-hugging-face",
@@ -741,7 +753,8 @@
           "verified_at": "2026-09-29"
         }
       ],
-      "verified_at": "2026-09-29"
+      "verified_at": "2026-09-29",
+      "display_order": 400
     },
     {
       "id": "lab-ibm",
@@ -801,7 +814,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 100
     },
     {
       "id": "lab-liquid-ai",
@@ -884,7 +898,8 @@
         }
       ],
       "verified_at": "2026-09-28",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 430
     },
     {
       "id": "lab-meituan",
@@ -923,7 +938,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 540
     },
     {
       "id": "lab-meta",
@@ -980,7 +996,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 50
     },
     {
       "id": "lab-microsoft",
@@ -1037,7 +1054,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 40
     },
     {
       "id": "lab-minimax",
@@ -1094,7 +1112,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 200
     },
     {
       "id": "lab-mistral-ai",
@@ -1139,7 +1158,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 130
     },
     {
       "id": "lab-mixedbread-ai",
@@ -1186,7 +1206,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 440
     },
     {
       "id": "lab-moonshot-ai",
@@ -1229,7 +1250,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 180
     },
     {
       "id": "lab-motif-technologies",
@@ -1272,7 +1294,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 550
     },
     {
       "id": "lab-nvidia",
@@ -1318,7 +1341,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 90
     },
     {
       "id": "lab-openai",
@@ -1376,7 +1400,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 10
     },
     {
       "id": "lab-openbmb",
@@ -1415,7 +1440,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 420
     },
     {
       "id": "lab-ornith-ai",
@@ -1460,7 +1486,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 450
     },
     {
       "id": "lab-perplexity",
@@ -1515,7 +1542,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 160
     },
     {
       "id": "lab-poolside",
@@ -1570,7 +1598,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 170
     },
     {
       "id": "lab-safe-superintelligence",
@@ -1609,7 +1638,8 @@
           "verified_at": "2026-09-29"
         }
       ],
-      "verified_at": "2026-09-29"
+      "verified_at": "2026-09-29",
+      "display_order": 560
     },
     {
       "id": "lab-sakana-ai",
@@ -1690,7 +1720,8 @@
         }
       ],
       "verified_at": "2026-09-28",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 250
     },
     {
       "id": "lab-stanford-nlp",
@@ -1742,7 +1773,8 @@
           "verified_at": "2026-09-29"
         }
       ],
-      "verified_at": "2026-09-29"
+      "verified_at": "2026-09-29",
+      "display_order": 570
     },
     {
       "id": "lab-stepfun",
@@ -1793,7 +1825,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 190
     },
     {
       "id": "lab-swiss-ai-initiative",
@@ -1842,7 +1875,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 590
     },
     {
       "id": "lab-tencent",
@@ -1888,7 +1922,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 230
     },
     {
       "id": "lab-thinking-machines-lab",
@@ -1935,7 +1970,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 460
     },
     {
       "id": "lab-trendyol",
@@ -1976,7 +2012,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 510
     },
     {
       "id": "lab-typesafe-ai",
@@ -2022,7 +2059,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 470
     },
     {
       "id": "lab-upstage",
@@ -2069,7 +2107,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 210
     },
     {
       "id": "lab-vispark",
@@ -2114,7 +2153,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 490
     },
     {
       "id": "lab-vivgrid",
@@ -2149,7 +2189,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 500
     },
     {
       "id": "lab-writer",
@@ -2202,7 +2243,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 480
     },
     {
       "id": "lab-xai",
@@ -2261,7 +2303,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 60
     },
     {
       "id": "lab-xiaomi",
@@ -2306,7 +2349,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 240
     },
     {
       "id": "lab-z-ai",
@@ -2364,7 +2408,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 140
     }
   ],
   "updated_at": "2026-09-29"

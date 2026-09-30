@@ -122,6 +122,23 @@
     });
   }
 
+  // A role tile previews the organizations behind its systems, not the systems
+  // themselves, so a tile carries company marks and never a monogram
+  // placeholder. A lab qualifies by owning one of the role's systems and by
+  // having a mark; `markedLabIds` is the page's loaded mark map, because whether
+  // a logo exists is a rendering fact rather than a catalog one. Preview
+  // precedence is the reviewed `display_order`, then the name (ADR 049).
+  function elementLabs(records, index, markedLabIds = null) {
+    const owners = new Map();
+    for (const record of records) {
+      const lab = index && index.bySystem.get(record.id);
+      if (lab) owners.set(lab.id, lab);
+    }
+    return [...owners.values()]
+      .filter(lab => !markedLabIds || markedLabIds.has(lab.id))
+      .sort((a, b) => (a.display_order - b.display_order) || a.name.localeCompare(b.name));
+  }
+
   function systemDeploymentSummary(projects, taxonomy) {
     const active = projects.filter(project => project.status === "active");
     const groupRows = (field, groups, columns, matches) => {
@@ -1860,6 +1877,7 @@
     directoryDefaults,
     directoryStageFromURL,
     editDistance,
+    elementLabs,
     familyEmblem,
     familyMatchCounts,
     filterAndSortProjects,

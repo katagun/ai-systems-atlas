@@ -64,6 +64,14 @@ Record `safety_framework` when the organization publishes a frontier-safety, res
 
 Labs are never scored, ranked, or sorted by anything but name. Funding, valuation, revenue, headcount, compute, leadership, benchmarks, and news are not fields.
 
+## Preview precedence: `display_order`
+
+A lab carries a required `display_order`, a positive multiple of ten that is distinct across the collection. It decides which organizations an Elements role tile draws its three marks from, in the order the tile shows them, and nothing else. The [Elements](WEB.md#content-hierarchy) previews are the one place an organization is shown rather than listed, and three slots cannot show forty-four labs.
+
+The field is a display precedence, not a judgment about the organization. It never reaches a score, a comparison, a collection sort, or a statement about an organization's importance, quality, size, or standing, and the Labs collection stays alphabetical whatever it says. Assign it from the marks a reader is most likely to recognize in this catalog's frontier work, and expect to argue about it: a precedence is an editorial claim, and a reviewer who disagrees should change the number in the same change that admits the lab.
+
+Never derive it from market capitalization, revenue, funding, headcount, or popularity. No lab publishes those figures about itself, they move without a review, and a number a reader could trace to a funding round would say something about the organization that nothing else in the record supports. Gaps of ten exist so a lab can be inserted between two others without renumbering the collection, and a tie is impossible because the values are distinct; the name is the tiebreak the page uses only as a last resort. See [ADR 049](adr/049-elements-previews-organization-marks-in-a-reviewed-order.md).
+
 ## Current coverage
 
 Forty-five labs are published, and forty-four of them cover all 311 reviewed releases. Forty-two are admitted on a reviewed release; one, Safe Superintelligence, on its own published statement of intent; and two, the Stanford NLP Group and Hugging Face, on a system each developed, because the catalog has reviewed no model release of either one's own.

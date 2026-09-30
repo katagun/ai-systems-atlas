@@ -3,7 +3,7 @@ const crypto = require("node:crypto");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -45,6 +45,53 @@ test("Elements covers every active system once with unique role symbols", () => 
   assert.deepEqual(ids.slice().sort(), projects.filter(project => project.status === "active").map(project => project.id).sort());
   assert.equal(new Set(ids).size, ids.length);
   assert.equal(new Set(roles.map(role => role.symbol)).size, roles.length);
+});
+
+test("Elements previews the labs that build a role, in display order, marks only", () => {
+  const labs = [
+    { id: "lab-lead", name: "Zeta", display_order: 10, systems: ["one"] },
+    { id: "lab-unmarked", name: "Gamma", display_order: 10, systems: ["five"] },
+    { id: "lab-tied-a", name: "Alpha", display_order: 20, systems: ["two"] },
+    { id: "lab-tied-b", name: "Beta", display_order: 20, systems: ["three"] },
+    { id: "lab-small", name: "Small", display_order: 30, systems: ["four"] },
+    { id: "lab-absent", name: "Delta", display_order: 10, systems: [] },
+  ];
+  const index = buildLabIndex(labs, []);
+  const records = [{ id: "one" }, { id: "two" }, { id: "three" }, { id: "four" }, { id: "five" }];
+  // A lab with no mark is left out rather than previewed as a monogram, and the
+  // remaining tiers are read in display order.
+  const marked = new Set(["lab-lead", "lab-small", "lab-tied-a", "lab-tied-b"]);
+  assert.deepEqual(elementLabs(records, index, marked).map(lab => lab.id), ["lab-lead", "lab-tied-a", "lab-tied-b", "lab-small"]);
+  // Without the mark filter the ordering still holds, and it is total: labs
+  // sharing a display_order fall to the name.
+  assert.deepEqual(elementLabs(records, index).map(lab => lab.id), ["lab-unmarked", "lab-lead", "lab-tied-a", "lab-tied-b", "lab-small"]);
+  // A role whose systems no lab owns previews nothing, and neither does a
+  // missing index or an empty record list.
+  assert.deepEqual(elementLabs([{ id: "unknown" }], index, marked), []);
+  assert.deepEqual(elementLabs(records, null, marked), []);
+  assert.deepEqual(elementLabs([], index, marked), []);
+});
+
+test("every lab carries a preview precedence and roles preview only marked labs", () => {
+  const labs = readWebJSON("labs.json").labs;
+  const projects = readWebJSON("app/systems.json").systems;
+  const taxonomy = readWebJSON("taxonomy.json");
+  const logos = readWebJSON("logos.json");
+  // Every lab carries a preview precedence, and no two share one, so the
+  // ordering a tile draws its three marks from is a total order.
+  const orders = labs.map(lab => lab.display_order);
+  assert.equal(new Set(orders).size, orders.length);
+  assert.ok(orders.every(order => Number.isInteger(order) && order > 0 && order % 10 === 0));
+  const index = buildLabIndex(labs, readWebJSON("app/models.json").models);
+  const marked = new Set(Object.keys(logos.records).filter(id => logos.records[id]));
+  const roles = systemElements(projects, taxonomy).flatMap(group => group.roles);
+  for (const role of roles) {
+    const previews = elementLabs(role.records, index, marked);
+    for (const lab of previews) assert.ok(marked.has(lab.id), `${role.id} previews the unmarked ${lab.id}`);
+    // The preview is the whole ordered set the tile draws three from, so the
+    // tiles' remainder counts stay a property of the catalog, not of the layout.
+    assert.deepEqual(previews.map(lab => lab.id), elementLabs(role.records, index, marked).map(lab => lab.id));
+  }
 });
 
 test("deployment summaries retain missing values and count overlapping modes once", () => {

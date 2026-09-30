@@ -711,6 +711,7 @@ class ValidationPolicyTests(unittest.TestCase):
         "lab_type": "ai_company",
         "headquarters": "us",
         "admission_basis": "reviewed_release",
+        "display_order": 30,
         "organization_note": "One name covers the synthetic lab's models and API.",
         "catalog_names": ["Anthropic"],
         "systems": [],
@@ -884,6 +885,27 @@ class ValidationPolicyTests(unittest.TestCase):
             lab["catalog_names"] = []
 
         self.assertEqual(self.lab_errors(self.catalog_with_lab(mutate)), [])
+
+    def test_lab_display_order_is_a_gapped_preview_precedence(self) -> None:
+        """ADR 049: preview precedence is a positive multiple of ten.
+
+        A free integer would let the field drift into an implied ranking with
+        more precision than a three-slot preview has, and a missing one would
+        leave a lab unordered wherever it is previewed.
+        """
+
+        self.assertEqual(self.lab_errors(self.catalog_with_lab(lambda lab: None)), [])
+
+        for bad in ("10", 15, 0, -10, None, True):
+            with self.subTest(display_order=bad):
+                errors = self.lab_errors(
+                    self.catalog_with_lab(
+                        lambda lab, value=bad: lab.update(display_order=value)
+                    )
+                )
+                self.assertTrue(
+                    any("display_order" in error for error in errors), errors
+                )
 
     def test_lab_may_be_admitted_on_a_system_it_developed(self) -> None:
         """ADR 048: a research group joins from a system, not a release.

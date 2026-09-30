@@ -18,7 +18,7 @@ const state = {
   projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], packs: [], labs: [], robots: [], taxonomy: null,
   labIndex: null,
   reviewedModelCount: 0, modelSourceCount: 0,
-  licenses: new Map(), logos: { icons: {}, records: {} },
+  licenses: new Map(), logos: { icons: {}, records: {} }, logosLoaded: false,
   directoryCollection: "all", directoryStage: "door", recent: {}, directoryRoles: null, directoryRolesLabel: null, badgeLegendPreference: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { step: 0, answers: {} },
@@ -146,13 +146,24 @@ function cardMark(record) {
   return `<span class="card-mark card-monogram" data-mark="${escapeHTML(record.id)}" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(record.name))}</span>`;
 }
 
+// An Elements preview shows the organization, so it shows the organization's
+// logo or nothing. A lab without a mark is left out of the preview entirely
+// (ADR 049), which is why this has no monogram arm and returns "".
+function labMark(lab) {
+  const icon = state.logos.icons[state.logos.records[lab.id]];
+  if (!icon) return "";
+  return `<span class="card-mark" data-mark="${escapeHTML(lab.id)}" aria-hidden="true"><svg viewBox="0 0 24 24">${icon.body}</svg></span>`;
+}
+
 // The icon bodies are the largest file the page loads and nothing about the
 // page depends on them: a card without one already renders its monogram. So
 // they arrive after the first paint, and every mark on screen is filled in
 // once they do. Cards rendered later pick their icon up through cardMark.
+// Elements previews wait for the same file, because whether a lab has a logo
+// decides whether it is previewed at all.
 function loadMarks() {
   return loadJSON("logos.json")
-    .then(logos => { state.logos = logos; paintMarks(); })
+    .then(logos => { state.logos = logos; state.logosLoaded = true; paintElementMarks(); paintMarks(); })
     .catch(() => {});
 }
 
@@ -847,11 +858,35 @@ let elementRequest = 0;
 let mobileElementFamily = "memory_system";
 const mobileLayout = window.matchMedia("(max-width: 767px)");
 
-// Records already follow the sheet's alphabetical order; previews imply no rank.
-function elementMarks(records) {
-  if (!records.length) return "";
-  const remaining = limit => records.length > limit ? `+${records.length - limit}` : "";
-  return `<span class="element-marks" aria-hidden="true" title="Examples in alphabetical order: ${escapeHTML(records.slice(0, 3).map(record => record.name).join(", "))}">${records.slice(0, 3).map(cardMark).join("")}<span class="element-more-desktop">${remaining(3)}</span><span class="element-more-mobile">${remaining(2)}</span></span>`;
+// A role tile previews the organizations that build its systems, so every mark
+// on it is a company logo. A lab with no mark contributes nothing rather than a
+// monogram placeholder, and a role whose systems no lab owns previews nothing at
+// all. Marks arrive after first paint, so the strip renders empty and
+// paintElementMarks fills it; the three slots and the remainder count are
+// decided there, over the labs that actually have a mark.
+function elementMarks(role) {
+  return `<span class="element-marks" data-element-marks="${escapeHTML(role.id)}" aria-hidden="true"></span>`;
+}
+
+function paintElementMarks(root = document) {
+  // Whether a lab has a mark decides whether it is previewed, so an unloaded
+  // mark map previews nothing and would empty every strip rather than fill it.
+  if (!state.logosLoaded) return;
+  const marks = state.logos.records;
+  const marked = new Set(Object.keys(marks).filter(id => marks[id]));
+  $$("[data-element-marks]", root).forEach(strip => {
+    const role = elementGroups.flatMap(group => group.roles).find(item => item.id === strip.dataset.elementMarks);
+    if (!role) return;
+    const labs = AppCore.elementLabs(role.records, state.labIndex, marked);
+    if (!labs.length) {
+      strip.remove();
+      return;
+    }
+    const remaining = limit => labs.length > limit ? `+${labs.length - limit}` : "";
+    strip.title = `Organizations in this role: ${labs.map(lab => lab.name).join(", ")}`;
+    strip.innerHTML = `${labs.slice(0, 3).map(labMark).join("")}<span class="element-more-desktop">${remaining(3)}</span><span class="element-more-mobile">${remaining(2)}</span>`;
+    paintMarks(strip);
+  });
 }
 
 function renderElements() {
@@ -860,8 +895,11 @@ function renderElements() {
   $("#element-family-tabs").innerHTML = elementGroups.map(group => `<button type="button" data-element-family-tab="${escapeHTML(group.id)}" aria-pressed="false" aria-controls="element-group-${escapeHTML(group.id)}">${escapeHTML(AppCore.FAMILY_SHORT_NAMES[group.id] || group.name)}</button>`).join("");
   $("#element-groups").innerHTML = elementGroups.map(group => `<section class="element-group" id="element-group-${escapeHTML(group.id)}" data-element-family="${escapeHTML(group.id)}" aria-labelledby="element-family-${escapeHTML(group.id)}">
     <div class="element-family-heading"><h3 id="element-family-${escapeHTML(group.id)}">${escapeHTML(group.name)}</h3><span>${group.count} active</span></div>
-    <div class="element-tiles">${group.roles.map(role => `<button type="button" class="element-tile" data-element="${escapeHTML(role.id)}" aria-pressed="false" aria-controls="element-sheet"${role.records.length ? "" : " disabled"} aria-label="${escapeHTML(role.name)}, ${role.records.length} active systems. Show reference sheet"><span class="element-count">${role.records.length}</span><span class="element-symbol" aria-hidden="true">${escapeHTML(role.symbol)}</span><span class="element-name">${escapeHTML(role.name)}</span>${elementMarks(role.records)}</button>`).join("")}</div></section>`).join("");
+    <div class="element-tiles">${group.roles.map(role => `<button type="button" class="element-tile" data-element="${escapeHTML(role.id)}" aria-pressed="false" aria-controls="element-sheet"${role.records.length ? "" : " disabled"} aria-label="${escapeHTML(role.name)}, ${role.records.length} active systems. Show reference sheet"><span class="element-count">${role.records.length}</span><span class="element-symbol" aria-hidden="true">${escapeHTML(role.symbol)}</span><span class="element-name">${escapeHTML(role.name)}</span>${elementMarks(role)}</button>`).join("")}</div></section>`).join("");
   syncElementFamilies();
+  // A repaint after the marks have loaded previews straight away; the first
+  // paint waits for loadMarks.
+  paintElementMarks();
 }
 
 function syncElementFamilies() {

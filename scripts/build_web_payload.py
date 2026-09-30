@@ -161,6 +161,7 @@ BOOT_FIELDS = {
         "catalog_names",
         "systems",
         "admission_basis",
+        "display_order",
     ),
     "robots": (
         "id",
