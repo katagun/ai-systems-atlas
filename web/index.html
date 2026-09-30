@@ -23,7 +23,7 @@
   <link rel="canonical" href="https://peacefulcoexistance.com/">
   <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=9159c54a8a20">
+  <link rel="stylesheet" href="styles.css?v=67ac95222db6">
 </head>
 <body class="atlas-app">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -131,7 +131,7 @@
           </div>
 
           <div id="all-directory-panel" class="collection-panel" hidden>
-            <div class="result-row"><p id="all-directory-result-count" aria-live="polite"></p></div>
+            <div class="result-row"><p id="all-directory-result-count" aria-live="polite" tabindex="-1"></p></div>
             <p class="scope-note" data-scope-note="all">The whole directory in one list: A–Z, or best match first while you search. Scores stay hidden here, since a score only compares like with like. Choose a collection for its own filters, and its scores where it has them. <button data-open-tab="taxonomy">How comparisons work →</button></p>
             <div class="job-hint" data-job-hint="all" hidden></div>
             <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems, model releases, inference services, local runtimes, agent packs, and robots"></section>
@@ -197,7 +197,7 @@
               <label><span>Install</span><select id="pack-install-filter"><option value="">All install mechanisms</option></select></label>
               <label><span>License</span><select id="pack-license-filter"><option value="">All licenses</option></select></label>
             </div>
-            <div class="result-row"><p id="pack-result-count" aria-live="polite"></p></div>
+            <div class="result-row"><p id="pack-result-count" aria-live="polite" tabindex="-1"></p></div>
             <p class="scope-note" data-scope-note="packs">Packs are documents a host agent installs and reads. They are recorded for what they install, never scored, and never compared. A pack that runs its own code is reviewed as a system instead. <button data-open-tab="taxonomy">How packs are classified →</button></p>
             <section id="pack-grid" class="project-grid inference-grid" aria-label="Reviewed agent packs and scored systems installed as packs"></section>
             <nav id="pack-pager" class="pager" aria-label="Agent packs pagination"></nav>
@@ -210,7 +210,7 @@
               <label><span>Availability</span><select id="robot-availability-filter"><option value="">Any availability</option></select></label>
               <label><span>Status</span><select id="robot-status-filter"><option value="">Any status</option></select></label>
             </div>
-            <div class="result-row"><p id="robot-result-count" aria-live="polite"></p></div>
+            <div class="result-row"><p id="robot-result-count" aria-live="polite" tabindex="-1"></p></div>
             <p class="scope-note" data-scope-note="robots">Robots are listed for what their makers document: the models they name or the way they let you run your own, the hardware, how to get one, and the terms. The Atlas does not test robots, so nothing here is scored or compared. <button data-open-tab="taxonomy">How robots are classified →</button></p>
             <section id="robot-grid" class="project-grid inference-grid" aria-label="Reviewed robots"></section>
             <nav id="robot-pager" class="pager" aria-label="Robots pagination"></nav>
@@ -225,7 +225,7 @@
               <label><span>License</span><select id="model-license-filter"><option value="">All licenses</option></select></label>
               <label><span>Lab</span><select id="model-lab-filter"><option value="">All labs</option></select></label>
             </div>
-            <div class="result-row"><p id="model-result-count" aria-live="polite"></p></div>
+            <div class="result-row"><p id="model-result-count" aria-live="polite" tabindex="-1"></p></div>
             <p class="scope-note" data-scope-note="models"><span id="models-kicker" class="scope-note-facts">models.dev source catalog and Atlas reviews</span> Artifact licensing describes reviewed release artifacts and mandatory terms, not training code or training data openness. Imported source records have no Atlas score. Reviewed scores compare access and deployability only; they exclude output quality, benchmarks, parameter count, current price, latency, and throughput. <button data-open-tab="taxonomy">How scoring works →</button></p>
             <section id="model-grid" class="project-grid inference-grid" aria-label="models.dev source records and Atlas-reviewed model releases"></section>
             <nav id="model-pager" class="pager" aria-label="Models pagination"></nav>
@@ -237,7 +237,7 @@
               <label><span>Headquarters</span><select id="lab-country-filter"><option value="">All countries</option></select></label>
               <label><span>Releases</span><select id="lab-distribution-filter"><option value="">Any distribution</option></select></label>
             </div>
-            <div class="result-row"><p id="lab-result-count" aria-live="polite"></p></div>
+            <div class="result-row"><p id="lab-result-count" aria-live="polite" tabindex="-1"></p></div>
             <p class="scope-note" data-scope-note="labs"><span id="labs-kicker" class="scope-note-facts">The organizations behind the models</span> A lab is listed once the Atlas has reviewed a release it developed. Releases keeps a lab with at least one reviewed release distributed that way; each release keeps its own licence and score in Models. <button data-open-tab="taxonomy">How labs are classified →</button></p>
             <section id="lab-grid" class="project-grid inference-grid" aria-label="Labs that develop reviewed model releases"></section>
             <nav id="lab-pager" class="pager" aria-label="Labs pagination"></nav>
@@ -251,7 +251,7 @@
               <label><span>License</span><select id="specification-license-filter"><option value="">All licenses</option></select></label>
               <label><span>Lab</span><select id="specification-lab-filter"><option value="">All labs</option></select></label>
             </div>
-            <div class="result-row"><p id="specification-result-count" aria-live="polite"></p></div>
+            <div class="result-row"><p id="specification-result-count" aria-live="polite" tabindex="-1"></p></div>
             <p class="scope-note" data-scope-note="specifications"><span id="specifications-kicker" class="scope-note-facts">Interoperability artifacts</span> Protocols, instruction conventions, and package formats, classified by what they connect, with no cross-purpose score.</p>
             <section id="specification-grid" class="project-grid specification-grid" aria-label="Reviewed specifications"></section>
             <nav id="specification-pager" class="pager" aria-label="Specifications pagination"></nav>
@@ -522,6 +522,6 @@
   <footer><div class="footer-actions"><nav class="footer-nav" aria-label="Site map"><a href="./">Catalog</a><a href="?view=finder">Finder</a><a href="?view=explore">Explore</a><a href="?view=taxonomy">Concepts</a><a href="?view=api">Published data</a><a href="blog/">Blog</a></nav><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a></div><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
   <script type="application/json" id="data-versions">{"projects.json":"71d9917d5557","taxonomy.json":"9797c3c30ee1","license-evidence.json":"d6cbb911714a","specifications.json":"f6487c60eb84","inference-services.json":"3adcbc44ceca","local-runtimes.json":"c3d85a51fff7","models.json":"541ef5ef7c71","models-dev.json":"ec5e4b8a29fb","logos.json":"a0ce82f2ea60","exclusions.json":"ff05010648bd","app/systems.json":"fd038c59c916","app/inference.json":"b1f20c24671e","app/runtimes.json":"ef7c2001163c","app/specifications.json":"e62146fa677b","app/models.json":"5808a43cc56c","app/packs.json":"0907bc81836a","app/labs.json":"621781eaa733","app/robots.json":"3b07b04f8f7c","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"e2975e5aaa70","app/search/inference.json":"b26a8d12b53b","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"a292e958eac7","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"2a8a8278c714","app/search/robots.json":"f3ba0fcf79b2","app/detail":"4509213f7994"}</script>
   <script src="app-core.js?v=8f463431e769" defer></script>
-  <script src="app.js?v=a6ee81ce7cad" defer></script>
+  <script src="app.js?v=e12461b924ef" defer></script>
 </body>
 </html>

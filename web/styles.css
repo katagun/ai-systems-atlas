@@ -647,13 +647,16 @@ h1 {
 .scope-note button:hover { color: var(--text); }
 /* The rail beside the results above 1000 px; a sheet from the bar's
    Filters button below it (Phase 3 spec, section 3). The rail ends above
-   the badge legend's measured height, so no value sits under it. The front
-   door hides the frame, whatever layout class it carries. */
+   the badge legend and the comparison tray, as app.js measures them into
+   --bottom-clearance, so no value sits under either. Its height fits under
+   its lowest top, where the frame starts (--frame-top) until the page
+   scrolls it up to its sticky place, so it clears them at every scroll.
+   The front door hides the frame, whatever layout class it carries. */
 .results-frame { display: block; }
 #results-frame[hidden] { display: none; }
 @media (min-width: 1001px) {
   .results-frame.has-rail { display: grid; grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
-  .filter-rail { position: sticky; top: calc(var(--sticky-clearance, 0px) + .5rem); max-height: calc(100vh - var(--sticky-clearance, 0px) - var(--legend-h, 0px) - 1rem); overflow-y: auto; padding-right: .25rem; }
+  .filter-rail { position: sticky; top: calc(var(--sticky-clearance, 0px) + .5rem); max-height: calc(100vh - max(var(--sticky-clearance, 0px) + .5rem, var(--frame-top, 0px)) - var(--bottom-clearance, 0px) - 1rem); overflow-y: auto; padding-right: .25rem; }
   .filters-button { display: none; }
 }
 @media (max-width: 1000px) {

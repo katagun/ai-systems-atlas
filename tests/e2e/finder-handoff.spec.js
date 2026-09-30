@@ -92,13 +92,14 @@ test("Browse matches lands on the results and shows the Finder's role set as a r
   await choose(page, '[data-finder-choice="priority"][data-finder-value="balanced"]');
   await choose(page, "[data-finder-directory]");
 
-  const { top: panelTop, stickyBottom: sb } = await settle(page, "#systems-directory-panel");
-  expect(panelTop).toBeLessThan(900);
-  expect(panelTop).toBeGreaterThanOrEqual(sb - 1);
-  // A no-op revealDirectoryResults leaves the panel far below the strip,
-  // where activateView's smooth scroll to the top comes to rest; a working
-  // one lands its top within the same 12px margin keepFinderInView uses.
-  expect(panelTop).toBeLessThanOrEqual(sb + 13);
+  // The results begin with the chips row, which holds the Finder chip, so
+  // revealDirectoryResults lands the row's top within the same 12px margin
+  // under the sticky stack that keepFinderInView uses. Landing on the panel
+  // below it would leave the row under the bar.
+  const { top: chipsTop, stickyBottom: sb } = await settle(page, "#filter-chips");
+  expect(chipsTop).toBeLessThan(900);
+  expect(chipsTop).toBeGreaterThanOrEqual(sb - 1);
+  expect(chipsTop).toBeLessThanOrEqual(sb + 13);
   const chip = page.getByRole("button", { name: /Finder: Write and maintain software/ });
   await expect(chip).toBeVisible();
   await expect(page.locator("#result-count")).toContainText("Finder match");
@@ -109,6 +110,20 @@ test("Browse matches lands on the results and shows the Finder's role set as a r
   // "hidden" regardless of whether the element itself was ever hidden.
   await expect(page.locator("#finder-roles-chip")).toBeHidden();
   await expect(page.locator("#result-count")).not.toContainText("Finder match");
+});
+
+// The Finder chip is the only sign that the Finder's roles narrow the list,
+// so the handoff never leaves it under the sticky strip and bar (ruling R-T3-4).
+test("after Browse matches the Finder chip sits below the sticky strip and bar", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?view=finder");
+  await choose(page, '[data-finder-choice="direction"][data-finder-value="agent_system"]');
+  await choose(page, '[data-finder-choice="goal"][data-finder-value="coding"]');
+  await choose(page, '[data-finder-choice="priority"][data-finder-value="balanced"]');
+  await choose(page, "[data-finder-directory]");
+  const { top, stickyBottom } = await settle(page, "#finder-roles-chip");
+  expect(top, `chip top ${top}, sticky bottom ${stickyBottom}`).toBeGreaterThanOrEqual(stickyBottom);
+  await expect(page.locator("#result-count")).toBeFocused();
 });
 
 test("removing the Finder chip by keyboard moves focus to the result count", async ({ page }) => {

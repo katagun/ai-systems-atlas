@@ -1253,6 +1253,23 @@ function syncStickyClearance() {
   const strip = $("#scope-strip");
   document.documentElement.style.setProperty("--strip-height", `${strip && !strip.hidden ? strip.getBoundingClientRect().height : 0}px`);
   document.documentElement.style.setProperty("--sticky-clearance", `${stickyHeight()}px`);
+  // Where the results frame starts on the page, and so the rail's top until
+  // the page scrolls it up to its sticky place: its lowest, which its
+  // height is fitted under (styles.css).
+  const frame = $("#results-frame");
+  document.documentElement.style.setProperty("--frame-top", `${frame?.getClientRects().length ? frame.getBoundingClientRect().top + window.scrollY : 0}px`);
+}
+
+// The bottom's counterpart, which the rail ends above: how far up the
+// viewport the overlays fixed to its bottom reach, the badge legend or,
+// while a comparison is in progress, the tray the legend steps aside for
+// (ruling R-T3-5). Whichever top edge is higher decides, so the rail clears
+// whatever the two stack to.
+function syncBottomClearance() {
+  const reaches = ["#badge-legend", "#comparison-tray"].map(selector => $(selector))
+    .filter(overlay => overlay.getClientRects().length && getComputedStyle(overlay).position === "fixed")
+    .map(overlay => window.innerHeight - overlay.getBoundingClientRect().top);
+  document.documentElement.style.setProperty("--bottom-clearance", `${Math.max(0, ...reaches)}px`);
 }
 
 // The one way a tile or a strip entry opens a collection. A facet narrows
@@ -2681,15 +2698,19 @@ function applyFinderToDirectory() {
   revealDirectoryResults();
 }
 
-// The handoff lands on the results the Finder chose, not on the page top above them.
-// The Finder view hides the button that asked for this, so focus moves to the
-// count of what the Finder chose rather than falling to the page, as it does
-// when the Finder chip removes itself. It moves without scrolling, since the
-// scroll above has already placed the results.
+// The handoff lands on the results the Finder chose, not on the page top above them:
+// on the chips row while it holds anything, since a Finder chip there is the only
+// sign the Finder's roles narrow the list, and otherwise on the collection's panel
+// (ruling R-T3-4). The Finder view hides the button that asked for this, so focus
+// moves to the count of what the Finder chose rather than falling to the page, as
+// it does when the Finder chip removes itself. It moves without scrolling, since
+// the scroll above has already placed the results.
 function revealDirectoryResults() {
   const panel = $(".collection-panel:not([hidden])");
   if (!panel) return;
-  window.scrollTo({ top: panel.getBoundingClientRect().top + window.scrollY - headerClearance(), behavior: "instant" });
+  const chips = $("#filter-chips");
+  const target = chips.hidden ? panel : chips;
+  window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - headerClearance(), behavior: "instant" });
   $(COLLECTIONS[state.directoryCollection].resultCount).focus({ preventScroll: true });
 }
 
@@ -3920,6 +3941,10 @@ function bindEvents() {
   });
   syncStickyClearance();
   window.addEventListener("resize", syncStickyClearance);
+  // Each overlay changes size as it opens, closes, or wraps its text.
+  const bottomOverlays = new ResizeObserver(syncBottomClearance);
+  ["#badge-legend", "#comparison-tray"].forEach(selector => bottomOverlays.observe($(selector)));
+  window.addEventListener("resize", syncBottomClearance);
   for (const [scope, selector] of Object.entries(MATCH_SORTS)) {
     $(selector).addEventListener("input", () => {
       if ($(SCOPE_CONTROLS[scope].q).value.trim()) sortChosenDuringQuery[scope] = true;
