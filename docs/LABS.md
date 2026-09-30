@@ -66,4 +66,4 @@ Labs are never scored, ranked, or sorted by anything but name. Funding, valuatio
 
 ## Current coverage
 
-Forty-four labs are published, and forty-three of them cover all 311 reviewed releases. Forty-two are admitted on a reviewed release; one, Safe Superintelligence, on its own published statement of intent; and one, the Stanford NLP Group, on a system it developed, which joins to no release because it is a research group and the catalog has reviewed no model release of its own. [`COVERAGE.md`](COVERAGE.md#labs) records how the batches were chosen and read, [`LAB_REREAD_2026-09-25.md`](LAB_REREAD_2026-09-25.md) records the direct re-read of every page the first two batches cite, and [ADR 048](adr/048-a-research-group-may-be-admitted-on-a-system-it-developed.md) records the third basis.
+Forty-five labs are published, and forty-four of them cover all 311 reviewed releases. Forty-two are admitted on a reviewed release; one, Safe Superintelligence, on its own published statement of intent; and two, the Stanford NLP Group and Hugging Face, on a system each developed, because the catalog has reviewed no model release of either one's own.

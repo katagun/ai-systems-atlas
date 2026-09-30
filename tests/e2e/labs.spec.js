@@ -80,7 +80,9 @@ test("a lab dialog fits a phone screen with its longest channel URL and name", a
 });
 
 test("a lab admitted on a system explains its empty release join instead of listing nothing", async ({ page }) => {
-  await page.goto(`/?collection=labs&record=lab:${catalogCounts.labIdWithBasis("reviewed_system")}`);
+  // An explicit id, not a lookup by basis: two labs now share this basis and
+  // the test asserts which one it means.
+  await page.goto("/?collection=labs&record=lab:lab-stanford-nlp");
   const dialog = recordView(page, "lab");
   await expect(dialog.locator("h1")).toHaveText("Stanford NLP Group");
   await expect(dialog).toContainText("Recorded because:");
@@ -97,6 +99,32 @@ test("a lab admitted on a system explains its empty release join instead of list
 
   const systems = dialog.locator(".detail-block").filter({ hasText: "Systems it builds" });
   await expect(systems).toContainText("DSPy");
+});
+
+test("a lab joined to systems but to no release says so instead of listing nothing", async ({ page }) => {
+  await page.goto("/?collection=labs&record=lab:lab-hugging-face");
+  const dialog = recordView(page, "lab");
+  await expect(recordHeading(page, "lab")).toHaveText("Hugging Face");
+  await expect(dialog).toContainText("Recorded because:");
+  await expect(dialog).toContainText("Reviewed system");
+  // The parent line is omitted rather than blank: the record names no parent.
+  await expect(dialog).not.toContainText("Parent organization:");
+
+  // No reviewed release to join, so no control offers to browse zero releases.
+  const releases = dialog.locator(".detail-block").filter({ hasText: "Reviewed model releases" });
+  await expect(releases.locator("h3")).toHaveText("Reviewed model releases · 0");
+  await expect(dialog.locator("[data-browse-lab-models]")).toHaveCount(0);
+
+  // Every join the record does have, across four collections.
+  await expect(dialog.locator(".detail-block").filter({ hasText: "Systems it builds" })).toContainText("smolagents");
+  await expect(dialog.locator(".detail-block").filter({ hasText: "Systems it builds" })).toContainText("LeRobot");
+  await expect(dialog.locator(".detail-block").filter({ hasText: "Inference services it operates" }))
+    .toContainText("Hugging Face Inference Endpoints");
+  await expect(dialog).toContainText("Named in the catalog as:");
+
+  // The card's count row drops the zeros rather than printing a 0.
+  const card = page.locator('#lab-grid .lab-card:has([data-lab="lab-hugging-face"])');
+  await expect(card.locator(".tags span")).toHaveText(["2 systems", "2 inference services", "1 local runtime"]);
 });
 
 test("a model dialog links to the lab that developed the release", async ({ page }) => {
