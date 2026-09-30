@@ -8,7 +8,7 @@ The interface uses a technical editorial system: cool paper backgrounds, crisp w
 
 ## Mobile landing and navigation
 
-Below 768px the app uses the Elements-first mobile layout from ADR 046: one family at a time, compact collection tiles, and a fixed Home / Search / Finder / Explore / More bar. Search focuses the existing mixed catalog; Finder replaces the landing job shortcuts. More owns documentation links and the existing theme/GitHub controls, moving the controls back to the header at desktop widths. Reference-sheet restoration reveals the selected family, and a family switch closes an incompatible sheet. The bar reserves safe-area space and stacks below the badge legend and comparison tray; a keyboard-sized visual viewport reduction while editing hides it. Desktop and the static blog keep their existing header. Browser coverage is in `tests/e2e/mobile-landing.spec.js`.
+Below 768px the app uses the Elements-first mobile layout from ADR 046: one family at a time, with Agents leading the family buttons and shown until a restored role reveals its own family, compact collection tiles, and a fixed Home / Search / Finder / Explore / More bar. Search focuses the existing mixed catalog; Finder replaces the landing job shortcuts. More owns documentation links and the existing theme/GitHub controls, moving the controls back to the header at desktop widths. Reference-sheet restoration reveals the selected family, and a family switch closes an incompatible sheet. The bar reserves safe-area space and stacks below the badge legend and comparison tray; a keyboard-sized visual viewport reduction while editing hides it. Desktop and the static blog keep their existing header. Browser coverage is in `tests/e2e/mobile-landing.spec.js`.
 
 ## Content hierarchy
 
