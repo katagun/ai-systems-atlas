@@ -1238,7 +1238,8 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
 .finder-disclaimer { color: var(--muted); line-height: 1.65; }
 .finder-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.15rem; }
 /* The shortlist is a directory card, so "Browse matches" does not change the
-   subject: the same frame, the same family accent rule, the same measure. */.finder-result {
+   subject: the same frame, the same family accent rule, the same measure. */
+.finder-result {
   min-height: 340px;
   padding: 1.4rem;
   border: 1px solid var(--line);
