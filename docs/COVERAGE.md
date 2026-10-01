@@ -36,7 +36,7 @@ system_candidates: 119
 exclusions: 102
 packs: 8
 labs: 45 covering 312 releases
-robots: 4
+robots: 6
 ```
 
 The block is the only place these counts are written down, which is why nothing above restates them: a second copy is a second thing to rot. Read `active-choice` as the catalog a reader chooses from — every system minus the archived and superseded ones — and `labs covering N releases` as the share of reviewed model releases whose developer has a labs record, which is the one figure that says whether the labs collection is keeping up with the models collection.

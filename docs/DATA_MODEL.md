@@ -55,6 +55,7 @@ The browser presents projects, inference services, local runtimes, and a de-dupl
 Fields are grouped by responsibility:
 
 - **Identity:** `id`, `name`, optional GitHub `repo`, authoritative `url`, and `description`.
+- **Product boundary:** optional `current_repo_note` prose stating what the record covers and which adjacent product, rename, or repository it is not — the note distinguishing a vendor's assistant, coding agent, and platform records from one another. It renders as the Product boundary section in the record dialog and as a fact on the share page; a record without one shows no section. Rename and acquisition history has no scoped field of its own yet.
 - **Classification:** `system_family`, `primary_role`, `secondary_roles`, and `score_profile`.
 - **Traits:** agent relationship, optional reviewed provider relationship and model backends, architecture, retrieval, capture, lifecycle, deployment (including `host_pack` for systems installed into a host agent), local-first behavior, editability, provenance, and agent-only operation fields.
 - **Trait definitions:** Directory cards show `local_first` and `human_editable` as the Local-first and Editable by you badges. Each definition below quotes its badge definition in `web/app-core.js` verbatim, a test keeps the two identical, and [ADR 030](adr/030-local-first-and-editable-judge-the-content-a-system-keeps.md) records the rules that follow each quote.

@@ -163,6 +163,8 @@ def _facts_for(
                     f'<a href="../{html.escape(successor["id"])}/">{html.escape(successor["name"])}</a>',
                 )
             )
+        if record.get("current_repo_note"):
+            facts.append(("Product boundary", record["current_repo_note"]))
         return (
             eyebrow,
             record["why_it_matters"],

@@ -69,6 +69,39 @@
     return normalizeSearchText(text).replace(/-/g, " ").replace(/\.+(?=\s|$)/g, "").replace(/\s+/g, " ").trim();
   }
 
+  // A short reviewed synonym list: a phrase readers type that the catalog's
+  // own words never say, mapped to the catalog words that answer it. Every
+  // entry is pinned by a real-catalog probe in tests/test_web.js, so an
+  // entry that stops matching anything fails the suite rather than rotting.
+  // Matching stays word-based (ADR 040): a synonym replaces whole query
+  // words, never substrings. Expansions carry no stop words, which the
+  // parser would have dropped from a typed query anyway.
+  const SEARCH_SYNONYMS = [
+    { match: ["note", "taking"], expand: ["notes"] },
+    { match: ["chatbot"], expand: ["chat"] },
+    { match: ["sso"], expand: ["single", "sign"] },
+    { match: ["k8s"], expand: ["kubernetes"] },
+  ];
+
+  // Alternate word sequences for a parsed query: each synonym whose match
+  // words appear as one contiguous run is tried with that run replaced by
+  // its expansion. Callers take the best variant, so a synonym widens a
+  // query without adding required words.
+  function queryVariants(query) {
+    const variants = [];
+    for (const synonym of SEARCH_SYNONYMS) {
+      const span = synonym.match.length;
+      for (let i = 0; i + span <= query.words.length; i += 1) {
+        if (synonym.match.every((word, j) => query.words[i + j] === word)) {
+          const words = [...query.words.slice(0, i), ...synonym.expand, ...query.words.slice(i + span)];
+          const tokens = words.map(stemQueryWord);
+          variants.push({ words, tokens, text: tokens.join(" ") });
+        }
+      }
+    }
+    return variants;
+  }
+
   // `words` holds each query word as typed, index for index with its stem in
   // `tokens`, because a stem is not always a prefix of its own spelling:
   // "series" stems to "sery".
@@ -76,7 +109,9 @@
     const words = comparableText(raw).split(" ")
       .filter(word => word && !SEARCH_STOP_WORDS.has(word));
     const tokens = words.map(stemQueryWord);
-    return { raw: String(raw || ""), text: tokens.join(" "), tokens, words };
+    const query = { raw: String(raw || ""), text: tokens.join(" "), tokens, words };
+    query.alternates = queryVariants(query);
+    return query;
   }
 
   // How one query word hits one field's words: 1 for a whole word, 0.8 for a
@@ -367,6 +402,40 @@
         .some(model => (model.distribution_modes || []).includes(filters.distribution)));
   }
 
+  // Related navigation inside a system dialog, from data the boot payload
+  // already carries: the same primary role for siblings, superseded_by links
+  // for previous and next. Active records come first, then names A–Z, and the
+  // record itself is never listed.
+  function relatedSystems(project, projects = [], limit = 5) {
+    return (projects || [])
+      .filter(item => item.id !== project.id && item.primary_role === project.primary_role)
+      .sort((a, b) => Number(isActiveRecord(b)) - Number(isActiveRecord(a)) || a.name.localeCompare(b.name))
+      .slice(0, limit);
+  }
+  function successorSystem(project, projects = []) {
+    return (projects || []).find(item => item.id === project.superseded_by) || null;
+  }
+  function predecessorSystems(project, projects = [], limit = 3) {
+    return (projects || [])
+      .filter(item => item.superseded_by === project.id)
+      .sort((a, b) => Number(isActiveRecord(b)) - Number(isActiveRecord(a)) || a.name.localeCompare(b.name))
+      .slice(0, limit);
+  }
+
+  // "More from this lab" for a system dialog: sibling systems joined through
+  // the same lab index the Lab line uses, excluding the record itself. The
+  // lab dialog remains the full list across every collection; this is the
+  // short way across inside one role.
+  function moreFromLabSystems(project, { index = null, projects = [], limit = 4 } = {}) {
+    const lab = labsForRecord("system", project, index)[0];
+    if (!lab) return null;
+    const systems = (projects || [])
+      .filter(item => item.id !== project.id && (lab.systems || []).includes(item.id))
+      .sort((a, b) => Number(isActiveRecord(b)) - Number(isActiveRecord(a)) || a.name.localeCompare(b.name));
+    if (!systems.length) return null;
+    return { lab, systems: systems.slice(0, limit), total: systems.length };
+  }
+
   // Which lab claims each name, system, and models.dev namespace, so a record
   // dialog can link to its lab without re-joining every lab on every paint.
   function buildLabIndex(labs = [], models = []) {
@@ -545,7 +614,9 @@
   // hold the joined word whole hold the phrase, and the heaviest earns its
   // phrase bonus, the name's included, so "lang chain agents" still lists
   // LangChain first. The typed words are joined beside their stems.
-  function recordMatch(query, fields) {
+  // One query variant matched and ordered: the base weight, plus the
+  // split-name join the same variant would earn on its own words.
+  function recordMatchVariant(query, fields) {
     let weight = searchMatch(query, fields);
     const nameWords = cachedSearchWords(fields.name);
     const join = (list, i) => [...list.slice(0, i), list[i] + list[i + 1], ...list.slice(i + 2)];
@@ -567,6 +638,13 @@
       weight = Math.max(weight, joinedWeight + bonus);
     }
     return weight;
+  }
+
+  // A record's weight is its best variant's: the query as typed, then each
+  // synonym expansion on its own words.
+  function recordMatch(query, fields) {
+    const variants = [query, ...(query.alternates || []).map(alternate => ({ ...query, words: alternate.words, tokens: alternate.tokens, text: alternate.text }))];
+    return Math.max(0, ...variants.map(variant => recordMatchVariant(variant, fields)));
   }
 
   // Every record status the taxonomy defines that means a record is no longer
@@ -725,24 +803,28 @@
   // such word names a goal only when that goal's label holds the word and no
   // other eligible goal holds it anywhere, so "browser" names a goal while a
   // generic word such as "agent" or "model" names none, and neither does a
-  // word only a description mentions ("open", in "open-weight"). The goal
-  // matching the most words wins, then the one whose label holds more of
-  // them, then the first listed. Each kept position is scored with
-  // queryWordHit, the better of its stem and its typed spelling, since a stem
-  // is not always a prefix of its own spelling ("libraries" stems to
-  // "library"): a stem-only hit test would miss it.
-  function matchFinderGoal(goals, raw) {
-    const query = parseSearchQuery(raw);
+  // word only a description mentions ("open", in "open-weight"). A goal may
+  // carry reviewed `keywords` — catalog words readers type that its label
+  // and description never say, such as "sql" for the data-analysis goal —
+  // and those count as the label for the one-word rule. The goal matching
+  // the most words wins, then the one whose label holds more of them, then
+  // the first listed. Each kept position is scored with queryWordHit, the
+  // better of its stem and its typed spelling, since a stem is not always a
+  // prefix of its own spelling ("libraries" stems to "library"): a stem-only
+  // hit test would miss it. A query that matches no goal as typed is retried
+  // once per synonym variant, so "note taking" can name the goal "notes"
+  // names; the first variant that names a goal wins.
+  function matchParsedFinderGoal(goals, query) {
     const positions = [...query.tokens.keys()].filter(i => query.tokens[i].length >= 3);
     if (!positions.length) return null;
     const needed = Math.max(1, Math.ceil(positions.length * 0.6));
     const matched = [];
     for (const goal of goals) {
       if (!goal.eligible) continue;
-      const goalWords = cachedSearchWords(`${goal.label} ${goal.description}`);
+      const goalWords = cachedSearchWords(`${goal.label} ${goal.description} ${(goal.keywords || []).join(" ")}`);
       const hits = positions.filter(i => queryWordHit(goalWords, query, i, false) > 0).length;
       if (hits < needed) continue;
-      const labelWords = cachedSearchWords(goal.label);
+      const labelWords = cachedSearchWords(`${goal.label} ${(goal.keywords || []).join(" ")}`);
       matched.push({ goal, hits, labelHits: positions.filter(i => queryWordHit(labelWords, query, i, false) > 0).length });
     }
     if (positions.length === 1 && (matched.length !== 1 || !matched[0].labelHits)) return null;
@@ -751,6 +833,12 @@
       if (!best || item.hits > best.hits || (item.hits === best.hits && item.labelHits > best.labelHits)) best = item;
     }
     return best ? best.goal : null;
+  }
+  function matchFinderGoal(goals, raw) {
+    const query = parseSearchQuery(raw);
+    return matchParsedFinderGoal(goals, query)
+      || (query.alternates || []).map(alternate => matchParsedFinderGoal(goals, { ...query, words: alternate.words, tokens: alternate.tokens })).find(Boolean)
+      || null;
   }
 
   // The collections the Directory offers, in the order the front door's index
@@ -1687,13 +1775,13 @@
       { id: "knowledge_assistant", label: "Ask questions over documents", description: "A ready-to-use AI knowledge app or RAG workspace.", roles: ["ai_knowledge_app"] },
       { id: "agent_memory", label: "Give agents durable memory", description: "Memory services, temporal context, or a bridge to human-owned knowledge.", roles: ["agent_memory_service", "context_graph_engine", "memory_bridge"] },
       { id: "ambient_recall", label: "Automatically remember activity", description: "Passive capture for reconstructing digital work and context.", roles: ["ambient_capture"] },
-      { id: "memory_infrastructure", label: "Build a custom memory product", description: "Retrieval or context-graph infrastructure for developers.", roles: ["retrieval_infrastructure", "context_graph_engine"] }
+      { id: "memory_infrastructure", label: "Build a custom memory product", description: "Retrieval or context-graph infrastructure for developers.", roles: ["retrieval_infrastructure", "context_graph_engine"], keywords: ["retrieval"] }
     ],
     agent_system: [
       { id: "general_work", label: "Delegate general knowledge work", description: "An end-user agent that plans and completes broad multi-step work across files, web sources, and applications.", roles: ["general_work_agent"] },
       { id: "coding", label: "Write and maintain software", description: "An interactive coding agent or a repeatable coding-agent workflow.", roles: ["coding_agent", "coding_agent_workflow"] },
       { id: "research", label: "Research and synthesize information", description: "A multi-step researcher that gathers sources and produces reports.", roles: ["research_agent"] },
-      { id: "analyze_data", label: "Analyze data with natural language", description: "A text-to-SQL or analytics agent that plans, validates, and explains queries.", roles: ["data_analysis_agent"] },
+      { id: "analyze_data", label: "Analyze data with natural language", description: "A text-to-SQL or analytics agent that plans, validates, and explains queries.", roles: ["data_analysis_agent"], keywords: ["sql"] },
       { id: "browser", label: "Operate websites or browsers", description: "An agent specialized in browser and graphical interaction.", roles: ["browser_computer_agent"] },
       { id: "persistent", label: "Run a persistent, stateful agent", description: "Identity, memory, schedules, skills, and long-running state.", roles: ["stateful_agent_runtime"] },
       { id: "build_agents", label: "Build and orchestrate agents", description: "A framework for tools, workflows, state, and multi-agent coordination.", roles: ["agent_framework_sdk", "multi_agent_orchestrator"] }
@@ -1713,7 +1801,7 @@
       { id: "personal_machine", label: "Run models on my own computer", description: "A packaged runner that manages download, storage, and local serving.", runtimeTypes: ["desktop_runner"] },
       { id: "serve_workload", label: "Serve a sustained request load", description: "An engine built for batching, concurrency, and multi-accelerator serving.", runtimeTypes: ["server_engine"] },
       { id: "embed_inference", label: "Embed inference in my own software", description: "A library or binary a host application links rather than operates as a service.", runtimeTypes: ["embedded_library"] },
-      { id: "self_host_endpoint", label: "Self-host one compatible endpoint", description: "A gateway presenting familiar APIs over interchangeable local backends.", runtimeTypes: ["compatibility_gateway"] }
+      { id: "self_host_endpoint", label: "Self-host one compatible endpoint", description: "A gateway presenting familiar APIs over interchangeable local backends.", runtimeTypes: ["compatibility_gateway"], keywords: ["gateway"] }
     ]
   };
   const FINDER_PRIORITIES = {
@@ -1906,6 +1994,9 @@
     matchesProject,
     mergePackScopeEntries,
     modelAccessSummary,
+    moreFromLabSystems,
+    predecessorSystems,
+    relatedSystems,
     systemDeploymentSummary,
     systemElements,
     modelMetadataAttribution,
@@ -1928,8 +2019,10 @@
     releaseDate,
     releasesNewestFirst,
     scopeFromURL,
+    successorSystem,
     scopeURLParams,
     scoreDimension,
+    SEARCH_SYNONYMS,
     searchFields,
     searchWords,
     shareRecordPath,

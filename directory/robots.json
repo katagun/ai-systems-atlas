@@ -399,6 +399,168 @@
         }
       ],
       "verified_at": "2026-09-24"
+    },
+    {
+      "id": "unitree-go2",
+      "name": "Unitree Go2",
+      "manufacturer": "Unitree Robotics",
+      "url": "https://www.unitree.com/go2",
+      "first_party_domains": [
+        "unitree.com",
+        "github.com/unitreerobotics"
+      ],
+      "description": "Unitree's quadruped robot dog, sold in AIR, PRO, X and EDU configurations. Unitree names no learned model for it; its robotics repositories document training a reinforcement-learning policy in simulation and deploying it to a physical Go2 for motion control, and controlling it directly with ROS 2 messages.",
+      "variants": "Go2 AIR, PRO, X and EDU on the product page. Full secondary development is an EDU-only feature, with partial support on the X and none on the AIR or PRO.",
+      "form_factor": "quadruped",
+      "availability": "orderable",
+      "availability_note": "Unitree's shop sells the Go2 with an add-to-cart button and says orders ship within one month. The EDU version is bought by contacting Unitree's sales team.",
+      "ai_basis": [
+        "open_model_interface"
+      ],
+      "named_models": [],
+      "research_confidence": "high",
+      "hardware": {
+        "compute": "An 8-core high-performance CPU, which the product page says supports advanced, AI, and 3D-mapping modes. A high-computing-power module such as Orin is listed as an accessory.",
+        "sensors": "Unitree's self-developed 4D LiDAR L2 with 360-by-96-degree hemispherical coverage and a 0.05 m minimum detection distance, an HD wide-angle camera, and a wireless vector positioning module on the PRO and above. The EDU version adds a foot-end force sensor.",
+        "actuation": "Twelve joint motors with about 45 N·m peak joint torque. The product page lists payloads of about 7 to 8 kg, up to 10 to 12 kg maximum by configuration, and speeds up to 2.5 to 3.7 m/s, about 5 m/s maximum in lab tests.",
+        "power": "An 8000 mAh smart battery with a 15000 mAh long-endurance option. The product page lists about 1 to 2 hours of battery life, about 2 to 4 on the EDU version, with a fast charger for the EDU."
+      },
+      "developer_access": "Unitree's unitree_rl_gym repository documents training a reinforcement-learning policy in simulation and deploying it to a physical Go2 for motion control, and its unitree_ros2 repository documents controlling the Go2 directly with ROS 2 messages, without wrapping the SDK interface. The product page gates full secondary development to the EDU version.",
+      "terms": [
+        "sdk_license",
+        "software_terms"
+      ],
+      "terms_note": "Unitree's SDK, unitree_sdk2, is released under the BSD 3-Clause License. Unitree's terms page has Terms, After-sales Terms, Privacy Policy, Disclaimer, and End User License Agreement tabs; the after-sales tab is the hardware warranty policy. The product page lists a 6-month warranty for the AIR and 12 months for the other configurations.",
+      "terms_evidence": [
+        {
+          "terms_kind": "sdk_license",
+          "scope": "unitree_sdk2 licence file",
+          "kind": "web_terms",
+          "url": "https://github.com/unitreerobotics/unitree_sdk2/blob/main/LICENSE",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "terms_kind": "software_terms",
+          "scope": "End User License Agreement tab",
+          "kind": "web_terms",
+          "url": "https://www.unitree.com/terms",
+          "verified_at": "2026-09-30"
+        }
+      ],
+      "not_verified": "The documented policy interfaces are Unitree's own claims; the Atlas has not verified them. Every source is a Unitree web page or repository file that Unitree can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://www.unitree.com/go2",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_rl_gym README",
+          "url": "https://github.com/unitreerobotics/unitree_rl_gym/blob/main/README.md",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_ros2 README",
+          "url": "https://github.com/unitreerobotics/unitree_ros2/blob/master/README.md",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Unitree shop page",
+          "url": "https://shop.unitree.com/products/unitree-go2",
+          "verified_at": "2026-09-30"
+        }
+      ],
+      "verified_at": "2026-09-30"
+    },
+    {
+      "id": "unitree-h1",
+      "name": "Unitree H1",
+      "manufacturer": "Unitree Robotics",
+      "url": "https://www.unitree.com/h1",
+      "first_party_domains": [
+        "unitree.com",
+        "github.com/unitreerobotics"
+      ],
+      "description": "Unitree's full-size universal humanoid robot, sold as the H1 and H1-2. Unitree names no learned model for it; its robotics repositories document training a reinforcement-learning policy in simulation and deploying it to a physical H1 for motion control, and controlling it directly with ROS 2 messages.",
+      "variants": "H1 and H1-2 on the product page, which lists user-development computing for both.",
+      "form_factor": "humanoid",
+      "availability": "orderable",
+      "availability_note": "Unitree's shop lists the H1 with an add-to-cart button. Buyers who want product information are told to contact Unitree directly.",
+      "ai_basis": [
+        "open_model_interface"
+      ],
+      "named_models": [],
+      "research_confidence": "high",
+      "hardware": {
+        "compute": "A standard configuration of an Intel Core i5 for platform functions and an Intel Core i7 for user development, with optional modules such as Orin NX.",
+        "sensors": "3D LiDAR plus a depth camera, which Unitree says gives 360-degree depth perception.",
+        "actuation": "Low-inertia high-speed internal-rotor permanent magnet synchronous motors on industrial-grade crossed roller bearings. The H1 stands about 180 cm, weighs about 47 kg, and moves at 3.3 m/s with five degrees of freedom per leg and four expandable degrees per arm. The H1-2 stands about 178 cm, weighs about 70 kg, and has 27 degrees of freedom in total, with shoulder and elbow joints of about 120 N·m, wrists of about 30 N·m, and a rated arm load of about 7 kg.",
+        "power": "A quickly replaceable 15 Ah (0.864 kWh) battery at up to 67.2 V."
+      },
+      "developer_access": "Unitree's unitree_rl_gym repository documents training a reinforcement-learning policy in simulation and deploying it to a physical H1 or H1-2 for motion control, and its unitree_ros2 repository documents controlling the H1 directly with ROS 2 messages, without wrapping the SDK interface.",
+      "terms": [
+        "sdk_license",
+        "software_terms"
+      ],
+      "terms_note": "Unitree's SDK, unitree_sdk2, is released under the BSD 3-Clause License. Unitree's terms page has Terms, After-sales Terms, Privacy Policy, Disclaimer, and End User License Agreement tabs; the after-sales tab is the hardware warranty policy, and it excludes damage caused by the user's own developer-mode programs from free warranty. The H1 product page states no warranty period.",
+      "terms_evidence": [
+        {
+          "terms_kind": "sdk_license",
+          "scope": "unitree_sdk2 licence file",
+          "kind": "web_terms",
+          "url": "https://github.com/unitreerobotics/unitree_sdk2/blob/main/LICENSE",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "terms_kind": "software_terms",
+          "scope": "End User License Agreement tab",
+          "kind": "web_terms",
+          "url": "https://www.unitree.com/terms",
+          "verified_at": "2026-09-30"
+        }
+      ],
+      "not_verified": "The documented policy interfaces are Unitree's own claims; the Atlas has not verified them. Every source is a Unitree web page or repository file that Unitree can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://www.unitree.com/h1",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_rl_gym README",
+          "url": "https://github.com/unitreerobotics/unitree_rl_gym/blob/main/README.md",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_ros2 README",
+          "url": "https://github.com/unitreerobotics/unitree_ros2/blob/master/README.md",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Unitree shop page",
+          "url": "https://shop.unitree.com/products/unitree-h1",
+          "verified_at": "2026-09-30"
+        }
+      ],
+      "verified_at": "2026-09-30"
     }
   ]
 }
