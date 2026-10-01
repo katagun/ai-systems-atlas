@@ -152,6 +152,24 @@ class EngineeringMeasurementTests(unittest.TestCase):
         self.assertEqual(1, len(failures))
         self.assertIn("syncMatchSortGone", failures[0])
 
+    def test_anchors_resolve_in_app_core_too(self) -> None:
+        """A symbol that lives only in `app-core.js` counts as existing.
+
+        CR-18 moved the Finder's ranking helpers out of the classic script, so
+        checking `app.js` alone left every anchor naming one of them unresolvable
+        in the wrong direction: a rename there would pass silently. The guards
+        item's anchors pointed into `app-core.js` for the same reason and were
+        never checked at all.
+        """
+        core_only = measure.declared_names(APP_CORE) - measure.declared_names(APP_JS)
+        self.assertTrue(core_only, "app-core.js is expected to declare its own names")
+        section = f"- [ ] Item. `{sorted(core_only)[0]}` (1870) ranks.\n"
+        self.assertEqual([], measure.javascript_anchor_failures(section))
+        gone = "- [ ] Item. `noSuchRankingHelper` (1870) ranks.\n"
+        failures = measure.javascript_anchor_failures(gone)
+        self.assertEqual(1, len(failures))
+        self.assertIn("app-core.js", failures[0])
+
     def test_anchors_accept_both_shapes(self) -> None:
         """`name` (933) and `name` at 2780 are both anchors, both resolvable."""
         for line in (

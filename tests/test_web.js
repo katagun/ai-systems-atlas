@@ -907,6 +907,20 @@ test("lab releases list newest first and fall back to the name when a date is mi
   assert.deepEqual(alpha.map(item => item.id), ["alpha-one", "alpha-two", "alpha-early"], "sorting copies rather than reorders");
 });
 
+test("a stage lists dated records newest first and breaks a shared date by name", () => {
+  const { newestDated } = require("../web/app-core.js");
+  const records = [
+    { id: "late-b", name: "Beta", release: "2026-09-22" },
+    { id: "late-a", name: "Alpha", release: "2026-09-22" },
+    { id: "mid", name: "Mid", release: "2026-09-21" },
+    { id: "undated", name: "Undated", release: "" },
+  ];
+  const dateOf = record => record.release;
+  assert.deepEqual(newestDated(records, dateOf).map(item => item.id), ["late-a", "late-b", "mid"]);
+  assert.deepEqual(records.map(item => item.id), ["late-b", "late-a", "mid", "undated"], "sorting copies rather than reorders");
+  assert.deepEqual(newestDated([], dateOf), []);
+});
+
 test("a lab shows which distribution modes its releases carry, in taxonomy order", () => {
   const alpha = labRelations(labs[0], labCatalog).models;
   assert.deepEqual(labDistributionModes(alpha, ["downloadable_weights", "developer_api", "third_party_hosting"]), ["downloadable_weights", "developer_api", "third_party_hosting"]);
