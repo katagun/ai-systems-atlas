@@ -4,7 +4,7 @@ const { relative, sep } = require("node:path");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -2820,4 +2820,66 @@ test("collection symbols have their own explanations independent of shared glyph
   for (const entry of COLLECTIONS) assert.ok(entry.meaning, entry.id);
   assert.equal(COLLECTIONS.find(entry => entry.id === "packs").emblem, "agent-system");
   assert.match(COLLECTIONS.find(entry => entry.id === "packs").meaning, /own type badges/);
+});
+
+// The Finder's screen is one counted map of its goal tables, so the counts it
+// prints are the numbers a reader trusts before choosing anything. These read
+// the real payloads, not fixtures: a tile that shows 0 for a job the directory
+// can satisfy is the defect they exist to catch.
+test("every goal the Finder offers can satisfy at least one active reviewed record", () => {
+  const records = findRecordsByProfile();
+  const collections = {
+    projects: Object.values(records).flatMap(byFamily => byFamily).filter(record => record.system_family),
+    inferenceServices: records.inference_service,
+    localRuntimes: records.local_runtime,
+  };
+  const entries = finderGoalEntries(collections);
+  assert.equal(entries.length, FINDER_DIRECTIONS.reduce((sum, direction) => sum + FINDER_GOALS[direction.id].length, 0));
+  for (const entry of entries) {
+    assert.ok(Number.isInteger(entry.eligible), `${entry.id} counts whole records`);
+    assert.ok(entry.eligible >= 1, `${entry.id} has at least one active reviewed record`);
+  }
+  // The same predicate ranks the shortlist, so a tile's count and the
+  // candidate set can never disagree.
+  for (const entry of entries) {
+    const goal = FINDER_GOALS[entry.direction].find(item => item.id === entry.id);
+    assert.equal(finderGoalRecords(entry.direction, goal, collections).length, entry.eligible);
+  }
+});
+
+test("a direction's total is never the sum of its goal counts, because goals overlap", () => {
+  // context_graph_engine is claimed by both memory's agent_memory and its
+  // memory_infrastructure, so the two counts share records and the column
+  // total is smaller than their sum. The tile heading prints the total and the
+  // tiles print the per-goal counts, so a rendering rule that summed them
+  // would misstate the column. A future overlap is then a deliberate change
+  // here rather than a silent regression.
+  const records = findRecordsByProfile();
+  const collections = {
+    projects: Object.values(records).flatMap(byFamily => byFamily).filter(record => record.system_family),
+    inferenceServices: records.inference_service,
+    localRuntimes: records.local_runtime,
+  };
+  const overlapping = finderGoalEntries(collections).filter(entry => entry.direction === "memory_system");
+  const summed = overlapping.reduce((sum, entry) => sum + entry.eligible, 0);
+  const total = finderDirectionTotal("memory_system", collections);
+  assert.ok(summed > total, `memory's goals sum to ${summed} against a family total of ${total}`);
+
+  // A direction whose goals partition their direction sums exactly, which is
+  // what makes memory's excess a property of the tables and not of the maths.
+  for (const direction of ["agent_system", "assistant_system"]) {
+    const summed = FINDER_GOALS[direction].reduce((sum, goal) => {
+      const entries = finderGoalEntries(collections).filter(entry => entry.direction === direction && entry.id === goal.id);
+      return sum + entries[0].eligible;
+    }, 0);
+    assert.equal(summed, finderDirectionTotal(direction, collections), `${direction}'s goals partition it`);
+  }
+});
+
+test("the direction total counts active records only, so a retired one leaves the heading", () => {
+  const base = { name: "Live", primary_role: "coding_agent", system_family: "agent_system", status: "active" };
+  const retired = { ...base, name: "Retired", status: "retired" };
+  const collections = { projects: [base, retired], inferenceServices: [], localRuntimes: [] };
+  assert.equal(finderDirectionTotal("agent_system", collections), 1);
+  assert.equal(finderGoalRecords("agent_system", FINDER_GOALS.agent_system.find(item => item.id === "coding"), collections).length, 1);
 });

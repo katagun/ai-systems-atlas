@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { allSearch, categoryEntry, collectionDot, collectionEntry, entryCount, familyEntry, openCollection, openView, pressedEntry, searchAll } = require("./helpers/landing");
+const { finderHandoff } = require("./helpers/finder");
 const counts = require("./helpers/catalog-counts");
 const { closeRecord, expectFilter, recordView, search, searchBox, setFilter, sortControl } = require("./helpers/results");
 
@@ -217,7 +218,10 @@ test("a Finder job opens the Finder at its priority question", async ({ page }) 
   await expect(page.locator("#door-jobs button")).toHaveCount(5);
   await page.locator('#door-jobs [data-door-direction="agent_system"]').click();
   await expect(page.locator("#finder")).toHaveClass(/is-active/);
-  await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
+  // The Finder is one screen, so the job is chosen and its shortlist is what
+  // the pill leaves open — there is no standing question left to answer.
+  await expect(page.locator(".finder-result-heading h2")).toHaveText("Delegate general knowledge work");
+  await expect(page.locator("#finder-status")).toContainText("match, ranked for");
 });
 
 test("tiles carry the three most recently reviewed marks and no example ranking", async ({ page }) => {
@@ -317,10 +321,7 @@ test("a state dot marks a comparison in progress and Finder roles applied", asyn
   await page.locator("#comparison-clear").click();
   await expect(page.locator("#scope-strip .state-dot")).toHaveCount(0);
   await page.goto("/?view=finder");
-  for (const value of ["agent_system", "coding", "balanced"]) {
-    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-  }
-  await page.locator("[data-finder-directory]").click();
+  await finderHandoff(page, "coding");
   await expect(collectionDot(page, "systems")).toHaveClass(/is-finder/);
   await page.locator("#finder-roles-chip").click();
   await expect(page.locator("#scope-strip .state-dot")).toHaveCount(0);
@@ -624,10 +625,7 @@ test("a comparison in progress stays off the front door's URL and the Systems ti
 
 test("the Systems tile reopens a Finder role set its dot marks", async ({ page }) => {
   await page.goto("/?view=finder");
-  for (const value of ["agent_system", "coding", "balanced"]) {
-    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-  }
-  await page.locator("[data-finder-directory]").click();
+  await finderHandoff(page, "coding");
   await expect(page.locator("#finder-roles-chip")).toBeVisible();
   const before = await page.locator("#result-count").textContent();
   await openView(page, "directory");

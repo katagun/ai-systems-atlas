@@ -69,11 +69,13 @@ The same rule applies to the collection-specific `inference_service`, `local_run
 
 ## Guided finder
 
-The Finder is a transparent decision flow over the operational collections:
+The Finder is a transparent decision over the operational collections, shown as one screen rather than asked as a sequence of questions. Its three axes are always visible and independent:
 
-1. choose a memory, agent, assistant, inference-service, or local-runtime direction;
-2. choose a desired job, which maps to one or more system roles or one inference-service type;
-3. choose a priority supported by that record's own traits and score profile.
+1. a direction — memory, agent, assistant, inference-service, or local-runtime — drawn as a column headed by that family's active total;
+2. a desired job within it, which maps to one or more system roles or one inference-service type, listed with the count of records that job can draw on;
+3. a priority supported by that record's own traits and score profile, shown once a job is chosen.
+
+The counts are per job and never summed into a direction's total, because one job may claim a role another job in the same direction also claims; the same rule that keeps `context_graph_engine` in two memory goals keeps the column honest. Choosing a job settles its direction, so the priority row offered is that direction's alone.
 
 Only active projects in the chosen system family and role set are eligible on a system path; inference paths use the independently curated service collection and exactly one service type. The priority adds weight only to documented traits or dimensions in the selected profile, whose overall score breaks close ties. Results explain the native classification and surface one recorded weakness or tradeoff. Opening the Directory preserves the eligible role set or service type. Preferences remain soft ranking signals rather than hard filters. The Finder never pools or compares scores across profiles and is a starting shortlist, not an empirical evaluation of a user's workload.
 
