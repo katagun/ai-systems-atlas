@@ -4,7 +4,7 @@ const { relative, sep } = require("node:path");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -945,6 +945,42 @@ test("a record dialog finds its lab by its own collection's join rule", () => {
   assert.deepEqual(ids("system", { id: "alpha-chat" }), ["lab-alpha"]);
   assert.deepEqual(ids("system", { id: "unrelated" }), []);
   assert.deepEqual(labsForRecord("model", labCatalog.models[0], null), []);
+});
+
+// Related navigation inside a system dialog comes from data the boot payload
+// already carries: the same primary role for siblings, superseded_by links
+// for previous and next. Active records come first, then names A–Z, and the
+// record itself is never listed.
+test("a system dialog lists same-role siblings and predecessor and successor links", () => {
+  const systems = [
+    { id: "alpha-chat", name: "Alpha Chat", primary_role: "general_ai_assistant", status: "active" },
+    { id: "beta-chat", name: "Beta Chat", primary_role: "general_ai_assistant", status: "active" },
+    { id: "old-chat", name: "Old Chat", primary_role: "general_ai_assistant", status: "archived" },
+    { id: "agent-one", name: "Agent One", primary_role: "coding_agent", status: "active", superseded_by: "agent-two" },
+    { id: "agent-two", name: "Agent Two", primary_role: "coding_agent", status: "active" },
+  ];
+  assert.deepEqual(relatedSystems(systems[0], systems).map(item => item.id), ["beta-chat", "old-chat"]);
+  assert.deepEqual(relatedSystems(systems[0], systems, 1).map(item => item.id), ["beta-chat"]);
+  assert.deepEqual(relatedSystems(systems[3], systems).map(item => item.id), ["agent-two"]);
+  assert.equal(successorSystem(systems[3], systems).id, "agent-two");
+  assert.equal(successorSystem(systems[4], systems), null);
+  assert.deepEqual(predecessorSystems(systems[4], systems).map(item => item.id), ["agent-one"]);
+  assert.deepEqual(predecessorSystems(systems[0], systems), []);
+});
+
+test("more-from-lab lists same-lab systems besides the record itself", () => {
+  const owned = [{ id: "lab-a", name: "A", catalog_names: ["A"], systems: ["chat-a", "chat-b"] }];
+  const index = buildLabIndex(owned, []);
+  const projects = [
+    { id: "chat-a", name: "Chat A", status: "active" },
+    { id: "chat-b", name: "Chat B", status: "active" },
+    { id: "chat-c", name: "Chat C", status: "active" },
+  ];
+  const more = moreFromLabSystems(projects[0], { index, projects });
+  assert.equal(more.lab.id, "lab-a");
+  assert.deepEqual(more.systems.map(item => item.id), ["chat-b"]);
+  assert.equal(more.total, 1);
+  assert.equal(moreFromLabSystems(projects[2], { index, projects }), null);
 });
 
 test("the models lab filter narrows to the ids it is given", () => {
@@ -2072,6 +2108,22 @@ test("real-catalog probes: known names first and loose queries answered", () => 
   assert.ok(run("run models locally").length > 0);
   assert.ok(run("memory for agents").length > 0);
   assert.ok(run("open source coding agent").length > 0);
+  // Every reviewed synonym answers the query its catalog words answer: the
+  // synonym's matches are a superset of its expansion's, so a rotting entry
+  // fails here rather than silently listing nothing.
+  for (const { match, expand } of SEARCH_SYNONYMS) {
+    const phrase = match.join(" ");
+    const expanded = expand.join(" ");
+    assert.ok(run(phrase).length > 0, `"${phrase}" lists nothing`);
+    const listed = new Set(run(phrase));
+    for (const name of run(expanded)) assert.ok(listed.has(name), `"${phrase}" misses ${name}, which "${expanded}" finds`);
+  }
+  // Every reviewed goal keyword names its goal on the shipped goal set.
+  const shippedGoals = Object.entries(FINDER_GOALS).flatMap(([direction, goals]) =>
+    goals.map(goal => ({ ...goal, direction, eligible: 1 })));
+  for (const [term, id] of [["sql", "analyze_data"], ["retrieval", "memory_infrastructure"], ["gateway", "self_host_endpoint"]]) {
+    assert.equal(matchFinderGoal(shippedGoals, term).id, id);
+  }
   // Short words stay whole outside names: "rag" never matches inside a prose
   // word such as "storage", and "pi" never matches "API".
   const rag = hits("rag");
@@ -2182,6 +2234,41 @@ test("a query names a Finder job by an -ies word matched as typed, not only its 
     { id: "sdk_builder", direction: "agent_system", label: "Build agent libraries", description: "An SDK for building agents.", eligible: 3 },
   ];
   assert.equal(matchFinderGoal(goals, "libraries").id, "sdk_builder");
+});
+
+// A synonym replaces whole query words with the catalog words that answer
+// them, and a record matches on the best variant.
+test("a reviewed synonym widens the query without adding required words", () => {
+  const query = parseSearchQuery("note taking");
+  assert.deepEqual(query.alternates.map(alternate => alternate.words), [["notes"]]);
+  assert.deepEqual(parseSearchQuery("notes").alternates, []);
+  const fields = searchFields("system", { id: "n", name: "Notebook", description: "Take notes and link ideas." });
+  assert.ok(recordMatch(parseSearchQuery("notes"), fields) > 0);
+  assert.ok(recordMatch(query, fields) > 0);
+  const other = searchFields("system", { id: "o", name: "Orchestrator", description: "Coordinate agents." });
+  assert.equal(recordMatch(query, other), 0);
+});
+
+// Goal keywords count as the label for the one-word rule, so "sql" names the
+// data-analysis goal while a word two goals share names none.
+test("a goal keyword names the goal for a one-word query", () => {
+  const goals = [
+    { id: "analyze_data", direction: "agent_system", label: "Analyze data with natural language", description: "An analytics agent.", keywords: ["sql"], eligible: 4 },
+    { id: "build_agents", direction: "agent_system", label: "Build and orchestrate agents", description: "A framework for tools.", eligible: 7 },
+  ];
+  assert.equal(matchFinderGoal(goals, "sql").id, "analyze_data");
+  const shared = goals.map(goal => ({ ...goal, keywords: ["sql"] }));
+  assert.equal(matchFinderGoal(shared, "sql"), null);
+});
+
+// A synonym variant retries goal naming, so "note taking" names the goal
+// "notes" names.
+test("a synonym variant names the Finder job its expansion names", () => {
+  const goals = [
+    { id: "personal_knowledge", direction: "memory_system", label: "Keep my own notes and knowledge", description: "A workspace for ideas.", eligible: 6 },
+  ];
+  assert.equal(matchFinderGoal(goals, "notes").id, "personal_knowledge");
+  assert.equal(matchFinderGoal(goals, "note taking").id, "personal_knowledge");
 });
 
 const registryPayloads = {
