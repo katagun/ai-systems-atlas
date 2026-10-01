@@ -432,6 +432,13 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
                 "last": dates[-1] if dates else None,
                 "missing": len(active) - len(dates),
             }
+            # The boot record does not carry verified_at; the stage needs it
+            # to order active systems without loading every detail file.
+            envelope["review_dates"] = {
+                record["id"]: record["verified_at"]
+                for record in active
+                if record.get("verified_at")
+            }
         if collection == "models":
             envelope.update(
                 {

@@ -435,6 +435,24 @@ class WebPayloadTests(unittest.TestCase):
                 collection,
             )
 
+    def test_active_system_review_dates_ride_the_boot_envelope(self) -> None:
+        """The stage orders active systems by review date, which the boot record does not carry."""
+        payload = json.loads(self.payloads["app/systems.json"])
+        systems = self.catalog["projects.json"]["projects"]
+        expected = {
+            record["id"]: record["verified_at"]
+            for record in systems
+            if record.get("status") == "active" and record.get("verified_at")
+        }
+        self.assertEqual(payload["review_dates"], expected)
+        inactive = [
+            record["id"]
+            for record in systems
+            if record.get("status") != "active" and record.get("verified_at")
+        ]
+        self.assertTrue(inactive, "the fixture needs an inactive dated system")
+        self.assertTrue(set(inactive).isdisjoint(payload["review_dates"]))
+
     def test_recent_record_ids_orders_by_review_date_then_name(self) -> None:
         records = [
             {"id": "b", "name": "Beta", "verified_at": "2026-09-01"},
