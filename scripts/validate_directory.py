@@ -505,6 +505,18 @@ MODEL_REVIEW_REQUIRED = {
     "source_model",
     "model_access_score",
 }
+# ADR 051: a type states what the release is for, so the record's own output
+# modalities have to agree with it. The two language types keep the text
+# requirement their definitions always had, and the three generative-media types
+# name the modality they exist to produce. An action-emitting policy has no type
+# here on purpose, so no row can satisfy this table by emitting robot actions.
+MODEL_TYPE_OUTPUT_MODALITY = {
+    "language_model": "text",
+    "multimodal_language_model": "text",
+    "image_generation_model": "image",
+    "video_generation_model": "video",
+    "audio_generation_model": "audio",
+}
 
 
 def load_document(directory: Path, name: str) -> dict[str, Any]:
@@ -2719,8 +2731,6 @@ def validate_model_source_metadata(
     prefix: str,
     tax: Taxonomy,
     errors: list[str],
-    *,
-    require_text: bool = True,
 ) -> None:
     """Validate the models.dev-owned snapshot without treating it as editorial truth."""
     if (
@@ -2761,8 +2771,6 @@ def validate_model_source_metadata(
                 f"{prefix}: source_metadata.modalities",
                 errors,
             )
-        if require_text and "text" not in modalities.get("output", []):
-            errors.append(f"{prefix}: model candidates must produce text")
 
     capabilities = metadata.get("capabilities")
     if not isinstance(capabilities, dict) or set(capabilities) != MODEL_CAPABILITIES:
@@ -2900,7 +2908,8 @@ def validate_models(
             "https://"
         ):
             errors.append(f"{prefix}: url must be authoritative HTTPS")
-        if model.get("model_type") not in tax.enum_ids["model_types"]:
+        model_type = model.get("model_type")
+        if model_type not in tax.enum_ids["model_types"]:
             errors.append(f"{prefix}: unknown model type")
         validate_string_list(
             model,
@@ -2912,6 +2921,19 @@ def validate_models(
         validate_model_source_metadata(
             model.get("source_metadata"), prefix, tax, errors
         )
+        # ADR 051: the type says what the release produces, so the attributed
+        # output modalities have to agree with it rather than the other way round.
+        required_modality = MODEL_TYPE_OUTPUT_MODALITY.get(model_type)
+        outputs = (model.get("source_metadata") or {}).get("modalities", {})
+        if (
+            required_modality is not None
+            and isinstance(outputs, dict)
+            and required_modality not in (outputs.get("output") or [])
+        ):
+            errors.append(
+                f"{prefix}: {model_type} must record {required_modality} "
+                "as an output modality"
+            )
 
         validate_string_list(
             model, "licenses", tax.enum_ids["licenses"], prefix, errors
@@ -3072,7 +3094,6 @@ def validate_models_dev(
             prefix,
             tax,
             errors,
-            require_text=False,
         )
     return records
 

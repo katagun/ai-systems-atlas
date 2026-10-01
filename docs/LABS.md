@@ -14,7 +14,7 @@ Every lab states why it is in the collection, in a required `admission_basis` fi
 
 The third basis admits a property of a record this catalog already curates, not of the organization's fame, funding, coverage, or reputation: the Atlas must hold a reviewed system record, and the organization's own pages must name the system. A research group whose output is papers rather than systems still waits, because a paper is not a record in any collection. The cost is that Labs is no longer bounded by Models alone but by Models and Systems together, and that is the growth the basis accepts.
 
-Size, funding, frontier status, popularity, openness, nationality, and licence decide nothing. A service operator that serves other developers' models, and a company whose only releases are image, audio, or video generators, still wait: none of them publishes a statement that it is building frontier models, and neither develops a reviewed system.
+Size, funding, frontier status, popularity, openness, nationality, and licence decide nothing. A service operator that serves other developers' models still waits: it develops no reviewed system and publishes no statement that it is building frontier models. An organization whose releases are image, audio, or video generators no longer waits on that ground alone, because since [ADR 051](adr/051-generative-media-releases-join-the-reviewed-models-collection.md) a generative-media release is a reviewable model record, so such an organization is admitted the ordinary way, on a reviewed release of its own ([`MODELS.md`](MODELS.md#eligibility)).
 
 A lab record never replaces a release record, and it never carries a conclusion that belongs to one. Licence, source model, distribution, and access score stay on each release ([ADR 025](adr/025-model-releases-are-independent-curated-records.md)).
 
@@ -66,7 +66,7 @@ Labs are never scored, ranked, or sorted by anything but name. Funding, valuatio
 
 ## Preview precedence: `display_order`
 
-A lab carries a required `display_order`, a positive multiple of ten that is distinct across the collection. It decides which organizations an Elements role tile draws its three marks from, in the order the tile shows them, and nothing else. The [Elements](WEB.md#content-hierarchy) previews are the one place an organization is shown rather than listed, and three slots cannot show forty-four labs.
+A lab carries a required `display_order`, a positive multiple of ten that is distinct across the collection. It decides which organizations an Elements role tile draws its three marks from, in the order the tile shows them, and nothing else. The [Elements](WEB.md#content-hierarchy) previews are the one place an organization is shown rather than listed, and three slots cannot show the whole collection.
 
 The field is a display precedence, not a judgment about the organization. It never reaches a score, a comparison, a collection sort, or a statement about an organization's importance, quality, size, or standing, and the Labs collection stays alphabetical whatever it says. Assign it from the marks a reader is most likely to recognize in this catalog's frontier work, and expect to argue about it: a precedence is an editorial claim, and a reviewer who disagrees should change the number in the same change that admits the lab.
 
@@ -74,4 +74,4 @@ Never derive it from market capitalization, revenue, funding, headcount, or popu
 
 ## Current coverage
 
-Forty-five labs are published, and forty-four of them cover all 311 reviewed releases. Forty-two are admitted on a reviewed release; one, Safe Superintelligence, on its own published statement of intent; and two, the Stanford NLP Group and Hugging Face, on a system each developed, because the catalog has reviewed no model release of either one's own.
+Forty-six labs are published, and forty-five of them cover all 313 reviewed releases. Forty-three are admitted on a reviewed release; one, Safe Superintelligence, on its own published statement of intent; and two, the Stanford NLP Group and Hugging Face, on a system each developed, because the catalog has reviewed no model release of either one's own.
