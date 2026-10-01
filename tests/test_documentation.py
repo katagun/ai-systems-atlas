@@ -565,6 +565,113 @@ class DocumentationTests(unittest.TestCase):
             + "; ".join(undated),
         )
 
+    def test_every_corner_in_the_stylesheet_comes_from_a_radius_token(self) -> None:
+        """`web/styles.css` must take every corner radius from a token.
+
+        The radius scale once encoded size rather than role, so a 112px tile and a
+        dialog picked different steps and two adjacent grids rendered visibly
+        different corners. That drift is invisible to a linter and only shows up
+        in a screenshot, so the rule is asserted here instead: a corner is one of
+        four tokens or it is a finding. A literal `50%` is the same class of
+        problem, since the circle value then has a second home.
+        """
+        css = (ROOT / "web" / "styles.css").read_text(encoding="utf-8")
+        tokens = {"var(--radius)", "var(--radius-control)", "var(--radius-chip)"}
+        literals: list[str] = []
+        for number, line in enumerate(css.splitlines(), start=1):
+            for value in re.findall(r"border-radius:\s*([^;]+);", line):
+                if value.strip() not in tokens | {"var(--radius-pill)", "0"}:
+                    literals.append(f"line {number}: {value.strip()}")
+        self.assertEqual(
+            [],
+            literals,
+            "these corners set a radius directly; use --radius for containers, "
+            "--radius-control for inputs and buttons, --radius-chip for badges "
+            "and toggle chips, and --radius-pill only for circles: "
+            + "; ".join(literals),
+        )
+
+    def test_container_components_take_the_container_radius(self) -> None:
+        """A component's radius token must follow its role, not its size.
+
+        `--radius-control` names the controls a pointer enters — inputs, buttons,
+        menu items — so a panel that happens to be small cannot claim it. The
+        classes below are the surfaces that drifted: popovers, table wrappers,
+        dialog blocks, and grid tiles, several of which rendered beside each other
+        with different corners.
+        """
+        css = (ROOT / "web" / "styles.css").read_text(encoding="utf-8")
+        containers = (
+            ".element-tile",
+            ".tile",
+            ".detail-block",
+            ".comparison-table-wrap",
+            ".badge-tooltip",
+            ".badge-legend-chip",
+            ".finder-choice",
+            ".taxonomy-item",
+        )
+        wrong: list[str] = []
+        for selector in containers:
+            rule = re.search(
+                rf"(?m)^{re.escape(selector)}\s*\{{(.*?)\}}", css, re.DOTALL
+            )
+            self.assertIsNotNone(rule, f"{selector} no longer exists in styles.css")
+            radius = re.search(r"border-radius:\s*([^;]+);", rule.group(1))
+            self.assertIsNotNone(radius, f"{selector} sets no border-radius")
+            if radius.group(1).strip() != "var(--radius)":
+                wrong.append(f"{selector}: {radius.group(1).strip()}")
+        self.assertEqual(
+            [],
+            wrong,
+            "these containers take a radius token that is not --radius; a "
+            "container's corners should not depend on how big it is: "
+            + "; ".join(wrong),
+        )
+
+    def test_the_radius_scale_stays_sharp_and_ordered(self) -> None:
+        """The four steps must keep their order and stay small.
+
+        Order is the scale's whole contract: a container's corner may never be
+        tighter than a chip's, or the nesting reads inverted. The ceiling keeps
+        the corners sharp, which is the intended character and the reason the
+        tokens were rescaled in the first place.
+        """
+        css = (ROOT / "web" / "styles.css").read_text(encoding="utf-8")
+        declared = dict(
+            (name, int(px))
+            for name, px in re.findall(r"--radius(-chip|-control)?:\s*(\d+)px;", css)
+        )
+        scale = {
+            "chip": declared.get("-chip"),
+            "control": declared.get("-control"),
+            "container": declared.get(""),
+            "pill": 999 if "--radius-pill: 999px;" in css else None,
+        }
+        self.assertEqual(
+            [],
+            [name for name, value in scale.items() if value is None],
+            f"a radius token is missing or unparsable: {scale}",
+        )
+        self.assertLess(
+            scale["chip"],
+            scale["control"],
+            f"chip radius {scale['chip']}px is not tighter than control "
+            f"{scale['control']}px",
+        )
+        self.assertLess(
+            scale["control"],
+            scale["container"],
+            f"control radius {scale['control']}px is not tighter than container "
+            f"{scale['container']}px",
+        )
+        self.assertLessEqual(
+            scale["container"],
+            10,
+            f"container radius {scale['container']}px exceeds the 10px ceiling; "
+            "these corners are meant to read as sharp",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

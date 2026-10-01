@@ -63,54 +63,6 @@
       ]
     },
     {
-      "id": "model-anthropic-claude-sonnet-5-5",
-      "source_id": "anthropic/claude-sonnet-5-5",
-      "source_metadata": {
-        "name": "Claude Sonnet 5.5",
-        "description": "Fast Claude model for everyday coding, agents, and knowledge work",
-        "family": "claude-sonnet",
-        "release_date": "2026-09-28",
-        "last_updated": "2026-09-28",
-        "knowledge_cutoff": "2026-06",
-        "modalities": {
-          "input": [
-            "text",
-            "image",
-            "pdf"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": true,
-          "reasoning": true,
-          "tool_call": true,
-          "structured_output": null,
-          "temperature": false
-        },
-        "limits": {
-          "context": 1000000,
-          "input": null,
-          "output": 128000
-        },
-        "reported_open_weights": false,
-        "reported_license": null,
-        "links": [],
-        "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-09-29",
-      "last_seen_at": "2026-09-29",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
       "id": "model-google-gemini-embedding-001",
       "source_id": "google/gemini-embedding-001",
       "source_metadata": {

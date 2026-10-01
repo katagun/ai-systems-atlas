@@ -9014,6 +9014,103 @@
       "license_review_status": "verified"
     },
     {
+      "id": "openai-dots",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "dots",
+      "repo": null,
+      "url": "https://developers.openai.com/codex/dots",
+      "description": "OpenAI's always-on delegated agent, powered by GPT-6 Astra, that keeps work moving across a user's tools and projects from its own cloud computer and browser, with cross-channel memory, scheduled and event-triggered tasks, background agents, and connected computers and apps.",
+      "primary_role": "general_work_agent",
+      "secondary_roles": [
+        "stateful_agent_runtime"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "openai"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "service-managed dot identity, appearance, and handle, conversations across ChatGPT, calls, Slack, and Teams, saved notes separate from ChatGPT memory, connected-app and connected-computer context, schedules, and background research findings",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "remote_cloud",
+        "host"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers the dots product documented under OpenAI's Codex developer documentation and created from the ChatGPT desktop app. It is distinct from the ChatGPT assistant record, the Codex coding agent, and the OpenAI Agents API; GPT-6 Astra is its documented model backend and remains a separate model record.",
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 8.6,
+        "autonomy": 8.8,
+        "human_control": 8.2,
+        "observability_recovery": 6.8,
+        "data_sovereignty": 4.6,
+        "interoperability": 6.4,
+        "maturity": 4.8,
+        "overall": 7.13
+      },
+      "strengths": [
+        "A durable named agent rather than a session, reached from ChatGPT, voice calls, Slack, and Teams without creating a new dot or resetting its notes",
+        "Runs in the cloud with its own computer and browser, so assigned work continues when the user's devices are off",
+        "Assigned, scheduled, and event-triggered work is paired with an Activity surface, per-action approval review, and optional custom rules"
+      ],
+      "weaknesses": [
+        "Gradual rollout gated by plan, region, and workspace settings, so availability differs across Pro, Business Premium, and Enterprise accounts",
+        "Operational implementation, model runtime, and all retained context are proprietary and service-managed",
+        "Stopping a task does not undo actions already taken, and cross-channel sharing requires explicit per-request permission"
+      ],
+      "why_it_matters": "Documents the always-on personal agent as a shipping product boundary: one named agent with durable notes, its own cloud computer, background sub-agents, and scheduled work, reached identically from chat, voice, and workplace messaging.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-30",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified"
+    },
+    {
       "system_family": "agent_system",
       "score_profile": "agent",
       "secondary_roles": [],
