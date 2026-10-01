@@ -1,7 +1,110 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-24",
+  "verified_at": "2026-09-30",
   "robots": [
+    {
+      "id": "hello-robot-stretch-4",
+      "name": "Stretch 4",
+      "manufacturer": "Hello Robot",
+      "url": "https://hello-robot.com/stretch-4/",
+      "repo": "hello-robot/stretch4_grasping_demo",
+      "first_party_domains": [
+        "hello-robot.com",
+        "github.com/hello-robot"
+      ],
+      "description": "Hello Robot's mobile manipulator, a wheeled base carrying a telescoping lift, a single arm, and a head, sold as a research and commercial platform. Its own documentation ships a grasping demo that runs two named third-party models, and its ROS 2 packages and Python bridge are published open source.",
+      "form_factor": "mobile_manipulator",
+      "availability": "orderable",
+      "availability_note": "Hello Robot's purchase page states a price of $29,950, accepts payment by check, wire transfer, or purchase order, and says Stretch 4 typically ships within two to four weeks of receiving a purchase order or pre-payment.",
+      "ai_basis": [
+        "vendor_named_model",
+        "open_model_interface"
+      ],
+      "named_models": [
+        {
+          "name": "Molmo 2",
+          "kind": "language_or_vision_language",
+          "role_note": "Hello Robot's grasping demo says perception uses the Molmo 2 Vision-Language Model to output pixel coordinates for a target object described with text.",
+          "evidence_label": "Stretch 4 grasping demo README"
+        },
+        {
+          "name": "SAM 2",
+          "kind": "vision_language_action",
+          "role_note": "Hello Robot's grasping demo says SAM 2 segments the target object from Molmo 2's pixel coordinates and then tracks and segments that object over time.",
+          "evidence_label": "Stretch 4 grasping demo README"
+        }
+      ],
+      "research_confidence": "high",
+      "hardware": {
+        "compute": "An NVIDIA Jetson Orin NX installed within the base with 128GB NVMe and 16GB memory, with its own WiFi and Ethernet networking to the main compute. Hello Robot sells the Jetson Orin NX as an accessory described as running your AI models on-robot.",
+        "sensors": "A head sensor suite of two hemispherical 3D LiDARs covering 360 by 189 degrees at over 2,000,000 measurements per second, two global-shutter RGB cameras of 2.3 megapixels calibrated to the LiDARs for RGBD data, and a 12-megapixel RGB teleoperation camera. The wrist carries an OAK-D SR camera at the roll joint, and the base carries six laser line sensors for cliff and hazard monitoring.",
+        "actuation": "A 3-omniwheel holonomic drive with three 8-inch omniwheels, a lift driven by a closed-loop stepper motor through a low gear-ratio belt drive, a single arm, and a 3-degree-of-freedom internally cabled wrist with yaw, pitch, and roll. Hello Robot states a maximum payload of 4 kg retracted and 2.5 kg extended, and that the robot weighs about 60 pounds without its battery.",
+        "power": "A removable battery accessed by removing the base's top shell, weighing 30 pounds, with a barrel-jack charge port that Hello Robot restricts to its own 36V charger. The purchase page sells a LiFePO4 25.6V 20A 512W spare battery and ballast, and a docking station with three reflective ArUco tags that the robot uses to dock itself for wireless charging."
+      },
+      "developer_access": "Hello Robot publishes the robot's ROS 2 packages, including stretch_core, stretch_description, stretch_deep_perception, stretch_nav2, and a stretch_python_bridge package that gives synchronous Python access to ROS 2 image, pointcloud, transform, camera-info, and IMU topics as NumPy arrays. Its product page lists open-source ROS 2 and a Python SDK among the platform's highlights, and its documentation describes reference demos for autonomy and Embodied AI.",
+      "terms": [
+        "terms_of_sale"
+      ],
+      "terms_note": "Hello Robot's Terms of Sale cover its robots, components, and accessories, including shipping and delivery, returns within 30 days of delivery in the contiguous United States and 28 days internationally with a 10% restocking fee, and a one-year limited product warranty from delivery that excludes damage from use other than the product's intended purpose and in accordance with Hello Robot documentation. The purchase page states a 30-day return policy and a limited one-year warranty, and offers an extended three-year warranty and a Full Robot Refurb option. No separate software or SDK licence page was found at review time.",
+      "terms_evidence": [
+        {
+          "terms_kind": "terms_of_sale",
+          "scope": "Terms of Sale covering robots, components, and accessories",
+          "kind": "web_terms",
+          "url": "https://hello-robot.com/terms-of-sale/",
+          "verified_at": "2026-09-30"
+        }
+      ],
+      "not_verified": "The named models and the ROS 2 and Python routes are Hello Robot's own claims; the Atlas has not verified them. Every source is a Hello Robot web page or a file in a repository Hello Robot can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Stretch 4 product page",
+          "url": "https://hello-robot.com/stretch-4/",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "git_blob",
+          "role": "named_model",
+          "label": "Stretch 4 grasping demo README",
+          "url": "https://github.com/hello-robot/stretch4_grasping_demo/blob/main/README.md",
+          "blob_sha": "dd15c52bb6ca55d83d901a46aaa0e9b02fb0ba8d",
+          "immutable_url": "https://api.github.com/repos/hello-robot/stretch4_grasping_demo/git/blobs/dd15c52bb6ca55d83d901a46aaa0e9b02fb0ba8d",
+          "path": "README.md"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "Stretch Python bridge documentation",
+          "url": "https://docs.hello-robot.com/stretch4-ros2-repo/stretch_python_bridge",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "role": "technical_documentation",
+          "label": "Stretch 4 hardware guide",
+          "url": "https://docs.hello-robot.com/stretch4-hardware-guide/stretch-4-hardware-guide",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Stretch 4 purchase page",
+          "url": "https://hello-robot.com/purchase/",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Hello Robot develop page",
+          "url": "https://hello-robot.com/develop/",
+          "verified_at": "2026-09-30"
+        }
+      ],
+      "verified_at": "2026-09-30"
+    },
     {
       "id": "figure-03",
       "name": "Figure 03",

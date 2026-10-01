@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-29",
+  "updated_at": "2026-09-30",
   "candidates": [
     {
       "repo": "aden-hive/hive",
@@ -5530,6 +5530,88 @@
         "traits",
         "editorial_score"
       ]
+    },
+    {
+      "repo": "frankarobotics/franka_ros",
+      "name": "Franka Research 3",
+      "url": "https://github.com/frankarobotics/franka_ros",
+      "description": "Franka Robotics' seven-axis robot arm, documented through the Franka Control Interface (FCI) and its libfranka, franka_ros, and franka_ros2 components.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "robot-arm",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-30",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — conditions 3 and 4",
+        "rule": "docs/ROBOTS.md evidence workflow step 2 and Unavailable pages",
+        "finding": "On 2026-09-30 the vendor's own website was unreadable from the reviewer's network: `franka.ai` and `www.franka.ai` both refused the TLS handshake with `TLSV1_UNRECOGNIZED_NAME` under urllib, curl, and a headless Chromium, while control fetches to other vendors' sites succeeded in the same session. The maker's technical documentation is published instead on `frankarobotics.github.io`, which is the `github.com/<org>` form of a shared host that `docs/ROBOTS.md` admits, and that documentation was readable. It states that the software and its documentation support the Franka Research 3 and an older Franka Emika Robot, and that the FCI is reached through libfranka, 'a C++ library that provides low-level control of Franka Robotics research robots', plus franka_ros and franka_ros2. That documents a control interface, not a route the vendor offers for running a learned model: the interface specification page sets realtime limits for joint-space and Cartesian commands and torque control, and nothing on the pages read names a learned model or policy. Two conditions therefore stand unmet on this pass: condition 3, because a documented low-level control interface is programmability unless the maker documents it for running the reader's own model or policy; and condition 4, because the hardware specification this record needs would come from the product pages and technical specification sheets on the website that could not be read, and the specification page read here carries control limits rather than a hardware spec sheet. Re-review from a network that can resolve `franka.ai`, where the product page, the FR3 datasheet, the availability statement, and the sales terms would settle conditions 3, 4, 5, and 6. This is a hold on unreadable evidence, not a judgement about the product.",
+        "evidence": [
+          {
+            "label": "franka_ros README",
+            "url": "https://github.com/frankarobotics/franka_ros/blob/develop/README.md",
+            "kind": "git_blob",
+            "content_sha256": "35b127927c1c26fd76bb8c387e076a1ee1f7bb6dc4dbf6b22c8b3989db8c1e91",
+            "fetched_at": "2026-09-30",
+            "blob_sha": "1e166ddabb99c63cf2d52b822f1b0f8eef123835",
+            "immutable_url": "https://api.github.com/repos/frankarobotics/franka_ros/git/blobs/1e166ddabb99c63cf2d52b822f1b0f8eef123835"
+          }
+        ],
+        "proposed_at": "2026-09-30",
+        "proposer": "robots batch 1 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "Kinova Gen3",
+      "url": "https://www.kinovarobotics.com/product/gen3-robots",
+      "description": "Kinova's ultra-lightweight 6- and 7-degree-of-freedom robotic arms, driven through the KORTEX API with ROS and ROS2 support.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "robot-arm",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-30",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — condition 3 AI basis",
+        "rule": "docs/ROBOTS.md inclusion boundary condition 3",
+        "finding": "The product page, read on 2026-09-30, states the hardware the gate's condition 4 accepts: 6 and 7 DoF variants, a 891 mm maximum reach, 7.2 kg and 8.2 kg total weight, a 4 kg mid-range continuous payload, 50 cm/s maximum speed, infinite actuator joint range, 20 to 30 VDC supply, 36 W average power, IP33 ingress protection, and a -30 to 35 degrees Celsius operating range. It documents 1 kHz closed-loop low-level control, integrated joint torque sensors, and an optional 2D/3D vision module. It names no learned model or policy, and the software it lists — the KINOVA KORTEX API and Web App, MATLAB hardware support, ROS and ROS2, C++ and Python, Gazebo, and MoveIt Pro compatibility — is programmability: the guide refuses that as the AI basis, because a motion API the maker offers for general use is not a route the vendor documents for running the reader's own model or policy. Condition 3 is unmet on what was read. Kinova's documentation site was reachable and its KORTEX API documentation was not read in this pass, so a policy interface may exist there; re-review against the API documentation before treating this as settled.",
+        "evidence": [
+          {
+            "label": "Gen3 product page",
+            "url": "https://www.kinovarobotics.com/product/gen3-robots",
+            "kind": "web",
+            "content_sha256": "88a2181f1ddb17b9484a8cba04ad2f4ab32a87031987a39ea75234765500cccd",
+            "fetched_at": "2026-09-30"
+          }
+        ],
+        "proposed_at": "2026-09-30",
+        "proposer": "robots batch 1 review"
+      }
     }
   ]
 }

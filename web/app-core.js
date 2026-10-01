@@ -385,6 +385,12 @@
     return [...models].sort((a, b) => releaseDate(b).localeCompare(releaseDate(a)) || a.name.localeCompare(b.name));
   }
 
+  // The front-door stage: dated records only, newest date first, a shared
+  // date broken by name. Undated records are left out rather than sorted last.
+  function newestDated(records, dateOf) {
+    return [...(records || [])].filter(record => dateOf(record)).sort((a, b) => dateOf(b).localeCompare(dateOf(a)) || a.name.localeCompare(b.name));
+  }
+
   // The union of the distribution modes the lab's reviewed releases carry, in
   // taxonomy order: each release keeps its own conclusion (ADR 025), and the
   // lab only shows which ones occur.
@@ -2052,6 +2058,7 @@
     recordMatch,
     releaseDate,
     releasesNewestFirst,
+    newestDated,
     scopeFromURL,
     successorSystem,
     scopeURLParams,

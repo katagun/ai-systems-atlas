@@ -681,3 +681,41 @@ test("inside Systems on a phone the strip stays short and the family row fits on
     await expect(familyEntry(page, "assistant_system")).toHaveAccessibleName(/^Assistants \d/);
   }
 });
+
+test("the catalog stage leads each face with one record and lists the rest newest first", async ({ page }) => {
+  await page.goto("/");
+  const elements = page.getByRole("tab", { name: "Elements" });
+  const models = page.getByRole("tab", { name: "Models" });
+  const systems = page.getByRole("tab", { name: "Systems" });
+  await expect(elements).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator("#elements")).toBeVisible();
+
+  await models.click();
+  await expect(page.locator("#elements")).toBeHidden();
+  await expect(page.locator("#collection-index")).toBeVisible();
+  const modelName = (await page.locator("#stage-model .stage-name").textContent()).trim();
+  const modelRows = page.locator("#stage-model .stage-list-name");
+  await expect(modelRows).not.toHaveCount(0);
+  expect(await modelRows.allTextContents()).not.toContain(modelName);
+  const modelDates = await page.locator("#stage-model .stage-list time").allTextContents();
+  for (let i = 1; i < modelDates.length; i += 1) expect(modelDates[i] <= modelDates[i - 1]).toBeTruthy();
+  await page.locator("#stage-model .link-button").click();
+  await expect(page.locator("#model-dialog")).toBeVisible();
+  await page.locator("#model-dialog").getByRole("button", { name: "Close" }).click();
+
+  await systems.click();
+  await expect(page.locator("#stage-model")).toBeHidden();
+  const systemName = (await page.locator("#stage-system .stage-name").textContent()).trim();
+  const systemRows = page.locator("#stage-system .stage-list-name");
+  await expect(systemRows).not.toHaveCount(0);
+  expect(await systemRows.allTextContents()).not.toContain(systemName);
+  const systemDates = await page.locator("#stage-system .stage-list time").allTextContents();
+  for (let i = 1; i < systemDates.length; i += 1) expect(systemDates[i] <= systemDates[i - 1]).toBeTruthy();
+  await page.locator("#stage-system .stage-list button").first().click();
+  await expect(page.locator("#project-dialog")).toBeVisible();
+  await page.locator("#project-dialog").getByRole("button", { name: "Close" }).click();
+
+  await elements.click();
+  await expect(page.locator("#elements")).toBeVisible();
+  await expect(page.locator("#stage-system")).toBeHidden();
+});
