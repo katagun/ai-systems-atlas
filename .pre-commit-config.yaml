@@ -58,7 +58,7 @@ repos:
   # also reformat ```python snippets inside Markdown (e.g. the frozen
   # docs/superpowers planning archive), which are historical records, not code.
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.6
+    rev: v0.16.9
     hooks:
       - id: ruff-check
         types_or: [python, pyi]
