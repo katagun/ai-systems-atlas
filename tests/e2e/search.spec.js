@@ -2,6 +2,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { allSearch, collectionEntry, openCollection, openView, pressedEntry } = require("./helpers/landing");
+const { chooseFinderGoal, finderHandoff } = require("./helpers/finder");
 const { clearFilters, expectFilter, filterControl, recordView, search, searchBox, setFilter, settled, sortControl } = require("./helpers/results");
 
 // The page binds its search and keyboard listeners once its data has loaded,
@@ -314,7 +315,7 @@ test("the Finder's handoff ends an earlier query, so the next query selects Best
     await search(page, "api", scope);
     await sortControl(page, scope).selectOption(chosen);
     await page.getByRole("button", { name: "Find your fit", exact: true }).click();
-    for (const value of [direction, goal, priority]) await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
+    await chooseFinderGoal(page, goal, priority);
     await page.locator("[data-finder-directory]").click();
     await expect(searchBox(page, scope)).toHaveValue("");
     await expect(sortControl(page, scope)).toHaveValue("score");
@@ -469,7 +470,7 @@ test("an intent query offers the Finder job and opens its shortlist step", async
   await expect(hint).toContainText("Run models on my own computer");
   await hint.getByRole("button", { name: /Open shortlist/ }).click();
   await expect(page.locator("#finder")).toHaveClass(/is-active/);
-  await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
+  await expect(page.locator(".finder-result-heading h2")).toHaveText("Run models on my own computer");
 });
 
 // The banner is a flex box, and an author display rule overrides the one the
@@ -644,8 +645,7 @@ test("a search the filters hide says so, offers to show it, and never offers it 
 // showing what the filters hide must drop it too: Family's own path does.
 test("showing what the filters hide also drops a Finder role set", async ({ page }) => {
   await page.goto("/?view=finder");
-  for (const value of ["memory_system", "agent_memory", "balanced"]) await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-  await page.locator("[data-finder-directory]").click();
+  await finderHandoff(page, "agent_memory");
   await expect(page.locator("#finder-roles-chip")).toBeVisible();
   // An active memory system whose role the set leaves out, so only the set hides it.
   const outside = await page.evaluate(() => state.projects.find(project => project.status === "active"
@@ -728,13 +728,19 @@ test("an empty result spans the grid, at a readable measure", async ({ page }) =
 // question when a job opens it partway (R-P1-14). Boot moves no focus.
 test("a button that switches views hands focus to the new view's heading", async ({ page }) => {
   await page.goto("/?view=finder");
-  await expect(page.locator("#finder-content h2")).toHaveText("What should it do?");
+  // The Finder's heading is the view's own h1; its screen opens on the goal
+  // tiles, with no question heading between the reader and them.
+  await expect(page.locator("#finder-title")).toHaveText("Find your fit");
+  await expect(page.locator(".finder-goal")).toHaveCount(23);
   expect(await page.evaluate(() => document.activeElement === document.body), "boot leaves focus alone").toBe(true);
 
   await page.goto("/");
   await page.locator("#door-jobs button").first().press("Enter");
-  await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
-  await expect(page.locator("#finder-content h2")).toBeFocused();
+  // Every entry into the Finder, whether it arrives with a job already chosen
+  // or not, lands on the view's own heading. The old wizard stopped at a
+  // standing question to focus; the one screen has none, and a heading the
+  // reader has not scrolled to is the honest thing to put focus on.
+  await expect(page.locator("#finder-title")).toBeFocused();
 
   await searchAll(page, "Zyxwvut Frobnicator");
   await page.getByRole("button", { name: "Try the Finder" }).press("Enter");
@@ -745,8 +751,8 @@ test("a button that switches views hands focus to the new view's heading", async
   const goal = await page.evaluate(() => finderGoalEntries().find(entry => entry.eligible).label);
   await searchAll(page, goal);
   await page.locator('[data-job-hint="all"]').getByRole("button", { name: /Open shortlist/ }).press("Enter");
-  await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
-  await expect(page.locator("#finder-content h2")).toBeFocused();
+  await expect(page.locator("#finder-title")).toBeFocused();
+  await expect(page.locator(".finder-goal[aria-pressed='true']")).toHaveAttribute("aria-label", new RegExp(`^${goal}`));
 });
 
 // "Suggest it for review" waits until nothing anywhere in the catalog answers

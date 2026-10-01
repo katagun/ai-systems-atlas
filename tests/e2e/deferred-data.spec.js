@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { allSearch, openView, searchAll } = require("./helpers/landing");
+const { chooseFinderGoal } = require("./helpers/finder");
 const { recordHeading, recordView, search, searchBox } = require("./helpers/results");
 
 // The card marks and the reviewed license evidence are the two largest files
@@ -175,9 +176,7 @@ test("a finder shortlist prints an em dash, not a dangling label, when detail ne
   await page.route("**/app/detail/**", route => route.abort());
   await page.goto("/");
   await openView(page, "finder");
-  for (let step = 0; step < 3; step += 1) {
-    await page.locator("#finder-content .finder-choice").first().click();
-  }
+  await chooseFinderGoal(page, "personal_knowledge");
 
   const tradeoff = page.locator(".finder-result .finder-tradeoff").first();
   await expect(tradeoff).toBeVisible();

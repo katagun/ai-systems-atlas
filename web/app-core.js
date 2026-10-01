@@ -1943,6 +1943,37 @@
   // hydrated before results paint. The fetches start when the goal is chosen, so
   // the priority question usually covers the wait.
   const FINDER_DETAIL_KINDS = { inference_service: "inference", local_runtime: "runtime" };
+
+  // The records a Finder goal can draw on: active systems in its family and
+  // role set, or services or runtimes of its type (docs/WEB.md). Collections
+  // are passed in rather than read from app state, so the tile counts and the
+  // shortlist's candidate set come from one predicate and this can be tested
+  // against the real payloads.
+  function finderGoalRecords(direction, goalConfig, collections) {
+    const { projects, inferenceServices, localRuntimes } = collections;
+    if (direction === "inference_service") return inferenceServices.filter(item => goalConfig.serviceTypes.includes(item.service_type));
+    if (direction === "local_runtime") return localRuntimes.filter(item => goalConfig.runtimeTypes.includes(item.runtime_type));
+    return projects.filter(item => item.status === "active" && item.system_family === direction && goalConfig.roles.includes(item.primary_role));
+  }
+
+  // One entry per goal, carrying the count its tile prints. A goal may claim a
+  // role another goal in the same direction also claims — context_graph_engine
+  // is both agent_memory's and memory_infrastructure's — so these counts are
+  // per goal and a direction's total is never their sum.
+  function finderGoalEntries(collections) {
+    return Object.entries(FINDER_GOALS).flatMap(([direction, goals]) =>
+      goals.map(goal => ({ ...goal, direction, eligible: finderGoalRecords(direction, goal, collections).length })));
+  }
+
+  // How many active records a direction holds, which its group heading prints
+  // beside goals that may overlap.
+  function finderDirectionTotal(direction, collections) {
+    const { projects, inferenceServices, localRuntimes } = collections;
+    if (direction === "inference_service") return inferenceServices.length;
+    if (direction === "local_runtime") return localRuntimes.length;
+    return projects.filter(item => item.status === "active" && item.system_family === direction).length;
+  }
+
   return {
     BADGE_FAMILIES,
     MAX_CARD_BADGES,
@@ -1992,6 +2023,9 @@
     filterRobots,
     filterScoredCollection,
     filterSpecifications,
+    finderDirectionTotal,
+    finderGoalEntries,
+    finderGoalRecords,
     holdsPhrase,
     labDistributionModes,
     labRelations,
