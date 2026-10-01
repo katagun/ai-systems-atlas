@@ -565,11 +565,14 @@ h1 {
 .element-family-heading > span { color: var(--muted); font: .7rem var(--font-mono); }
 .element-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .45rem; }
 .element-group[data-element-family="assistant_system"] .element-tiles { grid-template-columns: 1fr; }
-.element-tile { display: grid; position: relative; align-content: space-between; gap: .55rem; min-height: 112px; padding: .7rem; text-align: left; border: 1px solid var(--line); border-radius: var(--radius); color: var(--text); background: color-mix(in srgb, var(--element-ink) 7%, var(--panel)); cursor: pointer; }
-.element-tile:hover { background: color-mix(in srgb, var(--element-ink) 15%, var(--panel)); }
-.element-tile[aria-pressed="true"] { outline: 2px solid var(--element-ink); outline-offset: 1px; }
-.element-tile:disabled { opacity: .55; cursor: default; }
-.element-symbol { color: var(--element-ink); font: 500 1.8rem var(--font-mono); letter-spacing: -.06em; }
+.element-tile,
+.finder-goal { display: grid; position: relative; align-content: space-between; gap: .55rem; min-height: 112px; padding: .7rem; text-align: left; border: 1px solid var(--line); border-radius: var(--radius); color: var(--text); background: color-mix(in srgb, var(--element-ink) 7%, var(--panel)); cursor: pointer; }
+.element-tile:hover,
+.finder-goal:hover { background: color-mix(in srgb, var(--element-ink) 15%, var(--panel)); }
+.element-tile[aria-pressed="true"],
+.finder-goal[aria-pressed="true"] { outline: 2px solid var(--element-ink); outline-offset: 1px; }
+.element-tile:disabled,
+.finder-goal:disabled { opacity: .55; cursor: default; }.element-symbol { color: var(--element-ink); font: 500 1.8rem var(--font-mono); letter-spacing: -.06em; }
 .element-count { position: absolute; top: .55rem; right: .6rem; color: var(--muted); font: .7rem var(--font-mono); }
 .element-name { font: .73rem/1.3 var(--font-body); overflow-wrap: anywhere; }
 /* Keep organization previews subordinate to role symbols and names. The strip
@@ -1199,106 +1202,70 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
   color: var(--amber-ink);
 }
 
+/* The Finder is the front door's role map with the priority axis added: five
+   counted goal columns in the family inks, then the shortlist. Its goal tiles
+   ARE element tiles (styles.css above), so its density is the door's by
+   construction rather than by parallel rules that can drift apart. */
+#finder { padding-block: clamp(2rem, 4vw, 3.2rem) clamp(3.5rem, 7vw, 7rem); }
 .finder-heading { max-width: 980px; }
-.finder-shell {
-  margin-top: 3.5rem;
-  overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--panel-glass);
-  box-shadow: var(--shadow);
+.finder-heading h1 { font-size: clamp(2.6rem, 5vw, 4.6rem); }
+.finder-heading > p:last-child { max-width: 70ch; }
+/* Two lines, reserved, so choosing a goal — which makes the status line name a
+   label, a count, and a ranking — does not shove the tile grid down under the
+   pointer. Below 720px the grid is one tall column and the shortlist is far
+   past the fold anyway, so the reservation would only read as a gap. */
+@media (min-width: 721px) {
+  .finder-heading > p:last-child { min-height: 3.3em; }
 }
-.finder-progress {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(120px, 1fr)) auto;
-  align-items: center;
-  gap: .6rem;
-  padding: 1rem 1.3rem;
-  border-bottom: 1px solid var(--line);
-  background: var(--panel-2);
-}
-.finder-progress-step { display: flex; align-items: center; gap: .6rem; color: var(--muted); }
-.finder-progress-step > span {
-  width: 26px;
-  height: 26px;
-  border: 1px solid var(--line-strong);
-  border-radius: var(--radius-pill);
-  display: grid;
-  place-items: center;
-  font-size: .7rem;
-}
-.finder-progress-step strong { font-size: .68rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
-.finder-progress-step.is-active { color: var(--text); }
-.finder-progress-step.is-active > span { border-color: var(--cyan); background: var(--cyan); color: var(--on-accent); }
-.finder-progress-step.is-complete { color: var(--cyan); }
-.finder-progress-step.is-complete > span { border-color: var(--cyan); }
-.finder-progress > p { margin: 0; color: var(--muted); font-size: .74rem; text-align: right; }
-.finder-content { min-height: 480px; padding: clamp(1.5rem, 4vw, 3.2rem); }
-.finder-question { max-width: 780px; margin-bottom: 2rem; }
-.finder-question h2,
-.finder-result-heading h2 {
-  margin: .35rem 0 .8rem;
-  font-size: clamp(2.2rem, 4vw, 3.7rem);
-  font-weight: 700;
-  letter-spacing: -.045em;
-  line-height: 1.04;
-}
-.finder-question > p:last-child,
+.finder-groups { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.3rem; }
+.finder-group { min-width: 0; --element-ink: var(--cyan); }
+.finder-group[data-finder-direction="agent_system"] { --element-ink: var(--coral); }
+.finder-group[data-finder-direction="assistant_system"] { --element-ink: var(--violet); }
+.finder-group[data-finder-direction="inference_service"] { --element-ink: var(--blue); }
+.finder-group[data-finder-direction="local_runtime"] { --element-ink: var(--amber); }
+.finder-goals { display: grid; grid-template-columns: 1fr; gap: .4rem; }
+/* The door's tile spaces a symbol above its name; a goal tile has only a name,
+   and its count sits in the door's own corner, so the name centres instead. */
+.finder-goal { min-height: 72px; align-content: center; }
+.finder-priorities { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .6rem; }
+.finder-priorities-label { color: var(--muted); font: 500 .68rem var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+.finder-priority[aria-checked="true"] { border-color: var(--cyan); background: var(--cyan); color: var(--on-accent); }
+.finder-priority[aria-checked="true"]:hover { color: var(--on-accent); }
+.finder-result-heading { margin: 2.6rem 0 1.5rem; display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
+.finder-result-heading > div { max-width: 760px; }
+.finder-result-heading h2 { margin: .35rem 0 .5rem; font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.04; }
 .finder-result-heading p,
 .finder-disclaimer { color: var(--muted); line-height: 1.65; }
-.finder-choice-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
-.finder-choice-grid.two-up { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.finder-choice-grid.direction-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.finder-choice {
-  min-height: 180px;
-  padding: 1.25rem;
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  background: var(--panel);
-  color: var(--text);
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
-}
-.finder-choice:hover,
-.finder-choice:focus-visible {
-  transform: translateY(-2px);
-  border-color: var(--line-strong);
-  box-shadow: var(--shadow-small);
-  outline: none;
-}
-.finder-choice:focus-visible { box-shadow: 0 0 0 3px color-mix(in srgb, var(--cyan) 15%, transparent); }
-.finder-choice-cue { color: var(--cyan) !important; font-size: .63rem !important; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
-.finder-choice strong { margin: auto 0 .55rem; font-size: 1.12rem; font-weight: 600; line-height: 1.3; }
-.finder-choice > span:last-child { color: var(--muted); font-size: .86rem; line-height: 1.5; }
-.finder-navigation { margin-top: 2rem; padding-top: 1.2rem; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: .75rem; }
-.finder-result-heading { margin-bottom: 1.5rem; display: flex; align-items: end; justify-content: space-between; gap: 2rem; }
-.finder-result-heading > div { max-width: 760px; }
-.finder-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+.finder-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.15rem; }
+/* The shortlist is a directory card, so "Browse matches" does not change the
+   subject: the same frame, the same family accent rule, the same measure. */
 .finder-result {
-  min-height: 420px;
-  padding: 1.3rem;
+  min-height: 340px;
+  padding: 1.4rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: var(--panel);
+  background: var(--glass-strong);
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   position: relative; /* Keeps the details control's stretched target inside the result. */
 }
+.finder-result::before { content: ""; position: absolute; top: 0; right: 0; left: 0; height: 4px; background: var(--cyan); }
 .finder-result.agent_system { background: var(--card-agent); }
+.finder-result.agent_system::before { background: var(--coral); }
 .finder-result.assistant_system { background: var(--card-assistant); }
+.finder-result.assistant_system::before { background: var(--violet); }
 .finder-result.inference_service { background: var(--card-inference); }
+.finder-result.inference_service::before { background: var(--blue); }
 .finder-result.local_runtime { background: var(--card-runtime); }
+.finder-result.local_runtime::before { background: var(--amber); }
 .finder-result-top { display: flex; align-items: flex-end; justify-content: space-between; }
 .finder-rank { color: var(--faint); font: 500 1.4rem var(--font-mono); }
-.finder-result h3 { margin: .2rem 0 .7rem; font-size: 1.65rem; font-weight: 600; letter-spacing: -.035em; }
+.finder-result h3 { margin: .2rem 0 .7rem; font-size: 1.55rem; font-weight: 700; letter-spacing: -.045em; }
 .finder-result p { color: var(--muted); line-height: 1.55; }
 .finder-why { margin-top: auto; padding-top: 1rem; }
 .finder-why > strong { color: var(--cyan); font-size: .68rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
-.finder-tradeoff { min-height: 3.1rem; font-size: .84rem; }
+.finder-tradeoff { font-size: .84rem; }
 .finder-tradeoff strong { color: var(--amber); }
 .finder-result-footer {
   padding-top: .9rem;
@@ -1498,8 +1465,7 @@ footer #data-date, footer .footer-meta {
   .search-field { grid-column: 1 / -1; }
   .advanced-filters { grid-template-columns: repeat(2, 1fr); }
   .project-grid { grid-template-columns: repeat(2, 1fr); }
-  .finder-choice-grid,
-  .finder-choice-grid.direction-grid { grid-template-columns: repeat(2, 1fr); }
+  .finder-groups { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
   .site-header { grid-template-columns: 1fr auto auto; column-gap: .75rem; }
 }
 
@@ -1573,14 +1539,9 @@ footer #data-date, footer .footer-meta {
   .control-panel { grid-template-columns: 1fr 1fr; }
   .search-field { grid-column: 1 / -1; }
   .project-grid,
-  .finder-results,
-  .finder-choice-grid,
-  .finder-choice-grid.two-up,
-  .finder-choice-grid.direction-grid { grid-template-columns: 1fr; }
-  .finder-progress { grid-template-columns: repeat(3, 1fr); }
-  .finder-progress-step { justify-content: center; }
-  .finder-progress-step strong { display: none; }
-  .finder-progress > p { grid-column: 1 / -1; text-align: center; }
+  .finder-results { grid-template-columns: 1fr; }
+  .finder-groups { grid-template-columns: 1fr; gap: 1.3rem; }
+  .finder-goal { min-height: 64px; }
   .finder-result-heading { align-items: flex-start; flex-direction: column; }
   .finder-result-heading .primary-button { width: 100%; }
   .detail-grid { grid-template-columns: minmax(0, 1fr); }

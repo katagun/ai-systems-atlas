@@ -4,13 +4,8 @@ const { closeRecord, recordView } = require("./helpers/results");
 
 // Reads where an element sits once the page stops scrolling. It first waits
 // until scrollY holds still for five animation frames, then measures in the
-// same evaluate, so nothing can move between the wait and the reading. With
-// `aim`, it first scrolls the element to the middle of the screen, instantly,
-// and reports its centre and whether a click there reaches it. Alongside the
-// element's top it reads the header's bottom edge, the lowest sticky edge
-// (in results the Directory's scope strip sticks under the header, and above
-// 1000 px the results bar under the strip), and the Finder shell's top.
-const settle = (page, selector, { aim = false } = {}) => page.locator(selector).evaluate(async (element, aim) => {
+// same evaluate, so nothing can move between the wait and the reading.
+const settle = (page, selector) => page.locator(selector).evaluate(async element => {
   await new Promise(resolve => {
     let last = window.scrollY;
     let still = 0;
@@ -22,86 +17,175 @@ const settle = (page, selector, { aim = false } = {}) => page.locator(selector).
     });
     frame();
   });
-  if (aim) element.scrollIntoView({ block: "center", behavior: "instant" });
   const box = element.getBoundingClientRect();
-  const x = box.left + box.width / 2;
-  const y = box.top + box.height / 2;
   return {
-    x,
-    y,
     top: box.top,
-    reached: element.contains(document.elementFromPoint(x, y)),
+    bottom: box.bottom,
     headerBottom: document.querySelector(".site-header").getBoundingClientRect().bottom,
     stickyBottom: Math.max(
       document.querySelector(".site-header").getBoundingClientRect().bottom,
       document.querySelector("#scope-strip").getBoundingClientRect().bottom,
       document.querySelector("#results-bar").getBoundingClientRect().bottom,
     ),
-    shellTop: document.querySelector(".finder-shell").getBoundingClientRect().top,
   };
-}, aim);
+});
 
-// Clicks a Finder control with the mouse on a page that holds still, and
-// returns where things sat when it did. Playwright's own click is not used
-// here. A choice rendered under the resting mouse is still running its hover
-// lift when that click checks it, so the click retries, and each retry scrolls
-// with element.scrollIntoView, which the page's smooth scrolling animates and
-// the click does not wait for. The page then kept moving after the choice had
-// been handled, so a reading could land mid-scroll, and where the Finder sat
-// before a choice depended on which retry ran.
-const choose = async (page, selector) => {
-  const aimed = await settle(page, selector, { aim: true });
-  expect(aimed.reached, `a click at the centre of ${selector} reaches it`).toBe(true);
-  await page.mouse.click(aimed.x, aimed.y);
-  return aimed;
+// Walks to a coding-agent shortlist under balanced fit. The one-screen layout
+// needs no scroll correction to keep a choice reachable — choosing a job
+// repaints only the shortlist below the tiles — so this is a plain click.
+const shortlist = async (page, goal = "coding") => {
+  await page.locator(`[data-finder-goal="${goal}"]`).click();
+  await expect(page.locator(".finder-result")).toHaveCount(3);
 };
 
-test("a choice keeps the step indicator in view and cards drop the repeated cue", async ({ page }) => {
+test("every goal is listed at once with a count, and the tallest column clears the fold", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/?view=finder");
+
+  // The density claim the redesign rests on: 23 goals in five columns, with
+  // the tallest column's last tile inside the first screen. Measured as the
+  // lowest tile bottom anywhere on the page, so a taller column cannot hide,
+  // and given the 16 px slack CI's Linux Chromium needs for font metrics.
+  await expect(page.locator(".finder-goal")).toHaveCount(23);
+  await expect(page.locator(".finder-group")).toHaveCount(5);
+  const lowest = await page.locator(".finder-goal").evaluateAll(tiles =>
+    Math.max(...tiles.map(tile => tile.getBoundingClientRect().bottom)));
+  expect(lowest).toBeLessThanOrEqual(1000);
+
+  // Every column lists exactly its table's goals, so the direction split the
+  // tables describe is the one the screen shows.
+  const perGroup = await page.locator(".finder-group").evaluateAll(groups =>
+    groups.map(group => group.querySelectorAll(".finder-goal").length));
+  expect(perGroup).toEqual([5, 7, 3, 4, 4]);
+
+  // Every tile carries a number, which is the whole point: the wizard's
+  // choices named a job and never said how many would match it.
+  const counts = await page.locator(".finder-goal .element-count").allInnerTexts();
+  expect(counts).toHaveLength(23);
+  for (const count of counts) expect(Number(count)).toBeGreaterThan(0);
+});
+
+test("a goal's count matches the records the shortlist is drawn from", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?view=finder");
-  await choose(page, '[data-finder-choice="direction"][data-finder-value="agent_system"]');
-  await expect(page.locator(".finder-choice-cue", { hasText: "Choose this" })).toHaveCount(0);
-  await choose(page, '[data-finder-choice="goal"][data-finder-value="coding"]');
+  await shortlist(page);
 
-  // Clicked from the middle of the screen, each checked control starts with
-  // the shell's top hidden behind the sticky header, the case keepFinderInView
-  // exists for. A no-op leaves it hidden; a working one snaps it back to just
-  // below the header, within the same 12px margin every time.
-  const beforePriority = await choose(page, '[data-finder-choice="priority"][data-finder-value="balanced"]');
-  expect(beforePriority.shellTop, "the shell's top starts behind the header").toBeLessThan(beforePriority.headerBottom);
-  const afterPriority = await settle(page, ".finder-shell");
-  expect(afterPriority.top).toBeGreaterThanOrEqual(afterPriority.headerBottom);
-  expect(afterPriority.top).toBeLessThanOrEqual(afterPriority.headerBottom + 13);
+  // "48 active records match" for a goal whose two roles hold 38 and 10. The
+  // tile count and the candidate set come from one predicate, so they cannot
+  // drift apart; this is the reader-visible half of that.
+  await expect(page.locator("#finder-status")).toContainText("Write and maintain software: 48 active records match");
+  await expect(page.locator(".finder-result-heading")).toContainText("3 of 48 active records");
+});
 
-  // Back is aimed at on the painted shortlist. A shortlist still waiting on
-  // detail repaints when the detail lands, which would move Back away from
-  // the point already aimed at.
-  await expect(page.locator(".finder-results")).toBeVisible();
-  const beforeBack = await choose(page, "[data-finder-back]");
-  expect(beforeBack.shellTop, "the shell's top starts behind the header").toBeLessThan(beforeBack.headerBottom);
-  const afterBack = await settle(page, ".finder-shell");
-  expect(afterBack.top).toBeGreaterThanOrEqual(afterBack.headerBottom);
-  expect(afterBack.top).toBeLessThanOrEqual(afterBack.headerBottom + 13);
+test("choosing a job presses its tile and writes the URL", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?view=finder");
+  await expect(page.locator(".finder-goal[aria-pressed='true']")).toHaveCount(0);
+  await expect(page.locator(".finder-priorities")).toHaveCount(0);
+
+  await shortlist(page);
+  await expect(page.locator('[data-finder-goal="coding"]')).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".finder-goal[aria-pressed='true']")).toHaveCount(1);
+  await expect(page).toHaveURL(/view=finder&direction=agent_system&job=coding&prefer=balanced/);
+  // A job settles its own direction, so the priorities shown are that
+  // family's and no other's.
+  await expect(page.locator(".finder-priority")).toHaveCount(5);
+  await expect(page.locator('[data-finder-priority="balanced"]')).toHaveAttribute("aria-checked", "true");
+});
+
+test("choosing a priority reranks the shortlist and writes the URL", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?view=finder");
+  await shortlist(page);
+  const balanced = await page.locator(".finder-result h3").allInnerTexts();
+
+  await page.locator('[data-finder-priority="developer"]').click();
+  await expect(page).toHaveURL(/prefer=developer/);
+  await expect(page.locator("#finder-status")).toContainText("ranked for “Composable developer framework”");
+  await expect(page.locator(".finder-result-heading")).toContainText("ranked for “Composable developer framework”");
+  await expect(page.locator('[data-finder-priority="developer"]')).toHaveAttribute("aria-checked", "true");
+
+  // Direct use is a trait of the coding agents themselves, so both profiles
+  // of it rank Claude Code first. The ranking is exercised by unit tests
+  // over every record and every priority; what the screen owes is that the
+  // choice lands and the label follows it.
+  expect(await page.locator(".finder-result h3").allInnerTexts()).toEqual(balanced);
+});
+
+test("Back and Forward retrace the three answers", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?view=finder");
+  await shortlist(page);
+  await page.locator('[data-finder-priority="developer"]').click();
+  await expect(page.locator(".finder-result")).toHaveCount(3);
+
+  await page.goBack();
+  await expect(page).toHaveURL(/prefer=balanced/);
+  await expect(page.locator('[data-finder-priority="balanced"]')).toHaveAttribute("aria-checked", "true");
+  await expect(page.locator(".finder-result")).toHaveCount(3);
+
+  await page.goBack();
+  await expect(page).toHaveURL(/view=finder$/);
+  await expect(page.locator(".finder-result")).toHaveCount(0);
+  await expect(page.locator(".finder-goal")).toHaveCount(23);
+
+  await page.goForward();
+  await expect(page).toHaveURL(/job=coding&prefer=balanced/);
+  await expect(page.locator(".finder-result")).toHaveCount(3);
+});
+
+test("a shared link restores the same three answers and the same three records", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?view=finder");
+  await shortlist(page);
+  await page.locator('[data-finder-priority="local"]').click();
+  const shared = new URL(page.url()).search;
+  const before = await page.locator(".finder-result h3").allInnerTexts();
+
+  await page.goto("/?view=finder");
+  await expect(page.locator(".finder-result")).toHaveCount(0);
+
+  await page.goto(`/${shared}`);
+  await expect(page.locator(".finder-result")).toHaveCount(3);
+  await expect(page.locator(".finder-result h3")).toHaveText(before);
+  await expect(page.locator('[data-finder-priority="local"]')).toHaveAttribute("aria-checked", "true");
+  await expect(page.locator("#finder-status")).toContainText("ranked for “Local execution and control”");
+});
+
+test("a goal its direction contradicts, or no goal at all, leaves the URL", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+
+  await page.goto("/?view=finder&direction=local_runtime&job=coding&prefer=balanced");
+  await expect(page).toHaveURL(/view=finder$/);
+  await expect(page.locator(".finder-result")).toHaveCount(0);
+  await expect(page.locator(".finder-goal")).toHaveCount(23);
+
+  await page.goto("/?view=finder&direction=agent_system&job=not_a_job");
+  await expect(page).toHaveURL(/view=finder$/);
+  await expect(page.locator(".finder-goal")).toHaveCount(23);
+
+  // A priority the chosen direction does not offer falls back to balanced
+  // rather than ranking against a profile it was never written for.
+  await page.goto("/?view=finder&job=coding&prefer=serving");
+  await expect(page.locator('[data-finder-priority="balanced"]')).toHaveAttribute("aria-checked", "true");
 });
 
 test("Browse matches lands on the results and shows the Finder's role set as a removable filter", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?view=finder");
-  await choose(page, '[data-finder-choice="direction"][data-finder-value="agent_system"]');
-  await choose(page, '[data-finder-choice="goal"][data-finder-value="coding"]');
-  await choose(page, '[data-finder-choice="priority"][data-finder-value="balanced"]');
-  await choose(page, "[data-finder-directory]");
+  await shortlist(page);
+  await page.locator("[data-finder-directory]").click();
 
   const { top: panelTop, stickyBottom: sb } = await settle(page, "#systems-directory-panel");
   expect(panelTop).toBeLessThan(900);
   expect(panelTop).toBeGreaterThanOrEqual(sb - 1);
-  // A no-op revealDirectoryResults leaves the panel far below the strip,
-  // where activateView's smooth scroll to the top comes to rest; a working
-  // one lands its top within the same 12px margin keepFinderInView uses.
   expect(panelTop).toBeLessThanOrEqual(sb + 13);
   const chip = page.getByRole("button", { name: /Finder: Write and maintain software/ });
   await expect(chip).toBeVisible();
   await expect(page.locator("#result-count")).toContainText("Finder match");
+  // The three answers belong to the Finder's own view, so the results URL
+  // carries none of them.
+  await expect(page).not.toHaveURL(/job=|prefer=|direction=/);
 
   await chip.click();
   // Targeted by id, not accessible name: the label empties on removal, so a
@@ -114,9 +198,7 @@ test("Browse matches lands on the results and shows the Finder's role set as a r
 test("removing the Finder chip by keyboard moves focus to the result count", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?view=finder");
-  await page.locator('[data-finder-choice="direction"][data-finder-value="agent_system"]').click();
-  await page.locator('[data-finder-choice="goal"][data-finder-value="coding"]').click();
-  await page.locator('[data-finder-choice="priority"][data-finder-value="balanced"]').click();
+  await shortlist(page);
   await page.locator("[data-finder-directory]").click();
 
   const chip = page.getByRole("button", { name: /Finder: Write and maintain software/ });
@@ -129,9 +211,7 @@ test("removing the Finder chip by keyboard moves focus to the result count", asy
 test("Browse matches by keyboard moves focus to the result count", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?view=finder");
-  await page.locator('[data-finder-choice="direction"][data-finder-value="agent_system"]').click();
-  await page.locator('[data-finder-choice="goal"][data-finder-value="coding"]').click();
-  await page.locator('[data-finder-choice="priority"][data-finder-value="balanced"]').click();
+  await shortlist(page);
 
   // The Finder hides itself as it hands off, taking the focused button with it.
   await page.locator("[data-finder-directory]").focus();
@@ -144,9 +224,7 @@ test("Browse matches opens its matches on their first page", async ({ page }) =>
   await page.goto("/?collection=systems&page=3");
   await expect(page.locator("#project-pager .pager-nav span")).toContainText("Page 3 of");
   await openView(page, "finder");
-  await page.locator('[data-finder-choice="direction"][data-finder-value="agent_system"]').click();
-  await page.locator('[data-finder-choice="goal"][data-finder-value="coding"]').click();
-  await page.locator('[data-finder-choice="priority"][data-finder-value="balanced"]').click();
+  await shortlist(page);
   await page.locator("[data-finder-directory]").click();
 
   await expect(page.locator("#result-count")).toContainText("Finder match");
@@ -157,9 +235,7 @@ test("Browse matches opens its matches on their first page", async ({ page }) =>
 test("the Finder chip sits beside the result count, and its × glyph never wraps alone", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?view=finder");
-  await page.locator('[data-finder-choice="direction"][data-finder-value="agent_system"]').click();
-  await page.locator('[data-finder-choice="goal"][data-finder-value="coding"]').click();
-  await page.locator('[data-finder-choice="priority"][data-finder-value="balanced"]').click();
+  await shortlist(page);
   await page.locator("[data-finder-directory]").click();
 
   async function checkChipLayout() {
@@ -187,13 +263,11 @@ test("the Finder chip sits beside the result count, and its × glyph never wraps
   await checkChipLayout();
 });
 
-// The role set has no URL key yet, so a Back that leaves Systems' URL state
-// as it was must not widen the list the Finder chose (ruling R18).
+// The role set still has no URL key of its own, so a Back that leaves Systems'
+// URL state as it was must not widen the list the Finder chose (ruling R18).
 test("Back after closing a record keeps the Finder's role set", async ({ page }) => {
   await page.goto("/?view=finder");
-  for (const value of ["agent_system", "coding", "balanced"]) {
-    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-  }
+  await shortlist(page);
   await page.locator("[data-finder-directory]").click();
   await expect(page.locator("#finder-roles-chip")).toBeVisible();
   const before = await page.locator("#result-count").textContent();

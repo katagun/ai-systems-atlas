@@ -603,18 +603,26 @@ class DocumentationTests(unittest.TestCase):
         css = (ROOT / "web" / "styles.css").read_text(encoding="utf-8")
         containers = (
             ".element-tile",
+            ".finder-goal",
+            ".finder-result",
             ".tile",
             ".detail-block",
             ".comparison-table-wrap",
             ".badge-tooltip",
             ".badge-legend-chip",
-            ".finder-choice",
             ".taxonomy-item",
         )
         wrong: list[str] = []
         for selector in containers:
+            # The selector may head a list, as `.element-tile` and `.finder-goal`
+            # do: the Finder's goal tile IS the door's element tile, so one
+            # declaration serves both and a second copy could drift. What the
+            # rule has to state is that the named component takes --radius,
+            # wherever else it shares the line.
             rule = re.search(
-                rf"(?m)^{re.escape(selector)}\s*\{{(.*?)\}}", css, re.DOTALL
+                rf"(?m)^{re.escape(selector)}(?:\s*,[^{{}}]*)?\s*\{{(.*?)\}}",
+                css,
+                re.DOTALL,
             )
             self.assertIsNotNone(rule, f"{selector} no longer exists in styles.css")
             radius = re.search(r"border-radius:\s*([^;]+);", rule.group(1))
