@@ -526,6 +526,27 @@ h1 {
 .door-jobs ul { display: contents; list-style: none; }
 .door-job { padding: .45rem .8rem; border: 1px solid var(--line); border-radius: var(--radius-pill); background: var(--glass-weak); color: var(--text); font: 500 .85rem var(--font-body); cursor: pointer; }
 .door-job:hover { border-color: var(--cyan); color: var(--cyan); }
+.stage-tabs { align-self: stretch; width: 100%; border-bottom: 1px solid var(--line); }
+.stage-tabs .tab { font-size: .95rem; }
+[data-stage-panel][hidden] { display: none; }
+.stage-feature { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1rem 1.25rem; align-items: start; padding-top: 1.1rem; border-top: 2px solid var(--cyan); }
+.stage-feature.is-system { border-top-color: var(--coral); }
+.stage-feature .eyebrow { margin-bottom: .35rem; }
+.stage-feature .card-mark { width: 52px; height: 52px; font-size: 1.35rem; }
+.stage-name { margin: 0; font: 600 clamp(1.8rem, 3vw, 2.5rem) var(--font-display); letter-spacing: -.04em; line-height: 1.05; }
+.stage-meta { margin: .4rem 0 0; color: var(--muted); font: .78rem var(--font-mono); }
+.stage-description { max-width: 68ch; margin: .75rem 0 0; color: var(--muted); font-size: 1.05rem; line-height: 1.55; }
+.stage-list-label { margin: 1.35rem 0 .15rem; color: var(--muted); font: 500 .68rem var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
+.stage-list { list-style: none; margin: 0; padding: 0; }
+.stage-list button { display: grid; width: 100%; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto; gap: .75rem; align-items: baseline; padding: .7rem 0; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: none; color: var(--text); text-align: left; cursor: pointer; }
+.stage-list button:hover { color: var(--cyan); }
+.stage-list-name { font: 600 1rem var(--font-display); letter-spacing: -.02em; }
+.stage-list-meta { color: var(--muted); font-size: .85rem; }
+.stage-list time { color: var(--muted); font: .75rem var(--font-mono); }
+@media (max-width: 720px) {
+  .stage-list button { grid-template-columns: minmax(0, 1fr) auto; }
+  .stage-list-meta { display: none; }
+}
 /* Elements is a taxonomy map, not a ranking or a claim of physical periodicity. */
 .elements { margin-block: .5rem 1rem; }
 .elements-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .5rem 1rem; margin-bottom: 1rem; }

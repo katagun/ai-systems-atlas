@@ -91,6 +91,7 @@ async function bootstrap() {
     loadJSON("app/packs.json"), loadJSON("app/labs.json"), loadJSON("app/robots.json")
   ]);
   state.projects = systems.systems;
+  state.systemReviewDates = systems.review_dates || {};
   state.inferenceServices = inference.inference;
   state.localRuntimes = runtimes.runtimes;
   state.runtimesVerifiedAt = runtimes.verified_at;
@@ -119,6 +120,7 @@ async function bootstrap() {
   renderFinder();
   renderDoorJobs();
   renderElements();
+  renderStage();
   renderModels();
   renderLabs();
   renderSpecifications();
@@ -995,6 +997,53 @@ async function loadElementRecord() {
 // The front door's Finder jobs: the first goal of each direction, opened at
 // the Finder's priority question with that direction and goal answered
 // (openFinderAt, which the job hint under a search already uses).
+function stageDate(kind, record) {
+  return kind === "model" ? AppCore.releaseDate(record) : state.systemReviewDates[record.id];
+}
+
+function stageMeta(kind, record) {
+  return kind === "model" ? record.developer || "" : roleName(record.primary_role);
+}
+
+function stageRecords(kind) {
+  if (kind === "model") return AppCore.newestDated(state.models.filter(model => model.review_status !== "imported"), AppCore.releaseDate);
+  return AppCore.newestDated(state.projects.filter(project => state.systemReviewDates[project.id]), project => state.systemReviewDates[project.id]);
+}
+
+function renderStageFace(kind, records) {
+  const root = $(`#stage-${kind}`);
+  const featured = records[0];
+  if (!featured) {
+    root.replaceChildren();
+    return;
+  }
+  const date = record => stageDate(kind, record);
+  const row = record => `<li><button type="button" data-stage-record="${kind}" data-stage-id="${escapeHTML(record.id)}"><span class="stage-list-name">${escapeHTML(record.name)}</span><span class="stage-list-meta">${escapeHTML(stageMeta(kind, record))}</span><time datetime="${escapeHTML(date(record))}">${escapeHTML(date(record))}</time></button></li>`;
+  const when = kind === "model" ? `released ${date(featured)}` : `reviewed ${date(featured)}`;
+  const where = kind === "model" ? featured.developer || "" : `${familyName(featured.system_family)} · ${roleName(featured.primary_role)}`;
+  const rest = records.slice(1);
+  root.innerHTML = `<article class="stage-feature${kind === "system" ? " is-system" : ""}">${cardMark(featured)}<div>
+      <p class="eyebrow">Latest reviewed ${kind}</p>
+      <h2 class="stage-name">${escapeHTML(featured.name)}</h2>
+      <p class="stage-meta">${escapeHTML(`${where} · ${when}`)}</p>
+      <p class="stage-description">${escapeHTML(featured.description || "")}</p>
+      <p><button type="button" class="link-button" data-stage-record="${kind}" data-stage-id="${escapeHTML(featured.id)}">Open this ${kind}</button></p>
+    </div></article>${rest.length ? `<p class="stage-list-label">More ${kind}s, newest first</p><ol class="stage-list">${rest.map(row).join("")}</ol>` : ""}`;
+}
+
+function renderStage() {
+  for (const kind of ["model", "system"]) renderStageFace(kind, stageRecords(kind));
+}
+
+function showStage(face) {
+  $$("[data-stage-face]").forEach(button => {
+    const selected = button.dataset.stageFace === face;
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-selected", String(selected));
+  });
+  $$("[data-stage-panel]").forEach(panel => { panel.hidden = panel.dataset.stagePanel !== face; });
+}
+
 function renderDoorJobs() {
   $("#door-jobs").innerHTML = AppCore.FINDER_DIRECTIONS.map(direction => {
     const goal = AppCore.FINDER_GOALS[direction.id][0];
@@ -3875,6 +3924,13 @@ function bindEvents() {
   initBadgeLegend();
   // The front door's search hands its text to the results search and lands in
   // results, so the first character is the search; the caret follows.
+  $("#front-door").addEventListener("click", event => {
+    const face = event.target.closest("[data-stage-face]");
+    if (face) showStage(face.dataset.stageFace);
+    const record = event.target.closest("[data-stage-record]");
+    if (!record) return;
+    (record.dataset.stageRecord === "model" ? openModel : openProject)(record.dataset.stageId);
+  });
   $("#element-groups").addEventListener("click", event => {
     const button = event.target.closest("[data-element]");
     if (button) selectElement(button.dataset.element, "", { focus: true });
