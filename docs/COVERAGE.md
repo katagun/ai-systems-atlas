@@ -32,11 +32,11 @@ local_runtimes: 17
 model_releases: 313
 models_dev_source_records: 434
 model_candidates: 14
-system_candidates: 119
+system_candidates: 121
 exclusions: 102
 packs: 8
 labs: 45 covering 313 releases
-robots: 6
+robots: 7
 ```
 
 The block is the only place these counts are written down, which is why nothing above restates them: a second copy is a second thing to rot. Read `active-choice` as the catalog a reader chooses from — every system minus the archived and superseded ones — and `labs covering N releases` as the share of reviewed model releases whose developer has a labs record, which is the one figure that says whether the labs collection is keeping up with the models collection.
@@ -74,7 +74,9 @@ Both batches were first written from search-engine extracts of each page, becaus
 
 ### Robots
 
-The Robots collection under [ADR 037](adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md) holds four records as of 2026-09-24: Figure 03, NEO, Spot, and Unitree G1, each reviewed against the boundary in [`ROBOTS.md`](ROBOTS.md) and published in batch 95. No robot waits under `robots collection review` any more, and the candidate queue moves from 135 records to 131. The other nine candidates held by the robotics scope decision stay where [ADR 036](adr/036-the-agent-to-physical-world-boundary-is-in-scope.md) put them: five under `robot software role decision`, three under `action-policy model boundary`, and one under `robot description specification boundary`. The system counts above predate this subsection and were not recomputed for it.
+The Robots collection under [ADR 037](adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md) holds seven records: Figure 03, NEO, Spot, and Unitree G1 published in batch 95, Unitree H1 and Go2 published on 2026-09-30, and Hello Robot's Stretch 4 published the same day as the collection's first `mobile_manipulator`. Four manufacturers are represented and three form factors, humanoid, quadruped, and mobile manipulator; `arm` and `other` still carry no record. Two vendors, Unitree and Hello Robot, hold both AI bases — a named model and a documented route for running your own — and Hello Robot is the only record whose evidence pins a git blob rather than mutable web pages alone. The candidate queue's robotics holds are no longer the five under `robot software role decision` this paragraph once named: ADR 045 retired that label, publishing LeRobot and OM1 as systems and moving three of the rest on. Five candidates wait under `action-policy model boundary`, one under `robot description specification boundary`, and one under `programme-gated run path`. Hardware products that failed a condition on 2026-09-29 are queued with the failing condition written down rather than published; the queue's totals are in the generated block above.
+
+Nineteen leads from the 2026-09-29 screen were re-read against the gate on 2026-09-30 and one cleared it. The two leads that got furthest both failed on evidence rather than on the product. Franka Research 3's website was unreadable from the reviewer's network — every host under `franka.ai` refused the TLS handshake while control fetches to other vendors succeeded — so the product page and datasheet that would settle conditions 4, 5, and 6 could not be read; its Franka Control Interface documentation is published on the maker's `github.com/<org>` host instead, and what that documents is low-level torque and Cartesian control, which is programmability rather than a route the vendor offers for running a learned model. Kinova's Gen3 page states its hardware in full and documents the KORTEX API, ROS and ROS2, and Python support, but names no learned model and offers no model route, so condition 3 went unmet on what was read and its KORTEX API documentation was not read in this pass. Hello Robot's own backlog lead named Stretch 3, which the maker has superseded with Stretch 4, so the record follows the product the maker sells. The remaining sixteen leads were not read in this pass and no verdict is recorded for them.
 
 ### Systems by role
 
