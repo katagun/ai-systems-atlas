@@ -2384,6 +2384,33 @@
       ]
     },
     {
+      "project_id": "openai-dots",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "OpenAI Terms of Use, the base agreement governing consumer use of ChatGPT and the dots it creates",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/terms-of-use/",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "OpenAI Service Terms section 4 (Codex and code generation), which governs the Codex documentation surface dots is documented under",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Business and enterprise use of dots on Business Premium and Enterprise workspaces",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/business-terms/",
+          "verified_at": "2026-09-30"
+        }
+      ]
+    },
+    {
       "project_id": "openai-agents-sdk",
       "repo": "openai/openai-agents-python",
       "items": [

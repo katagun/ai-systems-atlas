@@ -1360,7 +1360,8 @@
         "chatgpt",
         "codex",
         "openai-agents-sdk",
-        "openai-agents-js"
+        "openai-agents-js",
+        "openai-dots"
       ],
       "channels": [
         {
