@@ -1,17 +1,17 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-29",
-  "source_record_count": 434,
-  "eligible_record_count": 416,
+  "updated_at": "2026-10-01",
+  "source_record_count": 437,
+  "eligible_record_count": 419,
   "source": {
     "repo": "anomalyco/models.dev",
     "ref": "dev",
-    "commit": "fde326351fbf011d3c007163af3046b97efbf6b6",
+    "commit": "dbc891ced2fdbf01591e86345100e972b329b6a6",
     "url": "https://github.com/anomalyco/models.dev",
-    "immutable_url": "https://codeload.github.com/anomalyco/models.dev/tar.gz/fde326351fbf011d3c007163af3046b97efbf6b6",
+    "immutable_url": "https://codeload.github.com/anomalyco/models.dev/tar.gz/dbc891ced2fdbf01591e86345100e972b329b6a6",
     "path": "models/**/*.toml",
     "license": "MIT",
-    "sha256": "f18a11f8fbae5c5e02a715b1b5b2a4c427a9b58252d70b2f2bbdc8bded32d9da"
+    "sha256": "8bf66ba9a5aa25c1bc98971318e07ccc9b6c049eb3b54eea0a4d21cd933840a0"
   },
   "candidates": [
     {
@@ -53,7 +53,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-29",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -99,7 +99,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -149,7 +149,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -197,7 +197,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -245,7 +245,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -292,7 +292,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-29",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -340,7 +340,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-29",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -386,7 +386,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-29",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -433,7 +433,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -480,7 +480,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-04",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -527,7 +527,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-29",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -575,7 +575,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-29",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -623,7 +623,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-29",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",
@@ -671,7 +671,7 @@
       },
       "status": "provisional",
       "discovered_at": "2026-09-29",
-      "last_seen_at": "2026-09-29",
+      "last_seen_at": "2026-10-01",
       "review_required": [
         "official_identity",
         "model_boundary",

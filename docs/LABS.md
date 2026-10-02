@@ -66,7 +66,7 @@ Labs are never scored, ranked, or sorted by anything but name. Funding, valuatio
 
 ## Preview precedence: `display_order`
 
-A lab carries a required `display_order`, a positive multiple of ten that is distinct across the collection. It decides which organizations an Elements role tile draws its three marks from, in the order the tile shows them, and nothing else. The [Elements](WEB.md#content-hierarchy) previews are the one place an organization is shown rather than listed, and three slots cannot show forty-four labs.
+A lab carries a required `display_order`, a positive multiple of ten that is distinct across the collection. It decides which organizations an Elements role tile draws its three marks from, in the order the tile shows them, and nothing else. The [Elements](WEB.md#content-hierarchy) previews are the one place an organization is shown rather than listed, and three slots cannot show forty-six labs.
 
 The field is a display precedence, not a judgment about the organization. It never reaches a score, a comparison, a collection sort, or a statement about an organization's importance, quality, size, or standing, and the Labs collection stays alphabetical whatever it says. Assign it from the marks a reader is most likely to recognize in this catalog's frontier work, and expect to argue about it: a precedence is an editorial claim, and a reviewer who disagrees should change the number in the same change that admits the lab.
 
@@ -74,4 +74,4 @@ Never derive it from market capitalization, revenue, funding, headcount, or popu
 
 ## Current coverage
 
-Forty-five labs are published, and forty-four of them cover all 311 reviewed releases. Forty-two are admitted on a reviewed release; one, Safe Superintelligence, on its own published statement of intent; and two, the Stanford NLP Group and Hugging Face, on a system each developed, because the catalog has reviewed no model release of either one's own.
+Forty-six labs are published, and forty-five of them cover all 315 reviewed releases. Forty-three are admitted on a reviewed release; one, Safe Superintelligence, on its own published statement of intent; and two, the Stanford NLP Group and Hugging Face, on a system each developed, because the catalog has reviewed no model release of either one's own.
