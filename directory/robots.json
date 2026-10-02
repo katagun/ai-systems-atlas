@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-30",
+  "verified_at": "2026-10-01",
   "robots": [
     {
       "id": "hello-robot-stretch-4",
@@ -664,6 +664,182 @@
         }
       ],
       "verified_at": "2026-09-30"
+    },
+    {
+      "id": "unitree-h2",
+      "name": "Unitree H2",
+      "manufacturer": "Unitree Robotics",
+      "url": "https://www.unitree.com/H2",
+      "first_party_domains": [
+        "unitree.com",
+        "github.com/unitreerobotics"
+      ],
+      "description": "Unitree's full-size humanoid robot, sold as the H2 and the H2 EDU. Unitree names no learned model for it; its product page says a 2070 TOPS chip supports diverse intelligent models, and its reinforcement-learning repository lists the H2 among the robots it supports and registers velocity-tracking tasks for it.",
+      "variants": "H2 and H2 EDU on the product page, which lists secondary development for the EDU version only. Unitree publishes an H2 Plus on a product page of its own, which this record does not cover.",
+      "form_factor": "humanoid",
+      "availability": "enterprise_sales",
+      "availability_note": "Unitree's product page states a price for the H2 and lists the H2 EDU as contact sales. The shop page carries the same price but shows no add-to-cart control, marks the base variant out of stock, and offers a Contact Sales button as its only route to a price.",
+      "ai_basis": [
+        "open_model_interface"
+      ],
+      "named_models": [],
+      "research_confidence": "high",
+      "hardware": {
+        "compute": "Two PC slots, an Intel Core i5 for platform capabilities and an Intel Core i7 for custom development. The product page's description says a 2070 TOPS chip powers the robot, and a high-power computing module is an accessory, with multiple brands and models available such as Thor.",
+        "sensors": "A humanoid binocular camera with a wide field of view, and a voice-interaction array of microphone and high-power speaker. WiFi 6 and Bluetooth 5.2 are listed as present.",
+        "actuation": "Low-inertia high-speed internal-rotor permanent magnet synchronous motors on industrial-grade crossed roller bearings, with 31 degrees of freedom in total: six per leg, seven per arm, three at the waist, and two at the head. The page states a maximum arm-joint torque of 120 N·m and leg-joint torque of 360 N·m, an arm payload peaking at about 15 kg and rated at about 7 kg, a standing size of 1820 x 456 x 218 mm, a weight of about 70 kg with battery, a calf-plus-thigh length of 1045 mm and a forearm-plus-upper-arm length of 690 mm, and a body of aircraft-grade aluminium, titanium alloy, and high-strength engineering plastics. A bionic head with facial features and dexterous hands in several models are listed.",
+        "power": "A premium lithium battery with low internal resistance, 15 Ah (0.972 kWh) at up to 75.6 V, with about three hours of battery life. A quick-release smart battery and a charger are accessories, and cooling is local air cooling."
+      },
+      "developer_access": "Unitree's product page lists secondary development for the H2 EDU and points to a secondary development manual. Its unitree_rl_mjlab repository names the H2 among the robots it supports, registers Unitree-H2-Flat and Unitree-H2-Rough velocity-tracking tasks, and documents a Train, Play, Sim2Real workflow that deploys trained policies to physical Unitree robots, worked through on the G1. Its unitree_sdk2 repository ships an h2 example directory with low-level joint commands published on rt/lowcmd for the robot's 31 motors and a high-level locomotion client, and its unitree_ros2 repository ships an h2 example that drives H2 ankle commands with ROS 2 messages.",
+      "terms": [
+        "sdk_license",
+        "software_terms"
+      ],
+      "terms_note": "Unitree's SDK, unitree_sdk2, is released under the BSD 3-Clause License. Unitree's terms page has Terms, After-sales Terms, Privacy Policy, Disclaimer, and End User License Agreement tabs; the after-sales tab is the hardware warranty policy, and the licence agreement is offered as a downloadable document rather than as page text. The product page lists an 8-month warranty for the H2 and 12 months for the H2 EDU.",
+      "terms_evidence": [
+        {
+          "terms_kind": "sdk_license",
+          "scope": "unitree_sdk2 licence file",
+          "kind": "web_terms",
+          "url": "https://github.com/unitreerobotics/unitree_sdk2/blob/main/LICENSE",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "terms_kind": "software_terms",
+          "scope": "End User License Agreement tab",
+          "kind": "web_terms",
+          "url": "https://www.unitree.com/terms",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "not_verified": "The documented policy interfaces are Unitree's own claims; the Atlas has not verified them. Every source is a Unitree web page or repository file that Unitree can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://www.unitree.com/H2",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_rl_mjlab README",
+          "url": "https://github.com/unitreerobotics/unitree_rl_mjlab/blob/main/README.md",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_sdk2 h2 examples",
+          "url": "https://github.com/unitreerobotics/unitree_sdk2/tree/main/example/h2",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "unitree_rl_mjlab H2 task registration",
+          "url": "https://github.com/unitreerobotics/unitree_rl_mjlab/blob/main/src/tasks/velocity/config/h2/__init__.py",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Unitree shop page",
+          "url": "https://shop.unitree.com/products/unitree-h2",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "verified_at": "2026-10-01"
+    },
+    {
+      "id": "unitree-r1",
+      "name": "Unitree R1",
+      "manufacturer": "Unitree Robotics",
+      "url": "https://www.unitree.com/R1",
+      "first_party_domains": [
+        "unitree.com",
+        "github.com/unitreerobotics"
+      ],
+      "description": "Unitree's compact humanoid robot, sold as the R1 AIR, R1, and R1 EDU, which Unitree's own site lists under its Humanoid Robot category. Unitree names no learned model for it: the product page says it integrates a large multimodal model for voice and image processing without naming one. Its product page states that the R1's joint and sensor control interfaces are fully open, and its reinforcement-learning repository registers a velocity-tracking task for the R1 and ships a deployment program for it.",
+      "variants": "R1 AIR, R1, and R1 EDU on the product page, which lists secondary development for the R1 EDU only. The shop sells the R1 AIR and R1 in white and red, and takes the R1 EDU by contacting sales.",
+      "form_factor": "humanoid",
+      "availability": "orderable",
+      "availability_note": "Unitree's product page lists the R1 AIR, R1 and R1 EDU, with the EDU marked contact sales. The shop page shows an add-to-cart control and says the R1 Air (White) is backordered and will ship as soon as it is back in stock.",
+      "ai_basis": [
+        "open_model_interface"
+      ],
+      "named_models": [],
+      "research_confidence": "high",
+      "hardware": {
+        "compute": "An 8-core high-performance processor. A high-power computing module is an accessory of the R1 EDU, with multiple brands and models available such as Orin (40-100 TOPS).",
+        "sensors": "A four-microphone array and a speaker, with a monocular camera on the R1 AIR and a binocular camera on the R1 and R1 EDU. WiFi 6 and Bluetooth 5.2 are listed as present, and the page describes a two-degree-of-freedom head for environmental perception.",
+        "actuation": "Low-inertia high-speed internal-rotor permanent magnet synchronous motors on crossed roller bearings and double-hook ball bearings. The page lists 20 degrees of freedom on the R1 AIR, 26 on the R1, and 26 to 40 on the R1 EDU, made up of six per leg, four or five per arm, two at the waist, and two at the head. It states an arm load of about 2 kg, a standing size of 1230 x 357 x 190 mm, a weight of about 27 kg with battery on the AIR and about 29 kg on the others, a calf-plus-thigh length of 600 mm and a forearm-plus-upper-arm length of 420 mm, knee motion from -10 to +139 degrees, hip yaw of plus or minus 157 degrees, pitch of -168 to +146 degrees and roll of -60 to +100 degrees, and waist yaw of plus or minus 150 degrees and roll of plus or minus 30 degrees. Electrical routing is hollow plus internal routing and the joint encoders are dual plus single.",
+        "power": "A lithium battery with about one hour of battery life. A quick-release smart battery and a charger are accessories, and cooling is local air cooling."
+      },
+      "developer_access": "Unitree's product page states that the R1's joint and sensor control interfaces are fully open and that mainstream simulation platforms are supported, and lists secondary development for the R1 EDU. Its unitree_rl_mjlab repository names the R1 among the robots it supports, offers a Unitree-R1-Flat velocity-tracking task, and carries a deploy/robots/r1 program with a velocity policy configuration, documented through the same Train, Play, Sim2Real workflow. Its unitree_sdk2 repository ships an r1 example directory with low-level joint examples, a high-level locomotion client, and an audio client.",
+      "terms": [
+        "sdk_license",
+        "software_terms"
+      ],
+      "terms_note": "Unitree's SDK, unitree_sdk2, is released under the BSD 3-Clause License. Unitree's terms page has Terms, After-sales Terms, Privacy Policy, Disclaimer, and End User License Agreement tabs; the after-sales tab is the hardware warranty policy, and the licence agreement is offered as a downloadable document rather than as page text. The product page lists a 6-month warranty for the R1 AIR, 8 months for the R1, and 12 months for the R1 EDU.",
+      "terms_evidence": [
+        {
+          "terms_kind": "sdk_license",
+          "scope": "unitree_sdk2 licence file",
+          "kind": "web_terms",
+          "url": "https://github.com/unitreerobotics/unitree_sdk2/blob/main/LICENSE",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "terms_kind": "software_terms",
+          "scope": "End User License Agreement tab",
+          "kind": "web_terms",
+          "url": "https://www.unitree.com/terms",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "not_verified": "The documented policy interfaces are Unitree's own claims; the Atlas has not verified them. Every source is a Unitree web page or repository file that Unitree can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://www.unitree.com/R1",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_rl_mjlab README",
+          "url": "https://github.com/unitreerobotics/unitree_rl_mjlab/blob/main/README.md",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_sdk2 r1 examples",
+          "url": "https://github.com/unitreerobotics/unitree_sdk2/tree/main/example/r1",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "unitree_rl_mjlab R1 deployment program",
+          "url": "https://github.com/unitreerobotics/unitree_rl_mjlab/tree/main/deploy/robots/r1",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Unitree shop page",
+          "url": "https://shop.unitree.com/products/unitree-r1",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "verified_at": "2026-10-01"
     }
   ]
 }
