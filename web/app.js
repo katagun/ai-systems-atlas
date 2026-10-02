@@ -21,7 +21,7 @@ const state = {
   licenses: new Map(), logos: { icons: {}, records: {} }, logosLoaded: false,
   directoryCollection: "all", directoryStage: "door", recent: {}, directoryRoles: null, directoryRolesLabel: null, badgeLegendPreference: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
-  finder: { step: 0, answers: {} },
+  finder: { direction: "", goal: "", priority: "balanced" },
   pageSize: readStoredPageSize(),
   page: { all: 1, systems: 1, inference: 1, runtimes: 1, models: 1, specifications: 1, packs: 1, labs: 1, robots: 1 },
   urlReady: false,
@@ -2197,56 +2197,7 @@ function bindComparisonButtons(root) {
   }));
 }
 
-function finderChoice(key, item) {
-  return `<button class="finder-choice" data-finder-choice="${escapeHTML(key)}" data-finder-value="${escapeHTML(item.id)}">
-    ${item.cue ? `<span class="finder-choice-cue">${escapeHTML(item.cue)}</span>` : ""}
-    <strong>${escapeHTML(item.label)}</strong>
-    <span>${escapeHTML(item.description)}</span>
-  </button>`;
-}
-
-function renderFinderProgress() {
-  const step = state.finder.step;
-  const labels = ["Direction", "Job", "Priority"];
-  $("#finder-progress").innerHTML = labels.map((item, index) => {
-    const status = step > index ? "is-complete" : step === index ? "is-active" : "";
-    return `<div class="finder-progress-step ${status}"><span>${step > index ? "✓" : index + 1}</span><strong>${item}</strong></div>`;
-  }).join("") + `<p>${step >= 3 ? "Shortlist ready" : `Step ${step + 1} of 3`}</p>`;
-}
-
-function renderFinder() {
-  renderFinderProgress();
-  const { step, answers } = state.finder;
-  let content;
-  if (step === 0) {
-    content = `<div class="finder-question"><p class="eyebrow">Start with the outcome</p><h2>What should it do?</h2><p>Preserve knowledge, carry out delegated work, assist interactively, or serve models through a managed inference layer.</p></div>
-      <div class="finder-choice-grid direction-grid">${AppCore.FINDER_DIRECTIONS.map(item => finderChoice("direction", item)).join("")}</div>`;
-  } else if (step === 1) {
-    const choices = AppCore.FINDER_GOALS[answers.direction];
-    content = `<div class="finder-question"><p class="eyebrow">${escapeHTML(finderDirectionName(answers.direction))}</p><h2>Choose the closest job.</h2><p>You can broaden the directory afterward.</p></div>
-      <div class="finder-choice-grid">${choices.map(item => finderChoice("goal", item)).join("")}</div>`;
-  } else if (step === 2) {
-    // The shortlist's candidates are known once the goal is: fetch their detail
-    // now, while the priority question is on screen.
-    ensureFinderDetail();
-    const choices = AppCore.FINDER_PRIORITIES[answers.direction];
-    content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2 tabindex="-1">What matters most?</h2><p>This adjusts ranking only within the selected score profile.</p></div>
-      <div class="finder-choice-grid">${choices.map(item => finderChoice("priority", item)).join("")}</div>`;
-  } else {
-    const { direction, goal } = answers;
-    const pending = ensureFinderDetail();
-    if (pending) {
-      pending.then(() => {
-        if (state.finder.step === 3 && answers.direction === direction && answers.goal === goal) renderFinder();
-      });
-      content = `<div class="finder-question"><p class="eyebrow">Your shortlist</p><h2>Reading the reviewed scores…</h2><p>Ranking these matches needs the full score for each candidate.</p></div>`;
-    } else {
-      content = renderFinderResults();
-    }
-  }
-  const navigation = step > 0 ? `<div class="finder-navigation"><button class="ghost-button" data-finder-back>← Back</button><button class="ghost-button" data-finder-reset>Start over</button></div>` : "";
-  $("#finder-content").innerHTML = content + navigation;
-}
+const finderDetailAwaited = new Set();
 
 // How much sticks to the top of the viewport: the header, and in results
 // the strip and, above 1000 px, the results bar. Each counts only while it
@@ -2256,49 +2207,178 @@ function stickyHeight() {
   return sticky($(".site-header")) + sticky($("#scope-strip")) + sticky($("#results-bar"));
 }
 
-// The sticky height plus the reading margin both Finder scroll corrections
-// leave beneath it, measured once so the two never disagree.
+// The sticky height plus the reading margin a scroll correction leaves beneath
+// it, measured once so the two never disagree.
 function headerClearance() {
   return stickyHeight() + 12;
 }
 
-// A choice replaces the panel's content, which can leave the step indicator
-// under the sticky header; bring the shell's top back into view, instantly.
-function keepFinderInView() {
-  const shell = $(".finder-shell");
-  const clearance = headerClearance();
-  const top = shell.getBoundingClientRect().top;
-  if (top < clearance) window.scrollBy({ top: top - clearance, behavior: "instant" });
+// The collections the Finder ranks over, handed to AppCore so its counts and
+// its candidate set come from one predicate and can be tested without state.
+function finderCollections() {
+  return { projects: state.projects, inferenceServices: state.inferenceServices, localRuntimes: state.localRuntimes };
 }
 
-const finderDetailAwaited = new Set();
-
-// The records a Finder goal can draw on: active systems in its family and
-// role set, or services or runtimes of its type (docs/WEB.md).
+// The records a Finder goal can draw on: active systems in its family and role
+// set, or services or runtimes of its type (docs/WEB.md).
 function finderGoalRecords(direction, goalConfig) {
-  if (direction === "inference_service") return state.inferenceServices.filter(item => goalConfig.serviceTypes.includes(item.service_type));
-  if (direction === "local_runtime") return state.localRuntimes.filter(item => goalConfig.runtimeTypes.includes(item.runtime_type));
-  return state.projects.filter(item => item.status === "active" && item.system_family === direction && goalConfig.roles.includes(item.primary_role));
+  return AppCore.finderGoalRecords(direction, goalConfig, finderCollections());
 }
 
 function finderCandidates() {
-  const { direction, goal } = state.finder.answers;
+  const { direction, goal } = state.finder;
   const goalConfig = AppCore.FINDER_GOALS[direction]?.find(item => item.id === goal);
   return goalConfig ? finderGoalRecords(direction, goalConfig) : [];
 }
 
 let finderGoalList = null;
 function finderGoalEntries() {
-  finderGoalList ||= Object.entries(AppCore.FINDER_GOALS).flatMap(([direction, goals]) =>
-    goals.map(goal => ({ ...goal, direction, eligible: finderGoalRecords(direction, goal).length })));
+  finderGoalList ||= AppCore.finderGoalEntries(finderCollections());
   return finderGoalList;
 }
 
-// The job is already chosen, so focus lands on the question it leaves open.
-function openFinderAt(direction, goal) {
-  state.finder = { step: 2, answers: { direction, goal } };
+// A goal carries the direction that offers it, so a URL's `job` alone is
+// enough to restore both and `direction` is only ever written to make the
+// link legible.
+function finderGoalEntry(goalId, direction = "") {
+  const entries = finderGoalEntries();
+  return entries.find(item => item.id === goalId && (!direction || item.direction === direction)) || null;
+}
+
+// Choosing a goal settles the direction with it. A priority carries over only
+// when the new direction offers it, so a shared link's preference cannot rank
+// against a profile it was never written for.
+function chooseFinderGoal(goalId, direction = "") {
+  const entry = finderGoalEntry(goalId, direction);
+  if (!entry) return false;
+  state.finder = {
+    direction: entry.direction,
+    goal: entry.id,
+    priority: finderPriorityFor(entry.direction, state.finder.priority),
+  };
   renderFinder();
-  activateView("finder", { focusTarget: $("#finder-content h2") });
+  return true;
+}
+
+// Each answer is one history entry, so Back steps from priority to job to the
+// bare tiles and Forward replays them.
+function writeFinderURL({ push = false } = {}) {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("direction");
+  url.searchParams.delete("job");
+  url.searchParams.delete("prefer");
+  if (state.finder.goal) {
+    url.searchParams.set("direction", state.finder.direction);
+    url.searchParams.set("job", state.finder.goal);
+    url.searchParams.set("prefer", state.finder.priority);
+  }
+  writeURL(url, { push });
+}
+
+// The job is already chosen, so the screen opens with its shortlist rather
+// than with a question standing between the reader and it.
+function openFinderAt(direction, goal) {
+  chooseFinderGoal(goal, direction);
+  writeFinderURL();
+  activateView("finder");
+}
+
+function finderPriorityFor(direction, priority) {
+  return AppCore.FINDER_PRIORITIES[direction].some(item => item.id === priority) ? priority : "balanced";
+}
+
+// The goal's own tile, sharing the front door's element tile so the Finder's
+// density is the door's rather than a parallel rule that can drift from it.
+function finderGoalTile(entry) {
+  const selected = state.finder.goal === entry.id;
+  return `<button type="button" class="finder-goal" data-finder-goal="${escapeHTML(entry.id)}" data-finder-dir="${escapeHTML(entry.direction)}" aria-pressed="${selected}"${entry.eligible ? "" : " disabled"} aria-label="${escapeHTML(entry.label)}, ${entry.eligible} active ${entry.eligible === 1 ? "record" : "records"}"><span class="element-count">${entry.eligible}</span><span class="element-name">${escapeHTML(entry.label)}</span></button>`;
+}
+
+function renderFinderGroups() {
+  return `<div class="finder-groups">${AppCore.FINDER_DIRECTIONS.map(direction => {
+    const total = AppCore.finderDirectionTotal(direction.id, finderCollections());
+    const goals = AppCore.FINDER_GOALS[direction.id].map(goal => finderGoalEntry(goal.id)).filter(Boolean);
+    return `<section class="finder-group" data-finder-direction="${escapeHTML(direction.id)}" aria-labelledby="finder-group-${escapeHTML(direction.id)}">
+      <div class="element-family-heading"><h3 id="finder-group-${escapeHTML(direction.id)}">${escapeHTML(finderDirectionName(direction.id))}</h3><span>${total} active</span></div>
+      <div class="finder-goals">${goals.map(finderGoalTile).join("")}</div>
+    </section>`;
+  }).join("")}</div>`;
+}
+
+// The priority is a soft ranking signal inside one score profile, never an
+// eligibility filter (docs/TAXONOMY.md "Guided finder"), so it reads as a row
+// of toggles beside the shortlist rather than a question that gates it.
+function renderFinderPriorities() {
+  const { direction, goal, priority } = state.finder;
+  if (!goal) return "";
+  return `<div class="finder-priorities" role="radiogroup" aria-label="What matters most">
+    <span class="finder-priorities-label">Rank by</span>
+    ${AppCore.FINDER_PRIORITIES[direction].map(item => `<button type="button" class="door-job finder-priority" role="radio" aria-checked="${priority === item.id}" data-finder-priority="${escapeHTML(item.id)}" title="${escapeHTML(item.description)}">${escapeHTML(item.label)}</button>`).join("")}
+  </div>`;
+}
+
+function renderFinderStatus() {
+  const { goal, priority } = state.finder;
+  const entry = goal ? finderGoalEntry(goal) : null;
+  const label = AppCore.FINDER_PRIORITIES[entry?.direction]?.find(item => item.id === priority)?.label;
+  // Counted from the tables and the records, never transcribed: both figures
+  // move as the catalog does, and a stale one would misstate the screen.
+  const collections = finderCollections();
+  const directions = AppCore.FINDER_DIRECTIONS.length;
+  const jobs = AppCore.FINDER_DIRECTIONS.reduce((sum, direction) => sum + AppCore.FINDER_GOALS[direction.id].length, 0);
+  const records = AppCore.FINDER_DIRECTIONS.reduce((sum, direction) => sum + AppCore.finderDirectionTotal(direction.id, collections), 0);
+  $("#finder-status").textContent = entry
+    ? `${entry.label}: ${entry.eligible} active ${entry.eligible === 1 ? "record" : "records"} match, ranked for “${label}”.`
+    : `${jobs} jobs in ${directions} directions, over ${records} active records. Choose one to see its three strongest reviewed matches.`;
+}
+
+// The three answers, on the Finder's own keys. A goal the tables no longer
+// offer, or one whose direction contradicts the `direction` beside it, leaves
+// the URL as any value a control cannot take, and leaves the tiles.
+function restoreFinderFromURL(params) {
+  const goal = params.get("job") || "";
+  if (!goal) {
+    // Only a Finder URL with no job clears the screen. The tab and the
+    // mobile bar open the view without writing, so returning to it keeps the
+    // shortlist the reader had.
+    if (params.get("view") !== "finder") return;
+    state.finder = { direction: "", goal: "", priority: "balanced" };
+    renderFinder();
+    return;
+  }
+  const entry = finderGoalEntry(goal, params.get("direction") || "");
+  if (!entry) {
+    const current = new URL(window.location.href);
+    current.searchParams.delete("direction");
+    current.searchParams.delete("job");
+    current.searchParams.delete("prefer");
+    writeURL(current);
+    state.finder = { direction: "", goal: "", priority: "balanced" };
+    renderFinder();
+    return;
+  }
+  state.finder = { direction: entry.direction, goal: entry.id, priority: finderPriorityFor(entry.direction, params.get("prefer") || "") };
+  renderFinder();
+}
+
+function renderFinder() {
+  $("#finder-content").innerHTML = renderFinderGroups() + (state.finder.goal ? renderFinderPriorities() + renderFinderShortlist() : "");
+  renderFinderStatus();
+}
+
+function renderFinderShortlist() {
+  // Ranking needs each candidate's full score, which boot does not carry, so
+  // the fetches start as soon as the goal is chosen and the shortlist waits
+  // for them rather than ranking on an overall alone.
+  const pending = ensureFinderDetail();
+  if (pending) {
+    const chosen = state.finder.goal;
+    pending.then(() => {
+      if (state.finder.goal === chosen) renderFinder();
+    });
+    return `<div class="finder-result-heading"><div><p class="eyebrow">Your shortlist</p><h2>Reading the reviewed scores…</h2><p>Ranking these matches needs the full score for each candidate.</p></div></div>`;
+  }
+  return renderFinderResults();
 }
 
 function renderJobHint(scope, term) {
@@ -2489,7 +2569,7 @@ function emptyStateMarkup(scope, fallback) {
 // never arrives costs one wait and then a shortlist built from what landed —
 // never an endless retry.
 function ensureFinderDetail() {
-  const { direction, goal } = state.finder.answers;
+  const { direction, goal } = state.finder;
   const key = `${direction}:${goal}`;
   if (finderDetailAwaited.has(key)) return null;
   const kind = AppCore.FINDER_DETAIL_KINDS[direction] || "system";
@@ -2502,7 +2582,7 @@ function ensureFinderDetail() {
 }
 
 function recommendedFinderRecords() {
-  const { direction, goal, priority } = state.finder.answers;
+  const { direction, goal, priority } = state.finder;
   const goalConfig = AppCore.FINDER_GOALS[direction].find(item => item.id === goal);
   return finderCandidates()
     .map(project => {
@@ -2517,10 +2597,11 @@ function recommendedFinderRecords() {
 }
 
 function renderFinderResults() {
-  const { direction, goal, priority } = state.finder.answers;
+  const { direction, goal, priority } = state.finder;
   const goalConfig = AppCore.FINDER_GOALS[direction].find(item => item.id === goal);
   const priorityConfig = AppCore.FINDER_PRIORITIES[direction].find(item => item.id === priority);
   const results = recommendedFinderRecords();
+  const eligible = finderGoalEntry(goal, direction)?.eligible ?? 0;
   const isInference = direction === "inference_service";
   const isRuntime = direction === "local_runtime";
   const classificationLabel = record => isInference ? taxonomyName("inference_service_types", record.service_type)
@@ -2533,7 +2614,7 @@ function renderFinderResults() {
   };
   const detailAttribute = isInference ? "data-finder-inference" : isRuntime ? "data-finder-runtime" : "data-finder-project";
   const profileLabel = isInference ? "inference-service" : isRuntime ? "local-runtime" : "";
-  return `<div class="finder-result-heading"><div><p class="eyebrow">Your shortlist</p><h2>${escapeHTML(goalConfig.label)}</h2><p>Within ${escapeHTML(finderDirectionName(direction).toLowerCase())}, weighted for “${escapeHTML(priorityConfig.label.toLowerCase())}.”</p></div><button class="primary-button" data-finder-directory>Browse matches →</button></div>
+  return `<div class="finder-result-heading"><div><p class="eyebrow">Your shortlist</p><h2>${escapeHTML(goalConfig.label)}</h2><p>${results.length} of ${eligible} active ${eligible === 1 ? "record" : "records"}, ranked for “${escapeHTML(priorityConfig.label)}”. ${escapeHTML(goalConfig.description)}</p></div><button class="primary-button" data-finder-directory>Browse matches →</button></div>
     <div class="finder-results">${results.map(({ project, reasons }, index) => `<article class="finder-result ${escapeHTML(project.system_family || direction)}">
       <div class="finder-result-top">${cardMark(project)}<div class="finder-rank">0${index + 1}</div></div>
       <div><p class="family-label">${escapeHTML(classificationLabel(project))}</p><h3>${escapeHTML(project.name)}</h3><p>${escapeHTML(project.description)}</p>
@@ -2550,8 +2631,16 @@ function renderFinderResults() {
 // Each branch lands on the first page of its matches: a page kept from
 // earlier browsing, or restored from the URL, belongs to another list.
 function applyFinderToDirectory() {
-  const { direction, goal } = state.finder.answers;
+  const { direction, goal } = state.finder;
   const goalConfig = AppCore.FINDER_GOALS[direction].find(item => item.id === goal);
+  // The three answers belong to the Finder's own view. Leaving them on a
+  // Directory URL would make them outlive the screen that gives them meaning
+  // and would re-apply themselves if the reader came back by tab.
+  const url = new URL(window.location.href);
+  url.searchParams.delete("direction");
+  url.searchParams.delete("job");
+  url.searchParams.delete("prefer");
+  writeURL(url);
   clearComparison();
   if (direction === "local_runtime") {
     clearQuery();
@@ -3424,6 +3513,7 @@ function restoreFromURL({ boot = false } = {}) {
     if (onDoor) showFrontDoor({ updateURL: false });
     else if (scope && !comparisonRestored) setDirectoryCollection(scope, { updateURL: false });
     activateView(view);
+    restoreFinderFromURL(params);
     // The one restored query, or its absence, reaches every collection's
     // sort, so a sort chosen during a query the URL no longer holds ends too.
     if (scope) syncMatchSorts();
@@ -4010,33 +4100,16 @@ function bindEvents() {
     $("#result-count").focus();
   });
   $("#finder-content").addEventListener("click", event => {
-    const choice = event.target.closest("[data-finder-choice]");
-    if (choice) {
-      const key = choice.dataset.finderChoice;
-      state.finder.answers[key] = choice.dataset.finderValue;
-      if (key === "direction") {
-        delete state.finder.answers.goal;
-        delete state.finder.answers.priority;
-      } else if (key === "goal") {
-        delete state.finder.answers.priority;
-      }
-      state.finder.step = Math.min(3, state.finder.step + 1);
-      renderFinder();
-      keepFinderInView();
+    const goalButton = event.target.closest("[data-finder-goal]");
+    if (goalButton) {
+      if (chooseFinderGoal(goalButton.dataset.finderGoal, goalButton.dataset.finderDir)) writeFinderURL({ push: true });
       return;
     }
-    if (event.target.closest("[data-finder-back]")) {
-      state.finder.step = Math.max(0, state.finder.step - 1);
-      if (state.finder.step < 2) delete state.finder.answers.priority;
-      if (state.finder.step < 1) delete state.finder.answers.goal;
+    const priorityButton = event.target.closest("[data-finder-priority]");
+    if (priorityButton) {
+      state.finder.priority = priorityButton.dataset.finderPriority;
       renderFinder();
-      keepFinderInView();
-      return;
-    }
-    if (event.target.closest("[data-finder-reset]")) {
-      state.finder = { step: 0, answers: {} };
-      renderFinder();
-      keepFinderInView();
+      writeFinderURL({ push: true });
       return;
     }
     const projectButton = event.target.closest("[data-finder-project]");

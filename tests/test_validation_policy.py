@@ -3675,10 +3675,11 @@ class ValidationPolicyTests(unittest.TestCase):
             errors,
         )
 
-    def test_null_source_id_still_requires_text_output(self) -> None:
-        # validate_model_source_metadata already enforces this for every reviewed
-        # model (require_text defaults to True); the test pins it for ADR 038,
-        # because the importer's modality gate never sees a null-source record.
+    def test_null_source_record_type_must_match_its_output_modalities(self) -> None:
+        # ADR 051: the blanket "must produce text" rule is gone, so a null-source
+        # record is free to describe a release that outputs images. What it is not
+        # free to do is claim a type its own modalities contradict, which is the
+        # rule that replaced the text requirement.
         def mutate(models: list[dict]) -> None:
             models[0]["source_id"] = None
             models[0]["source_metadata"]["modalities"]["output"] = ["image"]
@@ -3686,8 +3687,25 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = self._with_null_source_models(mutate)
 
         self.assertTrue(
-            any("model candidates must produce text" in e for e in errors),
+            any(
+                "multimodal_language_model must record text as an output modality" in e
+                for e in errors
+            ),
             errors,
+        )
+
+    def test_null_source_image_release_is_accepted_under_its_own_type(self) -> None:
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+            models[0]["model_type"] = "image_generation_model"
+            models[0]["source_metadata"]["modalities"]["output"] = ["image"]
+
+        errors = self._with_null_source_models(mutate)
+
+        # The detached upstream row now needs a queue entry or disposition, so the
+        # eligible-count error is expected; nothing may complain about the model.
+        self.assertFalse(
+            [error for error in errors if error.startswith("model ")], errors
         )
 
     def test_null_source_record_cannot_cite_models_dev_evidence(self) -> None:

@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
+const { chooseFinderGoal, finderHandoff } = require("./helpers/finder");
 const {
   collectionEntry,
   entryCount,
@@ -214,9 +215,7 @@ test("the finder guides a local runtime path into the runtimes scope", async ({ 
   await page.goto("/");
 
   await page.getByRole("button", { name: "Find your fit", exact: true }).click();
-  await page.locator('[data-finder-choice][data-finder-value="local_runtime"]').click();
-  await page.locator('[data-finder-choice][data-finder-value="serve_workload"]').click();
-  await page.locator('[data-finder-choice][data-finder-value="hardware"]').click();
+  await chooseFinderGoal(page, "serve_workload", "hardware");
 
   await expect(page.locator(".finder-result h3").first()).toHaveText("vLLM");
   await expect(page.locator(".finder-result").first().locator(".card-mark svg")).toHaveCount(1);
@@ -525,9 +524,7 @@ test("reviewed named agent additions are searchable", async ({ page }) => {
 test("finder offers assistant outcomes and preserves the selected role", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Find your fit", exact: true }).click();
-  await page.getByRole("button", { name: /I need an assistant/ }).click();
-  await page.getByRole("button", { name: /Use several models in one place/ }).click();
-  await page.getByRole("button", { name: /Model and data portability/ }).click();
+  await chooseFinderGoal(page, "model_choice", "portable");
 
   await expect(page.locator(".finder-results h3").filter({ hasText: /^T3 Chat$/ })).toHaveCount(1);
   await expect(page.locator(".finder-result").filter({ hasText: "T3 Chat" }).locator(".card-monogram")).toHaveText("T");
@@ -543,9 +540,7 @@ test("finder offers assistant outcomes and preserves the selected role", async (
 test("finder recommends inference services without crossing score profiles", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Find your fit", exact: true }).click();
-  await page.getByRole("button", { name: /I need an inference service/ }).click();
-  await page.getByRole("button", { name: /Route across models and providers/ }).click();
-  await page.getByRole("button", { name: /Traffic resilience/ }).click();
+  await chooseFinderGoal(page, "route_models", "resilience");
 
   await expect(page.locator(".finder-results .finder-result")).toHaveCount(3);
   await expect(page.locator(".finder-results .family-label").first()).toHaveText("Routing aggregator");
@@ -755,11 +750,7 @@ test("the Systems chip lists every active system after a Finder handoff", async 
   // Straight from the handoff, and by way of All, which keeps the family.
   for (const via of [[], ["All"]]) {
     await page.goto("/?view=finder");
-    for (const value of ["agent_system", "coding", "balanced"]) {
-      await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-    }
-    await page.locator("[data-finder-directory]").click();
-    await expect(page.locator("#result-count")).toContainText("Finder match");
+    await finderHandoff(page, "coding");
     for (const name of via) await openCollection(page, name.toLowerCase());
     const systems = collectionEntry(page, "systems");
     const count = await entryCount(page, "systems");

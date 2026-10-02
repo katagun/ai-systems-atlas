@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { openFamily } = require("./helpers/landing");
+const { chooseFinderGoal } = require("./helpers/finder");
 const { recordView, search } = require("./helpers/results");
 
 // Typing searches the boot records at once, and focusing the box fetches the
@@ -149,17 +150,13 @@ test("a card's hover-titled facts stay above its details target", async ({ page 
   expect(await reached(model.locator(".card-source-meta")), "a reviewed-model card's source line").toBe("itself");
 
   await page.goto("/?view=finder");
-  for (const value of ["agent_system", "coding", "balanced"]) {
-    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-  }
+  await chooseFinderGoal(page, "coding");
   expect(await reached(page.locator(".finder-result .license-badge").first()), "a Finder result's licence badge").toBe("itself");
 });
 
 test("clicking a Finder result's body opens that result's record", async ({ page }) => {
   await page.goto("/?view=finder");
-  for (const value of ["agent_system", "coding", "balanced"]) {
-    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-  }
+  await chooseFinderGoal(page, "coding");
   const result = page.locator(".finder-result").first();
   const id = await result.locator(".card-open").getAttribute("data-finder-project");
   // Click the description, not the button. Each result must hold its own

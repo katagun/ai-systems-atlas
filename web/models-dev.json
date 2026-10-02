@@ -1,16 +1,16 @@
 {
   "version": "1.0",
-  "updated_at": "2026-10-01",
+  "updated_at": "2026-10-02",
   "source_record_count": 437,
   "source": {
     "repo": "anomalyco/models.dev",
     "ref": "dev",
-    "commit": "dbc891ced2fdbf01591e86345100e972b329b6a6",
+    "commit": "f9f2057be3c620898b6eaaca91dbbf75176043ae",
     "url": "https://github.com/anomalyco/models.dev",
-    "immutable_url": "https://codeload.github.com/anomalyco/models.dev/tar.gz/dbc891ced2fdbf01591e86345100e972b329b6a6",
+    "immutable_url": "https://codeload.github.com/anomalyco/models.dev/tar.gz/f9f2057be3c620898b6eaaca91dbbf75176043ae",
     "path": "models/**/*.toml",
     "license": "MIT",
-    "sha256": "8bf66ba9a5aa25c1bc98971318e07ccc9b6c049eb3b54eea0a4d21cd933840a0"
+    "sha256": "861632dbb125066db6b35f7d76eba0aa0f574130ced5a1bf419458d6ff560f47"
   },
   "models": [
     {

@@ -20,6 +20,8 @@ A record is one organization, either a company or a public research institution,
 
 The gate is the Models collection itself. An organization is recorded only once the catalog has reviewed a release it developed: one of its `catalog_names` must equal a reviewed model's `developer`, and validation enforces it. Size, funding, frontier status, popularity, openness, nationality, and licence decide nothing. The gate keeps the collection bounded by a boundary the Atlas already maintains. A service operator with no model of its own is not a lab, and neither is a company whose only releases are image generators or a company that has released nothing. Each of them waits until a release of theirs is reviewed.
 
+[ADR 051](051-generative-media-releases-join-the-reviewed-models-collection.md) supersedes the image-generator clause of that sentence only, because an image generator is now a reviewable release and such an organization reaches the gate the ordinary way. A service operator with no model of its own, and a company that has released nothing, still wait.
+
 ### Names, not copies
 
 `catalog_names` lists the exact strings the other collections use for the organization and for the units that develop its models or operate its model services. A separately branded subsidiary with its own product line, such as GitHub, stays out. The joins are fixed:

@@ -5,7 +5,7 @@
     "id": "models-dev",
     "name": "models.dev",
     "repo": "anomalyco/models.dev",
-    "commit": "dbc891ced2fdbf01591e86345100e972b329b6a6",
+    "commit": "f9f2057be3c620898b6eaaca91dbbf75176043ae",
     "url": "https://github.com/anomalyco/models.dev",
     "license": "MIT"
   },
@@ -6229,6 +6229,125 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-bfl-flux-2-dev",
+      "source_id": null,
+      "name": "FLUX.2 [dev]",
+      "developer": "Black Forest Labs",
+      "url": "https://huggingface.co/black-forest-labs/FLUX.2-dev",
+      "description": "Black Forest Labs' 32B rectified flow transformer for text-to-image generation and single- or multi-reference image editing, published as gated open weights under the FLUX [dev] Non-Commercial License 2.0, with no first-party developer API for this checkpoint.",
+      "model_type": "image_generation_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "FLUX.2 [dev]",
+        "description": "Black Forest Labs' open-weight image generation and editing model, the 32 billion parameter member of the FLUX.2 family",
+        "family": "flux",
+        "release_date": "2025-11-25",
+        "last_updated": null,
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "image"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": null,
+          "structured_output": null,
+          "temperature": null,
+          "tool_call": null
+        },
+        "limits": {
+          "context": null,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "flux-non-commercial-license",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/black-forest-labs/FLUX.2-dev"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-FLUX-Dev-Non-Commercial-2.0"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The weights, parameters, and inference code for every FLUX.x [dev] model are governed by the FLUX [dev] Non-Commercial License 2.0, published on the company's own legal pages with a version number and a last-updated date of November 25, 2025, and named for FLUX.2 [dev] in its own definition of the models it covers. It grants use, distribution, and derivative works only for a Non-Commercial Purpose, which its own text excludes from revenue-generating activity, end-user-facing deployment, and training a competing model; it requires content filters or a pre-distribution review of every output under section 2(e) together with AI disclosure; and the company may terminate it on notice under section 8(b). Outputs may be used commercially, so the restriction falls on operating the model rather than on the images it produces. The repository ships no LICENSE file, so the published web terms are the governing text and the Hugging Face licence tag is a card label rather than evidence. The licence names Black Forest Labs Inc. while the imprint names BFL GmbH, a difference the organization's own pages do not reconcile. Commercial self-hosting is sold separately under Self-Hosted Commercial License Terms, which govern a negotiated arrangement rather than this published release.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-FLUX-Dev-Non-Commercial-2.0",
+          "scope": "FLUX.2 [dev] weights, parameters, and inference code, including the content-filter and output-disclosure conditions in sections 2 and 8",
+          "kind": "web_terms",
+          "url": "https://bfl.ai/legal/non-commercial-license-terms",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "access_boundary": "This record represents the FLUX.2 [dev] open-weight release announced November 25, 2025 and served from the gated black-forest-labs/FLUX.2-dev repository. The FLUX.2 [klein], [flex], [pro], and [max] API tiers, the FLUX 3 image and video models, the FLUX 3 Action world action model, the FLUX 2 [klein] training path, the FLUX Tools endpoints, and third-party derivatives and quantizations are separate boundaries.",
+      "strengths": [
+        "The governing licence is published on an official page with a version number and a revision date, and names the models it covers",
+        "Documented deployment paths through Diffusers, ComfyUI, the single-file format, and a 4-bit quantization for consumer GPUs"
+      ],
+      "tradeoffs": [
+        "The weights are gated behind an accepted licence agreement, and the licence restricts operating the model to non-commercial purposes while requiring content filters on every deployment",
+        "No first-party developer API serves this checkpoint, so commercial reach depends on a separately negotiated licence or a third-party host"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 6,
+        "deployment_portability": 8,
+        "serving_reach": 3,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 9,
+        "overall": 6.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Developer-published FLUX.2 [dev] weight repository and model card",
+          "url": "https://huggingface.co/black-forest-labs/FLUX.2-dev",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "FLUX [dev] Non-Commercial License 2.0: the models it covers, the non-commercial purpose, the content-filter condition, and revocability",
+          "url": "https://bfl.ai/legal/non-commercial-license-terms",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "FLUX.2 announcement of November 25, 2025: the open-weight release of the FLUX.2 family",
+          "url": "https://bfl.ai/blog/flux-2",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Developer FLUX.2 overview: the API tiers are [max], [pro], [flex], and [klein], so no first-party endpoint serves this checkpoint",
+          "url": "https://docs.bfl.ai/flux_2/flux2_overview",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "fal's own model page hosting this release as fal-ai/flux-2-dev",
+          "url": "https://fal.ai/models/fal-ai/flux-2-dev",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "metadata_verified_at": "2026-10-01",
+      "verified_at": "2026-10-01"
     },
     {
       "id": "model-bytedance-seed-seed-1-6",

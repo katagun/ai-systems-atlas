@@ -476,6 +476,87 @@
       "display_order": 410
     },
     {
+      "id": "lab-black-forest-labs",
+      "name": "Black Forest Labs",
+      "url": "https://bfl.ai/",
+      "description": "The Freiburg and San Francisco lab that develops the FLUX family, publishing gated open weights from its Hugging Face organization and serving the FLUX 3 and FLUX.2 tiers through its own API.",
+      "lab_type": "ai_company",
+      "headquarters": "de",
+      "organization_note": "Two entities appear on the organization's own pages and it does not reconcile them: the imprint names BFL GmbH, registered at Ingeborg-Krummer-Schroth-Straße 18 in 79106 Freiburg im Breisgau with commercial register number HRB 291820 at Amtsgericht München and managing directors Robin Rombach, Andreas Blattmann, and Axel Sauer, while the FLUX [dev] Non-Commercial License 2.0 names Black Forest Labs Inc. as the licensor. This record takes the registered entity and the German address from the imprint as the headquarters, because that is the one document that states a registered address, and its about page says the organization works \"from our labs in Freiburg and San Francisco\", so the American lab is a second site rather than a second headquarters. No parent organization is recorded: the pages name a founding team of the Stable Diffusion and FLUX.1 authors and a managing-director list, and no holding company. The organization has two separate surfaces and they do not carry the same models. Its developer API serves FLUX 3 Image, FLUX 3 Video, and the FLUX.2 [max], [pro], [flex], and [klein] tiers, and its documentation says FLUX.2 [klein] is the open-weight family reachable through that API. The open weights are published from its Hugging Face organization instead, gated behind the FLUX [dev] Non-Commercial License 2.0, and the reviewed FLUX.2 [dev] release is one of them rather than an API tier. Commercial self-hosting is not a licence a reader can fetch: the site's \"Talk to us about commercial weights\" path sells it by negotiation under separate Self-Hosted Commercial License Terms, which is why the reviewed release records no first-party developer API for that checkpoint. Its own pages call it \"the frontier AI research lab for visual intelligence\", which the record reads as a claim about a field rather than a statement that it is building frontier language models; the organization is recorded on its reviewed release, not on that sentence. It is an AI company because the models and what it builds on them are its principal business, with an API, a playground, an MCP server, and a creator programme around them.",
+      "catalog_names": [
+        "Black Forest Labs"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://bfl.ai/models"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.bfl.ai/release-notes"
+        },
+        {
+          "kind": "news",
+          "url": "https://bfl.ai/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/black-forest-labs"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/black-forest-labs"
+        }
+      ],
+      "safety_framework": {
+        "title": "Responsible AI Development Policy",
+        "url": "https://bfl.ai/legal/responsible-ai-development-policy",
+        "verified_at": "2026-10-01"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Imprint: BFL GmbH registered in Freiburg im Breisgau, commercial register HRB 291820, and its managing directors",
+          "url": "https://bfl.ai/legal/imprint",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "About page: the frontier AI research lab for visual intelligence, working from labs in Freiburg and San Francisco",
+          "url": "https://bfl.ai/about",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Model catalogue: FLUX 3 Image, Video, and Action alongside the FLUX.2 and FLUX.1 tiers",
+          "url": "https://bfl.ai/models",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "FLUX.2 documentation: the API tiers are [max], [pro], [flex], and [klein], with [klein] also published as open weights",
+          "url": "https://docs.bfl.ai/flux_2/flux2_overview",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "FLUX [dev] Non-Commercial License 2.0 naming Black Forest Labs Inc. as licensor of the open weights",
+          "url": "https://bfl.ai/legal/non-commercial-license-terms",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Responsible AI Development Policy: safeguards before, during, and after release",
+          "url": "https://bfl.ai/legal/responsible-ai-development-policy",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "verified_at": "2026-10-01",
+      "admission_basis": "reviewed_release",
+      "display_order": 600
+    },
+    {
       "id": "lab-bytedance",
       "name": "ByteDance",
       "url": "https://www.bytedance.com/en/",
