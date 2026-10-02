@@ -1599,7 +1599,7 @@ test("the legend lists only what the active scope can show", () => {
   }
   // Models lists reviewed and imported rows together, so its legend names the
   // reviewed set and the source-record badge, types first.
-  assert.deepEqual(ids(badgeLegend("models")), ["language-model", "multimodal-language-model", "source-record", "downloadable-weights", "developer-api", "third-party-hosting"]);
+  assert.deepEqual(ids(badgeLegend("models")), ["language-model", "multimodal-language-model", "image-generation-model", "video-generation-model", "audio-generation-model", "source-record", "downloadable-weights", "developer-api", "third-party-hosting"]);
   assert.deepEqual(ids(badgeLegend("specifications")), CARD_BADGE_SETS.spec);
   assert.deepEqual(ids(badgeLegend("labs")), CARD_BADGE_SETS.lab);
   assert.equal(badgeLegend("systems", "constructor"), null);
