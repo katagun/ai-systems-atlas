@@ -87,6 +87,12 @@
           <p class="door-jobs-label">Start from a job</p>
           <ul id="door-jobs" role="list"></ul>
         </nav>
+        <div class="tabs stage-tabs" role="tablist" aria-label="Catalog stage">
+          <button type="button" class="tab is-active" role="tab" data-stage-face="elements" aria-selected="true" aria-controls="stage-elements">Elements</button>
+          <button type="button" class="tab" role="tab" data-stage-face="model" aria-selected="false" aria-controls="stage-model">Models</button>
+          <button type="button" class="tab" role="tab" data-stage-face="system" aria-selected="false" aria-controls="stage-system">Systems</button>
+        </div>
+        <div id="stage-elements" data-stage-panel="elements" role="tabpanel">
         <section id="elements" class="elements" aria-labelledby="elements-title">
           <div class="elements-heading"><h2 id="elements-title">Find a system by its role</h2><p id="elements-count"></p></div>
           <nav id="element-family-tabs" class="element-family-tabs" aria-label="Elements families"></nav>
@@ -103,6 +109,9 @@
           </section>
           <p class="element-note">Active systems grouped by role. Organization marks preview the labs that build them; symbols and positions imply no rank or periodic law.</p>
         </section>
+        </div>
+        <div id="stage-model" data-stage-panel="model" role="tabpanel" hidden></div>
+        <div id="stage-system" data-stage-panel="system" role="tabpanel" hidden></div>
         <div class="elements-heading collection-index-heading"><h2>Browse every collection</h2><p>Models, services, runtimes, and other record types keep their own boundaries.</p></div>
         <nav id="collection-index" class="collection-index" aria-label="Collections"></nav>
       </div>
@@ -302,14 +311,11 @@
 
     <section id="finder" class="view" aria-labelledby="finder-title">
       <div class="section-heading finder-heading">
-        <p class="eyebrow">Three quick questions</p>
-        <h1 id="finder-title" tabindex="-1">What should the system help you do?</h1>
-        <p>Answer three questions to get up to three reviewed matches.</p>
+        <p class="eyebrow">Counted, ranked, reviewed</p>
+        <h1 id="finder-title" tabindex="-1">Find your fit</h1>
+        <p id="finder-status">Every job carries a count. Choose one to see its three strongest reviewed matches.</p>
       </div>
-      <section class="finder-shell" aria-label="Guided system finder">
-        <div id="finder-progress" class="finder-progress" aria-label="Finder progress"></div>
-        <div id="finder-content" class="finder-content" aria-live="polite"></div>
-      </section>
+      <div id="finder-content"></div>
     </section>
 
     <section id="taxonomy" class="view" aria-labelledby="taxonomy-title">

@@ -10,6 +10,8 @@ ADR 025 separated automated models.dev discovery from Atlas-reviewed model relea
 
 The review queue is also narrower than the upstream source. It admits text-output models because the `model_access` rubric is designed for language-model access and deployment. models.dev's provider-independent tree also contains image-, audio-, and video-output records. Publishing only queue-eligible rows would still not satisfy a complete-source discovery claim.
 
+[ADR 051](051-generative-media-releases-join-the-reviewed-models-collection.md) supersedes the premise of that narrower queue: the rubric turns out not to be about language at all, so the queue now admits image-, video-, and audio-output records as well. The completeness argument above is unaffected and the snapshot is still published whole.
+
 ## Decision
 
 Publish `models-dev.json` as a distinct, commit-pinned, automated source snapshot containing every valid record under models.dev's `models/**/*.toml` tree. Keep only selected provider-independent fields, continue excluding provider endpoint inventories, prices, and benchmarks, and preserve models.dev's MIT attribution.

@@ -385,6 +385,12 @@
     return [...models].sort((a, b) => releaseDate(b).localeCompare(releaseDate(a)) || a.name.localeCompare(b.name));
   }
 
+  // The front-door stage: dated records only, newest date first, a shared
+  // date broken by name. Undated records are left out rather than sorted last.
+  function newestDated(records, dateOf) {
+    return [...(records || [])].filter(record => dateOf(record)).sort((a, b) => dateOf(b).localeCompare(dateOf(a)) || a.name.localeCompare(b.name));
+  }
+
   // The union of the distribution modes the lab's reviewed releases carry, in
   // taxonomy order: each release keeps its own conclusion (ADR 025), and the
   // lab only shows which ones occur.
@@ -1341,6 +1347,27 @@
       family: "type",
       glyph: '<rect x="10.5" y="11" width="11" height="10" rx="1.4"/><path d="m10.8 19.2 3.4-3.4 2.8 2.8 1.9-1.9 2.4 2.4"/><circle class="badge-dot" cx="18.6" cy="13.9" r="1.1"/>',
     },
+    "image-generation-model": {
+      name: "Image generation model",
+      definition: "A model whose documented primary output is images.",
+      test: { field: "model_type", equals: "image_generation_model" },
+      family: "type",
+      glyph: '<rect x="9.5" y="11" width="13" height="10" rx="1.4"/><circle class="badge-dot" cx="12.9" cy="14.4" r="1.1"/><path d="m9.9 20.6 4-4 3.1 3.1 2.2-2.2 2.9 2.9"/>',
+    },
+    "video-generation-model": {
+      name: "Video generation model",
+      definition: "A model whose documented primary output is video.",
+      test: { field: "model_type", equals: "video_generation_model" },
+      family: "type",
+      glyph: '<rect x="8.5" y="11.5" width="15" height="9.5" rx="1.4"/><path d="m15.2 14.4 3.7 2.1-3.7 2.1Z"/>',
+    },
+    "audio-generation-model": {
+      name: "Audio generation model",
+      definition: "A model whose documented primary output is audio.",
+      test: { field: "model_type", equals: "audio_generation_model" },
+      family: "type",
+      glyph: '<path d="M10.8 13.6v4.8M13.8 11.2v9.6M16.8 13.6v4.8M19.8 15.4v1.2"/>',
+    },
     "source-record": {
       name: "Source record",
       definition: "A release listed in the models.dev catalog, shown as attributed metadata. The Atlas has not reviewed it.",
@@ -1600,7 +1627,7 @@
     "system:assistant_system": ["assistant-system", "local-first", "self-hostable", "desktop-app", "mobile-app"],
     inference: ["direct-model-api", "cloud-model-platform", "managed-inference-host", "routing-aggregator", "dedicated-endpoints", "reserved-capacity", "batch"],
     runtime: ["desktop-runner", "server-engine", "embedded-library", "compatibility-gateway", "apple-metal", "amd-rocm", "distributed-serving", "npu"],
-    model: ["language-model", "multimodal-language-model", "downloadable-weights", "developer-api", "third-party-hosting"],
+    model: ["language-model", "multimodal-language-model", "image-generation-model", "video-generation-model", "audio-generation-model", "downloadable-weights", "developer-api", "third-party-hosting"],
     "model-source": ["source-record"],
     spec: ["protocol", "metadata-schema", "instruction-convention", "capability-format", "package-format"],
     pack: ["skills-bundle", "plugin", "process-kit", "vault-bundle", "marketplace"],
@@ -1937,6 +1964,37 @@
   // hydrated before results paint. The fetches start when the goal is chosen, so
   // the priority question usually covers the wait.
   const FINDER_DETAIL_KINDS = { inference_service: "inference", local_runtime: "runtime" };
+
+  // The records a Finder goal can draw on: active systems in its family and
+  // role set, or services or runtimes of its type (docs/WEB.md). Collections
+  // are passed in rather than read from app state, so the tile counts and the
+  // shortlist's candidate set come from one predicate and this can be tested
+  // against the real payloads.
+  function finderGoalRecords(direction, goalConfig, collections) {
+    const { projects, inferenceServices, localRuntimes } = collections;
+    if (direction === "inference_service") return inferenceServices.filter(item => goalConfig.serviceTypes.includes(item.service_type));
+    if (direction === "local_runtime") return localRuntimes.filter(item => goalConfig.runtimeTypes.includes(item.runtime_type));
+    return projects.filter(item => item.status === "active" && item.system_family === direction && goalConfig.roles.includes(item.primary_role));
+  }
+
+  // One entry per goal, carrying the count its tile prints. A goal may claim a
+  // role another goal in the same direction also claims — context_graph_engine
+  // is both agent_memory's and memory_infrastructure's — so these counts are
+  // per goal and a direction's total is never their sum.
+  function finderGoalEntries(collections) {
+    return Object.entries(FINDER_GOALS).flatMap(([direction, goals]) =>
+      goals.map(goal => ({ ...goal, direction, eligible: finderGoalRecords(direction, goal, collections).length })));
+  }
+
+  // How many active records a direction holds, which its group heading prints
+  // beside goals that may overlap.
+  function finderDirectionTotal(direction, collections) {
+    const { projects, inferenceServices, localRuntimes } = collections;
+    if (direction === "inference_service") return inferenceServices.length;
+    if (direction === "local_runtime") return localRuntimes.length;
+    return projects.filter(item => item.status === "active" && item.system_family === direction).length;
+  }
+
   return {
     BADGE_FAMILIES,
     MAX_CARD_BADGES,
@@ -1986,6 +2044,9 @@
     filterRobots,
     filterScoredCollection,
     filterSpecifications,
+    finderDirectionTotal,
+    finderGoalEntries,
+    finderGoalRecords,
     holdsPhrase,
     labDistributionModes,
     labRelations,
@@ -2018,6 +2079,7 @@
     recordMatch,
     releaseDate,
     releasesNewestFirst,
+    newestDated,
     scopeFromURL,
     successorSystem,
     scopeURLParams,

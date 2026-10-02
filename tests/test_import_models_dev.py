@@ -109,12 +109,18 @@ class ModelsDevImportTests(unittest.TestCase):
         self.assertEqual(["acme/example"], list(catalog))
         self.assertEqual("acme/example", catalog["acme/example"]["id"])
 
-    def test_normalization_filters_non_text_outputs_and_preserves_unknowns(
+    def test_normalization_queues_generative_media_and_filters_the_rest(
         self,
     ) -> None:
+        # ADR 051 widened eligibility past text output, so an image row is a
+        # candidate now. A row with no modality this catalog can review stays a
+        # source record instead.
         catalog = {
             "acme/chat": model_record("acme/chat"),
             "acme/image": model_record("acme/image", output=["image"]),
+            "acme/video": model_record("acme/video", output=["video"]),
+            "acme/audio": model_record("acme/audio", output=["audio"]),
+            "acme/pdf": model_record("acme/pdf", output=["pdf"]),
         }
 
         candidates, eligible = normalize_catalog(
@@ -123,8 +129,11 @@ class ModelsDevImportTests(unittest.TestCase):
             minimum_records=1,
         )
 
-        self.assertEqual(1, eligible)
-        self.assertEqual(["acme/chat"], [item["source_id"] for item in candidates])
+        self.assertEqual(4, eligible)
+        self.assertEqual(
+            ["acme/audio", "acme/chat", "acme/image", "acme/video"],
+            [item["source_id"] for item in candidates],
+        )
         self.assertIsNone(candidates[0]["source_metadata"]["capabilities"]["reasoning"])
         self.assertIsNone(candidates[0]["source_metadata"]["limits"]["input"])
 

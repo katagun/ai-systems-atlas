@@ -253,6 +253,21 @@
       "id": "multimodal_language_model",
       "name": "Multimodal language model",
       "definition": "A model that accepts image, audio, video, or document input and produces text as a primary output."
+    },
+    {
+      "id": "image_generation_model",
+      "name": "Image generation model",
+      "definition": "A model whose documented primary output is images."
+    },
+    {
+      "id": "video_generation_model",
+      "name": "Video generation model",
+      "definition": "A model whose documented primary output is video."
+    },
+    {
+      "id": "audio_generation_model",
+      "name": "Audio generation model",
+      "definition": "A model whose documented primary output is audio."
     }
   ],
   "model_modalities": [
@@ -1022,6 +1037,11 @@
       "definition": "Headquartered in the People's Republic of China (ISO 3166-1 CN)."
     },
     {
+      "id": "de",
+      "name": "Germany",
+      "definition": "Headquartered in Germany (ISO 3166-1 DE)."
+    },
+    {
       "id": "fr",
       "name": "France",
       "definition": "Headquartered in France (ISO 3166-1 FR)."
@@ -1627,6 +1647,11 @@
     {
       "id": "LicenseRef-DeepSeek-Model-1.0",
       "name": "DeepSeek Model License 1.0",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-FLUX-Dev-Non-Commercial-2.0",
+      "name": "FLUX [dev] Non-Commercial License 2.0",
       "kind": "restricted"
     },
     {
