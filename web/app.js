@@ -177,6 +177,13 @@ function labFlags(lab) {
   return circles ? `<div class="card-flags">${circles}</div>` : "";
 }
 
+function cardMarkWithGeography(kind, record) {
+  const flags = kind === "lab" ? labFlags(record) : cardFlags(kind, record);
+  const mark = cardMark(record);
+  if (!flags) return mark;
+  return `<span class="card-mark-wrap">${mark}${flags}</span>`;
+}
+
 // An Elements preview shows the organization, so it shows the organization's
 // logo or nothing. A lab without a mark is left out of the preview entirely
 // (ADR 049), which is why this has no monogram arm and returns "".
@@ -1633,7 +1640,7 @@ function labCard(lab, { mixed = false } = {}) {
   const origin = lab.parent_organization ? `Part of ${escapeHTML(lab.parent_organization)}` : escapeHTML(new URL(lab.url).hostname.replace(/^www\./, ""));
   const newestDate = AppCore.releaseDate(releases[0] || {});
   return `<article class="project-card lab-card${mixed ? " mixed-directory-card" : ""}">
-    <div class="card-top"><div class="card-identity">${cardMark(lab)}${labFlags(lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
+    <div class="card-top"><div class="card-identity">${cardMarkWithGeography("lab", lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
     <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
     <p>${escapeHTML(lab.description)}</p>
     ${counts ? `<div class="tags">${counts}</div>` : ""}
@@ -1653,7 +1660,7 @@ function labLinksMarkup(kind, record) {
 function robotCard(robot, { mixed = false } = {}) {
   const formLabel = taxonomyName("robot_form_factors", robot.form_factor);
   return `<article class="project-card robot-card${mixed ? " mixed-directory-card" : ""}">
-    <div class="card-top"><div class="card-identity">${cardMark(robot)}${cardFlags("robot", robot)}<div><p class="family-label">${mixed ? "Robot · " : ""}${escapeHTML(formLabel)}</p><h2>${escapeHTML(robot.name)}</h2><div class="repo">${escapeHTML(robot.manufacturer)}</div></div></div></div>
+    <div class="card-top"><div class="card-identity">${cardMarkWithGeography("robot", robot)}<div><p class="family-label">${mixed ? "Robot · " : ""}${escapeHTML(formLabel)}</p><h2>${escapeHTML(robot.name)}</h2><div class="repo">${escapeHTML(robot.manufacturer)}</div></div></div></div>
     <span class="role-badge">${escapeHTML(taxonomyName("robot_availability", robot.availability))}</span>
     <p>${escapeHTML(robot.description)}</p>
     ${badgeRow(AppCore.cardBadges("robot", robot))}
@@ -1691,7 +1698,7 @@ function importedModelCard(model, { mixed = false } = {}) {
 function mixedSystemCard(record) {
   const location = projectLocation(record);
   return `<article class="project-card mixed-directory-card ${escapeHTML(record.system_family)}">
-      <div class="card-top"><div class="card-identity">${cardMark(record)}${cardFlags("system", record)}<div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div></div>
+      <div class="card-top"><div class="card-identity">${cardMarkWithGeography("system", record)}<div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div></div>
       <span class="role-badge">${escapeHTML(roleName(record.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${evidenceReviewLabel(record)}</div>
       <p>${escapeHTML(record.description)}</p>
@@ -1725,7 +1732,7 @@ function renderAllDirectoryEntries() {
     if (kind === "model") {
       if (!isReviewedModel(record)) return importedModelCard(record, { mixed: true });
       return `<article class="project-card model-card mixed-directory-card">
-        <div class="card-top"><div class="card-identity">${cardMark(record)}${cardFlags("model", record)}<div><p class="family-label">Model release · ${escapeHTML(taxonomyName("model_types", record.model_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.developer)}</div></div></div></div>
+        <div class="card-top"><div class="card-identity">${cardMarkWithGeography("model", record)}<div><p class="family-label">Model release · ${escapeHTML(taxonomyName("model_types", record.model_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.developer)}</div></div></div></div>
         <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(record.description)}</p>
         ${modelSourceMeta(record)}
@@ -1833,7 +1840,7 @@ const COLLECTIONS = {
     // Only this grid sorts by stars, so only its cards explain a missing count.
     const githubSignal = project.stars == null ? "No GitHub metrics" : starCount(project);
     return `<article class="project-card ${escapeHTML(project.system_family)}">
-      <div class="card-top"><div class="card-identity">${cardMark(project)}${cardFlags("system", project)}<div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(projectLocation(project))}</div></div></div>${score}</div>
+      <div class="card-top"><div class="card-identity">${cardMarkWithGeography("system", project)}<div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(projectLocation(project))}</div></div></div>${score}</div>
       <span class="role-badge">${escapeHTML(roleName(project.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${evidenceReviewLabel(project)}</div>
       <p>${escapeHTML(project.description)}</p>
@@ -1977,7 +1984,7 @@ const COLLECTIONS = {
     card: model => {
       if (!isReviewedModel(model)) return importedModelCard(model);
       return `<article class="project-card model-card">
-        <div class="card-top"><div class="card-identity">${cardMark(model)}${cardFlags("model", model)}<div><p class="family-label">${escapeHTML(taxonomyName("model_types", model.model_type))}</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(model.developer)}</div></div></div><div class="score-ring" aria-label="Model-access score ${escapeHTML(model.score.overall)} out of 10">${escapeHTML(model.score.overall)}</div></div>
+        <div class="card-top"><div class="card-identity">${cardMarkWithGeography("model", model)}<div><p class="family-label">${escapeHTML(taxonomyName("model_types", model.model_type))}</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(model.developer)}</div></div></div><div class="score-ring" aria-label="Model-access score ${escapeHTML(model.score.overall)} out of 10">${escapeHTML(model.score.overall)}</div></div>
         <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
         ${modelSourceMeta(model)}
