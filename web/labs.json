@@ -10,7 +10,7 @@
       "lab_type": "ai_company",
       "headquarters": "us",
       "admission_basis": "reviewed_robot",
-      "organization_note": "The organization's own about page says it is \"an AI and robotics company based in Palo Alto, California\", which is the headquarters statement the record uses; the same page records that it was founded in 2014 as Halodi Robotics by Bernt Øyvind Børnich, so the company is Norwegian-founded and American-based, and the record says so rather than choosing a country for the origin, because `headquarters` is where the organization says it is based and nothing here is a claim about where it began. It is an AI company because the AI is the product: its own site separates an \"AI\" section from the robots, names Redwood as its world model, and describes NEO as its flagship product, so the organization develops both the robot and the model that runs it. It is recorded on the robot rather than a release because the catalog reviews no Redwood release, and Redwood is documented as a world model that plans actions rather than as a language release, which is outside the Models collection on the ground the robotics scope records. The reviewed robot is NEO, the home robot the record covers, not the earlier EVE industrial line, which the about page describes as deployed in customer factories from 2022. No parent organization is recorded: the pages read name no holding or controlling entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted.",
+      "organization_note": "The organization's own about page says it is \"an AI and robotics company based in Palo Alto, California\", which is the headquarters statement the record uses; the same page records that it was founded in 2014 as Halodi Robotics by Bernt Øyvind Børnich, so the company is Norwegian-founded and American-based, and the record says so rather than choosing a country for the origin, because `headquarters` is where the organization says it is based and nothing here is a claim about where it began. It is an AI company because the AI is the product: its own site separates an \"AI\" section from the robots, names Redwood as its world model, and describes NEO as its flagship product, so the organization develops both the robot and the model that runs it. It is recorded on the robot rather than a release because the catalog reviews no Redwood release, and Redwood is documented as a world model that plans actions rather than as a language release, which is outside the Models collection on the ground the robotics scope records. The reviewed robot is NEO, the home robot the record covers, not the earlier EVE industrial line, which the about page describes as deployed in customer factories from 2022. No parent organization is recorded: the pages read name no holding or controlling entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted. The organization's own about page says it is based in Palo Alto, California, and names no other base for its research or engineering work. The Norwegian origin it records there is where the company began, not where the work happens, so the review records nothing beyond the headquarters.",
       "catalog_names": [
         "1X Technologies"
       ],
@@ -30,7 +30,7 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "About page: an AI and robotics company based in Palo Alto, California, founded in 2014 as Halodi Robotics, with the 2022 EVE factory deployments and the NEO home robot timeline",
+          "label": "About page: an AI and robotics company based in Palo Alto, California, founded in 2014 as Halodi Robotics, with the 2022 EVE factory deployments and the NEO home robot timeline; about page: \"an AI and robotics company based in Palo Alto, California\"",
           "url": "https://www.1x.tech/about",
           "verified_at": "2026-10-03"
         },
@@ -48,7 +48,8 @@
         }
       ],
       "verified_at": "2026-10-03",
-      "display_order": 640
+      "display_order": 640,
+      "research_locations": []
     },
     {
       "id": "lab-agibot",
@@ -373,7 +374,7 @@
       "description": "The technology company that develops the Amazon Nova models and builds Amazon Bedrock, Amazon Quick, Kiro, and the Strands Agents SDK.",
       "lab_type": "technology_company",
       "headquarters": "us",
-      "organization_note": "Amazon develops the Nova models, and Amazon Web Services, Inc., of Seattle, serves them through Amazon Bedrock; Kiro Enterprise plans are purchased and billed through AWS. The catalog names the developer Amazon and the Bedrock operator Amazon Web Services, so both names belong to this record.",
+      "organization_note": "Amazon develops the Nova models, and Amazon Web Services, Inc., of Seattle, serves them through Amazon Bedrock; Kiro Enterprise plans are purchased and billed through AWS. The catalog names the developer Amazon and the Bedrock operator Amazon Web Services, so both names belong to this record. Its own science site states that Amazon scientists work \"across the globe\" and pins its research locations, and four of the pinned countries are not the United States: Brazil at Sao Paulo, the United Kingdom at London, Israel at Tel Aviv, and Spain at Madrid. The record keeps three, Brazil, the United Kingdom, and Israel, and the fourth, Spain, is left in this note rather than in a list a reader would take for complete.",
       "catalog_names": [
         "Amazon",
         "Amazon Web Services"
@@ -415,11 +416,22 @@
           "label": "Kiro FAQ: Enterprise plans are purchased and billed through AWS, and its output indemnity is in the AWS Service Terms",
           "url": "https://kiro.dev/faq/",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "About Amazon Science: \"Science at Amazon around the world\", Amazon scientists working \"across the globe\" from named research locations including Sao Paulo, Brazil, London, Tel Aviv, Madrid, New York, Seattle, and Sunnyvale",
+          "url": "https://www.amazon.science/about/",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
+      "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
-      "display_order": 70
+      "display_order": 70,
+      "research_locations": [
+        "gb",
+        "il",
+        "br"
+      ]
     },
     {
       "id": "lab-ant-group",
@@ -482,7 +494,7 @@
       "description": "The AI company that develops the Claude models and builds the Claude apps, Claude Code, and the Anthropic API on them.",
       "lab_type": "ai_company",
       "headquarters": "us",
-      "organization_note": "Anthropic PBC, a public benefit corporation based and headquartered in the United States, develops the models and runs the products; Anthropic Ireland, Limited contracts with customers in the European Economic Area, Switzerland, and the UK. Its board is elected by stockholders and by its Long-Term Benefit Trust. One name, Anthropic, covers the models, the API, and the specifications it stewards.",
+      "organization_note": "Anthropic PBC, a public benefit corporation based and headquartered in the United States, develops the models and runs the products; Anthropic Ireland, Limited contracts with customers in the European Economic Area, Switzerland, and the UK. Its board is elected by stockholders and by its Long-Term Benefit Trust. One name, Anthropic, covers the models, the API, and the specifications it stewards. Its careers page answers the remote-work question directly: \"Most staff are in the Bay Area and come to the office regularly\", with some staff living further away and coming in for one week a month, plus home-office stipends and relocation support. The work is in the country the record already names as its headquarters, so the review records nothing further.",
       "catalog_names": [
         "Anthropic"
       ],
@@ -529,11 +541,18 @@
           "label": "Company page: the board is elected by stockholders and the Long-Term Benefit Trust",
           "url": "https://www.anthropic.com/company",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: \"Most staff are in the Bay Area and come to the office regularly\", with some staff living further away and coming in for one week a month, plus home-office stipends and relocation support",
+          "url": "https://www.anthropic.com/careers",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
+      "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
-      "display_order": 20
+      "display_order": 20,
+      "research_locations": []
     },
     {
       "id": "lab-apodex-ai",
@@ -738,7 +757,7 @@
       "lab_type": "technology_company",
       "headquarters": "us",
       "admission_basis": "reviewed_robot",
-      "organization_note": "Boston Dynamics, Inc. is the entity the site's ownTerms of Use name as the property of the site, and the same terms give its address as 200 Smith Street, Suite 4100, Waltham, MA 02451 and say it administers and operates the site from Waltham, Massachusetts, so the headquarters is the United States. No parent organization is recorded: the pages read for this record name no holding or controlling entity, and an ownership relation reported elsewhere is not first-party evidence, so the field is omitted rather than filled from a press account. It is a technology company rather than an AI company because the catalog records robots and the interfaces around them rather than models, and its own about page describes it as \"the global leader in developing and deploying highly mobile robots\" rather than as a model developer, though it develops the perception and control software its own robots run and the Gemini Robotics integrations it demonstrates. The record is admitted on the robot it makes, Spot, which the catalog reviews as a quadruped whose vendor names learned policies and documents an open control interface; the robot record is what places the organization in this collection, and no model or system of its own is reviewed here. Its developer surface is the Spot SDK: the same first-party documentation the robot record cites, dev.bostondynamics.com, publishes the arm and network-compute-bridge interfaces another vendor's robot software targets, so the organization develops software other catalogs record. Its site names no safety framework of the frontier-safety, responsible-scaling, orpreparedness kind, so the field is omitted rather than filled with its robotics safety material.",
+      "organization_note": "Boston Dynamics, Inc. is the entity the site's ownTerms of Use name as the property of the site, and the same terms give its address as 200 Smith Street, Suite 4100, Waltham, MA 02451 and say it administers and operates the site from Waltham, Massachusetts, so the headquarters is the United States. No parent organization is recorded: the pages read for this record name no holding or controlling entity, and an ownership relation reported elsewhere is not first-party evidence, so the field is omitted rather than filled from a press account. It is a technology company rather than an AI company because the catalog records robots and the interfaces around them rather than models, and its own about page describes it as \"the global leader in developing and deploying highly mobile robots\" rather than as a model developer, though it develops the perception and control software its own robots run and the Gemini Robotics integrations it demonstrates. The record is admitted on the robot it makes, Spot, which the catalog reviews as a quadruped whose vendor names learned policies and documents an open control interface; the robot record is what places the organization in this collection, and no model or system of its own is reviewed here. Its developer surface is the Spot SDK: the same first-party documentation the robot record cites, dev.bostondynamics.com, publishes the arm and network-compute-bridge interfaces another vendor's robot software targets, so the organization develops software other catalogs record. Its site names no safety framework of the frontier-safety, responsible-scaling, orpreparedness kind, so the field is omitted rather than filled with its robotics safety material. The company's terms say it administers its site from Waltham, Massachusetts, and no page reviewed places its research or engineering work in another country, so the review records nothing beyond the headquarters.",
       "catalog_names": [
         "Boston Dynamics"
       ],
@@ -758,7 +777,7 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Terms of Use: the site is the property of Boston Dynamics, Inc., its address is 200 Smith Street, Suite 4100, Waltham, MA 02451, USA, and it administers and operates the site from Waltham, Massachusetts",
+          "label": "Terms of Use: the site is the property of Boston Dynamics, Inc., its address is 200 Smith Street, Suite 4100, Waltham, MA 02451, USA, and it administers and operates the site from Waltham, Massachusetts; terms of Use: the site is administered and operated from Waltham, Massachusetts",
           "url": "https://bostondynamics.com/terms/",
           "verified_at": "2026-10-03"
         },
@@ -782,7 +801,8 @@
         }
       ],
       "verified_at": "2026-10-03",
-      "display_order": 650
+      "display_order": 650,
+      "research_locations": []
     },
     {
       "id": "lab-bytedance",
@@ -878,7 +898,7 @@
       "description": "The AI company that develops the Command and North models for enterprise use and, through its research lab Cohere Labs, the Aya models.",
       "lab_type": "ai_company",
       "headquarters": "ca",
-      "organization_note": "Cohere Inc., with its principal place of business in Toronto, develops the Command models and operates the Cohere API; Cohere Labs, its research lab, publishes the Aya and North releases under the CohereLabs organization. The catalog names the developer Cohere or Cohere Labs release by release, so both names belong to this record.",
+      "organization_note": "Cohere Inc., with its principal place of business in Toronto, develops the Command models and operates the Cohere API; Cohere Labs, its research lab, publishes the Aya and North releases under the CohereLabs organization. The catalog names the developer Cohere or Cohere Labs release by release, so both names belong to this record. Its careers page describes \"a globally dispersed company that supports a remote work culture\" and names the offices it lists: Toronto, where the organization is headquartered, and San Francisco, New York, London, Paris, and Seoul. The record keeps the United States, the United Kingdom, and France, the three countries a reader most likely meets besides Canada; New York is the same country as San Francisco and Seoul is a fourth, left here rather than in a capped list.",
       "catalog_names": [
         "Cohere",
         "Cohere Labs"
@@ -913,11 +933,22 @@
           "label": "SaaS agreement giving Cohere Inc.'s principal place of business at 171 John Street, Toronto",
           "url": "https://cohere.com/saas-agreement",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: a globally dispersed company supporting a remote work culture, listing offices in Toronto, San Francisco, New York, London, Paris, and Seoul",
+          "url": "https://cohere.com/careers",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
+      "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
-      "display_order": 150
+      "display_order": 150,
+      "research_locations": [
+        "us",
+        "gb",
+        "fr"
+      ]
     },
     {
       "id": "lab-cognition-ai",
@@ -1051,7 +1082,7 @@
       "lab_type": "ai_company",
       "headquarters": "us",
       "admission_basis": "reviewed_robot",
-      "organization_note": "The site's Terms & Conditions name the operator as Figure AI Inc., and the privacy policy's contact block gives 3960 N First St, San Jose CA 95134 with privacy@figure.ai, so the headquarters is the United States; the same terms choose California law and California courts, which is a governing-law clause and not read as a headquarters statement, so the address in the privacy policy is the one that carries it. The organization is an AI company because it develops both the robots and the model that runs them: Helix is documented by the company as its own vision-language-action model, published on its own pages, and the reviewed robot record Figure 03 rests on those pages. It is recorded on the robot rather than on a release because the catalog reviews no Helix release, and an action-emitting policy is out of the Models collection on the ground the robotics scope records, so the robot is the strongest join the catalog holds. No parent organization is recorded: the pages read name no holding or controlling entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted rather than filled with its product-safety material.",
+      "organization_note": "The site's Terms & Conditions name the operator as Figure AI Inc., and the privacy policy's contact block gives 3960 N First St, San Jose CA 95134 with privacy@figure.ai, so the headquarters is the United States; the same terms choose California law and California courts, which is a governing-law clause and not read as a headquarters statement, so the address in the privacy policy is the one that carries it. The organization is an AI company because it develops both the robots and the model that runs them: Helix is documented by the company as its own vision-language-action model, published on its own pages, and the reviewed robot record Figure 03 rests on those pages. It is recorded on the robot rather than on a release because the catalog reviews no Helix release, and an action-emitting policy is out of the Models collection on the ground the robotics scope records, so the robot is the strongest join the catalog holds. No parent organization is recorded: the pages read name no holding or controlling entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted rather than filled with its product-safety material. The pages reviewed place the organization in San Jose, California, through its privacy contact address, and name no other place its work happens. The review records nothing beyond the headquarters.",
       "catalog_names": [
         "Figure AI"
       ],
@@ -1077,7 +1108,7 @@
         },
         {
           "kind": "web",
-          "label": "Privacy Policy, effective January 21, 2026: its contact block gives 3960 N First St, San Jose CA 95134 and privacy@figure.ai",
+          "label": "Privacy Policy, effective January 21, 2026: its contact block gives 3960 N First St, San Jose CA 95134 and privacy@figure.ai; privacy Policy: its contact block gives 3960 N First St, San Jose CA 95134",
           "url": "https://figure.ai/privacy-policy",
           "verified_at": "2026-10-03"
         },
@@ -1095,7 +1126,8 @@
         }
       ],
       "verified_at": "2026-10-03",
-      "display_order": 630
+      "display_order": 630,
+      "research_locations": []
     },
     {
       "id": "lab-google",
@@ -1192,7 +1224,7 @@
       "lab_type": "ai_company",
       "headquarters": "us",
       "admission_basis": "reviewed_robot",
-      "organization_note": "The imprint names the owner of the site as Hello Robot Inc. at 825 Ferry St., Suite A, Martinez, CA 94553, and the about page says the company maintains offices in Atlanta, GA and Martinez, CA and manufactures all robots in-house at the Martinez facility; both are in the United States, so the headquarters is the United States and the record does not choose between the two offices, which the labs guide treats as no headquarters listed only when no country can be found at all. The two co-founders are named on the about page, Dr. Aaron Edsinger, a former Director of Robotics at Google, and Dr. Charlie Kemp, a former tenured professor at Georgia Tech, and it says the company was founded in 2017 and builds on the research from Kemp's lab; the record names the organization, not the founders, because a person is not a lab. It is an AI company because the platform's software, its ROS 2 packages, its Python bridge, and the grasping demo that runs named third-party models are what a customer buys alongside the hardware, and the reviewed robot record is that platform. It is recorded on the robot rather than a release because the catalog reviews no model of its own: the demo it ships calls Molmo 2, another organization's model, which is a fact about the record and not a release of Hello Robot's own. No parent organization is recorded: the pages read name no holding entity, and an investor named as an advisor is not one. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "organization_note": "The imprint names the owner of the site as Hello Robot Inc. at 825 Ferry St., Suite A, Martinez, CA 94553, and the about page says the company maintains offices in Atlanta, GA and Martinez, CA and manufactures all robots in-house at the Martinez facility; both are in the United States, so the headquarters is the United States and the record does not choose between the two offices, which the labs guide treats as no headquarters listed only when no country can be found at all. The two co-founders are named on the about page, Dr. Aaron Edsinger, a former Director of Robotics at Google, and Dr. Charlie Kemp, a former tenured professor at Georgia Tech, and it says the company was founded in 2017 and builds on the research from Kemp's lab; the record names the organization, not the founders, because a person is not a lab. It is an AI company because the platform's software, its ROS 2 packages, its Python bridge, and the grasping demo that runs named third-party models are what a customer buys alongside the hardware, and the reviewed robot record is that platform. It is recorded on the robot rather than a release because the catalog reviews no model of its own: the demo it ships calls Molmo 2, another organization's model, which is a fact about the record and not a release of Hello Robot's own. No parent organization is recorded: the pages read name no holding entity, and an investor named as an advisor is not one. Its site names no frontier-safety or scaling framework, so the field is omitted. Its about page says it maintains offices in Atlanta, Georgia and Martinez, California, and manufactures all robots in-house at Martinez. Both are in the headquarters country, so the review records nothing beyond it.",
       "catalog_names": [
         "Hello Robot"
       ],
@@ -1214,7 +1246,7 @@
         },
         {
           "kind": "web",
-          "label": "About page: founded in 2017 by Dr. Aaron Edsinger and Dr. Charlie Kemp, offices in Atlanta, GA and Martinez, CA, all robots manufactured in-house at the Martinez facility",
+          "label": "About page: founded in 2017 by Dr. Aaron Edsinger and Dr. Charlie Kemp, offices in Atlanta, GA and Martinez, CA, all robots manufactured in-house at the Martinez facility; about page: offices in Atlanta, GA and Martinez, CA, with all robots manufactured in-house at the Martinez facility",
           "url": "https://hello-robot.com/about",
           "verified_at": "2026-10-03"
         },
@@ -1232,7 +1264,8 @@
         }
       ],
       "verified_at": "2026-10-03",
-      "display_order": 660
+      "display_order": 660,
+      "research_locations": []
     },
     {
       "id": "lab-higgsfield-ai",
@@ -1413,7 +1446,7 @@
       "description": "The technology company that develops the Granite models and serves them through watsonx.ai, alongside its watsonx Orchestrate agent platform.",
       "lab_type": "technology_company",
       "headquarters": "us",
-      "organization_note": "International Business Machines Corporation, incorporated in New York, has its principal executive office in Armonk, New York. It develops the Granite models, publishes them under its ibm-granite organizations, and serves them through watsonx.ai; watsonx Orchestrate is its agent platform. BeeAI Framework began at IBM but was contributed to the Linux Foundation, so it is not listed here. One name, IBM, covers the models, the service, and the platform.",
+      "organization_note": "International Business Machines Corporation, incorporated in New York, has its principal executive office in Armonk, New York. It develops the Granite models, publishes them under its ibm-granite organizations, and serves them through watsonx.ai; watsonx Orchestrate is its agent platform. BeeAI Framework began at IBM but was contributed to the Linux Foundation, so it is not listed here. One name, IBM, covers the models, the service, and the platform. IBM Research states where it works rather than only where the company is registered: its own labs page says \"11 labs spread across 18 sites around the world\" and groups them by region, among them Israel, the United Kingdom, and Zurich, alongside Africa, India, Ireland, Japan, Albany, Silicon Valley, and Yorktown Heights. The record keeps the three non-US sites that host research labs, Israel, the United Kingdom, and Switzerland, and the rest stay named here rather than in a list capped at three.",
       "catalog_names": [
         "IBM"
       ],
@@ -1461,11 +1494,22 @@
           "label": "watsonx Orchestrate product page",
           "url": "https://www.ibm.com/products/watsonx-orchestrate",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "IBM Research Labs page: \"11 labs spread across 18 sites around the world\", grouped as Africa, Albany, Cambridge, India, Ireland, Israel, Japan, Silicon Valley, United Kingdom, Yorktown Heights, and Zurich",
+          "url": "https://www.ibm.com/research/locations",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
+      "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
-      "display_order": 100
+      "display_order": 100,
+      "research_locations": [
+        "il",
+        "gb",
+        "ch"
+      ]
     },
     {
       "id": "lab-liquid-ai",
@@ -1474,7 +1518,7 @@
       "description": "The AI company spun out of MIT CSAIL that develops the Liquid Foundation Models for on-device and edge deployment and publishes their weights on Hugging Face.",
       "lab_type": "ai_company",
       "headquarters": "us",
-      "organization_note": "Liquid AI, Inc., whose privacy policy gives its address as 314 Main Street, Cambridge, Massachusetts, and whose terms of service are governed by Massachusetts law, develops and publishes the Liquid Foundation Models; it states that it does not offer a hosted API of its own, so no other catalog name reaches it and OpenRouter's route to the same weights belongs to that operator, not to this lab. Its company page says it was spun out of MIT CSAIL in 2023 by Ramin Hasani, Mathias Lechner, Alexander Amini, and Daniela Rus, and that MIT is its origin rather than a parent it reports. The verified GitHub organization is Liquid4All, linked from liquid.ai, and the weights are published under the LiquidAI Hugging Face organization; the unrelated github.com/LiquidAI account, which is registered to an individual in Cleveland and publishes three forked tutorial repositories, is not this lab's.",
+      "organization_note": "Liquid AI, Inc., whose privacy policy gives its address as 314 Main Street, Cambridge, Massachusetts, and whose terms of service are governed by Massachusetts law, develops and publishes the Liquid Foundation Models; it states that it does not offer a hosted API of its own, so no other catalog name reaches it and OpenRouter's route to the same weights belongs to that operator, not to this lab. Its company page says it was spun out of MIT CSAIL in 2023 by Ramin Hasani, Mathias Lechner, Alexander Amini, and Daniela Rus, and that MIT is its origin rather than a parent it reports. The verified GitHub organization is Liquid4All, linked from liquid.ai, and the weights are published under the LiquidAI Hugging Face organization; the unrelated github.com/LiquidAI account, which is registered to an individual in Cleveland and publishes three forked tutorial repositories, is not this lab's. Its careers page lists every role in San Francisco, Boston, Cambridge, Massachusetts, or remote, which is the United States alone, so the review records nothing beyond the headquarters.",
       "catalog_names": [
         "Liquid AI"
       ],
@@ -1545,11 +1589,18 @@
           "label": "LiquidAI Hugging Face organization publishing the LFM2.5 weight collections and model cards",
           "url": "https://huggingface.co/LiquidAI",
           "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: roles in San Francisco, Boston, Cambridge, Massachusetts, or Remote, all in the United States",
+          "url": "https://www.liquid.ai/careers",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-28",
+      "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
-      "display_order": 430
+      "display_order": 430,
+      "research_locations": []
     },
     {
       "id": "lab-meituan",
@@ -1656,7 +1707,7 @@
       "description": "The technology company that develops the MAI and Phi models and builds the Copilot assistants, Microsoft Foundry, and several agent frameworks.",
       "lab_type": "technology_company",
       "headquarters": "us",
-      "organization_note": "Microsoft Corporation, of Redmond, develops the MAI models through Microsoft AI and publishes the Phi models and ONNX Runtime GenAI, and Microsoft Azure operates Microsoft Foundry Models. The catalog names the developer and runtime maintainer Microsoft and the Foundry operator Microsoft Azure, so both names belong to this record.",
+      "organization_note": "Microsoft Corporation, of Redmond, develops the MAI models through Microsoft AI and publishes the Phi models and ONNX Runtime GenAI, and Microsoft Azure operates Microsoft Foundry Models. The catalog names the developer and runtime maintainer Microsoft and the Foundry operator Microsoft Azure, so both names belong to this record. Its AI work is not only where its headquarters is. The same page describes its offices city by city, and two are research and engineering sites in other countries: its London AI hub, where \"researchers, engineers, and product teams advance language models, build foundational AI tools, and drive responsible innovation\", and its Beijing campus, home to Microsoft China and the Asia Pacific R&D Group. Those two countries are this record's work locations; the page's other cities, Redmond, New York City, Berkeley, San Francisco, Mountain View, and Hyderabad, are in the United States, which is already the headquarters.",
       "catalog_names": [
         "Microsoft",
         "Microsoft Azure"
@@ -1701,11 +1752,21 @@
           "label": "Privacy statement naming Microsoft Corporation, One Microsoft Way, Redmond",
           "url": "https://www.microsoft.com/en-us/privacy/privacystatement",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "About | Microsoft AI locations: the London AI hub, where researchers, engineers, and product teams advance language models, and the Beijing campus, home to Microsoft China and the Asia Pacific R&D Group, beside Redmond, New York City, and the Bay Area",
+          "url": "https://microsoft.ai/about/",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
+      "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
-      "display_order": 40
+      "display_order": 40,
+      "research_locations": [
+        "gb",
+        "cn"
+      ]
     },
     {
       "id": "lab-minimax",
@@ -1818,7 +1879,7 @@
       "description": "The AI company that develops search and retrieval models, including the Toast model, and serves them through the Mixedbread API.",
       "lab_type": "ai_company",
       "headquarters": "none_listed",
-      "organization_note": "mixedbread ai inc., whose terms are governed by Delaware law, is the contracting entity; the pages reviewed give no address or headquarters. The catalog names the developer Mixedbread AI.",
+      "organization_note": "mixedbread ai inc., whose terms are governed by Delaware law, is the contracting entity; the pages reviewed give no address or headquarters. The catalog names the developer Mixedbread AI. The record lists no headquarters because the pages reviewed name no base, a registered office, or a notice address. Its careers page does say where the work is: every role it advertises is \"San Francisco, CA / Remote\", which places the organization in the United States without saying it is headquartered there. That distinction is why the work location is recorded and the headquarters is not.",
       "catalog_names": [
         "Mixedbread AI"
       ],
@@ -1853,11 +1914,20 @@
           "label": "Privacy policy naming mixedbread ai inc.",
           "url": "https://www.mixedbread.com/pages/privacy",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: open roles located in San Francisco, CA or Remote, with no other city named",
+          "url": "https://www.mixedbread.com/about",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
+      "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
-      "display_order": 440
+      "display_order": 440,
+      "research_locations": [
+        "us"
+      ]
     },
     {
       "id": "lab-moonshot-ai",
@@ -2260,7 +2330,7 @@
       "lab_type": "ai_company",
       "headquarters": "us",
       "admission_basis": "frontier_announcement",
-      "organization_note": "Safe Superintelligence Inc., which calls itself an American company with offices in Palo Alto and Tel Aviv, states on its own site that it started \"the world's first straight-shot SSI lab, with one goal and one product: a safe superintelligence\", and that \"SSI is our mission, our name, and our entire product roadmap\". The pages name no legal form beyond the Inc. in the site title and footer, no registered address, no directors, and no governing terms; there is no privacy policy, terms of service, model catalog, release-notes page, or safety framework, and the /safety path returns not-found. Its GitHub organization exists and publishes no repositories at all, and it has no Hugging Face organization, so neither is listed as a channel: a channel is a page or organization a reader can watch for the lab's work, and an empty account is not one. It is recorded on its own published statement of intent rather than on a release, which is why it joins to nothing in this collection; the safety language on its site is a mission statement rather than a framework, so no framework is recorded. Its own updates page names Ilya Sutskever as CEO and Daniel Levy as President as of July 2025 and records a July 2026 NVIDIA partnership.",
+      "organization_note": "Safe Superintelligence Inc., which calls itself an American company with offices in Palo Alto and Tel Aviv, states on its own site that it started \"the world's first straight-shot SSI lab, with one goal and one product: a safe superintelligence\", and that \"SSI is our mission, our name, and our entire product roadmap\". The pages name no legal form beyond the Inc. in the site title and footer, no registered address, no directors, and no governing terms; there is no privacy policy, terms of service, model catalog, release-notes page, or safety framework, and the /safety path returns not-found. Its GitHub organization exists and publishes no repositories at all, and it has no Hugging Face organization, so neither is listed as a channel: a channel is a page or organization a reader can watch for the lab's work, and an empty account is not one. It is recorded on its own published statement of intent rather than on a release, which is why it joins to nothing in this collection; the safety language on its site is a mission statement rather than a framework, so no framework is recorded. Its own updates page names Ilya Sutskever as CEO and Daniel Levy as President as of July 2025 and records a July 2026 NVIDIA partnership. The organization's own site says it is \"an American company with offices in Palo Alto and Tel Aviv, where we have deep roots and the ability to recruit top technical talent\", so the work is not only where the American entity is: Tel Aviv is the second office the record names.",
       "catalog_names": [],
       "systems": [],
       "channels": [
@@ -2272,7 +2342,7 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Company site: an American company with offices in Palo Alto and Tel Aviv, building safe superintelligence as its one goal and entire product roadmap",
+          "label": "Company site: an American company with offices in Palo Alto and Tel Aviv, building safe superintelligence as its one goal and entire product roadmap; company site: an American company with offices in Palo Alto and Tel Aviv, where it says it has deep roots and the ability to recruit top technical talent",
           "url": "https://ssi.inc/",
           "verified_at": "2026-09-29"
         },
@@ -2289,8 +2359,11 @@
           "verified_at": "2026-09-29"
         }
       ],
-      "verified_at": "2026-09-29",
-      "display_order": 560
+      "verified_at": "2026-10-03",
+      "display_order": 560,
+      "research_locations": [
+        "il"
+      ]
     },
     {
       "id": "lab-sakana-ai",
@@ -2494,7 +2567,7 @@
       "description": "The AI company that develops the Step models and offers them through the StepFun Open Platform in China and internationally.",
       "lab_type": "ai_company",
       "headquarters": "cn",
-      "organization_note": "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology), registered in Xuhui District, Shanghai, develops the models and operates the mainland StepFun Open Platform; StepFun Technology (HK) Limited operates the international platform. The catalog names the developer StepFun and both operating entities, so all three names belong to this record.",
+      "organization_note": "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology), registered in Xuhui District, Shanghai, develops the models and operates the mainland StepFun Open Platform; StepFun Technology (HK) Limited operates the international platform. The catalog names the developer StepFun and both operating entities, so all three names belong to this record. The pages reviewed name one place for the organization, its address at Floor 30, No. 701 Yunjin Road in Xuhui District, Shanghai, alongside its Shanghai public-network-security and ICP filings. Nothing names work outside China, so the review records nothing beyond the headquarters.",
       "catalog_names": [
         "StepFun",
         "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology)",
@@ -2533,11 +2606,18 @@
           "label": "International platform terms: a contract between STEPFUN TECHNOLOGY (HK) LIMITED and the user of the StepFun Open Platform services",
           "url": "https://platform.stepfun.ai/docs/en/agreement/userservice",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Homepage: the company's ICP filing and address at Floor 30, No. 701 Yunjin Road, Xuhui District, Shanghai",
+          "url": "https://www.stepfun.com/",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
+      "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
-      "display_order": 190
+      "display_order": 190,
+      "research_locations": []
     },
     {
       "id": "lab-swiss-ai-initiative",
@@ -2781,7 +2861,7 @@
       "lab_type": "ai_company",
       "headquarters": "cn",
       "admission_basis": "reviewed_robot",
-      "organization_note": "The contact page names a Hangzhou Headquarters at 3rd Floor, Building 1, Fengda Creative Park, No. 88 Dongliu Road, Binjiang District, Hangzhou City, Zhejiang Province, China, with a Shenzhen office and a Shanghai entity, Shanghai Gaoyi Technology Co., Ltd., given by name; the record takes the Hangzhou address because the page itself labels it the headquarters and names the other two as an office and a differently named entity, and the record notes them here rather than treating three addresses as three headquarters. Its own about page calls it a \"civilian robotics company\" focused on the R&D, production, and sales of general-purpose legged and humanoid robots, says it has worked on that since 2017, and states that it self-researchs the motors, reducers, controllers, LIDAR, and perception and motion-control algorithms its robots use, which is why the organization is an AI company rather than a hardware vendor that buys its intelligence: the software is developed in house and the catalog reviews three of its robots. It is recorded on those robots rather than on a release because the catalog reviews no model of its own, and the UnifoLM-X1-0 embodied intelligence model its about page describes is a policy that acts on a robot, which the robotics scope keeps out of the Models collection; the record says so rather than implying the organization publishes no model. No parent organization is recorded: the pages read name no holding entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted.",
+      "organization_note": "The contact page names a Hangzhou Headquarters at 3rd Floor, Building 1, Fengda Creative Park, No. 88 Dongliu Road, Binjiang District, Hangzhou City, Zhejiang Province, China, with a Shenzhen office and a Shanghai entity, Shanghai Gaoyi Technology Co., Ltd., given by name; the record takes the Hangzhou address because the page itself labels it the headquarters and names the other two as an office and a differently named entity, and the record notes them here rather than treating three addresses as three headquarters. Its own about page calls it a \"civilian robotics company\" focused on the R&D, production, and sales of general-purpose legged and humanoid robots, says it has worked on that since 2017, and states that it self-researchs the motors, reducers, controllers, LIDAR, and perception and motion-control algorithms its robots use, which is why the organization is an AI company rather than a hardware vendor that buys its intelligence: the software is developed in house and the catalog reviews three of its robots. It is recorded on those robots rather than on a release because the catalog reviews no model of its own, and the UnifoLM-X1-0 embodied intelligence model its about page describes is a policy that acts on a robot, which the robotics scope keeps out of the Models collection; the record says so rather than implying the organization publishes no model. No parent organization is recorded: the pages read name no holding entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted. Its contact page names a Hangzhou headquarters, a Shenzhen office, and a Shanghai entity, and every one of them is in China, which is the headquarters country. Nothing on the pages reviewed places its research or engineering work outside China.",
       "catalog_names": [
         "Unitree Robotics"
       ],
@@ -2803,7 +2883,7 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Contact page: the Hangzhou Headquarters address in Binjiang District, Hangzhou, Zhejiang, China, a Shenzhen office, and a Shanghai entity named Shanghai Gaoyi Technology Co., Ltd.",
+          "label": "Contact page: the Hangzhou Headquarters address in Binjiang District, Hangzhou, Zhejiang, China, a Shenzhen office, and a Shanghai entity named Shanghai Gaoyi Technology Co., Ltd; contact page: the Hangzhou Headquarters in Binjiang District, Zhejiang, a Shenzhen office, and a Shanghai entity named Shanghai Gaoyi Technology Co., Ltd.",
           "url": "https://www.unitree.com/contact",
           "verified_at": "2026-10-03"
         },
@@ -2821,7 +2901,8 @@
         }
       ],
       "verified_at": "2026-10-03",
-      "display_order": 620
+      "display_order": 620,
+      "research_locations": []
     },
     {
       "id": "lab-upstage",
@@ -2830,7 +2911,7 @@
       "description": "The AI company that develops the Solar language models and document-processing engines and builds agents for document workflows on them.",
       "lab_type": "ai_company",
       "headquarters": "kr",
-      "organization_note": "Upstage Co., Ltd. (주식회사 업스테이지) gives its business address in Gangnam-gu, Seoul. It develops the Solar models and its document-processing engines, offers them through its console API, and publishes the Solar Open 2 weights on Hugging Face. One name, Upstage, covers the models in the catalog.",
+      "organization_note": "Upstage Co., Ltd. (주식회사 업스테이지) gives its business address in Gangnam-gu, Seoul. It develops the Solar models and its document-processing engines, offers them through its console API, and publishes the Solar Open 2 weights on Hugging Face. One name, Upstage, covers the models in the catalog. Its careers page advertises \"an autonomous and flexible remote work environment\" with support for office space, and gives the company's address in Gangnam-gu, Seoul. Nothing on the page places its work outside South Korea, so the review records nothing beyond the headquarters.",
       "catalog_names": [
         "Upstage"
       ],
@@ -2865,11 +2946,18 @@
           "label": "Terms of service giving the Korea Science and Technology Center address, 22 Teheran-ro 7-gil, Gangnam-gu, Seoul",
           "url": "https://www.upstage.ai/terms-of-service",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: an autonomous and flexible remote work environment with office-space support, and a Seoul address at the Korea Science and Technology Center in Gangnam-gu",
+          "url": "https://www.upstage.ai/careers",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
+      "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
-      "display_order": 210
+      "display_order": 210,
+      "research_locations": []
     },
     {
       "id": "lab-vispark",
@@ -2960,7 +3048,7 @@
       "description": "The AI company that develops the Palmyra models and builds its enterprise agent platform on them.",
       "lab_type": "ai_company",
       "headquarters": "us",
-      "organization_note": "Writer, Inc., whose newsroom gives its headquarters at 111 Maiden Lane, San Francisco, takes legal notices there, and its terms are governed by California law. It develops the Palmyra models and serves them through its developer platform. One name, Writer, covers the models in the catalog.",
+      "organization_note": "Writer, Inc., whose newsroom gives its headquarters at 111 Maiden Lane, San Francisco, takes legal notices there, and its terms are governed by California law. It develops the Palmyra models and serves them through its developer platform. One name, Writer, covers the models in the catalog. The company's careers page says it runs a hybrid culture of in-office and remote work, and names three offices, San Francisco, New York, and London. Two are in the United States, which is the headquarters; the third is the organization's work outside it.",
       "catalog_names": [
         "Writer"
       ],
@@ -3001,11 +3089,20 @@
           "label": "Newsroom giving its headquarters at 111 Maiden Lane, San Francisco",
           "url": "https://writer.com/newsroom/",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: a hybrid culture of in-office and remote work, with \"SF/NY/London office space\" in three offices",
+          "url": "https://writer.com/careers",
+          "verified_at": "2026-10-03"
         }
       ],
       "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
-      "display_order": 480
+      "display_order": 480,
+      "research_locations": [
+        "gb"
+      ]
     },
     {
       "id": "lab-xiaomi",

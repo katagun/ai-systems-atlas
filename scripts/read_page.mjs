@@ -1,6 +1,6 @@
 // Reads cited pages the way a reader's browser shows them, so a review quotes
 // the page itself rather than a search-engine extract of it. The 2026-09-25 lab
-// re-read (docs/history/LAB_REREAD_2026-09-25.md) found claims no page made and a
+// re-read (docs/LAB_REREAD_2026-09-25.md) found claims no page made and a
 // filing that was another company's annual report, all read through extracts.
 //
 //   node scripts/read_page.mjs [options] URL...

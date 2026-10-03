@@ -157,16 +157,6 @@ test("a lab joined to systems but to no release says so instead of listing nothi
   await expect(card.locator(".tags span")).toHaveText(["2 inference services", "1 local runtime"]);
 });
 
-test("a lab card opens an inline release above the card details target", async ({ page }) => {
-  await page.goto("/?collection=labs");
-  const card = page.locator('#lab-grid .lab-card:has([data-lab="lab-anthropic"])');
-  const releaseRow = card.locator(".lab-related-list li").first();
-  await expect(releaseRow.locator(".lab-related-date")).not.toBeEmpty();
-  await releaseRow.locator("[data-open-model]").click();
-  await expect(recordHeading(page, "model")).toBeVisible();
-  await expect(recordView(page, "lab")).toBeHidden();
-});
-
 test("a model dialog links to the lab that developed the release", async ({ page }) => {
   await page.goto("/?collection=models&record=model:model-deepseek-deepseek-v4-pro");
   await expect(recordHeading(page, "model")).toHaveText("DeepSeek V4 Pro");

@@ -50,8 +50,7 @@ Read only what your task needs:
 | Understand coverage and choose a research batch | [`docs/COVERAGE.md`](docs/COVERAGE.md) |
 | Add, remove, classify, or rescore a project | [`docs/CURATION.md`](docs/CURATION.md) |
 | Understand JSON fields and timestamp semantics | [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) |
-| Understand review dates, evidence drift, or repository safeguards | [`docs/OPERATIONS.md`](docs/OPERATIONS.md) |
-| Run a refresh, a review workflow, or the verification gate | [`docs/RUNBOOKS.md`](docs/RUNBOOKS.md) |
+| Run refreshes or review candidate/license incidents | [`docs/OPERATIONS.md`](docs/OPERATIONS.md) |
 | Change or verify the browser UI | [`docs/WEB.md`](docs/WEB.md) |
 | Review current engineering risks | [`docs/CODEBASE_REVIEW_2026-09-28.md`](docs/CODEBASE_REVIEW_2026-09-28.md), then [`BACKLOG.md`](BACKLOG.md) |
 | Size a refactor before starting it | `uv run python scripts/measure_engineering.py` |

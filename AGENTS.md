@@ -31,8 +31,7 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 | System inclusion, licensing, prose, scores, forks, successors | [Curation](docs/CURATION.md) |
 | Families, roles, deployment, authoring surfaces, provider relationships, robot software | [Taxonomy](docs/TAXONOMY.md) |
 | Fields, enums, timestamps, local-first/editability, queues, dispositions | [Data model](docs/DATA_MODEL.md) |
-| Review dates, evidence links, terms/license drift, guard limits, CI/deploy, safeguards | [Operations](docs/OPERATIONS.md) |
-| Refresh, validation, regeneration, review workflows, sweep and triage routines | [Runbooks](docs/RUNBOOKS.md) |
+| Refresh, validation, evidence links, terms/license drift, review age, CI/deploy | [Operations](docs/OPERATIONS.md) |
 | UI, filters, comparison, details, badges, payloads, assets, accessibility | [Web](docs/WEB.md) |
 | Model releases, access scores, models.dev import, OpenRouter leads, and promotion | [Models](docs/MODELS.md) |
 | Protocols, conventions, packaging formats | [Specifications](docs/SPECIFICATIONS.md) |
@@ -46,9 +45,8 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 | Agent discovery, llms.txt, Atlas skill | [Agent docs](docs/AGENT_DOCS.md) |
 | Blog content and shared page shell | [Blog](docs/BLOG.md) |
 | Coverage gaps, direction, priorities | [Coverage](docs/COVERAGE.md), [Roadmap](ROADMAP.md), [Backlog](BACKLOG.md) |
-| Linting, formatting, pre-commit hooks | [Runbooks](docs/RUNBOOKS.md) |
+| Linting, formatting, pre-commit hooks | [Operations](docs/OPERATIONS.md) |
 | Engineering-debt measurements, complexity ratchet, stale prose figures | `scripts/measure_engineering.py` |
-| Dated reviews and re-reads whose findings have landed | [History](docs/history/README.md) |
 
 ## Command reference
 
