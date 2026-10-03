@@ -177,7 +177,10 @@ BOOT_FIELDS = {
     ),
 }
 
-# Exactly the fields each filter in web/app-core.js searches today.
+# Exactly the fields each filter in web/app-core.js searches today. A system's
+# `retrieval_modes` carries trait ids such as `semantic_vector`; the browser's
+# tokenizer splits an underscore into a space, so the indexed words are the ones
+# a reader types, and a trait hit weighs 3 rather than a name's 50.
 SEARCH_FIELDS = {
     "systems": (
         "id",
@@ -188,6 +191,7 @@ SEARCH_FIELDS = {
         "why_it_matters",
         "strengths",
         "weaknesses",
+        "retrieval_modes",
     ),
     "inference": (
         "id",
