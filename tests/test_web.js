@@ -210,6 +210,7 @@ test("directory defaults expose every active family without a hidden role constr
     deployment: "",
     agentInterface: "",
     capability: "",
+    retrieval: "",
     sourceModel: "",
     license: "",
     status: "active",
@@ -752,6 +753,79 @@ test("the systems scope writes the capability to the URL", () => {
     capability: new Set(["", "robot_control"]),
   });
   assert.equal(restored.values.capability, "robot_control");
+});
+
+// Retrieval is a trait, not a role (ADR 003): RAG reaches the catalog as the
+// modes a record carries, and the filter is how a reader reaches it.
+const retrievalProjects = [
+  { name: "Vector App", primary_role: "ai_knowledge_app", system_family: "memory_system", agent_relation: "agent_runtime", architectures: ["vector_index"], deployment: ["self_hosted"], agent_interfaces: ["web_app"], retrieval_modes: ["semantic_vector", "hybrid", "agentic"], source_model: "open_source", licenses: ["MIT"], status: "active", local_first: true, stars: 5, score: { overall: 8 } },
+  { name: "Graph Agent", primary_role: "coding_agent", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["graph_versioned"], deployment: ["local_cli"], agent_interfaces: ["terminal"], retrieval_modes: ["graph_traversal", "agentic"], source_model: "open_source", licenses: ["MIT"], status: "active", local_first: true, stars: 6, score: { overall: 9 } },
+  { name: "Prompt Only", primary_role: "general_ai_assistant", system_family: "assistant_system", agent_relation: "agent_enabled_ui", architectures: ["hybrid"], deployment: ["managed_cloud"], agent_interfaces: ["web_app"], retrieval_modes: [], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: false, stars: null, score: { overall: 7 } },
+];
+
+test("retrieval filtering reaches the systems that carry a mode", () => {
+  const vector = filterAndSortProjects(retrievalProjects, { retrieval: "semantic_vector", status: "active", sort: "name" });
+  const graph = filterAndSortProjects(retrievalProjects, { retrieval: "graph_traversal", status: "active", sort: "name" });
+
+  assert.deepEqual(vector.map(project => project.name), ["Vector App"]);
+  assert.deepEqual(graph.map(project => project.name), ["Graph Agent"]);
+});
+
+test("the retrieval filter defaults to unset and skips records with no modes", () => {
+  assert.equal(directoryDefaults().retrieval, "");
+  assert.equal(matchesProject(retrievalProjects[0], { retrieval: "" }), true);
+  assert.equal(matchesProject(retrievalProjects[2], { retrieval: "semantic_vector" }), false);
+});
+
+test("the retrieval filter combines with family rather than replacing it", () => {
+  const agents = filterAndSortProjects(retrievalProjects, {
+    family: "agent_system",
+    retrieval: "agentic",
+    status: "active",
+    sort: "name",
+  });
+  assert.deepEqual(agents.map(project => project.name), ["Graph Agent"]);
+  const memory = filterAndSortProjects(retrievalProjects, {
+    family: "memory_system",
+    retrieval: "agentic",
+    status: "active",
+    sort: "name",
+  });
+  assert.deepEqual(memory.map(project => project.name), ["Vector App"]);
+});
+
+test("system search reaches a record by the retrieval modes it carries", () => {
+  const results = filterAndSortProjects(retrievalProjects, {
+    ...directoryDefaults(),
+    term: "semantic vector",
+  });
+  assert.deepEqual(results.map(project => project.name), ["Vector App"]);
+  assert.deepEqual(filterAndSortProjects(retrievalProjects, {
+    ...directoryDefaults(),
+    term: "traversal",
+  }).map(project => project.name), ["Graph Agent"]);
+});
+
+test("the systems scope writes the retrieval mode to the URL", () => {
+  assert.equal(SCOPE_URL_PARAMS.systems.retrieval, "");
+  const written = scopeURLParams("systems", { retrieval: "graph_traversal", status: "active", sort: "name" });
+  assert.deepEqual(written, [["retrieval", "graph_traversal"]]);
+  const restored = readScopeURLParams("systems", new URLSearchParams(written), {
+    retrieval: new Set(["", "graph_traversal"]),
+  });
+  assert.equal(restored.values.retrieval, "graph_traversal");
+});
+
+test("the published systems index carries retrieval modes as searchable words", () => {
+  const index = readWebJSON("app/search/systems.json");
+  assert.match(index.llamaindex, /semantic_vector/);
+  // The index holds the raw trait id; the tokenizer is what turns an
+  // underscore into the space a reader's two-word query carries.
+  const vectorRecords = filterAndSortProjects(
+    [readWebJSON("app/systems.json").systems.find(record => record.id === "llamaindex")],
+    { ...directoryDefaults(), term: "semantic vector", searchIndex: index },
+  );
+  assert.deepEqual(vectorRecords.map(record => record.id), ["llamaindex"]);
 });
 
 test("robot control has no card badge (ADR 045)", () => {
