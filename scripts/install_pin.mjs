@@ -19,7 +19,7 @@
 // run when the install has drifted, naming the fix. That moves the failure from CI to
 // the author's machine, before a wrong artifact exists, instead of after one is merged
 // or force-pushed twice. A version bump is a deliberate act in this repository; the bump
-// procedure in docs/RUNBOOKS.md runs the full verification, and now the first thing
+// procedure in docs/OPERATIONS.md runs the full verification, and now the first thing
 // that verification can say is that the install is not the one it is about to bless.
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";

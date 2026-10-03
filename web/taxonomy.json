@@ -1032,6 +1032,11 @@
       "definition": "Headquartered in Belgium (ISO 3166-1 BE)."
     },
     {
+      "id": "br",
+      "name": "Brazil",
+      "definition": "Where a lab says it is headquartered, or where its reviewed research, engineering, or creative work happens (ISO 3166-1 BR)."
+    },
+    {
       "id": "ca",
       "name": "Canada",
       "definition": "Headquartered in Canada (ISO 3166-1 CA)."
@@ -1042,19 +1047,14 @@
       "definition": "Headquartered in the People's Republic of China (ISO 3166-1 CN)."
     },
     {
-      "id": "de",
-      "name": "Germany",
-      "definition": "Headquartered in Germany (ISO 3166-1 DE)."
-    },
-    {
       "id": "fr",
       "name": "France",
       "definition": "Headquartered in France (ISO 3166-1 FR)."
     },
     {
-      "id": "gb",
-      "name": "United Kingdom",
-      "definition": "Where a lab says it is headquartered, or where its reviewed research, engineering, or creative work happens (ISO 3166-1 GB)."
+      "id": "de",
+      "name": "Germany",
+      "definition": "Headquartered in Germany (ISO 3166-1 DE)."
     },
     {
       "id": "in",
@@ -1087,6 +1087,11 @@
       "definition": "Headquartered in the Republic of Korea (ISO 3166-1 KR)."
     },
     {
+      "id": "es",
+      "name": "Spain",
+      "definition": "Where a lab says it is headquartered, or where its reviewed research, engineering, or creative work happens (ISO 3166-1 ES)."
+    },
+    {
       "id": "ch",
       "name": "Switzerland",
       "definition": "Headquartered in Switzerland (ISO 3166-1 CH)."
@@ -1095,6 +1100,11 @@
       "id": "tr",
       "name": "Türkiye",
       "definition": "Headquartered in Türkiye (ISO 3166-1 TR)."
+    },
+    {
+      "id": "gb",
+      "name": "United Kingdom",
+      "definition": "Where a lab says it is headquartered, or where its reviewed research, engineering, or creative work happens (ISO 3166-1 GB)."
     },
     {
       "id": "us",

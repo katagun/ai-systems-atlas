@@ -110,7 +110,6 @@ class DocumentationTests(unittest.TestCase):
             "docs/COVERAGE.md",
             "docs/DATA_MODEL.md",
             "docs/OPERATIONS.md",
-            "docs/RUNBOOKS.md",
             "docs/INFERENCE_SERVICES.md",
             "docs/LOCAL_RUNTIMES.md",
             "docs/SPECIFICATIONS.md",

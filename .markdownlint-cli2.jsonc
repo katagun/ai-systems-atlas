@@ -6,9 +6,7 @@
   // subheadings in routines (MD036), and ordered lists use explicit `1.` steps
   // renumbered by hand (MD029) — all deliberate, so those rules stay off.
   // Fenced blocks must still name a language (MD040) and fences, bare URLs,
-  // and punctuation (MD031/MD034/MD026) are fixed where flagged. The frozen
-  // archives, `docs/superpowers/` and `docs/history/`, are excluded for the
-  // same reason: reformatting a point-in-time record buys nothing. MD028 stays
+  // and punctuation (MD031/MD034/MD026) are fixed where flagged. MD028 stays
   // off: adjacent `>` quotes are two deliberate blockquotes, and the custom
   // blog renderer in scripts/build_blog.py has no bare-`>` continuation line,
   // so joining them would change rendering. MD038 stays off too: it
@@ -26,5 +24,5 @@
     "MD028": false,
     "MD038": false
   },
-  "globs": ["**/*.md", "!**/node_modules/**", "!.claude/worktrees/**", "!.muse/worktrees/**", "!web/records/**", "!docs/superpowers/**", "!docs/history/**", "!test-results/**", "!playwright-report/**"],
+  "globs": ["**/*.md", "!**/node_modules/**", "!.claude/worktrees/**", "!.muse/worktrees/**", "!web/records/**", "!docs/superpowers/**", "!test-results/**", "!playwright-report/**"],
 }

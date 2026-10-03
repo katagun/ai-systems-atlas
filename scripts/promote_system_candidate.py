@@ -5,7 +5,7 @@ The command scaffolds review work but never invents editorial conclusions. Its
 apply path writes only after the complete proposed `projects.json`,
 `license-evidence.json`, and remaining `candidates.json` queue pass validation
 together. It mirrors `scripts/promote_model_candidate.py`; see that module and
-`docs/RUNBOOKS.md` ("Review a candidate") for the workflow this automates.
+`docs/OPERATIONS.md` ("Review a candidate") for the workflow this automates.
 """
 
 from __future__ import annotations
@@ -124,7 +124,7 @@ def build_draft(candidate: dict[str, Any]) -> dict[str, Any]:
 
     Only identity and automation-owned GitHub facts are prefilled. The
     proposed classification a keyword classifier attached to the candidate is
-    never copied in: `docs/RUNBOOKS.md` requires a human to choose
+    never copied in: `docs/OPERATIONS.md` requires a human to choose
     `system_family` and `primary_role` from scratch.
     """
     repo = candidate.get("repo")

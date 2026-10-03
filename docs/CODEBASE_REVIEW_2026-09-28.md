@@ -31,7 +31,7 @@ CR-09 through CR-14 and CR-16 and CR-17 were fixed on 2026-09-28 and each fix ca
 | CR-23 | Low | Open | Organisation names are free text across six collections; `labs.json` is bypassed in five of them |
 | CR-24 | Low | Open | Stale numbers in the process documentation, two dead pre-commit hooks, and no automated dependency bumps |
 
-CR-08 from [the 2026-09-05 review](history/CODEBASE_REVIEW_2026-09-05.md) is superseded by CR-13, which carries the same finding with a stronger statement: the floor is not untested, it fails.
+CR-08 from [the 2026-09-05 review](CODEBASE_REVIEW_2026-09-05.md) is superseded by CR-13, which carries the same finding with a stronger statement: the floor is not untested, it fails.
 
 Line references identify the implementation as reviewed. They drift as fixes land; the finding text is the durable record.
 
@@ -352,7 +352,7 @@ Rejected during verification, recorded here so they are not re-raised: `docs/COV
 
 ## Tracking and remediation order
 
-CR-01 through CR-04 are resolved as recorded in [the 2026-09-05 review](history/CODEBASE_REVIEW_2026-09-05.md). CR-05 through CR-08 remain open there and are tracked in `BACKLOG.md`; CR-13 supersedes CR-08 and CR-14 restates CR-05 with concrete acceptance signals.
+CR-01 through CR-04 are resolved as recorded in [the 2026-09-05 review](CODEBASE_REVIEW_2026-09-05.md). CR-05 through CR-08 remain open there and are tracked in `BACKLOG.md`; CR-13 supersedes CR-08 and CR-14 restates CR-05 with concrete acceptance signals.
 
 1. CR-09, one line, closes a live violated provenance invariant.
 2. CR-10, two words plus a sixty-line sync test, and it makes the drift unrepeatable.
