@@ -1145,6 +1145,7 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
 .project-card .compare-toggle,
 .project-card .card-source-meta,
 .project-card .license-badge,
+.project-card .lab-related,
 .finder-result .card-badges,
 .finder-result .badge-help,
 .finder-result .license-badge {
@@ -1449,6 +1450,32 @@ dialog h1 { overflow-wrap: break-word; }
 .detail-block, .detail-block p, .detail-block li, .detail-block td, .detail-block h3, .detail-block h4 { overflow-wrap: anywhere; }
 .detail-block h4 { margin: 1rem 0 .4rem; color: var(--text); font-size: .92rem; font-weight: 600; }
 .evidence-date { margin-left: .35rem; color: var(--muted); font: .7rem var(--font-mono); }
+/* Lab cards name a few joined records inline; the row layout matches the dialog
+   release list so names and dates do not run together when markup has no space
+   between the link and the date span. */
+.lab-related { margin-top: .75rem; }
+.lab-related-group + .lab-related-group { margin-top: .65rem; }
+.lab-related-label {
+  margin: 0 0 .35rem;
+  color: var(--muted);
+  font: 700 .58rem var(--font-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.lab-related-list { margin: 0; padding: 0; list-style: none; }
+.lab-related-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .2rem .75rem;
+  padding: .28rem 0;
+  border-top: 1px solid var(--line);
+}
+.lab-related-list li:first-child { border-top: 0; padding-top: 0; }
+.lab-related-list .link-button { text-align: left; }
+.lab-related-date { flex: none; color: var(--muted); font: .7rem var(--font-mono); }
+.lab-related-more button { color: var(--cyan); font-weight: 600; }
 .lab-release-list { margin: .5rem 0 .8rem; padding: 0; list-style: none; }
 .lab-release-list li { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .2rem .75rem; padding: .35rem 0; border-top: 1px solid var(--line); }
 .lab-release-list .link-button { text-align: left; }

@@ -1591,7 +1591,7 @@ function specificationCard(specification, { mixed = false } = {}) {
 
 // How many of a lab's releases, and of its systems, its card names before
 // handing off to its dialog, which holds the full join.
-const LAB_CARD_RECORDS = 4;
+const LAB_CARD_RECORDS = 3;
 
 // The two joins a lab card lists inline, so a reader scanning results sees the
 // records behind the organization rather than a count and a date. A card shows
@@ -1648,8 +1648,8 @@ function labCard(lab, { mixed = false } = {}) {
     <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
     <p>${escapeHTML(lab.description)}</p>
     ${counts ? `<div class="tags">${counts}</div>` : ""}
-    ${badgeRow(AppCore.cardBadges("lab", lab))}
     ${labRelatedMarkup(lab, releases, systems)}
+    ${badgeRow(AppCore.cardBadges("lab", lab))}
     <div class="card-footer"><span>${newestDate ? `Newest reviewed release ${escapeHTML(newestDate)}` : ""}</span>${detailsButton("data-lab", lab.id, lab.name)}</div>
   </article>`;
 }
