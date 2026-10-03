@@ -2435,7 +2435,7 @@
       "channels": [
         {
           "kind": "model_catalog",
-          "url": "https://dev.writer.com/home/models-overview"
+          "url": "https://dev.writer.com/home/models"
         },
         {
           "kind": "news",
@@ -2470,7 +2470,7 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25",
+      "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
       "display_order": 480
     },
