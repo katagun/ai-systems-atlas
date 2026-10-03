@@ -822,40 +822,6 @@ input:focus, select:focus {
 .robot-card { min-height: 380px; background: var(--card-robot); }
 .robot-card::before { background: var(--violet); }
 .mixed-directory-card { min-height: 330px; }
-/* The records a lab card names below its counts. They are the card's own content,
-   so they sit above the stretched details control (see the stacking list further
-   down) and keep the footer as the card's last rail. */
-.lab-related { display: flex; flex-direction: column; gap: .7rem; margin-top: .9rem; }
-.lab-related-label {
-  margin: 0;
-  color: var(--muted);
-  font: .7rem var(--font-mono);
-  letter-spacing: .04em;
-  text-transform: uppercase;
-}
-.lab-related-list { margin: .35rem 0 0; padding: 0; list-style: none; }
-.lab-related-list li {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: .15rem .7rem;
-  padding: .3rem 0;
-  border-top: 1px solid var(--line);
-}
-.lab-related-list .link-button { min-width: 0; text-align: left; overflow-wrap: anywhere; }
-.lab-related-date { color: var(--muted); font: .68rem var(--font-mono); white-space: nowrap; }
-.lab-related-more { border-top: 1px solid var(--line); }
-.lab-related-more button {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--cyan);
-  cursor: pointer;
-  font: .7rem var(--font-mono);
-  font-weight: 600;
-}
-.lab-related-more button:hover { color: var(--text); }
 .project-card:hover {
   transform: translateY(-4px);
   border-color: var(--hover-line);
@@ -877,21 +843,27 @@ input:focus, select:focus {
 }
 .card-mark svg { width: 20px; height: 20px; fill: currentColor; }
 .card-monogram { color: var(--muted); font: 600 1.05rem var(--font-display); }
-/* A lab card's headquarters flag, on the corner of the organization's mark. The
-   wrapper keeps the mark's own size and becomes the anchor for the flag. */
-.card-mark-wrap { position: relative; flex: none; display: grid; }
+/* A card's geography: the headquarters country of the lab it joins to, and any
+   reviewed research location beside it (ADR 052, ADR 053). The row sits directly
+   right of the record's mark rather than in a card corner, because four circles
+   will not fit on a 38px circle and one placement has to hold for every card in
+   every collection. */
+.card-flags {
+  display: flex;
+  flex: none;
+  align-self: flex-start;
+  gap: .2rem;
+  margin-top: .6rem;
+}
 .card-flag {
-  position: absolute;
-  right: -6px;
-  bottom: -6px;
   display: grid;
   place-items: center;
-  width: 19px;
-  height: 19px;
+  width: 18px;
+  height: 18px;
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   background: var(--panel);
-  font-size: .72rem;
+  font-size: .68rem;
   line-height: 1;
   overflow: hidden;
   pointer-events: none;
@@ -1156,9 +1128,8 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
 .card-footer button:hover,
 .finder-result-footer button:hover { color: var(--text); }
 /* The details control's target covers its whole card; the card's own controls,
-   its emblem row, its hover-titled facts, and the records a lab card names sit
-   above it, so a tap on an emblem only opens its tooltip, Compare only toggles,
-   and a tap on a listed release opens that release. */
+   its emblem row, and its hover-titled facts sit above it, so a tap on an
+   emblem only opens its tooltip and Compare only toggles. */
 .card-open::after {
   content: "";
   position: absolute;
@@ -1170,7 +1141,6 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
 .project-card .compare-toggle,
 .project-card .card-source-meta,
 .project-card .license-badge,
-.project-card .lab-related,
 .finder-result .card-badges,
 .finder-result .badge-help,
 .finder-result .license-badge {

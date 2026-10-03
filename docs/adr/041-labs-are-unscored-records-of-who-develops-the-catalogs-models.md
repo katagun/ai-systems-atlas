@@ -1,6 +1,6 @@
 # ADR 041: Labs are unscored records of who develops the catalog's models
 
-**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order) and [ADR 043](043-the-directory-opens-on-a-front-door-of-collection-tiles.md) (Labs is a Directory collection with a tile and a strip entry, not a sibling view; labs stay unscored).
+**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order), [ADR 043](043-the-directory-opens-on-a-front-door-of-collection-tiles.md) (Labs is a Directory collection with a tile and a strip entry, not a sibling view; labs stay unscored), [ADR 048](048-a-research-group-may-be-admitted-on-a-system-it-developed.md) (a research group may be admitted on a system it developed), [ADR 052](052-a-lab-records-where-its-work-happens-separately-from-its-headquarters.md) (a lab records where its work happens, separately from its headquarters), and [ADR 053](053-a-robots-maker-joins-labs-on-the-robot-it-makes.md) (a robot's maker joins Labs on the robot it makes).
 
 ## Context
 

@@ -1,7 +1,7 @@
 const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
 const { collectionEntry, entryCount, openCollection, pressedEntry, searchAll } = require("./helpers/landing");
-const { clearFilters, recordView, search, setFilter, sortControl } = require("./helpers/results");
+const { clearFilters, recordHeading, recordView, search, setFilter, sortControl } = require("./helpers/results");
 
 const ROBOTS = [
   { id: "g-one", name: "G One", manufacturer: "Unibot", url: "https://unibot.example/g-one", description: "A compact humanoid.", form_factor: "humanoid", ai_basis: ["vendor_named_model", "open_model_interface"], availability: "orderable", status: "active" },
@@ -59,6 +59,25 @@ test("the published robots open from the real collection", async ({ page }) => {
   await expect(recordView(page, "robot")).toContainText("Models the vendor names");
   await expect(recordView(page, "robot")).toContainText("Reinforcement-learning locomotion controller");
   await expect(page).toHaveURL(/record=robot(%3A|:)spot/);
+});
+
+test("a robot's card and dialog join to the lab that makes it", async ({ page }) => {
+  // ADR 053: the maker is a lab record, so the robot inherits its geography and
+  // cross-links to it. Unitree is the worked example: Hangzhou, three robots.
+  await page.goto("/?collection=robots");
+  await page.locator('#robot-pager select[aria-label="Results per page"]').selectOption("24");
+  await expect(page.locator("#robot-grid .robot-card .card-flag")).toHaveCount(catalogCounts.robotFlagsOnCards());
+  await expect(page.locator('#robot-grid .robot-card:has([data-robot="unitree-g1"]) .card-flag')).toHaveCount(1);
+  await expect(page.locator('#robot-grid .robot-card:has([data-robot="unitree-g1"]) .card-flag')).toHaveAttribute("aria-hidden", "true");
+
+  await page.locator('#robot-grid [data-robot="unitree-g1"]').click();
+  await recordView(page, "robot").getByRole("button", { name: "Unitree Robotics" }).click();
+  await expect(recordHeading(page, "lab")).toHaveText("Unitree Robotics");
+  await expect(recordView(page, "lab")).toContainText("Recorded because:");
+  await expect(recordView(page, "lab")).toContainText("Reviewed robot");
+  // The lab's own dialog lists the robots it makes, in both directions.
+  await expect(recordView(page, "lab").locator(".detail-block").filter({ hasText: "Robots it makes" }))
+    .toContainText("Unitree G1");
 });
 
 test("the robots scope filters, opens its own dialog, and never scores or compares", async ({ page }) => {
