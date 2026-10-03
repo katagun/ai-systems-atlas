@@ -1688,7 +1688,7 @@ function importedModelCard(model, { mixed = false } = {}) {
     ? "Open weights not reported"
     : metadata.reported_open_weights ? "Open weights reported" : "Closed weights reported";
   return `<article class="project-card model-card imported-model-card${mixed ? " mixed-directory-card" : ""}">
-    <div class="card-top"><div class="card-identity">${cardMark(model, "model")}<div><p class="family-label">models.dev source record</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(AppCore.modelCardDeveloperLabel(model, state.labIndex))}</div></div></div></div>
+    <div class="card-top"><div class="card-identity">${cardMarkWithGeography("model", model)}<div><p class="family-label">models.dev source record</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(AppCore.modelCardDeveloperLabel(model, state.labIndex))}</div></div></div></div>
     <span class="role-badge">Imported metadata · Not Atlas reviewed</span>
     <div class="license-row"><span class="source-badge">models.dev</span><span class="review-badge">Reported license · ${escapeHTML(reportedLicense)}</span></div>
     <p>${escapeHTML(model.description || "Imported provider-independent model metadata from models.dev.")}</p>
