@@ -907,6 +907,90 @@ class ValidationPolicyTests(unittest.TestCase):
                     any("display_order" in error for error in errors), errors
                 )
 
+    def test_a_robot_maker_may_be_admitted_on_the_robot_it_makes(self) -> None:
+        """ADR 053: a hardware maker joins on a reviewed robot.
+
+        The Boston Dynamics shape: a `manufacturer` catalog name that reaches a
+        robot record, no developer name, and no reviewed system.
+        """
+
+        def maker(mutate=None):
+            def build(lab):
+                lab["admission_basis"] = "reviewed_robot"
+                lab["catalog_names"] = ["Boston Dynamics"]
+                lab["systems"] = ["spot"]
+                if mutate is not None:
+                    mutate(lab)
+
+            return build
+
+        self.assertEqual(self.lab_errors(self.catalog_with_lab(maker())), [])
+
+        # A maker with a stronger join must use the stronger basis.
+        for stronger, lab in (
+            ("reviewed_release", {"catalog_names": ["Anthropic"]}),
+            ("reviewed_system", {"systems": ["aider"]}),
+            (
+                "frontier_announcement",
+                {"catalog_names": ["Boston Dynamics"], "systems": []},
+            ),
+        ):
+            with self.subTest(basis=stronger):
+                errors = self.lab_errors(
+                    self.catalog_with_lab(
+                        maker(lambda lab, patch=lab: lab.update(patch))
+                    )
+                )
+                self.assertTrue(
+                    any("admission basis" in error for error in errors), errors
+                )
+
+        # A robot id the catalog does not hold is not a join either.
+        errors = self.lab_errors(
+            self.catalog_with_lab(maker(lambda lab: lab.update(systems=["atlas"])))
+        )
+        self.assertTrue(any("systems" in error for error in errors), errors)
+
+    def test_lab_research_locations_are_reviewed_and_separate_from_the_headquarters(
+        self,
+    ) -> None:
+        """ADR 052: where the work happens is its own reviewed fact.
+
+        It is optional, because absent means the catalog has not reviewed it, and
+        it never restates the headquarters, which has its own field and rule.
+        """
+
+        def with_locations(value):
+            def mutate(lab):
+                if value is None:
+                    lab.pop("research_locations", None)
+                else:
+                    lab["research_locations"] = value
+
+            return mutate
+
+        self.assertEqual(
+            self.lab_errors(self.catalog_with_lab(with_locations(["kz"]))), []
+        )
+        self.assertEqual(self.lab_errors(self.catalog_with_lab(with_locations([]))), [])
+        self.assertEqual(
+            self.lab_errors(self.catalog_with_lab(with_locations(None))), []
+        )
+
+        for bad in (
+            "kz",
+            ["kz", "kz"],
+            ["us"],
+            ["none_listed"],
+            ["zz"],
+            ["kz", "in", "fr", "ch"],
+        ):
+            with self.subTest(research_locations=bad):
+                errors = self.lab_errors(self.catalog_with_lab(with_locations(bad)))
+                self.assertTrue(
+                    any("research_location" in error for error in errors), errors
+                )
+
     def test_lab_may_be_admitted_on_a_system_it_developed(self) -> None:
         """ADR 048: a research group joins from a system, not a release.
 

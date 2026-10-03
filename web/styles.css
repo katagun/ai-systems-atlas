@@ -8,13 +8,13 @@
   --line-strong: #bac6d4;
   --text: #132234;
   --muted: #647287;
-  --cyan: #087c78;
-  --cyan-bright: #09a39c;
+  --cyan: #2f6fad;
+  --cyan-bright: #4a90d9;
   --violet: #7259bb;
   --coral: #d56951;
   --amber: #a96328;
   --danger: #a84049;
-  --sage-soft: #e3f4f1;
+  --sage-soft: #e5edf4;
   --sand-soft: #fff0e8;
   --violet-soft: #f0ecfb;
   --shadow: 0 22px 60px rgba(31, 53, 78, .11);
@@ -23,11 +23,11 @@
   --on-ink: #ffffff;
   --on-accent: #ffffff;
   --ink-2: #26394e;
-  --cyan-deep: #23493d;
-  --blue: #377db1;
+  --cyan-deep: #1e4468;
+  --blue: #3a85c6;
   --hover-line: #a7b6c7;
-  --sage-ink: #365748;
-  --sage-line: #c5d1c8;
+  --sage-ink: #2d5478;
+  --sage-line: #c5d4e3;
   --sand-ink: #8a4d39;
   --violet-ink: #5e4697;
   --amber-soft: #f5ece3;
@@ -36,10 +36,10 @@
   --slate-soft: #e7eff0;
   --slate-ink: #48636e;
   --blue-soft: #e5edf4;
-  --blue-ink: #405b73;
-  --status-line: #cbd6d9;
-  --status-bg: #eef6fa;
-  --status-ink: #356077;
+  --blue-ink: #2d5478;
+  --status-line: #c8d4e3;
+  --status-bg: #edf3fa;
+  --status-ink: #345a7a;
   --chip-bg: #f0f4f8;
   --chip-ink: #58687c;
   --glass-weak: rgba(255, 255, 255, .5);
@@ -49,7 +49,7 @@
   --panel-glass: rgba(251, 252, 254, .92);
   --grid-line: rgba(90, 111, 137, .045);
   --grid-line-strong: rgba(83, 109, 138, .09);
-  --tint-cyan: rgba(9, 163, 156, .10);
+  --tint-cyan: rgba(47, 111, 173, .10);
   --tint-violet: rgba(114, 89, 187, .08);
   --backdrop: rgba(22, 35, 51, .46);
   --shadow-dialog: 0 30px 90px rgba(32, 37, 31, .18);
@@ -58,7 +58,7 @@
   --card-spec: linear-gradient(145deg, #fbfcff, #fff 68%);
   --card-inference: linear-gradient(145deg, #f9fdff, #fff 68%);
   --card-runtime: linear-gradient(145deg, #fffaf5, #fff 68%);
-  --card-pack: linear-gradient(145deg, #f7fdfa, #fff 68%);
+  --card-pack: linear-gradient(145deg, #f8f7fc, #fff 68%);
   --card-lab: linear-gradient(145deg, #f7f9fb, #fff 68%);
   --card-robot: linear-gradient(145deg, #fffbfa, #fff 68%);
   /* One radius per role, not per size. Containers take --radius, interactive
@@ -95,20 +95,20 @@
     --on-ink: #0f141b;
     --on-accent: #0f141b;
     --ink-2: #c9d3df;
-    --cyan: #3fb8b0;
-    --cyan-bright: #57d3ca;
-    --cyan-deep: #2a8f88;
+    --cyan: #6ea8dd;
+    --cyan-bright: #8ec0f0;
+    --cyan-deep: #4a88c4;
     --violet: #a495e0;
     --coral: #e98a74;
     --amber: #d9a15e;
     --danger: #e07b82;
-    --blue: #6ea8dd;
+    --blue: #82b9f0;
     --hover-line: #4a5a6e;
-    --sage-soft: rgba(63, 184, 176, .14);
+    --sage-soft: rgba(110, 168, 221, .14);
     --sand-soft: rgba(233, 138, 116, .14);
     --violet-soft: rgba(164, 149, 224, .16);
-    --sage-ink: #8ad6cf;
-    --sage-line: rgba(63, 184, 176, .35);
+    --sage-ink: #9cc4ea;
+    --sage-line: rgba(110, 168, 221, .35);
     --sand-ink: #f0a98f;
     --violet-ink: #c3b8ee;
     --amber-soft: rgba(217, 161, 94, .14);
@@ -116,8 +116,8 @@
     --amber-ink: #e8bd85;
     --slate-soft: rgba(154, 167, 184, .14);
     --slate-ink: #b7c3d2;
-    --blue-soft: rgba(110, 168, 221, .14);
-    --blue-ink: #9cc4ea;
+    --blue-soft: rgba(130, 185, 240, .16);
+    --blue-ink: #c5e0fa;
     --status-line: #3a4757;
     --status-bg: #1f2833;
     --status-ink: #b7c3d2;
@@ -130,7 +130,7 @@
     --panel-glass: rgba(20, 26, 35, .92);
     --grid-line: rgba(154, 167, 184, .06);
     --grid-line-strong: rgba(154, 167, 184, .1);
-    --tint-cyan: rgba(63, 184, 176, .08);
+    --tint-cyan: rgba(110, 168, 221, .08);
     --tint-violet: rgba(164, 149, 224, .07);
     --backdrop: rgba(0, 0, 0, .6);
     --shadow: 0 22px 60px rgba(0, 0, 0, .45);
@@ -141,7 +141,7 @@
     --card-spec: linear-gradient(145deg, rgba(154, 167, 184, .07), var(--panel) 68%);
     --card-inference: linear-gradient(145deg, rgba(110, 168, 221, .07), var(--panel) 68%);
     --card-runtime: linear-gradient(145deg, rgba(217, 161, 94, .07), var(--panel) 68%);
-    --card-pack: linear-gradient(145deg, rgba(94, 200, 160, .07), var(--panel) 68%);
+    --card-pack: linear-gradient(145deg, rgba(164, 149, 224, .06), var(--panel) 68%);
     --card-lab: linear-gradient(145deg, rgba(154, 167, 184, .09), var(--panel) 68%);
     --card-robot: linear-gradient(145deg, rgba(224, 123, 130, .07), var(--panel) 68%);
   }
@@ -160,20 +160,20 @@
   --on-ink: #0f141b;
   --on-accent: #0f141b;
   --ink-2: #c9d3df;
-  --cyan: #3fb8b0;
-  --cyan-bright: #57d3ca;
-  --cyan-deep: #2a8f88;
+  --cyan: #6ea8dd;
+  --cyan-bright: #8ec0f0;
+  --cyan-deep: #4a88c4;
   --violet: #a495e0;
   --coral: #e98a74;
   --amber: #d9a15e;
   --danger: #e07b82;
-  --blue: #6ea8dd;
+  --blue: #82b9f0;
   --hover-line: #4a5a6e;
-  --sage-soft: rgba(63, 184, 176, .14);
+  --sage-soft: rgba(110, 168, 221, .14);
   --sand-soft: rgba(233, 138, 116, .14);
   --violet-soft: rgba(164, 149, 224, .16);
-  --sage-ink: #8ad6cf;
-  --sage-line: rgba(63, 184, 176, .35);
+  --sage-ink: #9cc4ea;
+  --sage-line: rgba(110, 168, 221, .35);
   --sand-ink: #f0a98f;
   --violet-ink: #c3b8ee;
   --amber-soft: rgba(217, 161, 94, .14);
@@ -181,8 +181,8 @@
   --amber-ink: #e8bd85;
   --slate-soft: rgba(154, 167, 184, .14);
   --slate-ink: #b7c3d2;
-  --blue-soft: rgba(110, 168, 221, .14);
-  --blue-ink: #9cc4ea;
+  --blue-soft: rgba(130, 185, 240, .16);
+  --blue-ink: #c5e0fa;
   --status-line: #3a4757;
   --status-bg: #1f2833;
   --status-ink: #b7c3d2;
@@ -195,7 +195,7 @@
   --panel-glass: rgba(20, 26, 35, .92);
   --grid-line: rgba(154, 167, 184, .06);
   --grid-line-strong: rgba(154, 167, 184, .1);
-  --tint-cyan: rgba(63, 184, 176, .08);
+  --tint-cyan: rgba(110, 168, 221, .08);
   --tint-violet: rgba(164, 149, 224, .07);
   --backdrop: rgba(0, 0, 0, .6);
   --shadow: 0 22px 60px rgba(0, 0, 0, .45);
@@ -206,7 +206,7 @@
   --card-spec: linear-gradient(145deg, rgba(154, 167, 184, .07), var(--panel) 68%);
   --card-inference: linear-gradient(145deg, rgba(110, 168, 221, .07), var(--panel) 68%);
   --card-runtime: linear-gradient(145deg, rgba(217, 161, 94, .07), var(--panel) 68%);
-  --card-pack: linear-gradient(145deg, rgba(94, 200, 160, .07), var(--panel) 68%);
+  --card-pack: linear-gradient(145deg, rgba(164, 149, 224, .06), var(--panel) 68%);
   --card-lab: linear-gradient(145deg, rgba(154, 167, 184, .09), var(--panel) 68%);
   --card-robot: linear-gradient(145deg, rgba(224, 123, 130, .07), var(--panel) 68%);
 }
@@ -299,7 +299,7 @@ a { color: var(--cyan); text-underline-offset: .18em; }
   line-height: 1.02;
 }
 .wm-pe { grid-area: 1 / 1 / 2 / 2; text-align: right; }
-.wm-a { grid-area: 1 / 2 / 3 / 3; font-size: 2.2em; line-height: .68; padding: 0 1px; }
+.wm-a { grid-area: 1 / 2 / 3 / 3; font-size: 2.2em; line-height: .68; padding: 0 1px; color: var(--cyan); }
 .wm-ceful { grid-area: 1 / 3 / 2 / 4; }
 .wm-coexist { grid-area: 2 / 1 / 3 / 2; text-align: right; }
 .wm-nce { grid-area: 2 / 3 / 3 / 4; }
@@ -843,21 +843,27 @@ input:focus, select:focus {
 }
 .card-mark svg { width: 20px; height: 20px; fill: currentColor; }
 .card-monogram { color: var(--muted); font: 600 1.05rem var(--font-display); }
-/* A lab card's headquarters flag, on the corner of the organization's mark. The
-   wrapper keeps the mark's own size and becomes the anchor for the flag. */
-.card-mark-wrap { position: relative; flex: none; display: grid; }
+/* A card's geography: the headquarters country of the lab it joins to, and any
+   reviewed research location beside it (ADR 052, ADR 053). The row sits directly
+   right of the record's mark rather than in a card corner, because four circles
+   will not fit on a 38px circle and one placement has to hold for every card in
+   every collection. */
+.card-flags {
+  display: flex;
+  flex: none;
+  align-self: flex-start;
+  gap: .2rem;
+  margin-top: .6rem;
+}
 .card-flag {
-  position: absolute;
-  right: -6px;
-  bottom: -6px;
   display: grid;
   place-items: center;
-  width: 19px;
-  height: 19px;
+  width: 18px;
+  height: 18px;
   border: 1px solid var(--line);
   border-radius: var(--radius-pill);
   background: var(--panel);
-  font-size: .72rem;
+  font-size: .68rem;
   line-height: 1;
   overflow: hidden;
   pointer-events: none;
@@ -910,6 +916,7 @@ input:focus, select:focus {
   letter-spacing: .07em;
   text-transform: uppercase;
 }
+.memory_system .role-badge { background: var(--blue-soft); color: var(--blue-ink); }
 .agent_system .role-badge { background: var(--sand-soft); color: var(--sand-ink); }
 .assistant_system .role-badge { background: var(--violet-soft); color: var(--violet-ink); }
 .specification-card .role-badge { background: var(--slate-soft); color: var(--slate-ink); }
@@ -1729,6 +1736,7 @@ footer #data-date, footer .footer-meta {
   html:has(body.atlas-app) { scroll-padding-bottom: calc(var(--legend-h, 0px) + 80px + env(safe-area-inset-bottom, 0px)); }
   .atlas-app .site-header { min-height: 56px; grid-template-columns: 1fr; padding: .5rem 1rem; }
   .atlas-app .site-header .tabs { display: none; }
+  .atlas-app .site-header .brand { justify-self: center; }
   .atlas-app .brand small { display: none; }
   .atlas-app .wordmark { font-size: 1rem; }
   .atlas-app #directory.view:not(.is-results) { padding-top: 1.25rem; }

@@ -57,6 +57,12 @@ Assign `status` from the project statuses so a discontinued robot is labelled ra
 
 A subagent's research is a lead, never evidence. Re-fetch every URL and re-read every quotation yourself before it lands.
 
+## The maker as a lab
+
+`manufacturer` is a join field ([ADR 053](adr/053-a-robots-maker-joins-labs-on-the-robot-it-makes.md)): the string is validated against the robot records themselves, so it names an organization the catalog states, and the maker's `catalog_names` in Labs must list it exactly. Validation refuses a `manufacturer` no lab claims and a lab catalog name that no robot record carries, so a rename cannot silently detach a maker from its lab.
+
+A maker with a lab record gets what every other collection's records get: the lab cross-links from the robot's dialog, the robot is listed on the lab's dialog under the robots it makes, and the robot's card carries the lab's geography circles ([ADR 052](adr/052-a-lab-records-where-its-work-happens-separately-from-its-headquarters.md)). The robot record itself changes in no way by having a maker in Labs: still unscored, still what a vendor documents, never what the robot does.
+
 ## Unavailable pages
 
 A 404, a sales gate, or a login wall on a required evidence role fails the gate. A missing terms page does not: it is recorded as `none_published` with the observation in `terms_note`. A page that resolves but cannot be pinned is not an unavailable page; cite it as unpinnable, per step 2.

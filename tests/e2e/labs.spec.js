@@ -18,13 +18,16 @@ test("Labs lists every lab by name and filters by type, headquarters, and releas
   await expect(page.locator("#lab-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#lab-grid .compare-toggle")).toHaveCount(0);
 
-  // Each card carries its headquarters flag on the organization's mark, except
-  // where the record lists no headquarters, and the flag repeats the country the
-  // eyebrow already names, so it is hidden from assistive technology.
-  await expect(page.locator("#lab-grid .lab-card .card-flag")).toHaveCount(catalogCounts.labNamesWithFlag().length);
+  // Each card carries a circle per geography fact: the headquarters country,
+  // and any reviewed research location beside it. The circles repeat what the
+  // eyebrow and the dialog print in words, so they are hidden from assistive
+  // technology (ADR 052).
+  await expect(page.locator("#lab-grid .lab-card .card-flag")).toHaveCount(catalogCounts.labFlagsOnCards());
+  await expect(page.locator('#lab-grid .lab-card:has([data-lab="lab-anthropic"]) .card-flag')).toHaveCount(1);
   await expect(page.locator('#lab-grid .lab-card:has([data-lab="lab-anthropic"]) .card-flag')).toHaveAttribute("aria-hidden", "true");
+  // Higgsfield AI is a San Francisco entity whose engineering sits in Almaty.
+  await expect(page.locator('#lab-grid .lab-card:has([data-lab="lab-higgsfield-ai"]) .card-flag')).toHaveCount(2);
   await expect(page.locator('#lab-grid .lab-card:has([data-lab="lab-hugging-face"]) .card-flag')).toHaveCount(0);
-  await expect(page.locator('#lab-grid .lab-card:has([data-lab="lab-higgsfield-ai"]) .card-flag')).toHaveCount(1);
 
   await setFilter(page, "labs", "type", "technology_company");
   await expect(page.locator("#lab-grid .lab-card h2")).toHaveText(
@@ -40,14 +43,17 @@ test("Labs lists every lab by name and filters by type, headquarters, and releas
   );
 
   // The organization note is detail-only; the search index still reaches it.
+  // A search orders by match rather than by name (ADR 040), so both sides are
+  // sorted here: which labs match is the assertion, not where they land.
   await clearFilters(page, "labs");
   await search(page, "Hangzhou");
-  await expect(page.locator("#lab-grid .lab-card h2")).toHaveText(catalogCounts.labsMatching("Hangzhou"));
+  const headings = await page.locator("#lab-grid .lab-card h2").allTextContents();
+  expect(headings.sort()).toEqual([...catalogCounts.labsMatching("Hangzhou")].sort());
 });
 
 test("a lab dialog joins the records that name the lab and browses its releases in Models", async ({ page }) => {
   await page.goto("/?collection=labs");
-  await page.locator('#lab-grid [data-lab="lab-anthropic"]').click();
+  await page.locator('#lab-grid .card-open[data-lab="lab-anthropic"]').click();
 
   const dialog = recordView(page, "lab");
   await expect(dialog.locator("h1")).toHaveText("Anthropic");
@@ -109,6 +115,21 @@ test("a lab admitted on a system explains its empty release join instead of list
   await expect(systems).toContainText("DSPy");
 });
 
+test("a lab's dialog names the work location its card's second circle stands for", async ({ page }) => {
+  await page.goto("/?collection=labs&record=lab:lab-higgsfield-ai");
+  const dialog = recordView(page, "lab");
+
+  // The San Francisco entity and the Almaty engineering are two different facts,
+  // and the dialog keeps them apart rather than folding one into the other.
+  await expect(dialog).toContainText("Headquarters:");
+  await expect(dialog).toContainText("United States");
+  await expect(dialog).toContainText("Work also happens in: Kazakhstan");
+
+  // A lab with no reviewed work location prints no such line at all.
+  await page.goto("/?collection=labs&record=lab:lab-hugging-face");
+  await expect(recordView(page, "lab")).not.toContainText("Work also happens in:");
+});
+
 test("a lab joined to systems but to no release says so instead of listing nothing", async ({ page }) => {
   await page.goto("/?collection=labs&record=lab:lab-hugging-face");
   const dialog = recordView(page, "lab");
@@ -130,9 +151,10 @@ test("a lab joined to systems but to no release says so instead of listing nothi
     .toContainText("Hugging Face Inference Endpoints");
   await expect(dialog).toContainText("Named in the catalog as:");
 
-  // The card's count row drops the zeros rather than printing a 0.
+  // The card names systems inline and counts the joins it does not list in tags.
   const card = page.locator('#lab-grid .lab-card:has([data-lab="lab-hugging-face"])');
-  await expect(card.locator(".tags span")).toHaveText(["2 systems", "2 inference services", "1 local runtime"]);
+  await expect(card.locator('.lab-related-label:text-matches("Systems it builds")')).toHaveText("Systems it builds · 2");
+  await expect(card.locator(".tags span")).toHaveText(["2 inference services", "1 local runtime"]);
 });
 
 test("a model dialog links to the lab that developed the release", async ({ page }) => {

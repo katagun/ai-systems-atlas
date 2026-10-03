@@ -857,9 +857,35 @@ test("a lab card's flag covers every country the taxonomy records, and nothing e
     if (country.id === "none_listed") assert.equal(flag, "", "no headquarters is not a country to flag");
     else assert.ok(isFlag(flag), `no flag for the taxonomy country ${country.id} (${country.name})`);
   }
-  for (const lab of readJSON("labs.json").labs) {
+  // A record that joins to a lab inherits its geography on the card (ADR 053),
+  // so a robot whose maker is a lab carries the same circles the lab card does.
+  const robots = readJSON("robots.json").robots;
+  const labs = readJSON("labs.json").labs;
+  const labNames = new Set(labs.flatMap(lab => lab.catalog_names));
+  const makerLab = lab => (lab.research_locations || []).concat(lab.headquarters);
+  for (const robot of robots) {
+    const makers = labs.filter(lab => lab.catalog_names.includes(robot.manufacturer));
+    assert.ok(labNames.has(robot.manufacturer), `${robot.id} names no lab for its manufacturer`);
+    if (makers.length) {
+      const expected = makers.flatMap(makerLab);
+      assert.equal(makers.length, 1, `${robot.manufacturer} is claimed by more than one lab`);
+      assert.deepEqual(expected, [...new Set(expected)], `${robot.id} would print a country twice`);
+      assert.equal(makerLab(makers[0]).includes("none_listed"), false, `${robot.id} has no country to flag`);
+    }
+  }
+
+  for (const lab of labs) {
     assert.ok(lab.headquarters, `${lab.id} records no headquarters to flag`);
-    assert.equal(countryFlag(lab.headquarters), countryFlag(lab.headquarters.toLowerCase()));
+    // Both geography fields ride on the boot record, so a card can paint them
+    // without its detail payload (ADR 052).
+    const boot = readJSON("app/labs.json").labs.find(entry => entry.id === lab.id);
+    for (const code of [lab.headquarters, ...(lab.research_locations || [])]) {
+      assert.equal(countryFlag(code), countryFlag(code.toLowerCase()));
+      if (code === "none_listed") assert.equal(countryFlag(code), "", `${lab.id} has no country to flag`);
+      else assert.notEqual(countryFlag(code), "", `${lab.id} has no flag for ${code}`);
+      if (code === lab.headquarters) assert.ok("headquarters" in boot, `${lab.id} boot record lacks headquarters`);
+      else assert.ok((boot.research_locations || []).includes(code), `${lab.id} boot record lacks ${code}`);
+    }
   }
   for (const unknown of ["none_listed", "", undefined, "zz", "usa"]) {
     assert.equal(countryFlag(unknown), "", `${unknown} must not borrow a flag`);
