@@ -32,7 +32,8 @@
   // label of its own. Regional indicator pairs are the flag: they are drawn by the
   // platform's own font rather than by artwork this catalog would have to keep
   // accurate, and a country the taxonomy records but this map does not — and
-  // `none_listed`, which is not a country — gets no flag at all.
+  // `none_listed`, which is not a country — gets no flag at all. `research_locations`
+  // (ADR 052) names the same vocabulary, so one map serves both fields.
   const COUNTRY_FLAGS = {
     be: "🇧🇪",
     ca: "🇨🇦",
@@ -40,10 +41,12 @@
     cn: "🇨🇳",
     de: "🇩🇪",
     fr: "🇫🇷",
+    gb: "🇬🇧",
     il: "🇮🇱",
     in: "🇮🇳",
     jp: "🇯🇵",
     kr: "🇰🇷",
+    kz: "🇰🇿",
     sg: "🇸🇬",
     tr: "🇹🇷",
     us: "🇺🇸",
@@ -400,6 +403,9 @@
       specifications: (catalog.specifications || []).filter(item => (item.stewards || []).some(name => names.has(name))),
       packs: (catalog.packs || []).filter(item => names.has(item.steward)),
       systems: (catalog.projects || []).filter(item => systemIds.has(item.id)),
+      // A robot joins by the organization that makes it, the way a model joins by
+      // its developer (ADR 053).
+      robots: (catalog.robots || []).filter(item => names.has(item.manufacturer)),
     };
   }
 
@@ -503,6 +509,9 @@
     else if (kind === "runtime") labs = [index.byName.get(record.maintainer)];
     else if (kind === "spec") labs = (record.stewards || []).map(name => index.byName.get(name));
     else if (kind === "pack") labs = [index.byName.get(record.steward)];
+    // A robot joins by the organization that makes it, the way a model joins by
+    // its developer (ADR 053).
+    else if (kind === "robot") labs = [index.byName.get(record.manufacturer)];
     else labs = [];
     return [...new Set(labs.filter(Boolean))];
   }

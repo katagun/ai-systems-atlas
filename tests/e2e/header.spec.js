@@ -27,6 +27,9 @@ for (const width of [320, 360, 390, 720]) {
       if (path === "/") {
         await expect(page.locator(".site-header .tabs")).toBeHidden();
         await expect(page.locator("#mobile-nav")).toBeInViewport();
+        const headerCenter = header.x + header.width / 2;
+        const brandCenter = brand.x + brand.width / 2;
+        expect(Math.abs(headerCenter - brandCenter)).toBeLessThan(2);
         await page.locator('[data-mobile-nav="more"]').click();
         await expect(page.locator("#theme-toggle")).toBeInViewport();
         await expect(page.locator(".github-link")).toBeInViewport();

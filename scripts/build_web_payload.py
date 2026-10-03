@@ -149,7 +149,9 @@ BOOT_FIELDS = {
     ),
     # A lab card and every cross-link to a lab join through catalog_names and
     # systems (ADR 041), so both must be on the boot record; the join itself runs
-    # in the browser over boot records the page already holds.
+    # in the browser over boot records the page already holds. A card also paints
+    # its geography from boot, so research_locations rides with headquarters
+    # (ADR 052) rather than waiting for the detail payload.
     "labs": (
         "id",
         "name",
@@ -157,6 +159,7 @@ BOOT_FIELDS = {
         "description",
         "lab_type",
         "headquarters",
+        "research_locations",
         "parent_organization",
         "catalog_names",
         "systems",

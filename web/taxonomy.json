@@ -988,6 +988,11 @@
       "definition": "The catalog holds a reviewed system record the organization developed, and no reviewed model release of its own, so the record joins to that system instead."
     },
     {
+      "id": "reviewed_robot",
+      "name": "Reviewed robot",
+      "definition": "The catalog holds a reviewed robot record the organization makes, and no reviewed model release or reviewed system of its own, so the record joins to that robot instead."
+    },
+    {
       "id": "frontier_announcement",
       "name": "Frontier announcement",
       "definition": "The organization publishes, on its own pages, a statement that it is building frontier models, and the catalog has reviewed no release of its own. The record joins to nothing and says so."
@@ -1047,6 +1052,11 @@
       "definition": "Headquartered in France (ISO 3166-1 FR)."
     },
     {
+      "id": "gb",
+      "name": "United Kingdom",
+      "definition": "Where a lab says it is headquartered, or where its reviewed research, engineering, or creative work happens (ISO 3166-1 GB)."
+    },
+    {
       "id": "in",
       "name": "India",
       "definition": "Headquartered in India (ISO 3166-1 IN)."
@@ -1060,6 +1070,11 @@
       "id": "jp",
       "name": "Japan",
       "definition": "Headquartered in Japan (ISO 3166-1 JP)."
+    },
+    {
+      "id": "kz",
+      "name": "Kazakhstan",
+      "definition": "Where a lab says it is headquartered, or where its reviewed research, engineering, or creative work happens (ISO 3166-1 KZ)."
     },
     {
       "id": "sg",
@@ -1923,6 +1938,11 @@
       "id": "OFL-1.1",
       "name": "SIL Open Font License 1.1",
       "kind": "open_content"
+    },
+    {
+      "id": "PostgreSQL",
+      "name": "PostgreSQL License",
+      "kind": "open_source"
     },
     {
       "id": "Unlicense",
