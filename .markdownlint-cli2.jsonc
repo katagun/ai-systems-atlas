@@ -24,5 +24,8 @@
     "MD028": false,
     "MD038": false
   },
-  "globs": ["**/*.md", "!**/node_modules/**", "!.claude/worktrees/**", "!.muse/worktrees/**", "!web/records/**", "!docs/superpowers/**", "!test-results/**", "!playwright-report/**"],
+  // Bare CLI runs lint all Markdown; hooks use --no-globs and their filenames.
+  // Keep exclusions in ignores so they apply to both invocation styles.
+  "globs": ["**/*.md"],
+  "ignores": ["**/node_modules/**", ".claude/worktrees/**", ".muse/worktrees/**", "web/records/**", "docs/superpowers/**", "test-results/**", "playwright-report/**"],
 }

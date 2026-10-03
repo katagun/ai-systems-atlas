@@ -14,7 +14,7 @@ Suggest an unreviewed project through the issue form rather than adding it direc
 
 ## Verify the change
 
-Run the commands in [`AGENTS.md`](AGENTS.md). Install the commit hooks once per checkout with `pre-commit install`; `pre-commit run --all-files` reproduces the fast CI gate (formatting, lint, secrets on staged files, markdown, workflows) without the browser suite. After changing a published `directory/*.json` file, run synchronization before validation. Commit generated `web/` copies with their canonical directory files. Never report checks as passing unless you ran them.
+Run the commands in [`AGENTS.md`](AGENTS.md). Install commit and push hooks once per checkout with `pre-commit install`; `pre-commit run --all-files` runs the fast local checks and a full-history secret scan. `pre-commit run --all-files --hook-stage pre-push` adds the full Python coverage suite and local browser tests. GitHub CI scopes lint and Python regression tests to affected changes and never runs browser tests; see [`docs/OPERATIONS.md`](docs/OPERATIONS.md#pre-commit). After changing a published `directory/*.json` file, run `uv run python scripts/regenerate.py` before validation. Commit generated `web/` copies with their canonical directory files. Never report checks as passing unless you ran them.
 
 Pull requests must pass the required `verify` job, including dependency review for lockfile changes. Suspected vulnerabilities follow [`SECURITY.md`](SECURITY.md), not public issues.
 

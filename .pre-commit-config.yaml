@@ -1,13 +1,13 @@
 # Pre-commit gates for AI Systems Atlas.
 #
 # Install once per checkout:  pre-commit install
-# Run everything (what CI runs):  pre-commit run --all-files
+# Run every local check:  pre-commit run --all-files --hook-stage pre-push
 #
-# Every hook runs on `git commit` except the two slow suites, the unit tests
-# under coverage (about 192 s here, 93 s in CI) and the browser e2e (3.8 min), which run on
-# `git push` instead (`stages: [pre-push]`). `pre-commit install` installs
-# both hook types through default_install_hook_types below. CI runs the fast
-# hooks in one job and each slow suite in its own job; see verify.yml.
+# Every hook runs on `git commit` except unit tests under coverage and browser
+# e2e, which run on `git push` instead (`stages: [pre-push]`). `pre-commit install`
+# installs both hook types through default_install_hook_types below. GitHub CI
+# scopes lint and Python tests to affected files and never runs browser tests;
+# see verify.yml. The full local command above remains available for any change.
 # Complexity is enforced through ruff C901 (Python, max 50) and the eslint
 # complexity rule (JS, max 40); both are ratchets documented in
 # pyproject.toml and eslint.config.mjs, tightened by refactor, never by noqa.
@@ -40,18 +40,18 @@ repos:
       - id: check-added-large-files
         args: [--maxkb=1000]
 
-  # Secrets, scanned identically on commit and in CI: a full-history
-  # `gitleaks git` scan (seconds at this repo size) rather than a staged-only
-  # scan, so the local gate and the verify.yml gate can never disagree.
-  # The entry overrides the hook manifest (whose `--pre-commit --staged`
-  # default would be a no-op under `run --all-files` in CI).
+  # Local secrets gate: full-history `gitleaks git`, including manual all-files
+  # runs. CI invokes this hook separately with a validated commit range, plus a
+  # periodic full-history audit. The remote hook installs the pinned binary;
+  # the wrapper selects the range and keeps tool arguments shared.
   # Known-safe test fixtures live in .gitleaks.toml, never inline.
   - repo: https://github.com/gitleaks/gitleaks
     rev: v8.30.1
     hooks:
       - id: gitleaks
-        entry: gitleaks git --redact --verbose
-        args: [--config, .gitleaks.toml]
+        entry: uv run python scripts/scan_secrets.py
+        always_run: true
+        pass_filenames: false
 
   # Python lint + format, pinned to the ruff in the pyproject.toml dev group.
   # types_or is narrowed to Python sources on purpose: ruff would otherwise
@@ -112,8 +112,8 @@ repos:
         args: [-c, .yamllint.yml]
         types: [yaml]
 
-      # Markdown prose against .markdownlint-cli2.jsonc (globs live there;
-      # the frozen docs/superpowers planning archive is out of scope).
+      # Markdown prose against .markdownlint-cli2.jsonc. --no-globs keeps the
+      # hook scoped to supplied filenames; the config's ignores still apply.
       # --fix formats safe issues on commit (blank lines, fence spacing,
       # bare-URL brackets); the commit fails so the author reviews the fix.
       # Resolved from node_modules (see package.json); --yes keeps CI
@@ -122,8 +122,8 @@ repos:
         language: system
         name: markdownlint-cli2
         entry: npx --yes markdownlint-cli2
-        args: [--fix]
-        pass_filenames: false
+        args: [--fix, --no-globs, --]
+        types: [markdown]
 
       # Static HTML source (generated share pages under web/records and the
       # generated blog under web/blog are owned by their builders).
@@ -148,10 +148,9 @@ repos:
       - id: eslint
         language: system
         name: eslint (repo config)
-        entry: npm run lint:js
-        args: [--, --max-warnings=0]
+        entry: npx --yes eslint
+        args: [--max-warnings=0, --no-warn-ignored, --]
         types: [javascript]
-        pass_filenames: false
 
       # GitHub Actions security audit; findings suppressed with justification
       # in .github/zizmor.yml, never inline.
@@ -162,15 +161,13 @@ repos:
         args: [--no-progress, --format, plain]
         files: ^\.github/workflows/
 
-  # Project verification: everything verify.yml runs, so `pre-commit run
-  # --all-files --hook-stage pre-push` reproduces CI exactly (CI is env setup
-  # plus pre-commit, split across jobs). always_run keeps each check on every
-  # commit or push, not just when its files change; pass_filenames keeps the
-  # repo-owned commands intact. The fast checks here take seconds on commit;
-  # the unit suite and e2e carry `stages: [pre-push]` and run on push.
+  # Project verification: local hooks keep the full checks, while CI selects
+  # its Python suite from the change scope. always_run keeps these checks on each
+  # local commit or push; pass_filenames keeps the commands intact. Unit tests
+  # and e2e carry `stages: [pre-push]` and run on push. Browser tests are local
+  # only; GitHub verification does not install or run Chromium.
   # Bypass one check with SKIP=<hook-id>. To skip only the browser suite on a push, use
-  # SKIP=e2e-browser-tests: it is the sole slow hook, and the generated-freshness gate
-  # costs under a second, so there is no reason to lose it along with a four-minute run.
+  # SKIP=e2e-browser-tests preserves the other checks, including freshness.
   #
   # Prefer SKIP over git push --no-verify / git commit --no-verify, which is all of them.
   # Nothing in pre-commit can survive --no-verify, including the 0.8s staleness gate, and
@@ -186,19 +183,12 @@ repos:
         always_run: true
         pass_filenames: false
 
-      # git exports GIT_DIR/GIT_WORK_TREE/GIT_INDEX_FILE into hook processes
-      # during `git commit`; unset them so the suite's scratch git repos
-      # (RealGit tests) resolve on their own instead of this clone.
+      # The runner clears git's hook-specific environment so the suite's
+      # scratch git repos (RealGit tests) resolve on their own.
       - id: python-tests-coverage
         language: system
         name: python tests under coverage
-        entry: bash
-        args:
-          - -c
-          - >-
-            unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR;
-            uv run coverage run -m unittest discover -s tests &&
-            uv run coverage report
+        entry: uv run python scripts/run_python_tests.py
         always_run: true
         pass_filenames: false
         stages: [pre-push]
@@ -244,9 +234,8 @@ repos:
         always_run: true
         pass_filenames: false
 
-      # Needs Playwright browsers: npx playwright install chromium (CI does
-      # this before the pre-commit step). Starts its own server per checkout.
-      # CI sets ATLAS_E2E_SHARD to run half the suite per job.
+      # Local only. Install Chromium once: npx playwright install chromium.
+      # Starts its own server per checkout; GitHub CI never runs this hook.
       - id: e2e-browser-tests
         language: system
         name: browser end-to-end tests

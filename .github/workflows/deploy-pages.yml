@@ -10,8 +10,8 @@ on:
       - main
 
 # No manual trigger: a hand-started run could publish a revision that never
-# passed the complete verify workflow (CR-04). To redeploy, re-run the
-# push-triggered verify run for that revision; see docs/OPERATIONS.md "GitHub Pages".
+# passed the complete verify workflow (CR-04). To retry a failed publication,
+# re-run the current main revision's push-triggered verify run; see docs/OPERATIONS.md.
 
 permissions:
   contents: read
@@ -30,8 +30,11 @@ jobs:
       github.event.workflow_run.head_branch == github.event.repository.default_branch
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    outputs:
+      changed: ${{ steps.changes.outputs.changed }}
     permissions:
       contents: read
+      deployments: read
       pages: read
     steps:
       - name: Check out repository
@@ -39,50 +42,37 @@ jobs:
         with:
           persist-credentials: false
           ref: ${{ github.event.workflow_run.head_sha }}
-      - name: Install uv
-        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
-        with:
-          enable-cache: true
-          python-version: "3.12"
-      - name: Sync environment
-        run: uv sync --locked
-      # The web behavior tests include the guard that this checkout's node_modules is the
-      # pinned one (tests/test_web.js, added with scripts/install_pin.mjs). That assertion
-      # reads node_modules, so this job has to install the same tree `verify` does before it
-      # can run them: without it every package reads as absent rather than drifted and the
-      # two runs after #406 failed here, leaving main unpublished.
-      - name: Cache npm downloads
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.npm
-          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-      - name: Install Node dependencies
-        run: npm ci --ignore-scripts
-      - name: Validate published data
-        run: uv run python scripts/validate_directory.py
-      - name: Run web behavior tests
-        run: node --test tests/test_web.js
-      - name: Check browser JavaScript syntax
-        run: node --check web/app-core.js && node --check web/app.js
+          # Compare against the actual deployed commit, even after failed/canceled runs.
+          fetch-depth: 0
+      - name: Check publication changes since the last successful deployment
+        id: changes
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: python3 scripts/check_deploy_changes.py
       # ADR 050: this is the only place content hashes are written. Committed pages carry
       # the placeholder `?v=BUILD`, so no ordinary branch can produce the hash-only merge
-      # conflict this replaces, and `freshness-assets` cannot fail on this step. It runs
-      # after the web tests, which assert the placeholder, and before the upload, so the
-      # published artifact is the stamped tree. Deploying an unstamped page would ship
-      # every reader a cache key that no content ever changes under.
+      # conflict this replaces. Verification already passed for this checkout. The
+      # stamper only imports Node built-ins, so publishing needs no dependency install.
       - name: Stamp asset versions for deploy
+        if: steps.changes.outputs.changed == 'true'
         run: node scripts/build_asset_version.mjs
       - name: Check every published reference resolved to a content hash
+        if: steps.changes.outputs.changed == 'true'
         run: node scripts/build_asset_version.mjs --stamped
       - name: Configure GitHub Pages
+        if: steps.changes.outputs.changed == 'true'
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
       - name: Upload Pages artifact
+        if: steps.changes.outputs.changed == 'true'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: web
 
   deploy:
     needs: build
+    if: needs.build.outputs.changed == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

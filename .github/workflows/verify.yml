@@ -6,27 +6,50 @@ on:
       - main
   pull_request:
   workflow_dispatch:
+  schedule:
+    # Full lint, Python coverage and secret history audit; browsers stay local.
+    - cron: "17 9 * * 0"
 
 permissions:
   contents: read
 
 concurrency:
-  group: verify-${{ github.workflow }}-${{ github.ref }}
+  group: verify-${{ github.workflow }}-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: true
 
-# The whole gate lives in .pre-commit-config.yaml: lint, format, secrets,
-# complexity, catalog validation, unit tests with coverage, syntax and web
-# behavior checks, generated-file freshness, and e2e. CI is environment setup
-# plus pre-commit, split so the fast hooks report in about a minute while the
-# two slow suites run beside them: the unit suite in its own job and the
-# browser suite in two shards. `verify`, the required check, is the gate job
-# that fails when any of them does, so branch protection names one context.
-# no-commit-to-branch is skipped: it guards local commits off main, and a
-# push-triggered run on main always sits on main, so the hook would fail
-# every post-merge verification. Branch protection is the guard.
+# Keep the required workflow unconditional. Only the expensive Python regression
+# suite is skipped for known content/web-only changes; quick checkout contracts
+# and freshness always run. Browser tests remain in the local pre-push hook.
 jobs:
+  changes:
+    name: select checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      base: ${{ steps.plan.outputs.base }}
+      head: ${{ steps.plan.outputs.head }}
+      python_tests: ${{ steps.plan.outputs.python_tests }}
+      lint_all: ${{ steps.plan.outputs.lint_all }}
+      full_history: ${{ steps.plan.outputs.full_history }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # The ancestor search includes canceled pushes and every PR commit.
+          fetch-depth: 0
+      - name: Select checks from the complete change range
+        id: plan
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/ci_changes.py plan
+
   static:
     name: static checks and freshness
+    needs: changes
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -34,6 +57,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          # Gitleaks scans the selected commits, including intermediate edits.
           fetch-depth: 0
       - name: Review dependency changes
         if: github.event_name == 'pull_request'
@@ -55,14 +79,31 @@ jobs:
       - name: Install Node dependencies
         run: npm ci --ignore-scripts
       - name: Install pre-commit
-        run: pipx install pre-commit
-      - name: Run the fast hooks on all files
+        run: pipx install pre-commit==4.6.2
+      - name: Cache pre-commit environments
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/pre-commit
+          key: >-
+            pre-commit-v1-${{ runner.os }}-${{ runner.arch }}-py312-${{
+            hashFiles('.pre-commit-config.yaml', 'pyproject.toml', 'uv.lock') }}
+      - name: Scan new commits or audit full history
         env:
-          SKIP: no-commit-to-branch
-        run: pre-commit run --all-files --show-diff-on-failure
+          ATLAS_GITLEAKS_BASE: ${{ needs.changes.outputs.full_history == 'false' && needs.changes.outputs.base || '' }}
+          ATLAS_GITLEAKS_HEAD: ${{ needs.changes.outputs.head }}
+        run: pre-commit run --all-files gitleaks
+      - name: Run scoped lint and the always-on fast hooks
+        env:
+          ATLAS_CI_BASE: ${{ needs.changes.outputs.base }}
+          ATLAS_CI_LINT_ALL: ${{ needs.changes.outputs.lint_all }}
+        run: uv run python scripts/ci_changes.py lint
+      - name: Check documentation, catalog and web contracts
+        run: uv run python scripts/run_content_checks.py
 
   python:
     name: python tests under coverage
+    needs: changes
+    if: needs.changes.outputs.python_tests == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -77,82 +118,28 @@ jobs:
           python-version: "3.12"
       - name: Sync environment
         run: uv sync --locked
-      - name: Install pre-commit
-        run: pipx install pre-commit
-      - name: Run the unit suite hook
-        run: pre-commit run --all-files --hook-stage pre-push python-tests-coverage
-
-  e2e:
-    name: browser tests (shard ${{ matrix.shard }})
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    strategy:
-      fail-fast: false
-      matrix:
-        shard: ["1/2", "2/2"]
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - name: Install uv
-        uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
-        with:
-          enable-cache: true
-          python-version: "3.12"
-      - name: Sync environment
-        run: uv sync --locked
-      - name: Cache npm downloads
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.npm
-          key: npm-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-      - name: Install Node dependencies
-        run: npm ci --ignore-scripts
-      - name: Cache Playwright browsers
-        id: playwright-cache
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-      - name: Install Chromium
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npm exec -- playwright install --with-deps chromium
-      - name: Install Chromium system libraries
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: npm exec -- playwright install-deps chromium
-      - name: Install pre-commit
-        run: pipx install pre-commit
-      - name: Run the browser suite hook
-        env:
-          ATLAS_E2E_SHARD: ${{ matrix.shard }}
-        run: pre-commit run --all-files --hook-stage pre-push e2e-browser-tests
-      # Playwright keeps a trace, the page snapshot, and the error context for
-      # each failed test under test-results/ (trace: retain-on-failure in
-      # playwright.config.js). Linux-only failures could not be diagnosed from
-      # log text alone, so the directory is kept for a week on failure; open a
-      # trace with `npx playwright show-trace <file>.zip`.
-      - name: Keep the traces of failed tests
-        if: failure()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-        with:
-          name: playwright-test-results-shard-${{ strategy.job-index }}
-          path: test-results/
-          if-no-files-found: ignore
-          retention-days: 7
+      - name: Run the complete Python suite and coverage gate
+        run: uv run python scripts/run_python_tests.py
 
   verify:
     name: verify
-    needs: [static, python, e2e]
+    needs: [changes, static, python]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Fail when any job did not succeed
+      - name: Require selected checks to succeed
         env:
-          RESULTS: ${{ toJSON(needs.*.result) }}
+          CHANGES_RESULT: ${{ needs.changes.result }}
+          STATIC_RESULT: ${{ needs.static.result }}
+          PYTHON_RESULT: ${{ needs.python.result }}
+          PYTHON_EXPECTED: ${{ needs.changes.outputs.python_tests }}
         run: |
-          echo "job results: $RESULTS"
-          case "$RESULTS" in
-            *failure*|*cancelled*|*skipped*) echo "a required job did not succeed"; exit 1 ;;
+          if [ "$CHANGES_RESULT" != success ] || [ "$STATIC_RESULT" != success ]; then
+            echo "change selection and static checks must both succeed"
+            exit 1
+          fi
+          case "$PYTHON_EXPECTED:$PYTHON_RESULT" in
+            true:success|false:skipped|false:success) ;;
+            *) echo "a selected check failed, was canceled, or was unexpectedly skipped"; exit 1 ;;
           esac
