@@ -53,7 +53,7 @@ test("Labs lists every lab by name and filters by type, headquarters, and releas
 
 test("a lab dialog joins the records that name the lab and browses its releases in Models", async ({ page }) => {
   await page.goto("/?collection=labs");
-  await page.locator('#lab-grid [data-lab="lab-anthropic"]').click();
+  await page.locator('#lab-grid .card-open[data-lab="lab-anthropic"]').click();
 
   const dialog = recordView(page, "lab");
   await expect(dialog.locator("h1")).toHaveText("Anthropic");
@@ -151,9 +151,10 @@ test("a lab joined to systems but to no release says so instead of listing nothi
     .toContainText("Hugging Face Inference Endpoints");
   await expect(dialog).toContainText("Named in the catalog as:");
 
-  // The card's count row drops the zeros rather than printing a 0.
+  // The card names systems inline and counts the joins it does not list in tags.
   const card = page.locator('#lab-grid .lab-card:has([data-lab="lab-hugging-face"])');
-  await expect(card.locator(".tags span")).toHaveText(["2 systems", "2 inference services", "1 local runtime"]);
+  await expect(card.locator('.lab-related-label:text-matches("Systems it builds")')).toHaveText("Systems it builds · 2");
+  await expect(card.locator(".tags span")).toHaveText(["2 inference services", "1 local runtime"]);
 });
 
 test("a model dialog links to the lab that developed the release", async ({ page }) => {
