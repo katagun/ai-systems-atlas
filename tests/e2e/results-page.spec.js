@@ -86,18 +86,17 @@ test("an empty result's collection buttons count where the matches are, when two
   await expect(page.locator("#pack-grid .project-card h2")).toHaveText(["ECC"]);
 });
 
-// A lab's name, not its models, answers "hangzhou", so "Browse all in Models"
-// lists nothing unless it clears the search its label promises to widen. Everything
-// lists the lab now that it holds Labs, so the lab is opened from the All grid rather
-// than from the empty state's pointer into the Labs scope, which this query no longer
-// produces.
+// A lab's models, not only its name, must join for "Browse all in Models" to
+// appear; Palmyra matches Writer's releases while Hangzhou now also matches
+// robot-only labs with no model button. Everything lists the lab, so open Writer
+// from the All grid rather than from an empty-state pointer into Labs.
 test("Browse all in Models clears the search and lists the lab's releases newest first", async ({ page }) => {
   await page.goto("/");
-  await searchAll(page, "hangzhou");
+  await searchAll(page, "Palmyra");
   // The card's own details control, not the overflow control a capped card's
   // release list adds: both carry data-lab and both open this dialog.
-  const lab = page.locator("#all-directory-grid .lab-card .card-open").first();
-  const id = await lab.getAttribute("data-lab");
+  const lab = page.locator('#all-directory-grid .lab-card .card-open[data-lab="lab-writer"]');
+  const id = "lab-writer";
   await lab.click();
   await recordView(page, "lab").locator(`[data-browse-lab-models="${id}"]`).click();
   await expect(page.locator("#models-directory-panel")).toBeVisible();
