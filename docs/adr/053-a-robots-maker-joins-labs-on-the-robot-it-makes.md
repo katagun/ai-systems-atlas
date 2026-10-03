@@ -22,7 +22,7 @@ The five robot makers are admitted on this basis in the same change, each review
 
 ## Consequences
 
-- Five organizations enter Labs that were previously invisible in it, and the collection holds 53 records covering the same 316 reviewed releases: none of the five develops a release the catalog reviews, which is the same reason each joins on a robot.
+- Five organizations enter Labs that were previously invisible in it, and the collection holds 53 records covering the same 317 reviewed releases: none of the five develops a release the catalog reviews, which is the same reason each joins on a robot.
 - A hardware maker is now a lab record, which is a real widening and not a renaming. The gate that keeps the collection honest is still the collection's own: an organization is recorded because the catalog curates a record it made, not because it is prominent, funded, or well known. A robot maker with a reviewed release is recorded on that release instead.
 - Unitree's UnifoLM-X1-0, Figure's Helix, and 1X's Redwood stay out of Models, and each record says so rather than implying the organization publishes no model. A maker whose model is a language release, or whose action model is reviewed as an open model interface in its own right, is recorded on that release.
 - Robot records gain what every other collection's records have: an organization the catalog states they belong to, joinable in both directions. The robot guide's boundary is unchanged — a robot record still says what a vendor documents, never what the robot does — and this ADR adds a join, not a field.

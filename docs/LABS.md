@@ -32,12 +32,6 @@ Leave out a separately branded subsidiary with its own product line, such as Git
 
 `systems` lists the ids of the systems the organization builds and ships, because a system record names no organization. It spans two collections: a `projects.json` id and a `robots.json` id are both systems the catalog curates ([ADR 048](adr/048-a-research-group-may-be-admitted-on-a-system-it-developed.md), [ADR 053](adr/053-a-robots-maker-joins-labs-on-the-robot-it-makes.md)). List one only when its own reviewed record, its URL, or its repository establishes the organization as its maker. A system built on the lab's models by someone else is not the lab's, and neither is a robot built by a contract manufacturer. Validation requires every published system whose repository sits in one of the lab's `github` channel organizations to be listed, and it resolves every id in `systems` against both collections.
 
-## What a lab card shows
-
-A lab card names two of its joins rather than only counting them: its reviewed releases newest first, each with its release date, and the systems it builds by name. Both lists hold at most `LAB_CARD_RECORDS` entries and state the full total, so a capped list reads as capped and one control opens the lab dialog for the remainder. The tags row keeps counting the four joins the card does not name — inference services, local runtimes, specifications, and agent packs — so every type is counted once. A lab joined to neither prints no lists rather than two empty headings.
-
-The point is reach, not a second conclusion: a reader searching labs reaches a release or a system without opening the organization first. Each row is a record with its own licence, distribution, and score, and it opens that record's dialog, so the card concludes nothing about the lab ([ADR 025](adr/025-model-releases-are-independent-curated-records.md)). Both joins come from boot records the page already holds, through the same rules the dialog uses, so the card cannot drift from it.
-
 ## Classification
 
 - `lab_type`: `ai_company` when the organization's principal business is AI models and what it builds on them; `technology_company` when AI models are one line of a broader business (search, cloud, social media, devices, chips, commerce, software); `public_research` for a government-funded, academic, or nonprofit research organization. Judge the organization the record names, not its parent.

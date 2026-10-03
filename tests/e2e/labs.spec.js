@@ -1,7 +1,7 @@
 const { test, expect } = require("@playwright/test");
 const { viewTab } = require("./helpers/landing");
 const catalogCounts = require("./helpers/catalog-counts");
-const { clearFilters, closeRecord, expectFilter, recordHeading, recordView, search, setFilter, sortControl } = require("./helpers/results");
+const { clearFilters, expectFilter, recordHeading, recordView, search, setFilter, sortControl } = require("./helpers/results");
 
 test("Labs lists every lab by name and filters by type, headquarters, and release distribution", async ({ page }) => {
   await page.goto("/?collection=labs");
@@ -53,9 +53,7 @@ test("Labs lists every lab by name and filters by type, headquarters, and releas
 
 test("a lab dialog joins the records that name the lab and browses its releases in Models", async ({ page }) => {
   await page.goto("/?collection=labs");
-  // The card's own details control. A capped card's release list adds a second
-  // [data-lab] for the same record, so this asks for the footer control.
-  await page.locator('#lab-grid .lab-card .card-open[data-lab="lab-anthropic"]').click();
+  await page.locator('#lab-grid [data-lab="lab-anthropic"]').click();
 
   const dialog = recordView(page, "lab");
   await expect(dialog.locator("h1")).toHaveText("Anthropic");
@@ -153,88 +151,9 @@ test("a lab joined to systems but to no release says so instead of listing nothi
     .toContainText("Hugging Face Inference Endpoints");
   await expect(dialog).toContainText("Named in the catalog as:");
 
-  // The card's count row drops the zeros rather than printing a 0, and leaves out
-  // the two joins the card names below it, which carry their own totals.
-  const card = page.locator('#lab-grid .lab-card:has(.card-open[data-lab="lab-hugging-face"])');
-  await expect(card.locator(".tags span")).toHaveText(["2 inference services", "1 local runtime"]);
-});
-
-// A lab card names the records behind the organization, so a reader in search
-// results reaches a release or a system without opening the lab first.
-test("a lab card names the releases and systems behind the organization", async ({ page }) => {
-  await page.goto("/?collection=labs");
-  const card = page.locator('#lab-grid .lab-card:has(.card-open[data-lab="lab-anthropic"])');
-
-  // Releases, newest first, continuing the dialog's own order, then the systems
-  // it builds. Two groups, so a lab that joins to one of them shows one.
-  const releases = catalogCounts.reviewedModelsDevelopedByNewestFirst("lab-anthropic");
-  const systems = catalogCounts.labSystemsByName("lab-anthropic");
-  await expect(card.locator(".lab-related-label")).toHaveText([
-    `Reviewed releases · ${releases.length}`, `Systems it builds · ${systems.length}`,
-  ]);
-  await expect(card.locator(".lab-related-list .link-button")).toHaveText([...releases.slice(0, 4), ...systems]);
-
-  // A listed release opens that release, not the lab the card is for.
-  await card.locator("[data-open-model]").first().click();
-  await expect(recordHeading(page, "model")).toHaveText(releases[0]);
-  await closeRecord(page, "model");
-
-  // And a listed system opens that system.
-  await card.locator("[data-open-project]").first().click();
-  await expect(recordHeading(page, "system")).toHaveText(systems[0]);
-  await closeRecord(page, "system");
-
-  // The rest of the card is still the lab's own target.
-  await card.locator(".card-open").click();
-  await expect(recordHeading(page, "lab")).toHaveText("Anthropic");
-});
-
-// Four is the card's cap, and the control that reports the rest steps into the
-// dialog rather than silently truncating the join.
-test("a lab card caps its lists and hands the remainder to the dialog", async ({ page }) => {
-  await page.goto("/?collection=labs");
-  // The largest join is past the first page of results, so this browses them all.
-  await page.locator('#lab-pager select[aria-label="Results per page"]').selectOption("96");
-  const labId = catalogCounts.labIdWithMostReleases();
-  const card = page.locator(`#lab-grid .lab-card:has(.card-open[data-lab="${labId}"])`);
-  const total = catalogCounts.reviewedModelsDevelopedBy(labId).length;
-  expect(total).toBeGreaterThan(4);
-
-  // The heading states the total, so the cap is visible rather than implied.
-  await expect(card.locator(".lab-related-group").first().locator(".lab-related-label"))
-    .toHaveText(`Reviewed releases · ${total}`);
-  await expect(card.locator(".lab-related-group").first().locator("[data-open-model]")).toHaveCount(4);
-
-  const name = await card.locator("h2").textContent();
-  const more = card.locator(".lab-related-more button").first();
-  // The lab's name rides along in the control's hidden text, because a page of
-  // cards would otherwise hold several buttons with one name.
-  await expect(more).toHaveText(`All ${total} reviewed releases from ${name} →`);
-  await more.click();
-  await expect(recordHeading(page, "lab")).toHaveText(name);
-  await expect(recordView(page, "lab").getByRole("heading", { name: `Reviewed model releases · ${total}` })).toBeVisible();
-});
-
-// A lab joined to nothing says nothing rather than printing an empty heading,
-// which would read as a gap in the catalog (ADR 044, ADR 048).
-test("a lab joined to no release and no system lists neither", async ({ page }) => {
-  await page.goto("/?collection=labs");
-  await page.locator('#lab-pager select[aria-label="Results per page"]').selectOption("96");
-  const card = page.locator('#lab-grid .lab-card:has(.card-open[data-lab="lab-safe-superintelligence"])');
-  await expect(card).toHaveCount(1);
-  await expect(card.locator(".lab-related")).toHaveCount(0);
-  await expect(card.locator(".tags")).toHaveCount(0);
-});
-
-// Everything holds the same lab card, so the records it names are reachable from
-// the mixed grid without switching scope.
-test("an Everything lab card names the same records as the Labs grid", async ({ page }) => {
-  await page.goto("/?collection=all&q=Black+Forest+Labs");
-  const card = page.locator('#all-directory-grid .lab-card:has(.card-open[data-lab="lab-black-forest-labs"])');
-  const releases = catalogCounts.reviewedModelsDevelopedByNewestFirst("lab-black-forest-labs");
-  await expect(card.locator("[data-open-model]")).toHaveText(releases);
-  await card.locator("[data-open-model]").first().click();
-  await expect(recordHeading(page, "model")).toHaveText(releases[0]);
+  // The card's count row drops the zeros rather than printing a 0.
+  const card = page.locator('#lab-grid .lab-card:has([data-lab="lab-hugging-face"])');
+  await expect(card.locator(".tags span")).toHaveText(["2 systems", "2 inference services", "1 local runtime"]);
 });
 
 test("a model dialog links to the lab that developed the release", async ({ page }) => {
