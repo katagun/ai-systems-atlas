@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-28",
+  "updated_at": "2026-10-01",
   "dispositions": [
     {
       "source_id": "alibaba/qwen3.8-2.4t-a95b",
@@ -607,6 +607,18 @@
       "disposition": "excluded",
       "reason": "The release is a blended composite service that runs several frontier and open models per request and keeps the best answer; no distinct trained artifact or fixed single-model identity exists. Consistent with the excluded sakana/fugu composite precedent; a gateway service is not a model release.",
       "decided_at": "2026-09-22"
+    },
+    {
+      "source_id": "inclusionai/ling-3.1-flash",
+      "disposition": "held",
+      "reason": "The row reached the queue from a Vercel AI Gateway catalog sync and no first-party release artifact exists for it as of 2026-10-01: the inclusionAI Hugging Face organization publishes Ling-3.0-flash, Ling-3.0-flash-Fin, Ling-3.0-flash-VL, Ling-3.0-tiny and the 2.6 and earlier lines but no Ling 3.1 checkpoint; the ModelScope record for inclusionAI/Ling-3.1-flash returns record not found; the inclusionAI/ling-cookbook deployment recipes and the Ling and ling-cookbook repositories document only the 3.0 line; and Ant's own developer documentation, last updated 2026-09-23, lists Ling-3.0-flash, Ling-3.0-flash-VL, Ling-3.0-tiny and Ling-2.6-1T with no 3.1 entry. Held until Inclusion AI publishes a weight repository, model page, or governing terms for the release.",
+      "decided_at": "2026-10-01"
+    },
+    {
+      "source_id": "liquid/d1",
+      "disposition": "held",
+      "reason": "The release is not a text generator. Liquid AI's own Decision Models documentation states that a decision model returns calibrated probabilities across a fixed set of outcomes \"in a single call with zero generated tokens\", that usage.output_tokens is always 0, and that a caller should \"use a language model instead for free-form text generation, creative writing, multi-turn conversation, complex multi-step reasoning, open-ended Q&A, summarization, and code generation\". The three documented primitives, Noul, Choice, and Score, return typed decisions rather than composed text, so the output modality is a decision label rather than served language-model text. Same shape as the held openai/gpt-image-1.5 and quiverai/arrow-2 rows, whose output modality is not language-model text. Held rather than excluded because a future Liquid decision model could generate text, and because the row is a live API service rather than a retired alias.",
+      "decided_at": "2026-10-01"
     }
   ]
 }

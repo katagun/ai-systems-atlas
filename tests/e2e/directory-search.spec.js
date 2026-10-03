@@ -603,6 +603,43 @@ test("the capability filter reaches the agents that carry a capability", async (
   await expect(names.filter({ hasText: /^Aider$/ })).toHaveCount(0);
 });
 
+test("the retrieval filter reaches the systems that carry a retrieval mode", async ({ page }) => {
+  await page.goto("/?collection=systems");
+
+  const names = page.locator("#project-grid .project-card h2");
+  await setFilter(page, "systems", "retrieval", "graph_traversal");
+
+  await expect(names.filter({ hasText: /^Cognee$/ })).toHaveCount(1);
+  await expect(names.filter({ hasText: /^Aider$/ })).toHaveCount(0);
+  await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters · 1 active");
+  await expect(page).toHaveURL(/retrieval=graph_traversal/);
+
+  // A second mode narrows further rather than widening: Cognee records graph
+  // traversal but not temporal retrieval.
+  await setFilter(page, "systems", "retrieval", "temporal");
+  await expect(names.filter({ hasText: /^Graphiti$/ })).toHaveCount(1);
+  await expect(names.filter({ hasText: /^Cognee$/ })).toHaveCount(0);
+
+  await page.reload();
+  await expectFilter(page, "systems", "retrieval", "temporal");
+  await expect(names.filter({ hasText: /^Graphiti$/ })).toHaveCount(1);
+
+  await clearFilters(page, "systems");
+  await expectFilter(page, "systems", "retrieval", "");
+  await expect(page.locator(".advanced-filter-shell summary")).toHaveText("More filters");
+});
+
+test("a search term reaches a system by the retrieval mode it carries", async ({ page }) => {
+  await page.goto("/?collection=systems");
+  await search(page, "temporal retrieval");
+
+  // Temporal retrieval is the narrowest mode in the published catalog, so its
+  // matches are one page; the words are the trait id the index holds.
+  const names = page.locator("#project-grid .project-card h2");
+  await expect(names.filter({ hasText: /^Graphiti$/ })).toHaveCount(1);
+  await expect(names.filter({ hasText: /^Aider$/ })).toHaveCount(0);
+});
+
 test("directory cards carry product marks with monogram fallbacks", async ({ page }) => {
   await page.goto("/");
 

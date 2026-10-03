@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25",
+  "generated_at": "2026-10-03",
   "entries": [
     {
       "name": "A-MEM paper implementation",
@@ -552,6 +552,14 @@
       "useful_lesson": "Being swept in by a topic query that matches on 'robotics' or 'AI' does not establish that a system's documented behavior involves a model in the loop; the README has to show an actual model-driven decision or conversation, not just a marketing description.",
       "excluded_at": "2026-09-05",
       "verified_at": "2026-09-17"
+    },
+    {
+      "name": "OpenShell",
+      "repo": "NVIDIA/OpenShell",
+      "reason": "Apache-2.0 throughout, so licensing is not the ground: the tree root carries one LICENSE reading \"Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.\" above the Apache 2.0 text, pyproject.toml, sdk/typescript/package.json, and providers/README.md all declare the same SPDX identifier, and the generated THIRD-PARTY-NOTICES lists only permissive dependency licences (MIT, Apache-2.0, ISC, BSD, Unicode-3.0, Zlib, PSF-2.0, OpenSSL, CDLA-Permissive-2.0, 0BSD) with no copyleft component. What OpenShell owns is confinement around an agent somebody else runs, and its own architecture documentation says so: the compute driver's \"job is to build the boundary and prove it's in place. It never decides whether a request is allowed,\" and the quickstart's sandbox image is \"minimal Ubuntu with no agent installed,\" so the agent is a payload the operator supplies. The engineering is real and worth recording for anyone reading the entry -- Landlock confines filesystem access, seccomp user notification stages network operations, a trusted supervisor outside the boundary injects credentials only for requests bound to approved endpoints, and a formally verified policy prover blocks agent-proposed rules that would grant new credentialed reach before a human approves them. None of that is an Atlas outcome. Filesystem, syscall, and network confinement is the external_sandbox execution boundary the catalog already records as a trait on the system running inside it, and nothing here preserves durable knowledge, plans and acts through tools, or owns a conversational workspace; stateful_agent_runtime fails on the same ground, because the durable state the gateway keeps is the sandbox's lifecycle and credentials rather than an agent's. The precedents are consistent: gpty is excluded as the terminal an agent may drive, the Bedrock AgentCore SDK as the way an agent reaches a published platform, and Supabase and the observability platforms as adjacent infrastructure whose operator is the agent. NVIDIA is already a reviewed lab (lab-nvidia), and this record changes nothing there. The two skill trees are the project's own contributor workflow and its own product onboarding, SKILL.md and reference documents with no shipped program, and a repository appears in at most one collection, so this exclusion forecloses a pack record too. The class itself is not dismissed: BACKLOG.md carries a watch for an unscored agent-execution-substrate collection in the ADR 013/015 shape, and this is its first named case.",
+      "useful_lesson": "A vendor can ship a serious, formally verified, well-documented isolation layer and still be a building block, so ask what the software runs and what it decides rather than how much engineering stands behind it. Two first-party sentences answered the whole boundary question without reading the source tree: the project's own statement that the runtime never decides whether a request is allowed, and a default image with no agent in it.",
+      "excluded_at": "2026-10-03",
+      "verified_at": "2026-10-03"
     },
     {
       "name": "OpenSpiel",

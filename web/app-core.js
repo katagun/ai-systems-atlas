@@ -14,6 +14,7 @@
       deployment: "",
       agentInterface: "",
       capability: "",
+      retrieval: "",
       sourceModel: "",
       license: "",
       status: "active",
@@ -209,6 +210,7 @@
       (!filters.deployment || project.deployment.includes(filters.deployment)) &&
       (!filters.agentInterface || (project.agent_interfaces || []).includes(filters.agentInterface)) &&
       (!filters.capability || (project.agent_capabilities || []).includes(filters.capability)) &&
+      (!filters.retrieval || (project.retrieval_modes || []).includes(filters.retrieval)) &&
       (!filters.sourceModel || project.source_model === filters.sourceModel) &&
       (!filters.license || project.licenses.includes(filters.license)) &&
       (!filters.status || project.status === filters.status) &&
@@ -497,7 +499,7 @@
   // index narrows a search, never widens it (for systems, the mixed
   // directory's old list).
   const SEARCH_TEXT_FIELDS = {
-    system: ["id", "name", "description", "repo", "url", "why_it_matters", "strengths", "weaknesses"],
+    system: ["id", "name", "description", "repo", "url", "why_it_matters", "strengths", "weaknesses", "retrieval_modes"],
     spec: ["id", "name", "short_name", "description", "standardizes", "does_not_standardize", "repo", "stewards"],
     inference: INFERENCE_SERVICE_VIEW.searchFields,
     runtime: LOCAL_RUNTIME_VIEW.searchFields,
@@ -1012,7 +1014,7 @@
   // is Best match (scopeURLParams).
   const SCOPE_URL_PARAMS = {
     all: { q: "" },
-    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name", browseSort: "" },
+    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", retrieval: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name", browseSort: "" },
     inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", sort: "score", browseSort: "" },
     runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", sort: "score", browseSort: "" },
     packs: { q: "", type: "", host: "", install: "", license: "" },

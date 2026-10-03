@@ -1,11 +1,11 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-30",
+  "verified_at": "2026-10-01",
   "source": {
     "id": "models-dev",
     "name": "models.dev",
     "repo": "anomalyco/models.dev",
-    "commit": "fde326351fbf011d3c007163af3046b97efbf6b6",
+    "commit": "f9f2057be3c620898b6eaaca91dbbf75176043ae",
     "url": "https://github.com/anomalyco/models.dev",
     "license": "MIT"
   },
@@ -5551,6 +5551,174 @@
       "verified_at": "2026-09-30"
     },
     {
+      "id": "model-apodex-apodex-1-1-mini",
+      "source_id": null,
+      "name": "Apodex 1.1 Mini",
+      "developer": "Apodex AI",
+      "url": "https://huggingface.co/apodex/Apodex-1.1-mini",
+      "description": "Apodex AI's ungated 35B-total, 3B-active mixture-of-experts multimodal reasoning model, fine-tuned from Qwen3.5-35B-A3B for long-horizon research work with native function calling, published as Apache-2.0 open weights with official FP8, NVFP4, GPTQ-Int4, and GGUF exports alongside the FrontierAgent execution harness, and served as the Deep Research and Deep Solve tiers of the Apodex platform and through OpenRouter.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Apodex 1.1 Mini",
+        "description": "Reasoning-first model for complex, long-horizon research tasks that works directly with files, data, code, and tools to produce verifiable deliverables",
+        "family": "apodex",
+        "release_date": "2026-08-24",
+        "last_updated": "2026-08-26",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [
+          {
+            "label": "Official release blog",
+            "url": "https://www.apodex.com/blog/apodex-1.1-scaling-agentic-intelligence-for-complex-work"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/apodex/Apodex-1.1-mini"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships a LICENSE file carrying the verbatim Apache License 2.0 text, and the model card's own License section states that Apodex-1.1 is released under Apache 2.0. The grant covers the released weights and carries no revenue threshold, use restriction, or separate model-as-a-service licence, so the release is open source. The base checkpoint, Qwen/Qwen3.5-35B-A3B, is itself Apache-2.0, so the fine-tune inherits a compatible grant. Apodex's own hosted service is governed separately by its Commercial Terms of Service, which is a service contract and does not qualify the weight licence.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Official apodex/Apodex-1.1-mini repository: Safetensors weights, tokenizer, chat template, preprocessor and video-preprocessor configuration, and the official FP8, NVFP4, GPTQ-Int4, and GGUF exports and their derivatives",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini/blob/4e4f109a5e32d1306dc6c75e4995a09c8b881811/LICENSE",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Pinned model card at the reviewed repository commit, whose License section states the release terms and whose YAML front matter declares license: apache-2.0 and the Qwen/Qwen3.5-35B-A3B base model",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini/blob/4e4f109a5e32d1306dc6c75e4995a09c8b881811/README.md",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "access_boundary": "This record represents the apodex/Apodex-1.1-mini weight release published on Hugging Face at commit 4e4f109a5e32d1306dc6c75e4995a09c8b881811, the 35B-total, 3B-active multimodal mixture-of-experts checkpoint of the Apodex 1.1 generation. The unreleased full-size Apodex 1.1 model behind the Deep Discover tier, the Apodex 1.0 and 1.0-mini checkpoints and their 0.8B, 2B, and 4B SFT siblings, the official FP8, NVFP4, GPTQ-Int4, and GGUF format exports, the FrontierAgent and AgentCore harnesses, the Apodex Deep Research, Deep Solve, and Deep Discover product tiers, and OpenRouter's hosted route for the same weights are separate boundaries.",
+      "strengths": [
+        "Ungated weights in an official Apodex Hugging Face organization, shipping the verbatim Apache-2.0 LICENSE file in the repository and stating the same terms in the card",
+        "Official FP8, NVFP4, GPTQ-Int4, and GGUF exports published by the developer on the same organization, so a consumer-GPU path needs no third-party repackaging",
+        "First-party model card publishes the recommended sampling parameters, the 262,144-token context and 32,768-token output budget, exact SGLang and vLLM launch commands with the Qwen3 tool-call and reasoning parsers, and a complete tool-using agent example",
+        "The FrontierAgent harness and the Apodex 1.1 technical report are published under the same organization, so the execution environment the model is trained for is inspectable rather than described only in prose",
+        "First-party documentation ties the 35B checkpoint to the Deep Research and Deep Solve platform tiers, and OpenRouter documents an independent hosted route"
+      ],
+      "tradeoffs": [
+        "Only the mini checkpoint is open; the full-size Apodex 1.1 model behind the Deep Discover tier is not published, so the generation's top capability is not obtainable as weights",
+        "The base is a Qwen3.5 checkpoint, so the release inherits that lineage's identity rather than standing as an independently pretrained model",
+        "The model card's benchmark results are reported for the Agent Team system configuration rather than for the bare checkpoint, so the published scores do not isolate the weights",
+        "No deprecation or versioning posture is published for the line, and release identity rests on repository commits with no dated snapshot names"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.48
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Apodex 1.1 Mini model card: license, base model, sampling parameters, SGLang and vLLM launch commands, and the agentic usage example",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned model card at the reviewed repository commit, carrying the licence grant and the declared base model",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini/blob/4e4f109a5e32d1306dc6c75e4995a09c8b881811/README.md",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Apache-2.0 LICENSE file shipped in the weights repository",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini/blob/4e4f109a5e32d1306dc6c75e4995a09c8b881811/LICENSE",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned model configuration giving the 262,144-token context, 40-layer linear/full attention layout, 8-of-256 expert routing, and the vision and video preprocessor token identifiers",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini/blob/4e4f109a5e32d1306dc6c75e4995a09c8b881811/config.json",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official Apodex 1.1 release announcement: the 35B mini as the locally deployable checkpoint, the FrontierAgent harness, and the full model as the complete capability envelope",
+          "url": "https://www.apodex.com/blog/apodex-1.1-scaling-agentic-intelligence-for-complex-work",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official Apodex 1.1 technical report",
+          "url": "https://www.apodex.com/pdf/20260824",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official research page naming the 35B Apodex Deep Research model and its Agent Team depth tiers",
+          "url": "https://www.apodex.com/research",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official API pricing page listing the Deep Research 1.1, Deep Solve 1.1, and Deep Discover 1.1 Preview platform tiers",
+          "url": "https://www.apodex.com/api",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official FrontierAgent repository: the execution harness the model card recommends for running the mini locally",
+          "url": "https://github.com/ApodexAI/FrontierAgent",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "OpenRouter model page documenting a hosted route for the same release",
+          "url": "https://openrouter.ai/apodex/apodex-1.1-mini",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "metadata_verified_at": "2026-10-01",
+      "verified_at": "2026-10-01"
+    },
+    {
       "id": "model-arcee-ai-trinity-large-preview",
       "source_id": "arcee-ai/trinity-large-preview",
       "name": "Trinity Large Preview",
@@ -10322,6 +10490,160 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-google-diffusiongemma-26b-a4b-it",
+      "source_id": "google/diffusiongemma-26b-a4b-it",
+      "name": "DiffusionGemma 26B A4B IT",
+      "developer": "Google",
+      "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it",
+      "description": "Google DeepMind's ungated experimental open-weights multimodal model that generates text by discrete diffusion rather than token-by-token autoregression: an encoder-decoder over the 26B-total, 3.8B-active Gemma 4 mixture-of-experts architecture, denoising 256-token canvases with bidirectional attention for 256K-token context, released under Apache-2.0 and served on Vertex AI Model Garden.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "DiffusionGemma 26B A4B IT",
+        "description": "Gemma 4 based discrete text diffusion model for fast chat, reasoning, and tool use",
+        "family": "gemma",
+        "release_date": "2026-06-09",
+        "last_updated": "2026-07-15",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache 2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The model card links its license to Google's Gemma 4 license page, which carries the Apache License 2.0 text in full, and Google's own release blog states the weights are \"Released under an Apache 2.0 license\". The Gemma Terms of Use, whose appendix does not list DiffusionGemma, state that Gemma 4 terms are in the separate Gemma 4 license, so the Gemma Terms of Use use restrictions and the incorporated Gemma Prohibited Use Policy do not attach to this release. No LICENSE file ships in the repository, so the grant rests on the card metadata and the linked license page.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "scope": "Official google/diffusiongemma-26B-A4B-it model repository: Safetensors weights, tokenizer, processor, chat template, and scheduler configuration",
+          "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it/blob/f7f5b7f5fa82ffc52addd066915886d497f5517b/README.md",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "scope": "Google's Gemma 4 license page, linked from the model card as the governing license text, carrying the Apache License 2.0 in full",
+          "url": "https://ai.google.dev/gemma/docs/gemma_4_license",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "access_boundary": "This record represents the google/diffusiongemma-26B-A4B-it weight release published on Hugging Face at commit f7f5b7f5fa82ffc52addd066915886d497f5517b, the instruction-tuned 26B-total, 3.8B-active DiffusionGemma checkpoint. The Gemma 4 26B A4B autoregressive base it is fine-tuned from, the Diffusion Explained sample application, the community FP8 and 4-bit quantizations and the 31 finetune derivatives, and the Vertex AI Model Garden deployment of the same weights are separate boundaries.",
+      "strengths": [
+        "Ungated Apache-2.0 weights in an official Google Hugging Face organization, with the full Apache 2.0 text linked from the model card and the release blog",
+        "First open-weights Google release built on discrete text diffusion rather than autoregression, documented end to end by a separate Diffusion Explained page covering Uniform State Diffusion, incremental prefill, and denoising",
+        "First-party model card publishes the architecture table, 256-token canvas, 1024-token sliding window, 8-of-128 expert routing, recommended sampler settings, per-runtime deployment commands, a training-data description with a January 2025 cutoff, and a safety evaluation section",
+        "Served from Google's own Vertex AI Model Garden, which the developer documentation links directly from the model overview"
+      ],
+      "tradeoffs": [
+        "Google documents the release as experimental, and its own comparison table shows it scoring below the Gemma 4 base it derives from on most text and vision benchmarks",
+        "Google states the parallel-decoding advantage is aimed at low-concurrency single-user local use and diminishes under high-QPS cloud workloads, so the throughput case does not transfer to server deployments",
+        "No LICENSE file ships in the repository, so the grant rests on the card metadata and the linked license page rather than an in-repo license artifact",
+        "No deprecation or versioning posture is published for the line, and the repository's last commit is 15 July 2026"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/dbc891ced2fdbf01591e86345100e972b329b6a6/models/google/diffusiongemma-26b-a4b-it.toml",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official DiffusionGemma model card: architecture, benchmarks, sampler settings, training data, safety evaluation, and limitations",
+          "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned model card at the reviewed repository commit, the license grant this record rests on",
+          "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it/blob/f7f5b7f5fa82ffc52addd066915886d497f5517b/README.md",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Google's Gemma 4 license page carrying the Apache License 2.0 in full",
+          "url": "https://ai.google.dev/gemma/docs/gemma_4_license",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemma documentation: DiffusionGemma model overview, recommended serving configuration, and the Vertex AI Model Garden deployment path",
+          "url": "https://ai.google.dev/gemma/docs/diffusiongemma",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official Diffusion Explained page: Uniform State Diffusion, incremental prefill and denoising, and the autoregression comparison",
+          "url": "https://ai.google.dev/gemma/docs/diffusiongemma/explained",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official release announcement: DiffusionGemma, 4x faster text generation on GPUs, released under Apache 2.0",
+          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/diffusion-gemma-faster-text-generation/",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned model configuration giving the 256-token canvas, DiffusionGemmaForBlockDiffusion architecture, and 30-layer sliding/full attention layout",
+          "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it/blob/f7f5b7f5fa82ffc52addd066915886d497f5517b/config.json",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Gemma Terms of Use, whose appendix excludes DiffusionGemma and which routes Gemma 4 terms to the separate Apache-2.0 license",
+          "url": "https://ai.google.dev/gemma/terms",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "metadata_verified_at": "2026-10-01",
+      "verified_at": "2026-10-01"
     },
     {
       "id": "model-google-gemini-2-0-flash",
