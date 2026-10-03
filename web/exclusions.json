@@ -825,6 +825,15 @@
       "useful_lesson": "A staged graph alone is not an agent loop: without edges back, re-querying on thin results, or repair behavior, a research pipeline is a report generator.",
       "excluded_at": "2026-09-30",
       "verified_at": "2026-09-30"
+    },
+    {
+      "name": "Embedchain",
+      "repo": "embedchain/embedchain",
+      "url": "https://embedchain.ai",
+      "reason": "The repository no longer exists as an independent project. embedchain/embedchain answers with an HTTP 301 redirect to mem0ai/mem0, the repository the Atlas already publishes as Mem0, and the Explodinggradients/embedchain path that carried the original 2023 framework answers 404. What answered under the Embedchain name is now Mem0's own repository, described as \"The Memory Layer for AI Agents\", so the framework the name refers to and the published record are one codebase rather than two systems, and a second record would restate a fact the Mem0 record already carries.",
+      "useful_lesson": "A project that is absorbed into another is not a new record: check whether the old repository URL redirects to a repository the catalog already publishes before queueing the name, because the redirect is the evidence and it is cheap to read.",
+      "excluded_at": "2026-10-03",
+      "verified_at": "2026-10-03"
     }
   ]
 }

@@ -21,10 +21,6 @@
         {
           "kind": "news",
           "url": "https://www.1x.tech/stories"
-        },
-        {
-          "kind": "github",
-          "url": "https://github.com/1X-Technologies"
         }
       ],
       "evidence": [
@@ -187,6 +183,48 @@
       "verified_at": "2026-09-25",
       "admission_basis": "reviewed_release",
       "display_order": 520
+    },
+    {
+      "id": "lab-agibot",
+      "name": "AgiBot",
+      "url": "https://www.agibot.com/",
+      "description": "The Shanghai robotics company that develops the AgiBot A2 humanoid service robot and publishes Link-U OS, the open toolchain other teams use to train locomotion policies for deployment on the A2.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "AgiBot's own site and store operate from China; the record uses `cn` as headquarters because the pages reviewed name Shanghai operations and a Chinese store entity rather than a separate published headquarters address abroad. It is an AI company because its product pages name learned components such as ActionGPT, HIMUS, VectorFlux, and RTMOF, and its Link-U OS documents training and deploying reinforcement-learning locomotion policies on the A2. The record is admitted on the reviewed AgiBot A2 robot rather than on a Models release because the catalog reviews no separate language-model release from the maker. No parent organization is recorded on the pages read.",
+      "catalog_names": [
+        "AgiBot"
+      ],
+      "systems": [
+        "agibot-a2"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.agibot.com/news"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/Link-U-OS"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "AgiBot A2 product page, the reviewed robot record agibot-a2",
+          "url": "https://www.agibot.com/products/A2",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "AgiBot store terms of service",
+          "url": "https://store.agibot.com/policies/terms-of-service",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 670
     },
     {
       "id": "lab-alibaba",
@@ -608,11 +646,11 @@
       "id": "lab-boston-dynamics",
       "name": "Boston Dynamics",
       "url": "https://bostondynamics.com/",
-      "description": "The Waltham robotics company that develops Spot and Atlas, and publishes theSpot SDK and Orbit developer interfaces other teams build their own control on.",
+      "description": "The Waltham robotics company that develops the Spot and Atlas robots and publishes the Spot SDK, the control interface other teams build their own robot software on.",
       "lab_type": "technology_company",
       "headquarters": "us",
       "admission_basis": "reviewed_robot",
-      "organization_note": "Boston Dynamics, Inc. is the entity the site's ownTerms of Use name as the property of the site, and the same terms give its address as 200 Smith Street, Suite 4100, Waltham, MA 02451 and say it administers and operates the site from Waltham, Massachusetts, so the headquarters is the United States. No parent organization is recorded: the pages read for this record name no holding or controlling entity, and an ownership relation reported elsewhere is not first-party evidence, so the field is omitted rather than filled from a press account. It is a technology company rather than an AI company because the catalog records robots and the interfaces around them rather than models, and its own about page describes it as \"the global leader in developing and deploying highly mobile robots\" rather than as a model developer, though it develops the perception and control software its own robots run and the Gemini Robotics integrations it demonstrates. The record is admitted on the robot it makes, Spot, which the catalog reviews as a quadruped whose vendor names learned policies and documents an open control interface; the robot record is what places the organization in this collection, and no model or system of its own is reviewed here. Its developer surface is the Spot SDK: the same first-party documentation the robot record cites, dev.bostondynamics.com, publishes the arm and network-compute-bridge interfaces another vendor's robot software targets, so the organization develops software other catalogs record. Its site names no safety framework of the frontier-safety, responsible-scaling, orpreparedness kind, so the field is omitted rather than filled with its robotics safety material.",
+      "organization_note": "Boston Dynamics, Inc. is the entity the site's ownTerms of Use name as the property of the site, and the same terms give its address as 200 Smith Street, Suite 4100, Waltham, MA 02451 and say it administers and operates the site from Waltham, Massachusetts, so the headquarters is the United States. No parent organization is recorded: the pages read for this record name no holding or controlling entity, and an ownership relation reported elsewhere is not first-party evidence, so the field is omitted rather than filled from a press account. It is a technology company rather than an AI company because the catalog records robots and the interfaces around them rather than models, and its own about page describes it as \"the global leader in developing and deploying highly mobile robots\" rather than as a model developer, though it develops the perception and control software its own robots run and the Gemini Robotics integrations it demonstrates. The record is admitted on the robot it makes, Spot, which the catalog reviews as a quadruped whose vendor names learned policies and documents an open control interface; the robot record is what places the organization in this collection, and no model or system of its own is reviewed here. Its developer surface is the Spot SDK: the same first-party documentation the robot record cites, dev.bostondynamics.com, publishes the arm, joint-control, and network-compute-bridge interfaces another vendor's robot software targets, so the organization develops software other catalogs record. It publishes no GitHub organization of its own that this review could confirm as official — none is linked from its pages, and no reviewed record of the organization is published from one — so no such channel is recorded. Its site names no safety framework of the frontier-safety, responsible-scaling, orpreparedness kind, so the field is omitted rather than filled with its robotics safety material.",
       "catalog_names": [
         "Boston Dynamics"
       ],
@@ -623,10 +661,6 @@
         {
           "kind": "news",
           "url": "https://bostondynamics.com/blog/"
-        },
-        {
-          "kind": "github",
-          "url": "https://github.com/boston-dynamics"
         }
       ],
       "evidence": [
@@ -863,10 +897,6 @@
         {
           "kind": "news",
           "url": "https://www.figure.ai/news"
-        },
-        {
-          "kind": "github",
-          "url": "https://github.com/figure-ai"
         }
       ],
       "evidence": [
@@ -2529,7 +2559,9 @@
       "systems": [
         "unitree-g1",
         "unitree-go2",
-        "unitree-h1"
+        "unitree-h1",
+        "unitree-h2",
+        "unitree-r1"
       ],
       "channels": [
         {
@@ -2709,7 +2741,7 @@
       "channels": [
         {
           "kind": "model_catalog",
-          "url": "https://dev.writer.com/home/models-overview"
+          "url": "https://dev.writer.com/home/models"
         },
         {
           "kind": "news",
@@ -2744,7 +2776,7 @@
           "verified_at": "2026-09-25"
         }
       ],
-      "verified_at": "2026-09-25",
+      "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
       "display_order": 480
     },

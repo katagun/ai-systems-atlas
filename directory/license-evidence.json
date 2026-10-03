@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-09-30",
+  "verified_at": "2026-10-03",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -3738,7 +3738,82 @@
           "immutable_url": "https://api.github.com/repos/GD4AI/obsidian-llm-wiki/git/blobs/536ed32605d9bd95fbe1e0bfe35dd50aafcb2907"
         }
       ]
+    },
+    {
+      "project_id": "pgvector",
+      "repo": "pgvector/pgvector",
+      "items": [
+        {
+          "license_id": "PostgreSQL",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/pgvector/pgvector/blob/f37c13f68b57d2c3472b2214fbcff699d6d34876/LICENSE",
+          "blob_sha": "fc5f177fa5d9c0d20a949f4b4faa028999977008",
+          "immutable_url": "https://api.github.com/repos/pgvector/pgvector/git/blobs/fc5f177fa5d9c0d20a949f4b4faa028999977008"
+        }
+      ]
+    },
+    {
+      "project_id": "vespa",
+      "repo": "vespa-engine/vespa",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/vespa-engine/vespa/blob/f8652d11eb2e8113291daf485d65c4b7ac72a9f8/LICENSE",
+          "blob_sha": "df0bb94aeb6578299d1995c791da29f8f00f0cbc",
+          "immutable_url": "https://api.github.com/repos/vespa-engine/vespa/git/blobs/df0bb94aeb6578299d1995c791da29f8f00f0cbc"
+        }
+      ]
+    },
+    {
+      "project_id": "ragflow",
+      "repo": "infiniflow/ragflow",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/infiniflow/ragflow/blob/98b48a085786fb9e14be8753b5a9a9ea02230ccf/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/infiniflow/ragflow/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "private-gpt",
+      "repo": "zylon-ai/private-gpt",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/zylon-ai/private-gpt/blob/main/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/zylon-ai/private-gpt/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "txtai",
+      "repo": "neuml/txtai",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/neuml/txtai/blob/893d0424bec97f45e4cda1ad9c952afe170ea50f/LICENSE",
+          "blob_sha": "ca0a1be0119a00629ad2cb8b213180fd9ad0064a",
+          "immutable_url": "https://api.github.com/repos/neuml/txtai/git/blobs/ca0a1be0119a00629ad2cb8b213180fd9ad0064a"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-09-30"
+  "generated_at": "2026-10-03"
 }
