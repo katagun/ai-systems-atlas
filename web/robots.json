@@ -1,7 +1,113 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-30",
+  "verified_at": "2026-10-03",
   "robots": [
+    {
+      "id": "agibot-a2",
+      "name": "AgiBot A2",
+      "manufacturer": "AgiBot",
+      "url": "https://www.agibot.com/products/A2",
+      "first_party_domains": [
+        "agibot.com",
+        "github.com/Link-U-OS"
+      ],
+      "description": "AgiBot's full-size humanoid service robot, sold as the A2 and as the A2 Ultra, A2 Lite, A2 Max and A2 Pro configurations the maker's own pages name. The product page names four of the maker's own components — ActionGPT, HIMUS, VectorFlux and RTMOF — and says what each does, and the maker's open-source Link-U OS documents an end-to-end route for training a locomotion policy in simulation and deploying it to a physical A2.",
+      "variants": "A2 Ultra and A2 Lite on the product page's own parameter table and in AgiBot's store, which sells both with a stated price and an add-to-cart control. The maker's document centre and product pages also name an A2 Max, an A2 Pro, and an A2-W, the last a wheeled dual-arm robot documented on its own page, which this record does not cover.",
+      "form_factor": "humanoid",
+      "availability": "orderable",
+      "availability_note": "AgiBot's store lists the A2 Ultra and the A2 Lite with a stated price, a quantity control and an add-to-cart button, and states a shipping cost band, with customs duty left to the buyer. The product page itself closes with Contact us and a one-to-one customised-service form rather than a price.",
+      "ai_basis": [
+        "vendor_named_model",
+        "open_model_interface"
+      ],
+      "named_models": [
+        {
+          "name": "ActionGPT",
+          "kind": "other_learned",
+          "role_note": "AgiBot's product page says ActionGPT generates human-like natural movements based on voice commands and intent, supporting light operational tasks.",
+          "evidence_label": "Product page, named-component section"
+        },
+        {
+          "name": "HIMUS",
+          "kind": "other_learned",
+          "role_note": "AgiBot's product page expands HIMUS as its High-performance Multimodal Mapping System 3D-SLAM algorithm and says the system uses it for L4-level autonomous mobility with low latency and minimal drift in complex, dynamic environments.",
+          "evidence_label": "Product page, named-component section"
+        },
+        {
+          "name": "VectorFlux",
+          "kind": "other_learned",
+          "role_note": "AgiBot's product page names VectorFlux as its planning and control algorithm, used with HIMUS for autonomous mobility.",
+          "evidence_label": "Product page, named-component section"
+        },
+        {
+          "name": "RTMOF",
+          "kind": "reinforcement_learning_policy",
+          "role_note": "AgiBot's product page expands RTMOF as its Real-Time Robust Motion Framework, says it applies non-linear model predictive control together with reinforcement learning algorithms and a dynamic planning engine, and says the result quickly generates globally optimal trajectories and improves motion strategies in uncertain environments.",
+          "evidence_label": "Product page, named-component section"
+        }
+      ],
+      "research_confidence": "medium",
+      "hardware": {
+        "compute": "Not published.",
+        "sensors": "An interactive screen, LiDAR, a microphone, a dexterous hand, two RGB-D cameras, a fisheye camera, a speaker, and force/torque sensors. The A2 Ultra page's parameter table lists a 3D LiDAR and an RGB-D camera under its perception system.",
+        "actuation": "40 degrees of freedom plus active DoF, on what the page calls a universal humanoid skeletal structure with a modular design and customizable exterior options. The page says the self-developed integrated joint delivers peak torque of 512 Nm. The A2 Ultra page's table gives the A2 Ultra as 40 total DoF with 2 neck, 7 per arm, 6 per leg, and a 6-DoF dexterous hand.",
+        "power": "A 700 Wh battery with about 2 hours of runtime and battery-swapping support."
+      },
+      "developer_access": "AgiBot's own open-source Link-U OS documents a route for running the reader's own policy on the A2. Its Link-U OS Alpha documentation states the platform is based on the production-proven full-size Agibot Expedition A2, gives an all-in-one toolchain on MuJoCo and Isaac Gym covering training, simulation verification and real robot deployment, trains locomotion with PPO, and states that a single policy codebase runs across MuJoCo simulation and real robots. Its deployment guide targets the Agibot Expedition A2 Flagship Edition, and its rl_deploy repository publishes an aimrl_sdk Python package that streams observation frames from the arm, leg and IMU topics and publishes joint commands for Python-side policy deployment. The guide's user levels name hardware developers with A2 robots for hands-on development and verification. No X2 or A3 equivalent was found.",
+      "terms": [
+        "terms_of_sale"
+      ],
+      "terms_note": "AgiBot's store publishes Terms of Service last updated 2026-02-04, covering access, payment, shipping, returns and liability, alongside separate shipping, refund and privacy policies. No SDK or software licence for the A2 was found at review time; the maker's open-source Link-U OS carries its own Mulan PSL v2 licence, which the maker's product pages do not reference.",
+      "terms_evidence": [
+        {
+          "terms_kind": "terms_of_sale",
+          "scope": "AGIBOT Store terms of service",
+          "kind": "web_terms",
+          "url": "https://store.agibot.com/policies/terms-of-service",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "not_verified": "The four named components and the Link-U OS policy route are AgiBot's own claims; the Atlas has not verified them. Every source is an AgiBot web page or a repository file AgiBot can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://www.agibot.com/products/A2",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "role": "named_model",
+          "label": "Product page, named-component section",
+          "url": "https://www.agibot.com/products/A2",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "Link-U OS Alpha documentation",
+          "url": "https://www.agibot.com/filepage/282.html",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "AgiBot A2 Ultra product page",
+          "url": "https://www.agibot.com/products/A2_Ultra",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "AgiBot store A2 Lite page",
+          "url": "https://store.agibot.com/products/a2-lite",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03"
+    },
     {
       "id": "hello-robot-stretch-4",
       "name": "Stretch 4",
@@ -664,6 +770,182 @@
         }
       ],
       "verified_at": "2026-09-30"
+    },
+    {
+      "id": "unitree-h2",
+      "name": "Unitree H2",
+      "manufacturer": "Unitree Robotics",
+      "url": "https://www.unitree.com/H2",
+      "first_party_domains": [
+        "unitree.com",
+        "github.com/unitreerobotics"
+      ],
+      "description": "Unitree's full-size humanoid robot, sold as the H2 and the H2 EDU. Unitree names no learned model for it; its product page says a 2070 TOPS chip supports diverse intelligent models, and its reinforcement-learning repository lists the H2 among the robots it supports and registers velocity-tracking tasks for it.",
+      "variants": "H2 and H2 EDU on the product page, which lists secondary development for the EDU version only. Unitree publishes an H2 Plus on a product page of its own, which this record does not cover.",
+      "form_factor": "humanoid",
+      "availability": "enterprise_sales",
+      "availability_note": "Unitree's product page states a price for the H2 and lists the H2 EDU as contact sales. The shop page carries the same price but shows no add-to-cart control, marks the base variant out of stock, and offers a Contact Sales button as its only route to a price.",
+      "ai_basis": [
+        "open_model_interface"
+      ],
+      "named_models": [],
+      "research_confidence": "high",
+      "hardware": {
+        "compute": "Two PC slots, an Intel Core i5 for platform capabilities and an Intel Core i7 for custom development. The product page's description says a 2070 TOPS chip powers the robot, and a high-power computing module is an accessory, with multiple brands and models available such as Thor.",
+        "sensors": "A humanoid binocular camera with a wide field of view, and a voice-interaction array of microphone and high-power speaker. WiFi 6 and Bluetooth 5.2 are listed as present.",
+        "actuation": "Low-inertia high-speed internal-rotor permanent magnet synchronous motors on industrial-grade crossed roller bearings, with 31 degrees of freedom in total: six per leg, seven per arm, three at the waist, and two at the head. The page states a maximum arm-joint torque of 120 N·m and leg-joint torque of 360 N·m, an arm payload peaking at about 15 kg and rated at about 7 kg, a standing size of 1820 x 456 x 218 mm, a weight of about 70 kg with battery, a calf-plus-thigh length of 1045 mm and a forearm-plus-upper-arm length of 690 mm, and a body of aircraft-grade aluminium, titanium alloy, and high-strength engineering plastics. A bionic head with facial features and dexterous hands in several models are listed.",
+        "power": "A premium lithium battery with low internal resistance, 15 Ah (0.972 kWh) at up to 75.6 V, with about three hours of battery life. A quick-release smart battery and a charger are accessories, and cooling is local air cooling."
+      },
+      "developer_access": "Unitree's product page lists secondary development for the H2 EDU and points to a secondary development manual. Its unitree_rl_mjlab repository names the H2 among the robots it supports, registers Unitree-H2-Flat and Unitree-H2-Rough velocity-tracking tasks, and documents a Train, Play, Sim2Real workflow that deploys trained policies to physical Unitree robots, worked through on the G1. Its unitree_sdk2 repository ships an h2 example directory with low-level joint commands published on rt/lowcmd for the robot's 31 motors and a high-level locomotion client, and its unitree_ros2 repository ships an h2 example that drives H2 ankle commands with ROS 2 messages.",
+      "terms": [
+        "sdk_license",
+        "software_terms"
+      ],
+      "terms_note": "Unitree's SDK, unitree_sdk2, is released under the BSD 3-Clause License. Unitree's terms page has Terms, After-sales Terms, Privacy Policy, Disclaimer, and End User License Agreement tabs; the after-sales tab is the hardware warranty policy, and the licence agreement is offered as a downloadable document rather than as page text. The product page lists an 8-month warranty for the H2 and 12 months for the H2 EDU.",
+      "terms_evidence": [
+        {
+          "terms_kind": "sdk_license",
+          "scope": "unitree_sdk2 licence file",
+          "kind": "web_terms",
+          "url": "https://github.com/unitreerobotics/unitree_sdk2/blob/main/LICENSE",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "terms_kind": "software_terms",
+          "scope": "End User License Agreement tab",
+          "kind": "web_terms",
+          "url": "https://www.unitree.com/terms",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "not_verified": "The documented policy interfaces are Unitree's own claims; the Atlas has not verified them. Every source is a Unitree web page or repository file that Unitree can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://www.unitree.com/H2",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_rl_mjlab README",
+          "url": "https://github.com/unitreerobotics/unitree_rl_mjlab/blob/main/README.md",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_sdk2 h2 examples",
+          "url": "https://github.com/unitreerobotics/unitree_sdk2/tree/main/example/h2",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "unitree_rl_mjlab H2 task registration",
+          "url": "https://github.com/unitreerobotics/unitree_rl_mjlab/blob/main/src/tasks/velocity/config/h2/__init__.py",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Unitree shop page",
+          "url": "https://shop.unitree.com/products/unitree-h2",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "verified_at": "2026-10-01"
+    },
+    {
+      "id": "unitree-r1",
+      "name": "Unitree R1",
+      "manufacturer": "Unitree Robotics",
+      "url": "https://www.unitree.com/R1",
+      "first_party_domains": [
+        "unitree.com",
+        "github.com/unitreerobotics"
+      ],
+      "description": "Unitree's compact humanoid robot, sold as the R1 AIR, R1, and R1 EDU, which Unitree's own site lists under its Humanoid Robot category. Unitree names no learned model for it: the product page says it integrates a large multimodal model for voice and image processing without naming one. Its product page states that the R1's joint and sensor control interfaces are fully open, and its reinforcement-learning repository registers a velocity-tracking task for the R1 and ships a deployment program for it.",
+      "variants": "R1 AIR, R1, and R1 EDU on the product page, which lists secondary development for the R1 EDU only. The shop sells the R1 AIR and R1 in white and red, and takes the R1 EDU by contacting sales.",
+      "form_factor": "humanoid",
+      "availability": "orderable",
+      "availability_note": "Unitree's product page lists the R1 AIR, R1 and R1 EDU, with the EDU marked contact sales. The shop page shows an add-to-cart control and says the R1 Air (White) is backordered and will ship as soon as it is back in stock.",
+      "ai_basis": [
+        "open_model_interface"
+      ],
+      "named_models": [],
+      "research_confidence": "high",
+      "hardware": {
+        "compute": "An 8-core high-performance processor. A high-power computing module is an accessory of the R1 EDU, with multiple brands and models available such as Orin (40-100 TOPS).",
+        "sensors": "A four-microphone array and a speaker, with a monocular camera on the R1 AIR and a binocular camera on the R1 and R1 EDU. WiFi 6 and Bluetooth 5.2 are listed as present, and the page describes a two-degree-of-freedom head for environmental perception.",
+        "actuation": "Low-inertia high-speed internal-rotor permanent magnet synchronous motors on crossed roller bearings and double-hook ball bearings. The page lists 20 degrees of freedom on the R1 AIR, 26 on the R1, and 26 to 40 on the R1 EDU, made up of six per leg, four or five per arm, two at the waist, and two at the head. It states an arm load of about 2 kg, a standing size of 1230 x 357 x 190 mm, a weight of about 27 kg with battery on the AIR and about 29 kg on the others, a calf-plus-thigh length of 600 mm and a forearm-plus-upper-arm length of 420 mm, knee motion from -10 to +139 degrees, hip yaw of plus or minus 157 degrees, pitch of -168 to +146 degrees and roll of -60 to +100 degrees, and waist yaw of plus or minus 150 degrees and roll of plus or minus 30 degrees. Electrical routing is hollow plus internal routing and the joint encoders are dual plus single.",
+        "power": "A lithium battery with about one hour of battery life. A quick-release smart battery and a charger are accessories, and cooling is local air cooling."
+      },
+      "developer_access": "Unitree's product page states that the R1's joint and sensor control interfaces are fully open and that mainstream simulation platforms are supported, and lists secondary development for the R1 EDU. Its unitree_rl_mjlab repository names the R1 among the robots it supports, offers a Unitree-R1-Flat velocity-tracking task, and carries a deploy/robots/r1 program with a velocity policy configuration, documented through the same Train, Play, Sim2Real workflow. Its unitree_sdk2 repository ships an r1 example directory with low-level joint examples, a high-level locomotion client, and an audio client.",
+      "terms": [
+        "sdk_license",
+        "software_terms"
+      ],
+      "terms_note": "Unitree's SDK, unitree_sdk2, is released under the BSD 3-Clause License. Unitree's terms page has Terms, After-sales Terms, Privacy Policy, Disclaimer, and End User License Agreement tabs; the after-sales tab is the hardware warranty policy, and the licence agreement is offered as a downloadable document rather than as page text. The product page lists a 6-month warranty for the R1 AIR, 8 months for the R1, and 12 months for the R1 EDU.",
+      "terms_evidence": [
+        {
+          "terms_kind": "sdk_license",
+          "scope": "unitree_sdk2 licence file",
+          "kind": "web_terms",
+          "url": "https://github.com/unitreerobotics/unitree_sdk2/blob/main/LICENSE",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "terms_kind": "software_terms",
+          "scope": "End User License Agreement tab",
+          "kind": "web_terms",
+          "url": "https://www.unitree.com/terms",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "not_verified": "The documented policy interfaces are Unitree's own claims; the Atlas has not verified them. Every source is a Unitree web page or repository file that Unitree can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://www.unitree.com/R1",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_rl_mjlab README",
+          "url": "https://github.com/unitreerobotics/unitree_rl_mjlab/blob/main/README.md",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "unitree_sdk2 r1 examples",
+          "url": "https://github.com/unitreerobotics/unitree_sdk2/tree/main/example/r1",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "unitree_rl_mjlab R1 deployment program",
+          "url": "https://github.com/unitreerobotics/unitree_rl_mjlab/tree/main/deploy/robots/r1",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Unitree shop page",
+          "url": "https://shop.unitree.com/products/unitree-r1",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "verified_at": "2026-10-01"
     }
   ]
 }

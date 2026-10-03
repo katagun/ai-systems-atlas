@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-30",
+  "updated_at": "2026-10-03",
   "candidates": [
     {
       "repo": "aden-hive/hive",
@@ -5611,6 +5611,53 @@
         ],
         "proposed_at": "2026-09-30",
         "proposer": "robots batch 1 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "AgiBot X2",
+      "url": "https://www.agibot.com/products/X2",
+      "description": "AgiBot's compact full-size humanoid robot, sold as the X2, the X2 Ultra, the X2 Neo and the X2 EDU.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "humanoid",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-03",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — condition 3 AI basis",
+        "rule": "docs/ROBOTS.md inclusion boundary condition 3 and Classification, on open_model_interface",
+        "finding": "Read on 2026-10-03. Conditions 1, 2, 4, 5 and 6 are met on the pages read: the product page names the X2 series, states its hardware in a full parameter table (25 to 30 degrees of freedom, a 1310 x 460 x 210 mm standing size, about 39 kg, RK3588 compute boards, an Orin NX option on the Ultra, a swappable battery and about two hours of runtime at 0.5 m/s), and AgiBot's store sells the X2 Neo at a stated price with an add-to-cart control. The store's terms of service settle terms. Condition 3 is unmet on what was read. The product page names no learned model or policy: its own words are 'algorithm-driven decision-making' and 'intelligent algorithms', with no model named, and the autonomy it claims for the X2 Ultra rests on LiDAR, RGB-D cameras and stereo vision rather than on a named model. Nothing the maker publishes documents a route for running the reader's own model or policy on the X2 either. The product page and the store page both carry a 'Secondary Development' row, and it reads 'Not supported' for the X2 and 'Supported' for the X2 Ultra, but a specification-table claim is not an interface: no SDK, control API or policy interface for the X2 was found on the maker's own pages. AgiBot's document centre lists an 'AGIBOT X1 Development Guide' and open-source documentation for the X1, the A3, the G2, the D1 and the OmniHand, and for the X2 lists only a quick start guide, a packaging list, an after-sales guide and instructional videos; no X2 development guide is published there. The maker's open-source GitHub organisation holds twenty-four repositories, of which the only X2 one is `AgibotTech/agibot_x2_urdf`, and its own README describes the repository as URDF and MuJoCo robot descriptions for ROS, RViz and MoveIt, which is a robot description rather than a control interface. The maker's Link-U-OS organisation, which the maker's own open-source page links, documents a locomotion policy framework for the A2 and names no X2. Re-review if the maker publishes an X2 SDK, a policy interface or a development guide; on the pages read this is a hold on absent evidence, not a judgement about the product.",
+        "evidence": [
+          {
+            "label": "X2 product page",
+            "url": "https://www.agibot.com/products/X2",
+            "kind": "web",
+            "content_sha256": "0c1d5392e409b822ba7ef63c446b07bccc31e72064bcb47c9ac597964851abed",
+            "fetched_at": "2026-10-03"
+          },
+          {
+            "label": "X2 store page",
+            "url": "https://store.agibot.com/products/x2",
+            "kind": "web",
+            "content_sha256": "72d827959d301ce840ac95e854634615e9e1bee0bba05b151a9a25d73cbf6a1b",
+            "fetched_at": "2026-10-03"
+          }
+        ],
+        "proposed_at": "2026-10-03",
+        "proposer": "robots batch 3 review"
       }
     }
   ]
