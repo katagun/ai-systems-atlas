@@ -1729,6 +1729,7 @@ footer #data-date, footer .footer-meta {
   html:has(body.atlas-app) { scroll-padding-bottom: calc(var(--legend-h, 0px) + 80px + env(safe-area-inset-bottom, 0px)); }
   .atlas-app .site-header { min-height: 56px; grid-template-columns: 1fr; padding: .5rem 1rem; }
   .atlas-app .site-header .tabs { display: none; }
+  .atlas-app .site-header .brand { justify-self: center; }
   .atlas-app .brand small { display: none; }
   .atlas-app .wordmark { font-size: 1rem; }
   .atlas-app #directory.view:not(.is-results) { padding-top: 1.25rem; }
