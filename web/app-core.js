@@ -36,10 +36,12 @@
   // (ADR 052) names the same vocabulary, so one map serves both fields.
   const COUNTRY_FLAGS = {
     be: "🇧🇪",
+    br: "🇧🇷",
     ca: "🇨🇦",
     ch: "🇨🇭",
     cn: "🇨🇳",
     de: "🇩🇪",
+    es: "🇪🇸",
     fr: "🇫🇷",
     gb: "🇬🇧",
     il: "🇮🇱",
