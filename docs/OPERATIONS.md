@@ -279,7 +279,7 @@ without a newer review it opens terms drift, so a person decides which page is r
 ## Reading a cited page directly
 
 Quote a page only after reading it yourself. A search-engine extract is a lead, not a read: the
-2026-09-25 lab re-read ([`LAB_REREAD_2026-09-25.md`](LAB_REREAD_2026-09-25.md)) found labels no
+2026-09-25 lab re-read ([`LAB_REREAD_2026-09-25.md`](history/LAB_REREAD_2026-09-25.md)) found labels no
 page supported, and a filing cited as one company's annual report that was another's. Read each
 page as a browser shows it:
 

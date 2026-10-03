@@ -58,7 +58,7 @@ directory/models-dev.json source.commit = 1bc95312f70441e339d5aa010ad656b9c77069
 
 No producer maintains the field. `scripts/import_models_dev.py:513` writes only `models-dev.json` and `model-candidates.json`. `scripts/promote_model_candidate.py` `_with_record` writes only `models` and `verified_at`. The value is therefore hand-maintained, has already drifted, and can only drift further.
 
-The impact is bounded but real. All 309 reviewed models carry a `source_metadata` block whose provenance points at a commit that is not the commit from which the snapshot was taken, under a rule that working rule 11 and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md) make load-bearing. Seven records already diverge from their source row on top of this, which is precisely the case ADR 027 exists to detect.
+The impact is bounded but real. All 309 reviewed models carry a `source_metadata` block whose provenance points at a commit that is not the commit from which the snapshot was taken, under a rule that working rule 11 and [ADR 027](../adr/027-complete-models-dev-source-catalog-is-published.md) make load-bearing. Seven records already diverge from their source row on top of this, which is precisely the case ADR 027 exists to detect.
 
 **Fix.** In `validate()`, assert that `catalog["models.json"]["source"]["commit"]` equals `catalog["models-dev.json"]["source"]["commit"]`, alongside the existing source-block comparison at line 4109. If the two files are ever legitimately allowed to reference different snapshots, drop the field from `models.json` and let it join from the snapshot at render time; that decision belongs in `docs/DATA_MODEL.md`, not in the validator.
 

@@ -45,7 +45,7 @@ Prefer plain interface labels over methodology language. Use exact taxonomy term
 
 ### Card badges
 
-The [2026-09-29 badge review](BADGE_REVIEW_2026-09-29.md) evaluates OSS and API-compatibility proposals and records implementation gaps. The six follow-ups are implemented under [ADR 047](adr/047-badges-identify-record-facts-and-licensing-stays-scoped-text.md); the dated review preserves the original findings.
+The [2026-09-29 badge review](history/BADGE_REVIEW_2026-09-29.md) evaluates OSS and API-compatibility proposals and records implementation gaps. The six follow-ups are implemented under [ADR 047](adr/047-badges-identify-record-facts-and-licensing-stays-scoped-text.md); the dated review preserves the original findings.
 
 Every published card carries at least one badge. Badges are defined once in `CARD_BADGES` and listed per collection and system family, in priority order, in `CARD_BADGE_SETS` in `web/app-core.js`. The design budget is six: one type badge plus at most five traits. Registry and published-data tests enforce it; the renderer preserves every match and wraps rather than silently truncating if future data exceeds the budget. On system, inference-service, and local-runtime cards the badges replace the tags row, and on reviewed-model cards they replace the role pill. Badges are for scanning only: they never carry merit, editorial picks, trust or evidence state, or automated signals such as stars, and they never rank.
 
