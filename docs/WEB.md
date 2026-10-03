@@ -233,15 +233,15 @@ The 60 KB budget is exceeded, and the overage is tracked in `BACKLOG.md` under E
 
 Do not record the measurement here or in the backlog. A figure written into prose reads as current forever, and on 2026-09-29 the 101.6 KB this section used to state was already 1.2 KB stale — the exact failure `--counts` exists to make visible. Run the command and quote the result in the change that moves it.
 
-Run the rendered browser regression suite. It also guards page health: zero console or page errors across every view, no horizontal overflow at 390px, no request outside the site origin, and record URL restoration (install Chromium once per environment):
+Run the rendered browser regression suite locally. It is installed as a pre-push hook and does not run in GitHub CI. It also guards page health: zero console or page errors across every view, no horizontal overflow at 390px, no request outside the site origin, and record URL restoration (install Chromium once per environment):
 
 ```bash
-npm ci
+npm ci --ignore-scripts
 npx playwright install chromium
 npm run test:e2e
 ```
 
-The suite starts its own server on a port derived from the checkout's path and never adopts one it did not start, so the exploratory server below and a suite running in another worktree cannot serve it another checkout's `web/`. A stale server producing believable but wrong data is the failure this prevents; if its own port is occupied, the run stops with an error naming the port instead. Set `ATLAS_E2E_PORT` to choose the port yourself, and `ATLAS_E2E_SHARD` (`1/2`, `2/2`) to run one half of the suite the way each CI shard does. The server is `scripts/serve_web.py` rather than `python -m http.server`, whose listen backlog of five drops connections when a page fetches its boot payloads in parallel. A dropped connection waits on the client to retry its handshake; when the retries failed too, as on 2026-09-24, pages never booted and each local run failed a different handful of tests.
+The suite starts its own server on a port derived from the checkout's path and never adopts one it did not start, so the exploratory server below and a suite running in another worktree cannot serve it another checkout's `web/`. A stale server producing believable but wrong data is the failure this prevents; if its own port is occupied, the run stops with an error naming the port instead. Set `ATLAS_E2E_PORT` to choose the port yourself, and optionally `ATLAS_E2E_SHARD` (`1/2`, `2/2`) to split a local run. Failed tests retain traces in `test-results/`; open one with `npx playwright show-trace <file>.zip`. The server is `scripts/serve_web.py` rather than `python -m http.server`, whose listen backlog of five drops connections when a page fetches its boot payloads in parallel. A dropped connection waits on the client to retry its handshake; when the retries failed too, as on 2026-09-24, pages never booted and each local run failed a different handful of tests.
 
 For exploratory browser verification, serve the static application:
 
