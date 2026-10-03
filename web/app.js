@@ -142,10 +142,13 @@ async function bootstrap() {
 // Marks are decorative next to the record name, so they stay hidden from
 // assistive technology. Icon bodies come from the vendored, build-sanitized
 // logos.json; every dynamic value still passes through escapeHTML.
-function cardMark(record) {
-  const icon = state.logos.icons[state.logos.records[record.id]];
-  if (icon) return `<span class="card-mark" data-mark="${escapeHTML(record.id)}" aria-hidden="true"><svg viewBox="0 0 24 24">${icon.body}</svg></span>`;
-  return `<span class="card-mark card-monogram" data-mark="${escapeHTML(record.id)}" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(record.name))}</span>`;
+function cardMark(record, kind = null) {
+  const marks = state.logos.records;
+  const markId = AppCore.markRecordId(kind, record, state.labIndex, marks);
+  const icon = state.logos.icons[marks[markId]];
+  const monogram = AppCore.monogramGlyph(AppCore.markMonogramName(kind, record, markId, state.labIndex));
+  if (icon) return `<span class="card-mark" data-mark="${escapeHTML(markId)}" aria-hidden="true"><svg viewBox="0 0 24 24">${icon.body}</svg></span>`;
+  return `<span class="card-mark card-monogram" data-mark="${escapeHTML(markId)}" aria-hidden="true">${escapeHTML(monogram)}</span>`;
 }
 
 // A card says where the organization behind it is based and where its work
@@ -179,7 +182,7 @@ function labFlags(lab) {
 
 function cardMarkWithGeography(kind, record) {
   const flags = kind === "lab" ? labFlags(record) : cardFlags(kind, record);
-  const mark = cardMark(record);
+  const mark = cardMark(record, kind === "lab" ? null : kind);
   if (!flags) return mark;
   return `<span class="card-mark-wrap">${mark}${flags}</span>`;
 }
@@ -869,7 +872,8 @@ function tileMarks(id) {
     .map(recordId => AppCore.collectionEntries(id, collectionPayloads()).find(record => record.id === recordId))
     .filter(Boolean);
   if (!records.length) return "";
-  return `<span class="tile-marks" aria-hidden="true">${records.map(cardMark).join("")}</span>`;
+  const markKind = id === "models" ? "model" : null;
+  return `<span class="tile-marks" aria-hidden="true">${records.map(record => cardMark(record, markKind)).join("")}</span>`;
 }
 
 // The index: one tile per registry entry, hidden while its collection is
@@ -1062,7 +1066,7 @@ function renderStageFace(kind, records) {
   const when = kind === "model" ? `released ${date(featured)}` : `reviewed ${date(featured)}`;
   const where = kind === "model" ? featured.developer || "" : `${familyName(featured.system_family)} · ${roleName(featured.primary_role)}`;
   const rest = records.slice(1);
-  root.innerHTML = `<article class="stage-feature${kind === "system" ? " is-system" : ""}">${cardMark(featured)}<div>
+  root.innerHTML = `<article class="stage-feature${kind === "system" ? " is-system" : ""}">${cardMark(featured, kind)}<div>
       <p class="eyebrow">Latest reviewed ${kind}</p>
       <h2 class="stage-name">${escapeHTML(featured.name)}</h2>
       <p class="stage-meta">${escapeHTML(`${where} · ${when}`)}</p>
@@ -1684,7 +1688,7 @@ function importedModelCard(model, { mixed = false } = {}) {
     ? "Open weights not reported"
     : metadata.reported_open_weights ? "Open weights reported" : "Closed weights reported";
   return `<article class="project-card model-card imported-model-card${mixed ? " mixed-directory-card" : ""}">
-    <div class="card-top"><div class="card-identity">${cardMark(model)}<div><p class="family-label">models.dev source record</p><h2>${escapeHTML(model.name)}</h2><div class="repo">Namespace · ${escapeHTML(model.developer)}</div></div></div></div>
+    <div class="card-top"><div class="card-identity">${cardMark(model, "model")}<div><p class="family-label">models.dev source record</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(AppCore.modelCardDeveloperLabel(model, state.labIndex))}</div></div></div></div>
     <span class="role-badge">Imported metadata · Not Atlas reviewed</span>
     <div class="license-row"><span class="source-badge">models.dev</span><span class="review-badge">Reported license · ${escapeHTML(reportedLicense)}</span></div>
     <p>${escapeHTML(model.description || "Imported provider-independent model metadata from models.dev.")}</p>

@@ -70,6 +70,7 @@ test("an imported models.dev record is unscored and opens attributed source deta
   await search(page, "Sarvam 105B");
 
   const card = page.locator("#model-grid .imported-model-card").filter({ hasText: "Sarvam 105B" });
+  await expect(card).not.toContainText("Namespace ·");
   await expect(card).toContainText("Imported metadata · Not Atlas reviewed");
   await expect(card.locator(".score-ring")).toHaveCount(0);
   await expect(card.locator(".compare-toggle")).toHaveCount(0);

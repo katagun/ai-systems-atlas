@@ -4,7 +4,7 @@ const { relative, sep } = require("node:path");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, holdsPhrase, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1082,6 +1082,25 @@ test("a record dialog finds its lab by its own collection's join rule", () => {
   assert.deepEqual(ids("system", { id: "alpha-chat" }), ["lab-alpha"]);
   assert.deepEqual(ids("system", { id: "unrelated" }), []);
   assert.deepEqual(labsForRecord("model", labCatalog.models[0], null), []);
+});
+
+test("model card marks prefer a release mapping, then a joined lab mark", () => {
+  const index = buildLabIndex(labs, labCatalog.models);
+  const reviewed = labCatalog.models[0];
+  const imported = labCatalog.models[3];
+  const marks = { "lab-alpha": "lobe:alpha", "alpha-one": "lobe:alpha-one" };
+  assert.equal(markRecordId("model", reviewed, index, marks), "alpha-one");
+  assert.equal(markRecordId("model", { ...reviewed, id: "model-new" }, index, marks), "lab-alpha");
+  assert.equal(markRecordId("model", imported, index, marks), "lab-alpha");
+  assert.equal(markRecordId("model", labCatalog.models[6], index, marks), "gamma-two");
+  assert.equal(markRecordId("system", { id: "alpha-chat" }, index, marks), "alpha-chat");
+  assert.equal(markMonogramName("model", { id: "model-new", name: "New Chat", developer: "Alpha" }, "lab-alpha", index), "Alpha");
+});
+
+test("imported model cards name the joined lab instead of the namespace slug", () => {
+  const index = buildLabIndex(labs, labCatalog.models);
+  assert.equal(modelCardDeveloperLabel(labCatalog.models[3], index), "Alpha");
+  assert.equal(modelCardDeveloperLabel(labCatalog.models[6], index), "gamma");
 });
 
 // Related navigation inside a system dialog comes from data the boot payload

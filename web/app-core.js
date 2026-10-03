@@ -518,6 +518,35 @@
     return [...new Set(labs.filter(Boolean))];
   }
 
+  // Model cards prefer a mark mapped to the release id, then to a joined lab's
+  // operator mark. The returned id is what logos.json keys and data-mark carry.
+  function markRecordId(kind, record, index, recordMarks = {}) {
+    if (recordMarks[record.id]) return record.id;
+    if (kind !== "model" || !index) return record.id;
+    const labs = labsForRecord(kind, record, index);
+    const marked = labs.find(lab => recordMarks[lab.id]);
+    if (marked) return marked.id;
+    if (labs.length) return labs[0].id;
+    return record.id;
+  }
+
+  function markMonogramName(kind, record, markId, index) {
+    if (markId === record.id) return record.name;
+    if (kind === "model" && index) {
+      const lab = labsForRecord(kind, record, index).find(item => item.id === markId);
+      if (lab) return lab.name;
+    }
+    return record.name;
+  }
+
+  // Imported models.dev rows store a namespace slug in developer; prefer the
+  // joined lab's catalog name on cards when one exists.
+  function modelCardDeveloperLabel(model, index) {
+    const labs = labsForRecord("model", model, index);
+    if (labs.length) return labs[0].name;
+    return model.developer || "";
+  }
+
   // Robots are unscored (ADR 037): the shared collection filter supplies the
   // facets and search, and unscoredSort pins the sort so no caller can ask for
   // a score order that does not exist.
@@ -2090,7 +2119,10 @@
     labDistributionModes,
     labRelations,
     labsForRecord,
+    markMonogramName,
+    markRecordId,
     matchFinderGoal,
+    modelCardDeveloperLabel,
     matchesProject,
     mergePackScopeEntries,
     modelAccessSummary,
