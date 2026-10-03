@@ -238,6 +238,84 @@
       "display_order": 520
     },
     {
+      "id": "lab-aleph-alpha",
+      "name": "Aleph Alpha",
+      "url": "https://aleph-alpha.com/",
+      "description": "The Heidelberg company that trains Kolibri, its sovereign German-English open-weight language model for public administration and regulated industry.",
+      "lab_type": "ai_company",
+      "headquarters": "de",
+      "organization_note": "Two entities carry the organization's name, and the Kolibri model card separates them: it names \"Model Provider Aleph Alpha GmbH\" and \"Model Developer Aleph Alpha Research GmbH\", so the model record names the research company as developer and this record's catalog_names carries that string. Aleph Alpha GmbH is the entity on the imprint, entered in the commercial register at Mannheim as HRB 732804, represented by Ilhan Scheer, with the registered office at Speyerer Straße 14, 69115 Heidelberg and further offices in Berlin, Bayreuth, and München; it publishes the Kolibri weights under its own name. The organization develops and serves the Kolibri line itself, its models-overview page listing Kolibri as the only current model, and it offers enterprise deployment and specialization through sales contact rather than a documented self-serve API, so no inference-service, runtime, specification, or pack record names it and the tags row counts none of them. It publishes no frontier-safety, responsible-scaling, preparedness, or risk-management framework on its own pages: the site navigation carries Models, Offering, Blog, and Newsroom only, and the newsroom files announcements under Company, Partnership, and Product. What it does publish is per-release documentation — a model card with Responsible Use and Risks and limitations sections, a public training-data summary, a 189-page technical report, and a General-Purpose AI Code of Practice point of contact for rightsholders — so safety_framework is omitted rather than filled with a model card. Its position is unsettled by its own announcement: on 16 September 2026 Aleph Alpha and Cohere signed a definitive business combination agreement under which the unified company will \"operate globally as Cohere\", be \"dual-headquartered in Berlin and in Toronto\", keep Aleph Alpha's Heidelberg office as a research center, and appoint Ilhan Scheer as Cohere's Chief Operating Officer and Samuel Weinbach as its Chief Research Officer. The announcement states the transaction \"remains subject to final regulatory approvals\" and is \"expected to close later this year\", so no parent_organization is recorded while the deal is unclosed; both headquarters named for the combined company are a Cohere question, tracked separately, and the separate legal entities here are Heidelberg's.",
+      "catalog_names": [
+        "Aleph Alpha Research GmbH"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://aleph-alpha.com/en/models-overview/"
+        },
+        {
+          "kind": "news",
+          "url": "https://aleph-alpha.com/en/news/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/Aleph-Alpha"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/Aleph-Alpha"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Kolibri-1 model card: Model Provider Aleph Alpha GmbH and Model Developer Aleph Alpha Research GmbH, release date 3 October 2026, and the Apache 2.0 licence scope over the repository's weights and configuration files",
+          "url": "https://huggingface.co/Aleph-Alpha/Kolibri-1",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Imprint: Aleph Alpha GmbH, Speyerer Straße 14, 69115 Heidelberg, represented by Ilhan Scheer, entered in the commercial register at Mannheim as HRB 732804",
+          "url": "https://aleph-alpha.com/en/imprint/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Models overview: specialized sovereign LLMs built for the public sector, defence, and industry, with Kolibri as the only model listed and enterprise deployment offered on Aleph Alpha infrastructure",
+          "url": "https://aleph-alpha.com/en/models-overview/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "News announcement of 16 September 2026: a definitive business combination agreement with Cohere, the unified company operating globally as Cohere, dual-headquartered in Berlin and Toronto with Heidelberg kept as a research center, subject to regulatory approvals and expected to close later in 2026",
+          "url": "https://aleph-alpha.com/en/news/cohere-agreement-transatlantic-sovereign-ai/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Newsroom index: company announcements filed under Company, Partnership, and Product, with no frontier-safety, responsible-scaling, or preparedness framework published",
+          "url": "https://aleph-alpha.com/en/news/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Official GitHub organization linked from the site footer, publishing the aleph-alpha-inference serving package and the training frameworks",
+          "url": "https://github.com/Aleph-Alpha",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Aleph-Alpha Hugging Face organization publishing the Kolibri weights",
+          "url": "https://huggingface.co/Aleph-Alpha",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 280
+    },
+    {
       "id": "lab-alibaba",
       "name": "Alibaba",
       "url": "https://www.alibabagroup.com/",
