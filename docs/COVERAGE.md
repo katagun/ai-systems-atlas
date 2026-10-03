@@ -89,7 +89,7 @@ AgiBot's X2 was read the same day and is queued as a hold instead, and the disti
 | Role | Reviewed | Active | Coverage signal |
 |---|---:|---:|---|
 | General work agent | 7 | 7 | Improved across research-first, office-work, and media-production approaches; keep reviewing control, recovery, permission, and execution boundaries |
-| Agent framework / SDK | 39 | 35 | Broad across code frameworks and visual builders after ADR 019 widened the definition; RAG engines and all-in-one retrieval-plus-agent frameworks joined the role in batch 100; two Microsoft predecessors are superseded and one builder is archived |
+| Agent framework / SDK | 39 | 35 | Broad across code frameworks and visual builders after ADR 019 widened the definition; RAG engines and all-in-one retrieval-plus-agent frameworks joined the role in batch 101; two Microsoft predecessors are superseded and one builder is archived |
 | Coding agent | 38 | 35 | Broad across local, self-hosted, managed-cloud, terminal-native, and community-fork operation, and the three highest-profile proprietary editors are now reviewed rather than queued |
 | Human-first PKM | 11 | 10 | Broad, but proprietary reference products remain provisional |
 | AI knowledge app / RAG brain | 10 | 9 | Improved with a proprietary self-maintaining knowledge product; review open-core alternatives |
