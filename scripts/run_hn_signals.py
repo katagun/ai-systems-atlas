@@ -630,7 +630,7 @@ def finish(
     # and every other verified one still commits. Decided in this process from the base
     # queue's url and digest, never from CHECKS output or the run's own copy; the field
     # guard, CHECKS, and the re-read before `git add` all run on the result. See "Review a
-    # signal batch" in docs/OPERATIONS.md.
+    # signal batch" in docs/RUNBOOKS.md.
     dropped, fetch_problems, after = drop_drifted_assessments(before, after, fetcher)
     if fetch_problems:
         for problem in fetch_problems:

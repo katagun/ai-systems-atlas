@@ -29,7 +29,7 @@ This report supersedes nothing; it is a new adversarial pass.
   review following the workflow verbatim hits a dead step. Fix: add the
   script or rewrite step 2 to the real pinning/checking procedure.
 - **README runs tests before installing dependencies.**
-  [README.md](../README.md) "Start here"
+  [README.md](../../README.md) "Start here"
   runs `ruff`, `validate_directory.py`, `unittest`, and `node --test`
   before `npm ci` / `npx playwright install chromium`. A fresh checkout
   fails at the JS test and e2e lines. Fix: move `npm ci` (and the
@@ -38,7 +38,7 @@ This report supersedes nothing; it is a new adversarial pass.
 - **CURATION and MODELS omit payload + asset steps.**
   `docs/CURATION.md` (step 7) runs only `sync_web_data.py` and
   `build_share_pages.py`; `docs/MODELS.md` (promotion snippet) does
-  the same. [AGENTS.md](../AGENTS.md)
+  the same. [AGENTS.md](../../AGENTS.md)
   requires the four-step sequence including `build_web_payload.py` and
   `build_asset_version.mjs`. A reviewer following CURATION/MODELS leaves
   `web/` payload and asset version stale. Fix: copy the AGENTS sequence
@@ -48,14 +48,14 @@ This report supersedes nothing; it is a new adversarial pass.
 
 - **TAXONOMY Finder omits the local-runtime direction.**
   `docs/TAXONOMY.md` (step 1) lists memory, agent, assistant, or
-  inference-service; [web/app.js](../web/app.js)
+  inference-service; [web/app.js](../../web/app.js)
   `FINDER_DIRECTIONS` also offers `local_runtime` ("Run models on hardware
   I operate"). The taxonomy either under-documents a shipped path or the
   app over-offers one. Fix in whichever direction is intended.
 - **DATA_MODEL omits the robots collection.**
   `docs/DATA_MODEL.md` (canonical/published table) lists ten
   files; it has no `robots.json` row although ROBOTS describes
-  `directory/robots.json`, and [sync_web_data.py](../scripts/sync_web_data.py)
+  `directory/robots.json`, and [sync_web_data.py](../../scripts/sync_web_data.py)
   `PUBLISHED_DATA` is exactly those ten files. Either robots is
   unpublished (then ROBOTS step 7 "regeneration sequence" is wrong) or the
   table and `PUBLISHED_DATA` are stale. Decide and fix both together.

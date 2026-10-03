@@ -10,11 +10,11 @@ workflow never had, the OpenRouter cross-check (ADR 039). A pull request opened 
 reach a mergeable state without an extra repository secret. Running here instead means
 the pull request is opened with the maintainer's own `gh` credentials, so `verify` runs
 on it like any other pull request — no repository secret is needed anywhere. See
-`docs/OPERATIONS.md`, "Metadata refresh" and "Scheduled workflow", and the
+`docs/RUNBOOKS.md`, "Metadata refresh" and "Scheduled workflow", and the
 attention-source sweep (`scripts/run_hn_signals.py`) this follows the pattern of.
 
 The refresh involves no judgment, so scheduling it is a job for launchd
-(see "Scheduled workflow" in `docs/OPERATIONS.md`), not an unattended model.
+(see "Scheduled workflow" in `docs/RUNBOOKS.md`), not an unattended model.
 
 Usage:
     uv run python scripts/run_directory_refresh.py            # generate, verify, commit locally

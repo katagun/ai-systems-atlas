@@ -207,7 +207,7 @@ repos:
       # Neither could catch anything the linters do not: pyproject selects ruff's E9
       # syntax and IO rules, which run over every file, and eslint parses web/app.js and
       # web/app-core.js at ecmaVersion 2023. Both hooks ran in the static CI job and were
-      # restated in docs/OPERATIONS.md as required checks, so the cost was the false
+      # restated in docs/RUNBOOKS.md as required checks, so the cost was the false
       # assurance rather than the runtime.
 
       - id: node-web-tests
