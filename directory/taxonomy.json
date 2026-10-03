@@ -1925,6 +1925,11 @@
       "kind": "open_content"
     },
     {
+      "id": "PostgreSQL",
+      "name": "PostgreSQL License",
+      "kind": "open_source"
+    },
+    {
       "id": "Unlicense",
       "name": "The Unlicense",
       "kind": "open_source"
