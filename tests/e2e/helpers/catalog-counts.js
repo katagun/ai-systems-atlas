@@ -96,10 +96,23 @@ function labNames(predicate = () => true) {
   return labs.filter(predicate).map(lab => lab.name).sort((a, b) => a.localeCompare(b));
 }
 
-// The cards that carry a headquarters flag: every lab but the ones whose record
-// lists no headquarters, which is not a country to flag.
-function labNamesWithFlag() {
-  return labNames(lab => lab.headquarters !== "none_listed");
+// The flag circles a lab card carries: the headquarters country when the record
+// lists one, plus each reviewed research location (ADR 052).
+function labFlagsOnCards() {
+  return labs.reduce((total, lab) => total
+    + (lab.headquarters === "none_listed" ? 0 : 1)
+    + (lab.research_locations || []).length, 0);
+}
+
+// A robot's maker is a lab (ADR 053), so its card carries the same circles.
+function robotFlagsOnCards() {
+  return robots.reduce((total, robot) => {
+    const maker = labs.find(lab => lab.catalog_names.includes(robot.manufacturer));
+    if (!maker) return total;
+    return total
+      + (maker.headquarters === "none_listed" ? 0 : 1)
+      + (maker.research_locations || []).length;
+  }, 0);
 }
 
 function labsWithReleaseDistribution(mode) {
@@ -167,7 +180,8 @@ module.exports = {
   labs: labs.length,
   labCoveredModels,
   labNames,
-  labNamesWithFlag,
+  labFlagsOnCards,
+  robotFlagsOnCards,
   labsWithReleaseDistribution,
   labsMatching,
   reviewedModelsDevelopedBy,

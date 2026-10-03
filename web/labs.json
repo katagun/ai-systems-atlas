@@ -3,6 +3,54 @@
   "verified_at": "2026-09-29",
   "labs": [
     {
+      "id": "lab-one-x-technologies",
+      "name": "1X Technologies",
+      "url": "https://www.1x.tech/",
+      "description": "The Palo Alto company that develops the NEO home robot and Redwood, the world model it plans with, having shipped EVE industrial humanoids before it.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The organization's own about page says it is \"an AI and robotics company based in Palo Alto, California\", which is the headquarters statement the record uses; the same page records that it was founded in 2014 as Halodi Robotics by Bernt Øyvind Børnich, so the company is Norwegian-founded and American-based, and the record says so rather than choosing a country for the origin, because `headquarters` is where the organization says it is based and nothing here is a claim about where it began. It is an AI company because the AI is the product: its own site separates an \"AI\" section from the robots, names Redwood as its world model, and describes NEO as its flagship product, so the organization develops both the robot and the model that runs it. It is recorded on the robot rather than a release because the catalog reviews no Redwood release, and Redwood is documented as a world model that plans actions rather than as a language release, which is outside the Models collection on the ground the robotics scope records. The reviewed robot is NEO, the home robot the record covers, not the earlier EVE industrial line, which the about page describes as deployed in customer factories from 2022. No parent organization is recorded: the pages read name no holding or controlling entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted.",
+      "catalog_names": [
+        "1X Technologies"
+      ],
+      "systems": [
+        "neo"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.1x.tech/stories"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/1X-Technologies"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "About page: an AI and robotics company based in Palo Alto, California, founded in 2014 as Halodi Robotics, with the 2022 EVE factory deployments and the NEO home robot timeline",
+          "url": "https://www.1x.tech/about",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "NEO product page, the reviewed robot record neo",
+          "url": "https://www.1x.tech/neo",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Redwood AI world model page: the organization's own world model for its robots",
+          "url": "https://www.1x.tech/discover/redwood-ai-world-model",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 640
+    },
+    {
       "id": "lab-ai-singapore",
       "name": "AI Singapore",
       "url": "https://aisingapore.org/",
@@ -557,6 +605,60 @@
       "display_order": 600
     },
     {
+      "id": "lab-boston-dynamics",
+      "name": "Boston Dynamics",
+      "url": "https://bostondynamics.com/",
+      "description": "The Waltham robotics company that develops Spot and Atlas, and publishes theSpot SDK and Orbit developer interfaces other teams build their own control on.",
+      "lab_type": "technology_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "Boston Dynamics, Inc. is the entity the site's ownTerms of Use name as the property of the site, and the same terms give its address as 200 Smith Street, Suite 4100, Waltham, MA 02451 and say it administers and operates the site from Waltham, Massachusetts, so the headquarters is the United States. No parent organization is recorded: the pages read for this record name no holding or controlling entity, and an ownership relation reported elsewhere is not first-party evidence, so the field is omitted rather than filled from a press account. It is a technology company rather than an AI company because the catalog records robots and the interfaces around them rather than models, and its own about page describes it as \"the global leader in developing and deploying highly mobile robots\" rather than as a model developer, though it develops the perception and control software its own robots run and the Gemini Robotics integrations it demonstrates. The record is admitted on the robot it makes, Spot, which the catalog reviews as a quadruped whose vendor names learned policies and documents an open control interface; the robot record is what places the organization in this collection, and no model or system of its own is reviewed here. Its developer surface is the Spot SDK: the same first-party documentation the robot record cites, dev.bostondynamics.com, publishes the arm and network-compute-bridge interfaces another vendor's robot software targets, so the organization develops software other catalogs record. Its site names no safety framework of the frontier-safety, responsible-scaling, orpreparedness kind, so the field is omitted rather than filled with its robotics safety material.",
+      "catalog_names": [
+        "Boston Dynamics"
+      ],
+      "systems": [
+        "spot"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://bostondynamics.com/blog/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/boston-dynamics"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms of Use: the site is the property of Boston Dynamics, Inc., its address is 200 Smith Street, Suite 4100, Waltham, MA 02451, USA, and it administers and operates the site from Waltham, Massachusetts",
+          "url": "https://bostondynamics.com/terms/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "About page: Boston Dynamics as the global leader in developing and deploying highly mobile robots, with a link to its R&D lab results and commercial news",
+          "url": "https://bostondynamics.com/about/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Spot product page, the reviewed robot record spot",
+          "url": "https://bostondynamics.com/products/spot/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Spot SDK documentation, the developer interface another vendor's robot software targets",
+          "url": "https://dev.bostondynamics.com/",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 650
+    },
+    {
       "id": "lab-bytedance",
       "name": "ByteDance",
       "url": "https://www.bytedance.com/en/",
@@ -743,14 +845,71 @@
       "display_order": 120
     },
     {
+      "id": "lab-figure-ai",
+      "name": "Figure AI",
+      "url": "https://www.figure.ai/",
+      "description": "The San Jose company that develops the Figure humanoid robots and Helix, the vision-language-action model its own robots run.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The site's Terms & Conditions name the operator as Figure AI Inc., and the privacy policy's contact block gives 3960 N First St, San Jose CA 95134 with privacy@figure.ai, so the headquarters is the United States; the same terms choose California law and California courts, which is a governing-law clause and not read as a headquarters statement, so the address in the privacy policy is the one that carries it. The organization is an AI company because it develops both the robots and the model that runs them: Helix is documented by the company as its own vision-language-action model, published on its own pages, and the reviewed robot record Figure 03 rests on those pages. It is recorded on the robot rather than on a release because the catalog reviews no Helix release, and an action-emitting policy is out of the Models collection on the ground the robotics scope records, so the robot is the strongest join the catalog holds. No parent organization is recorded: the pages read name no holding or controlling entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted rather than filled with its product-safety material.",
+      "catalog_names": [
+        "Figure AI"
+      ],
+      "systems": [
+        "figure-03"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.figure.ai/news"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/figure-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms & Conditions: the site is operated by Figure AI Inc., with California governing law and California courts as the exclusive venue",
+          "url": "https://www.figure.ai/terms-and-conditions",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy Policy, effective January 21, 2026: its contact block gives 3960 N First St, San Jose CA 95134 and privacy@figure.ai",
+          "url": "https://figure.ai/privacy-policy",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Helix page: the organization's own vision-language-action model, named as the model its robots run",
+          "url": "https://www.figure.ai/helix",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Figure 03 product page, the reviewed robot record figure-03",
+          "url": "https://www.figure.ai/figure",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 630
+    },
+    {
       "id": "lab-google",
       "name": "Google",
       "url": "https://deepmind.google/",
       "description": "The technology company whose Google DeepMind unit develops the Gemini and Gemma models that Google serves through the Gemini API, Gemini Enterprise Agent Platform, and the Gemini apps.",
       "lab_type": "technology_company",
       "headquarters": "us",
+      "research_locations": [
+        "gb"
+      ],
       "parent_organization": "Alphabet Inc.",
-      "organization_note": "Google DeepMind develops the models. Google LLC, of Mountain View and the largest of Alphabet Inc.'s companies, offers the Gemini API, the Gemini apps, and the developer tools, while Google Cloud operates the Gemini Enterprise Agent Platform, formerly Vertex AI. The catalog names the developer Google for most releases and Google DeepMind for one, and names the Gemini Enterprise Agent Platform operator Google Cloud, so all three names belong to this record.",
+      "organization_note": "Google DeepMind develops the models. Google LLC, of Mountain View and the largest of Alphabet Inc.'s companies, offers the Gemini API, the Gemini apps, and the developer tools, while Google Cloud operates the Gemini Enterprise Agent Platform, formerly Vertex AI. The catalog names the developer Google for most releases and Google DeepMind for one, and names the Gemini Enterprise Agent Platform operator Google Cloud, so all three names belong to this record. The unit that develops them is not where the entity is headquartered: DeepMind's own careers page lists ten locations, London first among them, with the Bay Area, New York City, Cambridge (US), Bangalore, Montreal, Paris, Tokyo, Toronto, and Zurich beside it, so the research that produces the catalog's releases is spread across those cities rather than sitting under the Mountain View address this record is named for. Its about page says DeepMind started in 2010 and names no city, so the record does not assert where it began and carries the United Kingdom as the site that distinguishes it from the headquarters.",
       "catalog_names": [
         "Google",
         "Google DeepMind",
@@ -814,11 +973,67 @@
           "label": "Google Cloud documentation for the Gemini Enterprise Agent Platform, where the Vertex AI generative AI documentation now redirects",
           "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Google DeepMind careers page: its ten locations, London first, then the Bay Area, Bangalore, Cambridge (US), Montreal, New York City, Paris, Tokyo, Toronto, and Zurich, and its statement of an intentional location strategy",
+          "url": "https://deepmind.google/careers/",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
+      "verified_at": "2026-10-03",
       "admission_basis": "reviewed_release",
       "display_order": 30
+    },
+    {
+      "id": "lab-hello-robot",
+      "name": "Hello Robot",
+      "url": "https://hello-robot.com/",
+      "description": "The company behind the Stretch mobile manipulator, built by the two researchers who led Georgia Tech'sCharlie Kemp lab and Google's robotics directorate, and sold as a platform other teams build on.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The imprint names the owner of the site as Hello Robot Inc. at 825 Ferry St., Suite A, Martinez, CA 94553, and the about page says the company maintains offices in Atlanta, GA and Martinez, CA and manufactures all robots in-house at the Martinez facility; both are in the United States, so the headquarters is the United States and the record does not choose between the two offices, which the labs guide treats as no headquarters listed only when no country can be found at all. The two co-founders are named on the about page, Dr. Aaron Edsinger, a former Director of Robotics at Google, and Dr. Charlie Kemp, a former tenured professor at Georgia Tech, and it says the company was founded in 2017 and builds on the research from Kemp's lab; the record names the organization, not the founders, because a person is not a lab. It is an AI company because the platform's software, its ROS 2 packages, its Python bridge, and the grasping demo that runs named third-party models are what a customer buys alongside the hardware, and the reviewed robot record is that platform. It is recorded on the robot rather than a release because the catalog reviews no model of its own: the demo it ships calls Molmo 2, another organization's model, which is a fact about the record and not a release of Hello Robot's own. No parent organization is recorded: the pages read name no holding entity, and an investor named as an advisor is not one. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "catalog_names": [
+        "Hello Robot"
+      ],
+      "systems": [
+        "hello-robot-stretch-4"
+      ],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/hello-robot"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Imprint, last updated August 17, 2026: the owner of the website is Hello Robot Inc., 825 Ferry St., Suite A, Martinez, CA 94553, USA",
+          "url": "https://hello-robot.com/imprint/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "About page: founded in 2017 by Dr. Aaron Edsinger and Dr. Charlie Kemp, offices in Atlanta, GA and Martinez, CA, all robots manufactured in-house at the Martinez facility",
+          "url": "https://hello-robot.com/about",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Stretch 4 product page, the reviewed robot record hello-robot-stretch-4",
+          "url": "https://hello-robot.com/stretch-4/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Develop page: the ROS 2 packages and Python bridge published for the platform",
+          "url": "https://hello-robot.com/develop/",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 660
     },
     {
       "id": "lab-higgsfield-ai",
@@ -827,8 +1042,11 @@
       "description": "The San Francisco company that develops the Soul, Genjutsu, and Cinema Studio image and video models and serves them, with other developers' models, from one API, and builds the Supercomputer creative agent on the same platform.",
       "lab_type": "ai_company",
       "headquarters": "us",
+      "research_locations": [
+        "kz"
+      ],
       "admission_basis": "reviewed_system",
-      "organization_note": "One entity names the organization on every page read: the Terms of Use Agreement describes the reader's relationship with \"Higgsfield Inc. and our affiliated entities\" and calls them \"Company\", \"Higgsfield\", \"we\", and \"us\", the Privacy Policy opens the same way, and the site footer is \"© 2026 Higgsfield, Inc.\". The headquarters is the United States because the about page says the organization is \"Headquartered in San Francisco\" and its notice address in the terms, its privacy contact address, and its footer are one address, 535 Mission St, 14th Floor, San Francisco, CA 94105, named three times in the governing documents; the about page's mention of leading venture firms is backing, not a parent, so no parent organization is recorded. It is an AI company because the models and the creative product built on them are its whole business: its own pages call it an \"AI-native creative suite\" and \"your all-in-one AI creative studio\", and its Privacy Policy describes generating and editing images, video, audio, and other media \"using a combination of proprietary and third-party artificial intelligence models\". Its one serving surface carries both, and the API catalog is where that is legible: routes marked \"Higgsfield Exclusive\" appear under a higgsfield namespace — Genjutsu, Cinema Studio 4.0, Soul 2 — beside other developers' routes under their own namespaces, bytedance / Seedance 2.5 and Seedance 2.0, kling / Kling 3.0, alibaba / Wan 3.0 Prime, minimax / MiniMax H3, and xai / Grok Imagine 2.0, each with published per-second rates, so the organization both develops models and resells others' on the same API. Its changelog records models arriving from outside, FLUX 3 Image \"per Black Forest Labs\" among them, which is the same split seen in the catalog. It is recorded on a system rather than a release, so ADR 048's basis applies: this catalog has reviewed no Higgsfield model release, and the record it does have is the Supercomputer Agent, published as higgsfield-supercomputer, whose own product-boundary note says it covers that product and not the individual generators and not the company as a whole. That product is the organization's own on two first-party pages — the terms list \"an AI agent service (\\\"Supercomputer Agent\\\")\" among the services the agreement covers, and the product page documents it as one superagent for the creative stack with skills, schedules, and media-production workflows. Nothing else in the catalog names the organization: it is no model developer, no inference-service operator, no runtime maintainer, no specification steward, and no pack steward, and the one reviewed record names no organization, which is what ADR 048 calls the shape of a maker, so catalog_names is empty and the join runs from the system. Its channels are the three first-party pages a reader can watch: the API catalog, the changelog, and the Creator Hub blog. No GitHub or Hugging Face organization is recorded as a channel, because no page read links one from higgsfield.ai and no reviewed record of the organization is published from either, its one system record having no repository. It publishes no frontier-safety, responsible-scaling, preparedness, or risk-management framework: the Trust page covers content moderation, community guidelines, creator-programme terms, and fraud prevention, which are platform policies rather than a frontier framework, and neither the terms nor the privacy policy carries one, so the field is omitted rather than filled with a moderation policy.",
+      "organization_note": "One entity names the organization on every page read: the Terms of Use Agreement describes the reader's relationship with \"Higgsfield Inc. and our affiliated entities\" and calls them \"Company\", \"Higgsfield\", \"we\", and \"us\", the Privacy Policy opens the same way, and the site footer is \"© 2026 Higgsfield, Inc.\". The headquarters is the United States because the about page says the organization is \"Headquartered in San Francisco\" and its notice address in the terms, its privacy contact address, and its footer are one address, 535 Mission St, 14th Floor, San Francisco, CA 94105, named three times in the governing documents; the about page's mention of leading venture firms is backing, not a parent, so no parent organization is recorded. It is an AI company because the models and the creative product built on them are its whole business: its own pages call it an \"AI-native creative suite\" and \"your all-in-one AI creative studio\", and its Privacy Policy describes generating and editing images, video, audio, and other media \"using a combination of proprietary and third-party artificial intelligence models\". Its one serving surface carries both, and the API catalog is where that is legible: routes marked \"Higgsfield Exclusive\" appear under a higgsfield namespace — Genjutsu, Cinema Studio 4.0, Soul 2 — beside other developers' routes under their own namespaces, bytedance / Seedance 2.5 and Seedance 2.0, kling / Kling 3.0, alibaba / Wan 3.0 Prime, minimax / MiniMax H3, and xai / Grok Imagine 2.0, each with published per-second rates, so the organization both develops models and resells others' on the same API. Its changelog records models arriving from outside, FLUX 3 Image \"per Black Forest Labs\" among them, which is the same split seen in the catalog. It is recorded on a system rather than a release, so ADR 048's basis applies: this catalog has reviewed no Higgsfield model release, and the record it does have is the Supercomputer Agent, published as higgsfield-supercomputer, whose own product-boundary note says it covers that product and not the individual generators and not the company as a whole. That product is the organization's own on two first-party pages — the terms list \"an AI agent service (\\\"Supercomputer Agent\\\")\" among the services the agreement covers, and the product page documents it as one superagent for the creative stack with skills, schedules, and media-production workflows. Nothing else in the catalog names the organization: it is no model developer, no inference-service operator, no runtime maintainer, no specification steward, and no pack steward, and the one reviewed record names no organization, which is what ADR 048 calls the shape of a maker, so catalog_names is empty and the join runs from the system. Its channels are the three first-party pages a reader can watch: the API catalog, the changelog, and the Creator Hub blog. No GitHub or Hugging Face organization is recorded as a channel, because no page read links one from higgsfield.ai and no reviewed record of the organization is published from either, its one system record having no repository. It publishes no frontier-safety, responsible-scaling, preparedness, or risk-management framework: the Trust page covers content moderation, community guidelines, creator-programme terms, and fraud prevention, which are platform policies rather than a frontier framework, and neither the terms nor the privacy policy carries one, so the field is omitted rather than filled with a moderation policy. Its work is not where its entity is. Its own careers board, the page its own footer links as Careers and which resolves to its Ashby board, lists 81 open roles of which 50 are on-site in Almaty, Kazakhstan: every Engineering & Product role except four that sit in the San Francisco Bay Area, all eight Creative content roles, both Customer Experience roles, and its Head of Recruitment and Office Manager. The 27 United States roles are the corporate side — G&A in legal, contracts, tax, treasury, FP&A and revenue accounting, Marketing & Sales, public relations, and the four San Francisco engineering roles in IT security, GRC, and technical programs. The board also keeps the record honest about what the Almaty work is not: the single role in its Research & Development department, Machine Learning Engineer, Ads, is San Francisco Bay Area and hybrid. So the record says the engineering, product, creative, and support work is on-site in Almaty and does not say all of its research and development is there, which is what the page supports. The San Francisco entity, its notice address, and its venture backing are facts about where the company is incorporated and financed, not about where the product is built, and the record keeps the two apart.",
       "catalog_names": [],
       "systems": [
         "higgsfield-supercomputer"
@@ -900,6 +1118,12 @@
           "kind": "web",
           "label": "Trust page: content moderation at the model level, community guidelines and moderation, creator-programme terms, and fraud prevention, with no frontier-safety, responsible-scaling, preparedness, or risk-management framework",
           "url": "https://higgsfield.ai/trust",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page, resolving to the organization's own Ashby board: 81 open positions, 50 of them on-site in Almaty, Kazakhstan, including nearly every Engineering & Product role, all eight Creative content roles, and both Customer Experience roles, against 27 in the San Francisco Bay Area in G&A, Marketing & Sales, and Public Relations, with the single Research & Development role, Machine Learning Engineer, Ads, listed in San Francisco Bay Area as hybrid",
+          "url": "https://higgsfield.ai/careers",
           "verified_at": "2026-10-03"
         }
       ],
@@ -2289,6 +2513,56 @@
       "verified_at": "2026-09-25",
       "admission_basis": "reviewed_release",
       "display_order": 470
+    },
+    {
+      "id": "lab-unitree-robotics",
+      "name": "Unitree Robotics",
+      "url": "https://www.unitree.com/",
+      "description": "The Hangzhou company that develops the G1, H1, and Go2 legged and humanoid robots and self-researchs the motors, reducers, controllers, and perception software they run on.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The contact page names a Hangzhou Headquarters at 3rd Floor, Building 1, Fengda Creative Park, No. 88 Dongliu Road, Binjiang District, Hangzhou City, Zhejiang Province, China, with a Shenzhen office and a Shanghai entity, Shanghai Gaoyi Technology Co., Ltd., given by name; the record takes the Hangzhou address because the page itself labels it the headquarters and names the other two as an office and a differently named entity, and the record notes them here rather than treating three addresses as three headquarters. Its own about page calls it a \"civilian robotics company\" focused on the R&D, production, and sales of general-purpose legged and humanoid robots, says it has worked on that since 2017, and states that it self-researchs the motors, reducers, controllers, LIDAR, and perception and motion-control algorithms its robots use, which is why the organization is an AI company rather than a hardware vendor that buys its intelligence: the software is developed in house and the catalog reviews three of its robots. It is recorded on those robots rather than on a release because the catalog reviews no model of its own, and the UnifoLM-X1-0 embodied intelligence model its about page describes is a policy that acts on a robot, which the robotics scope keeps out of the Models collection; the record says so rather than implying the organization publishes no model. No parent organization is recorded: the pages read name no holding entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted.",
+      "catalog_names": [
+        "Unitree Robotics"
+      ],
+      "systems": [
+        "unitree-g1",
+        "unitree-go2",
+        "unitree-h1"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.unitree.com/news"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/unitreerobotics"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Contact page: the Hangzhou Headquarters address in Binjiang District, Hangzhou, Zhejiang, China, a Shenzhen office, and a Shanghai entity named Shanghai Gaoyi Technology Co., Ltd.",
+          "url": "https://www.unitree.com/contact",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "About page: a civilian robotics company focused on the R&D, production, and sales of general-purpose legged and humanoid robots since 2017, self-researching motors, reducers, controllers, LIDAR, and perception and motion-control algorithms, and the UnifoLM-X1-0 embodied intelligence model deployed at its own manufacturing facility",
+          "url": "https://www.unitree.com/about",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "G1 product page, one of the three reviewed robot records unitree-g1, unitree-go2, and unitree-h1",
+          "url": "https://www.unitree.com/g1",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 620
     },
     {
       "id": "lab-upstage",

@@ -11,7 +11,8 @@ same rules for the page, and each side is tested against fixtures:
   and an imported source row in one of them joins until a review overlays it;
 - a service joins by `operator`, a runtime by `maintainer`, a specification by any of
   its `stewards`, and a pack by `steward`;
-- a system joins when its id is listed in `systems`.
+- a system joins when its id is listed in `systems`;
+- a robot joins by `manufacturer`, the way a model joins by `developer` (ADR 053).
 """
 
 from __future__ import annotations
@@ -28,6 +29,7 @@ CATALOG_KEYS = (
     "runtimes",
     "specifications",
     "packs",
+    "robots",
 )
 
 
@@ -52,6 +54,7 @@ def catalog_lists(documents: Mapping[str, Mapping[str, Any]]) -> dict[str, list[
         "runtimes": documents["local-runtimes.json"].get("runtimes", []),
         "specifications": documents["specifications.json"].get("specifications", []),
         "packs": documents["packs.json"].get("packs", []),
+        "robots": documents["robots.json"].get("robots", []),
     }
 
 
@@ -128,6 +131,11 @@ def lab_relations(
             for item in _records(catalog.get("projects", []))
             if item.get("id") in system_ids
         ],
+        "robots": [
+            item
+            for item in _records(catalog.get("robots", []))
+            if item.get("manufacturer") in names
+        ],
     }
 
 
@@ -153,4 +161,5 @@ def organization_names(catalog: Mapping[str, Iterable[Any]]) -> dict[str, set[st
         "maintainer": strings(catalog.get("runtimes", []), "maintainer"),
         "stewards": stewards,
         "steward": strings(catalog.get("packs", []), "steward"),
+        "manufacturer": strings(catalog.get("robots", []), "manufacturer"),
     }

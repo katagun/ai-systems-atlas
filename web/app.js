@@ -148,15 +148,33 @@ function cardMark(record) {
   return `<span class="card-mark card-monogram" data-mark="${escapeHTML(record.id)}" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(record.name))}</span>`;
 }
 
-// A lab card says where the organization is based, so its mark carries that
-// country's flag on the corner. The flag is decorative: the card's eyebrow
-// already names the country, and the mark it sits on is already hidden from
-// assistive technology, so the circle is hidden too and nothing repeats itself
-// aloud. A lab whose record lists no headquarters gets no flag, because an
-// empty circle would stand for a country the record does not name.
-function labCardMark(lab) {
-  const flag = AppCore.countryFlag(lab.headquarters);
-  return `<span class="card-mark-wrap">${cardMark(lab)}${flag ? `<span class="card-flag" aria-hidden="true">${flag}</span>` : ""}</span>`;
+// A card says where the organization behind it is based and where its work
+// happens: one circle per geography fact, taken from the lab the record joins to
+// (ADR 052, ADR 053). The circles are decoration — the lab's own card and dialog
+// name every country in words, and a model or robot card already prints its
+// developer or manufacturer — so the row is aria-hidden, is never a card badge,
+// and carries no title. They are regional indicator characters drawn by the
+// platform's font rather than artwork this catalog has to keep accurate. A record
+// that joins to no lab prints nothing, and a lab whose record lists no
+// headquarters gets no circle for it, because an empty one would stand for a
+// country the record does not name.
+function cardFlags(kind, record) {
+  const circles = AppCore.labsForRecord(kind, record, state.labIndex)
+    .flatMap(lab => [lab.headquarters, ...(lab.research_locations || [])])
+    .map(country => AppCore.countryFlag(country))
+    .filter(Boolean)
+    .map(flag => `<span class="card-flag" aria-hidden="true">${flag}</span>`)
+    .join("");
+  return circles ? `<div class="card-flags">${circles}</div>` : "";
+}
+
+function labFlags(lab) {
+  const circles = [lab.headquarters, ...(lab.research_locations || [])]
+    .map(country => AppCore.countryFlag(country))
+    .filter(Boolean)
+    .map(flag => `<span class="card-flag" aria-hidden="true">${flag}</span>`)
+    .join("");
+  return circles ? `<div class="card-flags">${circles}</div>` : "";
 }
 
 // An Elements preview shows the organization, so it shows the organization's
@@ -1537,6 +1555,7 @@ function labRelationsFor(lab) {
   return AppCore.labRelations(lab, {
     models: state.models, projects: state.projects, services: state.inferenceServices,
     runtimes: state.localRuntimes, specifications: state.specifications, packs: state.packs,
+    robots: state.robots,
   });
 }
 
@@ -1570,11 +1589,12 @@ function labCard(lab, { mixed = false } = {}) {
     [relations.runtimes.length, "local runtime", "local runtimes"],
     [relations.specifications.length, "specification", "specifications"],
     [relations.packs.length, "agent pack", "agent packs"],
+    [relations.robots.length, "robot", "robots"],
   ].filter(([count]) => count).map(([count, one, many]) => `<span>${count} ${count === 1 ? one : many}</span>`).join("");
   const origin = lab.parent_organization ? `Part of ${escapeHTML(lab.parent_organization)}` : escapeHTML(new URL(lab.url).hostname.replace(/^www\./, ""));
   const newestDate = newest && AppCore.releaseDate(newest);
   return `<article class="project-card lab-card${mixed ? " mixed-directory-card" : ""}">
-    <div class="card-top"><div class="card-identity">${labCardMark(lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
+    <div class="card-top"><div class="card-identity">${cardMark(lab)}${labFlags(lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
     <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
     <p>${escapeHTML(lab.description)}</p>
     <div class="tags">${counts}</div>
@@ -1593,7 +1613,7 @@ function labLinksMarkup(kind, record) {
 function robotCard(robot, { mixed = false } = {}) {
   const formLabel = taxonomyName("robot_form_factors", robot.form_factor);
   return `<article class="project-card robot-card${mixed ? " mixed-directory-card" : ""}">
-    <div class="card-top"><div class="card-identity">${cardMark(robot)}<div><p class="family-label">${mixed ? "Robot · " : ""}${escapeHTML(formLabel)}</p><h2>${escapeHTML(robot.name)}</h2><div class="repo">${escapeHTML(robot.manufacturer)}</div></div></div></div>
+    <div class="card-top"><div class="card-identity">${cardMark(robot)}${cardFlags("robot", robot)}<div><p class="family-label">${mixed ? "Robot · " : ""}${escapeHTML(formLabel)}</p><h2>${escapeHTML(robot.name)}</h2><div class="repo">${escapeHTML(robot.manufacturer)}</div></div></div></div>
     <span class="role-badge">${escapeHTML(taxonomyName("robot_availability", robot.availability))}</span>
     <p>${escapeHTML(robot.description)}</p>
     ${badgeRow(AppCore.cardBadges("robot", robot))}
@@ -1631,7 +1651,7 @@ function importedModelCard(model, { mixed = false } = {}) {
 function mixedSystemCard(record) {
   const location = projectLocation(record);
   return `<article class="project-card mixed-directory-card ${escapeHTML(record.system_family)}">
-      <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div></div>
+      <div class="card-top"><div class="card-identity">${cardMark(record)}${cardFlags("system", record)}<div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div></div>
       <span class="role-badge">${escapeHTML(roleName(record.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${evidenceReviewLabel(record)}</div>
       <p>${escapeHTML(record.description)}</p>
@@ -1665,7 +1685,7 @@ function renderAllDirectoryEntries() {
     if (kind === "model") {
       if (!isReviewedModel(record)) return importedModelCard(record, { mixed: true });
       return `<article class="project-card model-card mixed-directory-card">
-        <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Model release · ${escapeHTML(taxonomyName("model_types", record.model_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.developer)}</div></div></div></div>
+        <div class="card-top"><div class="card-identity">${cardMark(record)}${cardFlags("model", record)}<div><p class="family-label">Model release · ${escapeHTML(taxonomyName("model_types", record.model_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.developer)}</div></div></div></div>
         <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(record.description)}</p>
         ${modelSourceMeta(record)}
@@ -1772,7 +1792,7 @@ const COLLECTIONS = {
     // Only this grid sorts by stars, so only its cards explain a missing count.
     const githubSignal = project.stars == null ? "No GitHub metrics" : starCount(project);
     return `<article class="project-card ${escapeHTML(project.system_family)}">
-      <div class="card-top"><div class="card-identity">${cardMark(project)}<div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(projectLocation(project))}</div></div></div>${score}</div>
+      <div class="card-top"><div class="card-identity">${cardMark(project)}${cardFlags("system", project)}<div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(projectLocation(project))}</div></div></div>${score}</div>
       <span class="role-badge">${escapeHTML(roleName(project.primary_role))}</span>
       <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${evidenceReviewLabel(project)}</div>
       <p>${escapeHTML(project.description)}</p>
@@ -1916,7 +1936,7 @@ const COLLECTIONS = {
     card: model => {
       if (!isReviewedModel(model)) return importedModelCard(model);
       return `<article class="project-card model-card">
-        <div class="card-top"><div class="card-identity">${cardMark(model)}<div><p class="family-label">${escapeHTML(taxonomyName("model_types", model.model_type))}</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(model.developer)}</div></div></div><div class="score-ring" aria-label="Model-access score ${escapeHTML(model.score.overall)} out of 10">${escapeHTML(model.score.overall)}</div></div>
+        <div class="card-top"><div class="card-identity">${cardMark(model)}${cardFlags("model", model)}<div><p class="family-label">${escapeHTML(taxonomyName("model_types", model.model_type))}</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(model.developer)}</div></div></div><div class="score-ring" aria-label="Model-access score ${escapeHTML(model.score.overall)} out of 10">${escapeHTML(model.score.overall)}</div></div>
         <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
         ${modelSourceMeta(model)}
@@ -2908,7 +2928,7 @@ function robotDialogMarkup(robot) {
   const reviewedLine = robot.verified_at ? `<p>Reviewed ${escapeHTML(robot.verified_at)}.</p>` : "";
   return `<p class="eyebrow">Robot · ${escapeHTML(taxonomyName("robot_form_factors", robot.form_factor))} · Unscored</p><h1>${escapeHTML(robot.name)}</h1><p>${escapeHTML(robot.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>What it is</h3><p><strong>Maker:</strong> ${escapeHTML(robot.manufacturer)}</p><p><strong>Status:</strong> ${escapeHTML(label(robot.status))}</p>${robot.variants ? `<p><strong>Variants:</strong> ${escapeHTML(robot.variants)}</p>` : ""}<p><a href="${escapeHTML(robot.url)}" target="_blank" rel="noreferrer">Open official page ↗</a></p>${robot.repo ? `<p><a href="https://github.com/${escapeHTML(robot.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
+      <section class="detail-block"><h3>What it is</h3><p><strong>Maker:</strong> ${escapeHTML(robot.manufacturer)}</p>${labLinksMarkup("robot", robot)}<p><strong>Status:</strong> ${escapeHTML(label(robot.status))}</p>${robot.variants ? `<p><strong>Variants:</strong> ${escapeHTML(robot.variants)}</p>` : ""}<p><a href="${escapeHTML(robot.url)}" target="_blank" rel="noreferrer">Open official page ↗</a></p>${robot.repo ? `<p><a href="https://github.com/${escapeHTML(robot.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
       <section class="detail-block"><h3>Models the vendor names</h3>${modelsSection}${notVerifiedMarkup}</section>
       ${(robot.ai_basis || []).includes("open_model_interface") ? `<section class="detail-block"><h3>Running your own models</h3><p>${detailText(robot.developer_access || "")}</p></section>` : ""}
       <section class="detail-block"><h3>Hardware</h3><p><strong>Compute:</strong> ${detailText(hardware.compute || "—")}</p><p><strong>Sensors:</strong> ${detailText(hardware.sensors || "—")}</p><p><strong>Actuation:</strong> ${detailText(hardware.actuation || "—")}</p><p><strong>Power:</strong> ${detailText(hardware.power || "—")}</p></section>
@@ -3223,18 +3243,22 @@ function labDialogMarkup(lab) {
   // rather than as the state the record is in (ADR 044, ADR 048).
   const announced = lab.admission_basis === "frontier_announcement";
   const systemBased = lab.admission_basis === "reviewed_system";
+  const robotBased = lab.admission_basis === "reviewed_robot";
   const noReleases = !relations.models.length;
   const releaseBlock = announced
     ? `<section class="detail-block"><h3>Reviewed model releases · 0</h3><p>None reviewed. The Atlas has reviewed no release this organization developed, which is why it is recorded on its own published statement of intent rather than on a release. Nothing here is a claim that it has released nothing.</p></section>`
+    : noReleases && robotBased
+      ? `<section class="detail-block"><h3>Reviewed model releases · 0</h3><p>None reviewed. The Atlas has reviewed no model release this organization developed, which is why it is recorded on a robot it makes rather than on a release. Nothing here is a claim that it has developed no models: the models such an organization names on its own pages are policies that act on its robots, which this collection keeps out of Models.</p></section>`
     : noReleases && systemBased
       ? `<section class="detail-block"><h3>Reviewed model releases · 0</h3><p>None reviewed. The Atlas has reviewed no model release this organization developed, which is why it is recorded on a system it built rather than on a release. Nothing here is a claim that it has developed no software.</p></section>`
       : `<section class="detail-block"><h3>Reviewed model releases · ${relations.models.length}</h3><p>${modeCounts}</p><ul class="lab-release-list">${recent}</ul>${pending}<p><button type="button" class="ghost-button" data-browse-lab-models="${escapeHTML(lab.id)}">Browse all ${total} in Models →</button></p></section>`;
   return `<p class="eyebrow">Lab · ${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · Unscored</p><h1>${escapeHTML(lab.name)}</h1><p>${escapeHTML(lab.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Organization</h3><p><strong>Type:</strong> ${escapeHTML(taxonomyName("lab_types", lab.lab_type))}</p><p><strong>Headquarters:</strong> ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p>${lab.parent_organization ? `<p><strong>Parent organization:</strong> ${escapeHTML(lab.parent_organization)}</p>` : ""}<p><strong>Recorded because:</strong> ${escapeHTML(taxonomyName("lab_admission_bases", lab.admission_basis))}</p>${lab.catalog_names.length ? `<p><strong>Named in the catalog as:</strong> ${escapeHTML(lab.catalog_names.join(" · "))}</p>` : ""}<p><a href="${escapeHTML(lab.url)}" target="_blank" rel="noreferrer">Open official site ↗</a></p></section>
+      <section class="detail-block"><h3>Organization</h3><p><strong>Type:</strong> ${escapeHTML(taxonomyName("lab_types", lab.lab_type))}</p><p><strong>Headquarters:</strong> ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p>${(lab.research_locations || []).length ? `<p><strong>Work also happens in:</strong> ${escapeHTML((lab.research_locations || []).map(country => taxonomyName("countries", country)).join(" · "))}</p>` : ""}<p><strong>Recorded because:</strong> ${lab.parent_organization ? `<p><strong>Parent organization:</strong> ${escapeHTML(lab.parent_organization)}</p>` : ""}<p><strong>Recorded because:</strong> ${escapeHTML(taxonomyName("lab_admission_bases", lab.admission_basis))}</p>${lab.catalog_names.length ? `<p><strong>Named in the catalog as:</strong> ${escapeHTML(lab.catalog_names.join(" · "))}</p>` : ""}<p><a href="${escapeHTML(lab.url)}" target="_blank" rel="noreferrer">Open official site ↗</a></p></section>
       <section class="detail-block"><h3>How it is organized</h3><p>${detailText(lab.organization_note)}</p></section>
       ${releaseBlock}
       <section class="detail-block"><h3>Systems it builds</h3>${relations.systems.length ? `<p>${labRecordButtons(relations.systems, "data-open-project")}</p>` : "<p>None recorded in the catalog.</p>"}</section>
+      <section class="detail-block"><h3>Robots it makes</h3>${relations.robots.length ? `<p>${labRecordButtons(relations.robots, "data-open-robot")}</p>` : "<p>None recorded in the catalog.</p>"}</section>
       <section class="detail-block"><h3>Inference services it operates</h3>${relations.services.length ? `<p>${labRecordButtons(relations.services, "data-open-inference")}</p>` : "<p>None recorded in the catalog.</p>"}</section>
       ${others}
       <section class="detail-block"><h3>Where it publishes</h3>${(lab.channels || []).map(labChannelMarkup).join("") || "<p>—</p>"}</section>
@@ -3251,6 +3275,7 @@ function bindLabDialogLinks() {
     ["data-open-model", openModel], ["data-open-project", openProject],
     ["data-open-inference", openInferenceService], ["data-open-runtime", openLocalRuntime],
     ["data-open-spec", openSpecification], ["data-open-pack", openPack],
+    ["data-open-robot", openRobot],
   ]) {
     $$(`[${attribute}]`, root).forEach(button => button.addEventListener("click", () => {
       $("#lab-dialog").close();

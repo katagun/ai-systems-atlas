@@ -94,7 +94,11 @@ test("an empty result's collection buttons count where the matches are, when two
 test("Browse all in Models clears the search and lists the lab's releases newest first", async ({ page }) => {
   await page.goto("/");
   await searchAll(page, "hangzhou");
-  const lab = page.locator("#all-directory-grid .lab-card [data-lab]").first();
+  // A lab with no reviewed release offers no "Browse all in Models" control at
+  // all, so this picks a matching lab that has releases rather than the first
+  // match: "hangzhou" also reaches a maker whose engineering is in Almaty or
+  // whose headquarters is Hangzhou, and neither has a release to browse.
+  const lab = page.locator('#all-directory-grid .lab-card:has(.tags span:text-matches("reviewed release")) [data-lab]').first();
   const id = await lab.getAttribute("data-lab");
   await lab.click();
   await recordView(page, "lab").locator(`[data-browse-lab-models="${id}"]`).click();
