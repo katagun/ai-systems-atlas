@@ -769,6 +769,29 @@ test("monogram glyphs use the first alphanumeric character uppercased", () => {
   assert.equal(monogramGlyph(undefined), "•");
 });
 
+test("a lab card's flag covers every country the taxonomy records, and nothing else", () => {
+  const fs = require("node:fs");
+  const path = require("node:path");
+  const { countryFlag } = require("../web/app-core.js");
+  const readJSON = file => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "web", file), "utf8"));
+
+  // A regional indicator pair: two code points in the flag block, so a flag
+  // cannot be a letter, a digit, or a country the taxonomy has not recorded.
+  const isFlag = value => /^[\u{1F1E6}-\u{1F1FF}]{2}$/u.test(value);
+  for (const country of readJSON("taxonomy.json").countries) {
+    const flag = countryFlag(country.id);
+    if (country.id === "none_listed") assert.equal(flag, "", "no headquarters is not a country to flag");
+    else assert.ok(isFlag(flag), `no flag for the taxonomy country ${country.id} (${country.name})`);
+  }
+  for (const lab of readJSON("labs.json").labs) {
+    assert.ok(lab.headquarters, `${lab.id} records no headquarters to flag`);
+    assert.equal(countryFlag(lab.headquarters), countryFlag(lab.headquarters.toLowerCase()));
+  }
+  for (const unknown of ["none_listed", "", undefined, "zz", "usa"]) {
+    assert.equal(countryFlag(unknown), "", `${unknown} must not borrow a flag`);
+  }
+});
+
 test("every logo mapping points at a published record and a vendored plain mark", () => {
   const fs = require("node:fs");
   const path = require("node:path");
