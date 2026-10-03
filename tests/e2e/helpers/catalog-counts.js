@@ -137,6 +137,23 @@ function labIdWithLongest(measure) {
   return labs.reduce((best, lab) => (measure(lab) > measure(best) ? lab : best)).id;
 }
 
+// The systems a lab card names, in the card's own order: the ids the lab record
+// lists, read from projects.json, sorted by name. A lab joins to systems by id,
+// not by name (docs/LABS.md).
+function labSystemsByName(labId) {
+  const ids = new Set(labs.find(lab => lab.id === labId).systems);
+  return projects.filter(project => ids.has(project.id))
+    .map(project => project.name)
+    .sort((a, b) => a.localeCompare(b));
+}
+
+// The largest reviewed-release join in the catalog, so the card's cap and its
+// overflow control are exercised against a real record rather than a fixture.
+function labIdWithMostReleases() {
+  return labs.reduce((best, lab) =>
+    reviewedModelsDevelopedBy(lab.id).length > reviewedModelsDevelopedBy(best.id).length ? lab : best).id;
+}
+
 const labNamesInCatalog = new Set(labs.flatMap(lab => lab.catalog_names));
 const labCoveredModels = reviewedModels.filter(model => labNamesInCatalog.has(model.developer)).length;
 
@@ -165,6 +182,8 @@ module.exports = {
   labsMatching,
   reviewedModelsDevelopedBy,
   reviewedModelsDevelopedByNewestFirst,
+  labSystemsByName,
+  labIdWithMostReleases,
   labIdWithLongestChannel: labIdWithLongest(lab => Math.max(...lab.channels.map(channel => channel.url.length))),
   labIdWithLongestNameWord: labIdWithLongest(lab => Math.max(...lab.name.split(/\s+/).map(word => word.length))),
 };
