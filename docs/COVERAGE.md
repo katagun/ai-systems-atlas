@@ -33,7 +33,7 @@ model_releases: 316
 models_dev_source_records: 437
 model_candidates: 32
 system_candidates: 121
-exclusions: 102
+exclusions: 103
 packs: 8
 labs: 47 covering 316 releases
 robots: 7
