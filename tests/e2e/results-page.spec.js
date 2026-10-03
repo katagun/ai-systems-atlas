@@ -100,7 +100,7 @@ test("Browse all in Models clears the search and lists the lab's releases newest
   // whose headquarters is Hangzhou, and neither has a release to browse. Use the
   // card's own details control, not the overflow control a capped card's release
   // list adds: both carry data-lab and both open this dialog.
-  const lab = page.locator('#all-directory-grid .lab-card:has(.tags span:text-matches("reviewed release")) .card-open').first();
+  const lab = page.locator('#all-directory-grid .lab-card:has(.lab-related-label:text-matches("Reviewed releases")) .card-open').first();
   const id = await lab.getAttribute("data-lab");
   await lab.click();
   await recordView(page, "lab").locator(`[data-browse-lab-models="${id}"]`).click();
