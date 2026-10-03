@@ -14,6 +14,7 @@
       deployment: "",
       agentInterface: "",
       capability: "",
+      retrieval: "",
       sourceModel: "",
       license: "",
       status: "active",
@@ -24,6 +25,32 @@
 
   function monogramGlyph(name) {
     return (String(name || "").match(/[a-zA-Z0-9]/)?.[0] || "•").toUpperCase();
+  }
+
+  // A lab's headquarters country as a flag. The card already prints the country's
+  // name in its eyebrow, so the flag repeats what the text says and carries no
+  // label of its own. Regional indicator pairs are the flag: they are drawn by the
+  // platform's own font rather than by artwork this catalog would have to keep
+  // accurate, and a country the taxonomy records but this map does not — and
+  // `none_listed`, which is not a country — gets no flag at all.
+  const COUNTRY_FLAGS = {
+    be: "🇧🇪",
+    ca: "🇨🇦",
+    ch: "🇨🇭",
+    cn: "🇨🇳",
+    de: "🇩🇪",
+    fr: "🇫🇷",
+    il: "🇮🇱",
+    in: "🇮🇳",
+    jp: "🇯🇵",
+    kr: "🇰🇷",
+    sg: "🇸🇬",
+    tr: "🇹🇷",
+    us: "🇺🇸",
+  };
+
+  function countryFlag(code) {
+    return COUNTRY_FLAGS[String(code || "").toLowerCase()] || "";
   }
 
   // Search (ADR 040): words, not substrings; results ordered by match, never
@@ -209,6 +236,7 @@
       (!filters.deployment || project.deployment.includes(filters.deployment)) &&
       (!filters.agentInterface || (project.agent_interfaces || []).includes(filters.agentInterface)) &&
       (!filters.capability || (project.agent_capabilities || []).includes(filters.capability)) &&
+      (!filters.retrieval || (project.retrieval_modes || []).includes(filters.retrieval)) &&
       (!filters.sourceModel || project.source_model === filters.sourceModel) &&
       (!filters.license || project.licenses.includes(filters.license)) &&
       (!filters.status || project.status === filters.status) &&
@@ -497,7 +525,7 @@
   // index narrows a search, never widens it (for systems, the mixed
   // directory's old list).
   const SEARCH_TEXT_FIELDS = {
-    system: ["id", "name", "description", "repo", "url", "why_it_matters", "strengths", "weaknesses"],
+    system: ["id", "name", "description", "repo", "url", "why_it_matters", "strengths", "weaknesses", "retrieval_modes"],
     spec: ["id", "name", "short_name", "description", "standardizes", "does_not_standardize", "repo", "stewards"],
     inference: INFERENCE_SERVICE_VIEW.searchFields,
     runtime: LOCAL_RUNTIME_VIEW.searchFields,
@@ -1012,7 +1040,7 @@
   // is Best match (scopeURLParams).
   const SCOPE_URL_PARAMS = {
     all: { q: "" },
-    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name", browseSort: "" },
+    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", retrieval: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name", browseSort: "" },
     inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", sort: "score", browseSort: "" },
     runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", sort: "score", browseSort: "" },
     packs: { q: "", type: "", host: "", install: "", license: "" },
@@ -2065,6 +2093,7 @@
     modelLicenseCategories,
     modelsKickerText,
     monogramGlyph,
+    countryFlag,
     normalizeSearchText,
     packShapedSystems,
     paginate,

@@ -877,6 +877,25 @@ input:focus, select:focus {
 }
 .card-mark svg { width: 20px; height: 20px; fill: currentColor; }
 .card-monogram { color: var(--muted); font: 600 1.05rem var(--font-display); }
+/* A lab card's headquarters flag, on the corner of the organization's mark. The
+   wrapper keeps the mark's own size and becomes the anchor for the flag. */
+.card-mark-wrap { position: relative; flex: none; display: grid; }
+.card-flag {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  display: grid;
+  place-items: center;
+  width: 19px;
+  height: 19px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--panel);
+  font-size: .72rem;
+  line-height: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
 .family-label {
   margin: 0 0 .42rem;
   color: var(--muted);

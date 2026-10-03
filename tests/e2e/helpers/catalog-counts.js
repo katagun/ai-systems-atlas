@@ -96,6 +96,12 @@ function labNames(predicate = () => true) {
   return labs.filter(predicate).map(lab => lab.name).sort((a, b) => a.localeCompare(b));
 }
 
+// The cards that carry a headquarters flag: every lab but the ones whose record
+// lists no headquarters, which is not a country to flag.
+function labNamesWithFlag() {
+  return labNames(lab => lab.headquarters !== "none_listed");
+}
+
 function labsWithReleaseDistribution(mode) {
   return labNames(lab => {
     const names = new Set(lab.catalog_names);
@@ -178,6 +184,7 @@ module.exports = {
   labs: labs.length,
   labCoveredModels,
   labNames,
+  labNamesWithFlag,
   labsWithReleaseDistribution,
   labsMatching,
   reviewedModelsDevelopedBy,

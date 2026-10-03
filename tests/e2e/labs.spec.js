@@ -18,6 +18,14 @@ test("Labs lists every lab by name and filters by type, headquarters, and releas
   await expect(page.locator("#lab-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#lab-grid .compare-toggle")).toHaveCount(0);
 
+  // Each card carries its headquarters flag on the organization's mark, except
+  // where the record lists no headquarters, and the flag repeats the country the
+  // eyebrow already names, so it is hidden from assistive technology.
+  await expect(page.locator("#lab-grid .lab-card .card-flag")).toHaveCount(catalogCounts.labNamesWithFlag().length);
+  await expect(page.locator('#lab-grid .lab-card:has([data-lab="lab-anthropic"]) .card-flag')).toHaveAttribute("aria-hidden", "true");
+  await expect(page.locator('#lab-grid .lab-card:has([data-lab="lab-hugging-face"]) .card-flag')).toHaveCount(0);
+  await expect(page.locator('#lab-grid .lab-card:has([data-lab="lab-higgsfield-ai"]) .card-flag')).toHaveCount(1);
+
   await setFilter(page, "labs", "type", "technology_company");
   await expect(page.locator("#lab-grid .lab-card h2")).toHaveText(
     catalogCounts.labNames(lab => lab.lab_type === "technology_company"),
@@ -82,7 +90,7 @@ test("a lab dialog fits a phone screen with its longest channel URL and name", a
 });
 
 test("a lab admitted on a system explains its empty release join instead of listing nothing", async ({ page }) => {
-  // An explicit id, not a lookup by basis: two labs now share this basis and
+  // An explicit id, not a lookup by basis: three labs now share this basis and
   // the test asserts which one it means.
   await page.goto("/?collection=labs&record=lab:lab-stanford-nlp");
   const dialog = recordView(page, "lab");

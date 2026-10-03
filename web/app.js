@@ -148,6 +148,17 @@ function cardMark(record) {
   return `<span class="card-mark card-monogram" data-mark="${escapeHTML(record.id)}" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(record.name))}</span>`;
 }
 
+// A lab card says where the organization is based, so its mark carries that
+// country's flag on the corner. The flag is decorative: the card's eyebrow
+// already names the country, and the mark it sits on is already hidden from
+// assistive technology, so the circle is hidden too and nothing repeats itself
+// aloud. A lab whose record lists no headquarters gets no flag, because an
+// empty circle would stand for a country the record does not name.
+function labCardMark(lab) {
+  const flag = AppCore.countryFlag(lab.headquarters);
+  return `<span class="card-mark-wrap">${cardMark(lab)}${flag ? `<span class="card-flag" aria-hidden="true">${flag}</span>` : ""}</span>`;
+}
+
 // An Elements preview shows the organization, so it shows the organization's
 // logo or nothing. A lab without a mark is left out of the preview entirely
 // (ADR 049), which is why this has no monogram arm and returns "".
@@ -269,7 +280,7 @@ function writeDirectoryURL() {
 // AppCore.SCOPE_URL_PARAMS keys; selectors are web/index.html's.
 const SCOPE_CONTROLS = {
   all: { q: "#results-search" },
-  systems: { q: "#results-search", family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter", deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", capability: "#capability-filter", sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter", sort: "#sort-filter" },
+  systems: { q: "#results-search", family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter", deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", capability: "#capability-filter", retrieval: "#retrieval-filter", sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter", sort: "#sort-filter" },
   inference: { q: "#results-search", type: "#inference-type-filter", delivery: "#inference-delivery-filter", modelSource: "#inference-model-source-filter", apiStyle: "#inference-api-filter", sort: "#inference-sort-filter" },
   runtimes: { q: "#results-search", type: "#runtime-type-filter", accelerator: "#runtime-accelerator-filter", modelFormat: "#runtime-format-filter", apiStyle: "#runtime-api-filter", sort: "#runtime-sort-filter" },
   packs: { q: "#results-search", type: "#pack-type-filter", host: "#pack-host-filter", install: "#pack-install-filter", license: "#pack-license-filter" },
@@ -631,6 +642,8 @@ function populateFilters() {
   state.taxonomy.agent_interfaces.filter(item => publishedInterfaces.has(item.id)).forEach(item => $("#agent-interface-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   const publishedCapabilities = new Set(state.projects.flatMap(project => project.agent_capabilities || []));
   state.taxonomy.agent_capabilities.filter(item => publishedCapabilities.has(item.id)).forEach(item => $("#capability-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
+  const publishedRetrievalModes = new Set(state.projects.flatMap(project => project.retrieval_modes || []));
+  state.taxonomy.retrieval_modes.filter(item => publishedRetrievalModes.has(item.id)).forEach(item => $("#retrieval-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   const publishedSourceModels = new Set(state.projects.map(project => project.source_model));
   state.taxonomy.source_models.filter(item => publishedSourceModels.has(item.id)).forEach(item => $("#source-model-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   const publishedLicenses = new Set(state.projects.flatMap(project => project.licenses));
@@ -761,6 +774,7 @@ function updateAdvancedFilterSummary() {
     $("#deployment-filter").value,
     $("#agent-interface-filter").value,
     $("#capability-filter").value,
+    $("#retrieval-filter").value,
     $("#status-filter").value !== "active" ? $("#status-filter").value || "all" : "",
     $("#local-filter").value,
   ].filter(Boolean).length;
@@ -782,6 +796,7 @@ function applyDirectoryDefaults() {
   $("#deployment-filter").value = defaults.deployment;
   $("#agent-interface-filter").value = defaults.agentInterface;
   $("#capability-filter").value = defaults.capability;
+  $("#retrieval-filter").value = defaults.retrieval;
   $("#status-filter").value = defaults.status;
   $("#sort-filter").value = defaults.sort;
   $("#local-filter").value = defaults.localOnly ? "1" : "";
@@ -1598,7 +1613,7 @@ function labCard(lab, { mixed = false } = {}) {
   const origin = lab.parent_organization ? `Part of ${escapeHTML(lab.parent_organization)}` : escapeHTML(new URL(lab.url).hostname.replace(/^www\./, ""));
   const newestDate = AppCore.releaseDate(releases[0] || {});
   return `<article class="project-card lab-card${mixed ? " mixed-directory-card" : ""}">
-    <div class="card-top"><div class="card-identity">${cardMark(lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
+    <div class="card-top"><div class="card-identity">${labCardMark(lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
     <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
     <p>${escapeHTML(lab.description)}</p>
     ${counts ? `<div class="tags">${counts}</div>` : ""}
@@ -1749,6 +1764,7 @@ function filteredProjects(term) {
     deployment: $("#deployment-filter").value,
     agentInterface: $("#agent-interface-filter").value,
     capability: $("#capability-filter").value,
+    retrieval: $("#retrieval-filter").value,
     sourceModel: $("#source-model-filter").value,
     license: $("#license-filter").value,
     status: $("#status-filter").value,
@@ -2723,6 +2739,7 @@ function applyFinderToDirectory() {
   $("#deployment-filter").value = "";
   $("#agent-interface-filter").value = "";
   $("#capability-filter").value = "";
+  $("#retrieval-filter").value = "";
   $("#source-model-filter").value = "";
   $("#license-filter").value = "";
   $("#status-filter").value = "active";
@@ -4122,7 +4139,7 @@ function bindEvents() {
     renderScopeStrip();
   });
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.directoryRolesLabel = null; state.page.systems = 1; renderProjects(); });
-  ["#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#capability-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
+  ["#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#capability-filter", "#retrieval-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
   ["#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.specifications = 1; renderSpecifications(); }));
   ["#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.inference = 1; renderInferenceServices(); }));
   ["#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.runtimes = 1; renderLocalRuntimes(); }));

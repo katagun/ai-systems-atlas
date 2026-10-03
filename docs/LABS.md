@@ -80,4 +80,4 @@ Never derive it from market capitalization, revenue, funding, headcount, or popu
 
 ## Current coverage
 
-Forty-seven labs are published, and forty-six of them cover all 316 reviewed releases. Forty-four are admitted on a reviewed release; one, Safe Superintelligence, on its own published statement of intent; and two, the Stanford NLP Group and Hugging Face, on a system each developed, because the catalog has reviewed no model release of either one's own.
+Forty-eight labs are published, and forty-seven of them cover all 316 reviewed releases. Forty-four are admitted on a reviewed release; one, Safe Superintelligence, on its own published statement of intent; and three, the Stanford NLP Group, Hugging Face, and Higgsfield AI, on a system each developed, because the catalog has reviewed no model release of any of their own.
