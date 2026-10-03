@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-30",
+  "generated_at": "2026-10-03",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -19942,6 +19942,411 @@
       "research_confidence": "high",
       "verified_at": "2026-09-30",
       "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "pgvector",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "pgvector",
+      "repo": "pgvector/pgvector",
+      "url": "https://github.com/pgvector/pgvector",
+      "description": "Vector similarity search for Postgres: a vector data type with ivfflat and HNSW index access methods, in the database you already run.",
+      "primary_role": "retrieval_infrastructure",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "Vector, halfvec, bit, and sparsevec columns in tables of the operator's own PostgreSQL database, queried with ordinary SQL predicates, joins, and transaction semantics.",
+      "deployment": [
+        "library",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "licenses": [
+        "PostgreSQL"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 23229,
+      "stars_verified_at": "2026-10-03",
+      "historical_stars": null,
+      "current_repo_note": "A PostgreSQL extension, not a server or a service. Every query runs inside a PostgreSQL database the operator runs, and the embedding pipeline, chunking, and record identity around the vectors stay with the application. Managed availability comes from hosted PostgreSQL providers that ship the extension, not from a pgvector-operated service.",
+      "score": {
+        "second_brain_fit": 3,
+        "data_sovereignty": 8,
+        "interoperability": 9,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 7,
+        "maturity": 9,
+        "overall": 6.81
+      },
+      "strengths": [
+        "Vectors live in the same tables as the rows they describe, so retrieval filters, joins, transactions, backups, and point-in-time recovery stay ordinary SQL",
+        "Reaches any language with a PostgreSQL client rather than requiring a second service and its own client library",
+        "Exact and approximate search, four vector types, six distance functions, quantization for scale, and iterative index scans for filtered queries"
+      ],
+      "weaknesses": [
+        "Not a retrieval product on its own: embedding, chunking, record identity, and ranking are the caller's work, and approximate indexes apply filtering after the scan",
+        "Hybrid search is a composition rather than a feature, documented as use together with PostgreSQL full-text search with fusion left to scripts in a separate repository",
+        "Approximate-index tuning (lists, probes, ef_search, scan limits) is Postgres index maintenance, so recall under filtering depends on settings the operator has to learn and watch"
+      ],
+      "why_it_matters": "The retrieval substrate most RAG systems in production actually sit on, published as infrastructure so the choice of vector store is visible without being mistaken for a product category, and as the counter-example to a dedicated vector database: the same retrieval inside the database the rest of the data is already in.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-03",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "vespa",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Vespa",
+      "repo": "vespa-engine/vespa",
+      "url": "https://github.com/vespa-engine/vespa",
+      "description": "Search and ranking platform that stores, indexes, and serves structured documents with BM25, nearest-neighbour, and hybrid retrieval at production scale.",
+      "primary_role": "retrieval_infrastructure",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "full_text",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "Application-defined schemas and documents in Vespa's own distributed document store, with rank profiles, query profiles, and Java components the application supplies.",
+      "deployment": [
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 7118,
+      "stars_verified_at": "2026-10-03",
+      "historical_stars": null,
+      "current_repo_note": "Vespa is the platform, not a hosted product with an Atlas-visible boundary of its own: the same Apache-2.0 code runs as a self-operated cluster or as Vespa Cloud, and the two differ in operations rather than in retrieval behaviour.",
+      "score": {
+        "second_brain_fit": 3,
+        "data_sovereignty": 7,
+        "interoperability": 6.5,
+        "memory_intelligence": 7.5,
+        "operational_simplicity": 3.5,
+        "maturity": 9,
+        "overall": 5.99
+      },
+      "strengths": [
+        "Lexical, vector, and hybrid retrieval in one engine: a documented hybrid rank profile combines bm25 title scoring with HNSW closeness in a single expression",
+        "Ranking is programmable rather than fixed, with rank profiles, ranking expressions, cross-encoder and TensorFlow, ONNX, and XGBoost model stages",
+        "Operated at internet scale for a decade, with a new release built from master every morning from Monday to Thursday"
+      ],
+      "weaknesses": [
+        "The heaviest operational commitment among retrieval stores reviewed here: configuration servers, content nodes, JVMs, and an application package to author and deploy",
+        "Schemas, rank profiles, and the YQL query language are Vespa-specific, so an application written against them is portable only through Vespa query and document APIs",
+        "A retrieval and ranking engine only: provenance, contradiction handling, consolidation, and any memory lifecycle stay with the application above it"
+      ],
+      "why_it_matters": "The retrieval substrate for search and recommendation systems at scale, published so a reader comparing stores can see that the lexical-plus-vector-plus-ranking option is a different commitment from a vector database, not a competitor to one.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-03",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "ragflow",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "RAGFlow",
+      "repo": "infiniflow/ragflow",
+      "url": "https://github.com/infiniflow/ragflow",
+      "description": "Document-grounded AI application platform: knowledge-base ingestion and agentic retrieval with a no-code agent canvas, deployable with Docker or as the vendor cloud.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "vector_index",
+        "full_text",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "hybrid",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors",
+        "scheduled",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation",
+        "human_curated"
+      ],
+      "canonical_data": "Parsed and chunked knowledge-base documents with their embeddings in the configured document engine (Elasticsearch by default, or Infinity, OpenSearch, OceanBase, SeekDB, or GaussDB), dataset and agent definitions on the canvas, and chat sessions in the configured business database (MySQL by default, or PostgreSQL, GaussDB, or OceanBase).",
+      "deployment": [
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 91622,
+      "stars_verified_at": "2026-10-03",
+      "historical_stars": null,
+      "current_repo_note": "The record covers the Apache-2.0 repository, which ships both products RAGFlow documents separately: Chat, \"suitable for applications mainly based on knowledge base Q&A and multi-turn dialogue\", and Agent, \"suitable for business workflows requiring conditional branching, tool calling, data processing or multi-step orchestration\". The vendor's own cloud service at cloud.ragflow.io is a separate hosted product whose terms this record does not review.",
+      "score": {
+        "task_reliability": 8,
+        "tool_use": 8,
+        "autonomy": 7.5,
+        "human_control": 7,
+        "observability_recovery": 6.5,
+        "data_sovereignty": 6.5,
+        "interoperability": 8.5,
+        "maturity": 8,
+        "overall": 7.52
+      },
+      "strengths": [
+        "The corpus is a first-class object rather than a side index: template-based chunking with a visualisation for human intervention, and knowledge compilation into Wikis, Graphs, Trees, PageIndex, Mind Maps, Timelines, and Skills that can be viewed, updated, and regenerated",
+        "Agentic retrieval is explicit rather than implied: the model analyses the question, breaks it down, retrieves, and verifies evidence, with Low, Medium, High, and Ultra thinking modes choosing the depth",
+        "Retrieval is not locked to one store: the document engine is selected at deployment across Elasticsearch, Infinity, OpenSearch, OceanBase, SeekDB, and GaussDB, and the business database across MySQL, PostgreSQL, GaussDB, and OceanBase",
+        "MCP and a sandbox executor are optional capabilities rather than requirements, and the agent canvas calls HTTP interfaces, databases, MCP tools, and custom code with conditional branches and loop logic"
+      ],
+      "weaknesses": [
+        "The heaviest deployment in this class: a working install needs a document engine, a business database, Redis, and object storage, with the vendor recommending 4 CPU cores, 16 GB RAM, and 50 GB of disk before any local model",
+        "Observability is a community-contributed Langfuse integration requiring a separate Langfuse workspace rather than a trace store the product owns, so recovery and replay are somebody else's product",
+        "The release train reached v1.0.0-rc1 on 2026-09-29 after a long 0.27.x line, so the current version is a release candidate and the API surface a builder depends on may still move",
+        "Agentic retrieval is the vendor's own claim about its reasoning depth; no independent evaluation of grounding accuracy or citation faithfulness is recorded here"
+      ],
+      "why_it_matters": "The most-adopted repository in the RAG-engine category, and the clearest statement of what that category became: document understanding and citation-grounded retrieval on one side, an agent canvas with tool calling on the other, in one deployable platform rather than a library.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-03",
+      "github_detected_license": "Apache-2.0",
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "container",
+        "external_sandbox",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "workflows",
+        "mcp",
+        "persistent_state",
+        "research"
+      ]
+    },
+    {
+      "id": "private-gpt",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "PrivateGPT",
+      "repo": "zylon-ai/private-gpt",
+      "url": "https://github.com/zylon-ai/private-gpt",
+      "description": "Self-hosted API layer that puts messages, ingestion, cited retrieval, tools, MCP, and database access behind a Claude-shaped API on top of any OpenAI-compatible local model server.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "vector_index",
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "Ingested files and artifact nodes under the operator's local data folder, with the vector, document, and index stores chosen per install (Qdrant for vectors; PostgreSQL, MySQL, SQL Server, or DB2 for the document and index stores), plus application-held message history.",
+      "deployment": [
+        "library",
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 57559,
+      "stars_verified_at": "2026-10-03",
+      "historical_stars": null,
+      "current_repo_note": "The record covers PrivateGPT 1.0, \"rebuilt from the ground up as a proper API layer for private AI applications\". The 2023 proof of concept that gave the repository its following was a local chat-with-your-documents script, which is a different product and is not this record; the bundled /ui workbench ships with the release and is described by the maintainers as \"a demonstrator, not the core product\". The vendor's commercial Zylon platform is built on this code and is not reviewed here.",
+      "score": {
+        "task_reliability": 8,
+        "tool_use": 8.5,
+        "autonomy": 7.5,
+        "human_control": 6.5,
+        "observability_recovery": 6,
+        "data_sovereignty": 9,
+        "interoperability": 9,
+        "maturity": 7.5,
+        "overall": 7.7
+      },
+      "strengths": [
+        "Mirrors the Claude API surface feature for feature, so agent code, tools, and MCP clients written against one run against local models on the other",
+        "Runs against any OpenAI-compatible server rather than a model vendor, with an offline mode setting for air-gapped installs",
+        "Local by default: ingested files and artifact nodes stay in the operator's data folder, and the vector, document, and index stores are chosen per install",
+        "Built-in tools go past retrieval to web search, web fetch, and code execution, with custom tools and remote MCP servers alongside them"
+      ],
+      "weaknesses": [
+        "The shipped settings enable no authentication and allow every CORS origin, so an operator who exposes the port exposes the tool surface, code execution included, until they turn auth on",
+        "It is an API layer rather than an agent: the loop, the plan, and failure recovery belong to the application built on top, so the framework scores the caller's work as its own capability surface",
+        "The maintainers' own comparison marks skills as basic, batch and async as async-only, structured outputs as inference-dependent, and prompt caching and OAuth as unsupported",
+        "Repository popularity measures the 2023 script rather than the 1.0 rewrite: the current release line began at v1.0.0 on 2026-06-03, so the star count overstates how long this code has been a product"
+      ],
+      "why_it_matters": "The reference answer to the question a private deployment actually asks, which is not which model to run but what to put in front of it: one API surface that keeps a laptop and a datacentre on the same client code, with the data never leaving the operator's hardware.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-03",
+      "github_detected_license": "Apache-2.0",
+      "agent_interfaces": [
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "research",
+        "shell_execution",
+        "mcp"
+      ]
+    },
+    {
+      "id": "txtai",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "txtai",
+      "repo": "neuml/txtai",
+      "url": "https://github.com/neuml/txtai",
+      "description": "All-in-one Python framework whose embeddings database of vector, sparse, and graph indexes backs agents, RAG, pipelines, and multi-model workflows over one API.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "vector_index",
+        "graph_db",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "An embeddings database of local content carrying dense and sparse vector indexes, an optional graph index, and SQL-queryable columns, held under the operator's data directory unless a remote store is configured.",
+      "deployment": [
+        "library",
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 12991,
+      "stars_verified_at": "2026-10-03",
+      "historical_stars": null,
+      "current_repo_note": "One framework with two products: the repository's own words call the embeddings database \"the key component\", a union of vector indexes, graph networks and relational databases, while the feature list leads with agents, pipelines, and workflows built on top of it. This record follows the framework, on the Haystack and RAGFlow precedent, because the agents and workflows are the outcome a reader adopts it for; the database is what makes that outcome cheap. The vendor's txtai.cloud is described in the README as still being built and is not reviewed here.",
+      "score": {
+        "task_reliability": 7.5,
+        "tool_use": 8,
+        "autonomy": 8,
+        "human_control": 7,
+        "observability_recovery": 6.5,
+        "data_sovereignty": 8.5,
+        "interoperability": 9,
+        "maturity": 8.5,
+        "overall": 7.76
+      },
+      "strengths": [
+        "One object rather than four: agents, pipelines, workflows, and the embeddings database share a single API and can call each other, and agents can be tools so an \"Agent Team\" is a list of agents",
+        "Retrieval is four ways over one index set, with dense and sparse vector indexes, a NetworkX graph for topic modelling and path traversal, and SQL over the content columns",
+        "Local by default with nothing to stand up: Faiss for approximate search, SQLite for content, and NetworkX for the graph, with remote stores as the opt-in",
+        "Reaches past Python through web and MCP APIs and published JavaScript, Java, Rust, and Go bindings"
+      ],
+      "weaknesses": [
+        "Observability is an MLflow plugin and its tracing module rather than a trace store the framework owns, so evaluation and replay depend on another product",
+        "Breadth is the trade: embeddings, pipelines, workflows, agents, an API server, and model hosting in one project means each is less governed than a focused product, and the project says so about agents, recommending workflows and RAG for simple or rule-based requests",
+        "Content storage is disabled by default, so the retrieval features that need it have to be switched on before they do anything",
+        "The maintainers are a consulting company selling around the stack, and the hosted product they point at is unfinished"
+      ],
+      "why_it_matters": "The most complete answer to building an agentic system out of one local dependency rather than a database, an orchestrator, and a model server: the retrieval substrate and the agent loop are the same library and the same index, which is also why the record is filed as a framework rather than as a store.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-03",
+      "github_detected_license": "Apache-2.0",
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research",
+        "multi_agent",
+        "workflows",
+        "mcp"
+      ]
     }
   ],
   "verified_at": "2026-09-28"
