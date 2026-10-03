@@ -27,6 +27,32 @@
     return (String(name || "").match(/[a-zA-Z0-9]/)?.[0] || "•").toUpperCase();
   }
 
+  // A lab's headquarters country as a flag. The card already prints the country's
+  // name in its eyebrow, so the flag repeats what the text says and carries no
+  // label of its own. Regional indicator pairs are the flag: they are drawn by the
+  // platform's own font rather than by artwork this catalog would have to keep
+  // accurate, and a country the taxonomy records but this map does not — and
+  // `none_listed`, which is not a country — gets no flag at all.
+  const COUNTRY_FLAGS = {
+    be: "🇧🇪",
+    ca: "🇨🇦",
+    ch: "🇨🇭",
+    cn: "🇨🇳",
+    de: "🇩🇪",
+    fr: "🇫🇷",
+    il: "🇮🇱",
+    in: "🇮🇳",
+    jp: "🇯🇵",
+    kr: "🇰🇷",
+    sg: "🇸🇬",
+    tr: "🇹🇷",
+    us: "🇺🇸",
+  };
+
+  function countryFlag(code) {
+    return COUNTRY_FLAGS[String(code || "").toLowerCase()] || "";
+  }
+
   // Search (ADR 040): words, not substrings; results ordered by match, never
   // by score.
   const SEARCH_STOP_WORDS = new Set(["a", "an", "the", "for", "with", "my", "to", "of", "and", "on", "in", "i", "me"]);
@@ -2067,6 +2093,7 @@
     modelLicenseCategories,
     modelsKickerText,
     monogramGlyph,
+    countryFlag,
     normalizeSearchText,
     packShapedSystems,
     paginate,

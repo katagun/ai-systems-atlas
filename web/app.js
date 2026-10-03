@@ -148,6 +148,17 @@ function cardMark(record) {
   return `<span class="card-mark card-monogram" data-mark="${escapeHTML(record.id)}" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(record.name))}</span>`;
 }
 
+// A lab card says where the organization is based, so its mark carries that
+// country's flag on the corner. The flag is decorative: the card's eyebrow
+// already names the country, and the mark it sits on is already hidden from
+// assistive technology, so the circle is hidden too and nothing repeats itself
+// aloud. A lab whose record lists no headquarters gets no flag, because an
+// empty circle would stand for a country the record does not name.
+function labCardMark(lab) {
+  const flag = AppCore.countryFlag(lab.headquarters);
+  return `<span class="card-mark-wrap">${cardMark(lab)}${flag ? `<span class="card-flag" aria-hidden="true">${flag}</span>` : ""}</span>`;
+}
+
 // An Elements preview shows the organization, so it shows the organization's
 // logo or nothing. A lab without a mark is left out of the preview entirely
 // (ADR 049), which is why this has no monogram arm and returns "".
@@ -1563,7 +1574,7 @@ function labCard(lab, { mixed = false } = {}) {
   const origin = lab.parent_organization ? `Part of ${escapeHTML(lab.parent_organization)}` : escapeHTML(new URL(lab.url).hostname.replace(/^www\./, ""));
   const newestDate = newest && AppCore.releaseDate(newest);
   return `<article class="project-card lab-card${mixed ? " mixed-directory-card" : ""}">
-    <div class="card-top"><div class="card-identity">${cardMark(lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
+    <div class="card-top"><div class="card-identity">${labCardMark(lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
     <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
     <p>${escapeHTML(lab.description)}</p>
     <div class="tags">${counts}</div>
