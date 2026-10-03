@@ -844,18 +844,20 @@ input:focus, select:focus {
 .card-mark svg { width: 20px; height: 20px; fill: currentColor; }
 .card-monogram { color: var(--muted); font: 600 1.05rem var(--font-display); }
 /* A card's geography: the headquarters country of the lab it joins to, and any
-   reviewed research location beside it (ADR 052, ADR 053). The row sits directly
-   right of the record's mark rather than in a card corner, because four circles
-   will not fit on a 38px circle and one placement has to hold for every card in
-   every collection. */
+   reviewed research location (ADR 052, ADR 053). Flags overlap on the mark's
+   bottom-right corner; each extra circle steps 9px to the right. */
+.card-mark-wrap { position: relative; flex: none; display: grid; }
 .card-flags {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
   display: flex;
-  flex: none;
-  align-self: flex-start;
-  gap: .2rem;
-  margin-top: .6rem;
+  flex-direction: row;
+  align-items: flex-end;
+  pointer-events: none;
 }
 .card-flag {
+  position: relative;
   display: grid;
   place-items: center;
   width: 18px;
@@ -868,6 +870,7 @@ input:focus, select:focus {
   overflow: hidden;
   pointer-events: none;
 }
+.card-flag + .card-flag { margin-left: -9px; }
 .family-label {
   margin: 0 0 .42rem;
   color: var(--muted);
