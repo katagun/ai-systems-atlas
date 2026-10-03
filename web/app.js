@@ -1559,26 +1559,66 @@ function specificationCard(specification, { mixed = false } = {}) {
     </article>`;
 }
 
+// How many of a lab's releases, and of its systems, its card names before
+// handing off to its dialog, which holds the full join.
+const LAB_CARD_RECORDS = 4;
+
+// The two joins a lab card lists inline, so a reader scanning results sees the
+// records behind the organization rather than a count and a date. A card shows
+// records, never a conclusion about the organization, so nothing here joins the
+// card's own terms together: each row is one record with its own (ADR 025).
+function labRelatedMarkup(lab, releases, systems) {
+  const groups = [
+    { label: "Reviewed releases", noun: "reviewed releases", attribute: "data-open-model", records: releases, dated: true },
+    { label: "Systems it builds", noun: "systems", attribute: "data-open-project", records: systems, dated: false },
+  ];
+  const blocks = groups.filter(group => group.records.length).map(({ label, noun, attribute, records, dated }) => {
+    const rows = records.slice(0, LAB_CARD_RECORDS).map(record => {
+      const date = dated ? AppCore.releaseDate(record) : "";
+      return `<li><button type="button" class="link-button" ${attribute}="${escapeHTML(record.id)}">${escapeHTML(record.name)}</button>${date ? `<span class="lab-related-date">${escapeHTML(date)}</span>` : ""}</li>`;
+    }).join("");
+    // The cap states a total the card cannot show, so the rest is one step away
+    // rather than silent. The dialog is the full list in every collection.
+    const more = records.length > LAB_CARD_RECORDS
+      ? `<li class="lab-related-more"><button type="button" data-lab="${escapeHTML(lab.id)}">All ${records.length} ${escapeHTML(noun)}<span class="visually-hidden"> from ${escapeHTML(lab.name)}</span><span aria-hidden="true"> →</span></button></li>`
+      : "";
+    return `<div class="lab-related-group"><p class="lab-related-label">${escapeHTML(label)} · ${records.length}</p><ul class="lab-related-list">${rows}${more}</ul></div>`;
+  }).join("");
+  return blocks ? `<div class="lab-related">${blocks}</div>` : "";
+}
+
+// A card's own details control stretches over the whole card, so the records a
+// lab card names need their own handlers and their own stacking level to stay
+// clickable above it, the way the badge row already is.
+function bindLabCardRecords(root) {
+  for (const [attribute, open] of [["data-open-model", openModel], ["data-open-project", openProject]]) {
+    $$(`.lab-card [${attribute}]`, root).forEach(button =>
+      button.addEventListener("click", () => open(button.getAttribute(attribute))));
+  }
+}
+
 function labCard(lab, { mixed = false } = {}) {
   const relations = labRelationsFor(lab);
   const modes = AppCore.labDistributionModes(relations.models, labDistributionOrder());
-  const newest = AppCore.releasesNewestFirst(relations.models)[0];
+  const releases = AppCore.releasesNewestFirst(relations.models);
+  const systems = [...relations.systems].sort((a, b) => a.name.localeCompare(b.name));
+  // The two joins the card names below carry their own totals, so the tags row
+  // counts only the four it does not list. Every type is still counted once.
   const counts = [
-    [relations.models.length, "reviewed release", "reviewed releases"],
-    [relations.systems.length, "system", "systems"],
     [relations.services.length, "inference service", "inference services"],
     [relations.runtimes.length, "local runtime", "local runtimes"],
     [relations.specifications.length, "specification", "specifications"],
     [relations.packs.length, "agent pack", "agent packs"],
   ].filter(([count]) => count).map(([count, one, many]) => `<span>${count} ${count === 1 ? one : many}</span>`).join("");
   const origin = lab.parent_organization ? `Part of ${escapeHTML(lab.parent_organization)}` : escapeHTML(new URL(lab.url).hostname.replace(/^www\./, ""));
-  const newestDate = newest && AppCore.releaseDate(newest);
+  const newestDate = AppCore.releaseDate(releases[0] || {});
   return `<article class="project-card lab-card${mixed ? " mixed-directory-card" : ""}">
     <div class="card-top"><div class="card-identity">${labCardMark(lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
     <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
     <p>${escapeHTML(lab.description)}</p>
-    <div class="tags">${counts}</div>
+    ${counts ? `<div class="tags">${counts}</div>` : ""}
     ${badgeRow(AppCore.cardBadges("lab", lab))}
+    ${labRelatedMarkup(lab, releases, systems)}
     <div class="card-footer"><span>${newestDate ? `Newest reviewed release ${escapeHTML(newestDate)}` : ""}</span>${detailsButton("data-lab", lab.id, lab.name)}</div>
   </article>`;
 }
@@ -1705,6 +1745,7 @@ function renderAllDirectoryEntries() {
   $$('[data-robot]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openRobot(button.dataset.robot)));
   $$('[data-lab]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLab(button.dataset.lab)));
   $$('[data-specification]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openSpecification(button.dataset.specification)));
+  bindLabCardRecords($("#all-directory-grid"));
   hideDetachedBadgeTooltip();
   renderPager("all", paged);
   if (activeScope() === "all") writeScopeURL();
@@ -1962,6 +2003,7 @@ function renderCollection(name) {
     || emptyStateMarkup(name, collection.empty);
   $$(`[${AppCore.datasetAttribute(collection.dataset)}]`, grid).forEach(button =>
     button.addEventListener("click", () => collection.open(button.dataset[collection.dataset])));
+  bindLabCardRecords(grid);
   if (context.comparable) {
     bindComparisonButtons(grid);
     renderComparisonControls();
