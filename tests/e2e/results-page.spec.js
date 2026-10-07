@@ -817,3 +817,23 @@ test("in the phone sheet Show all says nothing, and a choice says the new count"
   const count = Number((await page.locator("#result-count").textContent()).match(/^\d+/)[0]);
   await expect(status).toHaveText(`${count} ${count === 1 ? "result" : "results"}`);
 });
+
+// At 390 px "Clear search" keeps to one line beside the count, which wraps
+// instead, so the result row stays one count and one control (review N3).
+test("on a phone Clear search stays one line beside the count in All and Models", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const [collection, count] of [["all", "#all-directory-result-count"], ["models", "#model-result-count"]]) {
+    await page.goto(`/?collection=${collection}`);
+    await search(page, "memory");
+    const clear = clearControl(page);
+    await expect(clear).toHaveText("Clear search");
+    const lines = await clear.evaluate(element => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      return range.getClientRects().length;
+    });
+    expect(lines, `${collection}: Clear search is one line`).toBe(1);
+    const [counted, control] = [await page.locator(count).boundingBox(), await clear.boundingBox()];
+    expect(control.x, `${collection}: Clear sits beside the count`).toBeGreaterThanOrEqual(counted.x + counted.width);
+  }
+});

@@ -722,6 +722,10 @@ h1 {
 /* Glues the removal glyph to the chip's last word so a narrow chip never
    wraps the × onto a line by itself. */
 .filter-chip > span[aria-hidden="true"] { white-space: nowrap; }
+/* Clear keeps to one line wherever it sits; beside a long count at 390 px
+   the count wraps instead, so the result row stays one count and one
+   control (review N3). */
+#clear-filters { white-space: nowrap; }
 .filter-sheet { width: min(100%, 32rem); max-height: 85vh; margin: auto auto 0; padding: 1rem 1rem 1.25rem; border: 1px solid var(--line); border-radius: var(--radius); border-bottom-left-radius: 0; border-bottom-right-radius: 0; background: var(--panel); color: var(--text); box-shadow: var(--shadow-dialog); }
 /* The open sheet is a column: its groups scroll inside it, without carrying
    the page along, and "Show N results" stays at its foot, in view while the
