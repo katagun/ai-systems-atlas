@@ -1367,11 +1367,17 @@ function chooseFilter(key, value) {
   control.dispatchEvent(new Event("input", { bubbles: true }));
 }
 
+// The groups scroll, so the dialog would focus the container they scroll in,
+// which a screen reader cannot name. Focus goes instead to the first group's
+// chosen value, the one a reader changes first, or else its first value that
+// can be chosen (ruling R-T3-10).
 function openFilterSheet() {
   $("#filter-sheet .filter-groups").innerHTML = filterGroupsMarkup(state.directoryCollection, "sheet");
   syncFilterRail();
   syncFilterSheetButton({ announce: false });
   $("#filter-sheet").showModal();
+  const first = $("#filter-sheet [data-filter-group]");
+  (first?.querySelector("input:checked") || first?.querySelector("input:not(:disabled)"))?.focus();
 }
 
 // "Show N results", and the sheet's own status, which says the new count:

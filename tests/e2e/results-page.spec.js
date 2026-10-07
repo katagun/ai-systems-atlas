@@ -732,12 +732,13 @@ test("Escape closes the phone sheet and returns focus to the Filters button", as
 
 // A focused control's ring, 2 px drawn 3 px out, must fit inside the
 // scroller that holds it, or the scroller clips the stroke where its edge
-// meets the control (review N1). The walk tabs through every control, so
-// the scroll each Tab causes is checked as well as the first value.
+// meets the control (review N1). The walk starts at the control that holds
+// focus, if the scroller holds it, and tabs through every control after it,
+// so the scroll each Tab causes is checked as well as the first value.
 async function walkRings(page, scroller) {
   const rings = [];
-  for (let press = 0; press < 60; press += 1) {
-    await page.keyboard.press("Tab");
+  for (let press = 0; press <= 60; press += 1) {
+    if (press) await page.keyboard.press("Tab");
     const ring = await page.evaluate(selector => {
       const element = document.activeElement;
       const port = document.querySelector(selector);
@@ -792,8 +793,9 @@ test("a focused control's whole ring shows in the phone sheet, on a short phone 
     await expect(page.locator("#filter-sheet")).toBeVisible();
     const [title, value] = await page.evaluate(() => ["#filter-sheet-title", "#filter-sheet .filter-option input"].map(selector => document.querySelector(selector).getBoundingClientRect().left));
     expect(value, `${height}px: the sheet's values start where its title does`).toBeCloseTo(title, 0);
-    // The groups take focus themselves too, so their own ring, 5 px out,
-    // must clear the title above them and the button below them.
+    // The groups can hold focus themselves, as any scroller can, so their
+    // own ring, 5 px out, must clear the title above them and the button
+    // below them.
     const room = await page.evaluate(() => {
       const groups = document.querySelector("#filter-sheet .filter-groups").getBoundingClientRect();
       return {
@@ -862,4 +864,23 @@ test("Models' Lab group offers only labs that join a model", async ({ page }) =>
   expect(counts.filter(count => Number(count) === 0), "no lab counts 0").toEqual([]);
   expect(await page.evaluate(() => state.labs.some(lab => lab.name === "Unitree Robotics")), "Unitree Robotics is a lab").toBe(true);
   await expect(group.locator(".filter-option").filter({ hasText: /^Unitree Robotics/ })).toHaveCount(0);
+});
+
+// Opened from the keyboard, the sheet puts focus on the first group's chosen
+// value, the one a reader changes first, as it did before its groups became
+// a scroller. Otherwise the dialog focuses the container they scroll in,
+// which a screen reader cannot name (ruling R-T3-10).
+test("opened from the keyboard, the phone sheet focuses the first group's chosen value", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?collection=systems");
+  await page.locator("#filters-button").focus();
+  await page.keyboard.press("Enter");
+  const sheet = page.locator("#filter-sheet");
+  await expect(sheet).toBeVisible();
+  await expect(sheet.locator(".filter-groups"), "not the container the groups scroll in").not.toBeFocused();
+  const first = sheet.locator("[data-filter-group]").first();
+  const chosen = first.locator("input:checked");
+  await expect(chosen).toBeFocused();
+  const value = (await first.locator(".filter-option:has(input:checked) > span").first().textContent()).trim();
+  await expect(chosen).toHaveAccessibleName(value);
 });
