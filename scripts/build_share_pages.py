@@ -48,6 +48,26 @@ COLLECTION_LABELS = {
     "robot": "Robot",
 }
 
+# ADR 042: a reviewed model's share page carries the dialog's "Risk statements"
+# section in the same words (web/app-core.js flagSentence and riskStatementView).
+# The kind's source of truth is MAKER_RISK_FLAG in scripts/validate_directory.py,
+# which this generator does not import.
+MAKER_RISK_FLAG = "maker_risk_safeguards"
+FLAG_DISCLAIMER = "This is the developer's own statement, not an Atlas risk rating."
+FLAG_NO_STATEMENT_TEXT = (
+    "The developer publishes no risk-threshold statement for this release. "
+    "Absence is not evidence of safety."
+)
+FLAG_NOT_EXAMINED_TEXT = "Not yet examined."
+RISK_STYLE = """
+.risk-statements { margin: 0 0 1.5rem; }
+.risk-statements h2 { margin: 0 0 .5rem; font: 600 1.15rem/1.3 "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif; }
+.risk-statements h3 { margin: 0 0 .5rem; font-size: 1rem; font-weight: 600; }
+.risk-statements p { margin: 0 0 .5rem; }
+.risk-statements blockquote { margin: 0 0 .75rem; padding: .1rem 0 .1rem 1rem; border-left: 3px solid var(--line); }
+.risk-statements dl { margin: 0 0 .75rem; }
+""".strip()
+
 
 def share_page_path(kind: str, record_id: str) -> str:
     if kind not in COLLECTIONS:
@@ -103,6 +123,84 @@ def taxonomy_name(taxonomy: dict, group: str, value: str) -> str:
 
 def names(taxonomy: dict, group: str, values: list[str]) -> str:
     return " · ".join(taxonomy_name(taxonomy, group, value) for value in values)
+
+
+def _join_plain(items: list[str]) -> str:
+    if len(items) < 2:
+        return "".join(items)
+    if len(items) == 2:
+        return f"{items[0]} and {items[1]}"
+    return f"{', '.join(items[:-1])}, and {items[-1]}"
+
+
+def flag_sentence(entry: dict, developer: str, taxonomy: dict) -> str:
+    """The sentence web/app-core.js flagSentence builds for a found statement."""
+    domains = _join_plain(
+        [
+            taxonomy_name(taxonomy, "flag_domains", item).lower()
+            for item in entry["domains"]
+        ]
+    )
+    if entry["determination"] == "determined":
+        claim = f"{developer} states that this release reached “{entry['tier_term']}” in {domains} capability."
+    else:
+        claim = f"{developer} names this release against “{entry['tier_term']}” in {domains} capability, as a precaution."
+    scope = taxonomy_name(taxonomy, "flag_scopes", entry["scope"])
+    return f"{claim} The statement covers {scope[:1].lower()}{scope[1:]}. {FLAG_DISCLAIMER}"
+
+
+def _flag_source_html(entry: dict, taxonomy: dict) -> str:
+    confidence = taxonomy_name(
+        taxonomy, "research_confidence_levels", entry["research_confidence"]
+    )
+    label = (
+        "Read the developer's statement"
+        if entry["status"] == "statement_found"
+        else "Page the reviewer checked"
+    )
+    return (
+        f'<p class="note"><a href="{html.escape(entry["url"])}" rel="noreferrer">'
+        f"{html.escape(label)} ↗</a> · {html.escape(entry['verified_at'])} · "
+        f"Research confidence: {html.escape(confidence)}</p>"
+    )
+
+
+def _found_statement_html(entry: dict, developer: str, taxonomy: dict) -> str:
+    determination = taxonomy_name(
+        taxonomy, "flag_determinations", entry["determination"]
+    )
+    domains = names(taxonomy, "flag_domains", entry["domains"])
+    scope = taxonomy_name(taxonomy, "flag_scopes", entry["scope"])
+    sentence = flag_sentence(entry, developer, taxonomy)
+    return (
+        f"<h3>“{html.escape(entry['tier_term'])}” · {html.escape(determination)}</h3>"
+        f"<blockquote>{html.escape(entry['statement'])}</blockquote>"
+        f"<dl><dt>Risk areas</dt><dd>{html.escape(domains)}</dd>"
+        f"<dt>Covers</dt><dd>{html.escape(scope)}</dd></dl>"
+        f'{_flag_source_html(entry, taxonomy)}<p class="note">{html.escape(sentence)}</p>'
+    )
+
+
+def risk_statements_html(record: dict, taxonomy: dict) -> str:
+    """A reviewed model's "Risk statements" section in one of its three states."""
+    entry = next(
+        (
+            item
+            for item in record.get("flags", [])
+            if item.get("kind") == MAKER_RISK_FLAG
+        ),
+        None,
+    )
+    if entry is None:
+        body = f"<p>{FLAG_NOT_EXAMINED_TEXT}</p>"
+    elif entry["status"] == "no_statement_found":
+        body = f"<p>{FLAG_NO_STATEMENT_TEXT}</p>{_flag_source_html(entry, taxonomy)}"
+    else:
+        body = _found_statement_html(entry, record["developer"], taxonomy)
+    return (
+        '<section class="risk-statements" aria-labelledby="risk-statements">'
+        f'<h2 id="risk-statements">Risk statements</h2>{body}</section>'
+    )
 
 
 def _lab_facts(
@@ -394,6 +492,9 @@ def render_page(
         and record.get("url") != f"https://github.com/{record['repo']}"
         else ""
     )
+    # The section sits on its own line between the facts and the actions.
+    risk_html = f"{risk_statements_html(record, taxonomy)}\n" if kind == "model" else ""
+    style = f"{STYLE}\n{RISK_STYLE}" if risk_html else STYLE
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -411,7 +512,7 @@ def render_page(
 <meta name="theme-color" content="#f7f9fc">
 <link rel="stylesheet" href="../../../fonts.css">
 <style>
-{STYLE}
+{style}
 </style>
 <script type="application/ld+json">{json_ld_script}</script>
 </head>
@@ -421,7 +522,7 @@ def render_page(
 <h1>{html.escape(name)}</h1>
 <p class="lead">{html.escape(lead)}</p>
 <dl>{facts_html}</dl>
-<p class="actions"><a class="primary" href="../../../?record={kind}:{html.escape(record["id"])}">Open in the directory →</a> <a href="{html.escape(record["url"])}" rel="noreferrer">{official_label} ↗</a>{repo_link}</p>
+{risk_html}<p class="actions"><a class="primary" href="../../../?record={kind}:{html.escape(record["id"])}">Open in the directory →</a> <a href="{html.escape(record["url"])}" rel="noreferrer">{official_label} ↗</a>{repo_link}</p>
 <p class="note">Editorial ratings appear in the directory beside the profile they belong to and are never compared across collections.</p>
 </main>
 <footer>{SITE_NAME} · {SITE_TAGLINE} · Reviewed {html.escape(record["verified_at"])} · <a href="../../../">Browse the directory</a></footer>

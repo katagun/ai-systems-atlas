@@ -1375,14 +1375,38 @@ function modelModalityRoute(model) {
   return `${modalities.input.map(item => taxonomyName("model_modalities", item)).join(" + ")} → ${modalities.output.map(item => taxonomyName("model_modalities", item)).join(" + ")}`;
 }
 
-// Badges replace the tags row on system, inference-service, and
-// local-runtime cards. Each is an icon-only emblem whose frame names its
-// family; the name and definition ride in visually hidden text for screen
-// readers and in data attributes for the pointer tooltip. Badges are never
-// controls and take no tab stop.
-function badgeRow(badges) {
-  if (!badges.length) return "";
-  return `<div class="badge-group"><ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul><details class="badge-help"><summary>Badge meanings</summary><dl>${badges.map(badge => `<dt>${escapeHTML(badge.name)}</dt><dd>${escapeHTML(badge.definition)}</dd>`).join("")}</dl></details></div>`;
+// Every card leads its badge row with one type badge (ADR 047). Each badge is
+// an icon-only emblem whose frame names its family; the name and definition
+// ride in visually hidden text for screen readers and in data attributes for
+// the pointer tooltip. Badges are never controls and take no tab stop. A
+// reviewed-model card's flag (ADR 042) sits directly after its type badge,
+// outside the badge cap, and "Badge meanings" lists every emblem in the row's
+// order.
+function badgeRow(badges, flags = [], record) {
+  if (!badges.length && !flags.length) return "";
+  const lead = badges[0]?.family === "type" ? 1 : 0;
+  const entries = [...badges.slice(0, lead).map(badgeItem), ...flags.map(flag => flagItem(flag, record)), ...badges.slice(lead).map(badgeItem)];
+  return `<div class="badge-group"><ul class="card-badges" role="list">${entries.map(entry => entry.emblem).join("")}</ul><details class="badge-help"><summary>Badge meanings</summary><dl>${entries.map(entry => entry.meaning).join("")}</dl></details></div>`;
+}
+
+function badgeItem(badge) {
+  return {
+    emblem: `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`,
+    meaning: `<dt>${escapeHTML(badge.name)}</dt><dd>${escapeHTML(badge.definition)}</dd>`,
+  };
+}
+
+// A flag's hidden text is its family name and tooltip sentence, the "name:
+// definition" every badge gives a screen reader. Boot carries a found
+// statement's term, domains, determination, and scope (ADR 042), so the card
+// paints the developer's own words without waiting for the detail file. The
+// class is not `card-flag`: that names a card's geography circles.
+function flagItem(flag, record) {
+  const text = AppCore.flagEmblemText(flag.entry, record.developer, state.taxonomy);
+  return {
+    emblem: `<li class="card-badge card-reviewed-flag" data-badge="${escapeHTML(flag.id)}" data-family="${escapeHTML(flag.family)}" data-flag-record="${escapeHTML(record.id)}" data-name="${escapeHTML(text.name)}" data-definition="${escapeHTML(text.sentence)}">${AppCore.badgeEmblem(flag.id)}<span class="visually-hidden">${escapeHTML(flag.name)}: ${escapeHTML(text.sentence)}</span></li>`,
+    meaning: `<dt>${escapeHTML(`${flag.name} · ${text.name}`)}</dt><dd>${escapeHTML(text.sentence)}</dd>`,
+  };
 }
 
 // The one control that opens a card's record. Its hidden text names the
@@ -1740,7 +1764,7 @@ function renderAllDirectoryEntries() {
         <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(record.description)}</p>
         ${modelSourceMeta(record)}
-        ${badgeRow(AppCore.cardBadges("model", record))}
+        ${badgeRow(AppCore.cardBadges("model", record), AppCore.cardFlags("model", record), record)}
         <div class="card-footer"><span>Dedicated model-access score</span>${detailsButton("data-model", record.id, record.name)}</div>
       </article>`;
     }
@@ -1992,7 +2016,7 @@ const COLLECTIONS = {
         <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
         ${modelSourceMeta(model)}
-        ${badgeRow(AppCore.cardBadges("model", model))}
+        ${badgeRow(AppCore.cardBadges("model", model), AppCore.cardFlags("model", model), model)}
         <div class="card-footer"><span>${escapeHTML(AppCore.modelSourceLabel(model))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-model", model.id, model.name)}</div></div>
       </article>`;
     },
@@ -2802,7 +2826,8 @@ function renderTaxonomy() {
     state.taxonomy.primary_roles.filter(item => item.family === family.id),
   ]);
   const glossary = AppCore.cardBadgeGlossary();
-  const badgeGroups = Object.entries(AppCore.BADGE_FAMILIES).map(([id, family]) => [
+  // Reviewed flags are not badges; they have their own Taxonomy group.
+  const badgeGroups = Object.entries(AppCore.BADGE_FAMILIES).filter(([id]) => id !== AppCore.FLAG_FAMILY).map(([id, family]) => [
     `Card badges · ${family.name}`,
     glossary.filter(entry => entry.family === id).map(entry => ({
       name: entry.name,
@@ -2812,6 +2837,20 @@ function renderTaxonomy() {
     })),
     { lede: family.meaning, badgeFamily: id },
   ]);
+  // Reviewed flags (ADR 042): the kind with its emblem, then the vocabularies a
+  // flag entry uses. "Not examined" is a state, not a stored value.
+  const flagGroups = [
+    ["Reviewed flags", (state.taxonomy.flag_kinds || []).map(kind => ({
+      name: kind.name,
+      definition: kind.definition,
+      emblem: Object.hasOwn(AppCore.REVIEWED_FLAGS, kind.id) ? AppCore.badgeEmblem(kind.id) : "",
+      family: AppCore.FLAG_FAMILY,
+    })), { lede: AppCore.BADGE_FAMILIES[AppCore.FLAG_FAMILY].meaning, reviewedFlags: true }],
+    ["Reviewed flag states", [...(state.taxonomy.flag_statuses || []), { name: "Not examined", definition: "Nobody has checked this release's developer pages yet. Its record says “Not yet examined.”" }]],
+    ["Risk areas", state.taxonomy.flag_domains || []],
+    ["What the developer states", state.taxonomy.flag_determinations || []],
+    ["What a statement covers", state.taxonomy.flag_scopes || []],
+  ];
   const groups = [
     ["System families", state.taxonomy.system_families], ...roleGroups,
     ["Collection symbols", AppCore.COLLECTIONS.map(entry => ({ name: entry.name, definition: entry.meaning, emblem: AppCore.collectionEmblem(entry), family: "type" })), { lede: "Navigation symbols identify collections. Card badges describe individual records; shared artwork does not imply the same record type." }],
@@ -2837,6 +2876,7 @@ function renderTaxonomy() {
     ["Model modalities", state.taxonomy.model_modalities],
     ["Model distribution modes", state.taxonomy.model_distribution_modes],
     ["Model-access score", state.taxonomy.model_score_profile.dimensions.map(item => ({name: `${label(item.id)} · ${Math.round(item.weight * 100)}%`, definition: item.definition}))],
+    ...flagGroups,
     ["Specification types", state.taxonomy.specification_types],
     ["Specification scopes", state.taxonomy.specification_scopes], ["Specification statuses", state.taxonomy.specification_statuses],
     ["Pack types", state.taxonomy.pack_types], ["Pack hosts", state.taxonomy.pack_hosts],
@@ -2846,7 +2886,7 @@ function renderTaxonomy() {
     ["Kinds of model a robot maker names", state.taxonomy.robot_model_kinds], ["Robot terms", state.taxonomy.robot_terms_kinds],
     ["Licenses and terms", state.taxonomy.licenses]
   ];
-  $("#taxonomy-content").innerHTML = groups.map(([name, items, extra = {}]) => `<section class="taxonomy-group"${extra.badgeFamily ? ` data-badge-family="${escapeHTML(extra.badgeFamily)}"` : ""}><h2>${escapeHTML(name)}</h2>${extra.lede ? `<p class="taxonomy-lede">${escapeHTML(extra.lede)}</p>` : ""}<div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"${item.family ? ` data-family="${escapeHTML(item.family)}"` : ""}>${item.emblem || ""}<strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
+  $("#taxonomy-content").innerHTML = groups.map(([name, items, extra = {}]) => `<section class="taxonomy-group"${extra.badgeFamily ? ` data-badge-family="${escapeHTML(extra.badgeFamily)}"` : ""}${extra.reviewedFlags ? " data-reviewed-flags" : ""}><h2>${escapeHTML(name)}</h2>${extra.lede ? `<p class="taxonomy-lede">${escapeHTML(extra.lede)}</p>` : ""}<div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"${item.family ? ` data-family="${escapeHTML(item.family)}"` : ""}>${item.emblem || ""}<strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
 }
 
 // Every record dialog is the same frame — find the record, paint one content
@@ -3198,6 +3238,7 @@ const reportedCapability = value => value == null ? "Not reported" : value ? "Ye
 const reportedTokenLimit = value => value == null ? "Not reported" : Intl.NumberFormat("en").format(value);
 
 function modelSourceLinks(metadata, noLinksText) {
+  if (!metadata.links && !metadata.weights) return "<p>Loading source details…</p>";
   return [...(metadata.links || []), ...(metadata.weights || [])].map(item =>
     `<p><strong>${escapeHTML(item.label || "Source")}</strong>: <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">open source ↗</a></p>`
   ).join("") || `<p>${escapeHTML(noLinksText)}</p>`;
@@ -3209,13 +3250,32 @@ function importedModelDialogMarkup(model) {
   const limits = metadata.limits || {};
   return `<p class="eyebrow">models.dev source record · Not Atlas reviewed</p><h1>${escapeHTML(model.name)}</h1><p>${escapeHTML(model.description || "Loading the models.dev source description…")}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Source identity</h3><p><strong>models.dev namespace:</strong> ${escapeHTML(model.developer)}</p>${labLinksMarkup("model", model)}<p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p><p><a href="${escapeHTML(model.source_url)}" target="_blank" rel="noreferrer">Open commit-pinned source record ↗</a></p></section>
+      <section class="detail-block"><h3>Source identity</h3><p><strong>models.dev namespace:</strong> ${escapeHTML(model.developer)}</p>${labLinksMarkup("model", model)}<p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p>${model.source_url ? `<p><a href="${escapeHTML(model.source_url)}" target="_blank" rel="noreferrer">Open commit-pinned source record ↗</a></p>` : ""}</section>
       <section class="detail-block"><h3>Review status</h3><p>This is attributed metadata imported directly from models.dev. Atlas has not reviewed its identity boundary, licensing, distribution, evidence, or access score.</p><p class="unscored-note">Reported license and open-weight fields are source claims, not Atlas conclusions.</p></section>
       <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(limits.output))}</p></section>
       <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("") || "<p>Loading source details…</p>"}<p class="unscored-note">These values are imported discovery metadata, not an Atlas capability test.</p></section>
       <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>Open weights reported:</strong> ${escapeHTML(reportedCapability(metadata.reported_open_weights))}</p><p><strong>License reported:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
       <section class="detail-block"><h3>Source links from models.dev</h3>${modelSourceLinks(metadata, "No source links reported by models.dev.")}</section>
     </div>`;
+}
+
+// The three states of ADR 042's maker-risk flag, in the developer's own words.
+// Boot knows the state and, for a found statement, its term, domains,
+// determination, and scope; the quote, link, date, and confidence arrive with
+// detail. Until then the section says what boot knows, so a found statement
+// never reads as "not examined". The term is an <h4>, not a bold paragraph,
+// which would read as a label left without its value.
+function riskStatementsMarkup(model) {
+  const view = AppCore.riskStatementView(model, state.taxonomy);
+  if (!view) return "";
+  const heading = "<h3>Risk statements</h3>";
+  if (view.state === "not_examined") return `<section class="detail-block" data-risk="not_examined">${heading}<p>${escapeHTML(view.text)}</p></section>`;
+  const source = view.url
+    ? `<p><a href="${escapeHTML(view.url)}" target="_blank" rel="noreferrer">${view.state === "statement_found" ? "Read the developer's statement" : "Page the reviewer checked"} ↗</a> <span class="evidence-date">${escapeHTML(view.verifiedAt)}</span> · Research confidence: ${escapeHTML(view.confidence)}</p>`
+    : "";
+  if (view.state === "no_statement_found") return `<section class="detail-block" data-risk="no_statement_found">${heading}<p>${escapeHTML(view.text)}</p>${source}</section>`;
+  const quote = view.pending ? "" : `<blockquote class="risk-quote">${escapeHTML(view.statement)}</blockquote>`;
+  return `<section class="detail-block" data-risk="${view.pending ? "pending" : "statement_found"}">${heading}<h4>${escapeHTML(view.heading)}</h4>${quote}<p><strong>Risk areas:</strong> ${escapeHTML(view.domains)}</p><p><strong>Covers:</strong> ${escapeHTML(view.scope)}</p>${source}<p class="unscored-note">${escapeHTML(view.sentence)}</p></section>`;
 }
 
 // Like the other four record dialogs, this paints from the boot record the
@@ -3228,6 +3288,9 @@ function modelDialogMarkup(model) {
   if (!isReviewedModel(model)) return importedModelDialogMarkup(model);
   const profile = state.taxonomy.model_score_profile;
   const metadata = model.source_metadata;
+  // Boot carries only card metadata; limits, capabilities, dates and links land
+  // with the record's detail, so each reads as not reported until then.
+  const limits = metadata.limits || {};
   const attribution = AppCore.modelMetadataAttribution(model);
   const openWeightsLabel = attribution.listed ? "Open weights reported" : "Open weights";
   const licenseLabel = attribution.listed ? "License reported" : "License named by the developer";
@@ -3237,8 +3300,9 @@ function modelDialogMarkup(model) {
       <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p>${labLinksMarkup("model", model)}<p>${attribution.listed ? `<strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}` : escapeHTML(AppCore.UNLISTED_MODEL_LABEL)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p>${model.url ? `<a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a>` : "—"}</p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(model.score.overall)}</td></tr></table><p class="unscored-note">Access and deployability only. This score excludes output quality, benchmark rank, parameter count, price, latency, and throughput.</p></section>
       <section class="detail-block"><h3>Model boundary</h3><p>${detailText(model.access_boundary)}</p><p class="unscored-note">Hosted endpoints, inference services, runtimes, repackagings, fine-tunes, and applications remain separate boundaries.</p></section>
-      <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.output))}</p></section>
-      <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("")}<p class="unscored-note">${escapeHTML(attribution.capabilityNote)}</p></section>
+      ${riskStatementsMarkup(model)}
+      <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(limits.output))}</p></section>
+      <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities || {}).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("") || "<p>Loading source details…</p>"}<p class="unscored-note">${escapeHTML(attribution.capabilityNote)}</p></section>
       <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>${escapeHTML(openWeightsLabel)}:</strong> ${escapeHTML(reportedCapability(metadata.reported_open_weights))}</p><p><strong>${escapeHTML(licenseLabel)}:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
       <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Artifact licensing:</strong> ${escapeHTML(modelLicenseName(model.source_model))}</p><p>These labels describe the reviewed release artifacts and mandatory terms; they do not assess training code or training data openness.</p><p>${detailText(model.license_note)}</p>${(model.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>${escapeHTML(attribution.linksHeading)}</h3>${modelSourceLinks(metadata, attribution.noLinksText)}</section>
@@ -3866,10 +3930,6 @@ function writeViewURL(id) {
 function activateView(id, { focusTarget } = {}) {
   // Read before anything repaints: a repaint can detach the focused element.
   const leaving = document.activeElement?.closest?.(".view");
-  if (id === "inference-services" || id === "local-runtimes" || id === "agent-packs" || id === "robots") {
-    setDirectoryCollection(id === "inference-services" ? "inference" : id === "local-runtimes" ? "runtimes" : id === "agent-packs" ? "packs" : "robots");
-    id = "directory";
-  }
   const alias = AppCore.parseViewAlias ? AppCore.parseViewAlias(id) : null;
   if (alias) {
     setDirectoryCollection(alias, { updateURL: false });

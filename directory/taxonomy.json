@@ -314,6 +314,69 @@
       "definition": "One or more unrelated inference operators document a hosted path for the release."
     }
   ],
+  "flag_kinds": [
+    {
+      "id": "maker_risk_safeguards",
+      "name": "Maker risk statement",
+      "definition": "The developer's own system card, model page, or safety framework names this release against a risk threshold in cyber, biological or chemical, or autonomy capability. The Atlas records the developer's words and adds no rating of its own.",
+      "collections": [
+        "models"
+      ]
+    }
+  ],
+  "flag_statuses": [
+    {
+      "id": "statement_found",
+      "name": "Statement found",
+      "definition": "The developer's own system card, model page, or safety framework names this release against a risk threshold."
+    },
+    {
+      "id": "no_statement_found",
+      "name": "No statement found",
+      "definition": "A reviewer checked the developer's system card, model page, and framework page for this release, and none names it against a threshold. Absence is not evidence of safety."
+    }
+  ],
+  "flag_domains": [
+    {
+      "id": "cyber",
+      "name": "Cyber",
+      "definition": "The statement concerns cyber capability, such as finding or exploiting software vulnerabilities."
+    },
+    {
+      "id": "bio_chem",
+      "name": "Biological or chemical",
+      "definition": "The statement concerns biological or chemical capability, such as help toward making biological or chemical weapons."
+    },
+    {
+      "id": "autonomy",
+      "name": "Autonomy",
+      "definition": "The statement concerns autonomy, such as acting, copying itself, or doing AI research without human direction."
+    }
+  ],
+  "flag_determinations": [
+    {
+      "id": "determined",
+      "name": "Threshold reached",
+      "definition": "The developer states the release reached the threshold."
+    },
+    {
+      "id": "precautionary",
+      "name": "Precautionary",
+      "definition": "The developer states it could not rule the threshold out, or deployed safeguards as a precaution."
+    }
+  ],
+  "flag_scopes": [
+    {
+      "id": "weights",
+      "name": "The model itself",
+      "definition": "The statement is about the model, whichever way it is offered."
+    },
+    {
+      "id": "deployment",
+      "name": "Safeguards on a release channel",
+      "definition": "The statement is about safeguards the developer runs on one way of offering the release, such as its own app or API."
+    }
+  ],
   "inference_service_types": [
     {
       "id": "direct_model_api",
@@ -1820,6 +1883,11 @@
       "kind": "proprietary"
     },
     {
+      "id": "LicenseRef-n8n-Sustainable-Use-1.0",
+      "name": "n8n Sustainable Use License 1.0",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-NVIDIA-Community-Model-2024",
       "name": "NVIDIA Community Model License",
       "kind": "restricted"
@@ -1958,6 +2026,31 @@
       "id": "Unlicense",
       "name": "The Unlicense",
       "kind": "open_source"
+    },
+    {
+      "id": "LicenseRef-Qwen-Research-License-Agreement",
+      "name": "Qwen Research License Agreement",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-LongCat-Platform-Terms",
+      "name": "LongCat API Platform Terms of Service",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-MiniMax-Platform-Terms",
+      "name": "MiniMax Platform Terms of Service",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-MiniMax-Model-License",
+      "name": "MiniMax Model License Agreement",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Tencent-Hunyuan-Community-License",
+      "name": "Tencent Hunyuan Community License Agreement",
+      "kind": "restricted"
     }
   ],
   "source_models": [

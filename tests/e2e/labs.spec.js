@@ -152,6 +152,10 @@ test("a lab joined to systems but to no release says so instead of listing nothi
   await expect(dialog).toContainText("Named in the catalog as:");
 
   // The card names systems inline and counts the joins it does not list in tags.
+  // Search for it rather than counting on its place in the A-Z list: the grid
+  // pages 24 labs at a time, and every lab admitted ahead of "Hugging Face"
+  // moves its card toward the second page.
+  await page.goto("/?collection=labs&q=Hugging%20Face");
   const card = page.locator('#lab-grid .lab-card:has([data-lab="lab-hugging-face"])');
   await expect(card.locator('.lab-related-label:text-matches("Systems it builds")')).toHaveText("Systems it builds · 2");
   await expect(card.locator(".tags span")).toHaveText(["2 inference services", "1 local runtime"]);

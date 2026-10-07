@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-10-03",
+  "verified_at": "2026-10-06",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -3813,7 +3813,412 @@
           "immutable_url": "https://api.github.com/repos/neuml/txtai/git/blobs/ca0a1be0119a00629ad2cb8b213180fd9ad0064a"
         }
       ]
+    },
+    {
+      "project_id": "cuawright",
+      "repo": "microsoft/CUAWright",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Browser runtime and the rest of the repository outside the imported desktop runtime; the NOTICE file states this scope",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/microsoft/CUAWright/blob/main/LICENSE",
+          "blob_sha": "9e841e7a26e4eb057b24511e7b92d42b257a80e5",
+          "immutable_url": "https://api.github.com/repos/microsoft/CUAWright/git/blobs/9e841e7a26e4eb057b24511e7b92d42b257a80e5"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "The imported OSWorld desktop runtime under cuawright.desktop, per the NOTICE file",
+          "kind": "git_blob",
+          "path": "licenses/OSWorld-runtime-APACHE-2.0.txt",
+          "url": "https://github.com/microsoft/CUAWright/blob/main/licenses/OSWorld-runtime-APACHE-2.0.txt",
+          "blob_sha": "60d0edcb164e63027fda49865712d5bcde225195",
+          "immutable_url": "https://api.github.com/repos/microsoft/CUAWright/git/blobs/60d0edcb164e63027fda49865712d5bcde225195"
+        }
+      ]
+    },
+    {
+      "project_id": "mindsearch",
+      "repo": "InternLM/MindSearch",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository; the only license file in the tree, and the README points to it",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/InternLM/MindSearch/blob/main/LICENSE",
+          "blob_sha": "d78fe384132bd63552fac705aa14e29abb26c072",
+          "immutable_url": "https://api.github.com/repos/InternLM/MindSearch/git/blobs/d78fe384132bd63552fac705aa14e29abb26c072"
+        }
+      ]
+    },
+    {
+      "project_id": "kaibanjs",
+      "repo": "kaiban-ai/KaibanJS",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository; the only license file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/kaiban-ai/KaibanJS/blob/main/LICENSE",
+          "blob_sha": "6719452ed3dd2af48f85ff460f49057d4d5c5e30",
+          "immutable_url": "https://api.github.com/repos/kaiban-ai/KaibanJS/git/blobs/6719452ed3dd2af48f85ff460f49057d4d5c5e30"
+        }
+      ]
+    },
+    {
+      "project_id": "shannon",
+      "repo": "Kocoro-lab/Shannon",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository; the only license file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Kocoro-lab/Shannon/blob/main/LICENSE",
+          "blob_sha": "524237b55185166ed5fb17d3e51adf2256295184",
+          "immutable_url": "https://api.github.com/repos/Kocoro-lab/Shannon/git/blobs/524237b55185166ed5fb17d3e51adf2256295184"
+        }
+      ]
+    },
+    {
+      "project_id": "magnitude",
+      "repo": "magnitudedev/browser-agent",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository; the only license file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/magnitudedev/browser-agent/blob/main/LICENSE",
+          "blob_sha": "81533bf96905d70ff865124ed40135360c3728c7",
+          "immutable_url": "https://api.github.com/repos/magnitudedev/browser-agent/git/blobs/81533bf96905d70ff865124ed40135360c3728c7"
+        }
+      ]
+    },
+    {
+      "project_id": "go-micro",
+      "repo": "micro/go-micro",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository; the nested website LICENSE is the same blob and carries identical terms",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/micro/go-micro/blob/master/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/micro/go-micro/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "trellis",
+      "repo": "mindfold-ai/Trellis",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "Whole repository; the file is the plain AGPL-3.0 text, and the CLI package manifest declares AGPL-3.0-only",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/mindfold-ai/Trellis/blob/main/LICENSE",
+          "blob_sha": "0c97efd25b5974b974ed9a8a18207bc4f55bb338",
+          "immutable_url": "https://api.github.com/repos/mindfold-ai/Trellis/git/blobs/0c97efd25b5974b974ed9a8a18207bc4f55bb338"
+        }
+      ]
+    },
+    {
+      "project_id": "mobile-use",
+      "repo": "minitap-ai/mobile-use",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository; the NOTICE file adds an attribution request that it says is not a legal requirement",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/minitap-ai/mobile-use/blob/main/LICENSE",
+          "blob_sha": "055b75aaf55b25e2ea67bba85792fea95ec2062b",
+          "immutable_url": "https://api.github.com/repos/minitap-ai/mobile-use/git/blobs/055b75aaf55b25e2ea67bba85792fea95ec2062b"
+        }
+      ]
+    },
+    {
+      "project_id": "n8n",
+      "repo": "n8n-io/n8n",
+      "items": [
+        {
+          "license_id": "LicenseRef-n8n-Sustainable-Use-1.0",
+          "scope": "Everything outside files with .ee in the name or directory, and outside third-party components, which keep their own licenses; the packages/@n8n/cli copy is the same blob",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/n8n-io/n8n/blob/master/LICENSE.md",
+          "blob_sha": "f85f59baa906530c26cee26e0c9ddd6bd5f86dbd",
+          "immutable_url": "https://api.github.com/repos/n8n-io/n8n/git/blobs/f85f59baa906530c26cee26e0c9ddd6bd5f86dbd"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Source files with .ee in their filename or .ee in their directory name, usable in production only with an n8n Enterprise license",
+          "kind": "git_blob",
+          "path": "LICENSE_EE.md",
+          "url": "https://github.com/n8n-io/n8n/blob/master/LICENSE_EE.md",
+          "blob_sha": "b47966a6c05809c90723aa4beaf47cbbd34fac1b",
+          "immutable_url": "https://api.github.com/repos/n8n-io/n8n/git/blobs/b47966a6c05809c90723aa4beaf47cbbd34fac1b"
+        }
+      ]
+    },
+    {
+      "project_id": "nanoclaw",
+      "repo": "nanocoai/nanoclaw",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository code; gateway-compat/onecli-summary carries a separate Apache-2.0 copy for a compatibility test harness around OneCLI, which is not part of the runtime",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/nanocoai/nanoclaw/blob/main/LICENSE",
+          "blob_sha": "e5b4bee92ed2127744cea681fa103521298e3b9a",
+          "immutable_url": "https://api.github.com/repos/nanocoai/nanoclaw/git/blobs/e5b4bee92ed2127744cea681fa103521298e3b9a"
+        }
+      ]
+    },
+    {
+      "project_id": "open-deep-research",
+      "repo": "nickscamara/open-deep-research",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository as a derivative of the Vercel AI chatbot template; the file is the short Apache-2.0 notice (Copyright 2024 Vercel, Inc.) without the full license text",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/nickscamara/open-deep-research/blob/main/LICENSE",
+          "blob_sha": "695ee2d6a04b691b3f3aa1c4e76e7c4b3a931042",
+          "immutable_url": "https://api.github.com/repos/nickscamara/open-deep-research/git/blobs/695ee2d6a04b691b3f3aa1c4e76e7c4b3a931042"
+        }
+      ]
+    },
+    {
+      "project_id": "onecli",
+      "repo": "onecli/onecli",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository except the three paths enumerated in LICENSE-ENTERPRISE",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/onecli/onecli/blob/main/LICENSE",
+          "blob_sha": "3107be43cc3f09623ed3651bc677cdb44bbf5efe",
+          "immutable_url": "https://api.github.com/repos/onecli/onecli/git/blobs/3107be43cc3f09623ed3651bc677cdb44bbf5efe"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "apps/web/src/ee/, packages/api/src/ee/, and apps/gateway/crates/ee/, free for development, testing, and evaluation, with a subscription needed for production",
+          "kind": "git_blob",
+          "path": "LICENSE-ENTERPRISE",
+          "url": "https://github.com/onecli/onecli/blob/main/LICENSE-ENTERPRISE",
+          "blob_sha": "a6394e35d38b3dbd6362a77c89a40608f37a3162",
+          "immutable_url": "https://api.github.com/repos/onecli/onecli/git/blobs/a6394e35d38b3dbd6362a77c89a40608f37a3162"
+        }
+      ]
+    },
+    {
+      "project_id": "aden-hive",
+      "repo": "aden-hive/hive",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository, including the core framework runtime, the tools package whose pyproject.toml declares Apache-2.0, the frontend, and the browser extension; no nested licence file exists in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/aden-hive/hive/blob/6193aea7eb064f7536dfedcbe9ff08ad954ac53b/LICENSE",
+          "blob_sha": "f72c3e53be0426cfe5a26b6369918ac0d12a7bb5",
+          "immutable_url": "https://api.github.com/repos/aden-hive/hive/git/blobs/f72c3e53be0426cfe5a26b6369918ac0d12a7bb5"
+        }
+      ]
+    },
+    {
+      "project_id": "ruoyi-ai",
+      "repo": "ageerle/ruoyi-ai",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository-wide source code of the backend monorepo, covering the chat, workflow, system, and generator modules",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/ageerle/ruoyi-ai/blob/ca6ef96200ae36f7aa3990406841c8ccf3c60192/LICENSE",
+          "blob_sha": "6d6598ffd45efe7b66257c0144483afe59755b82",
+          "immutable_url": "https://api.github.com/repos/ageerle/ruoyi-ai/git/blobs/6d6598ffd45efe7b66257c0144483afe59755b82"
+        },
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "scope": "The three bundled Anthropic skill folders under ruoyi-admin/src/main/resources/skills (docx, pdf, and xlsx), each carrying the identical LICENSE.txt shown here, which restricts copying, derivative works, and redistribution",
+          "kind": "git_blob",
+          "path": "ruoyi-admin/src/main/resources/skills/docx/LICENSE.txt",
+          "url": "https://github.com/ageerle/ruoyi-ai/blob/ca6ef96200ae36f7aa3990406841c8ccf3c60192/ruoyi-admin/src/main/resources/skills/docx/LICENSE.txt",
+          "blob_sha": "c55ab42224874608473643de0a85736b7fec0730",
+          "immutable_url": "https://api.github.com/repos/ageerle/ruoyi-ai/git/blobs/c55ab42224874608473643de0a85736b7fec0730"
+        }
+      ]
+    },
+    {
+      "project_id": "agentuniverse",
+      "repo": "agentuniverse-ai/agentUniverse",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository, including the agentuniverse, agentuniverse_connector, agentuniverse_extension, and agentuniverse_product packages that pyproject.toml declares as Apache Software License; no nested licence file exists in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/agentuniverse-ai/agentUniverse/blob/254ecd280f54c2d2de654bbe5373e9f947d2dedf/LICENSE",
+          "blob_sha": "078d1868c1cf8ba6f4be572fd95bf04ed752ac2c",
+          "immutable_url": "https://api.github.com/repos/agentuniverse-ai/agentUniverse/git/blobs/078d1868c1cf8ba6f4be572fd95bf04ed752ac2c"
+        }
+      ]
+    },
+    {
+      "project_id": "munder-difflin",
+      "repo": "chaitanyagiri/munder-difflin",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Source code of the desktop application; the root LICENSE-ASSETS file carves out the bundled LimeZu pixel-art tilesets and maps under src/renderer/src/assets, which carry their own separate licence",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/chaitanyagiri/munder-difflin/blob/4321e934820b8fb344fa0179fe681e49138273b0/LICENSE",
+          "blob_sha": "69073fc3d4afe3a681f675e3543b534b608f37e3",
+          "immutable_url": "https://api.github.com/repos/chaitanyagiri/munder-difflin/git/blobs/69073fc3d4afe3a681f675e3543b534b608f37e3"
+        }
+      ]
+    },
+    {
+      "project_id": "fastclaw",
+      "repo": "fastclaw-ai/fastclaw",
+      "items": [
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Whole repository under the FastClaw Community License, Apache 2.0 with added conditions on multi-tenant service operation, interface branding, contributions, and trademarks; the bundled skill-creator folders carry a separate Apache-2.0 file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/fastclaw-ai/fastclaw/blob/f401889555c264d8e3506a2887af5268e4f22d9d/LICENSE",
+          "blob_sha": "f8f244d2339f937c35d04ea2ab4bc0d74d678be3",
+          "immutable_url": "https://api.github.com/repos/fastclaw-ai/fastclaw/git/blobs/f8f244d2339f937c35d04ea2ab4bc0d74d678be3"
+        }
+      ]
+    },
+    {
+      "project_id": "metagpt",
+      "repo": "FoundationAgents/MetaGPT",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository and the metagpt Python package declared in setup.py, except the vendored mineflayer-collectblock folder under metagpt/environment/minecraft, which has its own licence file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/FoundationAgents/MetaGPT/blob/11cdf466d042aece04fc6cfd13b28e1a70341b1f/LICENSE",
+          "blob_sha": "00d36a832e74e0a131ed5e698896206cb3724323",
+          "immutable_url": "https://api.github.com/repos/FoundationAgents/MetaGPT/git/blobs/00d36a832e74e0a131ed5e698896206cb3724323"
+        }
+      ]
+    },
+    {
+      "project_id": "phantom",
+      "repo": "ghostwright/phantom",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository, including the Bun runtime in src, the chat-ui frontend, and the bundled skills and role definitions; the separately licensed Claude Agent SDK dependency is not covered",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/ghostwright/phantom/blob/f8c7ab42d885936ee54abc785528000260f4acc5/LICENSE",
+          "blob_sha": "96074f698816b4b073b365d2d56b83f3afddb70f",
+          "immutable_url": "https://api.github.com/repos/ghostwright/phantom/git/blobs/96074f698816b4b073b365d2d56b83f3afddb70f"
+        }
+      ]
+    },
+    {
+      "project_id": "holaos",
+      "repo": "holaboss-ai/holaOS",
+      "items": [
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Whole repository under the Modified Apache 2.0 licence, whose added conditions restrict hosted or embedded commercial service use and removal of branding in the frontend; the app-sdk and runtime-client packages carry a byte-identical copy, and bundled embedded skills carry their own licence or notice files",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/holaboss-ai/holaOS/blob/4684714ee133794cdbb86630e42b7d93447fb2e2/LICENSE",
+          "blob_sha": "ffc48d2aacf0a6cecdf2d995498f467c9ba9e91a",
+          "immutable_url": "https://api.github.com/repos/holaboss-ai/holaOS/git/blobs/ffc48d2aacf0a6cecdf2d995498f467c9ba9e91a"
+        }
+      ]
+    },
+    {
+      "project_id": "artemis",
+      "repo": "google/artemis",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository, including the artemis package, the MCP server, and the playground; the third_party/mobile_use folder carries a separate Apache-2.0 licence file and a NOTICE from Minitap, Inc.",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/google/artemis/blob/351ca8422f7b5b54e80a9c1ce03a222e02415b6b/LICENSE",
+          "blob_sha": "ba262877bba9344e5e5b8ff5828ba2e7e2c8d963",
+          "immutable_url": "https://api.github.com/repos/google/artemis/git/blobs/ba262877bba9344e5e5b8ff5828ba2e7e2c8d963"
+        }
+      ]
+    },
+    {
+      "project_id": "gptme",
+      "repo": "gptme/gptme",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository, including the gptme package, the server and web UI, the desktop shell, and the packages directory; no nested licence file exists in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/gptme/gptme/blob/461a603d4670a4e529e0cecb0cbbb6c5b5277e90/LICENSE",
+          "blob_sha": "4b8507e51d1a4906711b3f94a01a95f663e1b00a",
+          "immutable_url": "https://api.github.com/repos/gptme/gptme/git/blobs/4b8507e51d1a4906711b3f94a01a95f663e1b00a"
+        }
+      ]
+    },
+    {
+      "project_id": "deepcode",
+      "repo": "HKUDS/DeepCode",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "The DeepCode application source, covering the core runtime, app server, protocol, desktop client, and workflows, except the pinned third-party skill folders under core/skills/builtin",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/HKUDS/DeepCode/blob/84c37f79c726bd12e74e39541adceb8b5e47b0d5/LICENSE",
+          "blob_sha": "b3ba37ce442298d5bdec96e2e52a8a812a25f123",
+          "immutable_url": "https://api.github.com/repos/HKUDS/DeepCode/git/blobs/b3ba37ce442298d5bdec96e2e52a8a812a25f123"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "The pinned upstream skills bundled under core/skills/builtin, including the mcp-builder, webapp-testing, skill-creator, frontend-design, and security skills, each with its own LICENSE.txt; this item is the mcp-builder copy",
+          "kind": "git_blob",
+          "path": "core/skills/builtin/mcp-builder/LICENSE.txt",
+          "url": "https://github.com/HKUDS/DeepCode/blob/84c37f79c726bd12e74e39541adceb8b5e47b0d5/core/skills/builtin/mcp-builder/LICENSE.txt",
+          "blob_sha": "aba33d7c94858c5531c8f99d0a979dddb9b211ed",
+          "immutable_url": "https://api.github.com/repos/HKUDS/DeepCode/git/blobs/aba33d7c94858c5531c8f99d0a979dddb9b211ed"
+        }
+      ]
+    },
+    {
+      "project_id": "openharness",
+      "repo": "HKUDS/OpenHarness",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository, covering the openharness package, the ohmo personal agent, the terminal UI frontend, and the autopilot dashboard; no nested licence file exists in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/HKUDS/OpenHarness/blob/9b2efd795c6aa09f88b0c257d269a9e518da6ae7/LICENSE",
+          "blob_sha": "06c5e27f80b8f078957cfe35bb0e970acd39beed",
+          "immutable_url": "https://api.github.com/repos/HKUDS/OpenHarness/git/blobs/06c5e27f80b8f078957cfe35bb0e970acd39beed"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-10-03"
+  "generated_at": "2026-10-06"
 }

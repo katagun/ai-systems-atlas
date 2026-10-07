@@ -34,6 +34,12 @@ a { color: var(--accent); }
 .note { margin: 0; color: var(--muted); font-size: .78rem; }
 footer { max-width: 44rem; margin: 0 auto 3rem; padding: 1rem 1.25rem 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .72rem; }
 @media (max-width: 560px) { dl { grid-template-columns: 1fr; gap: .1rem; } dt { margin-top: .5rem; } }
+.risk-statements { margin: 0 0 1.5rem; }
+.risk-statements h2 { margin: 0 0 .5rem; font: 600 1.15rem/1.3 "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif; }
+.risk-statements h3 { margin: 0 0 .5rem; font-size: 1rem; font-weight: 600; }
+.risk-statements p { margin: 0 0 .5rem; }
+.risk-statements blockquote { margin: 0 0 .75rem; padding: .1rem 0 .1rem 1rem; border-left: 3px solid var(--line); }
+.risk-statements dl { margin: 0 0 .75rem; }
 </style>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "DiffusionGemma 26B A4B IT", "description": "Google DeepMind's ungated experimental open-weights multimodal model that generates text by discrete diffusion rather than token-by-token autoregression: an…", "url": "https://peacefulcoexistance.com/records/models/model-google-diffusiongemma-26b-a4b-it/", "dateModified": "2026-10-01", "isPartOf": {"@type": "WebSite", "name": "peacefulcoexistance", "alternateName": "AI systems directory", "url": "https://peacefulcoexistance.com/"}, "about": {"@type": "SoftwareSourceCode", "name": "DiffusionGemma 26B A4B IT", "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it", "description": "Google DeepMind's ungated experimental open-weights multimodal model that generates text by discrete diffusion rather than token-by-token autoregression: an…", "creator": {"@type": "Organization", "name": "Google"}}}</script>
 </head>
@@ -43,6 +49,7 @@ footer { max-width: 44rem; margin: 0 auto 3rem; padding: 1rem 1.25rem 0; border-
 <h1>DiffusionGemma 26B A4B IT</h1>
 <p class="lead">Google DeepMind&#x27;s ungated experimental open-weights multimodal model that generates text by discrete diffusion rather than token-by-token autoregression: an encoder-decoder over the 26B-total, 3.8B-active Gemma 4 mixture-of-experts architecture, denoising 256-token canvases with bidirectional attention for 256K-token context, released under Apache-2.0 and served on Vertex AI Model Garden.</p>
 <dl><dt>Developer</dt><dd>Google</dd><dt>Distribution</dt><dd>Downloadable weights · Developer API</dd><dt>Artifact licensing</dt><dd>Open-licensed artifacts</dd><dt>License scope</dt><dd>Reviewed release artifacts and mandatory terms; not an assessment of training code or training data openness.</dd><dt>Licenses</dt><dd>Apache License 2.0</dd><dt>Boundary</dt><dd>This record represents the google/diffusiongemma-26B-A4B-it weight release published on Hugging Face at commit f7f5b7f5fa82ffc52addd066915886d497f5517b, the instruction-tuned 26B-total, 3.8B-active DiffusionGemma checkpoint. The Gemma 4 26B A4B autoregressive base it is fine-tuned from, the Diffusion Explained sample application, the community FP8 and 4-bit quantizations and the 31 finetune derivatives, and the Vertex AI Model Garden deployment of the same weights are separate boundaries.</dd></dl>
+<section class="risk-statements" aria-labelledby="risk-statements"><h2 id="risk-statements">Risk statements</h2><p>Not yet examined.</p></section>
 <p class="actions"><a class="primary" href="../../../?record=model:model-google-diffusiongemma-26b-a4b-it">Open in the directory →</a> <a href="https://huggingface.co/google/diffusiongemma-26B-A4B-it" rel="noreferrer">Open official model page ↗</a></p>
 <p class="note">Editorial ratings appear in the directory beside the profile they belong to and are never compared across collections.</p>
 </main>

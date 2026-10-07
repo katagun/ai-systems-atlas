@@ -37,9 +37,11 @@ test("the legend lists the active scope's badges and follows the scope", async (
 
 test("mixed scopes show only the families, sibling views name their own sets, and badge-less views show nothing", async ({ page }) => {
   await page.goto("/?collection=all");
-  await expect(items(page)).toHaveCount(4);
+  await expect(items(page)).toHaveCount(5);
   await expect(items(page).first()).toHaveText(/Type$/);
-  await expect(items(page).nth(1)).toHaveText(/Control and privacy$/);
+  // The legend follows the emblem row: a model card's flag sits after its type.
+  await expect(items(page).nth(1)).toHaveText(/Maker risk statement$/);
+  await expect(items(page).nth(2)).toHaveText(/Control and privacy$/);
   await expect(items(page).first()).not.toContainText("What kind of record it is");
 
   await openCollection(page, "models");
