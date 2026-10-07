@@ -691,6 +691,10 @@ h1 {
 @media (max-width: 1000px) {
   .filter-rail { display: none; }
 }
+/* The rail's first stop skips it, shown only while it has focus, as the
+   page's own skip link is (review I5). */
+.rail-skip { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.rail-skip:focus { position: static; width: auto; height: auto; margin: 0 0 .75rem; padding: .45rem .8rem; overflow: visible; clip: auto; border-radius: var(--radius-chip); background: var(--text); color: var(--on-ink); cursor: pointer; }
 .filter-group { margin: 0 0 1rem; padding: 0; border: 0; min-width: 0; }
 .filter-group legend { margin: 0 0 .35rem; padding: 0; color: var(--muted); font: 700 .66rem var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
 .filter-option { display: flex; align-items: center; gap: .45rem; padding: .15rem 0; font-size: .82rem; cursor: pointer; }

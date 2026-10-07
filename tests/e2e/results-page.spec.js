@@ -577,3 +577,32 @@ test("in Systems a chosen family keeps the result row's Clear reading Clear filt
   await expectFilter(page, "systems", "family", "");
   await expect(searchBox(page)).toHaveValue("");
 });
+
+// The rail sits before the results, one tab stop per group, so its first
+// stop skips it (review I5): a button, which leaves the URL alone, that hands
+// focus to the result count, after which Tab moves on into the results. In
+// Systems the scope note's own button comes before the grid; Specifications'
+// note has none, so there the next stop is in the grid.
+test("a keyboard reader can skip the rail to the results", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const [collection, count, next] of [
+    ["systems", "#result-count", '[data-scope-note="systems"]'],
+    ["specifications", "#specification-result-count", "#specification-grid"],
+  ]) {
+    await page.goto(`/?collection=${collection}`);
+    await expect(page.locator("#filter-rail .filter-group").first()).toBeVisible();
+    await searchBox(page).focus();
+    let reached = false;
+    for (let press = 0; press < 3 && !reached; press += 1) {
+      await page.keyboard.press("Tab");
+      reached = await page.evaluate(() => document.activeElement?.textContent === "Skip to results");
+    }
+    expect(reached, `${collection}: Tab reaches Skip to results within three presses`).toBe(true);
+    await expect(page.locator("#filter-rail").getByRole("button", { name: "Skip to results" })).toBeVisible();
+    await page.keyboard.press("Enter");
+    await expect(page.locator(count)).toBeFocused();
+    await expect(page).toHaveURL(new RegExp(`collection=${collection}$`));
+    await page.keyboard.press("Tab");
+    expect(await page.evaluate(selector => Boolean(document.activeElement?.closest(selector)), next), `${collection}: the next Tab lands past the rail`).toBe(true);
+  }
+});

@@ -4485,6 +4485,9 @@ function bindEvents() {
     resetCollection(state.directoryCollection);
     $(RESULT_VIEWS[state.directoryCollection].count).focus();
   });
+  // The rail sits before the results, a tab stop per group, so its first
+  // stop skips to the result count, which every collection lets take focus.
+  $("#skip-to-results").addEventListener("click", () => $(RESULT_VIEWS[state.directoryCollection].count).focus());
   $("#filters-button").addEventListener("click", openFilterSheet);
   $("#filter-sheet-done").addEventListener("click", () => $("#filter-sheet").close());
   $("#filter-sheet").addEventListener("close", () => $("#filters-button").focus());
