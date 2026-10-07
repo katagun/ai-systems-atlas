@@ -20,6 +20,33 @@ test("a bare URL opens the Elements front door with search and the role map abov
   }
 });
 
+// The headline carries the count, so the line above it names the kinds and no
+// number: the reader used to see "878 systems, …" and then "878 elements of AI".
+// Until the boot payloads land the headline has no count to show, and reads
+// "The elements of AI" rather than " elements of AI".
+test("the headline reads The elements of AI until its count arrives, and the kicker above it never holds a number", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  let release;
+  const held = new Promise(resolve => { release = resolve; });
+  await page.route(/\/app\/systems\.json/, async route => {
+    await held;
+    await route.continue();
+  });
+  await page.goto("/");
+  const kicker = page.locator("#hero-kicker");
+  await expect(page.locator("#directory-title")).toHaveText("The elements of AI");
+  await expect(kicker).toBeVisible();
+  // Everything lists labs and specifications as well (#404), so the line names them.
+  await expect(kicker).toContainText("labs");
+  await expect(kicker).toContainText("specifications");
+  await expect(kicker).not.toContainText(/\d/);
+
+  release();
+  await expect(page.locator("#directory-title")).toHaveText(`${counts.allDirectoryEntries.toLocaleString("en-US")} elements of AI`);
+  await expect(kicker).toContainText("labs");
+  await expect(kicker).not.toContainText(/\d/);
+});
+
 test("every tile counts what its collection lists, with the Models and packs splits", async ({ page }) => {
   await page.goto("/");
   const expected = {

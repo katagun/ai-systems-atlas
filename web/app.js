@@ -832,10 +832,12 @@ function applyDirectoryDefaults() {
   syncBadgeLegend();
 }
 
+// The headline holds "The" until the boot payloads give it a count. The kicker
+// above it is static markup that names the kinds and carries no number, so the
+// count is shown once.
 function renderStats() {
   const { count } = AppCore.collectionCount("all", collectionPayloads());
   $("#directory-count").textContent = count.toLocaleString("en-US");
-  $("#hero-kicker").textContent = `${count} systems, source models, services, runtimes, packs, and robots`;
 }
 
 // Every registry function reads the boot payloads in this shape.
