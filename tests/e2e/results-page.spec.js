@@ -5,6 +5,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { collectionEntry, familyEntry, openCollection, pressedEntry, searchAll } = require("./helpers/landing");
+const { chooseFinderGoal, finderHandoff } = require("./helpers/finder");
 const { clearFilters, closeRecord, expectFilter, recordView, search, searchBox, setFilter, settled, sortControl } = require("./helpers/results");
 
 // A word no record holds, written into one collection's search index so a
@@ -361,9 +362,7 @@ test("a group with one value in use hides until it has two", async ({ page }) =>
 test("beside a Finder role set, a role outside it counts what choosing it lists", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?view=finder");
-  for (const value of ["agent_system", "coding", "balanced"]) await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-  await page.locator("[data-finder-directory]").click();
-  await expect(page.locator("#finder-roles-chip")).toBeVisible();
+  await finderHandoff(page, "coding");
   const finderRoles = await page.evaluate(() => state.directoryRoles);
   const option = page.locator('#filter-rail [data-filter-group="role"] .filter-option')
     .filter({ has: page.locator(".filter-count") })
@@ -393,7 +392,7 @@ test("the Finder's handoff clears a Lab left set in its collection", async ({ pa
   const value = await page.locator('#filter-rail [data-filter-group="lab"] input:not([value=""])').first().getAttribute("value");
   await setFilter(page, "inference", "lab", value);
   await page.getByRole("button", { name: "Find your fit", exact: true }).click();
-  for (const choice of ["inference_service", "route_models", "balanced"]) await page.locator(`[data-finder-choice][data-finder-value="${choice}"]`).click();
+  await chooseFinderGoal(page, "route_models");
   await page.locator("[data-finder-directory]").click();
   await expectFilter(page, "inference", "type", "routing_aggregator");
   await expectFilter(page, "inference", "lab", "");
