@@ -2026,6 +2026,36 @@
       "id": "Unlicense",
       "name": "The Unlicense",
       "kind": "open_source"
+    },
+    {
+      "id": "LicenseRef-Qwen-Research-License-Agreement",
+      "name": "Qwen Research License Agreement",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-LongCat-Platform-Terms",
+      "name": "LongCat API Platform Terms of Service",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-MiniMax-Platform-Terms",
+      "name": "MiniMax Platform Terms of Service",
+      "kind": "proprietary"
+    },
+    {
+      "id": "LicenseRef-MiniMax-Model-License",
+      "name": "MiniMax Model License Agreement",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Tencent-Hunyuan-Community-License",
+      "name": "Tencent Hunyuan Community License Agreement",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-MIT-OpenAI-Anthropic-Rider",
+      "name": "MIT License with OpenAI/Anthropic Rider",
+      "kind": "restricted"
     }
   ],
   "source_models": [

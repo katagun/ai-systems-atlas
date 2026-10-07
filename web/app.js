@@ -832,10 +832,12 @@ function applyDirectoryDefaults() {
   syncBadgeLegend();
 }
 
+// The headline holds "The" until the boot payloads give it a count. The kicker
+// above it is static markup that names the kinds and carries no number, so the
+// count is shown once.
 function renderStats() {
   const { count } = AppCore.collectionCount("all", collectionPayloads());
   $("#directory-count").textContent = count.toLocaleString("en-US");
-  $("#hero-kicker").textContent = `${count} systems, source models, services, runtimes, packs, and robots`;
 }
 
 // Every registry function reads the boot payloads in this shape.
@@ -1054,6 +1056,23 @@ function stageRecords(kind) {
   return AppCore.newestDated(state.projects.filter(project => state.systemReviewDates[project.id]), project => state.systemReviewDates[project.id]);
 }
 
+// A face previews its collection; it is not the collection. Listing every
+// record after the featured one put the collection index (and "Browse every
+// collection" with it) some 14,000 px down the page at 1440 px wide, so a face
+// stops at this many rows and one control leaves for the rest.
+const STAGE_LIST_ROWS = 8;
+
+// The control under a face's list. It opens the whole collection through the
+// path a front-door tile takes (openCollection), so one entry is pushed on the
+// way out and Back returns to the door. Models asks for the release-date order,
+// the order the list above it is in; Systems has no review-date sort, so it
+// opens in its default order.
+function stageBrowseControl(kind) {
+  return kind === "model"
+    ? '<button type="button" class="link-button" data-open-collection="models" data-facet-key="sort" data-facet-value="release">Browse all models, newest first →</button>'
+    : '<button type="button" class="link-button" data-open-collection="systems">Browse all systems →</button>';
+}
+
 function renderStageFace(kind, records) {
   const root = $(`#stage-${kind}`);
   const featured = records[0];
@@ -1065,14 +1084,14 @@ function renderStageFace(kind, records) {
   const row = record => `<li><button type="button" data-stage-record="${kind}" data-stage-id="${escapeHTML(record.id)}"><span class="stage-list-name">${escapeHTML(record.name)}</span><span class="stage-list-meta">${escapeHTML(stageMeta(kind, record))}</span><time datetime="${escapeHTML(date(record))}">${escapeHTML(date(record))}</time></button></li>`;
   const when = kind === "model" ? `released ${date(featured)}` : `reviewed ${date(featured)}`;
   const where = kind === "model" ? featured.developer || "" : `${familyName(featured.system_family)} · ${roleName(featured.primary_role)}`;
-  const rest = records.slice(1);
+  const rest = records.slice(1, 1 + STAGE_LIST_ROWS);
   root.innerHTML = `<article class="stage-feature${kind === "system" ? " is-system" : ""}">${cardMark(featured, kind)}<div>
       <p class="eyebrow">Latest reviewed ${kind}</p>
       <h2 class="stage-name">${escapeHTML(featured.name)}</h2>
       <p class="stage-meta">${escapeHTML(`${where} · ${when}`)}</p>
       <p class="stage-description">${escapeHTML(featured.description || "")}</p>
       <p><button type="button" class="link-button" data-stage-record="${kind}" data-stage-id="${escapeHTML(featured.id)}">Open this ${kind}</button></p>
-    </div></article>${rest.length ? `<p class="stage-list-label">More ${kind}s, newest first</p><ol class="stage-list">${rest.map(row).join("")}</ol>` : ""}`;
+    </div></article>${rest.length ? `<p class="stage-list-label">More ${kind}s, newest first</p><ol class="stage-list">${rest.map(row).join("")}</ol>` : ""}<p class="stage-browse">${stageBrowseControl(kind)}</p>`;
 }
 
 function renderStage() {
@@ -1234,8 +1253,9 @@ function syncStickyClearance() {
 }
 
 // The one way a tile or a strip entry opens a collection. A facet narrows
-// the collection to one category first; a family goes through
-// jumpToDirectoryFamily so the role and Finder set are cleared as ever.
+// the collection to one category first (the stage's Models control passes the
+// `sort` key, which only orders it: the release-date sort); a family goes
+// through jumpToDirectoryFamily so the role and Finder set are cleared as ever.
 // Every collection reads the one query, so a query only a lab or a
 // specification answers follows the reader from the All results into Labs
 // or Specifications; the front door clears it on arrival.
@@ -1326,7 +1346,7 @@ function setDirectoryCollection(collection, { updateURL = true, carryQuery = upd
 // names seven of these grids and result counts again, for Phase 3 task 4 to
 // fold into one (CR-20; RECORD_DIALOGS is the pattern).
 const RESULT_VIEWS = {
-  all: { panel: "#all-directory-panel", grid: "#all-directory-grid", pager: "#all-directory-pager", count: "#all-directory-result-count", clear: "#reset-all-directory", placeholder: "Search systems, models, services, runtimes, packs, and robots", render: () => renderAllDirectoryEntries() },
+  all: { panel: "#all-directory-panel", grid: "#all-directory-grid", pager: "#all-directory-pager", count: "#all-directory-result-count", clear: "#reset-all-directory", placeholder: "Search systems, models, services, runtimes, packs, robots, labs, and specifications", render: () => renderAllDirectoryEntries() },
   systems: { panel: "#systems-directory-panel", grid: "#project-grid", pager: "#project-pager", count: "#result-count", clear: "#reset-filters", placeholder: "Search all systems", render: () => renderCollection("systems") },
   inference: { panel: "#inference-directory-panel", grid: "#inference-grid", pager: "#inference-pager", count: "#inference-result-count", clear: "#reset-inference-filters", placeholder: "Search services and boundaries", render: () => renderCollection("inference") },
   runtimes: { panel: "#runtimes-directory-panel", grid: "#runtime-grid", pager: "#runtime-pager", count: "#runtime-result-count", clear: "#reset-runtime-filters", placeholder: "Search runtimes and boundaries", render: () => renderCollection("runtimes") },
@@ -1669,7 +1689,7 @@ function labCard(lab, { mixed = false } = {}) {
   const newestDate = AppCore.releaseDate(releases[0] || {});
   return `<article class="project-card lab-card${mixed ? " mixed-directory-card" : ""}">
     <div class="card-top"><div class="card-identity">${cardMarkWithGeography("lab", lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
-    <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
+    ${modes.length ? `<span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>` : ""}
     <p>${escapeHTML(lab.description)}</p>
     ${counts ? `<div class="tags">${counts}</div>` : ""}
     ${labRelatedMarkup(lab, releases, systems)}
@@ -2388,12 +2408,39 @@ function writeFinderURL({ push = false } = {}) {
   writeURL(url, { push });
 }
 
+// A chosen goal paints its priority row and shortlist below every goal tile,
+// 2,500 px down a phone's page, so the choice would show nothing without a
+// scroll. This brings the row, the first thing the choice adds, to 12 px under
+// the sticky header (headerClearance), unless its top is already on screen below
+// the header. A phone's fixed bottom bar covers the last of the viewport, so the
+// screen ends where the bar begins. It runs once per choice, where the choice is
+// made: never from renderFinder, so neither a priority nor the shortlist
+// replacing its placeholder scrolls. Focus stays where it is.
+// `fromTop` is for a Finder that was just opened: activateView has started a
+// smooth scroll to the top, so the row is judged from a scroll position of 0,
+// where the page is heading, and an explicit scroll supersedes the one in flight.
+// The scroll is instant, as revealDirectoryResults is: it never animates, so it
+// honours prefers-reduced-motion by construction. A short page may stop short
+// of the target, as a shortlist still reading its scores can; the row then rests
+// lower, still in view.
+function revealFinderPriorities({ fromTop = false } = {}) {
+  const row = $(".finder-priorities");
+  if (!row || !$("#finder").classList.contains("is-active")) return;
+  const offset = row.getBoundingClientRect().top + window.scrollY;
+  const top = offset - (fromTop ? 0 : window.scrollY);
+  const bar = $("#mobile-nav");
+  const screenBottom = bar && getComputedStyle(bar).display !== "none" ? bar.getBoundingClientRect().top : window.innerHeight;
+  if (top >= stickyHeight() && top < screenBottom) return;
+  window.scrollTo({ top: offset - headerClearance(), behavior: "instant" });
+}
+
 // The job is already chosen, so the screen opens with its shortlist rather
 // than with a question standing between the reader and it.
 function openFinderAt(direction, goal) {
   chooseFinderGoal(goal, direction);
   writeFinderURL();
   activateView("finder");
+  revealFinderPriorities({ fromTop: true });
 }
 
 function finderPriorityFor(direction, priority) {
@@ -2442,13 +2489,15 @@ function renderFinderStatus() {
   const records = AppCore.FINDER_DIRECTIONS.reduce((sum, direction) => sum + AppCore.finderDirectionTotal(direction.id, collections), 0);
   $("#finder-status").textContent = entry
     ? `${entry.label}: ${entry.eligible} active ${entry.eligible === 1 ? "record" : "records"} match, ranked for “${label}”.`
-    : `${jobs} jobs in ${directions} directions, over ${records} active records. Choose one to see its three strongest reviewed matches.`;
+    : `${jobs} jobs in ${directions} directions, across ${records} active records. Choose one to see its three strongest reviewed matches.`;
 }
 
 // The three answers, on the Finder's own keys. A goal the tables no longer
 // offer, or one whose direction contradicts the `direction` beside it, leaves
-// the URL as any value a control cannot take, and leaves the tiles.
-function restoreFinderFromURL(params) {
+// the URL as any value a control cannot take, and leaves the tiles. `reveal` is
+// the page loading on a link that names a job, which opens like any other
+// Finder with a job set; Back and Forward leave the scroll to the browser.
+function restoreFinderFromURL(params, { reveal = false } = {}) {
   const goal = params.get("job") || "";
   if (!goal) {
     // Only a Finder URL with no job clears the screen. The tab and the
@@ -2472,6 +2521,7 @@ function restoreFinderFromURL(params) {
   }
   state.finder = { direction: entry.direction, goal: entry.id, priority: finderPriorityFor(entry.direction, params.get("prefer") || "") };
   renderFinder();
+  if (reveal) revealFinderPriorities({ fromTop: true });
 }
 
 function renderFinder() {
@@ -2500,7 +2550,7 @@ function renderJobHint(scope, term) {
   const goal = term.trim() ? AppCore.matchFinderGoal(finderGoalEntries(), term) : null;
   hint.hidden = !goal;
   hint.innerHTML = goal
-    ? `<span>Looks like a job: <strong>${escapeHTML(goal.label)}</strong>. The Finder can shortlist from ${goal.eligible} reviewed ${goal.eligible === 1 ? "record" : "records"}.</span><button type="button" class="link-button" data-finder-goal="${escapeHTML(`${goal.direction}:${goal.id}`)}">Open shortlist →</button>`
+    ? `<span>Looks like a job: <strong>${escapeHTML(goal.label)}</strong>. The Finder can shortlist from ${goal.eligible} reviewed ${goal.eligible === 1 ? "record" : "records"}.</span><button type="button" class="link-button" data-open-finder-goal="${escapeHTML(`${goal.direction}:${goal.id}`)}">Open shortlist →</button>`
     : "";
 }
 
@@ -3672,7 +3722,7 @@ function restoreFromURL({ boot = false } = {}) {
     if (onDoor) showFrontDoor({ updateURL: false });
     else if (scope && !comparisonRestored) setDirectoryCollection(scope, { updateURL: false });
     activateView(view);
-    restoreFinderFromURL(params);
+    restoreFinderFromURL(params, { reveal: boot });
     // The one restored query, or its absence, reaches every collection's
     // sort, so a sort chosen during a query the URL no longer holds ends too.
     if (scope) syncMatchSorts();
@@ -4257,7 +4307,10 @@ function bindEvents() {
   $("#finder-content").addEventListener("click", event => {
     const goalButton = event.target.closest("[data-finder-goal]");
     if (goalButton) {
-      if (chooseFinderGoal(goalButton.dataset.finderGoal, goalButton.dataset.finderDir)) writeFinderURL({ push: true });
+      if (chooseFinderGoal(goalButton.dataset.finderGoal, goalButton.dataset.finderDir)) {
+        writeFinderURL({ push: true });
+        revealFinderPriorities();
+      }
       return;
     }
     const priorityButton = event.target.closest("[data-finder-priority]");
@@ -4323,9 +4376,13 @@ function bindEvents() {
       input.focus();
       return;
     }
-    const goal = event.target.closest("[data-finder-goal]");
+    // Only the search banner's button, whose value is `direction:id`. A Finder
+    // tile carries a bare goal id on `data-finder-goal` and is answered by the
+    // Finder's own handler; reading that attribute here as well ran
+    // openFinderAt on every tile click, which asks the page for its top.
+    const goal = event.target.closest("[data-open-finder-goal]");
     if (goal) {
-      const [direction, id] = goal.dataset.finderGoal.split(":");
+      const [direction, id] = goal.dataset.openFinderGoal.split(":");
       openFinderAt(direction, id);
       return;
     }
