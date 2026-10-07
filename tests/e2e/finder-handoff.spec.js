@@ -84,6 +84,15 @@ test("every goal is listed at once with a count, and the tallest column clears t
   for (const count of counts) expect(Number(count)).toBeGreaterThan(0);
 });
 
+// The records figure is the total the five directions hold, not a floor: "over
+// 293 active records" read as "more than 293".
+test("the status line counts the jobs and the records they span before a job is chosen", async ({ page }) => {
+  await page.goto("/?view=finder");
+  await expect(page.locator("#finder-status")).toHaveText(
+    /^\d+ jobs in 5 directions, across \d+ active records\. Choose one to see its three strongest reviewed matches\.$/,
+  );
+});
+
 test("a goal's count matches the records the shortlist is drawn from", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?view=finder");

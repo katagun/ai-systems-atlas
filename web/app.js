@@ -2489,7 +2489,7 @@ function renderFinderStatus() {
   const records = AppCore.FINDER_DIRECTIONS.reduce((sum, direction) => sum + AppCore.finderDirectionTotal(direction.id, collections), 0);
   $("#finder-status").textContent = entry
     ? `${entry.label}: ${entry.eligible} active ${entry.eligible === 1 ? "record" : "records"} match, ranked for “${label}”.`
-    : `${jobs} jobs in ${directions} directions, over ${records} active records. Choose one to see its three strongest reviewed matches.`;
+    : `${jobs} jobs in ${directions} directions, across ${records} active records. Choose one to see its three strongest reviewed matches.`;
 }
 
 // The three answers, on the Finder's own keys. A goal the tables no longer
