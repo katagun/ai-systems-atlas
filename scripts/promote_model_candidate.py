@@ -22,6 +22,7 @@ from typing import Any, NamedTuple
 try:
     from .json_io import write_json_atomic
     from .validate_directory import (
+        MAKER_RISK_FLAG,
         Taxonomy,
         stable_model_id,
         validate_model_candidates,
@@ -32,6 +33,7 @@ try:
 except ImportError:  # Direct script execution places scripts/ on sys.path.
     from json_io import write_json_atomic
     from validate_directory import (
+        MAKER_RISK_FLAG,
         Taxonomy,
         stable_model_id,
         validate_model_candidates,
@@ -163,6 +165,17 @@ def build_draft(
             "overall": None,
         },
         "evidence": evidence,
+        # ADR 042: every new review records the maker-risk flag in an examined
+        # state; the blank entry fails validation until the reviewer fills it.
+        "flags": [
+            {
+                "kind": MAKER_RISK_FLAG,
+                "status": "",
+                "url": "",
+                "verified_at": "",
+                "research_confidence": "",
+            }
+        ],
         "metadata_verified_at": "",
         "verified_at": "",
     }
@@ -232,6 +245,24 @@ def _valid_date(value: object) -> date | None:
     return parsed if parsed.isoformat() == value else None
 
 
+def _maker_risk_flag_error(record: dict[str, Any]) -> str | None:
+    """ADR 042: every new listed or gap review records the maker-risk flag in an
+    examined state before promotion. Linking is exempt: it re-links an
+    already-published record, which may predate ADR 042."""
+    flags = record.get("flags")
+    if not isinstance(flags, list) or not any(
+        isinstance(entry, dict)
+        and entry.get("kind") == MAKER_RISK_FLAG
+        and entry.get("status") in {"statement_found", "no_statement_found"}
+        for entry in flags
+    ):
+        return (
+            f"flags must record a {MAKER_RISK_FLAG} entry, statement_found or "
+            "no_statement_found, before promotion (ADR 042)"
+        )
+    return None
+
+
 def _promotion_specific_errors(
     record: dict[str, Any],
     candidate: dict[str, Any],
@@ -282,6 +313,10 @@ def _promotion_specific_errors(
 
     if record.get("license_review_status") != "verified":
         errors.append("license_review_status must be verified before promotion")
+
+    flag_error = _maker_risk_flag_error(record)
+    if flag_error:
+        errors.append(flag_error)
 
     evidence = record.get("evidence")
     evidence_urls = (
@@ -414,6 +449,9 @@ def _preflight_gap(
         errors.append(f"model id is already published: {model_id}")
     if record.get("license_review_status") != "verified":
         errors.append("license_review_status must be verified before promotion")
+    flag_error = _maker_risk_flag_error(record)
+    if flag_error:
+        errors.append(flag_error)
     evidence = (
         record.get("evidence") if isinstance(record.get("evidence"), list) else []
     )
