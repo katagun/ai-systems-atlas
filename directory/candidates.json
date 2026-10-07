@@ -1,7 +1,40 @@
 {
   "version": "1.0",
-  "updated_at": "2026-10-03",
+  "updated_at": "2026-10-07",
   "candidates": [
+    {
+      "repo": "1jehuang/jcode",
+      "name": "jcode",
+      "url": "https://github.com/1jehuang/jcode",
+      "description": "High performance coding agent harness written in rust",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.82,
+      "github_detected_license": "MIT",
+      "stars": 20328,
+      "topics": [
+        "ai",
+        "ai-agent",
+        "ai-coding-agent",
+        "claude",
+        "cli",
+        "coding-agent",
+        "llm",
+        "mcp",
+        "openai",
+        "rust",
+        "terminal",
+        "tui"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
     {
       "repo": "aden-hive/hive",
       "name": "hive",
@@ -170,6 +203,26 @@
         "proposed_at": "2026-09-15",
         "proposer": "candidate-triage"
       }
+    },
+    {
+      "repo": "AgentMemoryRepo/agentmemoryrepo",
+      "name": "agentmemoryrepo",
+      "url": "https://github.com/AgentMemoryRepo/agentmemoryrepo",
+      "description": "Spec for Agent Memory Repo",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "agent_memory_service",
+      "classification_confidence": 0.8,
+      "github_detected_license": "MIT",
+      "stars": 570,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "agentuniverse-ai/agentUniverse",
@@ -464,6 +517,38 @@
       }
     },
     {
+      "repo": "codewhale-hq/Codewhale",
+      "name": "Codewhale",
+      "url": "https://github.com/codewhale-hq/Codewhale",
+      "description": "Open-source coding agent for your terminal, built in Rust and on a journey of continuous community improvement. Issues and PRs welcome.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.82,
+      "github_detected_license": "MIT",
+      "stars": 41067,
+      "topics": [
+        "agent-orchestration",
+        "ai-agent",
+        "cli",
+        "coding-agent",
+        "local-first",
+        "mcp",
+        "multi-agent",
+        "multi-model",
+        "open-source",
+        "rust",
+        "tui"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "coleam00/claude-memory-compiler",
       "name": "claude-memory-compiler",
       "url": "https://github.com/coleam00/claude-memory-compiler",
@@ -549,6 +634,38 @@
         "proposer": "promotion review",
         "held_by": "maintainer decision: self-described as not a product"
       }
+    },
+    {
+      "repo": "docker/skills",
+      "name": "skills",
+      "url": "https://github.com/docker/skills",
+      "description": "A collection of Docker skills for AI coding agents to help them build, test, debug, and optimize containerized apps with consistent, reusable workflows.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent_workflow",
+      "classification_confidence": 0.86,
+      "github_detected_license": "Apache-2.0",
+      "stars": 539,
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "antigravity",
+        "claude-code",
+        "codex",
+        "copilot",
+        "cursor",
+        "docker",
+        "gemin",
+        "gemini-cli-extension",
+        "skills"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "FailproofAI/failproofai",
@@ -723,6 +840,48 @@
         ],
         "proposed_at": "2026-09-15",
         "proposer": "candidate-triage"
+      }
+    },
+    {
+      "repo": "frankarobotics/franka_ros",
+      "name": "Franka Research 3",
+      "url": "https://github.com/frankarobotics/franka_ros",
+      "description": "Franka Robotics' seven-axis robot arm, documented through the Franka Control Interface (FCI) and its libfranka, franka_ros, and franka_ros2 components.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "robot-arm",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-30",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — conditions 3 and 4",
+        "rule": "docs/ROBOTS.md evidence workflow step 2 and Unavailable pages",
+        "finding": "On 2026-09-30 the vendor's own website was unreadable from the reviewer's network: `franka.ai` and `www.franka.ai` both refused the TLS handshake with `TLSV1_UNRECOGNIZED_NAME` under urllib, curl, and a headless Chromium, while control fetches to other vendors' sites succeeded in the same session. The maker's technical documentation is published instead on `frankarobotics.github.io`, which is the `github.com/<org>` form of a shared host that `docs/ROBOTS.md` admits, and that documentation was readable. It states that the software and its documentation support the Franka Research 3 and an older Franka Emika Robot, and that the FCI is reached through libfranka, 'a C++ library that provides low-level control of Franka Robotics research robots', plus franka_ros and franka_ros2. That documents a control interface, not a route the vendor offers for running a learned model: the interface specification page sets realtime limits for joint-space and Cartesian commands and torque control, and nothing on the pages read names a learned model or policy. Two conditions therefore stand unmet on this pass: condition 3, because a documented low-level control interface is programmability unless the maker documents it for running the reader's own model or policy; and condition 4, because the hardware specification this record needs would come from the product pages and technical specification sheets on the website that could not be read, and the specification page read here carries control limits rather than a hardware spec sheet. Re-review from a network that can resolve `franka.ai`, where the product page, the FR3 datasheet, the availability statement, and the sales terms would settle conditions 3, 4, 5, and 6. This is a hold on unreadable evidence, not a judgement about the product.",
+        "evidence": [
+          {
+            "label": "franka_ros README",
+            "url": "https://github.com/frankarobotics/franka_ros/blob/develop/README.md",
+            "kind": "git_blob",
+            "content_sha256": "35b127927c1c26fd76bb8c387e076a1ee1f7bb6dc4dbf6b22c8b3989db8c1e91",
+            "fetched_at": "2026-09-30",
+            "blob_sha": "1e166ddabb99c63cf2d52b822f1b0f8eef123835",
+            "immutable_url": "https://api.github.com/repos/frankarobotics/franka_ros/git/blobs/1e166ddabb99c63cf2d52b822f1b0f8eef123835"
+          }
+        ],
+        "proposed_at": "2026-09-30",
+        "proposer": "robots batch 1 review"
       }
     },
     {
@@ -998,6 +1157,47 @@
       }
     },
     {
+      "repo": "HarnessMD/munder-difflin",
+      "name": "munder-difflin",
+      "url": "https://github.com/HarnessMD/munder-difflin",
+      "description": "an open-source alternative to the dots, bots and muses of the world, run an office of claude code/codex like agents on your laptop, sandboxes or anywhere, uses your existing subscriptions",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "multi_agent_orchestrator",
+      "classification_confidence": 0.8,
+      "github_detected_license": "MIT",
+      "stars": 8526,
+      "topics": [
+        "agent-harness",
+        "agent-orchestration",
+        "agents",
+        "ai-agents",
+        "autonomous-agents",
+        "claude-code",
+        "codex",
+        "coding-agents",
+        "desktop-app",
+        "developer-tools",
+        "electron",
+        "gemini-cli",
+        "harness",
+        "harness-engineering",
+        "local-first",
+        "memory",
+        "multi-agent",
+        "opencode",
+        "orchestration",
+        "typescript"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "HarnessRouter/harnessrouter",
       "name": "harnessrouter",
       "url": "https://github.com/HarnessRouter/harnessrouter",
@@ -1231,6 +1431,29 @@
     },
     {
       "repo": null,
+      "name": "Amp",
+      "url": "https://ampcode.com/",
+      "description": "Agentic coding tool by Amp, an independent company spun off from Sourcegraph in December 2025: CLI, VS Code/JetBrains/Neovim/Zed extensions, and web/Slack surfaces with subagents for code review and library research. Proprietary; distributed via npm as @ampcode/cli.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.75,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "coding-agent",
+        "proprietary"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
       "name": "Asana AI Teammates",
       "url": "https://asana.com/product/ai/ai-teammates",
       "description": "Collaborative AI agents for coordination-heavy team work inside Asana, using Work Graph context, shared memory, configurable roles and permissions, connected applications, and no-code authoring through AI Studio.",
@@ -1247,6 +1470,29 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-09-05",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "New agent skill: Amazon SageMaker optimized generative AI inference for your coding agent",
+      "url": "https://aws.amazon.com/blogs/machine-learning/new-agent-skill-amazon-sagemaker-optimized-generative-ai-inference-for-your-coding-agent/",
+      "description": "Official AWS Artificial Intelligence Blog announcement awaiting editorial review. Amazon SageMaker optimized generative AI inference introduces the aws-ai-ml skill through the Agent Toolkit for AWS, giving coding agents like Kiro, Claude Code, and Codex deep expertise in inference optimization and benchmarking. Describe what you want, and your agent generates executable SageMaker Python SDK v3 code to benchmark, recommend, and compare deployments.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent_workflow",
+      "classification_confidence": 0.86,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "official-announcement",
+        "aws-ai-blog"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
       "review_required": [
         "licensing",
         "classification",
@@ -1602,6 +1848,53 @@
     },
     {
       "repo": null,
+      "name": "AgiBot X2",
+      "url": "https://www.agibot.com/products/X2",
+      "description": "AgiBot's compact full-size humanoid robot, sold as the X2, the X2 Ultra, the X2 Neo and the X2 EDU.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "humanoid",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-03",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — condition 3 AI basis",
+        "rule": "docs/ROBOTS.md inclusion boundary condition 3 and Classification, on open_model_interface",
+        "finding": "Read on 2026-10-03. Conditions 1, 2, 4, 5 and 6 are met on the pages read: the product page names the X2 series, states its hardware in a full parameter table (25 to 30 degrees of freedom, a 1310 x 460 x 210 mm standing size, about 39 kg, RK3588 compute boards, an Orin NX option on the Ultra, a swappable battery and about two hours of runtime at 0.5 m/s), and AgiBot's store sells the X2 Neo at a stated price with an add-to-cart control. The store's terms of service settle terms. Condition 3 is unmet on what was read. The product page names no learned model or policy: its own words are 'algorithm-driven decision-making' and 'intelligent algorithms', with no model named, and the autonomy it claims for the X2 Ultra rests on LiDAR, RGB-D cameras and stereo vision rather than on a named model. Nothing the maker publishes documents a route for running the reader's own model or policy on the X2 either. The product page and the store page both carry a 'Secondary Development' row, and it reads 'Not supported' for the X2 and 'Supported' for the X2 Ultra, but a specification-table claim is not an interface: no SDK, control API or policy interface for the X2 was found on the maker's own pages. AgiBot's document centre lists an 'AGIBOT X1 Development Guide' and open-source documentation for the X1, the A3, the G2, the D1 and the OmniHand, and for the X2 lists only a quick start guide, a packaging list, an after-sales guide and instructional videos; no X2 development guide is published there. The maker's open-source GitHub organisation holds twenty-four repositories, of which the only X2 one is `AgibotTech/agibot_x2_urdf`, and its own README describes the repository as URDF and MuJoCo robot descriptions for ROS, RViz and MoveIt, which is a robot description rather than a control interface. The maker's Link-U-OS organisation, which the maker's own open-source page links, documents a locomotion policy framework for the A2 and names no X2. Re-review if the maker publishes an X2 SDK, a policy interface or a development guide; on the pages read this is a hold on absent evidence, not a judgement about the product.",
+        "evidence": [
+          {
+            "label": "X2 product page",
+            "url": "https://www.agibot.com/products/X2",
+            "kind": "web",
+            "content_sha256": "0c1d5392e409b822ba7ef63c446b07bccc31e72064bcb47c9ac597964851abed",
+            "fetched_at": "2026-10-03"
+          },
+          {
+            "label": "X2 store page",
+            "url": "https://store.agibot.com/products/x2",
+            "kind": "web",
+            "content_sha256": "72d827959d301ce840ac95e854634615e9e1bee0bba05b151a9a25d73cbf6a1b",
+            "fetched_at": "2026-10-03"
+          }
+        ],
+        "proposed_at": "2026-10-03",
+        "proposer": "robots batch 3 review"
+      }
+    },
+    {
+      "repo": null,
       "name": "Siri AI",
       "url": "https://www.apple.com/apple-intelligence/",
       "description": "Apple's conversational assistant, rolling out as a beta from 14 September 2026, that answers from personal context across messages, email, and photos, reads the screen, draws on the web, takes actions in apps, and keeps conversations in a dedicated Siri app synced through iCloud across a user's devices.",
@@ -1674,6 +1967,46 @@
         "traits",
         "editorial_score"
       ]
+    },
+    {
+      "repo": null,
+      "name": "Kinova Gen3",
+      "url": "https://www.kinovarobotics.com/product/gen3-robots",
+      "description": "Kinova's ultra-lightweight 6- and 7-degree-of-freedom robotic arms, driven through the KORTEX API with ROS and ROS2 support.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "robot-arm",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-30",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — condition 3 AI basis",
+        "rule": "docs/ROBOTS.md inclusion boundary condition 3",
+        "finding": "The product page, read on 2026-09-30, states the hardware the gate's condition 4 accepts: 6 and 7 DoF variants, a 891 mm maximum reach, 7.2 kg and 8.2 kg total weight, a 4 kg mid-range continuous payload, 50 cm/s maximum speed, infinite actuator joint range, 20 to 30 VDC supply, 36 W average power, IP33 ingress protection, and a -30 to 35 degrees Celsius operating range. It documents 1 kHz closed-loop low-level control, integrated joint torque sensors, and an optional 2D/3D vision module. It names no learned model or policy, and the software it lists — the KINOVA KORTEX API and Web App, MATLAB hardware support, ROS and ROS2, C++ and Python, Gazebo, and MoveIt Pro compatibility — is programmability: the guide refuses that as the AI basis, because a motion API the maker offers for general use is not a route the vendor documents for running the reader's own model or policy. Condition 3 is unmet on what was read. Kinova's documentation site was reachable and its KORTEX API documentation was not read in this pass, so a policy interface may exist there; re-review against the API documentation before treating this as settled.",
+        "evidence": [
+          {
+            "label": "Gen3 product page",
+            "url": "https://www.kinovarobotics.com/product/gen3-robots",
+            "kind": "web",
+            "content_sha256": "88a2181f1ddb17b9484a8cba04ad2f4ab32a87031987a39ea75234765500cccd",
+            "fetched_at": "2026-09-30"
+          }
+        ],
+        "proposed_at": "2026-09-30",
+        "proposer": "robots batch 1 review"
+      }
     },
     {
       "repo": null,
@@ -2244,6 +2577,34 @@
       }
     },
     {
+      "repo": "LeoYeAI/talewell",
+      "name": "talewell",
+      "url": "https://github.com/LeoYeAI/talewell",
+      "description": "Plugin-first long-term memory for agent platforms — reference implementation of AMP (Agent Memory Protocol).",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "agent_memory_service",
+      "classification_confidence": 0.8,
+      "github_detected_license": "MIT",
+      "stars": 547,
+      "topics": [
+        "ai-agent",
+        "auto-dream",
+        "llm",
+        "memory",
+        "memory-management",
+        "myclaw",
+        "openclaw"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "lintsinghua/claude-code-book",
       "name": "claude-code-book",
       "url": "https://github.com/lintsinghua/claude-code-book",
@@ -2472,6 +2833,26 @@
       }
     },
     {
+      "repo": "microsoft/CUAWright",
+      "name": "CUAWright",
+      "url": "https://github.com/microsoft/CUAWright",
+      "description": "A simple SWE style browser+desktop agent framework that achieves SOTA results on long horizon web tasks. ",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.8,
+      "github_detected_license": "MIT",
+      "stars": 6031,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "microsoft/Webwright",
       "name": "Webwright",
       "url": "https://github.com/microsoft/Webwright",
@@ -2679,6 +3060,26 @@
         "proposed_at": "2026-09-23",
         "proposer": "candidate-triage"
       }
+    },
+    {
+      "repo": "MoonshotAI/kimi-code",
+      "name": "kimi-code",
+      "url": "https://github.com/MoonshotAI/kimi-code",
+      "description": "Kimi Code CLI, the current Kimi agent runtime CLI that the kimi-agent-sdk thin clients expose; supersedes the archived legacy kimi-cli Python CLI.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.8,
+      "github_detected_license": "MIT",
+      "stars": 7725,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "n8n-io/n8n",
@@ -3173,6 +3574,47 @@
         "proposed_at": "2026-09-23",
         "proposer": "candidate-triage"
       }
+    },
+    {
+      "repo": "openlit/openlit",
+      "name": "openlit",
+      "url": "https://github.com/openlit/openlit",
+      "description": "OpenLIT is the open-source agent harness engineering platform: trace, evaluate, guard, and improve everything around the model in your AI agents, on OTEL.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.83,
+      "github_detected_license": "Apache-2.0",
+      "stars": 2822,
+      "topics": [
+        "agent-harness",
+        "agent-harness-engineering",
+        "ai-engineering",
+        "ai-observability",
+        "amd-gpu",
+        "claude-code",
+        "clickhouse",
+        "codex",
+        "coding-agent",
+        "coding-agents",
+        "cursor",
+        "genai",
+        "gpu-monitoring",
+        "llm-observability",
+        "llmops",
+        "nvidia-smi",
+        "observability",
+        "open-source",
+        "openai",
+        "opentelemetry"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "openvla/openvla",
@@ -5436,178 +5878,6 @@
         "traits",
         "editorial_score"
       ]
-    },
-    {
-      "repo": "MoonshotAI/kimi-code",
-      "name": "kimi-code",
-      "url": "https://github.com/MoonshotAI/kimi-code",
-      "description": "Kimi Code CLI, the current Kimi agent runtime CLI that the kimi-agent-sdk thin clients expose; supersedes the archived legacy kimi-cli Python CLI.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 7725,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-29",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": null,
-      "name": "Amp",
-      "url": "https://ampcode.com/",
-      "description": "Agentic coding tool by Amp, an independent company spun off from Sourcegraph in December 2025: CLI, VS Code/JetBrains/Neovim/Zed extensions, and web/Slack surfaces with subagents for code review and library research. Proprietary; distributed via npm as @ampcode/cli.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.75,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "coding-agent",
-        "proprietary"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-29",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
-      "repo": "frankarobotics/franka_ros",
-      "name": "Franka Research 3",
-      "url": "https://github.com/frankarobotics/franka_ros",
-      "description": "Franka Robotics' seven-axis robot arm, documented through the Franka Control Interface (FCI) and its libfranka, franka_ros, and franka_ros2 components.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "robot-arm",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-30",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robot collection review — conditions 3 and 4",
-        "rule": "docs/ROBOTS.md evidence workflow step 2 and Unavailable pages",
-        "finding": "On 2026-09-30 the vendor's own website was unreadable from the reviewer's network: `franka.ai` and `www.franka.ai` both refused the TLS handshake with `TLSV1_UNRECOGNIZED_NAME` under urllib, curl, and a headless Chromium, while control fetches to other vendors' sites succeeded in the same session. The maker's technical documentation is published instead on `frankarobotics.github.io`, which is the `github.com/<org>` form of a shared host that `docs/ROBOTS.md` admits, and that documentation was readable. It states that the software and its documentation support the Franka Research 3 and an older Franka Emika Robot, and that the FCI is reached through libfranka, 'a C++ library that provides low-level control of Franka Robotics research robots', plus franka_ros and franka_ros2. That documents a control interface, not a route the vendor offers for running a learned model: the interface specification page sets realtime limits for joint-space and Cartesian commands and torque control, and nothing on the pages read names a learned model or policy. Two conditions therefore stand unmet on this pass: condition 3, because a documented low-level control interface is programmability unless the maker documents it for running the reader's own model or policy; and condition 4, because the hardware specification this record needs would come from the product pages and technical specification sheets on the website that could not be read, and the specification page read here carries control limits rather than a hardware spec sheet. Re-review from a network that can resolve `franka.ai`, where the product page, the FR3 datasheet, the availability statement, and the sales terms would settle conditions 3, 4, 5, and 6. This is a hold on unreadable evidence, not a judgement about the product.",
-        "evidence": [
-          {
-            "label": "franka_ros README",
-            "url": "https://github.com/frankarobotics/franka_ros/blob/develop/README.md",
-            "kind": "git_blob",
-            "content_sha256": "35b127927c1c26fd76bb8c387e076a1ee1f7bb6dc4dbf6b22c8b3989db8c1e91",
-            "fetched_at": "2026-09-30",
-            "blob_sha": "1e166ddabb99c63cf2d52b822f1b0f8eef123835",
-            "immutable_url": "https://api.github.com/repos/frankarobotics/franka_ros/git/blobs/1e166ddabb99c63cf2d52b822f1b0f8eef123835"
-          }
-        ],
-        "proposed_at": "2026-09-30",
-        "proposer": "robots batch 1 review"
-      }
-    },
-    {
-      "repo": null,
-      "name": "Kinova Gen3",
-      "url": "https://www.kinovarobotics.com/product/gen3-robots",
-      "description": "Kinova's ultra-lightweight 6- and 7-degree-of-freedom robotic arms, driven through the KORTEX API with ROS and ROS2 support.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "robot-arm",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-30",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robot collection review — condition 3 AI basis",
-        "rule": "docs/ROBOTS.md inclusion boundary condition 3",
-        "finding": "The product page, read on 2026-09-30, states the hardware the gate's condition 4 accepts: 6 and 7 DoF variants, a 891 mm maximum reach, 7.2 kg and 8.2 kg total weight, a 4 kg mid-range continuous payload, 50 cm/s maximum speed, infinite actuator joint range, 20 to 30 VDC supply, 36 W average power, IP33 ingress protection, and a -30 to 35 degrees Celsius operating range. It documents 1 kHz closed-loop low-level control, integrated joint torque sensors, and an optional 2D/3D vision module. It names no learned model or policy, and the software it lists — the KINOVA KORTEX API and Web App, MATLAB hardware support, ROS and ROS2, C++ and Python, Gazebo, and MoveIt Pro compatibility — is programmability: the guide refuses that as the AI basis, because a motion API the maker offers for general use is not a route the vendor documents for running the reader's own model or policy. Condition 3 is unmet on what was read. Kinova's documentation site was reachable and its KORTEX API documentation was not read in this pass, so a policy interface may exist there; re-review against the API documentation before treating this as settled.",
-        "evidence": [
-          {
-            "label": "Gen3 product page",
-            "url": "https://www.kinovarobotics.com/product/gen3-robots",
-            "kind": "web",
-            "content_sha256": "88a2181f1ddb17b9484a8cba04ad2f4ab32a87031987a39ea75234765500cccd",
-            "fetched_at": "2026-09-30"
-          }
-        ],
-        "proposed_at": "2026-09-30",
-        "proposer": "robots batch 1 review"
-      }
-    },
-    {
-      "repo": null,
-      "name": "AgiBot X2",
-      "url": "https://www.agibot.com/products/X2",
-      "description": "AgiBot's compact full-size humanoid robot, sold as the X2, the X2 Ultra, the X2 Neo and the X2 EDU.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "humanoid",
-        "official-product"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-10-03",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robot collection review — condition 3 AI basis",
-        "rule": "docs/ROBOTS.md inclusion boundary condition 3 and Classification, on open_model_interface",
-        "finding": "Read on 2026-10-03. Conditions 1, 2, 4, 5 and 6 are met on the pages read: the product page names the X2 series, states its hardware in a full parameter table (25 to 30 degrees of freedom, a 1310 x 460 x 210 mm standing size, about 39 kg, RK3588 compute boards, an Orin NX option on the Ultra, a swappable battery and about two hours of runtime at 0.5 m/s), and AgiBot's store sells the X2 Neo at a stated price with an add-to-cart control. The store's terms of service settle terms. Condition 3 is unmet on what was read. The product page names no learned model or policy: its own words are 'algorithm-driven decision-making' and 'intelligent algorithms', with no model named, and the autonomy it claims for the X2 Ultra rests on LiDAR, RGB-D cameras and stereo vision rather than on a named model. Nothing the maker publishes documents a route for running the reader's own model or policy on the X2 either. The product page and the store page both carry a 'Secondary Development' row, and it reads 'Not supported' for the X2 and 'Supported' for the X2 Ultra, but a specification-table claim is not an interface: no SDK, control API or policy interface for the X2 was found on the maker's own pages. AgiBot's document centre lists an 'AGIBOT X1 Development Guide' and open-source documentation for the X1, the A3, the G2, the D1 and the OmniHand, and for the X2 lists only a quick start guide, a packaging list, an after-sales guide and instructional videos; no X2 development guide is published there. The maker's open-source GitHub organisation holds twenty-four repositories, of which the only X2 one is `AgibotTech/agibot_x2_urdf`, and its own README describes the repository as URDF and MuJoCo robot descriptions for ROS, RViz and MoveIt, which is a robot description rather than a control interface. The maker's Link-U-OS organisation, which the maker's own open-source page links, documents a locomotion policy framework for the A2 and names no X2. Re-review if the maker publishes an X2 SDK, a policy interface or a development guide; on the pages read this is a hold on absent evidence, not a judgement about the product.",
-        "evidence": [
-          {
-            "label": "X2 product page",
-            "url": "https://www.agibot.com/products/X2",
-            "kind": "web",
-            "content_sha256": "0c1d5392e409b822ba7ef63c446b07bccc31e72064bcb47c9ac597964851abed",
-            "fetched_at": "2026-10-03"
-          },
-          {
-            "label": "X2 store page",
-            "url": "https://store.agibot.com/products/x2",
-            "kind": "web",
-            "content_sha256": "72d827959d301ce840ac95e854634615e9e1bee0bba05b151a9a25d73cbf6a1b",
-            "fetched_at": "2026-10-03"
-          }
-        ],
-        "proposed_at": "2026-10-03",
-        "proposer": "robots batch 3 review"
-      }
     }
   ]
 }
