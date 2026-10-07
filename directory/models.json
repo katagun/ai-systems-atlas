@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-10-06",
+  "verified_at": "2026-10-07",
   "source": {
     "id": "models-dev",
     "name": "models.dev",
@@ -5315,7 +5315,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "We therefore treat Claude Mythos 5 as having CB-1 capabilities and apply commensurate protections: real-time classifier guards, access controls for guard exemptions, a bug bounty program and threat intelligence, rapid-response options for jailbreaks, and security controls against model weight theft.",
+          "url": "https://www.anthropic.com/claude-fable-5-mythos-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-mythos-5-1",
@@ -5417,7 +5434,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-20",
-      "verified_at": "2026-09-20"
+      "verified_at": "2026-09-20",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "We apply the same CB-1 designation and safeguards to Mythos 5.1 as we applied to Mythos 5. We emphasize that although we have not applied the CB-2 designation to either Mythos 5 or Mythos 5.1, we have conservatively expanded the safeguards applied to these models relative to those we applied to weaker models, including Opus 5.",
+          "url": "https://www.anthropic.com/claude-fable-5-1-mythos-5-1-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-opus-4-5-20251101",
@@ -5635,7 +5669,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "AI R&D-4",
+          "domains": [
+            "autonomy"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "As a result, while we do not believe Claude Opus 4.6 meets the threshold for ASL-4 autonomy safeguards, we find ourselves in a gray zone where clean rule-out is difficult and the margin to the threshold is unclear. We expect with high probability that models in the near future could cross this threshold. Given this uncertainty, we have taken a cautious approach, similarly to how we approached the ASL-3 CBRN threshold for Claude Opus 4, and have chosen to prepare and publish a Sabotage Risk Report for Claude Opus 4.6, consistent with the RSP’s commitment to developing an affirmative case addressing misalignment risks for the AI R&D-4 threshold.",
+          "url": "https://www.anthropic.com/claude-opus-4-6-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-opus-4-7",
@@ -5847,7 +5898,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "Non-novel chemical and biological weapons (CB-1): We believe it is hard to be confident whether a model passes this threshold, but (as with previous recent models) our results are consistent with Opus 4.8 providing significant uplift to individuals or groups with basic technical backgrounds for this threat model.",
+          "url": "https://www.anthropic.com/claude-opus-4-8-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-opus-5",
@@ -5974,7 +6042,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "It is difficult to say with full confidence whether a model passes this threshold. However, Claude Opus 5 is broadly more capable than previous models like Sonnet 4.6 which we have conservatively treated as having CB-1 capabilities. As with earlier models we have conservatively treated as having CB-1 capabilities, we apply commensurate protections: real-time classifier guards, access controls for guard exemptions, a bug bounty program and threat intelligence, rapid-response options for jailbreaks, and security controls against model weight theft.",
+          "url": "https://www.anthropic.com/claude-opus-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-opus-5-5",
@@ -6071,7 +6156,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "verified_at": "2026-09-22",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "On chemical and biological risks, we treat Opus 5.5 as having CB-1 capabilities (relating to the synthesis of non-novel weapons) but not CB-2 capabilities (relating to the synthesis of novel weapons).",
+          "url": "https://www.anthropic.com/claude-opus-5-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-sonnet-4-5",
@@ -6404,7 +6506,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "Non-novel chemical and biological weapons (CB-1): It is hard to be confident about whether a model passes this threshold, but as with previous recent models, our results are consistent with Sonnet 5 providing significant uplift to individuals or groups with basic technical backgrounds for this threat model.",
+          "url": "https://www.anthropic.com/claude-sonnet-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-sonnet-5-5",
@@ -6531,7 +6650,25 @@
         }
       ],
       "metadata_verified_at": "2026-09-30",
-      "verified_at": "2026-09-30"
+      "verified_at": "2026-09-30",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1 and Autonomy-1",
+          "domains": [
+            "bio_chem",
+            "autonomy"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "We do treat Sonnet 5.5 as meeting our CB-1 and Autonomy-1 thresholds and apply the corresponding mitigations from our RSP.",
+          "url": "https://www.anthropic.com/claude-sonnet-5-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-apodex-apodex-1-1-mini",
@@ -22454,6 +22591,116 @@
       "verified_at": "2026-09-16"
     },
     {
+      "id": "model-mistral-mistral-large-4",
+      "source_id": "mistral/mistral-large-4",
+      "name": "Mistral Large 4",
+      "developer": "Mistral AI",
+      "url": "https://docs.mistral.ai/models/mistral-large-4-0",
+      "description": "Mistral AI's roughly one-trillion-parameter natively multimodal Mixture-of-Experts flagship, available today as a public-preview API model with open weights announced for the end of October 2026.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Mistral Large 4",
+        "description": "Mistral's 1T-parameter multimodal MoE for reasoning, coding, and agentic work",
+        "family": "mistral-large",
+        "release_date": "2026-10-06",
+        "last_updated": "2026-10-06",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "At review time no weights are published and no weights license exists: the announcement says weights will be released by the end of October 2026, and the docs page shows no license badge. The preview API is governed by Mistral's commercial terms, so the release is classified proprietary today. Re-review when the weights and their license text ship.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Public-preview API access to Mistral Large 4; no weights or weights license published as of the review date",
+          "kind": "web_terms",
+          "url": "https://mistral.ai/news/mistral-large-4",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "access_boundary": "This record represents Mistral Large 4 (announced 2026-10-06) as the public-preview mistral-large-4 API model (alias mistral-large-4-0). The weights promised for the end of October 2026, the reduced-moderation variant offered to vetted red-teaming partners, earlier Large generations, and downstream quantizations remain separate boundaries. The announcement states 1 trillion parameters with 49B active; the docs page states 1.05T total with 52B active and a 1.6B vision encoder.",
+      "strengths": [
+        "First-party announcement and docs page published on launch day with a 1M-token context window and documented function calling, structured outputs, batching, and agents",
+        "Mistral commits to publishing the weights by the end of October 2026 and to serving from European infrastructure it operates itself"
+      ],
+      "tradeoffs": [
+        "Public preview only: no weights, license text, or third-party hosting exist yet, so artifact availability and portability rest on a promise",
+        "The announcement and docs page disagree on active-parameter count (49B versus 52B)"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 5,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 4.0
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Mistral Large 4 announcement: preview API and end-of-month weights commitment",
+          "url": "https://mistral.ai/news/mistral-large-4",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Official Mistral Large 4 docs page: public-preview status, context window, and features",
+          "url": "https://docs.mistral.ai/models/mistral-large-4-0",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/195b940bc687ae56cf2f2e68d42bc830d9cf653f/models/mistral/mistral-large-4.toml",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://mistral.ai/news/mistral-large-4",
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ],
+      "metadata_verified_at": "2026-10-07",
+      "verified_at": "2026-10-07"
+    },
+    {
       "id": "model-mistral-mistral-medium-2505",
       "source_id": "mistral/mistral-medium-2505",
       "name": "Mistral Medium 3",
@@ -33574,6 +33821,114 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-reflection-beam",
+      "source_id": null,
+      "name": "Beam",
+      "developer": "Reflection AI",
+      "url": "https://reflection.ai/blog/introducing-beam",
+      "description": "Reflection AI's first model: a text-only, 501-billion-parameter sparse Mixture-of-Experts model (23 billion active) for coding, reasoning, and agentic work, announced October 5, 2026 in limited early access with Apache 2.0 weights promised later in October.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Beam",
+        "description": "Sparse Mixture-of-Experts text model with 501 billion total and 23 billion active parameters for coding, reasoning, and agentic workloads",
+        "family": "beam",
+        "release_date": "2026-10-05",
+        "last_updated": "2026-10-05",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": null,
+        "reported_license": null,
+        "links": [
+          {
+            "label": "Announcement",
+            "url": "https://reflection.ai/blog/introducing-beam"
+          }
+        ],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "At review time no weights are published and no weights license text exists: the announcement says the weights will be released under an Apache 2.0 license later this month, and early access is limited to a waitlisted group on terms the announcement does not publish. The release is classified proprietary today. Re-review when the weights and their license text ship.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Limited early access to Beam through a waitlist; no weights or weights license published as of the review date, and the announced Apache 2.0 license is a stated intention only",
+          "kind": "web_terms",
+          "url": "https://reflection.ai/blog/introducing-beam",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "access_boundary": "This record represents Beam as announced on 2026-10-05: the early version made available to a select, waitlisted group of users, not a generally available API or published weights. The weights, technical report, model card, and developer artifacts promised for later in October 2026, the distribution partners and open-source integrations promised at launch, the later models in the series, and downstream quantizations remain separate boundaries. The announcement says Beam is undergoing final red-teaming and evaluations, and gives 256K tokens as the maximum context length during reinforcement learning and 1M tokens as the effective context length after midtraining.",
+      "strengths": [
+        "First-party announcement published on release day with architecture, training-data and compute figures, a benchmark table naming its comparison models and the method of its efficiency comparison",
+        "Reflection commits to releasing weights under Apache 2.0 together with documentation and a full stack for running, evaluating, and fine-tuning the model"
+      ],
+      "tradeoffs": [
+        "Early access only: no weights, license text, model card, technical report, or third-party hosting exist yet, so artifact availability and portability rest on a promise",
+        "The announcement says final red-teaming and evaluations are still under way, and it publishes no model identifier, API model page, or pricing"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 1,
+        "lifecycle_transparency": 4,
+        "documentation_provenance": 6,
+        "overall": 2.7
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Beam announcement: architecture, early-access status, and the Apache 2.0 weights commitment",
+          "url": "https://reflection.ai/blog/introducing-beam",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Reflection Open Safety Framework page: framework text that names no model",
+          "url": "https://reflection.ai/safety",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://reflection.ai/blog/introducing-beam",
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ],
+      "metadata_verified_at": "2026-10-07",
+      "verified_at": "2026-10-07"
     },
     {
       "id": "model-sakana-sakana-namazu-v1-0",

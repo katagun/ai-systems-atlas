@@ -4218,7 +4218,67 @@
           "immutable_url": "https://api.github.com/repos/HKUDS/OpenHarness/git/blobs/06c5e27f80b8f078957cfe35bb0e970acd39beed"
         }
       ]
+    },
+    {
+      "project_id": "paperclip",
+      "repo": "paperclipai/paperclip",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT licence, which names Paperclip AI as holder; the Hermes adapter, a forked utility directory, brand icons and two skills carry their own MIT files, and one bundled font is covered by the SIL Open Font License in a separate notice",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/paperclipai/paperclip/blob/99a9de9940bf5974352d9dbfbb2f21e62e89689f/LICENSE",
+          "blob_sha": "a63594a5150d0ae00c3ddc36b61fa8f708c3ca8c",
+          "immutable_url": "https://api.github.com/repos/paperclipai/paperclip/git/blobs/a63594a5150d0ae00c3ddc36b61fa8f708c3ca8c"
+        }
+      ]
+    },
+    {
+      "project_id": "openrig",
+      "repo": "mvschwarz/openrig",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository under the Apache License 2.0 with the holder named in the appendix; the terminal interface package declares no licence field, and a vendored design skill and a plugin carry their own Apache files",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/mvschwarz/openrig/blob/0146f6a03f160ad43913aafe49a41f419c0fd354/LICENSE",
+          "blob_sha": "e0e69a6ed3424395694a2fc8ac350da25574cf0a",
+          "immutable_url": "https://api.github.com/repos/mvschwarz/openrig/git/blobs/e0e69a6ed3424395694a2fc8ac350da25574cf0a"
+        }
+      ]
+    },
+    {
+      "project_id": "agent-orchestrator",
+      "repo": "OrchestratorInc/agent-orchestrator",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Root licence for the repository, naming Untrivial as holder; the frontend and command-line package manifests declare MIT without a licence file, and the hosted cloud web app is a private submodule outside the reviewed tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/OrchestratorInc/agent-orchestrator/blob/4b60f079337a2aa90a82c944b3cdf84be17dcb68/LICENSE",
+          "blob_sha": "0963902dbd478bcf554d8d16ece3887338520535",
+          "immutable_url": "https://api.github.com/repos/OrchestratorInc/agent-orchestrator/git/blobs/0963902dbd478bcf554d8d16ece3887338520535"
+        }
+      ]
+    },
+    {
+      "project_id": "ntm",
+      "repo": "Dicklesworthstone/ntm",
+      "items": [
+        {
+          "license_id": "LicenseRef-MIT-OpenAI-Anthropic-Rider",
+          "scope": "Whole repository: the MIT grant plus an additional rider that controls over the rest of the licence, grants no rights to OpenAI, Anthropic, their affiliates, or anyone acting for them, and terminates permissions automatically on breach",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Dicklesworthstone/ntm/blob/6ecedcc0f0759dfc7603da087c7a4a6a2a42de58/LICENSE",
+          "blob_sha": "3d414da6ff83defe084707be6030866e8a7fb794",
+          "immutable_url": "https://api.github.com/repos/Dicklesworthstone/ntm/git/blobs/3d414da6ff83defe084707be6030866e8a7fb794"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-10-06"
+  "generated_at": "2026-10-07"
 }

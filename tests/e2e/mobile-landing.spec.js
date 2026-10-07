@@ -1,6 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { openCollection, openView, searchAll } = require("./helpers/landing");
-const { searchBox } = require("./helpers/results");
+const { searchBox, settled } = require("./helpers/results");
 
 for (const theme of ["light", "dark"]) {
   test(`mobile Elements families, compact collections and dock fit in ${theme}`, async ({ page }) => {
@@ -45,20 +45,28 @@ for (const theme of ["light", "dark"]) {
   });
 }
 
-test("mobile navigation restores search and sheets through history and handles More focus", async ({ page }) => {
+test("mobile navigation restores a role list through history and handles More focus", async ({ page }) => {
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/?element=coding_agent&elementRecord=aider");
-  await expect(page.locator('[data-element-family-tab="agent_system"]')).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#element-record-name")).toHaveAccessibleName("Aider");
-  await searchAll(page, "Ollama");
+  await expect(page.locator("#record-dialog")).toBeVisible();
+  await expect(page.locator("#record-dialog h1")).toHaveText("Aider");
+  await expect(page).toHaveURL(/role=coding_agent/);
+  await expect(page).toHaveURL(/layout=list/);
+  await expect(page).not.toHaveURL(/element=/);
+  await page.locator("#record-dialog .dialog-close").click();
+  await expect(page).not.toHaveURL(/record=/);
+  await page.locator('[data-mobile-nav="search"]').click();
+  await searchBox(page, "all").fill("Ollama");
+  await settled(page);
   await expect(searchBox(page, "all")).toBeFocused();
   await expect(page).toHaveURL(/q=Ollama/);
   await page.goBack();
-  await expect(page.locator("#element-record-name")).toHaveAccessibleName("Aider");
-  await page.locator('[data-element-family-tab="memory_system"]').click();
-  await expect(page.locator("#element-sheet")).toBeHidden();
+  await expect(page).toHaveURL(/role=coding_agent/);
+  await expect(page.locator("#project-grid")).toContainText("Aider");
+  await page.locator('[data-mobile-nav="home"]').click();
+  await expect(page.locator("#front-door")).toBeVisible();
   await expect(page).not.toHaveURL(/element=/);
   await openView(page, "finder");
   await expect(page.locator('[data-mobile-nav="finder"]')).toHaveAttribute("aria-current", "page");

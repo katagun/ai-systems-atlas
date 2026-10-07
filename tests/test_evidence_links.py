@@ -1215,6 +1215,12 @@ class FlagEvidenceTests(unittest.TestCase):
             )
         )
 
+        def oversize(_target):
+            raise check_evidence_links.OversizeBody("terms response exceeds the cap")
+
+        # A system-card PDF over the size cap is unpinnable, not a failed fetch.
+        self.assertIsNone(check_evidence_links.pin_hash(FLAG_URL, oversize))
+
 
 class SharedCacheTests(unittest.TestCase):
     """One cache for every worktree, no silent baselines, and a fail-closed import."""

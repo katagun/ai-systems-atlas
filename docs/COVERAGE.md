@@ -23,19 +23,19 @@ Every count below is generated, not transcribed. `uv run python scripts/validate
 <!-- catalog-counts: regenerate with `uv run python scripts/validate_directory.py --counts` -->
 
 ```text
-systems: 252
-  agent_system 169, assistant_system 17, memory_system 66
-  active-choice 240 (archived 9, superseded 3)
+systems: 256
+  agent_system 173, assistant_system 17, memory_system 66
+  active-choice 244 (archived 9, superseded 3)
 specifications: 22
 inference_services: 60
 local_runtimes: 17
-model_releases: 371
+model_releases: 373
 models_dev_source_records: 448
-model_candidates: 11
+model_candidates: 10
 system_candidates: 107
-exclusions: 107
+exclusions: 109
 packs: 8
-labs: 63 covering 371 releases
+labs: 64 covering 373 releases
 robots: 16
 ```
 
@@ -76,7 +76,7 @@ Both batches were first written from search-engine extracts of each page, becaus
 
 ### Robots
 
-The Robots collection under [ADR 037](adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md) holds sixteen records from twelve makers: Figure 03, NEO, Spot and Unitree G1 published in batch 95, Unitree H1 and Go2 and Hello Robot's Stretch 4 on 2026-09-30, Unitree H2 and R1 and AgiBot's A2 on 2026-10-01, and Booster T1, DEEP Robotics Lite3, LimX TRON 1, Pollen Robotics' Reachy Mini, Galbot G1 and Engineered Arts' Ameca on 2026-10-07 (batch 103). Ten are humanoids, three are quadrupeds, one is a mobile manipulator, and two, Reachy Mini and TRON 1, are the first records filed under `other`, because their makers' pages describe a desktop head robot and a two-legged robot with no torso or arms; `arm` still carries no record. Five records hold both AI bases, a named model and a documented route for running your own, nine hold only the documented route, and two, Figure 03 and NEO, hold only a named model. Five records pin a git blob rather than mutable web pages alone. The candidate queue's robotics holds are no longer the five under `robot software role decision` this paragraph once named: ADR 045 retired that label, publishing LeRobot and OM1 as systems and moving three of the rest on. Five candidates wait under `action-policy model boundary`, one under `robot description specification boundary`, and one under `programme-gated run path`. Hardware products that failed a condition are queued with the failing condition written down rather than published; the queue's totals are in the generated block above.
+The Robots collection under [ADR 037](adr/037-robots-are-unscored-records-of-what-a-vendor-documents.md) holds sixteen records from twelve makers: Figure 03, NEO, Spot and Unitree G1 published in batch 95, Unitree H1 and Go2 and Hello Robot's Stretch 4 on 2026-09-30, Unitree H2 and R1 and AgiBot's A2 on 2026-10-01, and Booster T1, DEEP Robotics Lite3, LimX TRON 1, Pollen Robotics' Reachy Mini, Galbot G1 and Engineered Arts' Ameca on 2026-10-07 (batch 104). Ten are humanoids, three are quadrupeds, one is a mobile manipulator, and two, Reachy Mini and TRON 1, are the first records filed under `other`, because their makers' pages describe a desktop head robot and a two-legged robot with no torso or arms; `arm` still carries no record. Five records hold both AI bases, a named model and a documented route for running your own, nine hold only the documented route, and two, Figure 03 and NEO, hold only a named model. Five records pin a git blob rather than mutable web pages alone. The candidate queue's robotics holds are no longer the five under `robot software role decision` this paragraph once named: ADR 045 retired that label, publishing LeRobot and OM1 as systems and moving three of the rest on. Five candidates wait under `action-policy model boundary`, one under `robot description specification boundary`, and one under `programme-gated run path`. Hardware products that failed a condition are queued with the failing condition written down rather than published; the queue's totals are in the generated block above.
 
 The 2026-09-29 screen's leads were read against the gate in three passes. The 2026-09-30 pass cleared one of nineteen, and the 2026-10-01 and 2026-10-03 passes published the Unitree H2 and R1 and the AgiBot A2 and held the X2. The 2026-10-07 pass read the thirteen leads that were still open or held, re-fetching every page it cites twice, and published six: Booster T1, DEEP Robotics Lite3, LimX TRON 1, Reachy Mini, Galbot G1 and Ameca. It held five new leads with the failing condition written down: Apptronik Apollo (conditions 3, 4 and 5: its page names Gemini Robotics only as a collaboration and states no hardware figures), UBTech Walker S2 (condition 3: BrainNet 2.0 and the Co-Agent are named but the text never says what either controls, and the specification is an image), XPENG IRON (conditions 3, 4 and 5: a page that calls itself a technical demonstration), Pollen's Reachy 2 (condition 3: an SDK and ROS 2 stack with no documented model route) and PAL Robotics' TIAGo (condition 3: ROS interfaces and a Jetson accessory). It also re-read the three standing holds. Franka Research 3's maker site is reachable now, which settles conditions 4 and 5 but not condition 3; Kinova's KORTEX API repositories document a control API only; and the AgiBot X2's pages hash identically to the 2026-10-03 capture. The four Unitree leads, H1, H2, R1 and Go2, were already published and were skipped. The backlog's other queued robots, Tesla Optimus, Agility Digit, the electric Atlas, ANYbotics ANYmal, Fourier GR-3, Sanctuary Phoenix, 1X EVE and Trossen ALOHA, are not in `directory/candidates.json` at this date and were not read in this pass.
 
@@ -94,7 +94,7 @@ The 2026-09-29 screen's leads were read against the gate in three passes. The 20
 | Agent memory service | 24 | 24 | Improved with separate open-engine and managed-service boundaries; compare ownership, lifecycle, governance, and retrieval intelligence |
 | Ambient capture | 3 | 3 | Thin; source-model diversity is missing |
 | Context graph engine | 5 | 5 | Thin |
-| Multi-agent orchestrator | 10 | 10 | Improved with a vendor-operated registry platform and a low-code service that escalates to people; open orchestrators remain thin |
+| Multi-agent orchestrator | 19 | 19 | Improved with four meta-harnesses that run other vendors' agent harnesses (batch 104); a surface that only owns terminals stays excluded |
 | Stateful agent runtime | 19 | 19 | Broad after three vendor-operated platforms joined the self-operated runtimes; compare who holds the operating contract alongside persistence and execution policy |
 | Browser/computer agent | 6 | 6 | Improved open baseline; desktop reliability and sandbox boundaries still need broader comparison |
 | Coding-agent workflow | 11 | 10 | Improved with a third-party orchestration plugin and an agent-built demonstration; compare process and delivery discipline |
@@ -334,5 +334,7 @@ Choose small batches with one coherent boundary question:
      - **Ameca (Engineered Arts):** `open_model_interface`, `medium`, `enterprise_sales`. The Tritium AI page says the Pro agent platform can "bring your own custom model" and the specifications list a REST, WebSocket, Python and Node.js control API; the model sits behind a cloud service and the developer documentation is behind a login. Terms are `none_published`.
 
      The five new holds, each queued with the failing condition written down, are in `directory/candidates.json` under `robot collection review`: Apptronik Apollo, UBTech Walker S2, XPENG IRON, Pollen Robotics Reachy 2 and PAL Robotics TIAGo. None of the six makers has a mark in Simple Icons or lobe-icons, so each card keeps its monogram. Each record states what its maker's pages say and nothing is scored; the robots are not compared or ranked.
+
+104. **Meta-harnesses, asked for by name:** four publishes and two exclusions, reviewed against one test: does the system own work beyond the sessions it launches. Paperclip, OpenRig, Agent Orchestrator and NTM are published as multi-agent orchestrators because each persists and reads back an entity other than a session: Paperclip's tasks, wakeup queue, approvals and hard-stop budgets; OpenRig's queue items with closure rules, workflow instances and watchdog jobs; Agent Orchestrator's orchestrator-versus-worker sessions, worker status reports and leased automation runs; NTM's assignments with claim, reservation and dispatch recovery. Agent of Empires is excluded on the terminal-owning precedent: its queued prompts and auto-resume are per-session lifecycle, and no entity lets one agent's state assign work to another. Superset is excluded as a close call, because the coordination its docs describe runs in a third-party agent following a skill. NTM is published as source-available: its licence is MIT plus a rider granting no rights to OpenAI, Anthropic, their affiliates, or anyone acting for them, recorded as its own licence reference. Agent Orchestrator's licence was added to its repository only on 2026-06-27 and its package manifests disagree with it. Not reviewed: Conductor and the Nimbalyst repository could not be verified, Crystal is deprecated, Xum runs its own agent loop, and cmux was already a candidate.
 
 For each batch, promote or exclude every reviewed candidate in the same change, update this snapshot only when counts materially change, and follow `CURATION.md` for evidence and scoring.

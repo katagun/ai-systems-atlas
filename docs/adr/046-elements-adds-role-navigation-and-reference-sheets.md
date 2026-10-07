@@ -1,6 +1,6 @@
 # ADR 046: Elements adds role navigation and reference sheets
 
-**Status:** Accepted. Amends [ADR 043](043-the-directory-opens-on-a-front-door-of-collection-tiles.md).
+**Status:** Accepted. Amends [ADR 043](043-the-directory-opens-on-a-front-door-of-collection-tiles.md). Amended by [ADR 054](054-a-role-opens-the-systems-list.md).
 
 ## Context
 

@@ -4,7 +4,7 @@ const { relative, sep } = require("node:path");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionEmblem, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -491,6 +491,24 @@ test("the release sort orders reviewed and imported rows newest first, undated l
     ["Audio Source", "Vision Model", "Qwen", "Undated Source"],
   );
   assert.deepEqual(filterModels(dated, { sort: "release", type: "language_model" }).map(item => item.name), ["Qwen"]);
+});
+
+test("reviewed=1 keeps Atlas-reviewed models, and review date orders systems newest first", () => {
+  const reviewed = models.map(model => ({ ...model, review_status: "reviewed" }));
+  assert.deepEqual(
+    filterModels([...reviewed, importedModel], { reviewed: "1" }).map(item => item.name).sort(),
+    ["Qwen", "Vision Model"],
+  );
+  const dated = [
+    { name: "Older", score: { overall: 9 } },
+    { name: "Undated", score: { overall: 1 } },
+    { name: "Newer", score: { overall: 2 } },
+  ];
+  const dates = { Older: "2024-01-01", Newer: "2026-05-01" };
+  assert.deepEqual(
+    filterAndSortProjects(dated, { term: "", sort: "reviewed", reviewDate: project => dates[project.name] || "" }).map(item => item.name),
+    ["Newer", "Older", "Undated"],
+  );
 });
 
 test("a reviewed model without a models.dev row never prints null", () => {
@@ -1721,6 +1739,12 @@ test("emblems are hidden decorative SVG built from the family frame and the badg
   assert.ok(svg.includes(CARD_BADGES["local-first"].glyph));
   assert.ok(familyEmblem("platform").includes(`d="${BADGE_FAMILIES.platform.frame}"`));
   assert.ok(!familyEmblem("platform").includes("badge-glyph"));
+  const systems = COLLECTIONS.find(entry => entry.id === "systems");
+  assert.ok(collectionEmblem(systems).includes("badge-glyph"));
+  assert.ok(collectionEmblem(COLLECTIONS.find(entry => entry.id === "all")).includes(`d="${BADGE_FAMILIES.type.frame}"`));
+  assert.equal(collectionEmblem({ id: "missing" }), "");
+  const named = collectionCategories("systems", { projects: [{ status: "active", system_family: "not_a_family" }] });
+  assert.equal(named[0].label, "Not a family");
 });
 
 test("the legend lists only what the active scope can show", () => {
@@ -1951,6 +1975,8 @@ test("a scope writes only the parameters that differ from their defaults, in a f
     [["q", "graph"], ["family", "memory_system"], ["sort", "name"]],
   );
   assert.deepEqual(scopeURLParams("systems", { status: "", localOnly: "1", sort: "score" }), [["status", ""], ["localOnly", "1"], ["sort", "score"]]);
+  assert.deepEqual(scopeURLParams("systems", { status: "active", sort: "name", layout: "list" }), [["layout", "list"]]);
+  assert.deepEqual(scopeURLParams("models", { sort: "score", reviewed: "1", layout: "cards" }), [["reviewed", "1"]]);
   assert.deepEqual(scopeURLParams("inference", { type: "direct_model_api", sort: "score" }), [["type", "direct_model_api"]]);
   assert.deepEqual(scopeURLParams("nowhere", { q: "x" }), []);
 });
@@ -2005,6 +2031,24 @@ test("every label in index.html holds exactly one control", () => {
 // only where a collection has them (ruling R-P1-23).
 test("the All intro promises scores only where a collection has them", () => {
   assert.match(indexHTML(), /Choose a collection for its own filters, and its scores where it has them\./);
+});
+
+// The count in the headline arrives with the boot payloads (renderStats), so the
+// markup the page ships must read as a sentence without it. The line above the
+// headline names the kinds and carries no number, so the count is shown once. The
+// headline's markup is compared whole, not stripped of its tags: the element
+// renderStats fills holds "The" until the count arrives.
+test("the front door's headline reads without its count and the kicker above it holds no number", () => {
+  const html = indexHTML();
+  const heading = html.match(/<h1 id="directory-title"[^>]*>([\s\S]*?)<\/h1>/);
+  assert.ok(heading, "index.html has the Directory heading");
+  assert.equal(heading[1], '<bdi id="directory-count">The</bdi> elements of <span>AI</span>');
+  const kicker = html.match(/<p[^>]*id="hero-kicker"[^>]*>([\s\S]*?)<\/p>/);
+  assert.ok(kicker, "index.html has the hero kicker");
+  assert.doesNotMatch(kicker[1], /\d/);
+  // Everything lists labs and specifications too (#404), so the line names them.
+  assert.match(kicker[1], /\blabs\b/);
+  assert.match(kicker[1], /\bspecifications\b/);
 });
 
 test("the API view does not call web-page evidence pinned", () => {
@@ -2656,7 +2700,7 @@ const DIRECT_SINKS = [
   "current_version",
 ];
 
-const SAFE_WRAPPER = /^(?:escapeHTML|detailText|detailList|detailScore|scoreCell|listCell)\(/;
+const SAFE_WRAPPER = /^(?:escapeHTML|detailText|detailList|detailScore|scoreCell|listCell|tableCell)\(/;
 
 test("a record field interpolated straight into markup is escaped at the point of use", () => {
   const app = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
@@ -2675,7 +2719,7 @@ test("a record field interpolated straight into markup is escaped at the point o
 
 test("the card score ring escapes the score it prints, in the label and the text", () => {
   const app = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
-  const ring = app.match(/const score = family \? `[^`]*score-ring[^`]*`/);
+  const ring = app.match(/const score = showScore \? `[^`]*score-ring[^`]*`/);
   assert.ok(ring, "could not find the card score ring in web/app.js");
   const raw = (ring[0].match(/\$\{(?!escapeHTML)/g) || []).length;
   assert.equal(raw, 0, `the score ring interpolates ${raw} value(s) unescaped: ${ring[0]}`);
