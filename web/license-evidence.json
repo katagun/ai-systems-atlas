@@ -3867,6 +3867,66 @@
           "immutable_url": "https://api.github.com/repos/agentuniverse-ai/agentUniverse/git/blobs/078d1868c1cf8ba6f4be572fd95bf04ed752ac2c"
         }
       ]
+    },
+    {
+      "project_id": "munder-difflin",
+      "repo": "chaitanyagiri/munder-difflin",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Source code of the desktop application; the root LICENSE-ASSETS file carves out the bundled LimeZu pixel-art tilesets and maps under src/renderer/src/assets, which carry their own separate licence",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/chaitanyagiri/munder-difflin/blob/4321e934820b8fb344fa0179fe681e49138273b0/LICENSE",
+          "blob_sha": "69073fc3d4afe3a681f675e3543b534b608f37e3",
+          "immutable_url": "https://api.github.com/repos/chaitanyagiri/munder-difflin/git/blobs/69073fc3d4afe3a681f675e3543b534b608f37e3"
+        }
+      ]
+    },
+    {
+      "project_id": "fastclaw",
+      "repo": "fastclaw-ai/fastclaw",
+      "items": [
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Whole repository under the FastClaw Community License, Apache 2.0 with added conditions on multi-tenant service operation, interface branding, contributions, and trademarks; the bundled skill-creator folders carry a separate Apache-2.0 file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/fastclaw-ai/fastclaw/blob/f401889555c264d8e3506a2887af5268e4f22d9d/LICENSE",
+          "blob_sha": "f8f244d2339f937c35d04ea2ab4bc0d74d678be3",
+          "immutable_url": "https://api.github.com/repos/fastclaw-ai/fastclaw/git/blobs/f8f244d2339f937c35d04ea2ab4bc0d74d678be3"
+        }
+      ]
+    },
+    {
+      "project_id": "metagpt",
+      "repo": "FoundationAgents/MetaGPT",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository and the metagpt Python package declared in setup.py, except the vendored mineflayer-collectblock folder under metagpt/environment/minecraft, which has its own licence file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/FoundationAgents/MetaGPT/blob/11cdf466d042aece04fc6cfd13b28e1a70341b1f/LICENSE",
+          "blob_sha": "00d36a832e74e0a131ed5e698896206cb3724323",
+          "immutable_url": "https://api.github.com/repos/FoundationAgents/MetaGPT/git/blobs/00d36a832e74e0a131ed5e698896206cb3724323"
+        }
+      ]
+    },
+    {
+      "project_id": "phantom",
+      "repo": "ghostwright/phantom",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository, including the Bun runtime in src, the chat-ui frontend, and the bundled skills and role definitions; the separately licensed Claude Agent SDK dependency is not covered",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/ghostwright/phantom/blob/f8c7ab42d885936ee54abc785528000260f4acc5/LICENSE",
+          "blob_sha": "96074f698816b4b073b365d2d56b83f3afddb70f",
+          "immutable_url": "https://api.github.com/repos/ghostwright/phantom/git/blobs/96074f698816b4b073b365d2d56b83f3afddb70f"
+        }
+      ]
     }
   ],
   "generated_at": "2026-10-06"

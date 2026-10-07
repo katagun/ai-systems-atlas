@@ -168,72 +168,6 @@
       }
     },
     {
-      "repo": "chaitanyagiri/munder-difflin",
-      "name": "munder-difflin",
-      "url": "https://github.com/chaitanyagiri/munder-difflin",
-      "description": "A local multi-agent harness that works with your existing Claude Code, Codex subscriptions, allows you to run an office of agents",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 7007,
-      "topics": [
-        "agent-orchestration",
-        "agents",
-        "ai-agents",
-        "autonomous-agents",
-        "claude-code",
-        "codex",
-        "desktop-app",
-        "electron",
-        "free",
-        "gemini-cli",
-        "harness",
-        "harness-engineering",
-        "local-first",
-        "memory",
-        "multi-agent",
-        "opencode",
-        "orchestration",
-        "typescript"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE is an \"MIT License\" with \"Copyright (c) 2026 Chaitanya Giri\" (the bundled pixel art is carved out under a separate LimeZu asset licence). The README says \"Munder Difflin is a desktop app that wraps\" real terminal-agent CLIs, wiring them into a coordinated hive with per-agent memory, mailboxes, a shared blackboard, an orchestrator that routes and escalates, per-agent git worktrees, budgets, and a circuit breaker. It supervises and runs other vendors' CLIs (Claude Code, Codex, Grok, Gemini and more) rather than being run by one. The bundle reports no cross-collection hits. Boundary question: whether a desktop harness that hosts and orchestrates other vendors' agent CLIs is one recordable operational system or reducible to the CLIs it wraps; published records that host other agents show this does not fail inclusion, so the inclusion gate is what review turns on.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/chaitanyagiri/munder-difflin/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "3fe5c1c9c922a77cd084e7671223589606b1f926c15e2751fc602b8dc6fc0181",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "69073fc3d4afe3a681f675e3543b534b608f37e3",
-            "immutable_url": "https://api.github.com/repos/chaitanyagiri/munder-difflin/git/blobs/69073fc3d4afe3a681f675e3543b534b608f37e3"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/chaitanyagiri/munder-difflin/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "f2db4ebd0f287f8eaf10662dc0b16f7f88f7b84d3509636037f673b270e116ff",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "a717a50dbfb0172136e664b6284587d647111b72",
-            "immutable_url": "https://api.github.com/repos/chaitanyagiri/munder-difflin/git/blobs/a717a50dbfb0172136e664b6284587d647111b72"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "codefuse-ai/codefuse-chatbot",
       "name": "codefuse-chatbot",
       "url": "https://github.com/codefuse-ai/codefuse-chatbot",
@@ -265,9 +199,9 @@
         "editorial_score"
       ],
       "triage": {
-        "verdict": "review_ready",
+        "verdict": "held",
         "rule": "docs/CURATION.md inclusion gate",
-        "finding": "GitHub detected NOASSERTION, but a LICENSE.md was fetched: it opens \"Copyright [2023] [Ant Group]\" and \"Licensed under the Apache License, Version 2.0 (the \"License\");\", so licence evidence exists and the detector mismatch is a review trigger, not a missing licence. The README (Chinese) describes an \"开源AI智能助手\" that aims \"构建软件开发全生命周期的AI智能助手\", built with a multi-agent scheduling core, a DevOps toolkit, repository-level code analysis, RAG over docs and code, and a sandbox for executing code. The bundle reports no cross-collection hits. Boundary question: whether the recordable operational product is this end-to-end DevOps assistant or the underlying reusable muAgent framework it ships, and how to classify the mixed Ant Group Apache header; both are questions for human review under the inclusion gate rather than a policy question that blocks the record.",
+        "finding": "Human review re-fetched the pinned documents and the tree. The LICENSE.md file opens with the notice \"Copyright [2023] [Ant Group]\" and \"Licensed under the Apache License, Version 2.0\". The GitHub repository description reads \"An intelligent assistant serving the entire software development lifecycle, powered by a Multi-Agent Framework\", and the Chinese-language update list in the README records, under 2024.01.29, a configurable multi-agent framework opened as the separate package codefuse-muAgent. The repository's requirements.txt lists codefuse-muagent, and examples/api.py and examples/llm_api.py import from the muagent package, so the agent scheduling code is not in this tree. The last commit is dated 2024-07-01. The remaining tree is a web UI, a start script, example phase scripts, a crawler and model-worker adapters. Boundary question: is this application, whose agent engine is an external dependency, an operational system in its own right, or a front end for a package the catalog has not reviewed?",
         "evidence": [
           {
             "label": "LICENSE",
@@ -288,8 +222,9 @@
             "immutable_url": "https://api.github.com/repos/codefuse-ai/codefuse-chatbot/git/blobs/e47cc5e9096e064cee34b8c89ed8f775adb28c99"
           }
         ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
+        "proposed_at": "2026-10-06",
+        "proposer": "human",
+        "held_by": "Held after human review on 2026-10-06 until the operational boundary is settled: the multi-agent engine this repository's README advertises lives in the separate codefuse-muagent package, which the repository imports and does not contain and which is not in any Atlas collection. Reopen when either that package is queued and reviewed as the system this app wraps, or this repository shows commits after 2024-07-01. BACKLOG.md \"Now\" item 1 is the batch that carried it."
       }
     },
     {
@@ -449,112 +384,6 @@
       }
     },
     {
-      "repo": "fastclaw-ai/fastclaw",
-      "name": "fastclaw",
-      "url": "https://github.com/fastclaw-ai/fastclaw",
-      "description": "Multi-Agent Framework",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "NOASSERTION",
-      "stars": 1340,
-      "topics": [
-        "agent-factory",
-        "agent-runtime",
-        "fastclaw",
-        "multi-agent",
-        "openclaw-alternative"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "GitHub reports NOASSERTION. The LICENSE is the \"FastClaw Community License Agreement\", which states \"FastClaw is licensed under the FastClaw Community License, based on\" Apache 2.0 with added conditions. It requires a commercial licence to use the \"source code to operate a multi-tenant service where\" FastClaw is sold as a service to third parties. It bars removing frontend branding, and says \"ThinkAny, LLC may adjust the open-source agreement to be more\" strict or relaxed. The README calls the project \"A lightweight AI Agent runtime written in Go.\" and says \"it creates, manages, and runs AI agents\". It adds that \"FastClaw handles the LLM communication, tool execution, sandbox isolation, and session management.\" The README documents built-in exec, file and web tools, Docker or E2B sandboxes, per-agent memory files, Telegram, Discord and Slack channels, a cron scheduler, an admin dashboard and an OpenAI-compatible API. Its storage table assigns user accounts and billing to a downstream application, naming ChatClaw. The bundle reports no cross-collection hits, and no published record by this name was found. Boundary question: is the record the self-hosted runtime and dashboard alone, or also the downstream applications the README positions it as a backend for?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/fastclaw-ai/fastclaw/blob/dev/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "6cfb4b1890e2036691e4711e16405fa3d6309575c785c0bc84c29e4f81bfc1f0",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "f8f244d2339f937c35d04ea2ab4bc0d74d678be3",
-            "immutable_url": "https://api.github.com/repos/fastclaw-ai/fastclaw/git/blobs/f8f244d2339f937c35d04ea2ab4bc0d74d678be3"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/fastclaw-ai/fastclaw/blob/dev/README.md",
-            "kind": "git_blob",
-            "content_sha256": "57c90badad59f87dd6f168ecd88eeb85da6b7264257e4cb1020dcefdd268e05b",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "da854be7f5c27d4eaff4be81fc7d6eee3a20facf",
-            "immutable_url": "https://api.github.com/repos/fastclaw-ai/fastclaw/git/blobs/da854be7f5c27d4eaff4be81fc7d6eee3a20facf"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "FoundationAgents/MetaGPT",
-      "name": "MetaGPT",
-      "url": "https://github.com/FoundationAgents/MetaGPT",
-      "description": "🌟 The Multi-Agent Framework: First AI Software Company, Towards Natural Language Programming",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 70347,
-      "topics": [
-        "agent",
-        "gpt",
-        "llm",
-        "metagpt",
-        "multi-agent"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE is \"The MIT License\" (\"Copyright (c) 2024 Chenglin Wu\"). The README's tagline is \"Assign different roles to GPTs to form a collaborative entity for complex tasks.\" It says MetaGPT takes a one-line requirement and outputs user stories, requirements, designs and code, and that \"It provides the entire process of a\" software company through orchestrated SOPs: \"We materialize SOP and apply it to teams composed of LLMs.\" It installs from PyPI and runs from a CLI, where one example says \"this will create a repo in ./workspace\". It also works as a library, including a Data Interpreter role. The README's news section, last dated March 2025, announces a hosted product: \"Today we are officially launching our natural language programming product\" MGX. It also points to research code for papers under examples. The bundle reports no cross-collection hits, and no published record for MetaGPT or MGX was found. Boundary question: is the record the open-source framework and CLI alone, or also the hosted MGX product the README announces?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/FoundationAgents/MetaGPT/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "74945da6216c3f6498159a55cd25c0564acc684b791c169f869117a095808b00",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "00d36a832e74e0a131ed5e698896206cb3724323",
-            "immutable_url": "https://api.github.com/repos/FoundationAgents/MetaGPT/git/blobs/00d36a832e74e0a131ed5e698896206cb3724323"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/FoundationAgents/MetaGPT/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "c3fc0ecd674161a7f5fe858d738ba5f02e2048d68190cefc45f5149f40daa962",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "080c02cd99015ca01f5db2c1063473fc22939bec",
-            "immutable_url": "https://api.github.com/repos/FoundationAgents/MetaGPT/git/blobs/080c02cd99015ca01f5db2c1063473fc22939bec"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "getnao/sylph",
       "name": "Sylph",
       "url": "https://github.com/getnao/sylph",
@@ -595,66 +424,6 @@
           }
         ],
         "proposed_at": "2026-09-12",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "ghostwright/phantom",
-      "name": "phantom",
-      "url": "https://github.com/ghostwright/phantom",
-      "description": "An AI co-worker with its own computer. Self-evolving, persistent memory, MCP server, secure credential collection, email identity. Built on the Claude Agent SDK.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 1469,
-      "topics": [
-        "ai-agents",
-        "ai-coworker",
-        "anthropic",
-        "autonomous-agents",
-        "bun",
-        "claude",
-        "docker",
-        "llm",
-        "mcp",
-        "self-evolution",
-        "slack",
-        "typescript"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE is the Apache License, Version 2.0 (\"Copyright 2026 Ghostwright\"). The README calls Phantom \"An AI co-worker with its own computer.\" It says \"It is a co-worker that runs on Slack, has a web chat interface at\" a chat path, and that it has its own email address, persistent vector memory, runtime-created MCP tools and self-evolution: \"The agent rewrites its own config after every session, validated by LLM judges.\" It runs self-hosted through Docker Compose with Qdrant and Ollama. The README warns that this mounts the host Docker socket. A managed tier is also offered: \"Get a Phantom on a dedicated VM with nothing to install.\" Its showcase stories are vendor-reported (\"These are not mockups. They happened on production Phantom instances.\"). The repository description says it is built on the Claude Agent SDK, a separately published record with a different operational outcome, so this is not a duplicate of it. The bundle reports no cross-collection hits. Boundary question: is the record the self-hosted Apache-2.0 deployment alone, or also the managed Phantom that Ghostwright hosts?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/ghostwright/phantom/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "39fa0b562e5d649c80253d11c6582616d3937489b888c425f15fcf0e7003fce3",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "96074f698816b4b073b365d2d56b83f3afddb70f",
-            "immutable_url": "https://api.github.com/repos/ghostwright/phantom/git/blobs/96074f698816b4b073b365d2d56b83f3afddb70f"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/ghostwright/phantom/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "ddb3e448b948bb21abba36c42c07ff7de72c96c7f0b7e9a5134966b429489f77",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "3eacb3560e66fc64c7d91be8c34738d31cbab3ee",
-            "immutable_url": "https://api.github.com/repos/ghostwright/phantom/git/blobs/3eacb3560e66fc64c7d91be8c34738d31cbab3ee"
-          }
-        ],
-        "proposed_at": "2026-09-15",
         "proposer": "candidate-triage"
       }
     },
