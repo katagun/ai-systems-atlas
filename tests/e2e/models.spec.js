@@ -39,8 +39,14 @@ test("Models exposes every source record and keeps Atlas reviews distinct", asyn
   );
   await page.locator("#model-pager [data-pager-next]").click();
   await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(
-    imageNames.slice(96),
+    imageNames.slice(96, 192),
   );
+  if (imageNames.length > 192) {
+    await page.locator("#model-pager [data-pager-next]").click();
+    await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(
+      imageNames.slice(192),
+    );
+  }
 
   await clearFilters(page, "models");
   await setFilter(page, "models", "distribution", "developer_api");
