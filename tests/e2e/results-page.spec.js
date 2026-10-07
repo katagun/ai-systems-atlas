@@ -837,3 +837,18 @@ test("on a phone Clear search stays one line beside the count in All and Models"
     expect(control.x, `${collection}: Clear sits beside the count`).toBeGreaterThanOrEqual(counted.x + counted.width);
   }
 });
+
+// Models' Lab group lists only the labs that join a model (ruling R-T3-7), so
+// at the defaults no lab counts 0, and a robot maker that joins no model is
+// not offered (review N4).
+test("Models' Lab group offers only labs that join a model", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=models");
+  const group = page.locator('#filter-rail [data-filter-group="lab"]');
+  await group.getByRole("button", { name: /^Show all \d+$/ }).click();
+  const counts = await group.locator('.filter-option:has(input:not([value=""])) .filter-count').allTextContents();
+  expect(counts.length).toBeGreaterThan(8);
+  expect(counts.filter(count => Number(count) === 0), "no lab counts 0").toEqual([]);
+  expect(await page.evaluate(() => state.labs.some(lab => lab.name === "Unitree Robotics")), "Unitree Robotics is a lab").toBe(true);
+  await expect(group.locator(".filter-option").filter({ hasText: /^Unitree Robotics/ })).toHaveCount(0);
+});
