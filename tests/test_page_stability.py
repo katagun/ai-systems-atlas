@@ -65,3 +65,13 @@ class PageStabilityTests(unittest.TestCase):
         code, out = self.run_main([None])
         self.assertEqual(2, code)
         self.assertIn("no body returned", out)
+
+    def test_an_empty_normalised_body_is_a_fetch_failure_not_stable(self) -> None:
+        # Two empty pages hash identically (sha256 of ""), which reads as stable.
+        # A script-only shell or a blocked response holds no visible text to pin.
+        code, out = self.run_main(
+            [b"<html><body><script>app()</script></body></html>"] * 2
+        )
+        self.assertEqual(2, code)
+        self.assertIn("no visible text", out)
+        self.assertNotIn("stable: citable", out)
