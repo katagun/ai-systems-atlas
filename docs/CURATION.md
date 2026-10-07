@@ -125,4 +125,4 @@ Automated system discovery writes durable candidates with proposed family and ro
 
 Automated attention-source discovery writes durable signals with provenance only — never a proposed family, role, or confidence — and a signal is never a candidate; promotion follows the review workflow above. See [ADR 028](adr/028-attention-sources-are-pointers-not-claims.md).
 
-See `docs/OPERATIONS.md` for candidate promotion and license-review resolution runbooks. See [ADR 007](adr/007-licenses-are-classification-not-inclusion.md) for the inclusion decision.
+See `docs/RUNBOOKS.md` for candidate promotion and license-review resolution runbooks. See [ADR 007](adr/007-licenses-are-classification-not-inclusion.md) for the inclusion decision.
