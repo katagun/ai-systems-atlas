@@ -249,7 +249,6 @@ SEARCH_FIELDS = {
         "repo",
         "description",
         "installs",
-        "not_a_system",
     ),
     "labs": (
         "id",

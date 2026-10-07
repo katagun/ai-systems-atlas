@@ -359,7 +359,7 @@
   // score order that does not exist.
   const PACK_VIEW = {
     kind: "pack",
-    searchFields: ["id", "name", "short_name", "steward", "repo", "description"],
+    searchFields: ["id", "name", "short_name", "steward", "repo", "description", "installs"],
     facets: {
       type: "pack_type",
       host: "hosts",
