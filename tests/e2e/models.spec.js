@@ -39,8 +39,14 @@ test("Models exposes every source record and keeps Atlas reviews distinct", asyn
   );
   await page.locator("#model-pager [data-pager-next]").click();
   await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(
-    imageNames.slice(96),
+    imageNames.slice(96, 192),
   );
+  if (imageNames.length > 192) {
+    await page.locator("#model-pager [data-pager-next]").click();
+    await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(
+      imageNames.slice(192),
+    );
+  }
 
   await clearFilters(page, "models");
   await setFilter(page, "models", "distribution", "developer_api");
@@ -138,6 +144,12 @@ test("a reviewed model models.dev does not list yet says so and never prints nul
       ? { ...model, source_id: null, source_metadata: { ...model.source_metadata, links: [], weights: [] } }
       : model);
     await route.fulfill({ response, json: { ...payload, unlisted_reviewed_count: 1, models } });
+  });
+  // The full models.dev block, links included, arrives with the record's detail.
+  await page.route(`**/app/detail/model/${QWEN}.json*`, async route => {
+    const response = await route.fetch();
+    const detail = await response.json();
+    await route.fulfill({ response, json: { ...detail, source_metadata: { ...detail.source_metadata, links: [], weights: [] } } });
   });
   await page.goto("/?collection=models");
 
