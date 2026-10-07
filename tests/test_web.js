@@ -2009,12 +2009,14 @@ test("the All intro promises scores only where a collection has them", () => {
 
 // The count in the headline arrives with the boot payloads (renderStats), so the
 // markup the page ships must read as a sentence without it. The line above the
-// headline names the kinds and carries no number, so the count is shown once.
+// headline names the kinds and carries no number, so the count is shown once. The
+// headline's markup is compared whole, not stripped of its tags: the element
+// renderStats fills holds "The" until the count arrives.
 test("the front door's headline reads without its count and the kicker above it holds no number", () => {
   const html = indexHTML();
   const heading = html.match(/<h1 id="directory-title"[^>]*>([\s\S]*?)<\/h1>/);
   assert.ok(heading, "index.html has the Directory heading");
-  assert.equal(heading[1].replace(/<[^>]*>/g, "").replace(/\s+/g, " ").trim(), "The elements of AI");
+  assert.equal(heading[1], '<bdi id="directory-count">The</bdi> elements of <span>AI</span>');
   const kicker = html.match(/<p[^>]*id="hero-kicker"[^>]*>([\s\S]*?)<\/p>/);
   assert.ok(kicker, "index.html has the hero kicker");
   assert.doesNotMatch(kicker[1], /\d/);
