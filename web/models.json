@@ -4452,7 +4452,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "We therefore treat Claude Mythos 5 as having CB-1 capabilities and apply commensurate protections: real-time classifier guards, access controls for guard exemptions, a bug bounty program and threat intelligence, rapid-response options for jailbreaks, and security controls against model weight theft.",
+          "url": "https://www.anthropic.com/claude-fable-5-mythos-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-mythos-5-1",
@@ -4554,7 +4571,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-20",
-      "verified_at": "2026-09-20"
+      "verified_at": "2026-09-20",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "We apply the same CB-1 designation and safeguards to Mythos 5.1 as we applied to Mythos 5. We emphasize that although we have not applied the CB-2 designation to either Mythos 5 or Mythos 5.1, we have conservatively expanded the safeguards applied to these models relative to those we applied to weaker models, including Opus 5.",
+          "url": "https://www.anthropic.com/claude-fable-5-1-mythos-5-1-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-opus-4-5-20251101",
@@ -4772,7 +4806,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "AI R&D-4",
+          "domains": [
+            "autonomy"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "As a result, while we do not believe Claude Opus 4.6 meets the threshold for ASL-4 autonomy safeguards, we find ourselves in a gray zone where clean rule-out is difficult and the margin to the threshold is unclear. We expect with high probability that models in the near future could cross this threshold. Given this uncertainty, we have taken a cautious approach, similarly to how we approached the ASL-3 CBRN threshold for Claude Opus 4, and have chosen to prepare and publish a Sabotage Risk Report for Claude Opus 4.6, consistent with the RSP’s commitment to developing an affirmative case addressing misalignment risks for the AI R&D-4 threshold.",
+          "url": "https://www.anthropic.com/claude-opus-4-6-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-opus-4-7",
@@ -4984,7 +5035,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "Non-novel chemical and biological weapons (CB-1): We believe it is hard to be confident whether a model passes this threshold, but (as with previous recent models) our results are consistent with Opus 4.8 providing significant uplift to individuals or groups with basic technical backgrounds for this threat model.",
+          "url": "https://www.anthropic.com/claude-opus-4-8-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-opus-5",
@@ -5111,7 +5179,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "It is difficult to say with full confidence whether a model passes this threshold. However, Claude Opus 5 is broadly more capable than previous models like Sonnet 4.6 which we have conservatively treated as having CB-1 capabilities. As with earlier models we have conservatively treated as having CB-1 capabilities, we apply commensurate protections: real-time classifier guards, access controls for guard exemptions, a bug bounty program and threat intelligence, rapid-response options for jailbreaks, and security controls against model weight theft.",
+          "url": "https://www.anthropic.com/claude-opus-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-opus-5-5",
@@ -5208,7 +5293,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "verified_at": "2026-09-22",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "On chemical and biological risks, we treat Opus 5.5 as having CB-1 capabilities (relating to the synthesis of non-novel weapons) but not CB-2 capabilities (relating to the synthesis of novel weapons).",
+          "url": "https://www.anthropic.com/claude-opus-5-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-sonnet-4-5",
@@ -5541,7 +5643,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "Non-novel chemical and biological weapons (CB-1): It is hard to be confident about whether a model passes this threshold, but as with previous recent models, our results are consistent with Sonnet 5 providing significant uplift to individuals or groups with basic technical backgrounds for this threat model.",
+          "url": "https://www.anthropic.com/claude-sonnet-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-sonnet-5-5",
@@ -5668,7 +5787,25 @@
         }
       ],
       "metadata_verified_at": "2026-09-30",
-      "verified_at": "2026-09-30"
+      "verified_at": "2026-09-30",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1 and Autonomy-1",
+          "domains": [
+            "bio_chem",
+            "autonomy"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "We do treat Sonnet 5.5 as meeting our CB-1 and Autonomy-1 thresholds and apply the corresponding mitigations from our RSP.",
+          "url": "https://www.anthropic.com/claude-sonnet-5-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-apodex-apodex-1-1-mini",

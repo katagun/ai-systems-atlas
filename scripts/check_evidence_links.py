@@ -100,6 +100,10 @@ class FetchFailure(Exception):
         self.status = status
 
 
+class OversizeBody(FetchFailure):
+    """A monitored page larger than MAX_TERMS_BYTES: reachable, but never hashed."""
+
+
 @dataclass
 class CheckSummary:
     total: int = 0
@@ -866,7 +870,7 @@ def fetch_target(
                     if target.monitor_terms:
                         body = response.read(MAX_TERMS_BYTES + 1)
                         if len(body) > MAX_TERMS_BYTES:
-                            raise FetchFailure(
+                            raise OversizeBody(
                                 f"terms response exceeds {MAX_TERMS_BYTES} bytes"
                             )
                     elif method == "GET":
@@ -1596,7 +1600,12 @@ def pin_hash(url: str, fetch: Callable[[LinkTarget], FetchResult]) -> str | None
     )
     hashes: set[str] = set()
     for _ in range(2):
-        response = fetch(target)
+        try:
+            response = fetch(target)
+        except OversizeBody:
+            # A page too large to hash, such as a long system-card PDF, is still
+            # a page: the flag cites it as unpinnable and it stays link-checked.
+            return None
         content = terms_content(
             response.body or b"", response.headers.get("content-type", ""), url
         )
@@ -1617,7 +1626,7 @@ def _run_pin(url: str) -> int:
         print(f"content_sha256: {pinned}")
     else:
         print(
-            "unpinnable: the page changed between two fetches or has no readable text; "
+            "unpinnable: the page changed between two fetches, has no readable text, or is too large to hash; "
             'a statement_found flag cites it with "unpinnable": true, and a '
             "no_statement_found flag must cite a page that pins"
         )
