@@ -662,7 +662,7 @@
         "limxdynamics.com",
         "github.com/limxdynamics"
       ],
-      "description": "LimX Dynamics' two-legged robot, which its own pages call \"The First Multi-Modal Biped Robot\", sold in Standard and EDU editions with a foot end that switches between point-foot, sole and wheeled modes. It has no torso or arms in the base product, so the record files it under other. LimX names no learned model for it; its repositories document training reinforcement-learning locomotion policies for the TRON1, deploying ONNX policies to it, and driving it from an LLM voice agent.",
+      "description": "LimX Dynamics' two-legged robot, which its own pages call \"The First Multi-Modal Biped Robot\", sold in Standard and EDU editions with a foot end that switches between point-foot, sole and wheeled modes. It has no torso or arms in its base configuration. LimX names no learned model for it; its repositories document training reinforcement-learning locomotion policies for the TRON1, deploying ONNX policies to it, and driving it from an LLM voice agent.",
       "variants": "TRON 1 Std. Ed. and TRON 1 EDU Ed. on the specification page, each with point-foot, sole and wheeled foot ends. Arm, sensor and voice-interaction expansion kits are sold separately. LimX sells TRON 2, Oli and Luna as separate products, which this record does not cover.",
       "form_factor": "other",
       "availability": "enterprise_sales",
@@ -857,7 +857,7 @@
         "pollen-robotics.com",
         "github.com/pollen-robotics"
       ],
-      "description": "Pollen Robotics' desktop robot with a movable head, two antennas and a rotating body, sold as a kit in Wireless and Lite versions. It has no arms, legs or base, so the record files it under other. Pollen names no learned model for the robot itself; its documentation says it \"is designed for AI Builders\" and documents an SDK, a REST and WebSocket API, and a reference conversation app in which an LLM calls tools that move the robot.",
+      "description": "Pollen Robotics' desktop robot with a movable head, two antennas and a rotating body, sold as a kit in Wireless and Lite versions. It has no arms, legs or wheeled base. Pollen names no learned model for the robot itself; its documentation says it \"is designed for AI Builders\" and documents an SDK, a REST and WebSocket API, and a reference conversation app in which an LLM calls tools that move the robot.",
       "variants": "Reachy Mini Wireless, which carries its own computer and battery, and Reachy Mini Lite, which runs from the buyer's Mac, PC or Linux machine. Pollen sells Reachy 2 separately, which this record does not cover.",
       "form_factor": "other",
       "availability": "orderable",
