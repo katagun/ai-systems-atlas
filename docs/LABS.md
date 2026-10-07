@@ -4,7 +4,7 @@ Use this guide for the organizations that develop the catalog's reviewed model r
 
 ## Inclusion gate
 
-Every lab states why it is in the collection, in a required `admission_basis` field. The three bases are in the `lab_admission_bases` group. [ADR 044](adr/044-a-lab-may-be-recorded-on-its-own-published-statement-of-frontier-intent.md) added the second and [ADR 048](adr/048-a-research-group-may-be-admitted-on-a-system-it-developed.md) the third, and both amend ADR 041's gate rather than replace it.
+Every lab states why it is in the collection, in a required `admission_basis` field. The four bases are in the `lab_admission_bases` group. [ADR 044](adr/044-a-lab-may-be-recorded-on-its-own-published-statement-of-frontier-intent.md) added the second, [ADR 048](adr/048-a-research-group-may-be-admitted-on-a-system-it-developed.md) the third, and [ADR 053](adr/053-a-robots-maker-joins-labs-on-the-robot-it-makes.md) the fourth, and all three amend ADR 041's gate rather than replace it.
 
 `reviewed_release` is the original gate: one of the lab's `catalog_names` must equal the `developer` of a record in `models.json`, and validation refuses a lab that fails this. Review the release first under [`MODELS.md`](MODELS.md), then record its developer.
 
