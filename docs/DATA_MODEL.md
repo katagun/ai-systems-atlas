@@ -138,7 +138,7 @@ OpenRouter model leads are regenerated wholesale by `scripts/import_openrouter.p
 
 License-review records correspond one-to-one with projects whose `license_review_status` is `review_required`. Automation may add or preserve an incident, but only a human review may resolve it. Project lifecycle status does not change merely because license evidence became stale.
 
-See `OPERATIONS.md` for promotion and resolution procedures.
+See `RUNBOOKS.md` for promotion and resolution procedures.
 
 `directory/hn-signals.json` is the attention-source signal queue, rebuilt wholesale from one
 day's window by every sweep and carrying nothing forward, so it holds no durable state and

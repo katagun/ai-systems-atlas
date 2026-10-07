@@ -4,7 +4,7 @@
 launchd runs this from a dedicated worktree on `local/hn-signals`. It moves that branch
 onto `origin/main` so the sweep and the routine both run current code, sweeps, and commits
 `directory/hn-signals.json`, which `run_hn_signals.py prepare --from-ref local/hn-signals`
-then reads. Nothing here pushes. See "Attention-source sweep" in docs/OPERATIONS.md.
+then reads. Nothing here pushes. See "Attention-source sweep" in docs/RUNBOOKS.md.
 
 One property governs every line: no exit path may leave the checkout in a state the
 first guard below refuses. A refused sweep is silent and a stale queue still reads as a
