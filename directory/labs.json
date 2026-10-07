@@ -1721,7 +1721,8 @@
         "semantic-kernel",
         "autogen",
         "magentic-ui",
-        "taskweaver"
+        "taskweaver",
+        "cuawright"
       ],
       "channels": [
         {

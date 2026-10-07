@@ -1820,6 +1820,11 @@
       "kind": "proprietary"
     },
     {
+      "id": "LicenseRef-n8n-Sustainable-Use-1.0",
+      "name": "n8n Sustainable Use License 1.0",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-NVIDIA-Community-Model-2024",
       "name": "NVIDIA Community Model License",
       "kind": "restricted"
