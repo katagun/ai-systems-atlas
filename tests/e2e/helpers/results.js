@@ -36,9 +36,9 @@ const CLEAR_CONTROLS = {
 
 // Keyed by the `record=` URL's kinds.
 const RECORD_VIEWS = {
-  system: "#project-dialog", spec: "#specification-dialog", inference: "#inference-dialog",
-  runtime: "#runtime-dialog", pack: "#pack-dialog", robot: "#robot-dialog",
-  model: "#model-dialog", lab: "#lab-dialog",
+  system: "#record-dialog", spec: "#record-dialog", inference: "#record-dialog",
+  runtime: "#record-dialog", pack: "#record-dialog", robot: "#record-dialog",
+  model: "#record-dialog", lab: "#record-dialog",
 };
 
 function searchBox(page, scope) {

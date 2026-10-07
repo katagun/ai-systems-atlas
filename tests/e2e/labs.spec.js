@@ -163,7 +163,7 @@ test("a model dialog links to the lab that developed the release", async ({ page
 
   await recordView(page, "model").locator('[data-open-lab="lab-deepseek"]').click();
   await expect(recordHeading(page, "lab")).toHaveText("DeepSeek");
-  await expect(recordView(page, "model")).toBeHidden();
+  await expect(recordView(page, "lab")).toBeVisible();
   await expect(page).toHaveURL(/record=lab(%3A|:)lab-deepseek/);
 });
 

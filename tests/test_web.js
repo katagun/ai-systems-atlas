@@ -493,6 +493,24 @@ test("the release sort orders reviewed and imported rows newest first, undated l
   assert.deepEqual(filterModels(dated, { sort: "release", type: "language_model" }).map(item => item.name), ["Qwen"]);
 });
 
+test("reviewed=1 keeps Atlas-reviewed models, and review date orders systems newest first", () => {
+  const reviewed = models.map(model => ({ ...model, review_status: "reviewed" }));
+  assert.deepEqual(
+    filterModels([...reviewed, importedModel], { reviewed: "1" }).map(item => item.name).sort(),
+    ["Qwen", "Vision Model"],
+  );
+  const dated = [
+    { name: "Older", score: { overall: 9 } },
+    { name: "Undated", score: { overall: 1 } },
+    { name: "Newer", score: { overall: 2 } },
+  ];
+  const dates = { Older: "2024-01-01", Newer: "2026-05-01" };
+  assert.deepEqual(
+    filterAndSortProjects(dated, { term: "", sort: "reviewed", reviewDate: project => dates[project.name] || "" }).map(item => item.name),
+    ["Newer", "Older", "Undated"],
+  );
+});
+
 test("a reviewed model without a models.dev row never prints null", () => {
   const unlisted = { ...models[0], source_id: null };
   assert.equal(modelSourceLabel(models[0]), "alibaba/qwen");
@@ -1934,6 +1952,8 @@ test("a scope writes only the parameters that differ from their defaults, in a f
     [["q", "graph"], ["family", "memory_system"], ["sort", "name"]],
   );
   assert.deepEqual(scopeURLParams("systems", { status: "", localOnly: "1", sort: "score" }), [["status", ""], ["localOnly", "1"], ["sort", "score"]]);
+  assert.deepEqual(scopeURLParams("systems", { status: "active", sort: "name", layout: "list" }), [["layout", "list"]]);
+  assert.deepEqual(scopeURLParams("models", { sort: "score", reviewed: "1", layout: "cards" }), [["reviewed", "1"]]);
   assert.deepEqual(scopeURLParams("inference", { type: "direct_model_api", sort: "score" }), [["type", "direct_model_api"]]);
   assert.deepEqual(scopeURLParams("nowhere", { q: "x" }), []);
 });
@@ -2639,7 +2659,7 @@ const DIRECT_SINKS = [
   "current_version",
 ];
 
-const SAFE_WRAPPER = /^(?:escapeHTML|detailText|detailList|detailScore|scoreCell|listCell)\(/;
+const SAFE_WRAPPER = /^(?:escapeHTML|detailText|detailList|detailScore|scoreCell|listCell|tableCell)\(/;
 
 test("a record field interpolated straight into markup is escaped at the point of use", () => {
   const app = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
@@ -2658,7 +2678,7 @@ test("a record field interpolated straight into markup is escaped at the point o
 
 test("the card score ring escapes the score it prints, in the label and the text", () => {
   const app = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
-  const ring = app.match(/const score = family \? `[^`]*score-ring[^`]*`/);
+  const ring = app.match(/const score = showScore \? `[^`]*score-ring[^`]*`/);
   assert.ok(ring, "could not find the card score ring in web/app.js");
   const raw = (ring[0].match(/\$\{(?!escapeHTML)/g) || []).length;
   assert.equal(raw, 0, `the score ring interpolates ${raw} value(s) unescaped: ${ring[0]}`);

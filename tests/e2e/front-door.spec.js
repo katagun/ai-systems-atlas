@@ -355,7 +355,7 @@ test("a focused strip entry keeps its focus while the grid repaints", async ({ p
 // results too: a switch into results from another view lands focus on it.
 test("a switch into Directory results focuses its heading", async ({ page }) => {
   await page.goto("/?collection=systems");
-  await page.locator("#systems-directory-panel [data-open-tab=taxonomy]").click();
+  await page.locator("#systems-directory-panel [data-scope-note=systems] [data-open-tab=taxonomy]").click();
   await expect(page.locator("#taxonomy")).toHaveClass(/is-active/);
   await expect(page.locator("#taxonomy-title")).toBeFocused();
   // The Catalog tab returns to the front door by design; the switch that
@@ -682,40 +682,67 @@ test("inside Systems on a phone the strip stays short and the family row fits on
   }
 });
 
-test("the catalog stage leads each face with one record and lists the rest newest first", async ({ page }) => {
+test("Models and Systems open the reviewed lists, newest first", async ({ page }) => {
   await page.goto("/");
   const elements = page.getByRole("tab", { name: "Elements" });
-  const models = page.getByRole("tab", { name: "Models" });
-  const systems = page.getByRole("tab", { name: "Systems" });
   await expect(elements).toHaveAttribute("aria-selected", "true");
   await expect(page.locator("#elements")).toBeVisible();
 
-  await models.click();
-  await expect(page.locator("#elements")).toBeHidden();
-  await expect(page.locator("#collection-index")).toBeVisible();
-  const modelName = (await page.locator("#stage-model .stage-name").textContent()).trim();
-  const modelRows = page.locator("#stage-model .stage-list-name");
-  await expect(modelRows).not.toHaveCount(0);
-  expect(await modelRows.allTextContents()).not.toContain(modelName);
-  const modelDates = await page.locator("#stage-model .stage-list time").allTextContents();
-  for (let i = 1; i < modelDates.length; i += 1) expect(modelDates[i] <= modelDates[i - 1]).toBeTruthy();
-  await page.locator("#stage-model .link-button").click();
-  await expect(page.locator("#model-dialog")).toBeVisible();
-  await page.locator("#model-dialog").getByRole("button", { name: "Close" }).click();
+  await page.getByRole("button", { name: "Models", exact: true }).click();
+  await expect(page.locator("#models-directory-panel")).toBeVisible();
+  await expect(page.locator("#front-door")).toBeHidden();
+  await expect(page).toHaveURL(/collection=models/);
+  await expect(page).toHaveURL(/reviewed=1/);
+  await expect(page).toHaveURL(/sort=release/);
+  await expect(page).toHaveURL(/layout=list/);
+  const reviews = await page.locator("#model-grid tbody tr td:nth-child(5)").allTextContents();
+  expect(reviews.length).toBeGreaterThan(0);
+  expect(reviews.every(review => review.trim() === "Atlas reviewed")).toBe(true);
+  const released = await page.locator("#model-grid tbody tr td:nth-child(4)").allTextContents();
+  let previous = null;
+  for (const value of released) {
+    const date = value.trim();
+    if (!date) {
+      previous = "";
+      continue;
+    }
+    expect(previous, "an undated release sorts last").not.toBe("");
+    if (previous) expect(date <= previous).toBe(true);
+    previous = date;
+  }
+  await page.locator("#model-grid tbody .link-button").first().click();
+  await expect(page.locator("#record-dialog")).toBeVisible();
+  await page.locator("#record-dialog").getByRole("button", { name: "Close" }).click();
+  await expect(page.locator("#record-dialog")).toBeHidden();
 
-  await systems.click();
-  await expect(page.locator("#stage-model")).toBeHidden();
-  const systemName = (await page.locator("#stage-system .stage-name").textContent()).trim();
-  const systemRows = page.locator("#stage-system .stage-list-name");
-  await expect(systemRows).not.toHaveCount(0);
-  expect(await systemRows.allTextContents()).not.toContain(systemName);
-  const systemDates = await page.locator("#stage-system .stage-list time").allTextContents();
-  for (let i = 1; i < systemDates.length; i += 1) expect(systemDates[i] <= systemDates[i - 1]).toBeTruthy();
-  await page.locator("#stage-system .stage-list button").first().click();
-  await expect(page.locator("#project-dialog")).toBeVisible();
-  await page.locator("#project-dialog").getByRole("button", { name: "Close" }).click();
-
-  await elements.click();
+  await page.goto("/");
+  await page.getByRole("button", { name: "Systems", exact: true }).click();
+  await expect(page.locator("#systems-directory-panel")).toBeVisible();
+  await expect(page).toHaveURL(/collection=systems/);
+  await expect(page).toHaveURL(/sort=reviewed/);
+  await expect(page).toHaveURL(/layout=list/);
+  const reviewed = await page.locator("#project-grid tbody tr td:nth-child(6)").allTextContents();
+  expect(reviewed.length).toBeGreaterThan(0);
+  previous = null;
+  for (const value of reviewed) {
+    const date = value.trim();
+    if (!date || date === "Not recorded") {
+      previous = "";
+      continue;
+    }
+    expect(previous, "a dated system sorts ahead of an undated one").not.toBe("");
+    if (previous) expect(date <= previous).toBe(true);
+    previous = date;
+  }
+  await page.locator("#project-grid tbody .link-button").first().click();
+  await expect(page.locator("#record-dialog")).toBeVisible();
+  await page.locator("#record-dialog").getByRole("button", { name: "Close" }).click();
+  await expect(page.locator("#record-dialog")).toBeHidden();
+  // Opening the record pushed an entry, and closing it replaces that entry,
+  // so the first Back stays on the list and the next returns to the door.
+  await page.goBack();
+  await expect(page).toHaveURL(/sort=reviewed/);
+  await page.goBack();
   await expect(page.locator("#elements")).toBeVisible();
-  await expect(page.locator("#stage-system")).toBeHidden();
+  await expect(page.locator("#front-door")).toBeVisible();
 });
