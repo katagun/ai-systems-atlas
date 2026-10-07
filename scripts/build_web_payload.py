@@ -113,9 +113,9 @@ BOOT_FIELDS = {
     # source_metadata is a nested block rather than a card field, and it is here
     # for the same reason the flat ones are: the card prints the family and the
     # modality route out of it, and the modality facet filters on
-    # source_metadata.modalities. It costs about 1.1 KB gzipped across the
-    # collection, which is cheaper than a card that cannot paint until detail
-    # lands.
+    # source_metadata.modalities. Only the MODEL_SOURCE_CARD_METADATA subset
+    # boots, for reviewed and imported rows alike; the complete block rides with
+    # the record's detail, which saved about 16 KB gzipped on 2026-10-06.
     "models": (
         "id",
         "name",
@@ -129,7 +129,6 @@ BOOT_FIELDS = {
         "score_profile",
         "source_metadata",
         "review_status",
-        "source_url",
     ),
     "packs": (
         "id",
@@ -409,15 +408,20 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
         entries = []
         for record in records:
             entry = {field: record[field] for field in boot_fields if field in record}
-            if collection == "models" and record.get("review_status") == "imported":
-                entry.pop("description", None)
+            if collection == "models":
+                # Every model row, reviewed or imported, boots with only the card
+                # metadata; the full models.dev block (capabilities, limits, links,
+                # weights) arrives with the record's detail.
                 entry["source_metadata"] = {
                     field: record["source_metadata"][field]
                     for field in MODEL_SOURCE_CARD_METADATA
                 }
+            if collection == "models" and record.get("review_status") == "imported":
+                entry.pop("description", None)
                 model_source_details[record["id"]] = {
                     "description": record["description"],
                     "source_metadata": record["source_metadata"],
+                    "source_url": record["source_url"],
                 }
             if "score" in record:
                 entry["score"] = {"overall": record["score"]["overall"]}
@@ -479,6 +483,8 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
             }
             if "score" in record:
                 detail["score"] = record["score"]
+            if collection == "models":
+                detail["source_metadata"] = record["source_metadata"]
             payloads[f"app/detail/{kind}/{record['id']}.json"] = dumps(detail)
     payloads["app/model-source-details.json"] = dumps(model_source_details)
     return payloads

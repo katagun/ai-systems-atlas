@@ -13,6 +13,7 @@ from scripts import build_web_payload
 from scripts.build_web_payload import (
     BOOT_FIELDS,
     COLLECTIONS,
+    MODEL_SOURCE_CARD_METADATA,
     SEARCH_FIELDS,
     build_payloads,
     load_catalog,
@@ -50,6 +51,17 @@ class WebPayloadTests(unittest.TestCase):
                     if field == "score":
                         self.assertIn("overall", entry["score"])
                         self.assertEqual(record["score"], detail["score"])
+                        continue
+                    # A model's source_metadata is split the same way: boot
+                    # carries the card subset, detail the complete block.
+                    if collection == "models" and field == "source_metadata":
+                        self.assertEqual(
+                            set(MODEL_SOURCE_CARD_METADATA),
+                            set(entry["source_metadata"]),
+                        )
+                        self.assertEqual(
+                            record["source_metadata"], detail["source_metadata"]
+                        )
                         continue
                     self.assertTrue(
                         (field in entry) != (field in detail),
@@ -261,6 +273,37 @@ class WebPayloadTests(unittest.TestCase):
                     "release_date",
                 },
                 set(entry["source_metadata"]),
+            )
+
+    def test_imported_model_source_url_rides_with_its_source_details(self) -> None:
+        records = {item["id"]: item for item in model_records(self.catalog)}
+        boot = json.loads(self.payloads["app/models.json"])["models"]
+        details = json.loads(self.payloads["app/model-source-details.json"])
+        for entry in boot:
+            self.assertNotIn("source_url", entry)
+            if entry["review_status"] == "imported":
+                self.assertEqual(
+                    records[entry["id"]]["source_url"],
+                    details[entry["id"]]["source_url"],
+                )
+
+    def test_reviewed_model_boot_carries_card_metadata_and_detail_the_full_block(
+        self,
+    ) -> None:
+        records = {item["id"]: item for item in model_records(self.catalog)}
+        boot = [
+            item
+            for item in json.loads(self.payloads["app/models.json"])["models"]
+            if item["review_status"] == "reviewed"
+        ]
+        self.assertTrue(boot)
+        for entry in boot:
+            self.assertEqual(
+                set(MODEL_SOURCE_CARD_METADATA), set(entry["source_metadata"])
+            )
+            detail = json.loads(self.payloads[f"app/detail/model/{entry['id']}.json"])
+            self.assertEqual(
+                records[entry["id"]]["source_metadata"], detail["source_metadata"]
             )
 
     def test_search_index_holds_lowercased_prose(self) -> None:
