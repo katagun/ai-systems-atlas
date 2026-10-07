@@ -2323,6 +2323,89 @@
       "display_order": 170
     },
     {
+      "id": "lab-prism-ml",
+      "name": "Prism ML",
+      "url": "https://prismml.com/",
+      "description": "The AI company, built on research at Caltech, that develops the Bonsai family of ternary and one-bit compressed models for on-device and single-GPU deployment and publishes their weights on Hugging Face.",
+      "lab_type": "ai_company",
+      "headquarters": "none_listed",
+      "organization_note": "Prism ML, Inc., the entity named by the terms and conditions and the privacy policy on prismml.com (both effective 18 February 2026), develops and publishes the Bonsai models and states no governing law or address: the terms resolve disputes 'in accordance with applicable law' and the privacy policy lists only an email contact, so no single headquarters is recorded. Its careers page lists all four engineering roles as 'Pasadena or San Francisco', which is recorded as research_locations rather than as a headquarters, and its home page says it builds on 'breakthrough research at Caltech' without describing a parent. The about page names Babak Hassibi as co-founder and CEO. The PrismML-Eng GitHub organization, linked from the Hugging Face organization card, holds the Bonsai-demo repository and forks of llama.cpp, MLX, and SGLang that the Bonsai weights need, and the prism-ml Hugging Face organization publishes the weights. The catalog names the lab 'Prism ML' as the model card's citation and Hugging Face organization do; the website's wordmark and page titles spell it PrismML.",
+      "catalog_names": [
+        "Prism ML"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://prismml.com/news"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/PrismML-Eng"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/prism-ml"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms and conditions, effective 18 February 2026: the Services are operated by Prism ML, Inc., disputes resolved under 'applicable law', and no address given",
+          "url": "https://prismml.com/terms",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy policy, effective 18 February 2026: Prism ML, Inc. with an email contact and no postal address",
+          "url": "https://prismml.com/privacy",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "About page: PrismML's mission of multiplying intelligence without increasing model size, and its leadership team",
+          "url": "https://prismml.com/about",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "Home page: PrismML is 'Utilizing breakthrough research at Caltech' to push intelligence density",
+          "url": "https://prismml.com/",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: four engineering roles, each in Pasadena or San Francisco",
+          "url": "https://prismml.com/careers",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "News index and the Bonsai 2 27B announcement dated 17 September 2026",
+          "url": "https://prismml.com/news",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "prism-ml Hugging Face organization card linking prismml.com and the PrismML-Eng GitHub organization",
+          "url": "https://huggingface.co/prism-ml",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "PrismML-Eng GitHub organization: Bonsai-demo and the llama.cpp, MLX, and SGLang forks the weights need",
+          "url": "https://github.com/PrismML-Eng",
+          "verified_at": "2026-10-06"
+        }
+      ],
+      "verified_at": "2026-10-06",
+      "admission_basis": "reviewed_release",
+      "display_order": 680,
+      "research_locations": [
+        "us"
+      ]
+    },
+    {
       "id": "lab-safe-superintelligence",
       "name": "Safe Superintelligence",
       "url": "https://ssi.inc/",
@@ -3210,5 +3293,5 @@
       "display_order": 140
     }
   ],
-  "updated_at": "2026-09-29"
+  "updated_at": "2026-10-06"
 }
