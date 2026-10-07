@@ -91,10 +91,16 @@ function sortControl(page, scope) {
   return page.locator(`.results-sort label[data-sort-scope="${scope}"] select`);
 }
 
-// One Clear filters serves every collection, and it shows only while
-// something is set: with nothing set there is nothing to clear.
+// One Clear control serves every collection: "Clear filters" after the
+// chips, or "Clear search" at the end of the result row while a query is the
+// only thing set (ruling R-T3-8). It shows only while something is set: with
+// nothing set there is nothing to clear.
+function clearControl(page) {
+  return page.locator("#clear-filters");
+}
+
 async function clearFilters(page) {
-  const clear = page.locator("#clear-filters");
+  const clear = clearControl(page);
   if (!await clear.isVisible()) return;
   await clear.click();
   await settled(page);
@@ -113,4 +119,4 @@ async function closeRecord(page, kind) {
   await recordView(page, kind).locator(".dialog-close").click();
 }
 
-module.exports = { clearFilters, closeRecord, expectFilter, filterControl, recordHeading, recordView, search, searchBox, setFilter, settled, sortControl };
+module.exports = { clearControl, clearFilters, closeRecord, expectFilter, filterControl, recordHeading, recordView, search, searchBox, setFilter, settled, sortControl };

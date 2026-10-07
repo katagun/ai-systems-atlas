@@ -6,7 +6,7 @@ const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { collectionEntry, familyEntry, openCollection, pressedEntry, searchAll } = require("./helpers/landing");
 const { chooseFinderGoal, finderHandoff } = require("./helpers/finder");
-const { clearFilters, closeRecord, expectFilter, recordView, search, searchBox, setFilter, settled, sortControl } = require("./helpers/results");
+const { clearControl, clearFilters, closeRecord, expectFilter, recordView, search, searchBox, setFilter, settled, sortControl } = require("./helpers/results");
 
 // A word no record holds, written into one collection's search index so a
 // test controls exactly which collection answers it.
@@ -292,6 +292,7 @@ test("a query of stop words alone leaves the rail's counts at their browsing val
   const browsing = await counts.allTextContents();
   await search(page, "me");
   await expect(counts).toHaveText(browsing);
+  await expect(clearControl(page), "a query that searches nothing has nothing to clear").toBeHidden();
 });
 
 // The Finder's chip shares the row and stays hidden outside Systems, so the
@@ -531,4 +532,48 @@ test("the phone sheet tells a screen reader the new count as the reader chooses"
   await settled(page);
   const shown = Number((await page.locator("#inference-result-count").textContent()).match(/^\d+/)[0]);
   await expect(status).toHaveText(`${shown} ${shown === 1 ? "result" : "results"}`);
+});
+
+// A query alone adds no row: "Clear search" ends the collection's result
+// row, where each collection's Clear sat before, and the chips row stays
+// shut until it holds a chip (ruling R-T3-8), so results do not jump.
+test("a query alone adds no row, and Clear search ends the result row", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=systems");
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  const row = page.locator("#systems-directory-panel .result-row");
+  const top = () => row.evaluate(element => element.getBoundingClientRect().top + window.scrollY);
+  const before = await top();
+  await search(page, "memory");
+  expect(await top(), "the result row has not moved").toBe(before);
+  await expect(clearControl(page)).toHaveText("Clear search");
+  await expect(row.getByRole("button", { name: "Clear search" })).toBeVisible();
+  await expect(page.locator("#filter-chips")).toBeHidden();
+});
+
+test("a chip takes Clear into the chips row as Clear filters, and it returns when the chip goes", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=systems");
+  await search(page, "memory");
+  const row = page.locator("#systems-directory-panel .result-row");
+  const chips = page.locator("#filter-chips");
+  await expect(row.getByRole("button", { name: "Clear search" })).toBeVisible();
+  await page.locator('#filter-rail [data-filter-group="role"] input:not([value=""]):not([disabled])').first().check();
+  await expect(chips.getByRole("button", { name: "Clear filters" })).toBeVisible();
+  await expect(row.getByRole("button", { name: /^Clear/ })).toHaveCount(0);
+  await chips.locator(".filter-chip:visible").first().click();
+  await expect(row.getByRole("button", { name: "Clear search" })).toBeVisible();
+  await expect(chips).toBeHidden();
+});
+
+// Clear resets Systems' family as well (applyDirectoryDefaults), so beside a
+// chosen family it never reads as if it cleared the query alone.
+test("in Systems a chosen family keeps the result row's Clear reading Clear filters", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=systems&family=memory_system");
+  await search(page, "memory");
+  await expect(page.locator("#systems-directory-panel .result-row").getByRole("button", { name: "Clear filters" })).toBeVisible();
+  await clearFilters(page);
+  await expectFilter(page, "systems", "family", "");
+  await expect(searchBox(page)).toHaveValue("");
 });

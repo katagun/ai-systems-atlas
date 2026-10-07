@@ -1321,8 +1321,9 @@ function syncFilterRail() {
 
 // Every non-default choice as a removable chip, then Clear filters, which
 // also clears the query (docs/WEB.md). The Finder's role set keeps its own
-// chip. The row shows while anything is set. The chips are replaced only
-// when one changes, so a repaint never takes the focus or a click from one.
+// chip. The row shows only while it holds a chip (ruling R-T3-8). The chips
+// are replaced only when one changes, so a repaint never takes the focus or
+// a click from one.
 let chipMarkup = null;
 function renderFilterChips(scope, values) {
   const chips = AppCore.FILTER_GROUPS[scope].flatMap(group => {
@@ -1340,9 +1341,18 @@ function renderFilterChips(scope, values) {
   // The Finder's role set narrows Systems alone, so its chip shows only there.
   const finder = scope === "systems" && Boolean(state.directoryRolesLabel);
   $("#finder-roles-chip").hidden = !finder;
-  const anything = chips.length > 0 || finder || currentQuery().trim() !== "";
-  $("#filter-chips").hidden = !anything;
-  $("#clear-filters").textContent = scope === "all" ? "Clear search" : "Clear filters";
+  const chipped = chips.length > 0 || finder;
+  $("#filter-chips").hidden = !chipped;
+  // Clear shows while anything is set, a chip or a query that searches. It
+  // follows the chips, or with none it ends the collection's result row, so
+  // a query alone adds no row. It reads "Clear search" while the query is
+  // all it clears; Systems' family, which it resets too, is not a chip. It
+  // moves only when its place changes, so a repaint keeps a focus on it.
+  const clear = $("#clear-filters");
+  const place = chipped ? $("#filter-chips") : $(`${RESULT_VIEWS[scope].panel} .result-row`);
+  if (clear.parentElement !== place) place.append(clear);
+  clear.hidden = !chipped && !isSearching();
+  clear.textContent = chipped || (scope === "systems" && $("#family-filter").value) ? "Clear filters" : "Clear search";
   const active = chips.length + (finder ? 1 : 0);
   $("#filters-button .filters-count").textContent = active ? String(active) : "";
 }
