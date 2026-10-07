@@ -147,6 +147,12 @@ def build_draft(candidate: dict[str, Any]) -> dict[str, Any]:
         "retrieval_modes": [],
         "capture_modes": [],
         "memory_lifecycle": [],
+        # Required, non-empty, for `agent_system` records only. The family is the
+        # reviewer's choice, so every draft carries them; empty lists pass for the
+        # other families, and the reviewer fills them or deletes them.
+        "agent_interfaces": [],
+        "execution_boundaries": [],
+        "agent_capabilities": [],
         "canonical_data": "",
         "deployment": [],
         "local_first": None,
