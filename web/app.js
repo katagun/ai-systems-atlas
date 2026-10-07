@@ -3866,10 +3866,6 @@ function writeViewURL(id) {
 function activateView(id, { focusTarget } = {}) {
   // Read before anything repaints: a repaint can detach the focused element.
   const leaving = document.activeElement?.closest?.(".view");
-  if (id === "inference-services" || id === "local-runtimes" || id === "agent-packs" || id === "robots") {
-    setDirectoryCollection(id === "inference-services" ? "inference" : id === "local-runtimes" ? "runtimes" : id === "agent-packs" ? "packs" : "robots");
-    id = "directory";
-  }
   const alias = AppCore.parseViewAlias ? AppCore.parseViewAlias(id) : null;
   if (alias) {
     setDirectoryCollection(alias, { updateURL: false });

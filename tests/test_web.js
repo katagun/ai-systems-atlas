@@ -2796,6 +2796,19 @@ test("a record that omits an optional trait list scores low instead of throwing"
   assert.equal(matchesProject({ name: "Bare", status: "active" }, { architecture: "plain_files", deployment: "local_cli" }), false);
 });
 
+test("activateView takes only view ids and collection aliases, with no callerless collection ids", () => {
+  const source = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
+  const literals = [...source.matchAll(/\bactivateView\("([^"]+)"/g)].map(match => match[1]);
+  assert.ok(literals.length > 0);
+  for (const id of new Set(literals)) {
+    assert.ok(parseViewId(id) || parseViewAlias(id), `activateView("${id}") names no view`);
+  }
+  // `inference-services`, `local-runtimes`, `agent-packs`, and `robots` once had a
+  // branch here that no caller reached and VIEW_IDS never admitted.
+  const body = source.slice(source.indexOf("function activateView("));
+  assert.doesNotMatch(body.slice(0, body.indexOf("\n}\n")), /"(inference-services|local-runtimes|agent-packs|robots)"/);
+});
+
 test("sovereignty outranks the local_first boolean on the local priorities", () => {
   // ADR 030 made local_first a data trait (where kept content lives and
   // whether the vendor keeps it), so on an execution-labelled priority the
