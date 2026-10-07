@@ -102,9 +102,9 @@ test("the Everything search box names every kind it searches", async ({ page }) 
   await page.goto("/");
   await openCollection(page, "all");
   await expect(page.locator("#all-directory-panel")).toBeVisible();
-  await expect(page.locator("#results-search")).toHaveAttribute("placeholder", hint);
+  await expect(searchBox(page)).toHaveAttribute("placeholder", hint);
   await page.goto("/?collection=all");
-  await expect(page.locator("#results-search")).toHaveAttribute("placeholder", hint);
+  await expect(searchBox(page)).toHaveAttribute("placeholder", hint);
 });
 
 test("a category link opens the scope narrowed to it", async ({ page }) => {
