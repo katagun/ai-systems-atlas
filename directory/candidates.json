@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-10-03",
+  "updated_at": "2026-10-07",
   "candidates": [
     {
       "repo": "aden-hive/hive",
@@ -723,6 +723,67 @@
         ],
         "proposed_at": "2026-09-15",
         "proposer": "candidate-triage"
+      }
+    },
+    {
+      "repo": "Future-House/paper-qa",
+      "name": "paper-qa",
+      "url": "https://github.com/Future-House/paper-qa",
+      "description": "High accuracy RAG for answering questions from scientific documents with citations",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "ai_knowledge_app",
+      "classification_confidence": 0.7,
+      "github_detected_license": "Apache-2.0",
+      "stars": 9325,
+      "topics": [
+        "ai",
+        "rag",
+        "science",
+        "search"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The root LICENSE is the Apache License, Version 2.0, and the pyproject declares the core package Apache-2.0 with `paper-qa-pypdf` as its only default reader dependency. The repository is a monorepo of four reader sub-packages (`paper-qa-pypdf`, `paper-qa-docling`, `paper-qa-nemotron`, `paper-qa-pymupdf`), each with its own LICENSE. Three are Apache-2.0; `paper-qa-pymupdf` is the GNU Affero General Public License v3 and depends on PyMuPDF. It is reached only through the opt-in `pymupdf` extra, so GitHub's repository-level Apache-2.0 detection does not describe every shipped component. The README calls it \"a package for doing high-accuracy retrieval augmented generation (RAG) on PDFs, text files, Microsoft Office documents, and source code files, with a focus on the scientific literature\". Distribution is `pip install paper-qa` plus a `pqa` CLI; the latest release is v2026.08.12 (CalVer since December 2025, which the README says removes backwards-compatibility guarantees). The default flow is paper search, gather evidence, generate answer: the `ToolSelector` agent may call the tools in any order, but the README also documents a \"fake\" agent that runs the fixed path search, gather evidence, answer, and a manual path through the `Docs` object's add and query methods that bypasses the agent entirely and \"does not impact performance\". State persists across runs: a Tantivy full-text index of the paper directory is stored under `PQA_HOME` (default `~/.pqa/`), \"all prior answers will be indexed and stored\" and searchable, and `Docs` objects pickle with their embeddings. Chunks are retrieved with dense, hybrid or sparse embeddings and then re-ranked and summarized by an LLM. Defaults send text to OpenAI (`gpt-4o-2024-11-20`, `text-embedding-3-small`) and look up metadata at Crossref, Semantic Scholar, Unpaywall and OpenAlex; any LiteLLM model works, and the README documents Ollama, llamafile and local Sentence Transformers embeddings, with a warning that models around 7B perform poorly. docs.edisonscientific.com/paperqa is a documentation mirror of this repository's README and tutorials; the page names no hosted PaperQA service, API, pricing or terms. The FutureHouse platform now redirects to Edison Scientific, whose hosted Literature agent is a separate product that the Kosmos record already declines to cover. The README itself says the maintainers' internal tool set and paper-access licences differ from this release. Boundary question: the reviewable unit is the self-hosted open-source library and CLI, scoped per component (Apache-2.0 core against the AGPL reader extra), rather than Edison's hosted agents. The classification turns on whether the iterative agent loop or the persistent document index and cited retrieval is the primary outcome, and on whether the Atlas treats a library with a CLI, not a finished end-user application, as a reviewable record.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/Future-House/paper-qa/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "a10f591e3522fbfe867cfde0b35e0594f6f43a51b013540208a1469c9e0b0f62",
+            "fetched_at": "2026-10-07",
+            "blob_sha": "7d89c6e2d7dea1388df7efe33222068cdd784f8b",
+            "immutable_url": "https://api.github.com/repos/Future-House/paper-qa/git/blobs/7d89c6e2d7dea1388df7efe33222068cdd784f8b"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/Future-House/paper-qa/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "1ebe76557cd4d5f9bbe60efa47d8702c5723e3b2a9451ddc7bbae5c086b0bfb7",
+            "fetched_at": "2026-10-07",
+            "blob_sha": "0b5639921586f03bd1f9d93445af9e0d17f37c48",
+            "immutable_url": "https://api.github.com/repos/Future-House/paper-qa/git/blobs/0b5639921586f03bd1f9d93445af9e0d17f37c48"
+          },
+          {
+            "label": "paper-qa-pymupdf LICENSE",
+            "url": "https://github.com/Future-House/paper-qa/blob/main/packages/paper-qa-pymupdf/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "57c8ff33c9c0cfc3ef00e650a1cc910d7ee479a8bc509f6c9209a7c2a11399d6",
+            "fetched_at": "2026-10-07",
+            "blob_sha": "dba13ed2ddf783ee8118c6a581dbf75305f816a3",
+            "immutable_url": "https://api.github.com/repos/Future-House/paper-qa/git/blobs/dba13ed2ddf783ee8118c6a581dbf75305f816a3"
+          }
+        ],
+        "proposed_at": "2026-10-07",
+        "proposer": "manual-review"
       }
     },
     {
