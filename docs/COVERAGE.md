@@ -94,7 +94,7 @@ The 2026-09-29 screen's leads were read against the gate in three passes. The 20
 | Agent memory service | 24 | 24 | Improved with separate open-engine and managed-service boundaries; compare ownership, lifecycle, governance, and retrieval intelligence |
 | Ambient capture | 3 | 3 | Thin; source-model diversity is missing |
 | Context graph engine | 5 | 5 | Thin |
-| Multi-agent orchestrator | 14 | 14 | Improved with four meta-harnesses that run other vendors' agent harnesses (batch 104); a surface that only owns terminals stays excluded |
+| Multi-agent orchestrator | 15 | 15 | Improved with four meta-harnesses that run other vendors' agent harnesses (batch 104); a surface that only owns terminals stays excluded |
 | Stateful agent runtime | 19 | 19 | Broad after three vendor-operated platforms joined the self-operated runtimes; compare who holds the operating contract alongside persistence and execution policy |
 | Browser/computer agent | 6 | 6 | Improved open baseline; desktop reliability and sandbox boundaries still need broader comparison |
 | Coding-agent workflow | 11 | 10 | Improved with a third-party orchestration plugin and an agent-built demonstration; compare process and delivery discipline |
