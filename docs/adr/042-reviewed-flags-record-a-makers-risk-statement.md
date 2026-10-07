@@ -1,6 +1,6 @@
 # ADR 042: Reviewed flags record a maker's own risk statement
 
-- Status: Proposed
+- Status: Accepted, 2026-10-06
 - Date: 2026-09-24
 
 ## Context

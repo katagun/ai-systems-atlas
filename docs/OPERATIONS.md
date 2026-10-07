@@ -236,8 +236,8 @@ drift-hashed with the same normalisation as terms and fail as `flag page drift r
 review` when they change. A `statement_found` entry pins its page with `content_sha256`,
 and that pin is the baseline: the first observation must match it, whenever the flag
 was reviewed, and `--establish-baselines` cannot override a mismatch, which fails as
-`flag pin mismatch`; the pin is also checked on every run, not only when the page
-changes, so a wrong pin fails while the page is unchanged. A review that changes the
+`flag pin mismatch`; the pin is also checked on every fetch of the page, not only when
+it changes, so a wrong pin fails while the page is unchanged. A review that changes the
 page's pin and advances the flag's `verified_at` accepts the new page only at the pinned
 hash. An `"unpinnable": true` entry is link-checked and never hashed; that veto applies
 to every citation of the URL, so terms-drift monitoring also stops for another record
