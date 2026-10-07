@@ -2778,6 +2778,54 @@ test("priorityBoost reads the memory and agent traits its priorities name, not a
   assert.equal(priorityBoost(agent, "control"), 3 + 2);
 });
 
+test("every field priorityBoost reads is carried by each published record it ranks", () => {
+  // One named test fails when a schema change drops a field, instead of a ranking
+  // assertion three layers down. The fields are the ones priorityBoost's memory
+  // and agent branches read; the guards in app-core.js keep a future absent field
+  // from throwing, and this pins that no published record is absent today.
+  const reads = {
+    memory_system: ["architectures", "deployment", "local_first", "human_editable", "score"],
+    agent_system: ["agent_interfaces", "execution_boundaries", "local_first", "score"],
+  };
+  const published = JSON.parse(fs.readFileSync(
+    path.join(__dirname, "..", "directory", "projects.json"), "utf8")).projects;
+  for (const [family, fields] of Object.entries(reads)) {
+    const records = published.filter(project => project.system_family === family);
+    assert.ok(records.length > 0, `no published ${family} record to pin`);
+    for (const field of fields) {
+      const missing = records.filter(project => project[field] === undefined).map(project => project.id);
+      assert.deepEqual(missing, [], `priorityBoost reads ${field} on ${family} records that omit it`);
+    }
+  }
+});
+
+test("a record that omits an optional trait list scores low instead of throwing", () => {
+  const memory = { system_family: "memory_system", score: { overall: 7 } };
+  for (const priority of ["local_editable", "local_control", "portable", "balanced"]) {
+    assert.doesNotThrow(() => priorityBoost(memory, priority), priority);
+  }
+  const agent = { system_family: "agent_system", score: { overall: 7 } };
+  for (const priority of ["direct_use", "developer", "local", "control"]) {
+    assert.doesNotThrow(() => priorityBoost(agent, priority), priority);
+  }
+  assert.equal(priorityBoost(agent, "direct_use"), 0);
+  assert.doesNotThrow(() => recommendationReasons(agent, "balanced", (_group, id) => id));
+  assert.equal(matchesProject({ name: "Bare", status: "active" }, { architecture: "plain_files", deployment: "local_cli" }), false);
+});
+
+test("activateView takes only view ids and collection aliases, with no callerless collection ids", () => {
+  const source = fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8");
+  const literals = [...source.matchAll(/\bactivateView\("([^"]+)"/g)].map(match => match[1]);
+  assert.ok(literals.length > 0);
+  for (const id of new Set(literals)) {
+    assert.ok(parseViewId(id) || parseViewAlias(id), `activateView("${id}") names no view`);
+  }
+  // `inference-services`, `local-runtimes`, `agent-packs`, and `robots` once had a
+  // branch here that no caller reached and VIEW_IDS never admitted.
+  const body = source.slice(source.indexOf("function activateView("));
+  assert.doesNotMatch(body.slice(0, body.indexOf("\n}\n")), /"(inference-services|local-runtimes|agent-packs|robots)"/);
+});
+
 test("sovereignty outranks the local_first boolean on the local priorities", () => {
   // ADR 030 made local_first a data trait (where kept content lives and
   // whether the vendor keeps it), so on an execution-labelled priority the

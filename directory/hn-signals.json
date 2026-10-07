@@ -1,1406 +1,1702 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-15T00:00:00Z",
+  "updated_at": "2026-10-07T00:00:00Z",
   "source": {
     "endpoint": "https://hn.algolia.com/api/v1/search_by_date",
-    "window_start": "2026-09-13T18:00:49Z",
-    "window_end": "2026-09-14T18:00:49Z",
+    "window_start": "2026-10-05T03:16:08Z",
+    "window_end": "2026-10-06T03:16:08Z",
     "points_floor": 25,
-    "story_count": 1047,
+    "story_count": 1061,
     "eligible_count": 60,
     "truncated": true,
     "suppressed": 0
   },
   "signals": [
     {
-      "story_id": "49695331",
-      "story_url": "https://news.ycombinator.com/item?id=49695331",
-      "title": "High-performance garbage collection for C++",
-      "url": "https://v8.dev/blog/high-performance-cpp-gc",
-      "points": 70,
-      "num_comments": 18,
-      "submitted_at": "2026-09-14T11:55:44Z",
+      "story_id": "49963895",
+      "story_url": "https://news.ycombinator.com/item?id=49963895",
+      "title": "Anthropic wants your thoughts on AI",
+      "url": "https://www.anthropic.com/research/your-thoughts-on-ai",
+      "points": 28,
+      "num_comments": 64,
+      "submitted_at": "2026-10-05T12:21:02Z",
       "page_status": "readable",
-      "content_sha256": "e770654fd44bc1ab1db87df0aa3c04c19d9bffc0e58bce93b7c6102f658ddfae",
-      "fetched_at": "2026-09-15T00:00:00Z",
+      "content_sha256": "ebe0208a29197e57df083b66fe7dbd293ced3d85365809abe8ef122414fe4c13",
+      "fetched_at": "2026-10-07T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15",
+      "discovered_at": "2026-10-07",
       "assessment": {
         "verdict": "out_of_scope",
         "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A 2020 engineering blog post about a garbage collector: \"Oilpan is a garbage collector written in C++ for managing C++ memory\". It is language runtime infrastructure, not a memory, agent, or assistant system.",
+        "finding": "A call to take part in a survey, not a shipped system: \"launching a new study using Anthropic Interviewer to learn from your experiences with AI\". It is a research study, not a memory, agent, or assistant system.",
         "evidence": [
           {
-            "label": "V8 Oilpan engineering post",
-            "url": "https://v8.dev/blog/high-performance-cpp-gc",
+            "label": "Anthropic study announcement",
+            "url": "https://www.anthropic.com/research/your-thoughts-on-ai",
             "kind": "web",
-            "content_sha256": "e770654fd44bc1ab1db87df0aa3c04c19d9bffc0e58bce93b7c6102f658ddfae",
-            "fetched_at": "2026-09-15T00:00:00Z"
+            "content_sha256": "ebe0208a29197e57df083b66fe7dbd293ced3d85365809abe8ef122414fe4c13",
+            "fetched_at": "2026-10-07T00:00:00Z"
           }
         ],
-        "proposed_at": "2026-09-15",
+        "proposed_at": "2026-10-06",
         "proposer": "hn-signals"
       }
     },
     {
-      "story_id": "49695408",
-      "story_url": "https://news.ycombinator.com/item?id=49695408",
-      "title": "Show HN: Kinesis \u2013 Control your Mac with the Meta Neural Band",
-      "url": "https://github.com/callbacked/kinesis",
-      "points": 118,
-      "num_comments": 45,
-      "submitted_at": "2026-09-14T12:01:31Z",
-      "page_status": "readable",
-      "content_sha256": "742400860906b435c3f2b831ad3c387c520ac940d63ff5b72b442509f97e34c6",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49695409",
-      "story_url": "https://news.ycombinator.com/item?id=49695409",
-      "title": "Apple's Siri AI Can Be Swapped Out for Claude, ChatGPT, Code Shows",
-      "url": "https://www.macrumors.com/2026/09/14/siri-can-be-swapped-out-for-chatgpt-claude/",
-      "points": 224,
-      "num_comments": 159,
-      "submitted_at": "2026-09-14T12:01:32Z",
-      "page_status": "readable",
-      "content_sha256": "e092775f0d1d8302c4601146474f350c5d8af1b89fb594a89adb65d03ac62ff9",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49695459",
-      "story_url": "https://news.ycombinator.com/item?id=49695459",
-      "title": "XCancel suspended \"due to a new development in the ongoing legal proceedings\"",
-      "url": "https://xcancel.com/twitter",
-      "points": 272,
+      "story_id": "49964018",
+      "story_url": "https://news.ycombinator.com/item?id=49964018",
+      "title": "The era of software quality, or the era of ostriches?",
+      "url": "https://blogs.gnome.org/mcatanzaro/2026/10/02/the-era-of-software-quality-or-the-era-of-ostriches/",
+      "points": 69,
       "num_comments": 1,
-      "submitted_at": "2026-09-14T12:05:52Z",
-      "page_status": "failed",
-      "content_sha256": null,
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "unreadable",
-        "rule": "docs/routines/hn-signals.md unreadable verdict",
-        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
-        "evidence": [],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49695519",
-      "story_url": "https://news.ycombinator.com/item?id=49695519",
-      "title": "There are only twelve 4x4 sudokus (and a cool trick for finding minimal subsets)",
-      "url": "https://baldino.dev/blog/there-are-only-twelve-4x4-sudokus/",
-      "points": 36,
-      "num_comments": 16,
-      "submitted_at": "2026-09-14T12:10:17Z",
+      "submitted_at": "2026-10-05T12:33:15Z",
       "page_status": "readable",
-      "content_sha256": "3131a9f42e6acf2a0455a8283b7e7710c200b06214f3773343fa7b00800f9fd9",
-      "fetched_at": "2026-09-15T00:00:00Z",
+      "content_sha256": "6f298d7288d0c5c163cc046477956418b532db4847a8d6235bc3631f70b62284",
+      "fetched_at": "2026-10-07T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15",
+      "discovered_at": "2026-10-07",
       "assessment": {
         "verdict": "out_of_scope",
         "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A recreational mathematics post: \"There are only twelve 4x4 sudokus!\" It is not a system.",
+        "finding": "An opinion post about secure programming in a desktop project: \"Humans are bad at writing secure code, and GNOME developers are no exception.\". No product to review.",
         "evidence": [
           {
-            "label": "4x4 sudoku post",
-            "url": "https://baldino.dev/blog/there-are-only-twelve-4x4-sudokus/",
+            "label": "GNOME software quality post",
+            "url": "https://blogs.gnome.org/mcatanzaro/2026/10/02/the-era-of-software-quality-or-the-era-of-ostriches/",
             "kind": "web",
-            "content_sha256": "3131a9f42e6acf2a0455a8283b7e7710c200b06214f3773343fa7b00800f9fd9",
-            "fetched_at": "2026-09-15T00:00:00Z"
+            "content_sha256": "6f298d7288d0c5c163cc046477956418b532db4847a8d6235bc3631f70b62284",
+            "fetched_at": "2026-10-07T00:00:00Z"
           }
         ],
-        "proposed_at": "2026-09-15",
+        "proposed_at": "2026-10-06",
         "proposer": "hn-signals"
       }
     },
     {
-      "story_id": "49695550",
-      "story_url": "https://news.ycombinator.com/item?id=49695550",
-      "title": "Musk Is Running a Fake Voter Registration Site Designed to Steal and Sell Data",
-      "url": "https://www.yahoo.com/news/politics/articles/elon-musk-running-fake-voter-130639289.html",
-      "points": 38,
-      "num_comments": 7,
-      "submitted_at": "2026-09-14T12:13:12Z",
-      "page_status": "readable",
-      "content_sha256": "63474a8581755721fbcc8d6fb4f105ef8d552b010349fcd09fcf80cbd2409406",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49695663",
-      "story_url": "https://news.ycombinator.com/item?id=49695663",
-      "title": "Unsolved Problem by Fields Medalist Breached by Two High School Students",
-      "url": "https://www.htx.com/en-in/news/internet-shocked-unsolved-problem-by-fields-medalist-breache-IBDgZG2j/",
-      "points": 33,
-      "num_comments": 59,
-      "submitted_at": "2026-09-14T12:23:11Z",
-      "page_status": "readable",
-      "content_sha256": "432c6d46be0fd58413c289b02bb60752f1c6d336c21ac058e8bc0349135af9f8",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49695689",
-      "story_url": "https://news.ycombinator.com/item?id=49695689",
-      "title": "PCB is brought to you by Fable 5",
-      "url": "https://a6mzero.com/posts/this-pcb-is-brought-to-you-by-fable-5/",
-      "points": 40,
-      "num_comments": 13,
-      "submitted_at": "2026-09-14T12:25:24Z",
-      "page_status": "readable",
-      "content_sha256": "91508a8f356df1ad64bacd09123809b6e055dcb6392ee551a12cbf7edd6f324e",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A personal hardware journal entry: \"An experiment to design a cute PCB (without touching any tools) in plain English\" by prompting a model. It is an experience report, not a system to review.",
-        "evidence": [
-          {
-            "label": "PCB experiment journal",
-            "url": "https://a6mzero.com/posts/this-pcb-is-brought-to-you-by-fable-5/",
-            "kind": "web",
-            "content_sha256": "91508a8f356df1ad64bacd09123809b6e055dcb6392ee551a12cbf7edd6f324e",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49695805",
-      "story_url": "https://news.ycombinator.com/item?id=49695805",
-      "title": "SDR\u2013; open source SDR with a patchable signal graph, Rust DSP, web UI",
-      "url": "https://github.com/Newspicel/sdrminusminus",
-      "points": 62,
-      "num_comments": 20,
-      "submitted_at": "2026-09-14T12:35:56Z",
-      "page_status": "readable",
-      "content_sha256": "10e2a1308c7b26775b3f7f4b0dccdc2244f5e3add583764e2b91cc22cdbd65e3",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49695876",
-      "story_url": "https://news.ycombinator.com/item?id=49695876",
-      "title": "OpenAI bots knew about the RubyGems caching vulnerability",
-      "url": "https://tenderlovemaking.com/2026/09/11/what-a-time-to-be-alive/",
-      "points": 499,
-      "num_comments": 409,
-      "submitted_at": "2026-09-14T12:40:57Z",
-      "page_status": "readable",
-      "content_sha256": "cbe06653afa1e334c2e8cfa442c9d71bba098aaf3436ebb43c91244bdc398a6f",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A developer blog post on a security incident: \"It seems like OpenAI Bots knew about the RubyGems caching vulnerability\". It is incident commentary, not a system.",
-        "evidence": [
-          {
-            "label": "RubyGems incident blog post",
-            "url": "https://tenderlovemaking.com/2026/09/11/what-a-time-to-be-alive/",
-            "kind": "web",
-            "content_sha256": "cbe06653afa1e334c2e8cfa442c9d71bba098aaf3436ebb43c91244bdc398a6f",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49696125",
-      "story_url": "https://news.ycombinator.com/item?id=49696125",
-      "title": "How to write an effective software design document",
-      "url": "https://refactoringenglish.com/excerpts/write-an-effective-design-doc/",
-      "points": 339,
-      "num_comments": 139,
-      "submitted_at": "2026-09-14T13:00:46Z",
-      "page_status": "readable",
-      "content_sha256": "24bb00c4f1947955a42eac8ec2bf95688f3298409f04fbb0c5e5f92ee1c6cee6",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A book excerpt on writing: \"A good design doc can save you years of development time.\" It is writing advice, not a system.",
-        "evidence": [
-          {
-            "label": "Design doc guide excerpt",
-            "url": "https://refactoringenglish.com/excerpts/write-an-effective-design-doc/",
-            "kind": "web",
-            "content_sha256": "24bb00c4f1947955a42eac8ec2bf95688f3298409f04fbb0c5e5f92ee1c6cee6",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49696132",
-      "story_url": "https://news.ycombinator.com/item?id=49696132",
-      "title": "Largest known Roman mosaic, beneath Baths of Trajan, opens to the public",
-      "url": "https://www.theartnewspaper.com/2026/09/14/largest-roman-mosaic-opens-to-the-public",
+      "story_id": "49964265",
+      "story_url": "https://news.ycombinator.com/item?id=49964265",
+      "title": "Gitframes",
+      "url": "https://github.com/gatewai-dev/gitframes",
       "points": 57,
-      "num_comments": 8,
-      "submitted_at": "2026-09-14T13:01:04Z",
+      "num_comments": 38,
+      "submitted_at": "2026-10-05T12:59:14Z",
       "page_status": "readable",
-      "content_sha256": "21402eefcfe9be953dd82ea7519bb20227b8f9163cf7883c5e67b78993968170",
-      "fetched_at": "2026-09-15T00:00:00Z",
+      "content_sha256": "eea80e4ebb2ad56c330798e4a19901f36c8c1856ae4deed6a3bc29944d75880a",
+      "fetched_at": "2026-10-07T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "worth_review",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The repository describes a video-rendering package built for agents to drive: \"Compositing, motion graphics and 3D for code-first video \u2014 one npm package that AI agents drive with code.\" and \"Framefields is built for coding agents.\". It lists agent skills and a Claude plugin: \"Using an AI coding agent? Install the framefields skills in one line.\". The page states Apache-2.0 licensing (\"Apache-2.0 license\" appears beside the README); it also warns of a beta: \"Beta: framefields is under active development.\". Boundary question: whether the agent skills and plugin shipped with the package are a reviewable pack of their own, or whether this is a code-first video rendering library, which the page does not describe as preserving knowledge, acting through tools on its own, or running a conversational workspace. The plugin's own availability is unclear: \"Framefields plugin review in claude takes a bit long...\".",
+        "evidence": [
+          {
+            "label": "framefields repository page",
+            "url": "https://github.com/gatewai-dev/gitframes",
+            "kind": "web",
+            "content_sha256": "eea80e4ebb2ad56c330798e4a19901f36c8c1856ae4deed6a3bc29944d75880a",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49964303",
+      "story_url": "https://news.ycombinator.com/item?id=49964303",
+      "title": "Pixel 11 doesn't yet meet the GrapheneOS security standards and may be skipped",
+      "url": "https://discuss.grapheneos.org/d/41564-pixel-11-doesnt-yet-meet-the-grapheneos-security-standards-and-may-be-skipped",
+      "points": 428,
+      "num_comments": 303,
+      "submitted_at": "2026-10-05T13:02:25Z",
+      "page_status": "readable",
+      "content_sha256": "3905f27aac9258d6d5e05dc5c4d507ba678d3eb1a79484813edb1767edebf5d6",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
       "assessment": {
         "verdict": "out_of_scope",
         "rule": "docs/CURATION.md inclusion gate",
-        "finding": "Archaeology news: \"A vast mosaic uncovered in Rome, the largest ever discovered in the Roman world, has opened to the public for the first time.\" Not a system.",
+        "finding": "A mobile operating system forum announcement: \"We have a partial port of GrapheneOS to the Pixel 11 series after a week of work on it.\". An operating system port, not a memory, agent, or assistant system.",
         "evidence": [
           {
-            "label": "Roman mosaic news",
-            "url": "https://www.theartnewspaper.com/2026/09/14/largest-roman-mosaic-opens-to-the-public",
+            "label": "GrapheneOS forum post",
+            "url": "https://discuss.grapheneos.org/d/41564-pixel-11-doesnt-yet-meet-the-grapheneos-security-standards-and-may-be-skipped",
             "kind": "web",
-            "content_sha256": "21402eefcfe9be953dd82ea7519bb20227b8f9163cf7883c5e67b78993968170",
-            "fetched_at": "2026-09-15T00:00:00Z"
+            "content_sha256": "3905f27aac9258d6d5e05dc5c4d507ba678d3eb1a79484813edb1767edebf5d6",
+            "fetched_at": "2026-10-07T00:00:00Z"
           }
         ],
-        "proposed_at": "2026-09-15",
+        "proposed_at": "2026-10-06",
         "proposer": "hn-signals"
       }
     },
     {
-      "story_id": "49696313",
-      "story_url": "https://news.ycombinator.com/item?id=49696313",
-      "title": "Volkswagen Just Built an EV That Can Go Nearly 900 Miles on a Charge",
-      "url": "https://www.motor1.com/news/808114/vw-mission-efficiency-concept-specs-photos/",
-      "points": 50,
-      "num_comments": 116,
-      "submitted_at": "2026-09-14T13:15:05Z",
-      "page_status": "failed",
-      "content_sha256": null,
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "unreadable",
-        "rule": "docs/routines/hn-signals.md unreadable verdict",
-        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
-        "evidence": [],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49696335",
-      "story_url": "https://news.ycombinator.com/item?id=49696335",
-      "title": "Temporal raises $550M at a $12.55B valuation",
-      "url": "https://temporal.io/blog/temporal-raises-usd550m-series-e-at-usd12-55b-valuation-ai",
-      "points": 78,
-      "num_comments": 62,
-      "submitted_at": "2026-09-14T13:16:31Z",
-      "page_status": "readable",
-      "content_sha256": "3ec00a783aeec9d7c6cca598174dca12bf2edc6b31fa844ac3367839c6373297",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49696402",
-      "story_url": "https://news.ycombinator.com/item?id=49696402",
-      "title": "Show HN: Pelican-bicycle alternatives",
-      "url": "https://gally.net/temp/20260914pelican-alternatives/index.html",
-      "points": 127,
-      "num_comments": 45,
-      "submitted_at": "2026-09-14T13:20:22Z",
-      "page_status": "readable",
-      "content_sha256": "437caee3f4f1759973290c394fc03b8e725f25609aa8e775250e5bc957fc424c",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A gallery of SVG drawing prompts \"given to language models in 2025 and 2026\", comparing model outputs. It is an informal benchmark page, not a system.",
-        "evidence": [
-          {
-            "label": "SVG prompt gallery",
-            "url": "https://gally.net/temp/20260914pelican-alternatives/index.html",
-            "kind": "web",
-            "content_sha256": "437caee3f4f1759973290c394fc03b8e725f25609aa8e775250e5bc957fc424c",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49696453",
-      "story_url": "https://news.ycombinator.com/item?id=49696453",
-      "title": "People who can't picture anything are rewriting the science of imagination",
-      "url": "https://dailyneuron.com/aphantasia-mental-imagery-brain-network/",
-      "points": 200,
-      "num_comments": 286,
-      "submitted_at": "2026-09-14T13:23:53Z",
-      "page_status": "readable",
-      "content_sha256": "9e680395ce233f0c6f166f0e05573e71f0da22536663be18ab914d4461cf74ac",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49696697",
-      "story_url": "https://news.ycombinator.com/item?id=49696697",
-      "title": "Ubuntu 26.10 completes transition to Rust-based coreutils",
-      "url": "https://www.omgubuntu.co.uk/2026/09/ubuntu-2610-rust-coreutils-complete",
-      "points": 256,
-      "num_comments": 288,
-      "submitted_at": "2026-09-14T13:38:58Z",
-      "page_status": "readable",
-      "content_sha256": "d7c298f1fc31da6f581f0cb2e33104650a63969dc1503c520188b7286a0a6d41",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49696867",
-      "story_url": "https://news.ycombinator.com/item?id=49696867",
-      "title": "The AI job market in 2026",
-      "url": "https://www.ilinmaks.com/blog/en/ai-jobs-market-2026",
-      "points": 67,
-      "num_comments": 71,
-      "submitted_at": "2026-09-14T13:49:57Z",
-      "page_status": "readable",
-      "content_sha256": "6e75ada14fae32843f5d601d61e7ad9f669e8472edcaea50755219c092377b88",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A labor-market summary: \"The AI labor market in September 2026 from LinkedIn, WEF, Stanford, PwC and Bain data\". It is commentary, not a system.",
-        "evidence": [
-          {
-            "label": "AI job market post",
-            "url": "https://www.ilinmaks.com/blog/en/ai-jobs-market-2026",
-            "kind": "web",
-            "content_sha256": "6e75ada14fae32843f5d601d61e7ad9f669e8472edcaea50755219c092377b88",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49697014",
-      "story_url": "https://news.ycombinator.com/item?id=49697014",
-      "title": "Notes on gotchas while migrating 35kb preprompts from Opus to self-hosted Ollama",
-      "url": "https://patrickmccanna.net/notes-on-migrating-large-prompts-away-from-anthropic-openai-to-self-hosted-llms/",
-      "points": 139,
-      "num_comments": 74,
-      "submitted_at": "2026-09-14T13:59:09Z",
-      "page_status": "readable",
-      "content_sha256": "1532b3a887cf95274b467e98a94ef180218f5dde183a6b911e55d0c06ebd25b8",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A blog post of \"Notes on migrating 35kb prompts away from Anthropic/OpenAI to Self-Hosted Ollama+opencode\". Ollama and OpenCode already have Atlas records, and this experience report does not change either record's boundary, license, or evidence.",
-        "evidence": [
-          {
-            "label": "Self-hosting migration notes",
-            "url": "https://patrickmccanna.net/notes-on-migrating-large-prompts-away-from-anthropic-openai-to-self-hosted-llms/",
-            "kind": "web",
-            "content_sha256": "1532b3a887cf95274b467e98a94ef180218f5dde183a6b911e55d0c06ebd25b8",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49697094",
-      "story_url": "https://news.ycombinator.com/item?id=49697094",
-      "title": "Adversarial Fashion Makes a Statement on AI Panopticon",
-      "url": "https://spectrum.ieee.org/adversarial-fashion",
-      "points": 107,
-      "num_comments": 47,
-      "submitted_at": "2026-09-14T14:04:53Z",
-      "page_status": "readable",
-      "content_sha256": "0a6a7eab0ed8c813f1fb7f5c64cdf7b8f85187d77226f176c9e3448f6dd98efa",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49697171",
-      "story_url": "https://news.ycombinator.com/item?id=49697171",
-      "title": "New $100k H-1B visa fee pushes tech jobs offshore",
-      "url": "https://spectrum.ieee.org/h-1b-visa-us-government",
-      "points": 167,
-      "num_comments": 363,
-      "submitted_at": "2026-09-14T14:09:10Z",
-      "page_status": "readable",
-      "content_sha256": "55475f20f7e7af69873121e45048bcf31230057350375e5811565d0fb23b432a",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49697192",
-      "story_url": "https://news.ycombinator.com/item?id=49697192",
-      "title": "Writing a Guix service from scratch, as a beginner",
-      "url": "https://aloysberger.com/posts/writing-a-guix-service-from-scratch-as-a-beginner.html",
-      "points": 26,
-      "num_comments": 0,
-      "submitted_at": "2026-09-14T14:10:40Z",
-      "page_status": "readable",
-      "content_sha256": "2658d05cc8c115d041b1e9cc55ff631ee4b2e4c9ef389b026a76ae73b8dad633",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A personal tutorial: \"I am in the middle of migrating my machines from NixOS to Guix.\" It is operating-system configuration writing, not an AI system.",
-        "evidence": [
-          {
-            "label": "Guix service tutorial",
-            "url": "https://aloysberger.com/posts/writing-a-guix-service-from-scratch-as-a-beginner.html",
-            "kind": "web",
-            "content_sha256": "2658d05cc8c115d041b1e9cc55ff631ee4b2e4c9ef389b026a76ae73b8dad633",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49697235",
-      "story_url": "https://news.ycombinator.com/item?id=49697235",
-      "title": "Where has Construction Automation been successful?",
-      "url": "https://www.construction-physics.com/p/where-has-construction-automation",
-      "points": 38,
-      "num_comments": 59,
-      "submitted_at": "2026-09-14T14:13:52Z",
-      "page_status": "readable",
-      "content_sha256": "590075976607db676449e827624bfd7398f61953f3acd63c5664f4269c2948e1",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49697443",
-      "story_url": "https://news.ycombinator.com/item?id=49697443",
-      "title": "My Health Insurance Denied My Cancer Treatment. I Emailed the CEO",
-      "url": "https://www.vanityfair.com/story/healthcare-cancer-treatment-essay",
-      "points": 47,
-      "num_comments": 25,
-      "submitted_at": "2026-09-14T14:27:17Z",
-      "page_status": "readable",
-      "content_sha256": "bfc1e2902f265a9e8400799be5112603697531b9cb7c7ecf9f9ea6a5788445e9",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A personal essay titled \"My Health Insurance Denied My Cancer Treatment\". Not a system.",
-        "evidence": [
-          {
-            "label": "Vanity Fair essay",
-            "url": "https://www.vanityfair.com/story/healthcare-cancer-treatment-essay",
-            "kind": "web",
-            "content_sha256": "bfc1e2902f265a9e8400799be5112603697531b9cb7c7ecf9f9ea6a5788445e9",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49697477",
-      "story_url": "https://news.ycombinator.com/item?id=49697477",
-      "title": "Dropping eBPF CPU Cost by About 90% with Memoization (Not AI Gen)",
-      "url": "https://nathannaveen.dev/posts/dropping-ebpf-cpu-cost-by-90/",
-      "points": 148,
-      "num_comments": 29,
-      "submitted_at": "2026-09-14T14:29:23Z",
-      "page_status": "readable",
-      "content_sha256": "671f468dff1a195a089d2efdd6addb2d9c1fc23f41fe6dd2a9721a94229598dc",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "An engineering post about \"our eBPF security agent\" where \"we cache which policy applies for each inode. This dropped our kernel CPU cost by about 90%.\" Agent here names a host security enforcement daemon; it is security infrastructure, not a memory, agent, or assistant system.",
-        "evidence": [
-          {
-            "label": "eBPF memoization post",
-            "url": "https://nathannaveen.dev/posts/dropping-ebpf-cpu-cost-by-90/",
-            "kind": "web",
-            "content_sha256": "671f468dff1a195a089d2efdd6addb2d9c1fc23f41fe6dd2a9721a94229598dc",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49697496",
-      "story_url": "https://news.ycombinator.com/item?id=49697496",
-      "title": "Most people prefer traditional architecture",
-      "url": "https://www.worksinprogress.news/p/do-people-prefer-traditional-architecture",
-      "points": 134,
+      "story_id": "49965047",
+      "story_url": "https://news.ycombinator.com/item?id=49965047",
+      "title": "Picard 3.0",
+      "url": "https://blog.metabrainz.org/2026/10/04/picard-3-0-released/",
+      "points": 141,
       "num_comments": 48,
-      "submitted_at": "2026-09-14T14:30:17Z",
+      "submitted_at": "2026-10-05T14:03:01Z",
       "page_status": "readable",
-      "content_sha256": "f277bbc9055a9ba481692d49daecbc15931b544518b817a651bf82791c82840b",
-      "fetched_at": "2026-09-15T00:00:00Z",
+      "content_sha256": "fcf2a53fb68560876c6e4c369ac203579523d6ede19be6ebd2d983ddc4de7862",
+      "fetched_at": "2026-10-07T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49697549",
-      "story_url": "https://news.ycombinator.com/item?id=49697549",
-      "title": "A rough guide for going back to the Moon",
-      "url": "https://research.ibm.com/blog/nasa-ibm-lunar-foundation-model",
-      "points": 43,
-      "num_comments": 65,
-      "submitted_at": "2026-09-14T14:33:00Z",
-      "page_status": "readable",
-      "content_sha256": "2f0951072e81b35fcfdca27c8ffd55efcc0ae60d3162ef5ccf65b54552f4200c",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
+      "discovered_at": "2026-10-07",
       "assessment": {
         "verdict": "out_of_scope",
         "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A research release: \"Today, IBM and NASA are open-sourcing the most thorough model for mapping the Moon to date.\" It announces a scientific model artifact for lunar mapping, not an operational memory, agent, or assistant system.",
+        "finding": "A release note for a music tag editor: \"MusicBrainz Picard is the official tag editor for the MusicBrainz database\". Not a memory, agent, or assistant system.",
         "evidence": [
           {
-            "label": "IBM NASA lunar model post",
-            "url": "https://research.ibm.com/blog/nasa-ibm-lunar-foundation-model",
+            "label": "Picard 3.0 release post",
+            "url": "https://blog.metabrainz.org/2026/10/04/picard-3-0-released/",
             "kind": "web",
-            "content_sha256": "2f0951072e81b35fcfdca27c8ffd55efcc0ae60d3162ef5ccf65b54552f4200c",
-            "fetched_at": "2026-09-15T00:00:00Z"
+            "content_sha256": "fcf2a53fb68560876c6e4c369ac203579523d6ede19be6ebd2d983ddc4de7862",
+            "fetched_at": "2026-10-07T00:00:00Z"
           }
         ],
-        "proposed_at": "2026-09-15",
+        "proposed_at": "2026-10-06",
         "proposer": "hn-signals"
       }
     },
     {
-      "story_id": "49697580",
-      "story_url": "https://news.ycombinator.com/item?id=49697580",
-      "title": "Oslo bans smart glasses in schools",
-      "url": "https://www.thelocal.no/20260910/oslo-bans-smart-glasses-in-schools",
-      "points": 39,
-      "num_comments": 8,
-      "submitted_at": "2026-09-14T14:34:24Z",
+      "story_id": "49965118",
+      "story_url": "https://news.ycombinator.com/item?id=49965118",
+      "title": "Linux containers in 500 lines of code (2016)",
+      "url": "https://blog.lizzie.io/linux-containers-in-500-loc.html",
+      "points": 143,
+      "num_comments": 43,
+      "submitted_at": "2026-10-05T14:09:15Z",
       "page_status": "readable",
-      "content_sha256": "255aa4c56d3bca2b1f5a8449ec34e36cce01484aaa24517b545bd1acfb1f069d",
-      "fetched_at": "2026-09-15T00:00:00Z",
+      "content_sha256": "66891ea5ae6d5ea6ab77585416d741df832d5c4235df2a0e972c9c54297f551c",
+      "fetched_at": "2026-10-07T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15",
+      "discovered_at": "2026-10-07",
       "assessment": {
         "verdict": "out_of_scope",
         "rule": "docs/CURATION.md inclusion gate",
-        "finding": "News: \"Norway's capital Oslo, said Thursday it had banned smart glasses in schools\". Not a system.",
+        "finding": "A 2016 tutorial on writing a container runtime: \"I wanted specifically to find a minimal set of restrictions to run untrusted code.\". Infrastructure education, not a memory, agent, or assistant system.",
         "evidence": [
           {
-            "label": "Oslo smart glasses news",
-            "url": "https://www.thelocal.no/20260910/oslo-bans-smart-glasses-in-schools",
+            "label": "Linux containers article",
+            "url": "https://blog.lizzie.io/linux-containers-in-500-loc.html",
             "kind": "web",
-            "content_sha256": "255aa4c56d3bca2b1f5a8449ec34e36cce01484aaa24517b545bd1acfb1f069d",
-            "fetched_at": "2026-09-15T00:00:00Z"
+            "content_sha256": "66891ea5ae6d5ea6ab77585416d741df832d5c4235df2a0e972c9c54297f551c",
+            "fetched_at": "2026-10-07T00:00:00Z"
           }
         ],
-        "proposed_at": "2026-09-15",
+        "proposed_at": "2026-10-06",
         "proposer": "hn-signals"
       }
     },
     {
-      "story_id": "49697642",
-      "story_url": "https://news.ycombinator.com/item?id=49697642",
-      "title": "1,000+ shoes reviewed and cut in half",
-      "url": "https://runrepeat.com",
-      "points": 36,
-      "num_comments": 7,
-      "submitted_at": "2026-09-14T14:37:43Z",
-      "page_status": "readable",
-      "content_sha256": "7ad3d3d3d939000d1f80f0f96e9a445da17942b8a8a75c2bc9d222ec0562d0f8",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49697643",
-      "story_url": "https://news.ycombinator.com/item?id=49697643",
-      "title": "Jabber/XMPP: How Do We Gain Traction?",
-      "url": "https://gultsch.de/posts/how-do-we-gain-traction/",
-      "points": 97,
-      "num_comments": 158,
-      "submitted_at": "2026-09-14T14:37:49Z",
-      "page_status": "readable",
-      "content_sha256": "a434f559b118c10204e5a3e4cfb693d96c777562ce7d5128331b8a33a0973b32",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "An essay on messaging protocols: \"A frequent argument against the Extensible Messaging and Presence Protocol (XMPP) is that the baseline feature set is too small\". Not an AI system.",
-        "evidence": [
-          {
-            "label": "XMPP adoption essay",
-            "url": "https://gultsch.de/posts/how-do-we-gain-traction/",
-            "kind": "web",
-            "content_sha256": "a434f559b118c10204e5a3e4cfb693d96c777562ce7d5128331b8a33a0973b32",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49697666",
-      "story_url": "https://news.ycombinator.com/item?id=49697666",
-      "title": "RubyGems Open Source Supply Chain Security and OpenAI",
-      "url": "https://rietta.com/blog/rubygems-supply-chain-openai/",
-      "points": 45,
-      "num_comments": 6,
-      "submitted_at": "2026-09-14T14:39:01Z",
-      "page_status": "readable",
-      "content_sha256": "aff1a092173efaacedf40f6a8bf0dbac4b893e7a34ccacff839756dd99efaeb5",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A security commentary post: \"OpenAI agents attacked RubyGems in May 2026.\" It is incident commentary, not a system.",
-        "evidence": [
-          {
-            "label": "RubyGems supply chain post",
-            "url": "https://rietta.com/blog/rubygems-supply-chain-openai/",
-            "kind": "web",
-            "content_sha256": "aff1a092173efaacedf40f6a8bf0dbac4b893e7a34ccacff839756dd99efaeb5",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49697713",
-      "story_url": "https://news.ycombinator.com/item?id=49697713",
-      "title": "'Project Lily': The Humans Reading Your ChatGPT Chats",
-      "url": "https://www.404media.co/inside-project-lily-the-humans-reading-your-chatgpt-chats/",
-      "points": 43,
-      "num_comments": 3,
-      "submitted_at": "2026-09-14T14:41:42Z",
-      "page_status": "readable",
-      "content_sha256": "82e6db345bcae9f4594d338a973524e05a760b6bc3d03d564740715ecd724187",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49697893",
-      "story_url": "https://news.ycombinator.com/item?id=49697893",
-      "title": "Dario, Please",
-      "url": "https://pop.rdi.sh/dario-please/",
-      "points": 600,
-      "num_comments": 283,
-      "submitted_at": "2026-09-14T14:50:32Z",
-      "page_status": "readable",
-      "content_sha256": "4d7aba27429041c1aaabc830a07a1cf7e8451697a203c746d968c6c83a804034",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A rebuttal essay: \"Dario Amodei, the CEO of Anthropic, recently published a blog post titled We Must Pace the Frontier\". It is commentary, not a system.",
-        "evidence": [
-          {
-            "label": "Dario, Please essay",
-            "url": "https://pop.rdi.sh/dario-please/",
-            "kind": "web",
-            "content_sha256": "4d7aba27429041c1aaabc830a07a1cf7e8451697a203c746d968c6c83a804034",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49697965",
-      "story_url": "https://news.ycombinator.com/item?id=49697965",
-      "title": "One Gets Through \u2013 Missile Command, but you launch the missiles",
-      "url": "https://onegetsthrough.com/",
-      "points": 49,
-      "num_comments": 9,
-      "submitted_at": "2026-09-14T14:53:55Z",
-      "page_status": "readable",
-      "content_sha256": "5e22d3a271d65576f3a70eda4c4174f935b12acf8c5dc4428d50bcabb6737da6",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A browser game: \"A free missile arcade game.\" Not an AI system.",
-        "evidence": [
-          {
-            "label": "One Gets Through game",
-            "url": "https://onegetsthrough.com/",
-            "kind": "web",
-            "content_sha256": "5e22d3a271d65576f3a70eda4c4174f935b12acf8c5dc4428d50bcabb6737da6",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49698423",
-      "story_url": "https://news.ycombinator.com/item?id=49698423",
-      "title": "Things That Annoy Me About Cars",
-      "url": "https://blog.decryption.net.au/posts/cars_suck.html",
-      "points": 71,
-      "num_comments": 100,
-      "submitted_at": "2026-09-14T15:17:51Z",
-      "page_status": "readable",
-      "content_sha256": "6381606a74e2e7cfa0fb2ac26c1e1dd516cf3a7551ddcada1b48f7d01c731b0c",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A personal rant: \"I have been looking at a new car and am thoroughly unimpressed with all the options available to me\". Not a system.",
-        "evidence": [
-          {
-            "label": "Car annoyances blog post",
-            "url": "https://blog.decryption.net.au/posts/cars_suck.html",
-            "kind": "web",
-            "content_sha256": "6381606a74e2e7cfa0fb2ac26c1e1dd516cf3a7551ddcada1b48f7d01c731b0c",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49698603",
-      "story_url": "https://news.ycombinator.com/item?id=49698603",
-      "title": "Foundation Model Engineering: From Theory to Production",
-      "url": "https://sungeuns.github.io/foundation-model-engineering/",
+      "story_id": "49965145",
+      "story_url": "https://news.ycombinator.com/item?id=49965145",
+      "title": "Another step towards Elm 1.0",
+      "url": "https://elm-lang.org/news/another-step-towards-elm-v1",
       "points": 38,
-      "num_comments": 3,
-      "submitted_at": "2026-09-14T15:27:48Z",
-      "page_status": "readable",
-      "content_sha256": "a36733c8fabc2a366f51f00d7d6cd6cbfd4b6bf921865e820d56a3914fcdb0a1",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "An educational guide whose read portion is a table of contents starting \"1. The Evolution of Intelligence\" and covering training, inference, and retrieval topics. It is teaching material, not a shipped system.",
-        "evidence": [
-          {
-            "label": "Foundation model engineering guide",
-            "url": "https://sungeuns.github.io/foundation-model-engineering/",
-            "kind": "web",
-            "content_sha256": "a36733c8fabc2a366f51f00d7d6cd6cbfd4b6bf921865e820d56a3914fcdb0a1",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49698607",
-      "story_url": "https://news.ycombinator.com/item?id=49698607",
-      "title": "Principles for Fast Tokio Applications",
-      "url": "https://dial9-rs.github.io/blog/principles-for-fast-tokio-applications/",
-      "points": 237,
-      "num_comments": 62,
-      "submitted_at": "2026-09-14T15:27:56Z",
-      "page_status": "readable",
-      "content_sha256": "466656346f4733e4a04650fbbe55621b54d9d88f2b484af38d28fbd5cea025ce",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A Rust engineering post: \"There are few hard-and-fast rules for writing code that performs well on Tokio runtimes\". Not an AI system.",
-        "evidence": [
-          {
-            "label": "Tokio performance post",
-            "url": "https://dial9-rs.github.io/blog/principles-for-fast-tokio-applications/",
-            "kind": "web",
-            "content_sha256": "466656346f4733e4a04650fbbe55621b54d9d88f2b484af38d28fbd5cea025ce",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49698664",
-      "story_url": "https://news.ycombinator.com/item?id=49698664",
-      "title": "China's Regulators Take Aim at \"AI Boyfriends\"",
-      "url": "https://spectrum.ieee.org/china-ai-chatbot-regulation",
-      "points": 56,
-      "num_comments": 52,
-      "submitted_at": "2026-09-14T15:30:56Z",
-      "page_status": "readable",
-      "content_sha256": "a046a7c01b28e3a9174059fb9fff24573e42e8e8512137a1d659a42591cb6828",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49698699",
-      "story_url": "https://news.ycombinator.com/item?id=49698699",
-      "title": "A beginning for mathematics",
-      "url": "https://www.daniellitt.com/blog/2026/9/13/a-beginning-for-mathematics/",
-      "points": 264,
-      "num_comments": 143,
-      "submitted_at": "2026-09-14T15:33:07Z",
-      "page_status": "readable",
-      "content_sha256": "a876ce04aecbcddbe6637f2b7957292555d950b78221372b52649fddb8200ea4",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "An essay on the mathematics profession: \"A year ago, internal models at OpenAI and DeepMind received the equivalent of a gold-medal score on the IMO.\" It is commentary, not a system.",
-        "evidence": [
-          {
-            "label": "Mathematics and AI essay",
-            "url": "https://www.daniellitt.com/blog/2026/9/13/a-beginning-for-mathematics/",
-            "kind": "web",
-            "content_sha256": "a876ce04aecbcddbe6637f2b7957292555d950b78221372b52649fddb8200ea4",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49699134",
-      "story_url": "https://news.ycombinator.com/item?id=49699134",
-      "title": "Truncated SVD (2023)",
-      "url": "https://brashandplucky.com/2023/09/09/truncated-svd.html",
-      "points": 52,
-      "num_comments": 8,
-      "submitted_at": "2026-09-14T16:00:33Z",
-      "page_status": "readable",
-      "content_sha256": "1718d54b8fccfe47185e5b852a5bc52bdd74ed4a180754d094eface3794cb0f6",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A 2023 linear algebra tutorial: \"Truncated SVD is simply the act of zeroing-out all the coefficients\". Not a system.",
-        "evidence": [
-          {
-            "label": "Truncated SVD tutorial",
-            "url": "https://brashandplucky.com/2023/09/09/truncated-svd.html",
-            "kind": "web",
-            "content_sha256": "1718d54b8fccfe47185e5b852a5bc52bdd74ed4a180754d094eface3794cb0f6",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49699145",
-      "story_url": "https://news.ycombinator.com/item?id=49699145",
-      "title": "The Tudor Kings",
-      "url": "https://analog-antiquarian.net/2026/09/11/the-tudor-kings/",
-      "points": 26,
-      "num_comments": 2,
-      "submitted_at": "2026-09-14T16:00:56Z",
-      "page_status": "readable",
-      "content_sha256": "814fc345012d33e2d5b6f7bb925cc0fde0c00868ab51781a6fa992f9749a7766",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A history blog, \"Chronicles of worldly wonders by Jimmy Maher\", here on the Tudor kings. Not a system.",
-        "evidence": [
-          {
-            "label": "Analog Antiquarian history post",
-            "url": "https://analog-antiquarian.net/2026/09/11/the-tudor-kings/",
-            "kind": "web",
-            "content_sha256": "814fc345012d33e2d5b6f7bb925cc0fde0c00868ab51781a6fa992f9749a7766",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49699158",
-      "story_url": "https://news.ycombinator.com/item?id=49699158",
-      "title": "Distributed Systems Classics (2017)",
-      "url": "https://nvartolomei.com/dist-sys-classics/",
-      "points": 337,
-      "num_comments": 72,
-      "submitted_at": "2026-09-14T16:02:01Z",
-      "page_status": "readable",
-      "content_sha256": "2492e464d0548c08af01c8a563cc8213f48c08943c4d59e3b780879c17e83ef0",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A reading list: \"A selected list of timeless and influential papers in distributed systems\". Not a system.",
-        "evidence": [
-          {
-            "label": "Distributed systems reading list",
-            "url": "https://nvartolomei.com/dist-sys-classics/",
-            "kind": "web",
-            "content_sha256": "2492e464d0548c08af01c8a563cc8213f48c08943c4d59e3b780879c17e83ef0",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49699159",
-      "story_url": "https://news.ycombinator.com/item?id=49699159",
-      "title": "Show HN: Neobrutalism.dev \u2013 Just added Base UI support and added new color theme",
-      "url": "https://www.neobrutalism.dev/",
-      "points": 158,
-      "num_comments": 74,
-      "submitted_at": "2026-09-14T16:02:02Z",
+      "num_comments": 7,
+      "submitted_at": "2026-10-05T14:11:28Z",
       "page_status": "unreadable",
       "content_sha256": null,
-      "fetched_at": "2026-09-15T00:00:00Z",
+      "fetched_at": "2026-10-07T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15",
+      "discovered_at": "2026-10-07",
       "assessment": {
         "verdict": "unreadable",
         "rule": "docs/routines/hn-signals.md unreadable verdict",
         "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
         "evidence": [],
-        "proposed_at": "2026-09-15",
+        "proposed_at": "2026-10-06",
         "proposer": "hn-signals"
       }
     },
     {
-      "story_id": "49699267",
-      "story_url": "https://news.ycombinator.com/item?id=49699267",
-      "title": "Show HN: Nari Qwen3-TTS and Qwen3-ASR \u2013 High accuracy, low latency and cost",
-      "url": "https://narilabs.com/blog/nari-labs-leads-coval-voice-ai-benchmarks/",
-      "points": 89,
-      "num_comments": 30,
-      "submitted_at": "2026-09-14T16:07:58Z",
+      "story_id": "49965152",
+      "story_url": "https://news.ycombinator.com/item?id=49965152",
+      "title": "The lamps in my house",
+      "url": "https://arslan.io/2026/10/05/the-lamps-in-my-house/",
+      "points": 335,
+      "num_comments": 126,
+      "submitted_at": "2026-10-05T14:12:14Z",
       "page_status": "readable",
-      "content_sha256": "1812c3a444fa54affc62ff820e891dd72f3e10b4afee39f2c62522d2f98c79f0",
-      "fetched_at": "2026-09-15T00:00:00Z",
+      "content_sha256": "1478eca295c5496a6f03781ffd4a685bb1960833dbd8c365b839a5e757f90455",
+      "fetched_at": "2026-10-07T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15",
+      "discovered_at": "2026-10-07",
       "assessment": {
         "verdict": "out_of_scope",
         "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A vendor benchmark post for speech model APIs: \"Our Qwen3-ASR Fast model is ranked #1 in Time-to-Final-Segment (TTFS)\", with an inference offering that says \"We deploy, optimize, and scale it.\" Text-to-speech and speech-to-text endpoints are not a memory, agent, or assistant system; whether the hosted inference belongs in the inference services collection is a separate question this pass does not decide.",
+        "finding": "A personal tour of lamps: \"I have a thing for lamps.\". Unrelated to any system.",
         "evidence": [
           {
-            "label": "Nari Labs benchmark post",
-            "url": "https://narilabs.com/blog/nari-labs-leads-coval-voice-ai-benchmarks/",
+            "label": "Lamps personal post",
+            "url": "https://arslan.io/2026/10/05/the-lamps-in-my-house/",
             "kind": "web",
-            "content_sha256": "1812c3a444fa54affc62ff820e891dd72f3e10b4afee39f2c62522d2f98c79f0",
-            "fetched_at": "2026-09-15T00:00:00Z"
+            "content_sha256": "1478eca295c5496a6f03781ffd4a685bb1960833dbd8c365b839a5e757f90455",
+            "fetched_at": "2026-10-07T00:00:00Z"
           }
         ],
-        "proposed_at": "2026-09-15",
+        "proposed_at": "2026-10-06",
         "proposer": "hn-signals"
       }
     },
     {
-      "story_id": "49699297",
-      "story_url": "https://news.ycombinator.com/item?id=49699297",
-      "title": "Microsoft patches Windows and Excel \u2013 breaks audio, remote access, and paste",
-      "url": "https://www.theregister.com/os-platforms/2026/09/14/microsoft-patches-windows-and-excel-breaks-audio-remote-access-and-paste/5296085",
-      "points": 254,
-      "num_comments": 174,
-      "submitted_at": "2026-09-14T16:09:45Z",
-      "page_status": "readable",
-      "content_sha256": "7292d41e1b8cc98ea49711ad05d6ddd885050aa765befdcc61094ab92f27ecd4",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49699308",
-      "story_url": "https://news.ycombinator.com/item?id=49699308",
-      "title": "The High Crime of \"LMAO\": How Cops Are Treating Mass Surveillance as a Joke",
-      "url": "https://www.eff.org/deeplinks/2026/09/high-crime-lmao-how-cops-are-treating-mass-surveillance-joke",
-      "points": 26,
-      "num_comments": 2,
-      "submitted_at": "2026-09-14T16:10:47Z",
-      "page_status": "readable",
-      "content_sha256": "b168656839ce164d08cfcb9b3c3b003e08e422bf6d3d81ff31273d549dbdb665",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49699384",
-      "story_url": "https://news.ycombinator.com/item?id=49699384",
-      "title": "For AI leaders Doom is a form of hype",
-      "url": "https://erkansaka.net/2026/09/10/ai-doom-rhetoric-safety-hype/",
-      "points": 131,
-      "num_comments": 181,
-      "submitted_at": "2026-09-14T16:15:05Z",
-      "page_status": "readable",
-      "content_sha256": "dd34f2d6c3da830fceac70ce0a7747e610346aec1d7dd0549e91bbb2086d8d78",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49699434",
-      "story_url": "https://news.ycombinator.com/item?id=49699434",
-      "title": "MIT creates method to force AI to comply with safety rules",
-      "url": "https://theframenews.org/en/hardflow-safety-critical-ai/",
-      "points": 26,
-      "num_comments": 28,
-      "submitted_at": "2026-09-14T16:18:17Z",
-      "page_status": "readable",
-      "content_sha256": "a8ee2e8f8b6911050276e1c4fb074c991b2c38c85e379e3509155abd85b05027",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "AI-written news about academic research: \"Researchers at MIT built a method called HardFlow\", and \"The catch: everything so far has run in simulation\". It is a research method with no shipped system in the read portion.",
-        "evidence": [
-          {
-            "label": "HardFlow research news",
-            "url": "https://theframenews.org/en/hardflow-safety-critical-ai/",
-            "kind": "web",
-            "content_sha256": "a8ee2e8f8b6911050276e1c4fb074c991b2c38c85e379e3509155abd85b05027",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49699477",
-      "story_url": "https://news.ycombinator.com/item?id=49699477",
-      "title": "Show HN: AttaLambda: a language where types and data are made of untyped lambdas",
-      "url": "https://attalambda.com",
-      "points": 26,
-      "num_comments": 0,
-      "submitted_at": "2026-09-14T16:21:10Z",
-      "page_status": "readable",
-      "content_sha256": "3c056a17f1c95b26507a553dd7a9feff0e04a804982efc843565acb8630d3f88",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A programming language site: \"AttaLambda is a small language built on pure, untyped lambda calculus.\" and \"AttaLambda is open source under the Apache License 2.0.\" It is a language, not a memory, agent, or assistant system.",
-        "evidence": [
-          {
-            "label": "AttaLambda home page",
-            "url": "https://attalambda.com",
-            "kind": "web",
-            "content_sha256": "3c056a17f1c95b26507a553dd7a9feff0e04a804982efc843565acb8630d3f88",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49699489",
-      "story_url": "https://news.ycombinator.com/item?id=49699489",
-      "title": "How my e-reader lost its stripes",
-      "url": "https://www.serpentine.com/posts/2026/x3-stripes/",
-      "points": 218,
-      "num_comments": 41,
-      "submitted_at": "2026-09-14T16:23:16Z",
-      "page_status": "readable",
-      "content_sha256": "a75f1a64741e862042df71701efd1405813bcd149adc26dbb9a093993718fea0",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "out_of_scope",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A personal hardware debugging post: \"I bought an Xteink X3.\" Not an AI system.",
-        "evidence": [
-          {
-            "label": "E-reader debugging post",
-            "url": "https://www.serpentine.com/posts/2026/x3-stripes/",
-            "kind": "web",
-            "content_sha256": "a75f1a64741e862042df71701efd1405813bcd149adc26dbb9a093993718fea0",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49699493",
-      "story_url": "https://news.ycombinator.com/item?id=49699493",
-      "title": "Cops Search Flock Cameras for Reasons of 'LMAO,' 'IDK,' and 'Asdfg'",
-      "url": "https://www.404media.co/cops-search-thousands-of-flock-cameras-for-reasons-of-lmao-idk-hehe-and-asdfg/",
-      "points": 132,
-      "num_comments": 14,
-      "submitted_at": "2026-09-14T16:23:41Z",
-      "page_status": "readable",
-      "content_sha256": "064ee3c70efe1c0e83b8c37ed9902e5bf9b5b1bbfad106c381a45f348c5016bf",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49699526",
-      "story_url": "https://news.ycombinator.com/item?id=49699526",
-      "title": "Hacking AI customer service agents",
-      "url": "https://www.intigriti.com/researchers/blog/hacking-tools/hacking-ai-customer-service-agents",
+      "story_id": "49965157",
+      "story_url": "https://news.ycombinator.com/item?id=49965157",
+      "title": "Evergreen Common Lisp (EGCL)",
+      "url": "https://github.com/atgreen/evergreen",
       "points": 34,
-      "num_comments": 5,
-      "submitted_at": "2026-09-14T16:26:03Z",
+      "num_comments": 0,
+      "submitted_at": "2026-10-05T14:12:24Z",
       "page_status": "readable",
-      "content_sha256": "45c5fd5c642f91e769c15eed21010277511f862a56b6d92f92cec38408b4aa3e",
-      "fetched_at": "2026-09-15T00:00:00Z",
+      "content_sha256": "719f0a2c2ee1ba55ac458c0ddd6c5745a75c9db8fca58e9f10a8ebc4e9845492",
+      "fetched_at": "2026-10-07T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15",
+      "discovered_at": "2026-10-07",
       "assessment": {
         "verdict": "out_of_scope",
         "rule": "docs/CURATION.md inclusion gate",
-        "finding": "A security research write-up of a conference talk \"on how attackers can abuse today's AI agents\" deployed for customer service. It describes attack techniques against third-party deployments, not a system to review.",
+        "finding": "A programming-language implementation: \"Evergreen Common Lisp (EGCL) is an experimental Common Lisp implementation written in Rust\". It mentions AI-driven authorship of the code, not an AI system a user operates: \"The project also explores whether a language implementation can be built through expert guidance of AI-driven development\". A language runtime, not a memory, agent, or assistant system.",
         "evidence": [
           {
-            "label": "Intigriti AI agent hacking post",
-            "url": "https://www.intigriti.com/researchers/blog/hacking-tools/hacking-ai-customer-service-agents",
+            "label": "Evergreen Common Lisp repository page",
+            "url": "https://github.com/atgreen/evergreen",
             "kind": "web",
-            "content_sha256": "45c5fd5c642f91e769c15eed21010277511f862a56b6d92f92cec38408b4aa3e",
-            "fetched_at": "2026-09-15T00:00:00Z"
+            "content_sha256": "719f0a2c2ee1ba55ac458c0ddd6c5745a75c9db8fca58e9f10a8ebc4e9845492",
+            "fetched_at": "2026-10-07T00:00:00Z"
           }
         ],
-        "proposed_at": "2026-09-15",
+        "proposed_at": "2026-10-06",
         "proposer": "hn-signals"
       }
     },
     {
-      "story_id": "49699590",
-      "story_url": "https://news.ycombinator.com/item?id=49699590",
-      "title": "When LLM judges agree, should we believe them?",
-      "url": "https://www.amazon.science/blog/when-llm-judges-agree-should-we-believe-them",
-      "points": 52,
-      "num_comments": 45,
-      "submitted_at": "2026-09-14T16:29:30Z",
-      "page_status": "readable",
-      "content_sha256": "f107cbcfacc5ff2411d65121b0c34fa34caf0564e988441c90cdbbde7bc5c4c6",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49699648",
-      "story_url": "https://news.ycombinator.com/item?id=49699648",
-      "title": "Why don't machine learning research agents overfit?",
-      "url": "https://www.amazon.science/blog/why-dont-machine-learning-research-agents-overfit",
-      "points": 132,
-      "num_comments": 90,
-      "submitted_at": "2026-09-14T16:32:23Z",
-      "page_status": "readable",
-      "content_sha256": "4687da15d9c6fd1e64249c46f63bb99a23d567cadd3f65140836733d0514e5a7",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49699671",
-      "story_url": "https://news.ycombinator.com/item?id=49699671",
-      "title": "Blizzard Revives 'StarCraft' Franchise with Open-World Sci-Fi Shooter",
-      "url": "https://hypebeast.com/2026/9/blizzard-open-world-starcraft-sci-fi-shooter-2030-release-info-teaser-revealed",
-      "points": 53,
-      "num_comments": 112,
-      "submitted_at": "2026-09-14T16:33:21Z",
-      "page_status": "readable",
-      "content_sha256": "66d8dbdaca0ea345ca06b090f89f3c8d32a62e3640bba17a623db7b184996ad2",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49700255",
-      "story_url": "https://news.ycombinator.com/item?id=49700255",
-      "title": "Cloudflare AKE cuts origin HelloRetryRequests from 52% to 3.7%",
-      "url": "https://blog.cloudflare.com/automatic-key-exchange-for-origins/",
-      "points": 114,
-      "num_comments": 35,
-      "submitted_at": "2026-09-14T17:02:34Z",
-      "page_status": "readable",
-      "content_sha256": "6f0a3cf6504822fe7d6c45ba24de59ce4dd6e3b7481df3e80465826b60685eb6",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15"
-    },
-    {
-      "story_id": "49700477",
-      "story_url": "https://news.ycombinator.com/item?id=49700477",
-      "title": "Pion, an agent designed to run any company autonomously",
-      "url": "https://andonlabs.com/blog/why-we-built-pion",
-      "points": 471,
-      "num_comments": 573,
-      "submitted_at": "2026-09-14T17:16:06Z",
-      "page_status": "readable",
-      "content_sha256": "99b4ee75b12705cc0fa1007712441dfcb745152a62e8d1fe18618fbb81b1b96e",
-      "fetched_at": "2026-09-15T00:00:00Z",
-      "status": "provisional",
-      "discovered_at": "2026-09-15",
-      "assessment": {
-        "verdict": "worth_review",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "Andon Labs announces a product launch: \"Today Andon is releasing Pion, an agent designed to run any company fully autonomously.\" The page says \"Pion is the platform we built to run all of these businesses.\" and describes its own deployments: \"In April 2026, we gave one agent a retail store in SF, Andon Market, and another a cafe in Stockholm, Andon Cafe.\" with \"Neither is profitable today\". Access is gated: \"If you want to run one, join the waitlist.\" No license, pricing, or technical architecture appears before the truncation marker, so none is asserted. No Pion or Andon record appears in the catalog. Boundary question: is a waitlist-gated platform, grown out of an evaluation lab's own deployments, already a maintained operational product a user can adopt, or still a research program to revisit once it is generally available?",
-        "evidence": [
-          {
-            "label": "Pion launch post",
-            "url": "https://andonlabs.com/blog/why-we-built-pion",
-            "kind": "web",
-            "content_sha256": "99b4ee75b12705cc0fa1007712441dfcb745152a62e8d1fe18618fbb81b1b96e",
-            "fetched_at": "2026-09-15T00:00:00Z"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "hn-signals"
-      }
-    },
-    {
-      "story_id": "49700661",
-      "story_url": "https://news.ycombinator.com/item?id=49700661",
-      "title": "Steam Frame starts at $1059",
-      "url": "https://store.steampowered.com/hardware/steamframe",
-      "points": 715,
-      "num_comments": 596,
-      "submitted_at": "2026-09-14T17:27:55Z",
-      "page_status": "failed",
+      "story_id": "49965227",
+      "story_url": "https://news.ycombinator.com/item?id=49965227",
+      "title": "Show HN: Pumpkins.sh \u2013 claim, carve, and display a pumpkin to the world",
+      "url": "https://pumpkins.sh/",
+      "points": 32,
+      "num_comments": 9,
+      "submitted_at": "2026-10-05T14:18:09Z",
+      "page_status": "unreadable",
       "content_sha256": null,
-      "fetched_at": "2026-09-15T00:00:00Z",
+      "fetched_at": "2026-10-07T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15",
+      "discovered_at": "2026-10-07",
       "assessment": {
         "verdict": "unreadable",
         "rule": "docs/routines/hn-signals.md unreadable verdict",
         "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
         "evidence": [],
-        "proposed_at": "2026-09-15",
+        "proposed_at": "2026-10-06",
         "proposer": "hn-signals"
       }
     },
     {
-      "story_id": "49701004",
-      "story_url": "https://news.ycombinator.com/item?id=49701004",
-      "title": "iOS 27, iPadOS 27, and macOS 27",
-      "url": "https://www.apple.com/newsroom/2026/09/major-updates-for-apples-software-platforms-are-now-available/",
-      "points": 694,
-      "num_comments": 814,
-      "submitted_at": "2026-09-14T17:50:29Z",
+      "story_id": "49965308",
+      "story_url": "https://news.ycombinator.com/item?id=49965308",
+      "title": "Making a GTK application in Haskell, part 1",
+      "url": "https://floreal.tech/blog/2026/making-a-gtk-app-in-haskell-part-1/",
+      "points": 174,
+      "num_comments": 53,
+      "submitted_at": "2026-10-05T14:23:47Z",
       "page_status": "readable",
-      "content_sha256": "415dff54012cf96dadaa28f944f812d41b62b38f7ad4105bd985e68edabd23a4",
-      "fetched_at": "2026-09-15T00:00:00Z",
+      "content_sha256": "cb2aa8e7024671561a86ec81f1ea0095c8fd9b94cbfb6fe54b771589fb0011ff",
+      "fetched_at": "2026-10-07T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15",
+      "discovered_at": "2026-10-07",
       "assessment": {
-        "verdict": "worth_review",
+        "verdict": "out_of_scope",
         "rule": "docs/CURATION.md inclusion gate",
-        "finding": "Apple's newsroom announces \"Siri AI is an entirely new version of Siri powered by the next generation of Apple Intelligence\", described as \"A more capable and conversational assistant with personal context understanding, broad world knowledge, onscreen awareness, and even more systemwide app actions\". It says \"Siri AI can understand personal context across messages, emails, photos, and more\" and \"A dedicated Siri app uses iCloud to privately sync conversational history\". Status: \"Siri AI is now rolling out as a beta in English\". The same page bundles many unrelated OS features (parental controls, Photos editing, Safari tab tools). No Siri or Apple Intelligence record appears in the catalog. Boundary question: is Siri AI a single maintained end-user product owning a broad conversational workspace with durable context, and where does its record stop relative to the wider Apple Intelligence feature set announced alongside it?",
+        "finding": "A programming tutorial for a to-do app: \"In this series, we are going to build a todo-list application using Haskell, GTK 4, and the Adwaita library.\". A tutorial, not a shipped system.",
         "evidence": [
           {
-            "label": "Apple software update newsroom post",
-            "url": "https://www.apple.com/newsroom/2026/09/major-updates-for-apples-software-platforms-are-now-available/",
+            "label": "Haskell GTK tutorial",
+            "url": "https://floreal.tech/blog/2026/making-a-gtk-app-in-haskell-part-1/",
             "kind": "web",
-            "content_sha256": "415dff54012cf96dadaa28f944f812d41b62b38f7ad4105bd985e68edabd23a4",
-            "fetched_at": "2026-09-15T00:00:00Z"
+            "content_sha256": "cb2aa8e7024671561a86ec81f1ea0095c8fd9b94cbfb6fe54b771589fb0011ff",
+            "fetched_at": "2026-10-07T00:00:00Z"
           }
         ],
-        "proposed_at": "2026-09-15",
+        "proposed_at": "2026-10-06",
         "proposer": "hn-signals"
       }
     },
     {
-      "story_id": "49701104",
-      "story_url": "https://news.ycombinator.com/item?id=49701104",
-      "title": "Iranian banks' SSL certificates are being revoked due to OFAC sanctions",
-      "url": "https://digiato.global/report/iran-banks-ssl-certificates-domain-changes/",
-      "points": 97,
-      "num_comments": 185,
-      "submitted_at": "2026-09-14T17:58:00Z",
+      "story_id": "49965497",
+      "story_url": "https://news.ycombinator.com/item?id=49965497",
+      "title": "\"I'm Embarrassed on Behalf of the Tech Industry\"",
+      "url": "https://blog.jim-nielsen.com/2026/embarrassed-by-tech/",
+      "points": 117,
+      "num_comments": 128,
+      "submitted_at": "2026-10-05T14:39:35Z",
+      "page_status": "readable",
+      "content_sha256": "f422945c347fc5ae1ac4b5b3f5c18a0ab3b83e1b66fff01920c41d9351d28054",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A short opinion post: \"Everything is hard to use.\". No product.",
+        "evidence": [
+          {
+            "label": "Embarrassed tech industry post",
+            "url": "https://blog.jim-nielsen.com/2026/embarrassed-by-tech/",
+            "kind": "web",
+            "content_sha256": "f422945c347fc5ae1ac4b5b3f5c18a0ab3b83e1b66fff01920c41d9351d28054",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49965625",
+      "story_url": "https://news.ycombinator.com/item?id=49965625",
+      "title": "Mosquitoes Are a Choice",
+      "url": "https://www.worksinprogress.news/p/you-can-just-eradicate-things",
+      "points": 41,
+      "num_comments": 12,
+      "submitted_at": "2026-10-05T14:49:09Z",
+      "page_status": "readable",
+      "content_sha256": "bb057c3d8c150ec5d2a1e02b7999f5aa9de69a76ca776a04bfe1d8b450e3afc2",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A magazine essay on disease eradication: \"The technology to eradicate mosquito-borne disease already exists.\". Unrelated to any system.",
+        "evidence": [
+          {
+            "label": "Mosquitoes essay",
+            "url": "https://www.worksinprogress.news/p/you-can-just-eradicate-things",
+            "kind": "web",
+            "content_sha256": "bb057c3d8c150ec5d2a1e02b7999f5aa9de69a76ca776a04bfe1d8b450e3afc2",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49965786",
+      "story_url": "https://news.ycombinator.com/item?id=49965786",
+      "title": "Altman: The world should accept some bad things happening for the benefits of AI",
+      "url": "https://www.politico.com/news/2026/10/04/sam-altman-decoded-interview-ai-01106217",
+      "points": 41,
+      "num_comments": 43,
+      "submitted_at": "2026-10-05T15:03:32Z",
       "page_status": "failed",
       "content_sha256": null,
-      "fetched_at": "2026-09-15T00:00:00Z",
+      "fetched_at": "2026-10-07T00:00:00Z",
       "status": "provisional",
-      "discovered_at": "2026-09-15",
+      "discovered_at": "2026-10-07",
       "assessment": {
         "verdict": "unreadable",
         "rule": "docs/routines/hn-signals.md unreadable verdict",
         "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
         "evidence": [],
-        "proposed_at": "2026-09-15",
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49965833",
+      "story_url": "https://news.ycombinator.com/item?id=49965833",
+      "title": "People are asking ChatGPT to help them decide how to vote in the midterms",
+      "url": "https://www.npr.org/2026/10/05/nx-s1-5977852/ai-chatbots-midterm-election",
+      "points": 54,
+      "num_comments": 84,
+      "submitted_at": "2026-10-05T15:06:27Z",
+      "page_status": "readable",
+      "content_sha256": "96af9778a6045f124eae6f8e0cbe7480953c161997f468610fc217d9e2232e00",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A news report about how people use chatbots, not a product page: \"People are using AI chatbots to help decide who to vote for\". Names no system of its own.",
+        "evidence": [
+          {
+            "label": "NPR chatbot voting story",
+            "url": "https://www.npr.org/2026/10/05/nx-s1-5977852/ai-chatbots-midterm-election",
+            "kind": "web",
+            "content_sha256": "96af9778a6045f124eae6f8e0cbe7480953c161997f468610fc217d9e2232e00",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49965894",
+      "story_url": "https://news.ycombinator.com/item?id=49965894",
+      "title": "Borland Turbo Basic",
+      "url": "https://dosdays.co.uk/topics/Software/borland_turbo_basic.php",
+      "points": 106,
+      "num_comments": 63,
+      "submitted_at": "2026-10-05T15:11:31Z",
+      "page_status": "readable",
+      "content_sha256": "61fe2af54d51412d5fc77deede2b3b17f4a7f0bafeed39a31231cc129fab236f",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A retrospective on a 1980s compiler: \"It was the first interactive compiler running on the CP/M operating system\". Not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "Turbo BASIC history page",
+            "url": "https://dosdays.co.uk/topics/Software/borland_turbo_basic.php",
+            "kind": "web",
+            "content_sha256": "61fe2af54d51412d5fc77deede2b3b17f4a7f0bafeed39a31231cc129fab236f",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49966062",
+      "story_url": "https://news.ycombinator.com/item?id=49966062",
+      "title": "Lunatik 5.0: scripting the Linux kernel with Lua, now with eBPF integration",
+      "url": "https://luainkernel.github.io/lunatik/",
+      "points": 33,
+      "num_comments": 0,
+      "submitted_at": "2026-10-05T15:23:03Z",
+      "page_status": "readable",
+      "content_sha256": "b633ec8c03ec4aa27f081d961ff5eabb7e61d4bc4965bbb18154192b32baf951",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A kernel scripting framework: \"Lunatik is a framework for scripting the Linux kernel with Lua.\". Infrastructure, not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "Lunatik project page",
+            "url": "https://luainkernel.github.io/lunatik/",
+            "kind": "web",
+            "content_sha256": "b633ec8c03ec4aa27f081d961ff5eabb7e61d4bc4965bbb18154192b32baf951",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49966163",
+      "story_url": "https://news.ycombinator.com/item?id=49966163",
+      "title": "The future of independence is interdependence",
+      "url": "https://onlys.ky/independence-is-interdependence/",
+      "points": 141,
+      "num_comments": 110,
+      "submitted_at": "2026-10-05T15:30:08Z",
+      "page_status": "readable",
+      "content_sha256": "f0f01dab5eac94f22e505cb1c3e978ff85e8969fe028bf17ab19b12899548fc9",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A personal essay on disability and independence: \"Every one of us depends on others; the only difference is how visible that dependence is.\". Unrelated to any system.",
+        "evidence": [
+          {
+            "label": "Interdependence essay",
+            "url": "https://onlys.ky/independence-is-interdependence/",
+            "kind": "web",
+            "content_sha256": "f0f01dab5eac94f22e505cb1c3e978ff85e8969fe028bf17ab19b12899548fc9",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49966182",
+      "story_url": "https://news.ycombinator.com/item?id=49966182",
+      "title": "uBlock Origin Lite is back on Firefox add-ons",
+      "url": "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin-lite/",
+      "points": 41,
+      "num_comments": 12,
+      "submitted_at": "2026-10-05T15:31:34Z",
+      "page_status": "readable",
+      "content_sha256": "dc1463fbcf86c6030d227f32494102f1f2e2401a166a7e0826f734705811a93c",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A browser content blocker: \"uBO Lite (uBOL) is an MV3-based content blocker.\". A utility outside the three families.",
+        "evidence": [
+          {
+            "label": "uBlock Origin Lite listing",
+            "url": "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin-lite/",
+            "kind": "web",
+            "content_sha256": "dc1463fbcf86c6030d227f32494102f1f2e2401a166a7e0826f734705811a93c",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49966293",
+      "story_url": "https://news.ycombinator.com/item?id=49966293",
+      "title": "Our approach to EU text provenance rules",
+      "url": "https://openai.com/index/eu-text-provenance/",
+      "points": 70,
+      "num_comments": 60,
+      "submitted_at": "2026-10-05T15:38:55Z",
+      "page_status": "readable",
+      "content_sha256": "d44f54f54a20801593b6692a79a7d9820e44af166f631432fe01c19ff65045c6",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A policy post from a vendor the Atlas may already track, about regulatory compliance and not a new product boundary: \"The EU AI Act requires generative AI providers to make generated text identifiable in a machine-readable way.\". Nothing here changes a record's boundary, license, or evidence.",
+        "evidence": [
+          {
+            "label": "OpenAI text provenance post",
+            "url": "https://openai.com/index/eu-text-provenance/",
+            "kind": "web",
+            "content_sha256": "d44f54f54a20801593b6692a79a7d9820e44af166f631432fe01c19ff65045c6",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49967427",
+      "story_url": "https://news.ycombinator.com/item?id=49967427",
+      "title": "Benchmark in Milliseconds",
+      "url": "https://matklad.github.io/2026/10/05/benchmark-milliseconds.html",
+      "points": 130,
+      "num_comments": 38,
+      "submitted_at": "2026-10-05T17:00:10Z",
+      "page_status": "readable",
+      "content_sha256": "4af636f855e46867091972f979c547a0b6c1320ac0fdf281a6bc70c83782290a",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A programming-practice note: \"My rule of thumb is to tweak the input size until the benchmark takes about 300ms\". Not a system.",
+        "evidence": [
+          {
+            "label": "Benchmark milliseconds post",
+            "url": "https://matklad.github.io/2026/10/05/benchmark-milliseconds.html",
+            "kind": "web",
+            "content_sha256": "4af636f855e46867091972f979c547a0b6c1320ac0fdf281a6bc70c83782290a",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49967579",
+      "story_url": "https://news.ycombinator.com/item?id=49967579",
+      "title": "DigitalOcean Ends Open Source Credits Program",
+      "url": "https://itsfoss.com/news/digitalocean-open-source-credits-end/",
+      "points": 49,
+      "num_comments": 6,
+      "submitted_at": "2026-10-05T17:12:10Z",
+      "page_status": "readable",
+      "content_sha256": "d3ada646ec4e4519f76d2f34d07658fc137c60162ba239a6809b202f6dbc2def",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A news item about a cloud credits program: \"DigitalOcean is ending its Open Source Credits program quietly\". Not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "DigitalOcean credits news",
+            "url": "https://itsfoss.com/news/digitalocean-open-source-credits-end/",
+            "kind": "web",
+            "content_sha256": "d3ada646ec4e4519f76d2f34d07658fc137c60162ba239a6809b202f6dbc2def",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49968105",
+      "story_url": "https://news.ycombinator.com/item?id=49968105",
+      "title": "OpenAI \"rogue\" agent activities found on Wikimedia projects",
+      "url": "https://diff.wikimedia.org/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/",
+      "points": 299,
+      "num_comments": 194,
+      "submitted_at": "2026-10-05T17:53:35Z",
+      "page_status": "readable",
+      "content_sha256": "90b3393931f984962a48e046093e802fe3f752400a19b3290b92097f852199df",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "An incident report about third-party agent activity, not a system the page offers: \"The Wikimedia Foundation conducted its own investigation to see whether Wikimedia websites had been similarly affected by AI agents\". No product to review.",
+        "evidence": [
+          {
+            "label": "Wikimedia agent activity report",
+            "url": "https://diff.wikimedia.org/2026/10/05/openai-rogue-agent-activities-found-on-wikimedia-projects/",
+            "kind": "web",
+            "content_sha256": "90b3393931f984962a48e046093e802fe3f752400a19b3290b92097f852199df",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49968402",
+      "story_url": "https://news.ycombinator.com/item?id=49968402",
+      "title": "Norway Eyes Partial Ban of Smart Glasses",
+      "url": "https://www.barrons.com/news/norway-eyes-partial-ban-of-smart-glasses-e65dc239",
+      "points": 178,
+      "num_comments": 102,
+      "submitted_at": "2026-10-05T18:15:20Z",
+      "page_status": "failed",
+      "content_sha256": null,
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "docs/routines/hn-signals.md unreadable verdict",
+        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
+        "evidence": [],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49968646",
+      "story_url": "https://news.ycombinator.com/item?id=49968646",
+      "title": "Jiti \u2013 Grow a running Lisp application by talking to it",
+      "url": "https://github.com/ghuntley/jiti",
+      "points": 29,
+      "num_comments": 0,
+      "submitted_at": "2026-10-05T18:33:14Z",
+      "page_status": "readable",
+      "content_sha256": "e942ca546e9eea238a7787c7bdabb91de8d0682131e8a2d986045160c4fff629",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "worth_review",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "The repository describes a conversational development environment for a live Lisp image: \"Jiti is a cooperative kernel for developing and using a live Common Lisp application through chat.\" and \"The same interface lets you inspect definitions, execute expressions, preview changes, and repair a paused call.\". Accepted work persists: \"Accepted definitions remain available to later requests and can be recovered in a fresh process.\". A model is required for chat: \"For chat, configure a model and either a credential file or OPENAI_API_KEY\". Licensing to flag: the file list shown on the page contains no LICENSE file and the portion read states no license, so license evidence would have to be gathered from the repository itself. Boundary question: whether a chat-driven kernel that defines, executes and repairs functions in a running Lisp application counts as an agent that acts through tools, or as a language development environment.",
+        "evidence": [
+          {
+            "label": "Jiti repository page",
+            "url": "https://github.com/ghuntley/jiti",
+            "kind": "web",
+            "content_sha256": "e942ca546e9eea238a7787c7bdabb91de8d0682131e8a2d986045160c4fff629",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49968708",
+      "story_url": "https://news.ycombinator.com/item?id=49968708",
+      "title": "Greenvolt begins building 600 MW/2.4 GWh BESS in Poland",
+      "url": "https://www.ess-news.com/2026/09/25/greenvolt-begins-building-600-mw-2-4-gwh-bess-in-poland/",
+      "points": 66,
+      "num_comments": 44,
+      "submitted_at": "2026-10-05T18:38:01Z",
+      "page_status": "readable",
+      "content_sha256": "345e4e8dd58c459e7fb3d1e1c603be0afd9204c229369f97bd3d522af749fb6f",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "An energy infrastructure news item: \"Greenvolt begins building 600 MW/2.4 GWh BESS in Poland\". Hardware, not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "Greenvolt battery storage news",
+            "url": "https://www.ess-news.com/2026/09/25/greenvolt-begins-building-600-mw-2-4-gwh-bess-in-poland/",
+            "kind": "web",
+            "content_sha256": "345e4e8dd58c459e7fb3d1e1c603be0afd9204c229369f97bd3d522af749fb6f",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49968906",
+      "story_url": "https://news.ycombinator.com/item?id=49968906",
+      "title": "Plain text is still one of the best technologies we have",
+      "url": "https://deadparrotbbs.com/why-plain-text-is-still-one-of-the-best-technologies-we-have/",
+      "points": 207,
+      "num_comments": 127,
+      "submitted_at": "2026-10-05T18:54:00Z",
+      "page_status": "readable",
+      "content_sha256": "b4e539dc4214c05afc0f41e1febd9dd3a0982039cd869aae13b3ed700181b229",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "An essay on file formats: \"There are not many computer file formats I would trust to still be readable fifty years from now, but plain text is one of them.\". Not a system.",
+        "evidence": [
+          {
+            "label": "Plain text essay",
+            "url": "https://deadparrotbbs.com/why-plain-text-is-still-one-of-the-best-technologies-we-have/",
+            "kind": "web",
+            "content_sha256": "b4e539dc4214c05afc0f41e1febd9dd3a0982039cd869aae13b3ed700181b229",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49968947",
+      "story_url": "https://news.ycombinator.com/item?id=49968947",
+      "title": "A Series of Unfortunate Events for OpenAI Users",
+      "url": "https://insufferable.dev/posts/a-series-of-unfortunate-events-for-openai-users/",
+      "points": 37,
+      "num_comments": 2,
+      "submitted_at": "2026-10-05T18:58:26Z",
+      "page_status": "readable",
+      "content_sha256": "e9b3a1f64bc649f39ed63af658222b3d2bfb47d3f24d8a7da340d5a31a535725",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A commentary post on usage limits and model releases, not a product page: \"The last 30 days have been some of the hardest for most Codex users to comprehend.\". Nothing here changes any record's boundary, license, or evidence.",
+        "evidence": [
+          {
+            "label": "OpenAI users commentary",
+            "url": "https://insufferable.dev/posts/a-series-of-unfortunate-events-for-openai-users/",
+            "kind": "web",
+            "content_sha256": "e9b3a1f64bc649f39ed63af658222b3d2bfb47d3f24d8a7da340d5a31a535725",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49968964",
+      "story_url": "https://news.ycombinator.com/item?id=49968964",
+      "title": "Questions for believers in AI consciousness",
+      "url": "https://endsdontjustifythemeans.com/p/6-questions-for-believers-in-ai-consciousness",
+      "points": 47,
+      "num_comments": 230,
+      "submitted_at": "2026-10-05T18:59:28Z",
+      "page_status": "readable",
+      "content_sha256": "c4bd5814f2d95bc417899236979ef01962368a4c603f37bd5f7833a5f1e47dd4",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A philosophy essay: \"6 questions for believers in AI consciousness!\". Not a system.",
+        "evidence": [
+          {
+            "label": "AI consciousness essay",
+            "url": "https://endsdontjustifythemeans.com/p/6-questions-for-believers-in-ai-consciousness",
+            "kind": "web",
+            "content_sha256": "c4bd5814f2d95bc417899236979ef01962368a4c603f37bd5f7833a5f1e47dd4",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49969183",
+      "story_url": "https://news.ycombinator.com/item?id=49969183",
+      "title": "Beam: Reflection's 501B open-weight model",
+      "url": "https://reflection.ai/blog/introducing-beam",
+      "points": 543,
+      "num_comments": 168,
+      "submitted_at": "2026-10-05T19:16:35Z",
+      "page_status": "readable",
+      "content_sha256": "d7fcf2b3c9c070e141a963421280f95369ae2ccca9688544a389c85d108030d9",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "worth_review",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A vendor announcement of a language model: \"Beam is a sparse Mixture-of-Experts model with 501 billion total parameters, 23 billion active, built for coding, reasoning, and agentic workloads.\". It is not yet downloadable: \"We will release the weights, technical report, model card, and developer artifacts later this month.\" Benchmarks it reports are the vendor's own figures, quoted here only as a claim: \"Beam is undergoing final red-teaming and evaluations.\". Boundary question: the page gives no license text or terms, and the weights are unreleased, so \"open-weight\" cannot yet be checked against any license; a reviewer should wait for the published weights and terms. The page was truncated after the training discussion and the safety and release sections beyond that point were not read.",
+        "evidence": [
+          {
+            "label": "Reflection Beam announcement",
+            "url": "https://reflection.ai/blog/introducing-beam",
+            "kind": "web",
+            "content_sha256": "d7fcf2b3c9c070e141a963421280f95369ae2ccca9688544a389c85d108030d9",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49969256",
+      "story_url": "https://news.ycombinator.com/item?id=49969256",
+      "title": "The Future of Mathematics",
+      "url": "https://terrytao.wordpress.com/2026/10/05/the-future-of-mathematics/",
+      "points": 122,
+      "num_comments": 86,
+      "submitted_at": "2026-10-05T19:22:40Z",
+      "page_status": "failed",
+      "content_sha256": null,
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "docs/routines/hn-signals.md unreadable verdict",
+        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
+        "evidence": [],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49969369",
+      "story_url": "https://news.ycombinator.com/item?id=49969369",
+      "title": "AI Companies Are Parasites",
+      "url": "https://www.coryd.dev/posts/2026/ai-companies-are-parasites",
+      "points": 71,
+      "num_comments": 37,
+      "submitted_at": "2026-10-05T19:30:10Z",
+      "page_status": "readable",
+      "content_sha256": "925ba26c5e2f9bc934b4adbf1e07d358f8606a8e44db28de0aca37919449b1ad",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "An opinion post about AI industry practices: \"Sell metered access to the models.\". No product.",
+        "evidence": [
+          {
+            "label": "AI companies opinion post",
+            "url": "https://www.coryd.dev/posts/2026/ai-companies-are-parasites",
+            "kind": "web",
+            "content_sha256": "925ba26c5e2f9bc934b4adbf1e07d358f8606a8e44db28de0aca37919449b1ad",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49969375",
+      "story_url": "https://news.ycombinator.com/item?id=49969375",
+      "title": "After bankruptcy, he was banned from betting sites. Then he discovered Kalshi",
+      "url": "https://www.npr.org/2026/10/02/nx-s1-5981420/kalshi-betting-prediction-markets-gambling-addiction",
+      "points": 63,
+      "num_comments": 66,
+      "submitted_at": "2026-10-05T19:30:21Z",
+      "page_status": "readable",
+      "content_sha256": "a42dcea4277831f09d204059dfd25dd1b7b6aebacb19616474e0dd5cfdd76cd7",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A news story about prediction markets and gambling: \"He was banned by betting sites. Then he relapsed on Kalshi\". Unrelated to the three families.",
+        "evidence": [
+          {
+            "label": "NPR Kalshi story",
+            "url": "https://www.npr.org/2026/10/02/nx-s1-5981420/kalshi-betting-prediction-markets-gambling-addiction",
+            "kind": "web",
+            "content_sha256": "a42dcea4277831f09d204059dfd25dd1b7b6aebacb19616474e0dd5cfdd76cd7",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49969933",
+      "story_url": "https://news.ycombinator.com/item?id=49969933",
+      "title": "The mental health of young men is declining. Experts warn it could get worse",
+      "url": "https://www.cbc.ca/news/health/the-mental-health-of-young-men-is-declining-experts-warn-it-could-get-worse-9.7361010",
+      "points": 79,
+      "num_comments": 125,
+      "submitted_at": "2026-10-05T20:07:25Z",
+      "page_status": "readable",
+      "content_sha256": "4f09916eb00c84c56cb2ad3ffcbe4804fedcb07deab250ac2a870a8996e1acb2",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A news story on health trends: \"The mental health of young men is declining. Experts warn it could get worse\". Unrelated to any system.",
+        "evidence": [
+          {
+            "label": "CBC mental health story",
+            "url": "https://www.cbc.ca/news/health/the-mental-health-of-young-men-is-declining-experts-warn-it-could-get-worse-9.7361010",
+            "kind": "web",
+            "content_sha256": "4f09916eb00c84c56cb2ad3ffcbe4804fedcb07deab250ac2a870a8996e1acb2",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49969961",
+      "story_url": "https://news.ycombinator.com/item?id=49969961",
+      "title": "Incident with Actions",
+      "url": "https://www.githubstatus.com/incidents/3q1yb5m7ltvb",
+      "points": 103,
+      "num_comments": 64,
+      "submitted_at": "2026-10-05T20:09:12Z",
+      "page_status": "readable",
+      "content_sha256": "3adb227639d4c45b65fffc87cc09afa2030628615dd39bb375532c1d4bf9e697",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A status page incident for a hosted service: \"GitHub Status - Incident with Actions\". Not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "GitHub status incident",
+            "url": "https://www.githubstatus.com/incidents/3q1yb5m7ltvb",
+            "kind": "web",
+            "content_sha256": "3adb227639d4c45b65fffc87cc09afa2030628615dd39bb375532c1d4bf9e697",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49970073",
+      "story_url": "https://news.ycombinator.com/item?id=49970073",
+      "title": "A third way of using Linux",
+      "url": "https://hisvirusness.com/third-is-the-way",
+      "points": 31,
+      "num_comments": 53,
+      "submitted_at": "2026-10-05T20:17:07Z",
+      "page_status": "readable",
+      "content_sha256": "ad8d878ae9c6bd27d8db3c3ee978b2eee186f446d330e35eb38fd0f9d28e38d8",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07"
+    },
+    {
+      "story_id": "49970507",
+      "story_url": "https://news.ycombinator.com/item?id=49970507",
+      "title": "WSL containers is now generally available",
+      "url": "https://blogs.windows.com/windowsdeveloper/2026/09/29/wsl-containers-now-generally-available/",
+      "points": 36,
+      "num_comments": 15,
+      "submitted_at": "2026-10-05T20:49:51Z",
+      "page_status": "readable",
+      "content_sha256": "57c8b004cab1d5190f7bdf4556812c072d9a879e6c83ead7ec6f10e38b617b4d",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A platform feature announcement: \"WSL containers is now generally available\". Infrastructure, not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "WSL containers announcement",
+            "url": "https://blogs.windows.com/windowsdeveloper/2026/09/29/wsl-containers-now-generally-available/",
+            "kind": "web",
+            "content_sha256": "57c8b004cab1d5190f7bdf4556812c072d9a879e6c83ead7ec6f10e38b617b4d",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49970667",
+      "story_url": "https://news.ycombinator.com/item?id=49970667",
+      "title": "Opus 5.5 agents discover two room-temperature magnetic semiconductor candidates",
+      "url": "https://www.vals.ai/blogs/room-temperature-magnetic-semiconductors",
+      "points": 482,
+      "num_comments": 325,
+      "submitted_at": "2026-10-05T21:00:21Z",
+      "page_status": "readable",
+      "content_sha256": "71a3b37a6a6b686287a430aa0d1c2e34d34ed8680f1397f6d7c5ad45fa86cfe3",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A research write-up of results found by a team of agents, with no shipped artifact described as a product: \"We are sharing two candidate magnets for next-generation computer memory, found by a team of Claude Opus 5.5 agents.\". A research result, not an operational system to catalogue.",
+        "evidence": [
+          {
+            "label": "Vals AI magnet research post",
+            "url": "https://www.vals.ai/blogs/room-temperature-magnetic-semiconductors",
+            "kind": "web",
+            "content_sha256": "71a3b37a6a6b686287a430aa0d1c2e34d34ed8680f1397f6d7c5ad45fa86cfe3",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49970871",
+      "story_url": "https://news.ycombinator.com/item?id=49970871",
+      "title": "Dust: Pretraining Transformers Without Backpropagation",
+      "url": "https://qlabs.sh/research/dust",
+      "points": 274,
+      "num_comments": 79,
+      "submitted_at": "2026-10-05T21:15:07Z",
+      "page_status": "readable",
+      "content_sha256": "87b3aec14033d92ada79a8fda59524190e4a1865270de40e9749cdea984f58f4",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A research paper on a training method with no shipped product described in the text read: \"Strikingly, we find larger models are more population-efficient, not less\". A paper, not an operational system.",
+        "evidence": [
+          {
+            "label": "Dust pretraining research",
+            "url": "https://qlabs.sh/research/dust",
+            "kind": "web",
+            "content_sha256": "87b3aec14033d92ada79a8fda59524190e4a1865270de40e9749cdea984f58f4",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49970888",
+      "story_url": "https://news.ycombinator.com/item?id=49970888",
+      "title": "CIA Report Warns Israel Could Head Toward Civil War, Total Collapse",
+      "url": "https://www.dropsitenews.com/p/cia-report-israel-civil-war-collapse",
+      "points": 38,
+      "num_comments": 42,
+      "submitted_at": "2026-10-05T21:16:23Z",
+      "page_status": "readable",
+      "content_sha256": "18218c71b2ded71031d50877be7299d11ce569132efc91ee35d9e6afab90c218",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A news report: \"CIA Report Warns Israel Could Head Toward Civil War, Total Collapse\". Unrelated to any system.",
+        "evidence": [
+          {
+            "label": "Dropsite news report",
+            "url": "https://www.dropsitenews.com/p/cia-report-israel-civil-war-collapse",
+            "kind": "web",
+            "content_sha256": "18218c71b2ded71031d50877be7299d11ce569132efc91ee35d9e6afab90c218",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49971230",
+      "story_url": "https://news.ycombinator.com/item?id=49971230",
+      "title": "Find the flattest route between any two points in SF",
+      "url": "https://flattensf.com/",
+      "points": 308,
+      "num_comments": 114,
+      "submitted_at": "2026-10-05T21:40:50Z",
+      "page_status": "readable",
+      "content_sha256": "cb3cd92070195b3d0c3e8366c1d63f58dce41e4a03ce5a849e4166aa7671e472",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A map routing utility: \"Routes are computed in your browser over 160,000 street segments\". A plain utility outside the three families.",
+        "evidence": [
+          {
+            "label": "Flatten SF route tool",
+            "url": "https://flattensf.com/",
+            "kind": "web",
+            "content_sha256": "cb3cd92070195b3d0c3e8366c1d63f58dce41e4a03ce5a849e4166aa7671e472",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49971356",
+      "story_url": "https://news.ycombinator.com/item?id=49971356",
+      "title": "Graphical UI",
+      "url": "https://www.graphicalui.com/",
+      "points": 34,
+      "num_comments": 3,
+      "submitted_at": "2026-10-05T21:51:09Z",
+      "page_status": "readable",
+      "content_sha256": "208313a57825bcd8ab38aae67421d975c48c8dcf0b00ee3d4a23ff4b9026c69c",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A paid theme builder for interface design: \"Graphical is for designers, developers, and anyone building an app with a coding agent.\". It ships design themes and agent context files, not an agent, memory, or assistant system of its own.",
+        "evidence": [
+          {
+            "label": "Graphical UI product page",
+            "url": "https://www.graphicalui.com/",
+            "kind": "web",
+            "content_sha256": "208313a57825bcd8ab38aae67421d975c48c8dcf0b00ee3d4a23ff4b9026c69c",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49971473",
+      "story_url": "https://news.ycombinator.com/item?id=49971473",
+      "title": "Engineer says Claude Code has made his job \"soul-sucking\"",
+      "url": "https://www.techspot.com/news/113937-engineer-claude-code-has-made-job-soul-sucking.html",
+      "points": 61,
+      "num_comments": 84,
+      "submitted_at": "2026-10-05T22:01:35Z",
+      "page_status": "readable",
+      "content_sha256": "1de0b0e3f141503784ca1a0cbf713309c97e3e17b9afb21df6bc3b7f06ab8850",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A news story about a vendor's product the Atlas may already carry, with no change to any record's boundary, license, or evidence: Engineer says Claude Code has made his job \"soul-sucking\".",
+        "evidence": [
+          {
+            "label": "TechSpot Claude Code story",
+            "url": "https://www.techspot.com/news/113937-engineer-claude-code-has-made-job-soul-sucking.html",
+            "kind": "web",
+            "content_sha256": "1de0b0e3f141503784ca1a0cbf713309c97e3e17b9afb21df6bc3b7f06ab8850",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49971678",
+      "story_url": "https://news.ycombinator.com/item?id=49971678",
+      "title": "Better Space-Time Trade-Offs for LSM-Tree Based Key-Value Stores [pdf]",
+      "url": "https://nivdayan.github.io/dostoevsky.pdf",
+      "points": 35,
+      "num_comments": 0,
+      "submitted_at": "2026-10-05T22:25:47Z",
+      "page_status": "readable",
+      "content_sha256": "61f42521250a935550cf62216a21c16e3ddc47e58fc11c66c67475c6eafec653",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "docs/routines/hn-signals.md unreadable verdict",
+        "finding": "The pinned text is raw PDF stream bytes with no readable prose, so nothing about this page was assessable and nothing is proposed.",
+        "evidence": [],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49971719",
+      "story_url": "https://news.ycombinator.com/item?id=49971719",
+      "title": "Friendship ended with Deno, now Node is my best friend",
+      "url": "https://dbushell.com/2026/10/03/deno-to-node/",
+      "points": 313,
+      "num_comments": 233,
+      "submitted_at": "2026-10-05T22:30:02Z",
+      "page_status": "readable",
+      "content_sha256": "e622b374f08a3ea86e5adf58300ddd3b291f01ec0cdba8db14d8efc9d75d57da",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A developer opinion post about JavaScript runtimes: \"Friendship ended with Deno, now Node is my best friend\". Not a system.",
+        "evidence": [
+          {
+            "label": "Deno to Node post",
+            "url": "https://dbushell.com/2026/10/03/deno-to-node/",
+            "kind": "web",
+            "content_sha256": "e622b374f08a3ea86e5adf58300ddd3b291f01ec0cdba8db14d8efc9d75d57da",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49971726",
+      "story_url": "https://news.ycombinator.com/item?id=49971726",
+      "title": "Learning Jazz Pianist Style with Cross-Attention Conditioning",
+      "url": "https://almostimplemented.github.io/jazz-pianist-style/",
+      "points": 50,
+      "num_comments": 13,
+      "submitted_at": "2026-10-05T22:30:52Z",
+      "page_status": "readable",
+      "content_sha256": "e5d518f3290985269d9ea328445ecb2b92e51452e5c5bf45e18a70066e11dced",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A research paper with audio demos: \"Can a model learn to do what Hyman did: not just recognize who is playing, but play in their manner?\". A paper with no operational system described in the portion read.",
+        "evidence": [
+          {
+            "label": "Jazz pianist style paper",
+            "url": "https://almostimplemented.github.io/jazz-pianist-style/",
+            "kind": "web",
+            "content_sha256": "e5d518f3290985269d9ea328445ecb2b92e51452e5c5bf45e18a70066e11dced",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49971782",
+      "story_url": "https://news.ycombinator.com/item?id=49971782",
+      "title": "Global Solar Atlas: summary of solar power potential globally",
+      "url": "https://globalsolaratlas.info/",
+      "points": 72,
+      "num_comments": 64,
+      "submitted_at": "2026-10-05T22:37:58Z",
+      "page_status": "unreadable",
+      "content_sha256": null,
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "docs/routines/hn-signals.md unreadable verdict",
+        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
+        "evidence": [],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49971826",
+      "story_url": "https://news.ycombinator.com/item?id=49971826",
+      "title": "Iroh Global Content Discovery",
+      "url": "https://www.iroh.computer/blog/iroh-global-content-discovery",
+      "points": 37,
+      "num_comments": 0,
+      "submitted_at": "2026-10-05T22:43:46Z",
+      "page_status": "readable",
+      "content_sha256": "d9952c49495a6931fa06658c3c9f28ae488d93c80316f12b1e5c2aee277fe58e",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A technical post on peer-to-peer content discovery: \"IPFS shipyard is shutting down.\". Networking infrastructure, not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "Iroh content discovery post",
+            "url": "https://www.iroh.computer/blog/iroh-global-content-discovery",
+            "kind": "web",
+            "content_sha256": "d9952c49495a6931fa06658c3c9f28ae488d93c80316f12b1e5c2aee277fe58e",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49971846",
+      "story_url": "https://news.ycombinator.com/item?id=49971846",
+      "title": "ChatGPT is adding real cartoonists' signatures to fake New Yorker cartoons",
+      "url": "https://www.niemanlab.org/2026/10/chatgpt-is-adding-real-cartoonists-signatures-to-fake-new-yorker-cartoons/",
+      "points": 545,
+      "num_comments": 408,
+      "submitted_at": "2026-10-05T22:46:45Z",
+      "page_status": "readable",
+      "content_sha256": "d98935a734af3be3fae0fa8c8aeb07fe057d3719987144368197baed18ba8d03",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A news story about a vendor's product: \"ChatGPT is adding real cartoonists\u2019 signatures to fake New Yorker cartoons\". Nothing here changes any record's boundary, license, or evidence.",
+        "evidence": [
+          {
+            "label": "Nieman Lab ChatGPT cartoons story",
+            "url": "https://www.niemanlab.org/2026/10/chatgpt-is-adding-real-cartoonists-signatures-to-fake-new-yorker-cartoons/",
+            "kind": "web",
+            "content_sha256": "d98935a734af3be3fae0fa8c8aeb07fe057d3719987144368197baed18ba8d03",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49971921",
+      "story_url": "https://news.ycombinator.com/item?id=49971921",
+      "title": "Example.com just launched the biggest redesign in decades",
+      "url": "https://www.debugbear.com/blog/example-dot-com-redesign-history",
+      "points": 343,
+      "num_comments": 234,
+      "submitted_at": "2026-10-05T22:55:11Z",
+      "page_status": "readable",
+      "content_sha256": "3f85faf7d7006333a028ca7d77f92593088f1840d8c372e1c0a94c45e49f8afb",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A web trivia post: \"Example.com Just Launched The Biggest Redesign In Decades\". Unrelated to any system.",
+        "evidence": [
+          {
+            "label": "Example.com redesign post",
+            "url": "https://www.debugbear.com/blog/example-dot-com-redesign-history",
+            "kind": "web",
+            "content_sha256": "3f85faf7d7006333a028ca7d77f92593088f1840d8c372e1c0a94c45e49f8afb",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49971952",
+      "story_url": "https://news.ycombinator.com/item?id=49971952",
+      "title": "Worth Building",
+      "url": "https://armstr.ng/writing/worth-building",
+      "points": 54,
+      "num_comments": 51,
+      "submitted_at": "2026-10-05T22:59:24Z",
+      "page_status": "readable",
+      "content_sha256": "4053f123b2aa1f45541d7e028fab2c7b23a4e6b50c7b7295bf8cd06713580f34",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A personal essay about building a small lookup tool with LLM help: \"With LLMs that calculation has changed, and this past weekend it changed for a domain lookup tool.\". No shipped system.",
+        "evidence": [
+          {
+            "label": "Worth Building post",
+            "url": "https://armstr.ng/writing/worth-building",
+            "kind": "web",
+            "content_sha256": "4053f123b2aa1f45541d7e028fab2c7b23a4e6b50c7b7295bf8cd06713580f34",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49972008",
+      "story_url": "https://news.ycombinator.com/item?id=49972008",
+      "title": "Ephemeral Testing",
+      "url": "https://lemire.me/blog/2026/10/05/ephemeral-testing/",
+      "points": 80,
+      "num_comments": 29,
+      "submitted_at": "2026-10-05T23:06:36Z",
+      "page_status": "readable",
+      "content_sha256": "d582bfae613bb25b5e43389545d79edb9b08937601f58d6a5dd0acc6b0212062",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A software-testing opinion post: \"I\u2019d like to propose a method that was unthinkable before: ephemeral testing.\". A method, not a shipped system.",
+        "evidence": [
+          {
+            "label": "Ephemeral testing post",
+            "url": "https://lemire.me/blog/2026/10/05/ephemeral-testing/",
+            "kind": "web",
+            "content_sha256": "d582bfae613bb25b5e43389545d79edb9b08937601f58d6a5dd0acc6b0212062",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49972027",
+      "story_url": "https://news.ycombinator.com/item?id=49972027",
+      "title": "Whistleblower who flagged Lutnick's links to Epstein dies",
+      "url": "https://www.thebanker.com/content/02286d53-0338-42ef-996d-5f7712b9f133",
+      "points": 77,
+      "num_comments": 8,
+      "submitted_at": "2026-10-05T23:09:34Z",
+      "page_status": "failed",
+      "content_sha256": null,
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "docs/routines/hn-signals.md unreadable verdict",
+        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
+        "evidence": [],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49972211",
+      "story_url": "https://news.ycombinator.com/item?id=49972211",
+      "title": "Samon: Designing a Zen Garden Raking Puzzle",
+      "url": "https://gwern.net/doc/design/2026-10-03-gwern-samon.html",
+      "points": 58,
+      "num_comments": 26,
+      "submitted_at": "2026-10-05T23:35:35Z",
+      "page_status": "failed",
+      "content_sha256": null,
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "docs/routines/hn-signals.md unreadable verdict",
+        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
+        "evidence": [],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49972419",
+      "story_url": "https://news.ycombinator.com/item?id=49972419",
+      "title": "AI tutoring with Khanmigo in a two-year school experiment",
+      "url": "https://edworkingpapers.com/ai26-1551",
+      "points": 71,
+      "num_comments": 67,
+      "submitted_at": "2026-10-06T00:00:45Z",
+      "page_status": "readable",
+      "content_sha256": "f966c8dd403fbc0b7a50b15c3375dd38597fde860a39a0a966be7f695c19b466",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A research paper evaluating a deployed tutoring product, not the product page: \"from a two-year cluster randomized trial in 18 Tennessee middle schools\". A study with no change to any record's boundary, license, or evidence.",
+        "evidence": [
+          {
+            "label": "Khanmigo school study",
+            "url": "https://edworkingpapers.com/ai26-1551",
+            "kind": "web",
+            "content_sha256": "f966c8dd403fbc0b7a50b15c3375dd38597fde860a39a0a966be7f695c19b466",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49972607",
+      "story_url": "https://news.ycombinator.com/item?id=49972607",
+      "title": "High Diesel Prices Bankrupted 16 Trucking Companies in Just 30 Days",
+      "url": "https://www.thedrive.com/news/high-diesel-prices-bankrupted-16-trucking-companies-in-just-30-days",
+      "points": 170,
+      "num_comments": 183,
+      "submitted_at": "2026-10-06T00:24:57Z",
+      "page_status": "readable",
+      "content_sha256": "01534acf6d5268f2bf8eef3ccaad0cb1e0be4e13d5931fbbb94afd14fec463f4",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07"
+    },
+    {
+      "story_id": "49972730",
+      "story_url": "https://news.ycombinator.com/item?id=49972730",
+      "title": "Photopea creator weighs in on Photosuite project",
+      "url": "https://github.com/eolix/photosuite/issues/77",
+      "points": 160,
+      "num_comments": 106,
+      "submitted_at": "2026-10-06T00:41:44Z",
+      "page_status": "failed",
+      "content_sha256": null,
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "unreadable",
+        "rule": "docs/routines/hn-signals.md unreadable verdict",
+        "finding": "The sweep could not read this page (page_status is not readable); no page text was bundled, so nothing about this link was read and nothing is proposed.",
+        "evidence": [],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49973211",
+      "story_url": "https://news.ycombinator.com/item?id=49973211",
+      "title": "Use GNU Emacs the Plain Text Computing Environment",
+      "url": "https://www2.lib.uchicago.edu/keith/emacs/",
+      "points": 31,
+      "num_comments": 0,
+      "submitted_at": "2026-10-06T01:51:34Z",
+      "page_status": "readable",
+      "content_sha256": "cc8259a686f8f60146e12fa542e1c0a82682148099cdfd38bb5ab673abdd31ca",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A guide to a long-established text editor: \"Using Emacs is kind of like making a piece of art.\". Not a memory, agent, or assistant system.",
+        "evidence": [
+          {
+            "label": "Use GNU Emacs guide",
+            "url": "https://www2.lib.uchicago.edu/keith/emacs/",
+            "kind": "web",
+            "content_sha256": "cc8259a686f8f60146e12fa542e1c0a82682148099cdfd38bb5ab673abdd31ca",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49973598",
+      "story_url": "https://news.ycombinator.com/item?id=49973598",
+      "title": "Why Common Lisp is now the best programming language",
+      "url": "https://www.vivienhenz.com/common-lisp",
+      "points": 282,
+      "num_comments": 381,
+      "submitted_at": "2026-10-06T02:51:51Z",
+      "page_status": "readable",
+      "content_sha256": "a79660a1da933cf4433403286cd7cd1fadb41f3d551bd03daea19d8623b1e86b",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A programming-language opinion post: \"Why Common Lisp Is Now the Best Programming Language\". Not a system.",
+        "evidence": [
+          {
+            "label": "Common Lisp opinion post",
+            "url": "https://www.vivienhenz.com/common-lisp",
+            "kind": "web",
+            "content_sha256": "a79660a1da933cf4433403286cd7cd1fadb41f3d551bd03daea19d8623b1e86b",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
+        "proposer": "hn-signals"
+      }
+    },
+    {
+      "story_id": "49973644",
+      "story_url": "https://news.ycombinator.com/item?id=49973644",
+      "title": "LLMs may have helped my RSI",
+      "url": "https://vaughanhilts.me/2026/10/05/llms-immensely-helped-my-rsi.html",
+      "points": 50,
+      "num_comments": 28,
+      "submitted_at": "2026-10-06T03:01:04Z",
+      "page_status": "readable",
+      "content_sha256": "13bd76056d83dc653bc34cdb4ca25604eccc37e608d9fe3e9c4cbedea9cd4bfc",
+      "fetched_at": "2026-10-07T00:00:00Z",
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "assessment": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md inclusion gate",
+        "finding": "A personal health essay: \"LLMs may have immensely helped my RSI\". Not a system.",
+        "evidence": [
+          {
+            "label": "RSI personal post",
+            "url": "https://vaughanhilts.me/2026/10/05/llms-immensely-helped-my-rsi.html",
+            "kind": "web",
+            "content_sha256": "13bd76056d83dc653bc34cdb4ca25604eccc37e608d9fe3e9c4cbedea9cd4bfc",
+            "fetched_at": "2026-10-07T00:00:00Z"
+          }
+        ],
+        "proposed_at": "2026-10-06",
         "proposer": "hn-signals"
       }
     }

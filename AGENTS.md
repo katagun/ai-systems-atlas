@@ -31,7 +31,8 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 | System inclusion, licensing, prose, scores, forks, successors | [Curation](docs/CURATION.md) |
 | Families, roles, deployment, authoring surfaces, provider relationships, robot software | [Taxonomy](docs/TAXONOMY.md) |
 | Fields, enums, timestamps, local-first/editability, queues, dispositions | [Data model](docs/DATA_MODEL.md) |
-| Refresh, validation, evidence links, terms/license drift, review age, CI/deploy | [Operations](docs/OPERATIONS.md) |
+| Refresh, validation, evidence links, terms/license drift, review age, CI/deploy, repository safeguards | [Operations](docs/OPERATIONS.md) |
+| Reviewing a candidate, signal, service, model, or lab; license resolution; scheduled routines and the attention-source sweep | [Runbooks](docs/RUNBOOKS.md) |
 | UI, filters, comparison, details, badges, payloads, assets, accessibility | [Web](docs/WEB.md) |
 | Model releases, access scores, models.dev import, OpenRouter leads, and promotion | [Models](docs/MODELS.md) |
 | Protocols, conventions, packaging formats | [Specifications](docs/SPECIFICATIONS.md) |

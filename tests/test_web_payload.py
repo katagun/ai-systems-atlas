@@ -5,6 +5,7 @@ import copy
 import io
 import json
 import os
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -16,6 +17,7 @@ from scripts.build_web_payload import (
     BOOT_FIELDS,
     BOOT_ITEM_FIELDS,
     COLLECTIONS,
+    MODEL_SOURCE_CARD_METADATA,
     SEARCH_FIELDS,
     build_payloads,
     load_catalog,
@@ -64,6 +66,17 @@ class WebPayloadTests(unittest.TestCase):
                             entry[field],
                         )
                         self.assertEqual(record[field], detail[field])
+                        continue
+                    # A model's source_metadata is split the same way: boot
+                    # carries the card subset, detail the complete block.
+                    if collection == "models" and field == "source_metadata":
+                        self.assertEqual(
+                            set(MODEL_SOURCE_CARD_METADATA),
+                            set(entry["source_metadata"]),
+                        )
+                        self.assertEqual(
+                            record["source_metadata"], detail["source_metadata"]
+                        )
                         continue
                     self.assertTrue(
                         (field in entry) != (field in detail),
@@ -370,6 +383,37 @@ class WebPayloadTests(unittest.TestCase):
                 set(entry["source_metadata"]),
             )
 
+    def test_imported_model_source_url_rides_with_its_source_details(self) -> None:
+        records = {item["id"]: item for item in model_records(self.catalog)}
+        boot = json.loads(self.payloads["app/models.json"])["models"]
+        details = json.loads(self.payloads["app/model-source-details.json"])
+        for entry in boot:
+            self.assertNotIn("source_url", entry)
+            if entry["review_status"] == "imported":
+                self.assertEqual(
+                    records[entry["id"]]["source_url"],
+                    details[entry["id"]]["source_url"],
+                )
+
+    def test_reviewed_model_boot_carries_card_metadata_and_detail_the_full_block(
+        self,
+    ) -> None:
+        records = {item["id"]: item for item in model_records(self.catalog)}
+        boot = [
+            item
+            for item in json.loads(self.payloads["app/models.json"])["models"]
+            if item["review_status"] == "reviewed"
+        ]
+        self.assertTrue(boot)
+        for entry in boot:
+            self.assertEqual(
+                set(MODEL_SOURCE_CARD_METADATA), set(entry["source_metadata"])
+            )
+            detail = json.loads(self.payloads[f"app/detail/model/{entry['id']}.json"])
+            self.assertEqual(
+                records[entry["id"]]["source_metadata"], detail["source_metadata"]
+            )
+
     def test_search_index_holds_lowercased_prose(self) -> None:
         """Every indexed field of every collection reaches the index, lowercased."""
         for collection, name, key, _ in COLLECTIONS:
@@ -499,6 +543,29 @@ class WebPayloadTests(unittest.TestCase):
         """A trust block is read behind a click; it never bloats boot and never makes a card match."""
         self.assertNotIn("trust", BOOT_FIELDS["inference"])
         self.assertNotIn("trust", SEARCH_FIELDS["inference"])
+
+    def test_pack_search_index_matches_the_browser_fallback_fields(self) -> None:
+        """The index and PACK_VIEW.searchFields name the same pack fields.
+
+        The browser searches its own list until the index arrives, so a field in
+        one and not the other makes a pack findable only after boot finishes.
+        `not_a_system` is excluded from both: its boundary boilerplate ("owns no
+        state", "install source, not a system") repeats across packs and would
+        match every pack for a query like "system".
+        """
+        source = (ROOT / "web" / "app-core.js").read_text(encoding="utf-8")
+        match = re.search(
+            r"const PACK_VIEW = \{.*?searchFields: \[([^\]]*)\]", source, re.DOTALL
+        )
+        self.assertIsNotNone(match, "PACK_VIEW.searchFields not found in app-core.js")
+        browser_fields = re.findall(r'"([^"]+)"', match.group(1))
+        self.assertEqual(list(SEARCH_FIELDS["packs"]), browser_fields)
+        self.assertNotIn("not_a_system", SEARCH_FIELDS["packs"])
+        index = json.loads(self.payloads["app/search/packs.json"])
+        for pack in self.catalog["packs.json"]["packs"]:
+            self.assertNotIn(
+                pack["not_a_system"].lower(), index[pack["id"]], pack["id"]
+            )
 
     def test_build_payloads_runs_the_model_overlay_only_once(self) -> None:
         """model_records() and unlisted_model_count() each run the overlay pass on
