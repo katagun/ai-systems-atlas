@@ -1,17 +1,602 @@
 {
   "version": "1.0",
-  "updated_at": "2026-10-02",
-  "source_record_count": 437,
-  "eligible_record_count": 437,
+  "updated_at": "2026-10-07",
+  "source_record_count": 448,
+  "eligible_record_count": 448,
   "source": {
     "repo": "anomalyco/models.dev",
     "ref": "dev",
-    "commit": "f9f2057be3c620898b6eaaca91dbbf75176043ae",
+    "commit": "195b940bc687ae56cf2f2e68d42bc830d9cf653f",
     "url": "https://github.com/anomalyco/models.dev",
-    "immutable_url": "https://codeload.github.com/anomalyco/models.dev/tar.gz/f9f2057be3c620898b6eaaca91dbbf75176043ae",
+    "immutable_url": "https://codeload.github.com/anomalyco/models.dev/tar.gz/195b940bc687ae56cf2f2e68d42bc830d9cf653f",
     "path": "models/**/*.toml",
     "license": "MIT",
-    "sha256": "861632dbb125066db6b35f7d76eba0aa0f574130ced5a1bf419458d6ff560f47"
+    "sha256": "ed4e9e48b40207a8a71432ffeb42c39900086b67fe4e576b9f73a9ea7e3fa3c9"
   },
-  "candidates": []
+  "candidates": [
+    {
+      "id": "model-bytedance-seed-seedance-2-0",
+      "source_id": "bytedance-seed/seedance-2.0",
+      "source_metadata": {
+        "name": "Seedance 2.0",
+        "description": "ByteDance unified multimodal audio-video model supporting text, image, video and audio references, editing, extension and synchronized stereo sound.",
+        "family": "seed",
+        "release_date": "2026-02-12",
+        "last_updated": "2026-10-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "video",
+            "audio"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 0,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [
+          {
+            "url": "https://seed.bytedance.com/en/blog/seedance-2-0-official-launch",
+            "type": "announcement"
+          }
+        ],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-bytedance-seed-seedance-2-5",
+      "source_id": "bytedance-seed/seedance-2.5",
+      "source_metadata": {
+        "name": "Seedance 2.5",
+        "description": "ByteDance multimodal audio-video model with up to 30-second single-pass generation, multi-round extension, reference inputs and timestamp-level editing.",
+        "family": "seed",
+        "release_date": "2026-07-31",
+        "last_updated": "2026-10-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "video",
+            "audio"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 0,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [
+          {
+            "url": "https://seed.bytedance.com/en/blog/one-take-creation-flexible-referencing-introducing-seedance-2-5",
+            "type": "announcement"
+          }
+        ],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-cohere-north-small-translate-1-0",
+      "source_id": "cohere/north-small-translate-1-0",
+      "source_metadata": {
+        "name": "North Small Translate",
+        "description": "Open-weight translation model for more than 50 languages and locale variants",
+        "family": "north",
+        "release_date": "2026-09-09",
+        "last_updated": "2026-09-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 16000,
+          "input": null,
+          "output": 16000
+        },
+        "reported_open_weights": true,
+        "reported_license": "CC-BY-NC-4.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/North-Small-Translate-1.0"
+          }
+        ]
+      },
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-cohere-tiny-aya-earth",
+      "source_id": "cohere/tiny-aya-earth",
+      "source_metadata": {
+        "name": "Tiny Aya Earth",
+        "description": "Compact multilingual model specialized for West Asian and African languages",
+        "family": null,
+        "release_date": "2026-02-17",
+        "last_updated": "2026-02-17",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8000,
+          "input": null,
+          "output": 8000
+        },
+        "reported_open_weights": true,
+        "reported_license": "CC-BY-NC-4.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/tiny-aya-earth"
+          }
+        ]
+      },
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-cohere-tiny-aya-fire",
+      "source_id": "cohere/tiny-aya-fire",
+      "source_metadata": {
+        "name": "Tiny Aya Fire",
+        "description": "Compact multilingual model specialized for South Asian languages",
+        "family": null,
+        "release_date": "2026-02-17",
+        "last_updated": "2026-02-17",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8000,
+          "input": null,
+          "output": 8000
+        },
+        "reported_open_weights": true,
+        "reported_license": "CC-BY-NC-4.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/tiny-aya-fire"
+          }
+        ]
+      },
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-cohere-tiny-aya-global",
+      "source_id": "cohere/tiny-aya-global",
+      "source_metadata": {
+        "name": "Tiny Aya Global",
+        "description": "Compact multilingual model balanced across 70 languages and regions",
+        "family": null,
+        "release_date": "2026-02-17",
+        "last_updated": "2026-02-17",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8000,
+          "input": null,
+          "output": 8000
+        },
+        "reported_open_weights": true,
+        "reported_license": "CC-BY-NC-4.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/tiny-aya-global"
+          }
+        ]
+      },
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-cohere-tiny-aya-water",
+      "source_id": "cohere/tiny-aya-water",
+      "source_metadata": {
+        "name": "Tiny Aya Water",
+        "description": "Compact multilingual model specialized for European and Asia-Pacific languages",
+        "family": null,
+        "release_date": "2026-02-17",
+        "last_updated": "2026-02-17",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8000,
+          "input": null,
+          "output": 8000
+        },
+        "reported_open_weights": true,
+        "reported_license": "CC-BY-NC-4.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/CohereLabs/tiny-aya-water"
+          }
+        ]
+      },
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-minimax-minimax-h3",
+      "source_id": "minimax/MiniMax-H3",
+      "source_metadata": {
+        "name": "MiniMax H3",
+        "description": "MiniMax general-purpose video model with multimodal references and synchronized stereo audio. Open H3-Base checkpoints; Context-IR and 2K regeneration are not included in the initial weights release.",
+        "family": "minimax",
+        "release_date": "2026-07-31",
+        "last_updated": "2026-10-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "video",
+            "audio"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 0,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": true,
+        "reported_license": "MiniMax H3 Community License Agreement",
+        "links": [
+          {
+            "url": "https://www.minimax.io/blog/minimax-h3",
+            "type": "announcement"
+          },
+          {
+            "url": "https://www.minimax.io/news/minimax-h3-open-source",
+            "type": "announcement"
+          },
+          {
+            "url": "https://huggingface.co/MiniMaxAI/MiniMax-H3",
+            "type": "model_card"
+          },
+          {
+            "url": "https://huggingface.co/MiniMaxAI/MiniMax-H3/blob/main/LICENSE",
+            "type": "license"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face: H3-Base FL2VA / Ref2VA",
+            "url": "https://huggingface.co/MiniMaxAI/MiniMax-H3",
+            "format": "safetensors"
+          }
+        ]
+      },
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-mistral-mistral-large-4",
+      "source_id": "mistral/mistral-large-4",
+      "source_metadata": {
+        "name": "Mistral Large 4",
+        "description": "Mistral's 1T-parameter multimodal MoE for reasoning, coding, and agentic work",
+        "family": "mistral-large",
+        "release_date": "2026-10-06",
+        "last_updated": "2026-10-06",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-nace-ai-drex-v1-5",
+      "source_id": "nace-ai/drex-v1.5",
+      "source_metadata": {
+        "name": "Drex 1.5",
+        "description": "System One decision model for typed, calibrated probabilistic answers over text or structured state",
+        "family": null,
+        "release_date": "2026-09-28",
+        "last_updated": "2026-09-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 139264,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [
+          {
+            "label": "Documentation",
+            "url": "https://drex.nace.ai/docs",
+            "type": "docs"
+          }
+        ],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    },
+    {
+      "id": "model-xai-grok-imagine-video-1-5-lite",
+      "source_id": "xai/grok-imagine-video-1.5-lite",
+      "source_metadata": {
+        "name": "Grok Imagine Video 1.5 Lite",
+        "description": "Cost-efficient video model for text-to-video and image-to-video generation",
+        "family": "grok",
+        "release_date": "2026-10-01",
+        "last_updated": "2026-10-01",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "video"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1024,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07",
+      "review_required": [
+        "official_identity",
+        "model_boundary",
+        "license_evidence",
+        "source_model",
+        "model_access_score"
+      ]
+    }
+  ]
 }
