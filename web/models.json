@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-10-03",
+  "verified_at": "2026-10-07",
   "source": {
     "id": "models-dev",
     "name": "models.dev",
@@ -19062,6 +19062,119 @@
       ],
       "metadata_verified_at": "2026-09-16",
       "verified_at": "2026-09-16"
+    },
+    {
+      "id": "model-mistral-mistral-large-4-0",
+      "source_id": null,
+      "name": "Mistral Large 4",
+      "developer": "Mistral AI",
+      "url": "https://docs.mistral.ai/models/mistral-large-4-0",
+      "description": "Mistral AI's roughly one-trillion-parameter natively multimodal Mixture-of-Experts flagship, available today as a public-preview API model with open weights announced for the end of October 2026.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Mistral Large 4",
+        "description": "Natively multimodal granular Mixture-of-Experts model for coding, agentic workflows, and multilingual enterprise tasks",
+        "family": "mistral-large",
+        "release_date": "2026-10-06",
+        "last_updated": "2026-10-06",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": null,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": null,
+        "reported_license": null,
+        "links": [
+          {
+            "label": "Announcement",
+            "url": "https://mistral.ai/news/mistral-large-4"
+          },
+          {
+            "label": "Docs",
+            "url": "https://docs.mistral.ai/models/mistral-large-4-0"
+          }
+        ],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "At review time no weights are published and no weights license exists: the announcement says weights will be released by the end of October 2026, and the docs page shows no license badge. The preview API is governed by Mistral's commercial terms, so the release is classified proprietary today. Re-review when the weights and their license text ship.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Public-preview API access to Mistral Large 4; no weights or weights license published as of the review date",
+          "kind": "web_terms",
+          "url": "https://mistral.ai/news/mistral-large-4",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "access_boundary": "This record represents Mistral Large 4 (announced 2026-10-06) as the public-preview mistral-large-4 API model (alias mistral-large-4-0). The weights promised for the end of October 2026, the reduced-moderation variant offered to vetted red-teaming partners, earlier Large generations, and downstream quantizations remain separate boundaries. The announcement states 1 trillion parameters with 49B active; the docs page states 1.05T total with 52B active and a 1.6B vision encoder.",
+      "strengths": [
+        "First-party announcement and docs page published on launch day with a 1M-token context window and documented function calling, structured outputs, batching, and agents",
+        "Mistral commits to publishing the weights by the end of October 2026 and to serving from European infrastructure it operates itself"
+      ],
+      "tradeoffs": [
+        "Public preview only: no weights, license text, or third-party hosting exist yet, so artifact availability and portability rest on a promise",
+        "The announcement and docs page disagree on active-parameter count (49B versus 52B)"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 5,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 4.0
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Mistral Large 4 announcement: preview API and end-of-month weights commitment",
+          "url": "https://mistral.ai/news/mistral-large-4",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Official Mistral Large 4 docs page: public-preview status, context window, and features",
+          "url": "https://docs.mistral.ai/models/mistral-large-4-0",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://mistral.ai/news/mistral-large-4",
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ],
+      "metadata_verified_at": "2026-10-07",
+      "verified_at": "2026-10-07"
     },
     {
       "id": "model-mistral-mistral-medium-2505",
