@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-10-01",
+  "updated_at": "2026-10-06",
   "dispositions": [
     {
       "source_id": "alibaba/qwen3.8-2.4t-a95b",
@@ -619,6 +619,78 @@
       "disposition": "held",
       "reason": "The release is not a text generator. Liquid AI's own Decision Models documentation states that a decision model returns calibrated probabilities across a fixed set of outcomes \"in a single call with zero generated tokens\", that usage.output_tokens is always 0, and that a caller should \"use a language model instead for free-form text generation, creative writing, multi-turn conversation, complex multi-step reasoning, open-ended Q&A, summarization, and code generation\". The three documented primitives, Noul, Choice, and Score, return typed decisions rather than composed text, so the output modality is a decision label rather than served language-model text. Same shape as the held openai/gpt-image-1.5 and quiverai/arrow-2 rows, whose output modality is not language-model text. Held rather than excluded because a future Liquid decision model could generate text, and because the row is a live API service rather than a retired alias.",
       "decided_at": "2026-10-01"
+    },
+    {
+      "source_id": "openai/gpt-5.6-cyber",
+      "disposition": "held",
+      "reason": "OpenAI's own model page calls gpt-5.6-cyber an alias for purpose-trained cybersecurity models, lists only the alias as its snapshot, and gives no first-party release statement (the openai.com announcement URL tried returns 404). Access is restricted to approved defenders, whose programme terms were not fetched. Held until OpenAI documents a fixed release identity.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "source_id": "openai/gpt-image-1",
+      "disposition": "held",
+      "reason": "OpenAI's model page badges gpt-image-1 Deprecated and its deprecations page lists it for shutdown on 2026-10-23. It is a fixed release about to lose its serving identity, so no record is minted now; exclude it as retired after the shutdown.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "source_id": "google/gemini-omni-flash-preview",
+      "disposition": "held",
+      "reason": "Output is video, but Google's own page for the preview ID returns 404, so its identity rests on the changelog and deprecations table, which disagree (the changelog deprecates the preview endpoint on 2026-09-30; the table gives an earliest shutdown of 2026-10-22). The GA gemini-omni-1.1-flash (2026-08-27) is a separate identity. Held until a first-party model page for a fixed identity can be fetched.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "source_id": "google/veo-3.1-fast-generate-preview",
+      "disposition": "held",
+      "reason": "Google's dedicated page for this ID returns 404; its identity rests on the shared Veo page, a deprecations row (earliest shutdown 2026-10-22) and the changelog. Held, while the Veo 3.1 and Veo 3.1 Lite previews, which have their own pages, are reviewed.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "source_id": "xai/grok-voice-tts-1.0",
+      "disposition": "held",
+      "reason": "No first-party page names a grok-voice-tts-1.0 model: docs.x.ai/developers/models/grok-voice-tts-1.0 returns the generic models index, and the TTS documentation page documents a /v1/tts endpoint with no model parameter or version. xAI's release notes say TTS reached general availability on March 16, while models.dev dates the row 2026-07-31. Identity and release date are undocumented first-party.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "source_id": "minimax/MiniMax-M3.1-Flash-Preview",
+      "disposition": "held",
+      "reason": "MiniMax's platform lists it beside the reviewed MiniMax-M3 but documents it as available only through M Plan and MiniMax Code for now. It has no first-party release date or changelog entry and no published weights, so a fixed release identity is not established. Held until MiniMax documents one.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "source_id": "alibaba/qwen3.8-max-prime",
+      "disposition": "excluded",
+      "reason": "A Fast mode (Prime) serving tier of the reviewed Qwen3.8-Max line (model-alibaba-qwen3-8-max): Alibaba's pricing page lists it only as a price row, and no model page of its own exists (QwenCloud and Model Studio pages return 404). It has no weights, licence, repository, or release identity of its own.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "source_id": "google/gemini-embedding-001",
+      "disposition": "held",
+      "reason": "Embedding, reranking, or judgment model: docs/MODELS.md holds these as their own question (the judgment-model type question in BACKLOG.md), so the release is not reviewed as a language model until Atlas decides whether to record them.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "source_id": "google/gemini-embedding-2",
+      "disposition": "held",
+      "reason": "Embedding, reranking, or judgment model: docs/MODELS.md holds these as their own question (the judgment-model type question in BACKLOG.md), so the release is not reviewed as a language model until Atlas decides whether to record them.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "source_id": "mistral/mistral-embed",
+      "disposition": "held",
+      "reason": "Embedding, reranking, or judgment model: docs/MODELS.md holds these as their own question (the judgment-model type question in BACKLOG.md), so the release is not reviewed as a language model until Atlas decides whether to record them.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "source_id": "nvidia/llama-nemotron-embed-vl-1b-v2",
+      "disposition": "held",
+      "reason": "Embedding, reranking, or judgment model: docs/MODELS.md holds these as their own question (the judgment-model type question in BACKLOG.md), so the release is not reviewed as a language model until Atlas decides whether to record them.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "source_id": "nvidia/llama-nemotron-rerank-vl-1b-v2",
+      "disposition": "held",
+      "reason": "Embedding, reranking, or judgment model: docs/MODELS.md holds these as their own question (the judgment-model type question in BACKLOG.md), so the release is not reviewed as a language model until Atlas decides whether to record them.",
+      "decided_at": "2026-10-06"
     }
   ]
 }

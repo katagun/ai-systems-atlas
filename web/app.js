@@ -832,10 +832,12 @@ function applyDirectoryDefaults() {
   syncBadgeLegend();
 }
 
+// The headline holds "The" until the boot payloads give it a count. The kicker
+// above it is static markup that names the kinds and carries no number, so the
+// count is shown once.
 function renderStats() {
   const { count } = AppCore.collectionCount("all", collectionPayloads());
   $("#directory-count").textContent = count.toLocaleString("en-US");
-  $("#hero-kicker").textContent = `${count} systems, source models, services, runtimes, packs, and robots`;
 }
 
 // Every registry function reads the boot payloads in this shape.
@@ -1054,6 +1056,23 @@ function stageRecords(kind) {
   return AppCore.newestDated(state.projects.filter(project => state.systemReviewDates[project.id]), project => state.systemReviewDates[project.id]);
 }
 
+// A face previews its collection; it is not the collection. Listing every
+// record after the featured one put the collection index (and "Browse every
+// collection" with it) some 14,000 px down the page at 1440 px wide, so a face
+// stops at this many rows and one control leaves for the rest.
+const STAGE_LIST_ROWS = 8;
+
+// The control under a face's list. It opens the whole collection through the
+// path a front-door tile takes (openCollection), so one entry is pushed on the
+// way out and Back returns to the door. Models asks for the release-date order,
+// the order the list above it is in; Systems has no review-date sort, so it
+// opens in its default order.
+function stageBrowseControl(kind) {
+  return kind === "model"
+    ? '<button type="button" class="link-button" data-open-collection="models" data-facet-key="sort" data-facet-value="release">Browse all models, newest first →</button>'
+    : '<button type="button" class="link-button" data-open-collection="systems">Browse all systems →</button>';
+}
+
 function renderStageFace(kind, records) {
   const root = $(`#stage-${kind}`);
   const featured = records[0];
@@ -1065,14 +1084,14 @@ function renderStageFace(kind, records) {
   const row = record => `<li><button type="button" data-stage-record="${kind}" data-stage-id="${escapeHTML(record.id)}"><span class="stage-list-name">${escapeHTML(record.name)}</span><span class="stage-list-meta">${escapeHTML(stageMeta(kind, record))}</span><time datetime="${escapeHTML(date(record))}">${escapeHTML(date(record))}</time></button></li>`;
   const when = kind === "model" ? `released ${date(featured)}` : `reviewed ${date(featured)}`;
   const where = kind === "model" ? featured.developer || "" : `${familyName(featured.system_family)} · ${roleName(featured.primary_role)}`;
-  const rest = records.slice(1);
+  const rest = records.slice(1, 1 + STAGE_LIST_ROWS);
   root.innerHTML = `<article class="stage-feature${kind === "system" ? " is-system" : ""}">${cardMark(featured, kind)}<div>
       <p class="eyebrow">Latest reviewed ${kind}</p>
       <h2 class="stage-name">${escapeHTML(featured.name)}</h2>
       <p class="stage-meta">${escapeHTML(`${where} · ${when}`)}</p>
       <p class="stage-description">${escapeHTML(featured.description || "")}</p>
       <p><button type="button" class="link-button" data-stage-record="${kind}" data-stage-id="${escapeHTML(featured.id)}">Open this ${kind}</button></p>
-    </div></article>${rest.length ? `<p class="stage-list-label">More ${kind}s, newest first</p><ol class="stage-list">${rest.map(row).join("")}</ol>` : ""}`;
+    </div></article>${rest.length ? `<p class="stage-list-label">More ${kind}s, newest first</p><ol class="stage-list">${rest.map(row).join("")}</ol>` : ""}<p class="stage-browse">${stageBrowseControl(kind)}</p>`;
 }
 
 function renderStage() {
@@ -1234,8 +1253,9 @@ function syncStickyClearance() {
 }
 
 // The one way a tile or a strip entry opens a collection. A facet narrows
-// the collection to one category first; a family goes through
-// jumpToDirectoryFamily so the role and Finder set are cleared as ever.
+// the collection to one category first (the stage's Models control passes the
+// `sort` key, which only orders it: the release-date sort); a family goes
+// through jumpToDirectoryFamily so the role and Finder set are cleared as ever.
 // Every collection reads the one query, so a query only a lab or a
 // specification answers follows the reader from the All results into Labs
 // or Specifications; the front door clears it on arrival.
@@ -1326,7 +1346,7 @@ function setDirectoryCollection(collection, { updateURL = true, carryQuery = upd
 // names seven of these grids and result counts again, for Phase 3 task 4 to
 // fold into one (CR-20; RECORD_DIALOGS is the pattern).
 const RESULT_VIEWS = {
-  all: { panel: "#all-directory-panel", grid: "#all-directory-grid", pager: "#all-directory-pager", count: "#all-directory-result-count", clear: "#reset-all-directory", placeholder: "Search systems, models, services, runtimes, packs, and robots", render: () => renderAllDirectoryEntries() },
+  all: { panel: "#all-directory-panel", grid: "#all-directory-grid", pager: "#all-directory-pager", count: "#all-directory-result-count", clear: "#reset-all-directory", placeholder: "Search systems, models, services, runtimes, packs, robots, labs, and specifications", render: () => renderAllDirectoryEntries() },
   systems: { panel: "#systems-directory-panel", grid: "#project-grid", pager: "#project-pager", count: "#result-count", clear: "#reset-filters", placeholder: "Search all systems", render: () => renderCollection("systems") },
   inference: { panel: "#inference-directory-panel", grid: "#inference-grid", pager: "#inference-pager", count: "#inference-result-count", clear: "#reset-inference-filters", placeholder: "Search services and boundaries", render: () => renderCollection("inference") },
   runtimes: { panel: "#runtimes-directory-panel", grid: "#runtime-grid", pager: "#runtime-pager", count: "#runtime-result-count", clear: "#reset-runtime-filters", placeholder: "Search runtimes and boundaries", render: () => renderCollection("runtimes") },
@@ -1375,14 +1395,38 @@ function modelModalityRoute(model) {
   return `${modalities.input.map(item => taxonomyName("model_modalities", item)).join(" + ")} → ${modalities.output.map(item => taxonomyName("model_modalities", item)).join(" + ")}`;
 }
 
-// Badges replace the tags row on system, inference-service, and
-// local-runtime cards. Each is an icon-only emblem whose frame names its
-// family; the name and definition ride in visually hidden text for screen
-// readers and in data attributes for the pointer tooltip. Badges are never
-// controls and take no tab stop.
-function badgeRow(badges) {
-  if (!badges.length) return "";
-  return `<div class="badge-group"><ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul><details class="badge-help"><summary>Badge meanings</summary><dl>${badges.map(badge => `<dt>${escapeHTML(badge.name)}</dt><dd>${escapeHTML(badge.definition)}</dd>`).join("")}</dl></details></div>`;
+// Every card leads its badge row with one type badge (ADR 047). Each badge is
+// an icon-only emblem whose frame names its family; the name and definition
+// ride in visually hidden text for screen readers and in data attributes for
+// the pointer tooltip. Badges are never controls and take no tab stop. A
+// reviewed-model card's flag (ADR 042) sits directly after its type badge,
+// outside the badge cap, and "Badge meanings" lists every emblem in the row's
+// order.
+function badgeRow(badges, flags = [], record) {
+  if (!badges.length && !flags.length) return "";
+  const lead = badges[0]?.family === "type" ? 1 : 0;
+  const entries = [...badges.slice(0, lead).map(badgeItem), ...flags.map(flag => flagItem(flag, record)), ...badges.slice(lead).map(badgeItem)];
+  return `<div class="badge-group"><ul class="card-badges" role="list">${entries.map(entry => entry.emblem).join("")}</ul><details class="badge-help"><summary>Badge meanings</summary><dl>${entries.map(entry => entry.meaning).join("")}</dl></details></div>`;
+}
+
+function badgeItem(badge) {
+  return {
+    emblem: `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`,
+    meaning: `<dt>${escapeHTML(badge.name)}</dt><dd>${escapeHTML(badge.definition)}</dd>`,
+  };
+}
+
+// A flag's hidden text is its family name and tooltip sentence, the "name:
+// definition" every badge gives a screen reader. Boot carries a found
+// statement's term, domains, determination, and scope (ADR 042), so the card
+// paints the developer's own words without waiting for the detail file. The
+// class is not `card-flag`: that names a card's geography circles.
+function flagItem(flag, record) {
+  const text = AppCore.flagEmblemText(flag.entry, record.developer, state.taxonomy);
+  return {
+    emblem: `<li class="card-badge card-reviewed-flag" data-badge="${escapeHTML(flag.id)}" data-family="${escapeHTML(flag.family)}" data-flag-record="${escapeHTML(record.id)}" data-name="${escapeHTML(text.name)}" data-definition="${escapeHTML(text.sentence)}">${AppCore.badgeEmblem(flag.id)}<span class="visually-hidden">${escapeHTML(flag.name)}: ${escapeHTML(text.sentence)}</span></li>`,
+    meaning: `<dt>${escapeHTML(`${flag.name} · ${text.name}`)}</dt><dd>${escapeHTML(text.sentence)}</dd>`,
+  };
 }
 
 // The one control that opens a card's record. Its hidden text names the
@@ -1645,7 +1689,7 @@ function labCard(lab, { mixed = false } = {}) {
   const newestDate = AppCore.releaseDate(releases[0] || {});
   return `<article class="project-card lab-card${mixed ? " mixed-directory-card" : ""}">
     <div class="card-top"><div class="card-identity">${cardMarkWithGeography("lab", lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
-    <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
+    ${modes.length ? `<span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>` : ""}
     <p>${escapeHTML(lab.description)}</p>
     ${counts ? `<div class="tags">${counts}</div>` : ""}
     ${labRelatedMarkup(lab, releases, systems)}
@@ -1740,7 +1784,7 @@ function renderAllDirectoryEntries() {
         <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(record.description)}</p>
         ${modelSourceMeta(record)}
-        ${badgeRow(AppCore.cardBadges("model", record))}
+        ${badgeRow(AppCore.cardBadges("model", record), AppCore.cardFlags("model", record), record)}
         <div class="card-footer"><span>Dedicated model-access score</span>${detailsButton("data-model", record.id, record.name)}</div>
       </article>`;
     }
@@ -1992,7 +2036,7 @@ const COLLECTIONS = {
         <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
         ${modelSourceMeta(model)}
-        ${badgeRow(AppCore.cardBadges("model", model))}
+        ${badgeRow(AppCore.cardBadges("model", model), AppCore.cardFlags("model", model), model)}
         <div class="card-footer"><span>${escapeHTML(AppCore.modelSourceLabel(model))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-model", model.id, model.name)}</div></div>
       </article>`;
     },
@@ -2364,12 +2408,39 @@ function writeFinderURL({ push = false } = {}) {
   writeURL(url, { push });
 }
 
+// A chosen goal paints its priority row and shortlist below every goal tile,
+// 2,500 px down a phone's page, so the choice would show nothing without a
+// scroll. This brings the row, the first thing the choice adds, to 12 px under
+// the sticky header (headerClearance), unless its top is already on screen below
+// the header. A phone's fixed bottom bar covers the last of the viewport, so the
+// screen ends where the bar begins. It runs once per choice, where the choice is
+// made: never from renderFinder, so neither a priority nor the shortlist
+// replacing its placeholder scrolls. Focus stays where it is.
+// `fromTop` is for a Finder that was just opened: activateView has started a
+// smooth scroll to the top, so the row is judged from a scroll position of 0,
+// where the page is heading, and an explicit scroll supersedes the one in flight.
+// The scroll is instant, as revealDirectoryResults is: it never animates, so it
+// honours prefers-reduced-motion by construction. A short page may stop short
+// of the target, as a shortlist still reading its scores can; the row then rests
+// lower, still in view.
+function revealFinderPriorities({ fromTop = false } = {}) {
+  const row = $(".finder-priorities");
+  if (!row || !$("#finder").classList.contains("is-active")) return;
+  const offset = row.getBoundingClientRect().top + window.scrollY;
+  const top = offset - (fromTop ? 0 : window.scrollY);
+  const bar = $("#mobile-nav");
+  const screenBottom = bar && getComputedStyle(bar).display !== "none" ? bar.getBoundingClientRect().top : window.innerHeight;
+  if (top >= stickyHeight() && top < screenBottom) return;
+  window.scrollTo({ top: offset - headerClearance(), behavior: "instant" });
+}
+
 // The job is already chosen, so the screen opens with its shortlist rather
 // than with a question standing between the reader and it.
 function openFinderAt(direction, goal) {
   chooseFinderGoal(goal, direction);
   writeFinderURL();
   activateView("finder");
+  revealFinderPriorities({ fromTop: true });
 }
 
 function finderPriorityFor(direction, priority) {
@@ -2418,13 +2489,15 @@ function renderFinderStatus() {
   const records = AppCore.FINDER_DIRECTIONS.reduce((sum, direction) => sum + AppCore.finderDirectionTotal(direction.id, collections), 0);
   $("#finder-status").textContent = entry
     ? `${entry.label}: ${entry.eligible} active ${entry.eligible === 1 ? "record" : "records"} match, ranked for “${label}”.`
-    : `${jobs} jobs in ${directions} directions, over ${records} active records. Choose one to see its three strongest reviewed matches.`;
+    : `${jobs} jobs in ${directions} directions, across ${records} active records. Choose one to see its three strongest reviewed matches.`;
 }
 
 // The three answers, on the Finder's own keys. A goal the tables no longer
 // offer, or one whose direction contradicts the `direction` beside it, leaves
-// the URL as any value a control cannot take, and leaves the tiles.
-function restoreFinderFromURL(params) {
+// the URL as any value a control cannot take, and leaves the tiles. `reveal` is
+// the page loading on a link that names a job, which opens like any other
+// Finder with a job set; Back and Forward leave the scroll to the browser.
+function restoreFinderFromURL(params, { reveal = false } = {}) {
   const goal = params.get("job") || "";
   if (!goal) {
     // Only a Finder URL with no job clears the screen. The tab and the
@@ -2448,6 +2521,7 @@ function restoreFinderFromURL(params) {
   }
   state.finder = { direction: entry.direction, goal: entry.id, priority: finderPriorityFor(entry.direction, params.get("prefer") || "") };
   renderFinder();
+  if (reveal) revealFinderPriorities({ fromTop: true });
 }
 
 function renderFinder() {
@@ -2476,7 +2550,7 @@ function renderJobHint(scope, term) {
   const goal = term.trim() ? AppCore.matchFinderGoal(finderGoalEntries(), term) : null;
   hint.hidden = !goal;
   hint.innerHTML = goal
-    ? `<span>Looks like a job: <strong>${escapeHTML(goal.label)}</strong>. The Finder can shortlist from ${goal.eligible} reviewed ${goal.eligible === 1 ? "record" : "records"}.</span><button type="button" class="link-button" data-finder-goal="${escapeHTML(`${goal.direction}:${goal.id}`)}">Open shortlist →</button>`
+    ? `<span>Looks like a job: <strong>${escapeHTML(goal.label)}</strong>. The Finder can shortlist from ${goal.eligible} reviewed ${goal.eligible === 1 ? "record" : "records"}.</span><button type="button" class="link-button" data-open-finder-goal="${escapeHTML(`${goal.direction}:${goal.id}`)}">Open shortlist →</button>`
     : "";
 }
 
@@ -2802,7 +2876,8 @@ function renderTaxonomy() {
     state.taxonomy.primary_roles.filter(item => item.family === family.id),
   ]);
   const glossary = AppCore.cardBadgeGlossary();
-  const badgeGroups = Object.entries(AppCore.BADGE_FAMILIES).map(([id, family]) => [
+  // Reviewed flags are not badges; they have their own Taxonomy group.
+  const badgeGroups = Object.entries(AppCore.BADGE_FAMILIES).filter(([id]) => id !== AppCore.FLAG_FAMILY).map(([id, family]) => [
     `Card badges · ${family.name}`,
     glossary.filter(entry => entry.family === id).map(entry => ({
       name: entry.name,
@@ -2812,6 +2887,20 @@ function renderTaxonomy() {
     })),
     { lede: family.meaning, badgeFamily: id },
   ]);
+  // Reviewed flags (ADR 042): the kind with its emblem, then the vocabularies a
+  // flag entry uses. "Not examined" is a state, not a stored value.
+  const flagGroups = [
+    ["Reviewed flags", (state.taxonomy.flag_kinds || []).map(kind => ({
+      name: kind.name,
+      definition: kind.definition,
+      emblem: Object.hasOwn(AppCore.REVIEWED_FLAGS, kind.id) ? AppCore.badgeEmblem(kind.id) : "",
+      family: AppCore.FLAG_FAMILY,
+    })), { lede: AppCore.BADGE_FAMILIES[AppCore.FLAG_FAMILY].meaning, reviewedFlags: true }],
+    ["Reviewed flag states", [...(state.taxonomy.flag_statuses || []), { name: "Not examined", definition: "Nobody has checked this release's developer pages yet. Its record says “Not yet examined.”" }]],
+    ["Risk areas", state.taxonomy.flag_domains || []],
+    ["What the developer states", state.taxonomy.flag_determinations || []],
+    ["What a statement covers", state.taxonomy.flag_scopes || []],
+  ];
   const groups = [
     ["System families", state.taxonomy.system_families], ...roleGroups,
     ["Collection symbols", AppCore.COLLECTIONS.map(entry => ({ name: entry.name, definition: entry.meaning, emblem: AppCore.collectionEmblem(entry), family: "type" })), { lede: "Navigation symbols identify collections. Card badges describe individual records; shared artwork does not imply the same record type." }],
@@ -2837,6 +2926,7 @@ function renderTaxonomy() {
     ["Model modalities", state.taxonomy.model_modalities],
     ["Model distribution modes", state.taxonomy.model_distribution_modes],
     ["Model-access score", state.taxonomy.model_score_profile.dimensions.map(item => ({name: `${label(item.id)} · ${Math.round(item.weight * 100)}%`, definition: item.definition}))],
+    ...flagGroups,
     ["Specification types", state.taxonomy.specification_types],
     ["Specification scopes", state.taxonomy.specification_scopes], ["Specification statuses", state.taxonomy.specification_statuses],
     ["Pack types", state.taxonomy.pack_types], ["Pack hosts", state.taxonomy.pack_hosts],
@@ -2846,7 +2936,7 @@ function renderTaxonomy() {
     ["Kinds of model a robot maker names", state.taxonomy.robot_model_kinds], ["Robot terms", state.taxonomy.robot_terms_kinds],
     ["Licenses and terms", state.taxonomy.licenses]
   ];
-  $("#taxonomy-content").innerHTML = groups.map(([name, items, extra = {}]) => `<section class="taxonomy-group"${extra.badgeFamily ? ` data-badge-family="${escapeHTML(extra.badgeFamily)}"` : ""}><h2>${escapeHTML(name)}</h2>${extra.lede ? `<p class="taxonomy-lede">${escapeHTML(extra.lede)}</p>` : ""}<div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"${item.family ? ` data-family="${escapeHTML(item.family)}"` : ""}>${item.emblem || ""}<strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
+  $("#taxonomy-content").innerHTML = groups.map(([name, items, extra = {}]) => `<section class="taxonomy-group"${extra.badgeFamily ? ` data-badge-family="${escapeHTML(extra.badgeFamily)}"` : ""}${extra.reviewedFlags ? " data-reviewed-flags" : ""}><h2>${escapeHTML(name)}</h2>${extra.lede ? `<p class="taxonomy-lede">${escapeHTML(extra.lede)}</p>` : ""}<div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"${item.family ? ` data-family="${escapeHTML(item.family)}"` : ""}>${item.emblem || ""}<strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
 }
 
 // Every record dialog is the same frame — find the record, paint one content
@@ -3198,6 +3288,7 @@ const reportedCapability = value => value == null ? "Not reported" : value ? "Ye
 const reportedTokenLimit = value => value == null ? "Not reported" : Intl.NumberFormat("en").format(value);
 
 function modelSourceLinks(metadata, noLinksText) {
+  if (!metadata.links && !metadata.weights) return "<p>Loading source details…</p>";
   return [...(metadata.links || []), ...(metadata.weights || [])].map(item =>
     `<p><strong>${escapeHTML(item.label || "Source")}</strong>: <a href="${escapeHTML(item.url)}" target="_blank" rel="noreferrer">open source ↗</a></p>`
   ).join("") || `<p>${escapeHTML(noLinksText)}</p>`;
@@ -3209,13 +3300,32 @@ function importedModelDialogMarkup(model) {
   const limits = metadata.limits || {};
   return `<p class="eyebrow">models.dev source record · Not Atlas reviewed</p><h1>${escapeHTML(model.name)}</h1><p>${escapeHTML(model.description || "Loading the models.dev source description…")}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Source identity</h3><p><strong>models.dev namespace:</strong> ${escapeHTML(model.developer)}</p>${labLinksMarkup("model", model)}<p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p><p><a href="${escapeHTML(model.source_url)}" target="_blank" rel="noreferrer">Open commit-pinned source record ↗</a></p></section>
+      <section class="detail-block"><h3>Source identity</h3><p><strong>models.dev namespace:</strong> ${escapeHTML(model.developer)}</p>${labLinksMarkup("model", model)}<p><strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}</p>${model.source_url ? `<p><a href="${escapeHTML(model.source_url)}" target="_blank" rel="noreferrer">Open commit-pinned source record ↗</a></p>` : ""}</section>
       <section class="detail-block"><h3>Review status</h3><p>This is attributed metadata imported directly from models.dev. Atlas has not reviewed its identity boundary, licensing, distribution, evidence, or access score.</p><p class="unscored-note">Reported license and open-weight fields are source claims, not Atlas conclusions.</p></section>
       <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(limits.output))}</p></section>
       <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("") || "<p>Loading source details…</p>"}<p class="unscored-note">These values are imported discovery metadata, not an Atlas capability test.</p></section>
       <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>Open weights reported:</strong> ${escapeHTML(reportedCapability(metadata.reported_open_weights))}</p><p><strong>License reported:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
       <section class="detail-block"><h3>Source links from models.dev</h3>${modelSourceLinks(metadata, "No source links reported by models.dev.")}</section>
     </div>`;
+}
+
+// The three states of ADR 042's maker-risk flag, in the developer's own words.
+// Boot knows the state and, for a found statement, its term, domains,
+// determination, and scope; the quote, link, date, and confidence arrive with
+// detail. Until then the section says what boot knows, so a found statement
+// never reads as "not examined". The term is an <h4>, not a bold paragraph,
+// which would read as a label left without its value.
+function riskStatementsMarkup(model) {
+  const view = AppCore.riskStatementView(model, state.taxonomy);
+  if (!view) return "";
+  const heading = "<h3>Risk statements</h3>";
+  if (view.state === "not_examined") return `<section class="detail-block" data-risk="not_examined">${heading}<p>${escapeHTML(view.text)}</p></section>`;
+  const source = view.url
+    ? `<p><a href="${escapeHTML(view.url)}" target="_blank" rel="noreferrer">${view.state === "statement_found" ? "Read the developer's statement" : "Page the reviewer checked"} ↗</a> <span class="evidence-date">${escapeHTML(view.verifiedAt)}</span> · Research confidence: ${escapeHTML(view.confidence)}</p>`
+    : "";
+  if (view.state === "no_statement_found") return `<section class="detail-block" data-risk="no_statement_found">${heading}<p>${escapeHTML(view.text)}</p>${source}</section>`;
+  const quote = view.pending ? "" : `<blockquote class="risk-quote">${escapeHTML(view.statement)}</blockquote>`;
+  return `<section class="detail-block" data-risk="${view.pending ? "pending" : "statement_found"}">${heading}<h4>${escapeHTML(view.heading)}</h4>${quote}<p><strong>Risk areas:</strong> ${escapeHTML(view.domains)}</p><p><strong>Covers:</strong> ${escapeHTML(view.scope)}</p>${source}<p class="unscored-note">${escapeHTML(view.sentence)}</p></section>`;
 }
 
 // Like the other four record dialogs, this paints from the boot record the
@@ -3228,6 +3338,9 @@ function modelDialogMarkup(model) {
   if (!isReviewedModel(model)) return importedModelDialogMarkup(model);
   const profile = state.taxonomy.model_score_profile;
   const metadata = model.source_metadata;
+  // Boot carries only card metadata; limits, capabilities, dates and links land
+  // with the record's detail, so each reads as not reported until then.
+  const limits = metadata.limits || {};
   const attribution = AppCore.modelMetadataAttribution(model);
   const openWeightsLabel = attribution.listed ? "Open weights reported" : "Open weights";
   const licenseLabel = attribution.listed ? "License reported" : "License named by the developer";
@@ -3237,8 +3350,9 @@ function modelDialogMarkup(model) {
       <section class="detail-block"><h3>Model identity</h3><p><strong>Developer:</strong> ${escapeHTML(model.developer)}</p>${labLinksMarkup("model", model)}<p>${attribution.listed ? `<strong>models.dev ID:</strong> ${escapeHTML(model.source_id)}` : escapeHTML(AppCore.UNLISTED_MODEL_LABEL)}</p><p><strong>Distribution:</strong> ${escapeHTML(model.distribution_modes.map(item => taxonomyName("model_distribution_modes", item)).join(" · "))}</p><p>${model.url ? `<a href="${escapeHTML(model.url)}" target="_blank" rel="noreferrer">Open official model page ↗</a>` : "—"}</p></section>
       <section class="detail-block"><h3>${escapeHTML(profile.name)}</h3><table class="score-table">${scoreRows}<tr><td><strong>Overall</strong></td><td>${escapeHTML(model.score.overall)}</td></tr></table><p class="unscored-note">Access and deployability only. This score excludes output quality, benchmark rank, parameter count, price, latency, and throughput.</p></section>
       <section class="detail-block"><h3>Model boundary</h3><p>${detailText(model.access_boundary)}</p><p class="unscored-note">Hosted endpoints, inference services, runtimes, repackagings, fine-tunes, and applications remain separate boundaries.</p></section>
-      <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.output))}</p></section>
-      <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("")}<p class="unscored-note">${escapeHTML(attribution.capabilityNote)}</p></section>
+      ${riskStatementsMarkup(model)}
+      <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(limits.output))}</p></section>
+      <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities || {}).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("") || "<p>Loading source details…</p>"}<p class="unscored-note">${escapeHTML(attribution.capabilityNote)}</p></section>
       <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>${escapeHTML(openWeightsLabel)}:</strong> ${escapeHTML(reportedCapability(metadata.reported_open_weights))}</p><p><strong>${escapeHTML(licenseLabel)}:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
       <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Artifact licensing:</strong> ${escapeHTML(modelLicenseName(model.source_model))}</p><p>These labels describe the reviewed release artifacts and mandatory terms; they do not assess training code or training data openness.</p><p>${detailText(model.license_note)}</p>${(model.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>${escapeHTML(attribution.linksHeading)}</h3>${modelSourceLinks(metadata, attribution.noLinksText)}</section>
@@ -3608,7 +3722,7 @@ function restoreFromURL({ boot = false } = {}) {
     if (onDoor) showFrontDoor({ updateURL: false });
     else if (scope && !comparisonRestored) setDirectoryCollection(scope, { updateURL: false });
     activateView(view);
-    restoreFinderFromURL(params);
+    restoreFinderFromURL(params, { reveal: boot });
     // The one restored query, or its absence, reaches every collection's
     // sort, so a sort chosen during a query the URL no longer holds ends too.
     if (scope) syncMatchSorts();
@@ -3866,10 +3980,6 @@ function writeViewURL(id) {
 function activateView(id, { focusTarget } = {}) {
   // Read before anything repaints: a repaint can detach the focused element.
   const leaving = document.activeElement?.closest?.(".view");
-  if (id === "inference-services" || id === "local-runtimes" || id === "agent-packs" || id === "robots") {
-    setDirectoryCollection(id === "inference-services" ? "inference" : id === "local-runtimes" ? "runtimes" : id === "agent-packs" ? "packs" : "robots");
-    id = "directory";
-  }
   const alias = AppCore.parseViewAlias ? AppCore.parseViewAlias(id) : null;
   if (alias) {
     setDirectoryCollection(alias, { updateURL: false });
@@ -4197,7 +4307,10 @@ function bindEvents() {
   $("#finder-content").addEventListener("click", event => {
     const goalButton = event.target.closest("[data-finder-goal]");
     if (goalButton) {
-      if (chooseFinderGoal(goalButton.dataset.finderGoal, goalButton.dataset.finderDir)) writeFinderURL({ push: true });
+      if (chooseFinderGoal(goalButton.dataset.finderGoal, goalButton.dataset.finderDir)) {
+        writeFinderURL({ push: true });
+        revealFinderPriorities();
+      }
       return;
     }
     const priorityButton = event.target.closest("[data-finder-priority]");
@@ -4263,9 +4376,13 @@ function bindEvents() {
       input.focus();
       return;
     }
-    const goal = event.target.closest("[data-finder-goal]");
+    // Only the search banner's button, whose value is `direction:id`. A Finder
+    // tile carries a bare goal id on `data-finder-goal` and is answered by the
+    // Finder's own handler; reading that attribute here as well ran
+    // openFinderAt on every tile click, which asks the page for its top.
+    const goal = event.target.closest("[data-open-finder-goal]");
     if (goal) {
-      const [direction, id] = goal.dataset.finderGoal.split(":");
+      const [direction, id] = goal.dataset.openFinderGoal.split(":");
       openFinderAt(direction, id);
       return;
     }

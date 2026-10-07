@@ -11,7 +11,7 @@ reads as a document someone edited after its review, which is the one thing it i
 | Document | What it settled |
 |---|---|
 | [`CODEBASE_REVIEW_2026-09-05.md`](CODEBASE_REVIEW_2026-09-05.md) | The first engineering-debt pass, CR-01 through CR-08. CR-05 through CR-08 remain open and are tracked in `BACKLOG.md`; CR-08 was superseded by CR-13 in [`CODEBASE_REVIEW_2026-09-28.md`](CODEBASE_REVIEW_2026-09-28.md), and CR-13 is the one that holds the 3.12 floor. |
-| [`ADVERSARIAL_REVIEW_2026-09-23.md`](ADVERSARIAL_REVIEW_2026-09-23.md) | An adversarial pass over the guard model the unattended routines rely on; its routes are the ones the threat model in [`OPERATIONS.md`](../OPERATIONS.md) still discusses as closed or open. |
+| [`ADVERSARIAL_REVIEW_2026-09-23.md`](ADVERSARIAL_REVIEW_2026-09-23.md) | An adversarial pass over the guard model the unattended routines rely on; its routes are the ones the threat model in [`RUNBOOKS.md`](../RUNBOOKS.md#guard-threat-model) still discusses as closed or open. |
 | [`LAB_REREAD_2026-09-25.md`](LAB_REREAD_2026-09-25.md) | A re-read of every cited lab page, after the first lab batches were written from search-engine extracts. Its corrections landed in four batches; [`lab-reread-2026-09-25/`](lab-reread-2026-09-25/) holds the source index, the reviewer brief, and the 117 findings. |
 
 The two reviews still cited as open-finding sources stay with the live documents rather than
