@@ -20391,6 +20391,1090 @@
       ],
       "source_model": "proprietary",
       "license_review_status": "verified"
+    },
+    {
+      "id": "cuawright",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "CUAWright",
+      "repo": "microsoft/CUAWright",
+      "url": "https://github.com/microsoft/CUAWright",
+      "description": "MIT and Apache-2.0 harness, formerly Webwright, that gives a coding model a terminal to launch Playwright browser sessions and write re-runnable scripts, with a desktop mode that runs tasks in an Ubuntu virtual machine.",
+      "primary_role": "browser_computer_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "openrouter"
+      ],
+      "architectures": [
+        "plain_files",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "screen"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "per-run trajectories, screenshots, scripts, and logs written to a local workspace, which the project treats as the state rather than the browser session",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "shell_execution",
+        "code_editing"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT",
+        "Apache-2.0"
+      ],
+      "source_model": "mixed_open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 6032,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Renamed from microsoft/Webwright on 2026-10-03; the old name redirects here, and existing webwright commands and imports still work.",
+      "score": {
+        "task_reliability": 7.5,
+        "tool_use": 7.0,
+        "autonomy": 8.0,
+        "human_control": 5.5,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 7.5,
+        "interoperability": 7.0,
+        "maturity": 5.5,
+        "overall": 6.88
+      },
+      "strengths": [
+        "Treats the local workspace of code and logs as the state and the browser as disposable, so each solved task leaves a re-runnable Playwright script behind",
+        "Every run writes trajectories and screenshots to disk, and an optional Skill Factory distils solved tasks into reusable scripts that rerun without a model",
+        "Covers browser and desktop in one tool and ships as a Claude Code or Codex plugin as well as a command line"
+      ],
+      "weaknesses": [
+        "The benchmark results in the README are the authors' own and several depend on models the README names as the best case",
+        "Desktop mode needs Docker, an Ubuntu virtual machine, and gated official task and asset snapshots, which narrows who can run it",
+        "The project is six months old, was renamed days before this review, and the desktop runtime is a separately licensed import"
+      ],
+      "why_it_matters": "A Microsoft Research harness that argues a terminal-equipped coding model beats step-by-step GUI agents, with published run artifacts to inspect.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-06",
+      "pushed_at": "2026-10-06T07:30:35Z",
+      "forks": 383,
+      "open_issues": 53,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "mindsearch",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "MindSearch",
+      "repo": "InternLM/MindSearch",
+      "url": "https://github.com/InternLM/MindSearch",
+      "description": "Apache-2.0 web-search research agent in which a planner builds a graph of sub-questions, searcher agents answer each from live web results, and a final step writes an answer with numbered references, served over FastAPI with React, Gradio, and Streamlit front ends.",
+      "primary_role": "research_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "per-question search graphs, searcher transcripts, and reference maps held by the server process; no durable store",
+      "deployment": [
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "research",
+        "multi_agent"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 6935,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Research prototype from the 2024 MindSearch paper with a deployed demo on the maintainers' own platform; the last push to the default branch was in July 2025.",
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 6.0,
+        "autonomy": 7.0,
+        "human_control": 4.5,
+        "observability_recovery": 5.5,
+        "data_sovereignty": 8.0,
+        "interoperability": 6.0,
+        "maturity": 4.5,
+        "overall": 5.87
+      },
+      "strengths": [
+        "Decomposes a question into a graph of sub-queries that searcher agents answer in parallel, then writes the answer with numbered references mapped back to source URLs",
+        "Runs fully self-hosted with an open InternLM model served locally, or with OpenAI, Qwen, or SiliconFlow-hosted endpoints, and five interchangeable search engines",
+        "Ships a FastAPI backend plus React, Gradio, and Streamlit front ends and a terminal debug mode, so a reader can run it end to end"
+      ],
+      "weaknesses": [
+        "No push to the default branch since July 2025, and the README documents no release process or versioning",
+        "The planner writes code that the server executes to build the graph, and the README documents no approval step or sandbox for it",
+        "Answer quality depends on a small local model by default; the maintainers' own accuracy claims sit in the paper rather than in a reproducible harness in the repository"
+      ],
+      "why_it_matters": "The best-known open implementation of a planner-and-searchers deep-search design, useful as a self-hostable reference for graph-structured web research.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "pushed_at": "2025-07-04T10:06:45Z",
+      "forks": 693,
+      "open_issues": 61,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "kaibanjs",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "KaibanJS",
+      "repo": "kaiban-ai/KaibanJS",
+      "url": "https://github.com/kaiban-ai/KaibanJS",
+      "description": "MIT-licensed JavaScript framework for building teams of agents and tasks, with a Kanban-style board for watching them work, a Redux-style store for state and logs, and agents that can also delegate to local coding-agent command lines.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google"
+      ],
+      "architectures": [
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "in-process team, agent, task, and workflow-log state held in a Redux-style store; persistence is left to the application",
+      "deployment": [
+        "library"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "framework_defined",
+        "host"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "workflows",
+        "persistent_state"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 1480,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 6.5,
+        "autonomy": 6.5,
+        "human_control": 6.5,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 7.5,
+        "interoperability": 6.5,
+        "maturity": 5.5,
+        "overall": 6.46
+      },
+      "strengths": [
+        "Agents, tasks, and teams are first-class objects, with task results passed between tasks and a team-level memory switch",
+        "A subscribable workflow log records task status changes with duration, token usage, and cost details, and the Kaiban Board visualises tasks moving from To Do to Done",
+        "Runs in Node.js and in React, Vue, Angular, and Next.js front ends, accepts tools from the wider JavaScript agent ecosystem, and can hand a task to Claude Code, OpenCode, or Codex command lines"
+      ],
+      "weaknesses": [
+        "The README carries a beta stability badge and the default branch has not been pushed since May 2026",
+        "The coding-agent delegation runs through Node child processes and the README says it is intended for local development",
+        "Durable storage and recovery of interrupted runs are not documented in the README, so production persistence is left to the application"
+      ],
+      "why_it_matters": "A JavaScript-native multi-agent framework with a visual task board, filling the slot that Python frameworks leave open for web-stack teams.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "pushed_at": "2026-05-15T18:53:38Z",
+      "forks": 159,
+      "open_issues": 79,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "shannon",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Shannon",
+      "repo": "Kocoro-lab/Shannon",
+      "url": "https://github.com/Kocoro-lab/Shannon",
+      "description": "MIT-licensed multi-agent platform that routes each task to a single-agent, DAG, ReAct, research, swarm, or browser strategy over Temporal workflows, with token budgets, approval gates, WASI code sandboxing, replayable runs, and REST, Python SDK, OpenAI-compatible, and desktop surfaces.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "x_ai",
+        "deepseek",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "event_log",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "task sessions and history in PostgreSQL, workflow histories in Temporal, and session caches in Redis",
+      "deployment": [
+        "self_hosted",
+        "desktop"
+      ],
+      "agent_interfaces": [
+        "api_sdk",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "container"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "workflows",
+        "persistent_state",
+        "mcp",
+        "research",
+        "browser_control",
+        "shell_execution"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "moderate",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 2277,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 7.5,
+        "autonomy": 7.5,
+        "human_control": 7.5,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 8.0,
+        "interoperability": 7.5,
+        "maturity": 6.0,
+        "overall": 7.36
+      },
+      "strengths": [
+        "Temporal workflows with replay: a failed task can be re-run step by step with the shipped replay script, and task pause, resume, and cancel are in the API",
+        "Hard per-task token budgets with automatic model fallback, plus OPA policies and approval gates that route decisions to connected clients",
+        "Eight execution strategies chosen by task complexity, including a lead-orchestrated swarm and an optional Playwright browsing agent, behind an OpenAI-compatible endpoint"
+      ],
+      "weaknesses": [
+        "Operating it means running a Go orchestrator, a Rust agent core, a Python service, Temporal, PostgreSQL, and Redis together",
+        "The 50 to 70 percent research cost saving and the production-reliability framing are the maintainers' own claims, not independently measured",
+        "The repository is about thirteen months old, and the README says the Playwright browser image is optional and 3.4 GB"
+      ],
+      "why_it_matters": "A production-minded orchestration stack built around workflow replay and hard budget enforcement, rather than around prompts alone.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "pushed_at": "2026-09-05T14:48:06Z",
+      "forks": 356,
+      "open_issues": 5,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "magnitude",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Magnitude",
+      "repo": "magnitudedev/browser-agent",
+      "url": "https://github.com/magnitudedev/browser-agent",
+      "description": "Apache-2.0 vision-first browser agent that drives a page by pixel coordinates from a visually grounded model, with act, extract, and verify primitives and a visual test runner for web apps.",
+      "primary_role": "browser_computer_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "screen"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "in-memory agent action history and run output from a Node script or test run; the README documents no durable store",
+      "deployment": [
+        "library",
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "library",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "browser_control"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 4134,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 6.5,
+        "tool_use": 6.0,
+        "autonomy": 6.5,
+        "human_control": 6.0,
+        "observability_recovery": 5.5,
+        "data_sovereignty": 7.0,
+        "interoperability": 6.0,
+        "maturity": 5.5,
+        "overall": 6.14
+      },
+      "strengths": [
+        "Acts on screenshots by pixel coordinates instead of numbered DOM boxes, which the README argues generalises across complex sites",
+        "One script can mix high-level tasks and low-level actions, and extract returns data validated against a zod schema",
+        "A test runner turns the same agent into visual assertions for web-app testing, installable with one command"
+      ],
+      "weaknesses": [
+        "The README says it needs a large visually grounded model and recommends Claude Sonnet 4 or Qwen-2.5VL 72B, so model cost and choice are narrow",
+        "The 94 percent WebVoyager figure is the maintainers' own claim, and the README lists deterministic caching as in progress",
+        "The default branch has not been pushed since February 2026"
+      ],
+      "why_it_matters": "A widely starred browser agent that bets on pixel-level vision and ties the agent loop to repeatable test-style automation.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "pushed_at": "2026-02-08T20:51:06Z",
+      "forks": 241,
+      "open_issues": 34,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "go-micro",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Go Micro",
+      "repo": "micro/go-micro",
+      "url": "https://github.com/micro/go-micro",
+      "description": "Apache-2.0 Go framework for services and agents, where agents discover registered service endpoints as tools, keep store-backed conversation memory, run checkpointed workflows, and call OpenAI, Anthropic, Gemini, Mistral, or Ollama models through one interface.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "mistral",
+        "local_runtime"
+      ],
+      "architectures": [
+        "event_log",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "store-backed conversation history and opt-in flow and agent-run checkpoints, by default as files under the home micro store directory",
+      "deployment": [
+        "library",
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "workflows",
+        "persistent_state"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 23086,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "A service framework that began in 2015 and gained agents later; the agent surface is the part reviewed here.",
+      "score": {
+        "task_reliability": 6.5,
+        "tool_use": 7.5,
+        "autonomy": 6.0,
+        "human_control": 6.5,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 8.5,
+        "interoperability": 7.5,
+        "maturity": 7.0,
+        "overall": 6.99
+      },
+      "strengths": [
+        "Existing service endpoints become agent tools through the registry, so an agent works with services a team already runs",
+        "Documented durability contract: flow steps checkpoint before and after each step, agent runs can opt in to checkpointing, and human-input pauses resume explicitly",
+        "The model layer covers several providers with retries and shared tool handling, on a codebase more than ten years old"
+      ],
+      "weaknesses": [
+        "The documentation says replaying an interrupted dispatch can create another agent invocation, and tool results are reused by name and input rather than call id",
+        "Recovery is explicit: persisting a checkpoint installs no background worker, and the default file store must survive the process",
+        "Go only; the agent features are newer than the service framework they sit on"
+      ],
+      "why_it_matters": "Shows the services-first route to agents: an established Go microservice framework whose registry becomes the agent tool catalogue.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-06",
+      "pushed_at": "2026-10-05T10:51:42Z",
+      "forks": 2425,
+      "open_issues": 3,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "trellis",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Trellis",
+      "repo": "mindfold-ai/Trellis",
+      "url": "https://github.com/mindfold-ai/Trellis",
+      "description": "AGPL-3.0 engineering workflow that persists specs, task requirements, and session journals in a .trellis folder in the repository and, through hooks, injects the right context into coding agents and their sub-agents across 22 platforms.",
+      "primary_role": "coding_agent_workflow",
+      "secondary_roles": [],
+      "agent_relation": "coding_workflow",
+      "architectures": [
+        "plain_files",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "structured_query"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only",
+        "versioned"
+      ],
+      "canonical_data": "specs, task requirement files, context manifests, and per-developer journals under the repository's .trellis directory",
+      "deployment": [
+        "local_cli",
+        "host_pack"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "ide"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "workflows",
+        "persistent_state",
+        "multi_agent"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "AGPL-3.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 14876,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "The root LICENSE is the plain AGPL-3.0 text and the CLI manifest declares AGPL-3.0-only, but the COPYRIGHT file says \"or any later version\"; the narrower reading is recorded.",
+      "score": {
+        "task_reliability": 6.5,
+        "tool_use": 6.5,
+        "autonomy": 5.5,
+        "human_control": 7.0,
+        "observability_recovery": 6.0,
+        "data_sovereignty": 8.0,
+        "interoperability": 8.5,
+        "maturity": 7.0,
+        "overall": 6.79
+      },
+      "strengths": [
+        "Keeps the workflow's state in the repository itself, with task directories, curated context manifests, and journals that the next session reads back",
+        "A PreToolUse hook rewrites the sub-agent call to inject the task's context, so the injection is enforced by code rather than left to the prompt",
+        "One structure works across 22 coding platforms, and an ablate and restore pair removes and recovers every managed file from a verified backup"
+      ],
+      "weaknesses": [
+        "It configures and steers host agents rather than executing work, so task outcomes still depend on whichever coding agent runs",
+        "AGPL-3.0 on an engineering workflow that lives inside a company repository is a licensing question a reader has to settle",
+        "The license text, the manifest, and the COPYRIGHT header disagree on \"only\" versus \"or later\""
+      ],
+      "why_it_matters": "Shows a workflow layer that owns durable project state and injects it by hook into whichever coding agent a team already uses.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "pushed_at": "2026-09-29T12:35:32Z",
+      "forks": 852,
+      "open_issues": 80,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "AGPL-3.0"
+    },
+    {
+      "id": "mobile-use",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "mobile-use",
+      "repo": "minitap-ai/mobile-use",
+      "url": "https://github.com/minitap-ai/mobile-use",
+      "description": "Apache-2.0 agent that operates an Android or iOS device from a natural-language command through the UI tree, with a multi-agent task decomposition, structured data extraction and a Docker quick launch for Android.",
+      "primary_role": "browser_computer_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "google",
+        "x_ai",
+        "openrouter",
+        "anthropic",
+        "openai_compatible"
+      ],
+      "architectures": [
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "screen"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "in-process agent graph state for each run; the README documents no durable store",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "browser_control"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 3228,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Controls mobile devices rather than a browser; the closest role is the computer-use agent role.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 6.5,
+        "autonomy": 7.5,
+        "human_control": 5.0,
+        "observability_recovery": 5.5,
+        "data_sovereignty": 7.0,
+        "interoperability": 6.0,
+        "maturity": 5.5,
+        "overall": 6.26
+      },
+      "strengths": [
+        "Operates a real Android phone or emulator, or an iOS simulator, on the UI tree the device exposes",
+        "Can return structured JSON from what it finds in an app, described in natural language, and runs against OpenAI, Google, xAI, Anthropic, OpenRouter, or MiniMax models",
+        "A published paper describes the multi-agent task decomposition behind the AndroidWorld result"
+      ],
+      "weaknesses": [
+        "The 100 percent AndroidWorld figure is the maintainers' own claim; the README also says games are poorly handled because they expose no accessibility tree",
+        "Physical iOS devices are not supported, and the Docker quick launch works for Android only",
+        "No approval step is documented before the agent acts inside real apps on a real device"
+      ],
+      "why_it_matters": "One of few open agents that acts on real phones, with a documented multi-agent decomposition behind a leading mobile benchmark claim.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "pushed_at": "2026-09-14T17:13:50Z",
+      "forks": 295,
+      "open_issues": 9,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "n8n",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "n8n",
+      "repo": "n8n-io/n8n",
+      "url": "https://github.com/n8n-io/n8n",
+      "description": "Fair-code workflow automation platform with a visual canvas, 1,500-plus integrations, and AI agent, tool, memory, and MCP nodes, run self-hosted under the Sustainable Use License or on n8n Cloud, with enterprise-licensed features in separately marked files.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google"
+      ],
+      "architectures": [
+        "relational_db",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "workflow definitions, credentials, and execution history in the instance database",
+      "deployment": [
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "workflows",
+        "multi_agent",
+        "mcp",
+        "persistent_state"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "LicenseRef-n8n-Sustainable-Use-1.0",
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 206786,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "A workflow-automation platform whose AI agent nodes qualify it as a builder of tool-using agents; the agent surface, not general automation, is what is scored.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 9.0,
+        "autonomy": 6.0,
+        "human_control": 7.5,
+        "observability_recovery": 7.5,
+        "data_sovereignty": 7.0,
+        "interoperability": 9.0,
+        "maturity": 9.0,
+        "overall": 7.7
+      },
+      "strengths": [
+        "Agent, agent-tool, memory, guardrail, and MCP client and server nodes sit beside 1,500-plus integrations, so agents act through systems a team already connects",
+        "Human approvals, execution history, role-based access, and audit trails are part of the platform, and it can be self-hosted with Docker",
+        "The README lists more than 9,000 workflow templates, and the project has the largest star count in this batch"
+      ],
+      "weaknesses": [
+        "The Sustainable Use License limits use to internal business purposes or non-commercial use and bars paid redistribution, so it is not open source",
+        "Files marked .ee need a paid enterprise license for production use, and the README says enterprise licences add features",
+        "Agents are one node type inside a general automation product, so agent behaviour is shaped by the workflow around it"
+      ],
+      "why_it_matters": "The most widely deployed workflow tool to treat AI agents as nodes, which makes it the practical entry point for teams that want agents wired into existing systems.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-06",
+      "pushed_at": "2026-10-07T00:03:26Z",
+      "forks": 61011,
+      "open_issues": 1145,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "nanoclaw",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "NanoClaw",
+      "repo": "nanocoai/nanoclaw",
+      "url": "https://github.com/nanocoai/nanoclaw",
+      "description": "MIT-licensed personal agent runtime that gives each agent its own Docker container, memory, and schedule, reachable through WhatsApp, Telegram, Slack, Discord, and other channels, built on the Claude Agent SDK with a credential gateway that keeps keys out of the container.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "anthropic"
+      ],
+      "architectures": [
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic",
+        "keyword"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "human_curated"
+      ],
+      "canonical_data": "two SQLite files per session, one per writer, plus per-agent workspace folders holding CLAUDE.md instructions and memory",
+      "deployment": [
+        "self_hosted",
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "container"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "persistent_state",
+        "multi_agent",
+        "research",
+        "mcp"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 30883,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "The README calls it an AI assistant, but what it ships is a self-hosted agent runtime with no conversational workspace of its own; it is catalogued with the other claw-family runtimes.",
+      "score": {
+        "task_reliability": 6.5,
+        "tool_use": 7.0,
+        "autonomy": 7.5,
+        "human_control": 6.0,
+        "observability_recovery": 5.0,
+        "data_sovereignty": 8.5,
+        "interoperability": 7.0,
+        "maturity": 6.0,
+        "overall": 6.61
+      },
+      "strengths": [
+        "Each agent runs in its own Linux container with only explicitly mounted folders, so shell access is bounded by the container rather than by permission checks",
+        "A credential gateway injects keys at request time and enforces per-agent policies and rate limits, so agents never hold raw API keys",
+        "The architecture is small and documented: a host router, two single-writer SQLite files per session, and scheduled tasks with optional gates that skip waking the agent"
+      ],
+      "weaknesses": [
+        "The trunk is Anthropic-native; channels and other model providers are skills that copy code into each fork, so every installation diverges",
+        "Setup and customisation lean on Claude Code, which the README lists as a requirement",
+        "The README documents no approval step before an agent acts, and an optional hosted account unlocks a prebuilt image and managed Slack app"
+      ],
+      "why_it_matters": "A deliberately small, container-isolated runtime that makes the case for OS-level isolation over application-level permission checks in personal agents.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "pushed_at": "2026-10-06T14:42:11Z",
+      "forks": 12774,
+      "open_issues": 1039,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "open-deep-research",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Open Deep Research",
+      "repo": "nickscamara/open-deep-research",
+      "url": "https://github.com/nickscamara/open-deep-research",
+      "description": "Next.js chat application, forked from Vercel's AI chatbot template, whose deep-research tool loops through search, Firecrawl extraction, and reasoning-model analysis up to a set depth before writing a report.",
+      "primary_role": "research_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "openrouter"
+      ],
+      "architectures": [
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "chat history, documents, and votes in a PostgreSQL database, with files in Vercel Blob",
+      "deployment": [
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "remote_cloud",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "limited",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 6294,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "The LICENSE is the short Apache-2.0 notice naming Vercel, Inc. as 2024 copyright holder, inherited from the template, with no full license text; GitHub reports it as undetected.",
+      "score": {
+        "task_reliability": 5.5,
+        "tool_use": 5.5,
+        "autonomy": 6.5,
+        "human_control": 4.5,
+        "observability_recovery": 4.5,
+        "data_sovereignty": 5.0,
+        "interoperability": 5.0,
+        "maturity": 3.5,
+        "overall": 5.04
+      },
+      "strengths": [
+        "The deep-research tool actually iterates: it searches, extracts from the found pages, analyses the findings, and repeats to a configurable maximum depth",
+        "Switchable model providers through the Vercel AI SDK, with a separately configured reasoning model for structured analysis",
+        "A deployable chat application with history and authentication, so it runs as a product and not only as a script"
+      ],
+      "weaknesses": [
+        "Depends on the paid Firecrawl service for search and extraction, and on Vercel Postgres and Blob for storage",
+        "Last pushed in May 2025 and describes itself as a clone of a closed product, with no stated reliability or evaluation results",
+        "The license file is a short notice that names the template's original holder, so the grant for the fork's own code rests on that notice alone"
+      ],
+      "why_it_matters": "A widely starred open clone of the deep-research pattern, useful as a compact reference for a search, extract, and analyse loop on a commodity web stack.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "pushed_at": "2025-05-07T15:38:28Z",
+      "forks": 738,
+      "open_issues": 45,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "onecli",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "OneCLI",
+      "repo": "onecli/onecli",
+      "url": "https://github.com/onecli/onecli",
+      "description": "Open-core platform that gives each employee a sandboxed, long-lived agent with its own conversation, memory, skills, and schedule, with a Rust gateway that injects credentials and enforces team policy and human approvals, on a dashboard, in Slack, self-hosted or cloud.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "human_curated"
+      ],
+      "canonical_data": "agents, conversations, memory, skills, connections, and encrypted secrets in the control-plane PostgreSQL database",
+      "deployment": [
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "external_sandbox",
+        "container"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "persistent_state",
+        "mcp"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0",
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "open_core",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 3562,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Began as a credential vault for agents and was rebuilt as a team agent platform (v2); adoption signals mix both periods.",
+      "score": {
+        "task_reliability": 6.5,
+        "tool_use": 7.0,
+        "autonomy": 7.0,
+        "human_control": 8.5,
+        "observability_recovery": 6.5,
+        "data_sovereignty": 8.0,
+        "interoperability": 7.0,
+        "maturity": 5.5,
+        "overall": 7.02
+      },
+      "strengths": [
+        "Credentials never reach the agent: a gateway intercepts outbound requests and injects them at request time, with per-agent grants and a policy that applies across the team",
+        "Deterministic human-in-the-loop approvals in chat for actions such as sending an email or deleting a ticket",
+        "The agent is a durable object with a sandbox, conversation, editable memory, skills, and a schedule, and the runner is outbound-only so it works behind NAT"
+      ],
+      "weaknesses": [
+        "Three ee directories and a separate enterprise license cover enterprise features, which need a subscription for production use",
+        "The README describes the harness interface as vendor-neutral, so the agent runtime inside the sandbox is a separate choice a reader must make",
+        "The repository was created in March 2026 and was rebuilt from a vault into a platform, so the current design has a short track record"
+      ],
+      "why_it_matters": "Applies credential isolation and approval gates to the multi-user problem that single-user agent runtimes leave open.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "pushed_at": "2026-10-06T13:12:37Z",
+      "forks": 249,
+      "open_issues": 179,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "Apache-2.0"
     }
   ],
   "verified_at": "2026-09-28"
