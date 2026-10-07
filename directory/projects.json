@@ -21112,8 +21112,7 @@
         "api_sdk"
       ],
       "execution_boundaries": [
-        "host",
-        "container"
+        "host"
       ],
       "agent_capabilities": [
         "workflows",
