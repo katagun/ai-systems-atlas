@@ -1,15 +1,15 @@
 {
   "version": "1.0",
-  "updated_at": "2026-10-01",
+  "updated_at": "2026-10-07",
   "source": {
     "name": "OpenRouter",
     "url": "https://openrouter.ai/api/v1/models",
     "terms_url": "https://openrouter.ai/terms",
-    "fetched_at": "2026-10-01",
-    "sha256": "de6df023af9ab624a1d99336446ff12cf0e58dab319d4eee40f3fa8b65ff5dba"
+    "fetched_at": "2026-10-07",
+    "sha256": "4c938477e92f9ac53aabf0e26f1c72bc9bbcb21dd36bc2aa11ee79be23dcc183"
   },
-  "listed_count": 464,
-  "eligible_count": 355,
+  "listed_count": 465,
+  "eligible_count": 358,
   "leads": [
     {
       "openrouter_id": "baidu/ernie-4.5-vl-424b-a47b",
@@ -18,7 +18,7 @@
       "hugging_face_id": "baidu/ERNIE-4.5-VL-424B-A47B-PT",
       "listed_at": "2025-06-30",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "bytedance/ui-tars-1.5-7b",
@@ -27,7 +27,7 @@
       "hugging_face_id": "ByteDance-Seed/UI-TARS-1.5-7B",
       "listed_at": "2025-07-22",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "deepseek/deepseek-r1-0528",
@@ -36,7 +36,7 @@
       "hugging_face_id": "deepseek-ai/DeepSeek-R1-0528",
       "listed_at": "2025-05-28",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "dots-studio/dots-3-note-preview",
@@ -45,7 +45,16 @@
       "hugging_face_id": null,
       "listed_at": "2026-08-14",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
+    },
+    {
+      "openrouter_id": "google/gemini-nano-banana-2.1",
+      "canonical_slug": "google/gemini-nano-banana-2.1-20261006",
+      "name": "Google: Nano Banana 2.1",
+      "hugging_face_id": null,
+      "listed_at": "2026-10-06",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "google/gemma-2-27b-it",
@@ -54,7 +63,7 @@
       "hugging_face_id": "google/gemma-2-27b-it",
       "listed_at": "2024-07-13",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "ibm-granite/granite-4.2-8b",
@@ -63,7 +72,7 @@
       "hugging_face_id": "ibm-granite/granite-4.2-8b",
       "listed_at": "2026-08-31",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "inception/mercury-2",
@@ -72,7 +81,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-03-04",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "inception/mercury-2.5",
@@ -81,7 +90,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-09-08",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "inclusionai/ling-3.0-flash",
@@ -90,7 +99,7 @@
       "hugging_face_id": "inclusionAI/Ling-3.0-flash",
       "listed_at": "2026-07-23",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "inclusionai/ling-3.0-flash-sante",
@@ -99,7 +108,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-09-04",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "inclusionai/ling-3.0-flash-vl",
@@ -108,7 +117,7 @@
       "hugging_face_id": "inclusionAI/Ling-3.0-flash-VL",
       "listed_at": "2026-09-10",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "inference-net/schematron-v2-small",
@@ -117,7 +126,7 @@
       "hugging_face_id": "inference-net/schematron-v2-llama-3.2-3b",
       "listed_at": "2026-09-12",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "inference-net/schematron-v2-turbo",
@@ -126,16 +135,7 @@
       "hugging_face_id": "inference-net/schematron-v2-granite-4.0-h-micro",
       "listed_at": "2026-09-12",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
-    },
-    {
-      "openrouter_id": "kwaipilot/kat-coder-pro-v2.5",
-      "canonical_slug": "kwaipilot/kat-coder-pro-v2.5-20260710",
-      "name": "Kwaipilot: KAT-Coder-Pro V2.5",
-      "hugging_face_id": null,
-      "listed_at": "2026-07-10",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "meta-llama/llama-3.2-1b-instruct",
@@ -144,7 +144,7 @@
       "hugging_face_id": "meta-llama/Llama-3.2-1B-Instruct",
       "listed_at": "2024-09-25",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "meta-llama/llama-3.2-3b-instruct",
@@ -153,7 +153,7 @@
       "hugging_face_id": "meta-llama/Llama-3.2-3B-Instruct",
       "listed_at": "2024-09-25",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "meta-llama/llama-guard-4-12b",
@@ -162,7 +162,7 @@
       "hugging_face_id": "meta-llama/Llama-Guard-4-12B",
       "listed_at": "2025-04-30",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "meta/muse-spark-1.2-contributor",
@@ -171,7 +171,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-08-21",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "meta/muse-spark-1.3-contributor",
@@ -180,7 +180,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-09-02",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "microsoft/phi-4",
@@ -189,7 +189,7 @@
       "hugging_face_id": "microsoft/phi-4",
       "listed_at": "2025-01-10",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "microsoft/wizardlm-2-8x22b",
@@ -198,7 +198,7 @@
       "hugging_face_id": "microsoft/WizardLM-2-8x22B",
       "listed_at": "2024-04-16",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "minimax/minimax-01",
@@ -207,7 +207,7 @@
       "hugging_face_id": "MiniMaxAI/MiniMax-Text-01",
       "listed_at": "2025-01-15",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "minimax/minimax-m1",
@@ -216,7 +216,7 @@
       "hugging_face_id": null,
       "listed_at": "2025-06-17",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "mistralai/codestral-2508",
@@ -225,7 +225,7 @@
       "hugging_face_id": null,
       "listed_at": "2025-08-01",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "mistralai/mistral-large",
@@ -234,7 +234,7 @@
       "hugging_face_id": null,
       "listed_at": "2024-02-26",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "mistralai/mistral-large-2407",
@@ -243,7 +243,16 @@
       "hugging_face_id": null,
       "listed_at": "2024-11-19",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
+    },
+    {
+      "openrouter_id": "mistralai/mistral-large-4-0",
+      "canonical_slug": "mistralai/mistral-large-4-0-20261006",
+      "name": "Mistral: Mistral Large 4",
+      "hugging_face_id": null,
+      "listed_at": "2026-10-06",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "mistralai/mistral-medium-3.1",
@@ -252,7 +261,7 @@
       "hugging_face_id": null,
       "listed_at": "2025-08-13",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "mistralai/mistral-saba",
@@ -261,7 +270,7 @@
       "hugging_face_id": null,
       "listed_at": "2025-02-17",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "mistralai/mistral-small-24b-instruct-2501",
@@ -270,7 +279,7 @@
       "hugging_face_id": "mistralai/Mistral-Small-24B-Instruct-2501",
       "listed_at": "2025-01-30",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "mistralai/mixtral-8x22b-instruct",
@@ -279,7 +288,7 @@
       "hugging_face_id": "mistralai/Mixtral-8x22B-Instruct-v0.1",
       "listed_at": "2024-04-17",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "moonshotai/kimi-k2",
@@ -288,7 +297,7 @@
       "hugging_face_id": "moonshotai/Kimi-K2-Instruct",
       "listed_at": "2025-07-11",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "moonshotai/kimi-k2-0905",
@@ -297,7 +306,7 @@
       "hugging_face_id": "moonshotai/Kimi-K2-Instruct-0905",
       "listed_at": "2025-09-04",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "morph/morph-v3-fast",
@@ -306,7 +315,7 @@
       "hugging_face_id": null,
       "listed_at": "2025-07-07",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "morph/morph-v3-large",
@@ -315,7 +324,7 @@
       "hugging_face_id": null,
       "listed_at": "2025-07-07",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "nex-agi/nex-n2.5-mini",
@@ -324,7 +333,7 @@
       "hugging_face_id": "nex-agi/Nex-N2.5-mini",
       "listed_at": "2026-09-08",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "nex-agi/nex-n2.5-pro",
@@ -333,7 +342,7 @@
       "hugging_face_id": "nex-agi/Nex-N2.5-Pro",
       "listed_at": "2026-09-08",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "nousresearch/hermes-3-llama-3.1-405b",
@@ -342,7 +351,7 @@
       "hugging_face_id": "NousResearch/Hermes-3-Llama-3.1-405B",
       "listed_at": "2024-08-16",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "nousresearch/hermes-3-llama-3.1-70b",
@@ -351,7 +360,7 @@
       "hugging_face_id": "NousResearch/Hermes-3-Llama-3.1-70B",
       "listed_at": "2024-08-18",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "nousresearch/hermes-4-405b",
@@ -360,7 +369,16 @@
       "hugging_face_id": "NousResearch/Hermes-4-405B",
       "listed_at": "2025-08-26",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
+    },
+    {
+      "openrouter_id": "nvidia/switchyard",
+      "canonical_slug": "nvidia/switchyard",
+      "name": "NVIDIA: Switchyard",
+      "hugging_face_id": null,
+      "listed_at": "2026-09-21",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "openai/gpt-3.5-turbo-instruct",
@@ -369,7 +387,7 @@
       "hugging_face_id": null,
       "listed_at": "2023-09-28",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "openai/gpt-6.1-sol-pro",
@@ -378,7 +396,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-09-29",
       "discovered_at": "2026-09-29",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "openai/gpt-audio",
@@ -387,7 +405,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-01-19",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "openai/gpt-audio-mini",
@@ -396,7 +414,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-01-19",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "perceptron/perceptron-mk1",
@@ -405,7 +423,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-05-12",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "perceptron/perceptron-mk1.5",
@@ -414,16 +432,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-09-25",
       "discovered_at": "2026-09-29",
-      "last_seen_at": "2026-10-01"
-    },
-    {
-      "openrouter_id": "prism-ml/ternary-bonsai-2-27b",
-      "canonical_slug": "prism-ml/ternary-bonsai-2-27b-20260918",
-      "name": "PrismML: Ternary Bonsai 2 27B",
-      "hugging_face_id": "prism-ml/Ternary-Bonsai-2-27B-gguf",
-      "listed_at": "2026-09-18",
-      "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "qwen/qwen-2.5-72b-instruct",
@@ -432,7 +441,7 @@
       "hugging_face_id": "Qwen/Qwen2.5-72B-Instruct",
       "listed_at": "2024-09-19",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "qwen/qwen-2.5-7b-instruct",
@@ -441,7 +450,7 @@
       "hugging_face_id": "Qwen/Qwen2.5-7B-Instruct",
       "listed_at": "2024-10-16",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "qwen/qwen3-14b",
@@ -450,7 +459,7 @@
       "hugging_face_id": "Qwen/Qwen3-14B",
       "listed_at": "2025-04-28",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "qwen/qwen3-235b-a22b-thinking-2507",
@@ -459,7 +468,7 @@
       "hugging_face_id": "Qwen/Qwen3-235B-A22B-Thinking-2507",
       "listed_at": "2025-07-25",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "qwen/qwen3-30b-a3b-instruct-2507",
@@ -468,7 +477,7 @@
       "hugging_face_id": "Qwen/Qwen3-30B-A3B-Instruct-2507",
       "listed_at": "2025-07-29",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "qwen/qwen3-30b-a3b-thinking-2507",
@@ -477,7 +486,7 @@
       "hugging_face_id": "Qwen/Qwen3-30B-A3B-Thinking-2507",
       "listed_at": "2025-08-28",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "qwen/qwen3-8b",
@@ -486,7 +495,7 @@
       "hugging_face_id": "Qwen/Qwen3-8B",
       "listed_at": "2025-04-28",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "qwen/qwen3-vl-30b-a3b-instruct",
@@ -495,7 +504,7 @@
       "hugging_face_id": "Qwen/Qwen3-VL-30B-A3B-Instruct",
       "listed_at": "2025-10-06",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "qwen/qwen3-vl-30b-a3b-thinking",
@@ -504,7 +513,7 @@
       "hugging_face_id": "Qwen/Qwen3-VL-30B-A3B-Thinking",
       "listed_at": "2025-10-06",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "qwen/qwen3-vl-32b-instruct",
@@ -513,7 +522,7 @@
       "hugging_face_id": "Qwen/Qwen3-VL-32B-Instruct",
       "listed_at": "2025-10-23",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "qwen/qwen3-vl-8b-instruct",
@@ -522,7 +531,7 @@
       "hugging_face_id": "Qwen/Qwen3-VL-8B-Instruct",
       "listed_at": "2025-10-14",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "qwen/qwen3-vl-8b-thinking",
@@ -531,7 +540,7 @@
       "hugging_face_id": "Qwen/Qwen3-VL-8B-Thinking",
       "listed_at": "2025-10-14",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "rekaai/reka-edge",
@@ -540,7 +549,7 @@
       "hugging_face_id": "RekaAI/reka-edge-2603",
       "listed_at": "2026-03-20",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "rekaai/reka-flash-3",
@@ -549,7 +558,7 @@
       "hugging_face_id": "RekaAI/reka-flash-3",
       "listed_at": "2025-03-12",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "relace/relace-apply-3",
@@ -558,7 +567,7 @@
       "hugging_face_id": null,
       "listed_at": "2025-09-26",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "relace/relace-search",
@@ -567,7 +576,7 @@
       "hugging_face_id": null,
       "listed_at": "2025-12-08",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "sakana/fugu-max",
@@ -576,7 +585,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-09-11",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "sakana/fugu-ultra-v2",
@@ -585,7 +594,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-09-11",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "tencent/hunyuan-a13b-instruct",
@@ -594,7 +603,7 @@
       "hugging_face_id": "tencent/Hunyuan-A13B-Instruct",
       "listed_at": "2025-07-08",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "tencent/hy-mt2-1.8b",
@@ -603,7 +612,7 @@
       "hugging_face_id": "tencent/Hy-MT2-1.8B",
       "listed_at": "2026-08-20",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "tencent/hy-mt2-30b-a3b",
@@ -612,7 +621,7 @@
       "hugging_face_id": "tencent/Hy-MT2-30B-A3B",
       "listed_at": "2026-08-20",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "tencent/hy-mt2-7b",
@@ -621,7 +630,7 @@
       "hugging_face_id": "tencent/Hy-MT2-7B",
       "listed_at": "2026-08-19",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "typesafe/jev-router",
@@ -630,7 +639,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-09-25",
       "discovered_at": "2026-09-29",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     },
     {
       "openrouter_id": "x-ai/grok-4.20-multi-agent",
@@ -639,7 +648,7 @@
       "hugging_face_id": null,
       "listed_at": "2026-03-31",
       "discovered_at": "2026-09-25",
-      "last_seen_at": "2026-10-01"
+      "last_seen_at": "2026-10-07"
     }
   ]
 }
