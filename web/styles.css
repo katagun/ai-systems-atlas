@@ -1002,6 +1002,7 @@ input:focus, select:focus {
 [data-family="control"] { color: var(--cyan); }
 [data-family="capability"] { color: var(--violet); }
 [data-family="platform"] { color: var(--amber); }
+[data-family="flags"] { color: var(--danger); }
 .badge-emblem {
   display: block;
   width: 1.7rem;
@@ -1451,6 +1452,7 @@ dialog h1 { overflow-wrap: break-word; }
    content wraps. The same reason `.lab-channel-link` below carries this already. */
 .detail-block, .detail-block p, .detail-block li, .detail-block td, .detail-block h3, .detail-block h4 { overflow-wrap: anywhere; }
 .detail-block h4 { margin: 1rem 0 .4rem; color: var(--text); font-size: .92rem; font-weight: 600; }
+.detail-block .risk-quote { margin: .6rem 0; padding: .1rem 0 .1rem .9rem; border-left: 3px solid var(--line-strong); color: var(--text); }
 .evidence-date { margin-left: .35rem; color: var(--muted); font: .7rem var(--font-mono); }
 /* Lab cards name a few joined records inline; the row layout matches the dialog
    release list so names and dates do not run together when markup has no space

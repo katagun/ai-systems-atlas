@@ -139,6 +139,12 @@ test("a reviewed model models.dev does not list yet says so and never prints nul
       : model);
     await route.fulfill({ response, json: { ...payload, unlisted_reviewed_count: 1, models } });
   });
+  // The full models.dev block, links included, arrives with the record's detail.
+  await page.route(`**/app/detail/model/${QWEN}.json*`, async route => {
+    const response = await route.fetch();
+    const detail = await response.json();
+    await route.fulfill({ response, json: { ...detail, source_metadata: { ...detail.source_metadata, links: [], weights: [] } } });
+  });
   await page.goto("/?collection=models");
 
   await expect(page.locator("#models-kicker")).toContainText("1 not yet on models.dev");
