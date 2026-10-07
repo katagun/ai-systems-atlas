@@ -95,6 +95,18 @@ test("the Everything tile is the A–Z list, and the Models, Labs, and Specifica
   }
 });
 
+// Everything lists labs and specifications as well as the six kinds the box used
+// to name (#404), so its hint names all eight, as the markup's own hint does.
+test("the Everything search box names every kind it searches", async ({ page }) => {
+  const hint = "Search systems, models, services, runtimes, packs, robots, labs, and specifications";
+  await page.goto("/");
+  await openCollection(page, "all");
+  await expect(page.locator("#all-directory-panel")).toBeVisible();
+  await expect(page.locator("#results-search")).toHaveAttribute("placeholder", hint);
+  await page.goto("/?collection=all");
+  await expect(page.locator("#results-search")).toHaveAttribute("placeholder", hint);
+});
+
 test("a category link opens the scope narrowed to it", async ({ page }) => {
   await page.goto("/");
   await familyEntry(page, "memory_system").click();
