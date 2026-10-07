@@ -1,22 +1,26 @@
 from __future__ import annotations
 
 import contextlib
+import copy
 import io
 import json
 import os
 import tempfile
 import unittest
 from pathlib import Path
+from typing import ClassVar
 from unittest.mock import patch
 
 from scripts import build_web_payload
 from scripts.build_web_payload import (
     BOOT_FIELDS,
+    BOOT_ITEM_FIELDS,
     COLLECTIONS,
     SEARCH_FIELDS,
     build_payloads,
     load_catalog,
     model_records,
+    project_boot_items,
     unlisted_model_count,
 )
 
@@ -51,10 +55,113 @@ class WebPayloadTests(unittest.TestCase):
                         self.assertIn("overall", entry["score"])
                         self.assertEqual(record["score"], detail["score"])
                         continue
+                    # A list whose items boot sees in part (ADR 042's flags): boot
+                    # carries each item's keys for its status, detail the whole list.
+                    keys_by_status = BOOT_ITEM_FIELDS.get(collection, {}).get(field)
+                    if keys_by_status is not None:
+                        self.assertEqual(
+                            project_boot_items(record[field], keys_by_status),
+                            entry[field],
+                        )
+                        self.assertEqual(record[field], detail[field])
+                        continue
                     self.assertTrue(
                         (field in entry) != (field in detail),
                         f"{collection}/{record['id']}.{field} must be in exactly one of boot and detail",
                     )
+
+    FOUND_FLAG: ClassVar[dict] = {
+        "kind": "maker_risk_safeguards",
+        "status": "statement_found",
+        "tier_term": "Fixture Level 3",
+        "domains": ["cyber"],
+        "determination": "determined",
+        "scope": "weights",
+        "statement": "A fixture sentence standing in for a developer's verbatim words.",
+        "url": "https://www.example-lab.com/system-card",
+        "content_sha256": "a" * 64,
+        "verified_at": "2026-09-01",
+        "research_confidence": "high",
+    }
+    NONE_FLAG: ClassVar[dict] = {
+        "kind": "maker_risk_safeguards",
+        "status": "no_statement_found",
+        "url": "https://www.example-lab.com/safety",
+        "verified_at": "2026-09-01",
+        "research_confidence": "medium",
+    }
+
+    def flagged_payloads(self, entry: dict) -> tuple[dict, dict, dict]:
+        catalog = copy.deepcopy(self.catalog)
+        model = catalog["models.json"]["models"][0]
+        model["flags"] = [dict(entry)]
+        payloads = build_payloads(catalog)
+        boot = {
+            item["id"]: item
+            for item in json.loads(payloads["app/models.json"])["models"]
+        }
+        detail = json.loads(payloads[f"app/detail/model/{model['id']}.json"])
+        return model, boot[model["id"]], detail
+
+    def test_boot_carries_a_found_statements_emblem_fields_and_not_its_quote(
+        self,
+    ) -> None:
+        _, entry, detail = self.flagged_payloads(self.FOUND_FLAG)
+        self.assertEqual(
+            [
+                {
+                    "kind": "maker_risk_safeguards",
+                    "status": "statement_found",
+                    "tier_term": "Fixture Level 3",
+                    "domains": ["cyber"],
+                    "determination": "determined",
+                    "scope": "weights",
+                }
+            ],
+            entry["flags"],
+        )
+        self.assertEqual([self.FOUND_FLAG], detail["flags"])
+
+    def test_boot_carries_only_kind_and_status_when_no_statement_was_found(
+        self,
+    ) -> None:
+        _, entry, detail = self.flagged_payloads(self.NONE_FLAG)
+        self.assertEqual(
+            [{"kind": "maker_risk_safeguards", "status": "no_statement_found"}],
+            entry["flags"],
+        )
+        self.assertEqual([self.NONE_FLAG], detail["flags"])
+
+    def test_an_unknown_status_keeps_only_kind_and_status(self) -> None:
+        self.assertEqual(
+            [{"kind": "k", "status": "future"}],
+            project_boot_items(
+                [{"kind": "k", "status": "future", "tier_term": "x"}],
+                BOOT_ITEM_FIELDS["models"]["flags"],
+            ),
+        )
+
+    def test_imported_rows_never_carry_flags_in_boot(self) -> None:
+        """Imported models.dev rows carry no Atlas conclusion, so boot gives them no flags."""
+        boot = json.loads(self.payloads["app/models.json"])["models"]
+        for entry in boot:
+            if entry["review_status"] == "imported":
+                self.assertNotIn("flags", entry, entry["id"])
+
+    def test_flags_never_reach_search(self) -> None:
+        """A flag never affects the Finder, sort, or search (ADR 042)."""
+        self.assertNotIn("flags", SEARCH_FIELDS["models"])
+        self.assertNotIn("flags", BOOT_FIELDS["models"])
+        found = BOOT_ITEM_FIELDS["models"]["flags"]["statement_found"]
+        for detail_only in (
+            "statement",
+            "url",
+            "content_sha256",
+            "unpinnable",
+            "verified_at",
+            "research_confidence",
+        ):
+            self.assertNotIn(detail_only, found)
 
     def test_specifications_are_unscored_so_no_field_is_split(self) -> None:
         """The score exception above must never fire for specifications."""
