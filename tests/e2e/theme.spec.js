@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { recordHeading } = require("./helpers/results");
 
 const LIGHT_BG = "rgb(247, 249, 252)";
 const DARK_BG = "rgb(15, 20, 27)";
@@ -60,8 +61,8 @@ test("a stored dark choice is stamped before the app script runs", async ({ page
 test("dark theme keeps a record dialog and its share page readable", async ({ page }) => {
   await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/?record=runtime:ollama");
-  await expect(page.locator("#runtime-dialog-content h1")).toHaveText("Ollama");
-  const dialogText = await page.locator("#runtime-dialog-content h1").evaluate(node => getComputedStyle(node).color);
+  await expect(recordHeading(page, "runtime")).toHaveText("Ollama");
+  const dialogText = await recordHeading(page, "runtime").evaluate(node => getComputedStyle(node).color);
   expect(dialogText).not.toBe("rgb(19, 34, 52)");
 
   await page.goto("/records/local-runtimes/ollama/");

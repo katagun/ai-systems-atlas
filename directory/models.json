@@ -1,11 +1,11 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-28",
+  "verified_at": "2026-10-03",
   "source": {
     "id": "models-dev",
     "name": "models.dev",
     "repo": "anomalyco/models.dev",
-    "commit": "1bc95312f70441e339d5aa010ad656b9c7706952",
+    "commit": "f9f2057be3c620898b6eaaca91dbbf75176043ae",
     "url": "https://github.com/anomalyco/models.dev",
     "license": "MIT"
   },
@@ -422,6 +422,126 @@
       ],
       "url": "https://huggingface.co/AikidoSec/altar-1",
       "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-aleph-alpha-kolibri-1",
+      "source_id": null,
+      "name": "Kolibri 1",
+      "developer": "Aleph Alpha Research GmbH",
+      "url": "https://huggingface.co/Aleph-Alpha/Kolibri-1",
+      "description": "Aleph Alpha's sovereign English-German mixture-of-experts reasoning model, 78.1B total parameters with 3.46B active per token, trained from scratch for public administration and regulated industry and published as FP8 weights under Apache 2.0.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Kolibri 1",
+        "description": "Kolibri is Aleph Alpha's mixture-of-experts (MoE) reasoning model, with a focus on German and English. The model supports an explicit reasoning mode and tool calling. It is optimized for long-context and inference efficiency.",
+        "family": "kolibri",
+        "release_date": "2026-10-03",
+        "last_updated": null,
+        "knowledge_cutoff": "2026-06-18",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache 2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Aleph-Alpha/Kolibri-1"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The Kolibri-1 model card states that \"The model weights are published by Aleph Alpha GmbH under Apache 2.0 license. The rights granted thereunder only apply to the weights and configuration files published in this repository. For the avoidance of doubt, any other artifacts not included in the repository are excluded from the license. The license especially does not extend to underlying code, model architecture, parameter settings or any training method.\" The repository ships the unmodified Apache License 2.0 text with no filled-in copyright line, and the card adds a General-Purpose AI Code of Practice point of contact for rightsholders. The card's Responsible Use section is guidance rather than a licence term: it opens by \"Acknowledging the permissive nature of the license under which the weights of Kolibri are released\" and asks users to refrain from unlawful use, so it adds no mandatory restriction to the artefacts the licence covers. The classification is of the published weights and configuration files, not of training code, data, or methods, which Aleph Alpha retains.",
+      "license_evidence": [
+        {
+          "kind": "web_terms",
+          "license_id": "Apache-2.0",
+          "scope": "The weights and configuration files published in the Aleph-Alpha/Kolibri-1 repository; the model card states the licence does not extend to code, model architecture, parameter settings, or training methods, which Aleph Alpha retains",
+          "url": "https://huggingface.co/Aleph-Alpha/Kolibri-1/blob/main/LICENSE",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "access_boundary": "This record represents the Kolibri 1 release of 3 October 2026, the version whose weights are published as Aleph-Alpha/Kolibri-1 and whose serving parsers are named kolibri1. It excludes Kolibri Origin, the earlier pipeline-validating iteration the developer states had \"no public release\"; the Pharia enterprise platform and any managed endpoint, since no first-party API is documented for this release; the aleph-alpha-inference serving package, which is a separate repository; and any downstream fine-tune, quantization, or re-upload of these weights.",
+      "strengths": [
+        "Developer-published FP8 safetensors weights under Apache 2.0 with the licence scope stated in the model card itself, covering the repository's weights and configuration files and expressly excluding code, architecture, and training methods",
+        "A 189-page technical report and a model card that document the full pipeline, including 768 B200 GPUs over 21 days of pre-training, the bilingual data mix, more than 1.2M reinforcement-learning tasks, energy consumption, and per-checkpoint evaluation across safety, grounding, and abstention",
+        "A documented first-party serving path: an aleph-alpha-inference package with a ghcr.io container image, a vLLM serve command using the Kolibri reasoning and tool-call parsers, recommended sampling parameters, and an OpenAI-compatible local endpoint"
+      ],
+      "tradeoffs": [
+        "The full 78B model must be resident even though 3.46B parameters activate per token, so the documented minimum is 2x A100 80 GB, 2x H100 SXM5, or one H200, B200, or B300",
+        "The developer recommends contexts of at most 262,144 tokens for serving efficiency and complex tasks even though 1,048,576 tokens has been validated, and longer contexts need explicit vLLM overrides",
+        "No first-party managed API is documented for this release; access beyond the weights is enterprise deployment through sales contact, and no third-party hosting path is documented",
+        "Implicit knowledge stops at 18 June 2026 for both German and English, so deployments without tool access work from a dated world model"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 7,
+        "deployment_portability": 8,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 7.64
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Developer-published Kolibri-1 weights repository and model card: provider and developer entities, precision, context, knowledge cutoff, intended use, limitations, and the License and terms section",
+          "url": "https://huggingface.co/Aleph-Alpha/Kolibri-1",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Apache License 2.0 text published in the Kolibri-1 repository, governing the weights and configuration files",
+          "url": "https://huggingface.co/Aleph-Alpha/Kolibri-1/blob/main/LICENSE",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Official Kolibri model page: generally available status, mixture-of-experts architecture, 78B total and 3B active parameters, 1,048,576-token context, hardware requirements, Apache 2.0 licence line, and the open-weights and enterprise-deployment access routes",
+          "url": "https://aleph-alpha.com/en/kolibri/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Release announcement of 3 October 2026: the Kolibri and Kolibri Origin comparison table, the Apache 2.0 terms, the 20T-token training progression, and the documented vLLM serving command",
+          "url": "https://aleph-alpha.com/en/blog/kolibri-has-landed-a-sovereign-open-weight-model/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Kolibri technical report: an English-German mixture-of-experts transformer with 78.1B total and 3.46B active parameters per token, released as open weights under the Apache 2.0 licence",
+          "url": "https://aleph-alpha.com/downloads/tech-report.pdf",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "metadata_verified_at": "2026-10-03",
+      "verified_at": "2026-10-03"
     },
     {
       "id": "model-alibaba-qwen-plus-2025-12-01",
@@ -5424,6 +5544,301 @@
       "verified_at": "2026-09-11"
     },
     {
+      "id": "model-anthropic-claude-sonnet-5-5",
+      "source_id": "anthropic/claude-sonnet-5-5",
+      "name": "Claude Sonnet 5.5",
+      "developer": "Anthropic",
+      "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+      "description": "The second model of Anthropic's Claude 5.5 family, released September 28, 2026, a text-and-image model with 1M-token context and adaptive thinking, served through the Claude API, Amazon Bedrock, Google Cloud, Microsoft Foundry, and Claude Platform on AWS.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Claude Sonnet 5.5",
+        "description": "Fast Claude model for everyday coding, agents, and knowledge work",
+        "family": "claude-sonnet",
+        "release_date": "2026-09-28",
+        "last_updated": "2026-09-28",
+        "knowledge_cutoff": "2026-06",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Claude Sonnet 5.5 is served, not distributed, under Anthropic's Commercial Terms of Service, which govern the reviewed Sonnet and Opus lines and incorporate the Usage Policy by reference. No weights are released, and the terms prohibit reverse engineering the Services and using them to train competing models.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "scope": "Claude Sonnet 5.5 API access and related Anthropic services",
+          "kind": "web_terms",
+          "url": "https://www.anthropic.com/legal/commercial-terms",
+          "verified_at": "2026-09-30"
+        }
+      ],
+      "access_boundary": "This record represents the Claude Sonnet 5.5 release of September 28, 2026, the second model of the Claude 5.5 family with the pinned claude-sonnet-5-5 API identifier and per-platform IDs on Amazon Bedrock, Google Cloud, Microsoft Foundry, and Claude Platform on AWS. The reviewed Sonnet 5, Sonnet 4.6, and Opus 5.5 lines, the unlaunched Claude Haiku 5.5, and independent hosts are separate boundaries.",
+      "strengths": [
+        "Dated first-party announcement and docs page with per-platform model identifiers, an active latest status, and a retirement commitment of no sooner than September 28, 2027",
+        "Served on the Claude API, Amazon Bedrock, Google Cloud, Microsoft Foundry, and Claude Platform on AWS"
+      ],
+      "tradeoffs": [
+        "Closed weights served only through managed APIs",
+        "Five documented breaking changes from Sonnet 5, including forced tool use returning an error and up-front thinking requiring the new between_tools setting"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 9,
+        "lifecycle_transparency": 9,
+        "documentation_provenance": 9,
+        "overall": 5.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/fde326351fbf011d3c007163af3046b97efbf6b6/models/anthropic/claude-sonnet-5-5.toml",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Sonnet 5.5 model and platform documentation",
+          "url": "https://platform.claude.com/docs/en/models/sonnet-5-5/overview",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude Sonnet 5.5 release announcement",
+          "url": "https://www.anthropic.com/claude-sonnet-5-5",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "label": "Official Claude model ID and versioning policy",
+          "url": "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "label": "AWS Bedrock model card showing Claude Sonnet 5.5 availability",
+          "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-card-anthropic-claude-sonnet-5-5.html",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "label": "Google Cloud model card showing Claude Sonnet 5.5 availability",
+          "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude/sonnet-5-5",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "label": "Microsoft Foundry model catalog showing claude-sonnet-5-5 availability",
+          "url": "https://ai.azure.com/catalog/models/claude-sonnet-5-5",
+          "verified_at": "2026-09-30"
+        }
+      ],
+      "metadata_verified_at": "2026-09-30",
+      "verified_at": "2026-09-30"
+    },
+    {
+      "id": "model-apodex-apodex-1-1-mini",
+      "source_id": null,
+      "name": "Apodex 1.1 Mini",
+      "developer": "Apodex AI",
+      "url": "https://huggingface.co/apodex/Apodex-1.1-mini",
+      "description": "Apodex AI's ungated 35B-total, 3B-active mixture-of-experts multimodal reasoning model, fine-tuned from Qwen3.5-35B-A3B for long-horizon research work with native function calling, published as Apache-2.0 open weights with official FP8, NVFP4, GPTQ-Int4, and GGUF exports alongside the FrontierAgent execution harness, and served as the Deep Research and Deep Solve tiers of the Apodex platform and through OpenRouter.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "Apodex 1.1 Mini",
+        "description": "Reasoning-first model for complex, long-horizon research tasks that works directly with files, data, code, and tools to produce verifiable deliverables",
+        "family": "apodex",
+        "release_date": "2026-08-24",
+        "last_updated": "2026-08-26",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [
+          {
+            "label": "Official release blog",
+            "url": "https://www.apodex.com/blog/apodex-1.1-scaling-agentic-intelligence-for-complex-work"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/apodex/Apodex-1.1-mini"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository ships a LICENSE file carrying the verbatim Apache License 2.0 text, and the model card's own License section states that Apodex-1.1 is released under Apache 2.0. The grant covers the released weights and carries no revenue threshold, use restriction, or separate model-as-a-service licence, so the release is open source. The base checkpoint, Qwen/Qwen3.5-35B-A3B, is itself Apache-2.0, so the fine-tune inherits a compatible grant. Apodex's own hosted service is governed separately by its Commercial Terms of Service, which is a service contract and does not qualify the weight licence.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Official apodex/Apodex-1.1-mini repository: Safetensors weights, tokenizer, chat template, preprocessor and video-preprocessor configuration, and the official FP8, NVFP4, GPTQ-Int4, and GGUF exports and their derivatives",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini/blob/4e4f109a5e32d1306dc6c75e4995a09c8b881811/LICENSE",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Pinned model card at the reviewed repository commit, whose License section states the release terms and whose YAML front matter declares license: apache-2.0 and the Qwen/Qwen3.5-35B-A3B base model",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini/blob/4e4f109a5e32d1306dc6c75e4995a09c8b881811/README.md",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "access_boundary": "This record represents the apodex/Apodex-1.1-mini weight release published on Hugging Face at commit 4e4f109a5e32d1306dc6c75e4995a09c8b881811, the 35B-total, 3B-active multimodal mixture-of-experts checkpoint of the Apodex 1.1 generation. The unreleased full-size Apodex 1.1 model behind the Deep Discover tier, the Apodex 1.0 and 1.0-mini checkpoints and their 0.8B, 2B, and 4B SFT siblings, the official FP8, NVFP4, GPTQ-Int4, and GGUF format exports, the FrontierAgent and AgentCore harnesses, the Apodex Deep Research, Deep Solve, and Deep Discover product tiers, and OpenRouter's hosted route for the same weights are separate boundaries.",
+      "strengths": [
+        "Ungated weights in an official Apodex Hugging Face organization, shipping the verbatim Apache-2.0 LICENSE file in the repository and stating the same terms in the card",
+        "Official FP8, NVFP4, GPTQ-Int4, and GGUF exports published by the developer on the same organization, so a consumer-GPU path needs no third-party repackaging",
+        "First-party model card publishes the recommended sampling parameters, the 262,144-token context and 32,768-token output budget, exact SGLang and vLLM launch commands with the Qwen3 tool-call and reasoning parsers, and a complete tool-using agent example",
+        "The FrontierAgent harness and the Apodex 1.1 technical report are published under the same organization, so the execution environment the model is trained for is inspectable rather than described only in prose",
+        "First-party documentation ties the 35B checkpoint to the Deep Research and Deep Solve platform tiers, and OpenRouter documents an independent hosted route"
+      ],
+      "tradeoffs": [
+        "Only the mini checkpoint is open; the full-size Apodex 1.1 model behind the Deep Discover tier is not published, so the generation's top capability is not obtainable as weights",
+        "The base is a Qwen3.5 checkpoint, so the release inherits that lineage's identity rather than standing as an independently pretrained model",
+        "The model card's benchmark results are reported for the Agent Team system configuration rather than for the bare checkpoint, so the published scores do not isolate the weights",
+        "No deprecation or versioning posture is published for the line, and release identity rests on repository commits with no dated snapshot names"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 6,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.48
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Apodex 1.1 Mini model card: license, base model, sampling parameters, SGLang and vLLM launch commands, and the agentic usage example",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned model card at the reviewed repository commit, carrying the licence grant and the declared base model",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini/blob/4e4f109a5e32d1306dc6c75e4995a09c8b881811/README.md",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Apache-2.0 LICENSE file shipped in the weights repository",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini/blob/4e4f109a5e32d1306dc6c75e4995a09c8b881811/LICENSE",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned model configuration giving the 262,144-token context, 40-layer linear/full attention layout, 8-of-256 expert routing, and the vision and video preprocessor token identifiers",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini/blob/4e4f109a5e32d1306dc6c75e4995a09c8b881811/config.json",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official Apodex 1.1 release announcement: the 35B mini as the locally deployable checkpoint, the FrontierAgent harness, and the full model as the complete capability envelope",
+          "url": "https://www.apodex.com/blog/apodex-1.1-scaling-agentic-intelligence-for-complex-work",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official Apodex 1.1 technical report",
+          "url": "https://www.apodex.com/pdf/20260824",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official research page naming the 35B Apodex Deep Research model and its Agent Team depth tiers",
+          "url": "https://www.apodex.com/research",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official API pricing page listing the Deep Research 1.1, Deep Solve 1.1, and Deep Discover 1.1 Preview platform tiers",
+          "url": "https://www.apodex.com/api",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official FrontierAgent repository: the execution harness the model card recommends for running the mini locally",
+          "url": "https://github.com/ApodexAI/FrontierAgent",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "OpenRouter model page documenting a hosted route for the same release",
+          "url": "https://openrouter.ai/apodex/apodex-1.1-mini",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "metadata_verified_at": "2026-10-01",
+      "verified_at": "2026-10-01"
+    },
+    {
       "id": "model-arcee-ai-trinity-large-preview",
       "source_id": "arcee-ai/trinity-large-preview",
       "name": "Trinity Large Preview",
@@ -5934,6 +6349,125 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-bfl-flux-2-dev",
+      "source_id": null,
+      "name": "FLUX.2 [dev]",
+      "developer": "Black Forest Labs",
+      "url": "https://huggingface.co/black-forest-labs/FLUX.2-dev",
+      "description": "Black Forest Labs' 32B rectified flow transformer for text-to-image generation and single- or multi-reference image editing, published as gated open weights under the FLUX [dev] Non-Commercial License 2.0, with no first-party developer API for this checkpoint.",
+      "model_type": "image_generation_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "third_party_hosting"
+      ],
+      "source_metadata": {
+        "name": "FLUX.2 [dev]",
+        "description": "Black Forest Labs' open-weight image generation and editing model, the 32 billion parameter member of the FLUX.2 family",
+        "family": "flux",
+        "release_date": "2025-11-25",
+        "last_updated": null,
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "image"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": null,
+          "structured_output": null,
+          "temperature": null,
+          "tool_call": null
+        },
+        "limits": {
+          "context": null,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "flux-non-commercial-license",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/black-forest-labs/FLUX.2-dev"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-FLUX-Dev-Non-Commercial-2.0"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The weights, parameters, and inference code for every FLUX.x [dev] model are governed by the FLUX [dev] Non-Commercial License 2.0, published on the company's own legal pages with a version number and a last-updated date of November 25, 2025, and named for FLUX.2 [dev] in its own definition of the models it covers. It grants use, distribution, and derivative works only for a Non-Commercial Purpose, which its own text excludes from revenue-generating activity, end-user-facing deployment, and training a competing model; it requires content filters or a pre-distribution review of every output under section 2(e) together with AI disclosure; and the company may terminate it on notice under section 8(b). Outputs may be used commercially, so the restriction falls on operating the model rather than on the images it produces. The repository ships no LICENSE file, so the published web terms are the governing text and the Hugging Face licence tag is a card label rather than evidence. The licence names Black Forest Labs Inc. while the imprint names BFL GmbH, a difference the organization's own pages do not reconcile. Commercial self-hosting is sold separately under Self-Hosted Commercial License Terms, which govern a negotiated arrangement rather than this published release.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-FLUX-Dev-Non-Commercial-2.0",
+          "scope": "FLUX.2 [dev] weights, parameters, and inference code, including the content-filter and output-disclosure conditions in sections 2 and 8",
+          "kind": "web_terms",
+          "url": "https://bfl.ai/legal/non-commercial-license-terms",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "access_boundary": "This record represents the FLUX.2 [dev] open-weight release announced November 25, 2025 and served from the gated black-forest-labs/FLUX.2-dev repository. The FLUX.2 [klein], [flex], [pro], and [max] API tiers, the FLUX 3 image and video models, the FLUX 3 Action world action model, the FLUX 2 [klein] training path, the FLUX Tools endpoints, and third-party derivatives and quantizations are separate boundaries.",
+      "strengths": [
+        "The governing licence is published on an official page with a version number and a revision date, and names the models it covers",
+        "Documented deployment paths through Diffusers, ComfyUI, the single-file format, and a 4-bit quantization for consumer GPUs"
+      ],
+      "tradeoffs": [
+        "The weights are gated behind an accepted licence agreement, and the licence restricts operating the model to non-commercial purposes while requiring content filters on every deployment",
+        "No first-party developer API serves this checkpoint, so commercial reach depends on a separately negotiated licence or a third-party host"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 6,
+        "deployment_portability": 8,
+        "serving_reach": 3,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 9,
+        "overall": 6.18
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Developer-published FLUX.2 [dev] weight repository and model card",
+          "url": "https://huggingface.co/black-forest-labs/FLUX.2-dev",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "FLUX [dev] Non-Commercial License 2.0: the models it covers, the non-commercial purpose, the content-filter condition, and revocability",
+          "url": "https://bfl.ai/legal/non-commercial-license-terms",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "FLUX.2 announcement of November 25, 2025: the open-weight release of the FLUX.2 family",
+          "url": "https://bfl.ai/blog/flux-2",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Developer FLUX.2 overview: the API tiers are [max], [pro], [flex], and [klein], so no first-party endpoint serves this checkpoint",
+          "url": "https://docs.bfl.ai/flux_2/flux2_overview",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "fal's own model page hosting this release as fal-ai/flux-2-dev",
+          "url": "https://fal.ai/models/fal-ai/flux-2-dev",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "metadata_verified_at": "2026-10-01",
+      "verified_at": "2026-10-01"
     },
     {
       "id": "model-bytedance-seed-seed-1-6",
@@ -10078,6 +10612,160 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-google-diffusiongemma-26b-a4b-it",
+      "source_id": "google/diffusiongemma-26b-a4b-it",
+      "name": "DiffusionGemma 26B A4B IT",
+      "developer": "Google",
+      "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it",
+      "description": "Google DeepMind's ungated experimental open-weights multimodal model that generates text by discrete diffusion rather than token-by-token autoregression: an encoder-decoder over the 26B-total, 3.8B-active Gemma 4 mixture-of-experts architecture, denoising 256-token canvases with bidirectional attention for 256K-token context, released under Apache-2.0 and served on Vertex AI Model Garden.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights",
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "DiffusionGemma 26B A4B IT",
+        "description": "Gemma 4 based discrete text diffusion model for fast chat, reasoning, and tool use",
+        "family": "gemma",
+        "release_date": "2026-06-09",
+        "last_updated": "2026-07-15",
+        "knowledge_cutoff": "2025-01",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache 2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The model card links its license to Google's Gemma 4 license page, which carries the Apache License 2.0 text in full, and Google's own release blog states the weights are \"Released under an Apache 2.0 license\". The Gemma Terms of Use, whose appendix does not list DiffusionGemma, state that Gemma 4 terms are in the separate Gemma 4 license, so the Gemma Terms of Use use restrictions and the incorporated Gemma Prohibited Use Policy do not attach to this release. No LICENSE file ships in the repository, so the grant rests on the card metadata and the linked license page.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "scope": "Official google/diffusiongemma-26B-A4B-it model repository: Safetensors weights, tokenizer, processor, chat template, and scheduler configuration",
+          "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it/blob/f7f5b7f5fa82ffc52addd066915886d497f5517b/README.md",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "kind": "web_terms",
+          "scope": "Google's Gemma 4 license page, linked from the model card as the governing license text, carrying the Apache License 2.0 in full",
+          "url": "https://ai.google.dev/gemma/docs/gemma_4_license",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "access_boundary": "This record represents the google/diffusiongemma-26B-A4B-it weight release published on Hugging Face at commit f7f5b7f5fa82ffc52addd066915886d497f5517b, the instruction-tuned 26B-total, 3.8B-active DiffusionGemma checkpoint. The Gemma 4 26B A4B autoregressive base it is fine-tuned from, the Diffusion Explained sample application, the community FP8 and 4-bit quantizations and the 31 finetune derivatives, and the Vertex AI Model Garden deployment of the same weights are separate boundaries.",
+      "strengths": [
+        "Ungated Apache-2.0 weights in an official Google Hugging Face organization, with the full Apache 2.0 text linked from the model card and the release blog",
+        "First open-weights Google release built on discrete text diffusion rather than autoregression, documented end to end by a separate Diffusion Explained page covering Uniform State Diffusion, incremental prefill, and denoising",
+        "First-party model card publishes the architecture table, 256-token canvas, 1024-token sliding window, 8-of-128 expert routing, recommended sampler settings, per-runtime deployment commands, a training-data description with a January 2025 cutoff, and a safety evaluation section",
+        "Served from Google's own Vertex AI Model Garden, which the developer documentation links directly from the model overview"
+      ],
+      "tradeoffs": [
+        "Google documents the release as experimental, and its own comparison table shows it scoring below the Gemma 4 base it derives from on most text and vision benchmarks",
+        "Google states the parallel-decoding advantage is aimed at low-concurrency single-user local use and diminishes under high-QPS cloud workloads, so the throughput case does not transfer to server deployments",
+        "No LICENSE file ships in the repository, so the grant rests on the card metadata and the linked license page rather than an in-repo license artifact",
+        "No deprecation or versioning posture is published for the line, and the repository's last commit is 15 July 2026"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 7,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 8.06
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/dbc891ced2fdbf01591e86345100e972b329b6a6/models/google/diffusiongemma-26b-a4b-it.toml",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official DiffusionGemma model card: architecture, benchmarks, sampler settings, training data, safety evaluation, and limitations",
+          "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned model card at the reviewed repository commit, the license grant this record rests on",
+          "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it/blob/f7f5b7f5fa82ffc52addd066915886d497f5517b/README.md",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Google's Gemma 4 license page carrying the Apache License 2.0 in full",
+          "url": "https://ai.google.dev/gemma/docs/gemma_4_license",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official Gemma documentation: DiffusionGemma model overview, recommended serving configuration, and the Vertex AI Model Garden deployment path",
+          "url": "https://ai.google.dev/gemma/docs/diffusiongemma",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official Diffusion Explained page: Uniform State Diffusion, incremental prefill and denoising, and the autoregression comparison",
+          "url": "https://ai.google.dev/gemma/docs/diffusiongemma/explained",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official release announcement: DiffusionGemma, 4x faster text generation on GPUs, released under Apache 2.0",
+          "url": "https://blog.google/innovation-and-ai/technology/developers-tools/diffusion-gemma-faster-text-generation/",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Pinned model configuration giving the 256-token canvas, DiffusionGemmaForBlockDiffusion architecture, and 30-layer sliding/full attention layout",
+          "url": "https://huggingface.co/google/diffusiongemma-26B-A4B-it/blob/f7f5b7f5fa82ffc52addd066915886d497f5517b/config.json",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Gemma Terms of Use, whose appendix excludes DiffusionGemma and which routes Gemma 4 terms to the separate Apache-2.0 license",
+          "url": "https://ai.google.dev/gemma/terms",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "metadata_verified_at": "2026-10-01",
+      "verified_at": "2026-10-01"
+    },
+    {
       "id": "model-google-gemini-2-0-flash",
       "source_id": "google/gemini-2.0-flash",
       "name": "Gemini 2.0 Flash",
@@ -12234,6 +12922,121 @@
       ],
       "metadata_verified_at": "2026-09-12",
       "verified_at": "2026-09-12"
+    },
+    {
+      "id": "model-google-gemini-4-argon",
+      "source_id": null,
+      "name": "Gemini 4 Argon",
+      "developer": "Google",
+      "url": "https://deepmind.google/models/gemini/",
+      "description": "Google's frontier Gemini release announced September 30, 2026, for long-horizon software engineering, enterprise knowledge work, and autonomous vulnerability remediation, with an expanded 1M-token output limit, no downloadable weights, and access staged from a restricted defender program to paid API customers.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Gemini 4 Argon",
+        "description": "Google's frontier model for real-world coding, enterprise knowledge work, and cyber defense",
+        "family": "gemini-4",
+        "release_date": "2026-09-30",
+        "last_updated": "2026-09-30",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": null,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": null,
+          "input": null,
+          "output": 1000000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [
+          {
+            "label": "Official release announcement",
+            "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
+            "type": "announcement"
+          }
+        ],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Gemini-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Google serves Gemini 4 Argon as a managed model under the Gemini API Additional Terms of Service, which incorporate the Google APIs Terms of Service and a Prohibited Use Policy. Those terms prohibit developing competing models and reverse engineering, extracting, or replicating model components such as parameter weights, so nothing is licensed for self-operation. At this review date no model identifier or public API path is published, so the terms are recorded as the governing framework for the announced paid API release rather than as a documented per-model license.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Gemini-API-Terms",
+          "scope": "Access to Gemini 4 Argon through the Gemini API and Google AI Studio once released, including the incorporated Google APIs Terms of Service and Prohibited Use Policy; no weight license",
+          "kind": "web_terms",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-30"
+        }
+      ],
+      "access_boundary": "This record represents the Gemini 4 Argon release announced September 30, 2026, Google's frontier model for coding, enterprise knowledge work, and defensive cybersecurity, distinguished by a 1M-token output limit raised from 64K. At this review date Google has published no model identifier, no API model page, and no deprecation date: access is restricted to invited Fairwind Program defenders and is stated to reach developers, enterprises, and consumers starting with paid API customers. The Gemini 3.8 Flash and earlier Gemini releases, the Fairwind Program itself, the Gemini consumer app, and the Gemini Enterprise Agent Platform are separate service, program, or model boundaries.",
+      "strengths": [
+        "First-party announcement and a DeepMind model page with a published benchmark table, safety posture, and eval methodology",
+        "Announced introductory pricing of $2 per million input and $10 per million output tokens, with $4 and $20 applying after the introductory period"
+      ],
+      "tradeoffs": [
+        "No downloadable weights, and no published model identifier or API documentation at review time, so nothing can be pinned",
+        "Access is staged: restricted to Fairwind Program defenders now, with no announced general-availability date"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 2,
+        "lifecycle_transparency": 4,
+        "documentation_provenance": 7,
+        "overall": 3.2
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Gemini 4 Argon announcement (September 30, 2026)",
+          "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "label": "Official DeepMind Gemini model page carrying the Gemini 4 Argon benchmark table, safety posture, and eval methodology",
+          "url": "https://deepmind.google/models/gemini/",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "label": "Official Fairwind Program page describing restricted Gemini 4 Argon defender access",
+          "url": "https://deepmind.google/fairwind-program/",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "kind": "web",
+          "label": "Gemini API Additional Terms of Service",
+          "url": "https://ai.google.dev/gemini-api/terms",
+          "verified_at": "2026-09-30"
+        }
+      ],
+      "metadata_verified_at": "2026-09-30",
+      "verified_at": "2026-09-30"
     },
     {
       "id": "model-google-deep-research-preview-04-2026",
@@ -30398,8 +31201,8 @@
       "source_id": "writer/palmyra-x4",
       "name": "Palmyra X4",
       "developer": "Writer",
-      "url": "https://dev.writer.com/home/models-overview",
-      "description": "Writer's Palmyra X4, a 128K-context tool-calling and RAG-focused language model launched September 2024, served through the Writer API and Amazon Bedrock and scheduled for deprecation on November 18, 2026.",
+      "url": "https://dev.writer.com/home/models",
+      "description": "Writer's Palmyra X4, a 128K-context tool-calling and RAG-focused language model launched September 2024, served through the Writer API and Amazon Bedrock and scheduled for deprecation on December 14, 2026.",
       "model_type": "language_model",
       "distribution_modes": [
         "developer_api",
@@ -30442,24 +31245,24 @@
       ],
       "source_model": "proprietary",
       "license_review_status": "verified",
-      "license_note": "Palmyra X4 is served, not distributed; the governing terms are Writer's API and product terms, with a model card on Amazon Bedrock documenting the serving lifecycle and a published deprecation date of November 18, 2026.",
+      "license_note": "Palmyra X4 is served, not distributed; the governing terms are Writer's API and product terms, with a model card on Amazon Bedrock documenting the serving lifecycle and a published deprecation date of December 14, 2026.",
       "license_evidence": [
         {
           "license_id": "LicenseRef-Writer-API-Terms",
           "scope": "Palmyra X4 served API model under Writer API and product terms; Bedrock card documents the serving lifecycle",
           "kind": "web_terms",
           "url": "https://writer.com/legal/",
-          "verified_at": "2026-09-22"
+          "verified_at": "2026-10-03"
         }
       ],
-      "access_boundary": "This record represents the Palmyra X4 API model line launched September 2024 with the palmyra-x4 API identifier, served through Writer and Amazon Bedrock, and scheduled for deprecation on November 18, 2026. Palmyra X5 and X6 are separate lines.",
+      "access_boundary": "This record represents the Palmyra X4 API model line launched September 2024 with the palmyra-x4 API identifier, served through Writer and Amazon Bedrock, and scheduled for deprecation on December 14, 2026. Writer documents Palmyra X6 as the migration target. Palmyra X5 is a separate line also scheduled for deprecation.",
       "strengths": [
-        "Dated first-party identity with a published deprecation date and an explicit migration path",
+        "Dated first-party identity with a published deprecation date and an explicit migration path to Palmyra X6",
         "Available on two channels (Writer API and Amazon Bedrock) with documented tool-calling and structured-output support"
       ],
       "tradeoffs": [
         "Closed weights with proprietary terms only",
-        "The line is deprecating in a matter of weeks, so the record carries a terminating lifecycle"
+        "The line is scheduled for deprecation with continued support only through Writer's published policy window"
       ],
       "score_profile": "model_access",
       "score": {
@@ -30476,25 +31279,25 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/writer/palmyra-x4.toml",
-          "verified_at": "2026-09-22"
+          "verified_at": "2026-10-03"
         },
         {
           "kind": "web",
           "label": "Official model page, model card, or weight repository",
-          "url": "https://dev.writer.com/home/models-overview",
-          "verified_at": "2026-09-22"
+          "url": "https://dev.writer.com/home/models",
+          "verified_at": "2026-10-03"
         }
       ],
-      "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "metadata_verified_at": "2026-10-03",
+      "verified_at": "2026-10-03"
     },
     {
       "id": "model-writer-palmyra-x5",
       "source_id": "writer/palmyra-x5",
       "name": "Palmyra X5",
       "developer": "Writer",
-      "url": "https://writer.com/llms/palmyra-x5",
-      "description": "Writer's Palmyra X5, launched April 28, 2025, a 1M-context multimodal model taking text and image input and returning text or structured output, served through the Writer API and Amazon Bedrock.",
+      "url": "https://dev.writer.com/home/models",
+      "description": "Writer's Palmyra X5, launched April 28, 2025, a 1M-context multimodal model taking text and image input and returning text or structured output, served through the Writer API and Amazon Bedrock and scheduled for deprecation on December 14, 2026.",
       "model_type": "multimodal_language_model",
       "distribution_modes": [
         "developer_api",
@@ -30538,24 +31341,24 @@
       ],
       "source_model": "proprietary",
       "license_review_status": "verified",
-      "license_note": "Palmyra X5 is served, not distributed; the governing terms are Writer's API and product terms, with dated launch and serving documentation and a Bedrock model card.",
+      "license_note": "Palmyra X5 is served, not distributed; the governing terms are Writer's API and product terms, with dated launch and serving documentation, a Bedrock model card, and a published deprecation date of December 14, 2026.",
       "license_evidence": [
         {
           "license_id": "LicenseRef-Writer-API-Terms",
           "scope": "Palmyra X5 served API model under Writer API and product terms; Bedrock card documents the serving lifecycle",
           "kind": "web_terms",
           "url": "https://writer.com/legal/",
-          "verified_at": "2026-09-22"
+          "verified_at": "2026-10-03"
         }
       ],
-      "access_boundary": "This record represents the Palmyra X5 API model line launched April 28, 2025 with the palmyra-x5 API identifier, served through Writer and Amazon Bedrock and the current migration target for the X4 line. Palmyra X4 and X6 are separate lines.",
+      "access_boundary": "This record represents the Palmyra X5 API model line launched April 28, 2025 with the palmyra-x5 API identifier, served through Writer and Amazon Bedrock and scheduled for deprecation on December 14, 2026. Writer documents Palmyra X6 as the migration target. Palmyra X4 is a separate deprecating line.",
       "strengths": [
-        "Dated first-party launch identity and current serving status as the X4 migration target",
+        "Dated first-party launch identity with a published deprecation date and migration path to Palmyra X6",
         "1M-token context with image input and sub-second tool-calling for agentic workloads on two channels"
       ],
       "tradeoffs": [
         "Closed weights with proprietary terms only",
-        "Multimodality is limited to image input, and no deprecation or version-snapshot date is published for the API identifier"
+        "The line is scheduled for deprecation even though it remains the documented vision model for some API examples"
       ],
       "score_profile": "model_access",
       "score": {
@@ -30572,17 +31375,111 @@
           "kind": "web",
           "label": "Pinned models.dev source metadata",
           "url": "https://github.com/anomalyco/models.dev/blob/9df518aae587f231d955a3f849306082c543aa4d/models/writer/palmyra-x5.toml",
-          "verified_at": "2026-09-22"
+          "verified_at": "2026-10-03"
         },
         {
           "kind": "web",
           "label": "Official model page, model card, or weight repository",
-          "url": "https://writer.com/llms/palmyra-x5",
-          "verified_at": "2026-09-22"
+          "url": "https://dev.writer.com/home/models",
+          "verified_at": "2026-10-03"
         }
       ],
-      "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "metadata_verified_at": "2026-10-03",
+      "verified_at": "2026-10-03"
+    },
+    {
+      "id": "model-writer-palmyra-x6",
+      "source_id": null,
+      "name": "Palmyra X6",
+      "developer": "Writer",
+      "url": "https://dev.writer.com/home/models",
+      "description": "Writer's Palmyra X6, launched August 13, 2026, a 1M-context agentic language model for long-horizon enterprise workflows with tool use and sub-agents, served as the default model on the Writer API.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Palmyra X6",
+        "description": "Agentic model for WRITER Agent and long-horizon enterprise workflows with sub-agents, grounding, and MCP tool use",
+        "family": "palmyra",
+        "release_date": "2026-08-13",
+        "last_updated": "2026-10-03",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Writer-API-Terms"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "Palmyra X6 is served, not distributed; the governing terms are Writer's API and product terms, with dated launch documentation and a published model catalog covering pricing, context limits, and family-level deprecation policy.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Writer-API-Terms",
+          "scope": "Palmyra X6 served API model under Writer API and product terms",
+          "kind": "web_terms",
+          "url": "https://writer.com/legal/",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "access_boundary": "This record represents the Palmyra X6 API model line launched August 13, 2026 with the palmyra-x6 API identifier and documented as Writer's default agentic model on the Writer API. Palmyra X4 and X5 are separate deprecating lines.",
+      "strengths": [
+        "Dated first-party launch identity with a published model catalog, pricing, and family-level deprecation policy",
+        "Documented agentic capabilities with 1M-token context, tool use, and sub-agents on the Writer API"
+      ],
+      "tradeoffs": [
+        "Closed weights with proprietary terms only",
+        "Writer documents first-party API serving for this line; no Amazon Bedrock model ID is listed alongside X4 and X5"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 5,
+        "lifecycle_transparency": 8,
+        "documentation_provenance": 8,
+        "overall": 4.24
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official model page, model card, or weight repository",
+          "url": "https://dev.writer.com/home/models",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Palmyra X6 launch announcement",
+          "url": "https://writer.com/engineering/palmyra-x6/",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "metadata_verified_at": "2026-10-03",
+      "verified_at": "2026-10-03"
     },
     {
       "id": "model-xai-grok-4-20-0309-non-reasoning",

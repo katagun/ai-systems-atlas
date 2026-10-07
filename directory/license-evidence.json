@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-09-28",
+  "verified_at": "2026-10-03",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -2384,6 +2384,33 @@
       ]
     },
     {
+      "project_id": "openai-dots",
+      "repo": null,
+      "items": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "OpenAI Terms of Use, the base agreement governing consumer use of ChatGPT and the dots it creates",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/terms-of-use/",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "OpenAI Service Terms section 4 (Codex and code generation), which governs the Codex documentation surface dots is documented under",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/service-terms/",
+          "verified_at": "2026-09-30"
+        },
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Business and enterprise use of dots on Business Premium and Enterprise workspaces",
+          "kind": "web_terms",
+          "url": "https://openai.com/policies/business-terms/",
+          "verified_at": "2026-09-30"
+        }
+      ]
+    },
+    {
       "project_id": "openai-agents-sdk",
       "repo": "openai/openai-agents-python",
       "items": [
@@ -3573,7 +3600,220 @@
           "verified_at": "2026-08-28"
         }
       ]
+    },
+    {
+      "project_id": "lerobot",
+      "repo": "huggingface/lerobot",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository under the Apache License 2.0, including the appended DETR notice",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/huggingface/lerobot/blob/main/LICENSE",
+          "blob_sha": "93baf0c18936131979fdda6a38536cbcef0efccb",
+          "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/93baf0c18936131979fdda6a38536cbcef0efccb"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "code derived from Diffusion Policy, FOWM, simxarm, ALOHA, StarVLA, and Meta Platforms, under MIT notices appended to the LICENSE file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/huggingface/lerobot/blob/main/LICENSE",
+          "blob_sha": "93baf0c18936131979fdda6a38536cbcef0efccb",
+          "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/93baf0c18936131979fdda6a38536cbcef0efccb"
+        }
+      ]
+    },
+    {
+      "project_id": "om1",
+      "repo": "OpenMind/OM1",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/OpenMind/OM1/blob/main/LICENSE",
+          "blob_sha": "a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0",
+          "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0"
+        }
+      ]
+    },
+    {
+      "project_id": "openai-agents-js",
+      "repo": "openai/openai-agents-js",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole openai-agents-js repository and the npm packages it publishes",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/openai/openai-agents-js/blob/main/LICENSE",
+          "blob_sha": "0b9aa14f1d62dc4f93fd48437369ceff7ff27cd8",
+          "immutable_url": "https://api.github.com/repos/openai/openai-agents-js/git/blobs/0b9aa14f1d62dc4f93fd48437369ceff7ff27cd8"
+        }
+      ]
+    },
+    {
+      "project_id": "koog",
+      "repo": "JetBrains/koog",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole koog repository and the Maven artifacts it publishes",
+          "kind": "git_blob",
+          "path": "LICENSE.txt",
+          "url": "https://github.com/JetBrains/koog/blob/develop/LICENSE.txt",
+          "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+          "immutable_url": "https://api.github.com/repos/JetBrains/koog/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+        }
+      ]
+    },
+    {
+      "project_id": "claude-agent-acp",
+      "repo": "agentclientprotocol/claude-agent-acp",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "whole repository at the pinned blob",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/agentclientprotocol/claude-agent-acp/blob/main/LICENSE",
+          "blob_sha": "c24b053560354d8261d5132edaa3d30b2d1cb1f3",
+          "immutable_url": "https://api.github.com/repos/agentclientprotocol/claude-agent-acp/git/blobs/c24b053560354d8261d5132edaa3d30b2d1cb1f3"
+        }
+      ]
+    },
+    {
+      "project_id": "sqlbot",
+      "repo": "dataease/SQLBot",
+      "items": [
+        {
+          "license_id": "LicenseRef-SQLBot-Modified-GPLv3",
+          "scope": "whole repository at the pinned blob; additional conditions in the LICENSE file beyond GPLv3",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/dataease/SQLBot/blob/main/LICENSE",
+          "blob_sha": "042baf3dbf2e597df24aa8b48a0e2839910fd20d",
+          "immutable_url": "https://api.github.com/repos/dataease/SQLBot/git/blobs/042baf3dbf2e597df24aa8b48a0e2839910fd20d"
+        }
+      ]
+    },
+    {
+      "project_id": "aihawk",
+      "repo": "feder-cr/AIHawk",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "whole repository at the pinned blob",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/feder-cr/AIHawk/blob/main/LICENSE",
+          "blob_sha": "9036d5efbfaf66e50d1a318d07d08a404aa64250",
+          "immutable_url": "https://api.github.com/repos/feder-cr/AIHawk/git/blobs/9036d5efbfaf66e50d1a318d07d08a404aa64250"
+        }
+      ]
+    },
+    {
+      "project_id": "obsidian-llm-wiki",
+      "repo": "GD4AI/obsidian-llm-wiki",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository source at the pinned blob",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/GD4AI/obsidian-llm-wiki/blob/main/LICENSE",
+          "blob_sha": "5d9ef00e1503fb7c2e2c772ec4ba5dfd3dbd41a6",
+          "immutable_url": "https://api.github.com/repos/GD4AI/obsidian-llm-wiki/git/blobs/5d9ef00e1503fb7c2e2c772ec4ba5dfd3dbd41a6"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "packages bundled into the shipped main.js as listed in the pinned notices file",
+          "kind": "git_blob",
+          "path": "THIRD-PARTY-NOTICES.md",
+          "url": "https://github.com/GD4AI/obsidian-llm-wiki/blob/main/THIRD-PARTY-NOTICES.md",
+          "blob_sha": "536ed32605d9bd95fbe1e0bfe35dd50aafcb2907",
+          "immutable_url": "https://api.github.com/repos/GD4AI/obsidian-llm-wiki/git/blobs/536ed32605d9bd95fbe1e0bfe35dd50aafcb2907"
+        }
+      ]
+    },
+    {
+      "project_id": "pgvector",
+      "repo": "pgvector/pgvector",
+      "items": [
+        {
+          "license_id": "PostgreSQL",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/pgvector/pgvector/blob/f37c13f68b57d2c3472b2214fbcff699d6d34876/LICENSE",
+          "blob_sha": "fc5f177fa5d9c0d20a949f4b4faa028999977008",
+          "immutable_url": "https://api.github.com/repos/pgvector/pgvector/git/blobs/fc5f177fa5d9c0d20a949f4b4faa028999977008"
+        }
+      ]
+    },
+    {
+      "project_id": "vespa",
+      "repo": "vespa-engine/vespa",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/vespa-engine/vespa/blob/f8652d11eb2e8113291daf485d65c4b7ac72a9f8/LICENSE",
+          "blob_sha": "df0bb94aeb6578299d1995c791da29f8f00f0cbc",
+          "immutable_url": "https://api.github.com/repos/vespa-engine/vespa/git/blobs/df0bb94aeb6578299d1995c791da29f8f00f0cbc"
+        }
+      ]
+    },
+    {
+      "project_id": "ragflow",
+      "repo": "infiniflow/ragflow",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/infiniflow/ragflow/blob/98b48a085786fb9e14be8753b5a9a9ea02230ccf/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/infiniflow/ragflow/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "private-gpt",
+      "repo": "zylon-ai/private-gpt",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/zylon-ai/private-gpt/blob/main/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/zylon-ai/private-gpt/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "txtai",
+      "repo": "neuml/txtai",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "repository",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/neuml/txtai/blob/893d0424bec97f45e4cda1ad9c952afe170ea50f/LICENSE",
+          "blob_sha": "ca0a1be0119a00629ad2cb8b213180fd9ad0064a",
+          "immutable_url": "https://api.github.com/repos/neuml/txtai/git/blobs/ca0a1be0119a00629ad2cb8b213180fd9ad0064a"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-09-28"
+  "generated_at": "2026-10-03"
 }

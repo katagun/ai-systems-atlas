@@ -48,10 +48,17 @@ async function openFamily(page, family) {
 }
 
 function viewTab(page, id) {
-  return page.locator(`.tab[data-tab="${id}"]`);
+  return page.locator(`.tab[data-tab="${id}"]:visible, [data-mobile-nav="${id === "directory" ? "home" : id}"]:visible`);
 }
 
 async function openView(page, id) {
+  if (await page.locator("#mobile-nav").isVisible()) {
+    if (["taxonomy", "api"].includes(id)) {
+      await page.locator('[data-mobile-nav="more"]').click();
+      await page.locator(`[data-mobile-view="${id}"]`).click();
+    } else await viewTab(page, id).click();
+    return;
+  }
   if (["explore", "taxonomy", "api"].includes(id)) {
     await page.locator(".docs-button").click();
     await page.locator(`#docs-menu-list [data-open-view="${id}"]`).click();
@@ -61,13 +68,15 @@ async function openView(page, id) {
 }
 
 function allSearch(page) {
-  return page.locator("#door-search:visible, #all-directory-search:visible");
+  return page.locator("#door-search:visible, #results-search:visible");
 }
 
 // On the front door this fills its search, whose input handler carries the
-// whole value into the All search and lands in results.
+// whole value into the results search and lands in results.
 async function searchAll(page, text) {
+  if (!await allSearch(page).count()) await page.locator('[data-mobile-nav="search"]').click();
   await allSearch(page).fill(text);
+  await require("./results").settled(page);
 }
 
 module.exports = { allSearch, categoryEntry, collectionDot, collectionEntry, entryCount, familyCount, familyEntry, openCollection, openFamily, openView, pressedEntry, pressedFamily, searchAll, viewTab };

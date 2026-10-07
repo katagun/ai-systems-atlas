@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-27",
+  "updated_at": "2026-10-03",
   "candidates": [
     {
       "repo": "aden-hive/hive",
@@ -165,53 +165,6 @@
             "fetched_at": "2026-09-15",
             "blob_sha": "a1cff71b9b52646997f808cb7ab466aeb2a6c538",
             "immutable_url": "https://api.github.com/repos/ageerle/ruoyi-ai/git/blobs/a1cff71b9b52646997f808cb7ab466aeb2a6c538"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "agentclientprotocol/claude-agent-acp",
-      "name": "claude-agent-acp",
-      "url": "https://github.com/agentclientprotocol/claude-agent-acp",
-      "description": "Use Claude Agent SDK from any ACP client",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 2521,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "ADR 020 operational-boundary comparison",
-        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\" text with \"Copyright 2025 Zed Industries, Inc. and contributors\". The README is titled \"ACP adapter for the Claude Agent SDK\" and says \"This tool implements an ACP agent by using the official\" Claude Agent SDK, supporting \"Tool calls (with permission requests)\", \"Nested subagent transcripts\", \"Interactive (and background) terminals\", and \"Client MCP servers\", plus opt-in goal, session-failure, and permission extensions. It is distributed as an npm package with a preview channel. The bundle reports no cross-collection hits, but by name the Atlas already publishes the Claude Agent SDK as a project record and the Agent Client Protocol as a specification; this repository is published by the protocol's organisation, not by the SDK's vendor. Boundary question: under ADR 020, does exposing the already-published SDK's agent loop to ACP clients, with its added extensions, change the operational boundary enough to earn a separate record, or is it an interface packaging of the Claude Agent SDK that folds into that record?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/agentclientprotocol/claude-agent-acp/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "6ed4f049cce59e05197d585bdf8a39980b45d546d6ea718ee344555f3a867c3a",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "c24b053560354d8261d5132edaa3d30b2d1cb1f3",
-            "immutable_url": "https://api.github.com/repos/agentclientprotocol/claude-agent-acp/git/blobs/c24b053560354d8261d5132edaa3d30b2d1cb1f3"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/agentclientprotocol/claude-agent-acp/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "90be6e06919d7bf620d37afc6144319d7f9bed24e0719802da11ced8910fb492",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "2c9a69de918182900bdc59cf587d64a0a67475c0",
-            "immutable_url": "https://api.github.com/repos/agentclientprotocol/claude-agent-acp/git/blobs/2c9a69de918182900bdc59cf587d64a0a67475c0"
           }
         ],
         "proposed_at": "2026-09-15",
@@ -550,62 +503,6 @@
       }
     },
     {
-      "repo": "dataease/SQLBot",
-      "name": "SQLBot",
-      "url": "https://github.com/dataease/SQLBot",
-      "description": "🔥 基于大模型和 RAG 的智能问数系统，对话式数据分析神器。Text-to-SQL Generation via LLMs using RAG.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 1.0,
-      "github_detected_license": "NOASSERTION",
-      "stars": 6782,
-      "topics": [
-        "chatbi",
-        "deepseek",
-        "llm",
-        "nl2sql",
-        "rag",
-        "sqlbot",
-        "text-to-sql",
-        "text2sql"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE is headed \"# Open Source License\" and states \"SQLBot is licensed under a modified version of the GNU General Public License version 3 (GPLv3), with the following additional conditions:\" including a logo/copyright-retention clause, signed \"© 2025 FIT2CLOUD, Inc.\"; GitHub reports NOASSERTION. The README (Chinese) describes a \"基于大语言模型和 RAG 的智能问数系统\" that lets users \"实现对话式数据分析（ChatBI）\", generating SQL and visual charts from natural language over configured data sources with workspace isolation, term libraries, calibrating SQL examples, and MCP/embedding integration, deployed via Docker. The bundle reports no cross-collection hits. Boundary question: whether this conversational text-to-SQL and data-analysis product demonstrates the required query planning or refinement, execution, result validation or repair, and an explanation surface; that is exactly what the inclusion gate and the data-analysis scope test put to human review.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/dataease/SQLBot/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "426022abd84da60b733aee2d5f5f2a99b2afab4333bd4ae65f9ad730dd0e52b4",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "042baf3dbf2e597df24aa8b48a0e2839910fd20d",
-            "immutable_url": "https://api.github.com/repos/dataease/SQLBot/git/blobs/042baf3dbf2e597df24aa8b48a0e2839910fd20d"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/dataease/SQLBot/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "dd1cd2d887431e71531d9a681f660967e0acc74c7a25a989d58f7c2e329e7d7f",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "8d34fb9478a62250f8ee57719a857f3f49b76c43",
-            "immutable_url": "https://api.github.com/repos/dataease/SQLBot/git/blobs/8d34fb9478a62250f8ee57719a857f3f49b76c43"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "disler/super-simple-software-factory",
       "name": "super-simple-software-factory",
       "url": "https://github.com/disler/super-simple-software-factory",
@@ -651,60 +548,6 @@
         "proposed_at": "2026-09-12",
         "proposer": "promotion review",
         "held_by": "maintainer decision: self-described as not a product"
-      }
-    },
-    {
-      "repo": "dora-rs/dora",
-      "name": "Dora",
-      "url": "https://github.com/dora-rs/dora",
-      "description": "Dora (Dataflow-Oriented Robotic Architecture) is middleware for composing AI-based robotic applications as low-latency, distributed dataflow pipelines.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": "Apache-2.0",
-      "stars": 3922,
-      "topics": [
-        "dataflow",
-        "embodied-ai",
-        "low-latency",
-        "robotics",
-        "rust"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robot software role decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Ships an installable CLI (cargo install dora-cli) and Python API (pip install dora-rs) with releases, CI, and a public node hub, so a maintained run path is documented. Its documented outcome is a declarative dataflow graph: the node hub lists ready-made nodes for cameras, YOLO, LLMs, and TTS, and the README documents a ROS2 bridge carrying 'bidirectional topics, services, and actions over DDS' between graph nodes and ROS2, where 'actions' is the ROS2 request/feedback/result concept rather than actuation. The README never uses the words actuator, hardware, physical, or VLM, so a model node's output reaching a robot's actuator through this bridge is a reasonable inference from what a ROS2-connected dataflow graph does, not a claim the README makes outright. No existing role names composing a dataflow graph that mixes model node types (LLM, YOLO) with a ROS2 bridge to robot software; the node-hub and LLM-node claims are stated directly in the README's feature list without reading the source tree, but the actuator link is not.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/dora-rs/dora/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "ae5e06d263ca95043cedfd1d14c4eb3474389fb6570dd0d0abc6060c9273e268",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "9700c27ca56309d5458bc986482823b51459669b",
-            "immutable_url": "https://api.github.com/repos/dora-rs/dora/git/blobs/9700c27ca56309d5458bc986482823b51459669b"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/dora-rs/dora/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "7b515bc646ca4e20427bc6a72b8ca5149a0e9b38a77e9a7d0ba5463af5a6cfbc",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "fe9751aa01eb9c7d359209185eb26c8e31f1a15f",
-            "immutable_url": "https://api.github.com/repos/dora-rs/dora/git/blobs/fe9751aa01eb9c7d359209185eb26c8e31f1a15f"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
       }
     },
     {
@@ -830,74 +673,6 @@
       }
     },
     {
-      "repo": "feder-cr/AIHawk",
-      "name": "AIHawk",
-      "url": "https://github.com/feder-cr/AIHawk",
-      "description": "Open-source AI browser agent for web automation, undetected by anti-bot systems: a web browsing agent on a stealth Firefox that is not flagged as a bot, not blocked, and does not trigger captchas. Plain-English tasks, computer-use agent, browser MCP for Claude Code and Gemini CLI.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "browser_computer_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "MIT",
-      "stars": 30692,
-      "topics": [
-        "agentic-ai",
-        "ai-agent",
-        "ai-automation",
-        "autonomous-agents",
-        "browser",
-        "browser-agent",
-        "claude-code-plugin",
-        "computer-use",
-        "gemini-cli-extension",
-        "job-hunting",
-        "job-search",
-        "lead-generation",
-        "llm-agent",
-        "market-research",
-        "price-monitoring",
-        "productivity",
-        "task-automation",
-        "web-agent",
-        "web-automation",
-        "web-research"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate; ADR 020 operational-boundary comparison",
-        "finding": "The LICENSE is the \"MIT License\" (\"Copyright (c) 2024-2026 AIHawk contributors\"). The README adds that everything \"distributed before 2 September 2026 was released under AGPL-3.0\" and stays under it. The README says \"AIHawk is an anti detect browser and web browsing agent, open source, with an MCP server for coding agents\". It offers two surfaces: an MCP server added to Claude Code, Codex or Gemini CLI, and a standalone web UI with \"Chat on the left, the live browser on the right.\" It says \"It drives the page the way a person would: the pointer moves, keys are pressed.\" It also says \"AIHawk runs on your machine and has no server of its own.\" Models come through the user's OpenRouter key. The README's featured-in links point to 2024 articles whose addresses refer to automated job applications, not to the browser agent described today. The bundle reports no cross-collection hits, and no published record by this name was found. Boundary question: is the current stealth browser agent and MCP server the same operational system that earned the repository's adoption signals? ADR 020 compares operational boundaries, not repositories.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/feder-cr/AIHawk/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "7bd49adceb91947129a3ad60d2131884b60775c54e47b3ef1740a110904a1d8b",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "9036d5efbfaf66e50d1a318d07d08a404aa64250",
-            "immutable_url": "https://api.github.com/repos/feder-cr/AIHawk/git/blobs/9036d5efbfaf66e50d1a318d07d08a404aa64250"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/feder-cr/AIHawk/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "aa9f8d096fca7ead9de8c9aa655dc45e5c6caba4d9186b8d94552de67ae4c383",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "06ebccd1aa7938f09718353a96561c7ff40c0929",
-            "immutable_url": "https://api.github.com/repos/feder-cr/AIHawk/git/blobs/06ebccd1aa7938f09718353a96561c7ff40c0929"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "FoundationAgents/MetaGPT",
       "name": "MetaGPT",
       "url": "https://github.com/FoundationAgents/MetaGPT",
@@ -944,66 +719,6 @@
             "fetched_at": "2026-09-15",
             "blob_sha": "080c02cd99015ca01f5db2c1063473fc22939bec",
             "immutable_url": "https://api.github.com/repos/FoundationAgents/MetaGPT/git/blobs/080c02cd99015ca01f5db2c1063473fc22939bec"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "GD4AI/obsidian-llm-wiki",
-      "name": "obsidian-llm-wiki",
-      "url": "https://github.com/GD4AI/obsidian-llm-wiki",
-      "description": "Karpathy's LLM Wiki implementation plugin for Obsidian - turns notes and PDFs into a linked, LLM-powered knowledge base with entity pages, concept pages, graph-powered Q&A, and local-first privacy.",
-      "proposed_system_family": "memory_system",
-      "proposed_primary_role": "human_pkm",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 606,
-      "topics": [
-        "graph-algorithms",
-        "karpathy",
-        "knowledge-graph",
-        "knowledge-management",
-        "llm-wiki",
-        "markdown",
-        "note-taking",
-        "obsidian",
-        "obsidian-plugins",
-        "pdf",
-        "pdf-processing",
-        "privacy-first"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE is the Apache \"Version 2.0, January 2004\" text (\"Copyright 2025-2026 Greener-Dalii\"). The README describes \"An Obsidian plugin that turns your notes into a connected, queryable knowledge base\". It says \"the LLM extracts entities and concepts and generates an interlinked wiki with\" bidirectional links. Queries retrieve context through \"Personalized PageRank over your existing\" link graph rather than embeddings. It says \"The plugin modifies nothing in your original notes\" and writes only new pages under a wiki folder. It documents lint and repair commands, PDF and Office ingest, and more than sixteen model providers including local ones. Its retrieval benchmark is measured \"on the project's own benchmark corpus\". The README also names a sibling repository that ships a headless CLI running the same engine outside Obsidian. The bundle reports no cross-collection hits. Smart Second Brain, a different Obsidian plugin, is a published record, so plugin form alone does not block review. Boundary question: is the record the Obsidian plugin alone, or also the sibling headless CLI built on the same engine?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/GD4AI/obsidian-llm-wiki/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "b669d54594b161f62cb9f6d4f23ff74f8431d50ecd63b6d101913402087cb081",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "5d9ef00e1503fb7c2e2c772ec4ba5dfd3dbd41a6",
-            "immutable_url": "https://api.github.com/repos/GD4AI/obsidian-llm-wiki/git/blobs/5d9ef00e1503fb7c2e2c772ec4ba5dfd3dbd41a6"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/GD4AI/obsidian-llm-wiki/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "6e5ac46570729fa4ff7f9f0e4f5f4fed4009734abbed3ed8bd2bbbe266149787",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "33c0e99c23759f46efb91b2078cb094a5ee3e8cc",
-            "immutable_url": "https://api.github.com/repos/GD4AI/obsidian-llm-wiki/git/blobs/33c0e99c23759f46efb91b2078cb094a5ee3e8cc"
           }
         ],
         "proposed_at": "2026-09-15",
@@ -1138,18 +853,18 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robot software role decision",
+        "held_by": "programme-gated run path",
         "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Publishes a Python SDK (pip install safari-sdk) for accessing, serving, evaluating, and fine-tuning Gemini Robotics checkpoints; the README says most of that functionality requires joining a Trusted Tester program rather than downloading open weights. The README documents a bundled framework whose Embodiments component 'connect agents to physical robot systems' and whose worked example wires a conversational agent to control an Aloha robot, with a Tools component described as letting the agent perform robot control. No existing role names a developer package whose own documentation describes connecting a model-driven agent to physical robot hardware, and this is stated directly in the README's Agent, Embodiments, and Tools sections without reading the source tree.",
+        "finding": "Publishes a Python SDK (pip install safari-sdk) for accessing, serving, evaluating, and fine-tuning Gemini Robotics checkpoints; the README says most of that functionality requires joining a Trusted Tester program rather than downloading open weights. The README documents a bundled framework whose Embodiments component 'connect agents to physical robot systems' and whose worked example wires a conversational agent to control an Aloha robot, with a Tools component described as letting the agent perform robot control. No existing role names a developer package whose own documentation describes connecting a model-driven agent to physical robot hardware, and this is stated directly in the README's Agent, Embodiments, and Tools sections without reading the source tree. Re-read on 2026-09-28 under ADR 045: the README still says most functionality requires joining the Trusted Tester programme, so the run path a reader can adopt is gated; the hold lifts at general availability, on the reasoning ADR 023 recorded for Microsoft Discovery.",
         "evidence": [
           {
             "label": "README",
             "url": "https://github.com/google-deepmind/gemini-robotics-sdk/blob/main/README.md",
             "kind": "git_blob",
-            "content_sha256": "fb10b5979c91654e67ab8b3462ddd8a68382eaa3f343e5254a3fb8b23a29e8bc",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "b0a48c5f1e40f8de6cf4f5f95764887d9c717389",
-            "immutable_url": "https://api.github.com/repos/google-deepmind/gemini-robotics-sdk/git/blobs/b0a48c5f1e40f8de6cf4f5f95764887d9c717389"
+            "content_sha256": "e994460be219cfcabeda77d13b30bb6d9329682c5097ee90415c2ef32b69d48e",
+            "fetched_at": "2026-09-28",
+            "blob_sha": "28dc33308a18fba5a374a788b699f6561c34ddf2",
+            "immutable_url": "https://api.github.com/repos/google-deepmind/gemini-robotics-sdk/git/blobs/28dc33308a18fba5a374a788b699f6561c34ddf2"
           },
           {
             "label": "LICENSE",
@@ -1283,67 +998,45 @@
       }
     },
     {
-      "repo": "guy-hartstein/company-research-agent",
-      "name": "company-research-agent",
-      "url": "https://github.com/guy-hartstein/company-research-agent",
-      "description": "An agentic company research tool powered by LangGraph and Tavily that conducts deep diligence on companies using a multi-agent framework. It leverages Google's Gemini 2.5 Flash and OpenAI's GPT-5.1 on the backend for inference.",
+      "repo": "HarnessRouter/harnessrouter",
+      "name": "harnessrouter",
+      "url": "https://github.com/HarnessRouter/harnessrouter",
+      "description": "HarnessRouter Community Edition: the self-hosted, Apache-2.0 edition of the unified interface for agent harnesses. Run Codex, Claude Code, Hermes, PI, DSH, and more through one API, with sessions, streaming, files, cancellation, and failure handling. Implements the Unified Harness Protocol (UHP), an open standard. Your keys, your infrastructure.",
       "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.83,
       "github_detected_license": "Apache-2.0",
-      "stars": 2274,
+      "stars": 2775,
       "topics": [
-        "agents",
-        "ai",
-        "company",
-        "financial-analysis",
-        "gemini",
-        "gemini-3-flash",
-        "langchain",
-        "langgraph-python",
-        "multi-agent-systems",
-        "openai",
-        "python",
-        "research",
-        "tavily",
-        "tavily-api",
-        "tavily-search"
+        "agent-api",
+        "agent-framework",
+        "agent-harness",
+        "ai-agents",
+        "ai-infrastructure",
+        "coding-agent",
+        "conformance-testing",
+        "deepseek-harness",
+        "harness-engineering",
+        "hermes",
+        "llm",
+        "open-protocol",
+        "open-source",
+        "open-standard",
+        "pi-coding-agent",
+        "self-hosted",
+        "uhp",
+        "unified-api",
+        "unified-harness-protocol",
+        "unified-interface"
       ],
       "status": "provisional",
-      "discovered_at": "2026-09-13",
+      "discovered_at": "2026-09-29",
       "review_required": [
         "licensing",
         "classification",
         "traits",
         "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate; Scope boundaries vertical-agent clause",
-        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\" text with \"Copyright 2025 Guy Hartstein\", matching GitHub's Apache-2.0 detection. The README contradicts it: \"This project is licensed under the MIT License\". A reviewer needs to settle which terms govern. The README describes \"A multi-agent tool that generates comprehensive company research reports.\" and says \"The platform follows an agentic framework with specialized nodes that process data sequentially:\". Those nodes are four research analyzers, a collector, a curator that filters by Tavily relevance score, and briefing and editor steps backed by Gemini and GPT models. It runs as a FastAPI backend with a React frontend, it can be deployed with Docker, and the README links a hosted instance on a tavily.com subdomain. The bundle reports no cross-collection hits, and no published record under this name was found. Boundary question: does a fixed sequential pipeline of research and processing nodes satisfy the vertical-agent requirement of an iterative, tool-using workflow with domain-specific failure and recovery behaviour, or is it a report generator that does not reach that bar?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/guy-hartstein/company-research-agent/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "0db3f5d0676b2d86b5c81d6131c4e9fe5b73b27c715bdfa46c1d4814cee8e948",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "563b12b8bf555029764207b6e5978c52ba3aecce",
-            "immutable_url": "https://api.github.com/repos/guy-hartstein/company-research-agent/git/blobs/563b12b8bf555029764207b6e5978c52ba3aecce"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/guy-hartstein/company-research-agent/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "5d8a37352d2f9cb1c8f26645458618c58a9b1d9ea56d541784fd9c6eff8bd5de",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "bbd90404d6694283445f04133d6fba0a58f80c91",
-            "immutable_url": "https://api.github.com/repos/guy-hartstein/company-research-agent/git/blobs/bbd90404d6694283445f04133d6fba0a58f80c91"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
+      ]
     },
     {
       "repo": "HKUDS/DeepCode",
@@ -1808,6 +1501,31 @@
     },
     {
       "repo": null,
+      "name": "Norton Neo",
+      "url": "https://neobrowser.ai/",
+      "description": "Gen Digital's security-focused browser whose built-in AI chat reads open tabs as context, keeps memories across sessions that the user can view, edit, or delete, keeps conversation history on the device by default, and can summarize Gmail threads, draft replies, and check Google Calendar.",
+      "proposed_system_family": "assistant_system",
+      "proposed_primary_role": "general_ai_assistant",
+      "classification_confidence": 0.6,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "ai-browser",
+        "local-chat-history",
+        "official-product",
+        "privacy"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
       "name": "NotebookLM",
       "url": "https://notebooklm.google.com/",
       "description": "Google knowledge workspace for durable source collections, grounded answers with citations, and generated research and learning artifacts.",
@@ -1875,6 +1593,31 @@
       ],
       "status": "provisional",
       "discovered_at": "2026-08-25",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": null,
+      "name": "Siri AI",
+      "url": "https://www.apple.com/apple-intelligence/",
+      "description": "Apple's conversational assistant, rolling out as a beta from 14 September 2026, that answers from personal context across messages, email, and photos, reads the screen, draws on the web, takes actions in apps, and keeps conversations in a dedicated Siri app synced through iCloud across a user's devices.",
+      "proposed_system_family": "assistant_system",
+      "proposed_primary_role": "general_ai_assistant",
+      "classification_confidence": 0.85,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "official-product",
+        "on-device",
+        "personal-context",
+        "voice-assistant"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-14",
       "review_required": [
         "licensing",
         "classification",
@@ -2034,54 +1777,6 @@
       ]
     },
     {
-      "repo": "huggingface/lerobot",
-      "name": "LeRobot",
-      "url": "https://github.com/huggingface/lerobot",
-      "description": "LeRobot provides models, datasets, and tools in PyTorch for end-to-end robot learning, aiming to make real-world robotics more accessible.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.2,
-      "github_detected_license": "Apache-2.0",
-      "stars": 27219,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "triage": {
-        "verdict": "held",
-        "held_by": "robot software role decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Ships an installable PyPI package (pip install lerobot) with a documented training and control run path and a hardware-agnostic Robot interface. Its documented outcome is taking a trained policy's output and sending it straight to physical hardware: the README's own code example reads 'action = model.select_action(obs)' followed by 'robot.send_action(action)', across supported arms, humanoids, and other devices, including vision-language-action policies. No existing role names a framework whose distinguishing behavior is sending a model's output to a physical actuator rather than to a software tool, and the property is shown directly in the README's code example without reading the source tree.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/huggingface/lerobot/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "ba1a9487ce72d9018743997285a1ae29ba1f26c5656c2d97b038bc094b5ef9b2",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "50814df9295864e814a424c26461100f0fee631f",
-            "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/50814df9295864e814a424c26461100f0fee631f"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/huggingface/lerobot/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "0583375a0ec642ec79c447781f34322b0cfa66baff31258214d040f1f6d86d7c",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "a603343cdda0228e53d8d9cdeb355f342f1e8f2c",
-            "immutable_url": "https://api.github.com/repos/huggingface/lerobot/git/blobs/a603343cdda0228e53d8d9cdeb355f342f1e8f2c"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      },
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ]
-    },
-    {
       "repo": "IBM/AssetOpsBench",
       "name": "AssetOpsBench",
       "url": "https://github.com/IBM/AssetOpsBench",
@@ -2189,74 +1884,6 @@
             "fetched_at": "2026-09-23",
             "blob_sha": "2710c619a42791343c24a410bf3548a89352ea3b",
             "immutable_url": "https://api.github.com/repos/InternLM/MindSearch/git/blobs/2710c619a42791343c24a410bf3548a89352ea3b"
-          }
-        ],
-        "proposed_at": "2026-09-23",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "JetBrains/koog",
-      "name": "koog",
-      "url": "https://github.com/JetBrains/koog",
-      "description": "Koog is a JVM (Java and Kotlin) framework for building predictable, fault-tolerant and enterprise-ready AI agents across all platforms – from backend services to Android and iOS, JVM, and even in-browser environments. Koog is based on our AI products expertise and provides proven solutions for complex LLM and AI problems",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 4572,
-      "topics": [
-        "agentframework",
-        "agentic-ai",
-        "agents",
-        "ai",
-        "ai-agents-framework",
-        "aiagentframework",
-        "android-ai",
-        "anthropic",
-        "genai",
-        "generative-ai",
-        "java",
-        "jvm",
-        "kotlin",
-        "ktor",
-        "llm",
-        "mcp",
-        "multi-agent-systems",
-        "ollama",
-        "openai",
-        "spring"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE opens \"Apache License Version 2.0, January 2004\". The README states \"Koog is a Kotlin-based framework designed to build and run AI agents entirely in idiomatic Kotlin and Java API\" whose agents \"can interact with tools, handle complex workflows, and communicate with users\", with graph workflows, retries with state persistence, history compression, MCP and Agent Client Protocol integration, and tracing. The bundle reports no cross-collection hits. Boundary question: none apparent; the record reads as a maintained framework with releases, docs, and provider integrations.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/JetBrains/koog/blob/develop/LICENSE.txt",
-            "kind": "git_blob",
-            "content_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
-            "immutable_url": "https://api.github.com/repos/JetBrains/koog/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/JetBrains/koog/blob/develop/README.md",
-            "kind": "git_blob",
-            "content_sha256": "4d7e917bc714d02b7819c36682d85f9ae5359c4bbfd7ef441c0a834f1ce1f506",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "c0819adee20356d8b27a7879a630d355db8e4321",
-            "immutable_url": "https://api.github.com/repos/JetBrains/koog/git/blobs/c0819adee20356d8b27a7879a630d355db8e4321"
           }
         ],
         "proposed_at": "2026-09-23",
@@ -2845,61 +2472,6 @@
       }
     },
     {
-      "repo": "microsoft/Agents",
-      "name": "Agents",
-      "url": "https://github.com/microsoft/Agents",
-      "description": "The Microsoft 365 Agent SDK simplifies building full stack, multichannel, trusted agents for platforms including M365, Teams, Copilot Studio, and Webchat.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 1061,
-      "topics": [
-        "agents",
-        "bot",
-        "botframework",
-        "copilot",
-        "copilotstudio",
-        "sdk",
-        "teams"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE reads \"MIT License\" with \"Copyright (c) Microsoft Corporation\". The README presents the Microsoft 365 Agents SDK for creating \"an agent 'container' with state, storage, and the ability to manage activities and events\" deployable to Teams, Copilot, and custom channels, with C#, JavaScript, and Python client libraries plus assistant plugins that teach coding assistants the SDK patterns. The bundle reports no cross-collection hits. Boundary question: none apparent beyond confirming the hub repository plus its language repos constitute one reviewable product.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/microsoft/Agents/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "9e841e7a26e4eb057b24511e7b92d42b257a80e5",
-            "immutable_url": "https://api.github.com/repos/microsoft/Agents/git/blobs/9e841e7a26e4eb057b24511e7b92d42b257a80e5"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/microsoft/Agents/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "2638983a92deb0f21bfb98303e119c5261ddd30f5cc7ec28ef53f65647a3b0fa",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "97f7b790e4b07be030fdc885d31282e67eba744d",
-            "immutable_url": "https://api.github.com/repos/microsoft/Agents/git/blobs/97f7b790e4b07be030fdc885d31282e67eba744d"
-          }
-        ],
-        "proposed_at": "2026-09-23",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "microsoft/Webwright",
       "name": "Webwright",
       "url": "https://github.com/microsoft/Webwright",
@@ -3109,18 +2681,39 @@
       }
     },
     {
-      "repo": "MoonshotAI/kimi-agent-sdk",
-      "name": "kimi-agent-sdk",
-      "url": "https://github.com/MoonshotAI/kimi-agent-sdk",
-      "description": "Kimi Agent SDK provides a programmatic interface to interact with the Kimi CLI",
+      "repo": "n8n-io/n8n",
+      "name": "n8n",
+      "url": "https://github.com/n8n-io/n8n",
+      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
       "proposed_system_family": "agent_system",
       "proposed_primary_role": "agent_framework_sdk",
       "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 575,
-      "topics": [],
+      "github_detected_license": "NOASSERTION",
+      "stars": 205773,
+      "topics": [
+        "ai",
+        "apis",
+        "automation",
+        "cli",
+        "data-flow",
+        "development",
+        "integration-framework",
+        "integrations",
+        "ipaas",
+        "low-code",
+        "low-code-platform",
+        "mcp",
+        "mcp-client",
+        "mcp-server",
+        "n8n",
+        "no-code",
+        "self-hosted",
+        "typescript",
+        "workflow",
+        "workflow-automation"
+      ],
       "status": "provisional",
-      "discovered_at": "2026-09-13",
+      "discovered_at": "2026-09-23",
       "review_required": [
         "licensing",
         "classification",
@@ -3129,29 +2722,29 @@
       ],
       "triage": {
         "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE opens \"Apache License Version 2.0, January 2004\". The README states the SDKs \"expose the Kimi CLI agent runtime in your applications\", as \"thin, language-native clients that reuse the same Kimi CLI configuration, tools, skills, and MCP servers\", streaming responses, surfacing approvals and tool calls, in Go, Node.js, and Python with custom-tool registration. The bundle reports no cross-collection hits. Boundary question: whether these thin clients are themselves operational or merely clients of the separately maintained CLI runtime.",
+        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
+        "finding": "Licence file says: \"Sustainable Use License\" with \"You may use or modify the software only for your own internal business purposes\" and \"personal use\" README claims: \"n8n – The Platform for AI Agents and Workflow Automation\" and \"Fair-code platform to build and deploy AI agents and workflows. Combine a visual canvas with custom code\". It lists multi-step AI workflows with logic, tool use, human approvals, and observability, plus self-host or cloud deployment, and notes it is \"distributed under the [Sustainable Use License]\" with an Enterprise License for additional features. No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the product spans visual workflow automation and multi-step agents, so review must fix the operational boundary to assess; the fair-code licence pairing also needs source-model treatment at review.",
         "evidence": [
           {
             "label": "LICENSE",
-            "url": "https://github.com/MoonshotAI/kimi-agent-sdk/blob/main/LICENSE",
+            "url": "https://github.com/n8n-io/n8n/blob/master/LICENSE.md",
             "kind": "git_blob",
-            "content_sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
-            "immutable_url": "https://api.github.com/repos/MoonshotAI/kimi-agent-sdk/git/blobs/7a4a3ea2424c09fbe48d455aed1eaa94d9124835"
+            "content_sha256": "d2f621f59aa4c10eab79b6333e59d9d3d5b53307dcfd16dbd75e40e679e84965",
+            "fetched_at": "2026-09-24",
+            "blob_sha": "f85f59baa906530c26cee26e0c9ddd6bd5f86dbd",
+            "immutable_url": "https://api.github.com/repos/n8n-io/n8n/git/blobs/f85f59baa906530c26cee26e0c9ddd6bd5f86dbd"
           },
           {
             "label": "README",
-            "url": "https://github.com/MoonshotAI/kimi-agent-sdk/blob/main/README.md",
+            "url": "https://github.com/n8n-io/n8n/blob/master/README.md",
             "kind": "git_blob",
-            "content_sha256": "d2d7a5c9bf3b77a8e2ab901cbe8e6a061fd370e126782599c2f2b905e867ae1a",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "e48d8c4fcd987e9f2550fb2bb0acbecd307ec9c7",
-            "immutable_url": "https://api.github.com/repos/MoonshotAI/kimi-agent-sdk/git/blobs/e48d8c4fcd987e9f2550fb2bb0acbecd307ec9c7"
+            "content_sha256": "75c64f04b8b1e7d435496f6ebd2dbf3ea5ff7d3ff3d944d7fcf98cf1a7df2242",
+            "fetched_at": "2026-09-24",
+            "blob_sha": "21909fae00cbad4f18af84d2948752445051a915",
+            "immutable_url": "https://api.github.com/repos/n8n-io/n8n/git/blobs/21909fae00cbad4f18af84d2948752445051a915"
           }
         ],
-        "proposed_at": "2026-09-23",
+        "proposed_at": "2026-09-24",
         "proposer": "candidate-triage"
       }
     },
@@ -3406,6 +2999,74 @@
       }
     },
     {
+      "repo": "NVlabs/SoL-Pi",
+      "name": "SoL-Pi",
+      "url": "https://github.com/NVlabs/SoL-Pi",
+      "description": "SoL-Pi: Scaling Auto-Research Loops for Efficient Agent Harnesses",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "stateful_agent_runtime",
+      "classification_confidence": 0.83,
+      "github_detected_license": "MIT",
+      "stars": 3206,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
+      "repo": "octo-models/octo",
+      "name": "Octo",
+      "url": "https://github.com/octo-models/octo",
+      "description": "Octo is a generalist robot policy trained on Open X-Embodiment data, with code to fine-tune it and to run it on a real WidowX robot.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": "MIT",
+      "stars": 1789,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-28",
+      "triage": {
+        "verdict": "held",
+        "held_by": "action-policy model boundary",
+        "rule": "docs/CURATION.md inclusion gate; ADR 045 routing",
+        "finding": "Screened in the ADR 045 comparison-set review. The README's own evaluation section runs the pretrained policy on a real WidowX robot, so the physical reach is stated directly; but the repository is a policy model release with inference and fine-tuning code, the shape batch 39 held Isaac GR00T and OpenVLA in, so it waits on the action-policy model decision rather than on the systems scope. Latest release v1.5 of 2024-05-24.",
+        "evidence": [
+          {
+            "label": "README",
+            "url": "https://github.com/octo-models/octo/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "057e41b4866d4c1c19eaf8882c5f1551594476f1b2193f52ec626833381de262",
+            "fetched_at": "2026-09-28",
+            "blob_sha": "b33cd8e7df1bb51243e060e14b5a14741cb06032",
+            "immutable_url": "https://api.github.com/repos/octo-models/octo/git/blobs/b33cd8e7df1bb51243e060e14b5a14741cb06032"
+          },
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/octo-models/octo/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "8c891a7dd06fdaa873aa011ff0b2773a3ccfe6d123f6b9a9fc589db718aec1d1",
+            "fetched_at": "2026-09-28",
+            "blob_sha": "239522dcb0271245b5486e598a98737d445b3cd6",
+            "immutable_url": "https://api.github.com/repos/octo-models/octo/git/blobs/239522dcb0271245b5486e598a98737d445b3cd6"
+          }
+        ],
+        "proposed_at": "2026-09-28",
+        "proposer": "ADR 045 comparison-set screen"
+      },
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "onecli/onecli",
       "name": "onecli",
       "url": "https://github.com/onecli/onecli",
@@ -3464,106 +3125,6 @@
       }
     },
     {
-      "repo": "openai/openai-agents-js",
-      "name": "openai-agents-js",
-      "url": "https://github.com/openai/openai-agents-js",
-      "description": "A lightweight, powerful framework for multi-agent workflows and voice agents",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 3807,
-      "topics": [
-        "agents",
-        "openai",
-        "openai-api",
-        "realtime-api",
-        "typescript"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "Dossier complete: pinned MIT license file plus README product evidence, no competing collection hits, no digest errors. Applicable gate: \"A provider-native SDK or harness qualifies only when agent execution—not model API access—is its primary outcome.\" Reviewer to confirm that test in the boundary question below.",
-        "finding": "Licence file says \"MIT License\" with \"Copyright (c) 2025 OpenAI\" and the standard permission grant. README claims \"The OpenAI Agents SDK is a lightweight yet powerful framework for building multi-agent workflows in JavaScript/TypeScript. It is provider-agnostic, supporting OpenAI APIs and more.\" Core concepts listed include agents \"configured with instructions, tools, guardrails, and handoffs\", \"Agents paired with a filesystem workspace and sandbox environment for longer-running work\", and \"Built-in mechanisms for involving humans across agent runs\". No cross-collection hits in the digest. Boundary question: given the OpenAI authorship alongside the provider-agnostic claim, reviewer to confirm that agent execution, not model API access, is the primary outcome.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/openai/openai-agents-js/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "969d1c8178ad9a1ae2ff1e67534151d4cc58a2626274b272f918995bccd3a6ad",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "0b9aa14f1d62dc4f93fd48437369ceff7ff27cd8",
-            "immutable_url": "https://api.github.com/repos/openai/openai-agents-js/git/blobs/0b9aa14f1d62dc4f93fd48437369ceff7ff27cd8"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/openai/openai-agents-js/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "2ff0cb35820f8c937d2627eebb596a4cc9a25f5647e5a4be6f83f5776ad17dcb",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "27196ba2eb95ce411b3549af7bbc05af5f3f4028",
-            "immutable_url": "https://api.github.com/repos/openai/openai-agents-js/git/blobs/27196ba2eb95ce411b3549af7bbc05af5f3f4028"
-          }
-        ],
-        "proposed_at": "2026-09-24",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "openai/swarm",
-      "name": "swarm",
-      "url": "https://github.com/openai/swarm",
-      "description": "Educational framework exploring ergonomic, lightweight multi-agent orchestration. Managed by OpenAI Solution team.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 21974,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE reads \"MIT License\" with \"Copyright (c) 2024 OpenAI\". The README heads the project \"Swarm (experimental, educational)\" and states \"Swarm is now replaced by the OpenAI Agents SDK, which is a production-ready evolution of Swarm\", recommending migration, with stateless handoff-based coordination over the chat completions API. The bundle reports no cross-collection hits. Boundary question: the maintainer names a published successor, so the review should test supersession rather than a fresh listing.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/openai/swarm/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "d831db55645e47ca8e491c5a0e37f1ee744d7b10bf5aa8d50146c795ac0176c0",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "91ba98f3a21392ddd8c0e375f1f01e6d85d9e623",
-            "immutable_url": "https://api.github.com/repos/openai/swarm/git/blobs/91ba98f3a21392ddd8c0e375f1f01e6d85d9e623"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/openai/swarm/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "59245018ba7a6681c116b503428bf573b78494aaaeab7c29ea54d65c901ef3eb",
-            "fetched_at": "2026-09-23",
-            "blob_sha": "bcc1e195f17f6442fba96318fd2288a8c08653ac",
-            "immutable_url": "https://api.github.com/repos/openai/swarm/git/blobs/bcc1e195f17f6442fba96318fd2288a8c08653ac"
-          }
-        ],
-        "proposed_at": "2026-09-23",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "OpenHands/software-agent-sdk",
       "name": "software-agent-sdk",
       "url": "https://github.com/OpenHands/software-agent-sdk",
@@ -3614,60 +3175,6 @@
       }
     },
     {
-      "repo": "OpenMind/OM1",
-      "name": "OM1",
-      "url": "https://github.com/OpenMind/OM1",
-      "description": "OM1 is a modular AI hardware-abstraction layer that lets LLM-driven agents control heterogeneous robots over ROS2 and Zenoh.",
-      "proposed_system_family": null,
-      "proposed_primary_role": null,
-      "classification_confidence": 0.25,
-      "github_detected_license": "MIT",
-      "stars": 2904,
-      "topics": [
-        "llm",
-        "multiagent",
-        "robotics",
-        "ros2",
-        "zenoh"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-04",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "held",
-        "held_by": "robot software role decision",
-        "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Ships pre-built binaries for four platforms plus a documented build-from-source path, with a five-minute quick start that gets a running instance talking. Its documented outcome is a runtime that takes camera, microphone, LIDAR, and web input, routes it through a configurable choice of LLM and VLM providers, and issues physical actions -- motion, autonomous navigation, and spoken conversation -- on humanoid and quadruped robots as well as simulators. No existing role names a runtime whose delegated outcomes include moving a physical body rather than only files, applications, or the web, and the property is stated directly in the README's opening description and quick-start walkthrough without reading the source tree.",
-        "evidence": [
-          {
-            "label": "README",
-            "url": "https://github.com/OpenMind/OM1/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "b9a9bb3a9cf647cbcb7727e456be2c69b9638b06b58794a7f86d50bda60c795b",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "50deb2fe3b68f0f239d8fc911201a72c57840764",
-            "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/50deb2fe3b68f0f239d8fc911201a72c57840764"
-          },
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/OpenMind/OM1/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "346d8a3f9ea734e02cbce9ebcc9969b18f28242badd1078360168a09e0e2f37c",
-            "fetched_at": "2026-09-04",
-            "blob_sha": "a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0",
-            "immutable_url": "https://api.github.com/repos/OpenMind/OM1/git/blobs/a0fbf413eff6b41beb4c5061c2b1ef656e85b4d0"
-          }
-        ],
-        "proposed_at": "2026-09-04",
-        "proposer": "robotics scope screening"
-      }
-    },
-    {
       "repo": "openvla/openvla",
       "name": "OpenVLA",
       "url": "https://github.com/openvla/openvla",
@@ -3713,6 +3220,68 @@
         ],
         "proposed_at": "2026-09-04",
         "proposer": "robotics scope screening"
+      }
+    },
+    {
+      "repo": "oritera/Cairn",
+      "name": "Cairn",
+      "url": "https://github.com/oritera/Cairn",
+      "description": "A AI general-purpose state-space search engine, validated first on autonomous penetration testing.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "agent_framework_sdk",
+      "classification_confidence": 0.8,
+      "github_detected_license": "AGPL-3.0",
+      "stars": 2984,
+      "topics": [
+        "ai",
+        "ai-agent",
+        "ai-cybersecurity",
+        "ai-hacker",
+        "ai-hacking",
+        "blackbox-testing",
+        "ctf",
+        "ctf-tools",
+        "llm",
+        "penetration-testing",
+        "pentesting",
+        "red-teaming",
+        "security-automation",
+        "security-tools"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-23",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
+        "finding": "Licence file says: \"GNU AFFERO GENERAL PUBLIC LICENSE\" with \"Version 3, 19 November 2007\". README claims: \"Cairn is a general-purpose problem-solving engine.\" and \"It defines no roles, no workflows. Given an origin and a goal, it searches for a path through an unknown state space.\" Workers are agent loops: \"Agent Workers run an OODA loop — Observe the full graph, Orient to the current state, Decide on next intents, Act to explore — and write their findings back as new Facts.\" Execution runs through outside CLIs: \"Supported worker backends: **Claude Code**, **Codex**, and **Pi**.\" The only reported validation is autonomous penetration testing (hackathon result table), and the repo carries an authorized-use-only disclaimer: \"it is intended to be used only in environments where you have explicit authorization to operate\". No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the engine claims general problem solving but the evidence validates it on penetration testing so far, and workers run through outside CLIs, so review must fix the operational outcome to assess; the disclaimer belongs in the risk record.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/oritera/Cairn/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
+            "fetched_at": "2026-09-24",
+            "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+            "immutable_url": "https://api.github.com/repos/oritera/Cairn/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/oritera/Cairn/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "e8b302969405935bdb4a1f523a8b50f7f217204644a96e86490ca1a1c00600e1",
+            "fetched_at": "2026-09-24",
+            "blob_sha": "8041f9205fdc48d551d65b1d17b51ad3c163f28d",
+            "immutable_url": "https://api.github.com/repos/oritera/Cairn/git/blobs/8041f9205fdc48d551d65b1d17b51ad3c163f28d"
+          }
+        ],
+        "proposed_at": "2026-09-24",
+        "proposer": "candidate-triage"
       }
     },
     {
@@ -3947,9 +3516,9 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robot software role decision",
+        "held_by": "action-policy model boundary",
         "rule": "docs/CURATION.md inclusion gate; ADR 023 role test",
-        "finding": "Publishes an installable Python package (uv/pip) plus three named vision-language-action checkpoint families (pi0, pi0-FAST, pi0.5), downloaded from a hosted bucket rather than bundled in the repository, with documented fine-tuning and serving code. The README's own remote-inference workflow runs the checkpoint on a separate server and streams its predicted action_chunk output to the robot over a websocket connection, and its quickstart shows inference producing that action_chunk from a camera image and a language instruction. No existing role names a package whose delegated outcome is streaming a trained policy's action output to a physical robot rather than to a software tool, and this is stated directly in the README's quickstart and remote-inference sections without reading the source tree.",
+        "finding": "Publishes an installable Python package (uv/pip) plus three named vision-language-action checkpoint families (pi0, pi0-FAST, pi0.5), downloaded from a hosted bucket rather than bundled in the repository, with documented fine-tuning and serving code. The README's own remote-inference workflow runs the checkpoint on a separate server and streams its predicted action_chunk output to the robot over a websocket connection, and its quickstart shows inference producing that action_chunk from a camera image and a language instruction. No existing role names a package whose delegated outcome is streaming a trained policy's action output to a physical robot rather than to a software tool, and this is stated directly in the README's quickstart and remote-inference sections without reading the source tree. Re-read on 2026-09-28 under ADR 045: the repository has no tags, its PyPI name is a placeholder, its last commit is dated 2026-08-24, and its LICENSE_GEMMA.txt is Google's Gemma Terms of Use whose scope (the checkpoints, the code, or both) is unresolved. Its software exists to run or fine-tune its own three checkpoint families, so the systems question waits on the action-policy model decision, as Isaac GR00T's and OpenVLA's do.",
         "evidence": [
           {
             "label": "README",
@@ -4248,6 +3817,26 @@
       }
     },
     {
+      "repo": "rinadelph/Agent-MCP",
+      "name": "Agent-MCP",
+      "url": "https://github.com/rinadelph/Agent-MCP",
+      "description": "Agent-MCP is a framework for creating multi-agent systems that enables coordinated, efficient AI collaboration through the Model Context Protocol (MCP). The system is designed for developers building AI applications that benefit from multiple specialized agents working in parallel on different aspects of a project.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "multi_agent_orchestrator",
+      "classification_confidence": 0.8,
+      "github_detected_license": "NOASSERTION",
+      "stars": 1300,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
+    },
+    {
       "repo": "ros/urdfdom",
       "name": "urdfdom",
       "url": "https://github.com/ros/urdfdom",
@@ -4395,6 +3984,44 @@
         "proposed_at": "2026-09-23",
         "proposer": "candidate-triage"
       }
+    },
+    {
+      "repo": "ruvnet/RuVector",
+      "name": "RuVector",
+      "url": "https://github.com/ruvnet/RuVector",
+      "description": "RuVector provides High Performance, Real-Time decisions and agent memory , Self-Learning Ai, Vector GNN DB built in Rust.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "agent_memory_service",
+      "classification_confidence": 0.8,
+      "github_detected_license": "MIT",
+      "stars": 4527,
+      "topics": [
+        "ai",
+        "ai-ocr",
+        "attention-mechanism",
+        "gnn",
+        "gnn-model",
+        "gnns",
+        "graph",
+        "graph-neural-networks",
+        "llm-inference",
+        "low-latency",
+        "mincut",
+        "neo4j",
+        "ocr",
+        "onnx",
+        "rust",
+        "vector",
+        "wasm"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "SciSharp/BotSharp",
@@ -5106,6 +4733,53 @@
       }
     },
     {
+      "repo": "TREE-Ind/Unreal-Agent",
+      "name": "Unreal-Agent",
+      "url": "https://github.com/TREE-Ind/Unreal-Agent",
+      "description": "A collection of Unreal Engine 5 Editor Utility widgets powered by GPT3/4",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.7,
+      "github_detected_license": "Apache-2.0",
+      "stars": 234,
+      "topics": [],
+      "status": "provisional",
+      "discovered_at": "2026-09-23",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
+        "finding": "Licence file says: \"Apache License\" with \"Version 2.0, January 2004\". README claims: \"Unreal Agent is an **AI-powered editor copilot** for Unreal Engine.\" It states \"It runs *inside* the editor as a dockable tab, talks to OpenAI’s GPT models, and can **inspect and modify your project** using Python, scene queries, screenshots, and external tools.\" The agent loop is action-based: \"Agent is instructed to **change the project/level for you**, not just give instructions.\" Requirements pin the host: \"Unreal Engine 5.6.0\" and \"Your OpenAI (or compatible) API key.\" No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the product runs only inside the Unreal editor and needs a model API key, so review must establish the deployment scope and provider coupling from official support statements.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/TREE-Ind/Unreal-Agent/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+            "fetched_at": "2026-09-24",
+            "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+            "immutable_url": "https://api.github.com/repos/TREE-Ind/Unreal-Agent/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/TREE-Ind/Unreal-Agent/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "fe3399d84f52c9b2a8a5b1e1f3d65bae457b2317f9875aa6ede6f1c6efdef1ed",
+            "fetched_at": "2026-09-24",
+            "blob_sha": "2d707edff8193b4ff1a370364cef363ff1ec8c46",
+            "immutable_url": "https://api.github.com/repos/TREE-Ind/Unreal-Agent/git/blobs/2d707edff8193b4ff1a370364cef363ff1ec8c46"
+          }
+        ],
+        "proposed_at": "2026-09-24",
+        "proposer": "candidate-triage"
+      }
+    },
+    {
       "repo": "truefoundry/trueforge",
       "name": "trueforge",
       "url": "https://github.com/truefoundry/trueforge",
@@ -5282,6 +4956,40 @@
         "proposed_at": "2026-09-24",
         "proposer": "candidate-triage"
       }
+    },
+    {
+      "repo": "undefined-ui/second-brain-os",
+      "name": "second-brain-os",
+      "url": "https://github.com/undefined-ui/second-brain-os",
+      "description": "An AI second brain that maintains itself. Full guide, starter vault, agent skills and scripts for a self-organizing knowledge base in Claude Code and Obsidian.",
+      "proposed_system_family": "memory_system",
+      "proposed_primary_role": "human_pkm",
+      "classification_confidence": 1.0,
+      "github_detected_license": "MIT",
+      "stars": 813,
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "knowledge-graph",
+        "knowledge-management",
+        "llm",
+        "mcp",
+        "obsidian",
+        "personal-knowledge-base",
+        "pkm",
+        "second-brain"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-29",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ]
     },
     {
       "repo": "vastsa/PI-Desktop",
@@ -5674,232 +5382,24 @@
       }
     },
     {
-      "repo": "zylon-ai/private-gpt",
-      "name": "private-gpt",
-      "url": "https://github.com/zylon-ai/private-gpt",
-      "description": "Complete API layer for private AI applications on local models: RAG, skills, tools, MCP, text-to-sql, and more. Works with any OpenAI-compatible inference server.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "data_analysis_agent",
-      "classification_confidence": 0.84,
-      "github_detected_license": "Apache-2.0",
-      "stars": 57502,
-      "topics": [
-        "ai",
-        "ai-tools",
-        "on-premise"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
-        "finding": "Licence file says: \"Apache License\" with \"Version 2.0, January 2004\". README claims: \"PrivateGPT is the open-source API layer that turns local models into production AI applications.\" It states \"PrivateGPT does **not** run models itself. It connects to any OpenAI-compatible inference server via `OPENAI_API_BASE`.\" and \"If it implements `/v1/chat/completions` and `/v1/models`, it works.\" The API surface covers retrieval with citations, tools, MCP connectors, skills, and database access, while \"This UI is a demonstrator, not the core product. Developers are expected to build their own applications on top of the API.\" No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the product presents itself as an API layer that outside apps, agents, and workflows build on, so review must decide whether running tool-using behavior is its own primary outcome or provisional backend material.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/zylon-ai/private-gpt/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
-            "immutable_url": "https://api.github.com/repos/zylon-ai/private-gpt/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/zylon-ai/private-gpt/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "3b4ae5d4ee0793b3aa65b1a292cb1409bcaf6d12f7739d38f81937135f8dab07",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "79ec9ba150274e024e472ab3458320ef4c997baa",
-            "immutable_url": "https://api.github.com/repos/zylon-ai/private-gpt/git/blobs/79ec9ba150274e024e472ab3458320ef4c997baa"
-          }
-        ],
-        "proposed_at": "2026-09-24",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "n8n-io/n8n",
-      "name": "n8n",
-      "url": "https://github.com/n8n-io/n8n",
-      "description": "Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "NOASSERTION",
-      "stars": 205773,
-      "topics": [
-        "ai",
-        "apis",
-        "automation",
-        "cli",
-        "data-flow",
-        "development",
-        "integration-framework",
-        "integrations",
-        "ipaas",
-        "low-code",
-        "low-code-platform",
-        "mcp",
-        "mcp-client",
-        "mcp-server",
-        "n8n",
-        "no-code",
-        "self-hosted",
-        "typescript",
-        "workflow",
-        "workflow-automation"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-23",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
-        "finding": "Licence file says: \"Sustainable Use License\" with \"You may use or modify the software only for your own internal business purposes\" and \"personal use\" README claims: \"n8n – The Platform for AI Agents and Workflow Automation\" and \"Fair-code platform to build and deploy AI agents and workflows. Combine a visual canvas with custom code\". It lists multi-step AI workflows with logic, tool use, human approvals, and observability, plus self-host or cloud deployment, and notes it is \"distributed under the [Sustainable Use License]\" with an Enterprise License for additional features. No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the product spans visual workflow automation and multi-step agents, so review must fix the operational boundary to assess; the fair-code licence pairing also needs source-model treatment at review.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/n8n-io/n8n/blob/master/LICENSE.md",
-            "kind": "git_blob",
-            "content_sha256": "d2f621f59aa4c10eab79b6333e59d9d3d5b53307dcfd16dbd75e40e679e84965",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "f85f59baa906530c26cee26e0c9ddd6bd5f86dbd",
-            "immutable_url": "https://api.github.com/repos/n8n-io/n8n/git/blobs/f85f59baa906530c26cee26e0c9ddd6bd5f86dbd"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/n8n-io/n8n/blob/master/README.md",
-            "kind": "git_blob",
-            "content_sha256": "75c64f04b8b1e7d435496f6ebd2dbf3ea5ff7d3ff3d944d7fcf98cf1a7df2242",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "21909fae00cbad4f18af84d2948752445051a915",
-            "immutable_url": "https://api.github.com/repos/n8n-io/n8n/git/blobs/21909fae00cbad4f18af84d2948752445051a915"
-          }
-        ],
-        "proposed_at": "2026-09-24",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "TREE-Ind/Unreal-Agent",
-      "name": "Unreal-Agent",
-      "url": "https://github.com/TREE-Ind/Unreal-Agent",
-      "description": "A collection of Unreal Engine 5 Editor Utility widgets powered by GPT3/4",
+      "repo": "zai-org/ZCode",
+      "name": "ZCode",
+      "url": "https://github.com/zai-org/ZCode",
+      "description": "Z.ai's coding agent harness. Powerful, intelligent, extensible.",
       "proposed_system_family": "agent_system",
       "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.7,
+      "classification_confidence": 0.82,
       "github_detected_license": "Apache-2.0",
-      "stars": 234,
+      "stars": 7163,
       "topics": [],
       "status": "provisional",
-      "discovered_at": "2026-09-23",
+      "discovered_at": "2026-09-29",
       "review_required": [
         "licensing",
         "classification",
         "traits",
         "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
-        "finding": "Licence file says: \"Apache License\" with \"Version 2.0, January 2004\". README claims: \"Unreal Agent is an **AI-powered editor copilot** for Unreal Engine.\" It states \"It runs *inside* the editor as a dockable tab, talks to OpenAI’s GPT models, and can **inspect and modify your project** using Python, scene queries, screenshots, and external tools.\" The agent loop is action-based: \"Agent is instructed to **change the project/level for you**, not just give instructions.\" Requirements pin the host: \"Unreal Engine 5.6.0\" and \"Your OpenAI (or compatible) API key.\" No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the product runs only inside the Unreal editor and needs a model API key, so review must establish the deployment scope and provider coupling from official support statements.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/TREE-Ind/Unreal-Agent/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
-            "immutable_url": "https://api.github.com/repos/TREE-Ind/Unreal-Agent/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/TREE-Ind/Unreal-Agent/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "fe3399d84f52c9b2a8a5b1e1f3d65bae457b2317f9875aa6ede6f1c6efdef1ed",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "2d707edff8193b4ff1a370364cef363ff1ec8c46",
-            "immutable_url": "https://api.github.com/repos/TREE-Ind/Unreal-Agent/git/blobs/2d707edff8193b4ff1a370364cef363ff1ec8c46"
-          }
-        ],
-        "proposed_at": "2026-09-24",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "oritera/Cairn",
-      "name": "Cairn",
-      "url": "https://github.com/oritera/Cairn",
-      "description": "A AI general-purpose state-space search engine, validated first on autonomous penetration testing.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "agent_framework_sdk",
-      "classification_confidence": 0.8,
-      "github_detected_license": "AGPL-3.0",
-      "stars": 2984,
-      "topics": [
-        "ai",
-        "ai-agent",
-        "ai-cybersecurity",
-        "ai-hacker",
-        "ai-hacking",
-        "blackbox-testing",
-        "ctf",
-        "ctf-tools",
-        "llm",
-        "penetration-testing",
-        "pentesting",
-        "red-teaming",
-        "security-automation",
-        "security-tools"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-23",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "Inclusion gate: the operational product is identifiable from authoritative sources, so the dossier is ready and classification stays a human act.",
-        "finding": "Licence file says: \"GNU AFFERO GENERAL PUBLIC LICENSE\" with \"Version 3, 19 November 2007\". README claims: \"Cairn is a general-purpose problem-solving engine.\" and \"It defines no roles, no workflows. Given an origin and a goal, it searches for a path through an unknown state space.\" Workers are agent loops: \"Agent Workers run an OODA loop — Observe the full graph, Orient to the current state, Decide on next intents, Act to explore — and write their findings back as new Facts.\" Execution runs through outside CLIs: \"Supported worker backends: **Claude Code**, **Codex**, and **Pi**.\" The only reported validation is autonomous penetration testing (hackathon result table), and the repo carries an authorized-use-only disclaimer: \"it is intended to be used only in environments where you have explicit authorization to operate\". No cross-collection hits. Evidence complete with no fetch errors. Boundary question for human review: the engine claims general problem solving but the evidence validates it on penetration testing so far, and workers run through outside CLIs, so review must fix the operational outcome to assess; the disclaimer belongs in the risk record.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/oritera/Cairn/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "8486a10c4393cee1c25392769ddd3b2d6c242d6ec7928e1414efff7dfb2f07ef",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
-            "immutable_url": "https://api.github.com/repos/oritera/Cairn/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/oritera/Cairn/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "e8b302969405935bdb4a1f523a8b50f7f217204644a96e86490ca1a1c00600e1",
-            "fetched_at": "2026-09-24",
-            "blob_sha": "8041f9205fdc48d551d65b1d17b51ad3c163f28d",
-            "immutable_url": "https://api.github.com/repos/oritera/Cairn/git/blobs/8041f9205fdc48d551d65b1d17b51ad3c163f28d"
-          }
-        ],
-        "proposed_at": "2026-09-24",
-        "proposer": "candidate-triage"
-      }
+      ]
     },
     {
       "repo": "ZhengyiLuo/AgentsDock",
@@ -5938,23 +5438,18 @@
       ]
     },
     {
-      "repo": null,
-      "name": "Siri AI",
-      "url": "https://www.apple.com/apple-intelligence/",
-      "description": "Apple's conversational assistant, rolling out as a beta from 14 September 2026, that answers from personal context across messages, email, and photos, reads the screen, draws on the web, takes actions in apps, and keeps conversations in a dedicated Siri app synced through iCloud across a user's devices.",
-      "proposed_system_family": "assistant_system",
-      "proposed_primary_role": "general_ai_assistant",
-      "classification_confidence": 0.85,
-      "github_detected_license": null,
-      "stars": null,
-      "topics": [
-        "official-product",
-        "on-device",
-        "personal-context",
-        "voice-assistant"
-      ],
+      "repo": "MoonshotAI/kimi-code",
+      "name": "kimi-code",
+      "url": "https://github.com/MoonshotAI/kimi-code",
+      "description": "Kimi Code CLI, the current Kimi agent runtime CLI that the kimi-agent-sdk thin clients expose; supersedes the archived legacy kimi-cli Python CLI.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.8,
+      "github_detected_license": "MIT",
+      "stars": 7725,
+      "topics": [],
       "status": "provisional",
-      "discovered_at": "2026-09-14",
+      "discovered_at": "2026-09-29",
       "review_required": [
         "licensing",
         "classification",
@@ -5964,28 +5459,155 @@
     },
     {
       "repo": null,
-      "name": "Norton Neo",
-      "url": "https://neobrowser.ai/",
-      "description": "Gen Digital's security-focused browser whose built-in AI chat reads open tabs as context, keeps memories across sessions that the user can view, edit, or delete, keeps conversation history on the device by default, and can summarize Gmail threads, draft replies, and check Google Calendar.",
-      "proposed_system_family": "assistant_system",
-      "proposed_primary_role": "general_ai_assistant",
-      "classification_confidence": 0.6,
+      "name": "Amp",
+      "url": "https://ampcode.com/",
+      "description": "Agentic coding tool by Amp, an independent company spun off from Sourcegraph in December 2025: CLI, VS Code/JetBrains/Neovim/Zed extensions, and web/Slack surfaces with subagents for code review and library research. Proprietary; distributed via npm as @ampcode/cli.",
+      "proposed_system_family": "agent_system",
+      "proposed_primary_role": "coding_agent",
+      "classification_confidence": 0.75,
       "github_detected_license": null,
       "stars": null,
       "topics": [
-        "ai-browser",
-        "local-chat-history",
-        "official-product",
-        "privacy"
+        "coding-agent",
+        "proprietary"
       ],
       "status": "provisional",
-      "discovered_at": "2026-09-14",
+      "discovered_at": "2026-09-29",
       "review_required": [
         "licensing",
         "classification",
         "traits",
         "editorial_score"
       ]
+    },
+    {
+      "repo": "frankarobotics/franka_ros",
+      "name": "Franka Research 3",
+      "url": "https://github.com/frankarobotics/franka_ros",
+      "description": "Franka Robotics' seven-axis robot arm, documented through the Franka Control Interface (FCI) and its libfranka, franka_ros, and franka_ros2 components.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "robot-arm",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-30",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — conditions 3 and 4",
+        "rule": "docs/ROBOTS.md evidence workflow step 2 and Unavailable pages",
+        "finding": "On 2026-09-30 the vendor's own website was unreadable from the reviewer's network: `franka.ai` and `www.franka.ai` both refused the TLS handshake with `TLSV1_UNRECOGNIZED_NAME` under urllib, curl, and a headless Chromium, while control fetches to other vendors' sites succeeded in the same session. The maker's technical documentation is published instead on `frankarobotics.github.io`, which is the `github.com/<org>` form of a shared host that `docs/ROBOTS.md` admits, and that documentation was readable. It states that the software and its documentation support the Franka Research 3 and an older Franka Emika Robot, and that the FCI is reached through libfranka, 'a C++ library that provides low-level control of Franka Robotics research robots', plus franka_ros and franka_ros2. That documents a control interface, not a route the vendor offers for running a learned model: the interface specification page sets realtime limits for joint-space and Cartesian commands and torque control, and nothing on the pages read names a learned model or policy. Two conditions therefore stand unmet on this pass: condition 3, because a documented low-level control interface is programmability unless the maker documents it for running the reader's own model or policy; and condition 4, because the hardware specification this record needs would come from the product pages and technical specification sheets on the website that could not be read, and the specification page read here carries control limits rather than a hardware spec sheet. Re-review from a network that can resolve `franka.ai`, where the product page, the FR3 datasheet, the availability statement, and the sales terms would settle conditions 3, 4, 5, and 6. This is a hold on unreadable evidence, not a judgement about the product.",
+        "evidence": [
+          {
+            "label": "franka_ros README",
+            "url": "https://github.com/frankarobotics/franka_ros/blob/develop/README.md",
+            "kind": "git_blob",
+            "content_sha256": "35b127927c1c26fd76bb8c387e076a1ee1f7bb6dc4dbf6b22c8b3989db8c1e91",
+            "fetched_at": "2026-09-30",
+            "blob_sha": "1e166ddabb99c63cf2d52b822f1b0f8eef123835",
+            "immutable_url": "https://api.github.com/repos/frankarobotics/franka_ros/git/blobs/1e166ddabb99c63cf2d52b822f1b0f8eef123835"
+          }
+        ],
+        "proposed_at": "2026-09-30",
+        "proposer": "robots batch 1 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "Kinova Gen3",
+      "url": "https://www.kinovarobotics.com/product/gen3-robots",
+      "description": "Kinova's ultra-lightweight 6- and 7-degree-of-freedom robotic arms, driven through the KORTEX API with ROS and ROS2 support.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "robot-arm",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-09-30",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — condition 3 AI basis",
+        "rule": "docs/ROBOTS.md inclusion boundary condition 3",
+        "finding": "The product page, read on 2026-09-30, states the hardware the gate's condition 4 accepts: 6 and 7 DoF variants, a 891 mm maximum reach, 7.2 kg and 8.2 kg total weight, a 4 kg mid-range continuous payload, 50 cm/s maximum speed, infinite actuator joint range, 20 to 30 VDC supply, 36 W average power, IP33 ingress protection, and a -30 to 35 degrees Celsius operating range. It documents 1 kHz closed-loop low-level control, integrated joint torque sensors, and an optional 2D/3D vision module. It names no learned model or policy, and the software it lists — the KINOVA KORTEX API and Web App, MATLAB hardware support, ROS and ROS2, C++ and Python, Gazebo, and MoveIt Pro compatibility — is programmability: the guide refuses that as the AI basis, because a motion API the maker offers for general use is not a route the vendor documents for running the reader's own model or policy. Condition 3 is unmet on what was read. Kinova's documentation site was reachable and its KORTEX API documentation was not read in this pass, so a policy interface may exist there; re-review against the API documentation before treating this as settled.",
+        "evidence": [
+          {
+            "label": "Gen3 product page",
+            "url": "https://www.kinovarobotics.com/product/gen3-robots",
+            "kind": "web",
+            "content_sha256": "88a2181f1ddb17b9484a8cba04ad2f4ab32a87031987a39ea75234765500cccd",
+            "fetched_at": "2026-09-30"
+          }
+        ],
+        "proposed_at": "2026-09-30",
+        "proposer": "robots batch 1 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "AgiBot X2",
+      "url": "https://www.agibot.com/products/X2",
+      "description": "AgiBot's compact full-size humanoid robot, sold as the X2, the X2 Ultra, the X2 Neo and the X2 EDU.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "humanoid",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-03",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — condition 3 AI basis",
+        "rule": "docs/ROBOTS.md inclusion boundary condition 3 and Classification, on open_model_interface",
+        "finding": "Read on 2026-10-03. Conditions 1, 2, 4, 5 and 6 are met on the pages read: the product page names the X2 series, states its hardware in a full parameter table (25 to 30 degrees of freedom, a 1310 x 460 x 210 mm standing size, about 39 kg, RK3588 compute boards, an Orin NX option on the Ultra, a swappable battery and about two hours of runtime at 0.5 m/s), and AgiBot's store sells the X2 Neo at a stated price with an add-to-cart control. The store's terms of service settle terms. Condition 3 is unmet on what was read. The product page names no learned model or policy: its own words are 'algorithm-driven decision-making' and 'intelligent algorithms', with no model named, and the autonomy it claims for the X2 Ultra rests on LiDAR, RGB-D cameras and stereo vision rather than on a named model. Nothing the maker publishes documents a route for running the reader's own model or policy on the X2 either. The product page and the store page both carry a 'Secondary Development' row, and it reads 'Not supported' for the X2 and 'Supported' for the X2 Ultra, but a specification-table claim is not an interface: no SDK, control API or policy interface for the X2 was found on the maker's own pages. AgiBot's document centre lists an 'AGIBOT X1 Development Guide' and open-source documentation for the X1, the A3, the G2, the D1 and the OmniHand, and for the X2 lists only a quick start guide, a packaging list, an after-sales guide and instructional videos; no X2 development guide is published there. The maker's open-source GitHub organisation holds twenty-four repositories, of which the only X2 one is `AgibotTech/agibot_x2_urdf`, and its own README describes the repository as URDF and MuJoCo robot descriptions for ROS, RViz and MoveIt, which is a robot description rather than a control interface. The maker's Link-U-OS organisation, which the maker's own open-source page links, documents a locomotion policy framework for the A2 and names no X2. Re-review if the maker publishes an X2 SDK, a policy interface or a development guide; on the pages read this is a hold on absent evidence, not a judgement about the product.",
+        "evidence": [
+          {
+            "label": "X2 product page",
+            "url": "https://www.agibot.com/products/X2",
+            "kind": "web",
+            "content_sha256": "0c1d5392e409b822ba7ef63c446b07bccc31e72064bcb47c9ac597964851abed",
+            "fetched_at": "2026-10-03"
+          },
+          {
+            "label": "X2 store page",
+            "url": "https://store.agibot.com/products/x2",
+            "kind": "web",
+            "content_sha256": "72d827959d301ce840ac95e854634615e9e1bee0bba05b151a9a25d73cbf6a1b",
+            "fetched_at": "2026-10-03"
+          }
+        ],
+        "proposed_at": "2026-10-03",
+        "proposer": "robots batch 3 review"
+      }
     }
   ]
 }

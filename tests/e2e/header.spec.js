@@ -24,6 +24,19 @@ for (const width of [320, 360, 390, 720]) {
 
       const header = await box(page, ".site-header");
       const brand = await box(page, ".brand");
+      if (path === "/") {
+        await expect(page.locator(".site-header .tabs")).toBeHidden();
+        await expect(page.locator("#mobile-nav")).toBeInViewport();
+        const headerCenter = header.x + header.width / 2;
+        const brandCenter = brand.x + brand.width / 2;
+        expect(Math.abs(headerCenter - brandCenter)).toBeLessThan(2);
+        await page.locator('[data-mobile-nav="more"]').click();
+        await expect(page.locator("#theme-toggle")).toBeInViewport();
+        await expect(page.locator(".github-link")).toBeInViewport();
+        await page.keyboard.press("Escape");
+        await expect(page.locator('[data-mobile-nav="more"]')).toBeFocused();
+        return;
+      }
       const tabs = await box(page, ".tabs");
       const tools = await box(page, ".header-tools");
       const center = rect => rect.y + rect.height / 2;

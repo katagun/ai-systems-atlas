@@ -1,6 +1,7 @@
 const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
 const { collectionEntry, entryCount, openCollection, viewTab } = require("./helpers/landing");
+const { clearFilters, recordView, search, setFilter } = require("./helpers/results");
 
 const QWEN = "model-alibaba-qwen2-5-coder-0-5b";
 const DEEPSEEK = "model-deepseek-deepseek-v4-pro";
@@ -20,17 +21,17 @@ test("Models exposes every source record and keeps Atlas reviews distinct", asyn
   // Filtered expectations name every match, so page past the default 24.
   await page.locator('#model-pager select[aria-label="Results per page"]').selectOption("96");
 
-  await page.locator("#model-source-filter").selectOption("source_available");
+  await setFilter(page, "models", "sourceModel", "source_available");
   await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(
     catalogCounts.reviewedModelsWithSourceModel("source_available"),
   );
-  await page.locator("#model-license-filter").selectOption("CC-BY-NC-4.0");
+  await setFilter(page, "models", "license", "CC-BY-NC-4.0");
   await expect(page.locator("#model-grid .project-card h2")).toHaveText(
     catalogCounts.reviewedModelsWithLicense("CC-BY-NC-4.0"),
   );
 
-  await page.locator("#reset-model-filters").click();
-  await page.locator("#model-modality-filter").selectOption("image");
+  await clearFilters(page, "models");
+  await setFilter(page, "models", "modality", "image");
   // More than one page at 96: name page one, then page two.
   const imageNames = catalogCounts.reviewedModelsWithModality("image");
   await expect(page.locator("#model-grid .project-card:not(.imported-model-card) h2")).toHaveText(
@@ -41,8 +42,8 @@ test("Models exposes every source record and keeps Atlas reviews distinct", asyn
     imageNames.slice(96),
   );
 
-  await page.locator("#reset-model-filters").click();
-  await page.locator("#model-distribution-filter").selectOption("developer_api");
+  await clearFilters(page, "models");
+  await setFilter(page, "models", "distribution", "developer_api");
   // More than one page at 96: name page one, then page two.
   const apiNames = catalogCounts.reviewedModelsWithDistribution("developer_api");
   await expect(page.locator("#model-grid .project-card h2")).toHaveText(apiNames.slice(0, 96));
@@ -53,9 +54,9 @@ test("Models exposes every source record and keeps Atlas reviews distinct", asyn
     await expect(page.locator("#model-grid .project-card h2")).toHaveText(apiNames.slice(192));
   }
 
-  await page.locator("#reset-model-filters").click();
+  await clearFilters(page, "models");
   await page.locator(`#model-grid [data-model="${QWEN}"]`).click();
-  const dialog = page.locator("#model-dialog-content");
+  const dialog = recordView(page, "model");
   await expect(dialog.locator("h1")).toHaveText("Qwen2.5-Coder-0.5B");
   await expect(dialog).toContainText("Model access and deployability score");
   await expect(dialog).toContainText("Access and deployability only");
@@ -66,15 +67,16 @@ test("Models exposes every source record and keeps Atlas reviews distinct", asyn
 
 test("an imported models.dev record is unscored and opens attributed source details", async ({ page }) => {
   await page.goto("/?collection=models");
-  await page.locator("#model-search").fill("Sarvam 105B");
+  await search(page, "Sarvam 105B");
 
   const card = page.locator("#model-grid .imported-model-card").filter({ hasText: "Sarvam 105B" });
+  await expect(card).not.toContainText("Namespace ·");
   await expect(card).toContainText("Imported metadata · Not Atlas reviewed");
   await expect(card.locator(".score-ring")).toHaveCount(0);
   await expect(card.locator(".compare-toggle")).toHaveCount(0);
   await card.locator('[data-model="model-sarvam-sarvam-105b"]').click();
 
-  const dialog = page.locator("#model-dialog-content");
+  const dialog = recordView(page, "model");
   await expect(dialog.locator("h1")).toHaveText("Sarvam 105B");
   await expect(dialog).toContainText("models.dev source record · Not Atlas reviewed");
   await expect(dialog).toContainText("Atlas has not reviewed its identity boundary");
@@ -141,13 +143,13 @@ test("a reviewed model models.dev does not list yet says so and never prints nul
 
   await expect(page.locator("#models-kicker")).toContainText("1 not yet on models.dev");
   const card = page.locator(`#model-grid .project-card:has([data-model="${QWEN}"])`);
-  await page.locator("#model-search").fill("Qwen2.5-Coder-0.5B");
+  await search(page, "Qwen2.5-Coder-0.5B");
   await expect(card.locator(".card-footer")).toContainText("Not yet listed on models.dev");
   await expect(card).not.toContainText("null");
   await expect(card.locator(".card-source-meta")).toHaveAttribute("title", "Reviewed by Atlas from developer documentation");
 
   await card.locator(`[data-model="${QWEN}"]`).click();
-  const dialog = page.locator("#model-dialog-content");
+  const dialog = recordView(page, "model");
   await expect(dialog).toContainText("Not yet listed on models.dev");
   await expect(dialog).not.toContainText("models.dev ID:");
   await expect(dialog).toContainText("Reviewed by Atlas from developer documentation");

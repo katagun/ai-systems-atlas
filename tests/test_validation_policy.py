@@ -890,6 +890,7 @@ class ValidationPolicyTests(unittest.TestCase):
         "lab_type": "ai_company",
         "headquarters": "us",
         "admission_basis": "reviewed_release",
+        "display_order": 30,
         "organization_note": "One name covers the synthetic lab's models and API.",
         "catalog_names": ["Anthropic"],
         "systems": [],
@@ -1063,6 +1064,176 @@ class ValidationPolicyTests(unittest.TestCase):
             lab["catalog_names"] = []
 
         self.assertEqual(self.lab_errors(self.catalog_with_lab(mutate)), [])
+
+    def test_lab_display_order_is_a_gapped_preview_precedence(self) -> None:
+        """ADR 049: preview precedence is a positive multiple of ten.
+
+        A free integer would let the field drift into an implied ranking with
+        more precision than a three-slot preview has, and a missing one would
+        leave a lab unordered wherever it is previewed.
+        """
+
+        self.assertEqual(self.lab_errors(self.catalog_with_lab(lambda lab: None)), [])
+
+        for bad in ("10", 15, 0, -10, None, True):
+            with self.subTest(display_order=bad):
+                errors = self.lab_errors(
+                    self.catalog_with_lab(
+                        lambda lab, value=bad: lab.update(display_order=value)
+                    )
+                )
+                self.assertTrue(
+                    any("display_order" in error for error in errors), errors
+                )
+
+    def test_a_robot_maker_may_be_admitted_on_the_robot_it_makes(self) -> None:
+        """ADR 053: a hardware maker joins on a reviewed robot.
+
+        The Boston Dynamics shape: a `manufacturer` catalog name that reaches a
+        robot record, no developer name, and no reviewed system.
+        """
+
+        def maker(mutate=None):
+            def build(lab):
+                lab["admission_basis"] = "reviewed_robot"
+                lab["catalog_names"] = ["Boston Dynamics"]
+                lab["systems"] = ["spot"]
+                if mutate is not None:
+                    mutate(lab)
+
+            return build
+
+        self.assertEqual(self.lab_errors(self.catalog_with_lab(maker())), [])
+
+        # A maker with a stronger join must use the stronger basis.
+        for stronger, lab in (
+            ("reviewed_release", {"catalog_names": ["Anthropic"]}),
+            ("reviewed_system", {"systems": ["aider"]}),
+            (
+                "frontier_announcement",
+                {"catalog_names": ["Boston Dynamics"], "systems": []},
+            ),
+        ):
+            with self.subTest(basis=stronger):
+                errors = self.lab_errors(
+                    self.catalog_with_lab(
+                        maker(lambda lab, patch=lab: lab.update(patch))
+                    )
+                )
+                self.assertTrue(
+                    any("admission basis" in error for error in errors), errors
+                )
+
+        # A robot id the catalog does not hold is not a join either.
+        errors = self.lab_errors(
+            self.catalog_with_lab(maker(lambda lab: lab.update(systems=["atlas"])))
+        )
+        self.assertTrue(any("systems" in error for error in errors), errors)
+
+    def test_lab_research_locations_are_reviewed_and_separate_from_the_headquarters(
+        self,
+    ) -> None:
+        """ADR 052: where the work happens is its own reviewed fact.
+
+        It is optional, because absent means the catalog has not reviewed it, and
+        it never restates the headquarters, which has its own field and rule.
+        """
+
+        def with_locations(value):
+            def mutate(lab):
+                if value is None:
+                    lab.pop("research_locations", None)
+                else:
+                    lab["research_locations"] = value
+
+            return mutate
+
+        self.assertEqual(
+            self.lab_errors(self.catalog_with_lab(with_locations(["kz"]))), []
+        )
+        self.assertEqual(self.lab_errors(self.catalog_with_lab(with_locations([]))), [])
+        self.assertEqual(
+            self.lab_errors(self.catalog_with_lab(with_locations(None))), []
+        )
+
+        for bad in (
+            "kz",
+            ["kz", "kz"],
+            ["us"],
+            ["none_listed"],
+            ["zz"],
+            ["kz", "in", "fr", "ch"],
+        ):
+            with self.subTest(research_locations=bad):
+                errors = self.lab_errors(self.catalog_with_lab(with_locations(bad)))
+                self.assertTrue(
+                    any("research_location" in error for error in errors), errors
+                )
+
+    def test_lab_may_be_admitted_on_a_system_it_developed(self) -> None:
+        """ADR 048: a research group joins from a system, not a release.
+
+        The Stanford shape: no catalog name, because a system record names no
+        organization, and one reviewed system in `systems`.
+        """
+
+        def mutate(lab):
+            lab["admission_basis"] = "reviewed_system"
+            lab["catalog_names"] = []
+            lab["systems"] = ["dspy"]
+
+        self.assertEqual(self.lab_errors(self.catalog_with_lab(mutate)), [])
+
+    def test_system_based_lab_needs_a_system_and_no_release(self) -> None:
+        """Each exclusivity direction of the three bases is refused, not permitted."""
+
+        def no_system(lab):
+            lab["admission_basis"] = "reviewed_system"
+            lab["catalog_names"] = []
+            lab["systems"] = []
+
+        errors = self.lab_errors(self.catalog_with_lab(no_system))
+        self.assertTrue(any("develops no reviewed system" in e for e in errors), errors)
+
+        def announced_despite_a_system(lab):
+            lab["admission_basis"] = "frontier_announcement"
+            lab["catalog_names"] = []
+            lab["systems"] = ["dspy"]
+
+        errors = self.lab_errors(self.catalog_with_lab(announced_despite_a_system))
+        self.assertTrue(any("has a reviewed system" in e for e in errors), errors)
+
+        def system_based_despite_a_release(lab):
+            # Keeps the sample's Anthropic name, so the reviewed release is still
+            # reachable and the basis is the thing that is wrong.
+            lab["admission_basis"] = "reviewed_system"
+            lab["systems"] = ["dspy"]
+
+        errors = self.lab_errors(self.catalog_with_lab(system_based_despite_a_release))
+        self.assertTrue(
+            any("has a reviewed model release" in e for e in errors), errors
+        )
+
+    def test_unreviewed_release_lab_is_told_which_weaker_basis_fits(self) -> None:
+        """A lab with no release is named the basis it can actually use."""
+
+        def as_unreleased_system_based(lab):
+            lab["admission_basis"] = "reviewed_release"
+            lab["catalog_names"] = []
+            lab["systems"] = ["dspy"]
+
+        errors = self.lab_errors(self.catalog_with_lab(as_unreleased_system_based))
+        self.assertTrue(any("must be reviewed_system" in e for e in errors), errors)
+
+        def as_unreleased_announced(lab):
+            lab["admission_basis"] = "reviewed_release"
+            lab["catalog_names"] = []
+            lab["systems"] = []
+
+        errors = self.lab_errors(self.catalog_with_lab(as_unreleased_announced))
+        self.assertTrue(
+            any("must be frontier_announcement" in e for e in errors), errors
+        )
 
     def test_lab_is_recorded_only_once_it_developed_a_reviewed_release(self) -> None:
         documents = {
@@ -3767,10 +3938,11 @@ class ValidationPolicyTests(unittest.TestCase):
             errors,
         )
 
-    def test_null_source_id_still_requires_text_output(self) -> None:
-        # validate_model_source_metadata already enforces this for every reviewed
-        # model (require_text defaults to True); the test pins it for ADR 038,
-        # because the importer's modality gate never sees a null-source record.
+    def test_null_source_record_type_must_match_its_output_modalities(self) -> None:
+        # ADR 051: the blanket "must produce text" rule is gone, so a null-source
+        # record is free to describe a release that outputs images. What it is not
+        # free to do is claim a type its own modalities contradict, which is the
+        # rule that replaced the text requirement.
         def mutate(models: list[dict]) -> None:
             models[0]["source_id"] = None
             models[0]["source_metadata"]["modalities"]["output"] = ["image"]
@@ -3778,8 +3950,25 @@ class ValidationPolicyTests(unittest.TestCase):
         errors = self._with_null_source_models(mutate)
 
         self.assertTrue(
-            any("model candidates must produce text" in e for e in errors),
+            any(
+                "multimodal_language_model must record text as an output modality" in e
+                for e in errors
+            ),
             errors,
+        )
+
+    def test_null_source_image_release_is_accepted_under_its_own_type(self) -> None:
+        def mutate(models: list[dict]) -> None:
+            models[0]["source_id"] = None
+            models[0]["model_type"] = "image_generation_model"
+            models[0]["source_metadata"]["modalities"]["output"] = ["image"]
+
+        errors = self._with_null_source_models(mutate)
+
+        # The detached upstream row now needs a queue entry or disposition, so the
+        # eligible-count error is expected; nothing may complain about the model.
+        self.assertFalse(
+            [error for error in errors if error.startswith("model ")], errors
         )
 
     def test_null_source_record_cannot_cite_models_dev_evidence(self) -> None:

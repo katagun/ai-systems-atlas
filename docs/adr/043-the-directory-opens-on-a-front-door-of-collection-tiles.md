@@ -2,6 +2,8 @@
 
 **Status:** Accepted. Amends [ADR 013](013-distinct-collections-share-one-directory-surface.md) and [ADR 041](041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md).
 
+The role navigation and inline reference sheets added by [ADR 046](046-elements-adds-role-navigation-and-reference-sheets.md) precede the collection index. The collection tile and results-strip contracts below remain in force.
+
 ## Context
 
 The Directory landed on a hero, an atlas map, and a switcher of ten chips. The switcher mixed three levels: All, a collection, that collection's families, and the Models sibling view. It was 1,346 px wide inside a 349 px phone frame, it sat below the fold on a laptop, and each chip carried a name and a count and nothing else. The [front-door design](../superpowers/specs/2026-09-24-directory-front-door-design.md) chose a search-first landing page whose index and scope tabs are the quick filters. Its skeptic review ruled that tiles carry no definitions and no example marks, because choosing example records would need a ranking the unscored collections forbid ([ADR 008](008-specifications-are-unscored-artifacts.md), [ADR 037](037-robots-are-unscored-records-of-what-a-vendor-documents.md), [ADR 041](041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md)).

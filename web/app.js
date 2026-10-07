@@ -18,10 +18,10 @@ const state = {
   projects: [], specifications: [], inferenceServices: [], localRuntimes: [], models: [], packs: [], labs: [], robots: [], taxonomy: null,
   labIndex: null,
   reviewedModelCount: 0, modelSourceCount: 0,
-  licenses: new Map(), logos: { icons: {}, records: {} },
+  licenses: new Map(), logos: { icons: {}, records: {} }, logosLoaded: false,
   directoryCollection: "all", directoryStage: "door", recent: {}, directoryRoles: null, directoryRolesLabel: null, badgeLegendPreference: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
-  finder: { step: 0, answers: {} },
+  finder: { direction: "", goal: "", priority: "balanced" },
   pageSize: readStoredPageSize(),
   page: { all: 1, systems: 1, inference: 1, runtimes: 1, models: 1, specifications: 1, packs: 1, labs: 1, robots: 1 },
   urlReady: false,
@@ -91,6 +91,7 @@ async function bootstrap() {
     loadJSON("app/packs.json"), loadJSON("app/labs.json"), loadJSON("app/robots.json")
   ]);
   state.projects = systems.systems;
+  state.systemReviewDates = systems.review_dates || {};
   state.inferenceServices = inference.inference;
   state.localRuntimes = runtimes.runtimes;
   state.runtimesVerifiedAt = runtimes.verified_at;
@@ -118,6 +119,8 @@ async function bootstrap() {
   renderStats();
   renderFinder();
   renderDoorJobs();
+  renderElements();
+  renderStage();
   renderModels();
   renderLabs();
   renderSpecifications();
@@ -130,26 +133,78 @@ async function bootstrap() {
   // search; it lands in results the way a keystroke after boot would.
   if ($("#door-search").value && state.directoryStage === "door") $("#door-search").dispatchEvent(new Event("input", { bubbles: true }));
   loadMarks();
-  // The header's fonts can settle after bindEvents measured it.
+  // The header's and the strip's webfonts can land after this measures them,
+  // so the sticky heights are taken again once every font has loaded.
   syncStickyClearance();
+  document.fonts.ready.then(syncStickyClearance);
 }
 
 // Marks are decorative next to the record name, so they stay hidden from
 // assistive technology. Icon bodies come from the vendored, build-sanitized
 // logos.json; every dynamic value still passes through escapeHTML.
-function cardMark(record) {
-  const icon = state.logos.icons[state.logos.records[record.id]];
-  if (icon) return `<span class="card-mark" data-mark="${escapeHTML(record.id)}" aria-hidden="true"><svg viewBox="0 0 24 24">${icon.body}</svg></span>`;
-  return `<span class="card-mark card-monogram" data-mark="${escapeHTML(record.id)}" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(record.name))}</span>`;
+function cardMark(record, kind = null) {
+  const marks = state.logos.records;
+  const markId = AppCore.markRecordId(kind, record, state.labIndex, marks);
+  const icon = state.logos.icons[marks[markId]];
+  const monogram = AppCore.monogramGlyph(AppCore.markMonogramName(kind, record, markId, state.labIndex));
+  if (icon) return `<span class="card-mark" data-mark="${escapeHTML(markId)}" aria-hidden="true"><svg viewBox="0 0 24 24">${icon.body}</svg></span>`;
+  return `<span class="card-mark card-monogram" data-mark="${escapeHTML(markId)}" aria-hidden="true">${escapeHTML(monogram)}</span>`;
+}
+
+// A card says where the organization behind it is based and where its work
+// happens: one circle per geography fact, taken from the lab the record joins to
+// (ADR 052, ADR 053). The circles are decoration — the lab's own card and dialog
+// name every country in words, and a model or robot card already prints its
+// developer or manufacturer — so the row is aria-hidden, is never a card badge,
+// and carries no title. They are regional indicator characters drawn by the
+// platform's font rather than artwork this catalog has to keep accurate. A record
+// that joins to no lab prints nothing, and a lab whose record lists no
+// headquarters gets no circle for it, because an empty one would stand for a
+// country the record does not name.
+function cardFlags(kind, record) {
+  const circles = AppCore.labsForRecord(kind, record, state.labIndex)
+    .flatMap(lab => [lab.headquarters, ...(lab.research_locations || [])])
+    .map(country => AppCore.countryFlag(country))
+    .filter(Boolean)
+    .map(flag => `<span class="card-flag" aria-hidden="true">${flag}</span>`)
+    .join("");
+  return circles ? `<div class="card-flags">${circles}</div>` : "";
+}
+
+function labFlags(lab) {
+  const circles = [lab.headquarters, ...(lab.research_locations || [])]
+    .map(country => AppCore.countryFlag(country))
+    .filter(Boolean)
+    .map(flag => `<span class="card-flag" aria-hidden="true">${flag}</span>`)
+    .join("");
+  return circles ? `<div class="card-flags">${circles}</div>` : "";
+}
+
+function cardMarkWithGeography(kind, record) {
+  const flags = kind === "lab" ? labFlags(record) : cardFlags(kind, record);
+  const mark = cardMark(record, kind === "lab" ? null : kind);
+  if (!flags) return mark;
+  return `<span class="card-mark-wrap">${mark}${flags}</span>`;
+}
+
+// An Elements preview shows the organization, so it shows the organization's
+// logo or nothing. A lab without a mark is left out of the preview entirely
+// (ADR 049), which is why this has no monogram arm and returns "".
+function labMark(lab) {
+  const icon = state.logos.icons[state.logos.records[lab.id]];
+  if (!icon) return "";
+  return `<span class="card-mark" data-mark="${escapeHTML(lab.id)}" aria-hidden="true"><svg viewBox="0 0 24 24">${icon.body}</svg></span>`;
 }
 
 // The icon bodies are the largest file the page loads and nothing about the
 // page depends on them: a card without one already renders its monogram. So
 // they arrive after the first paint, and every mark on screen is filled in
 // once they do. Cards rendered later pick their icon up through cardMark.
+// Elements previews wait for the same file, because whether a lab has a logo
+// decides whether it is previewed at all.
 function loadMarks() {
   return loadJSON("logos.json")
-    .then(logos => { state.logos = logos; paintMarks(); })
+    .then(logos => { state.logos = logos; state.logosLoaded = true; paintElementMarks(); paintMarks(); })
     .catch(() => {});
 }
 
@@ -171,6 +226,7 @@ const roleName = id => taxonomyName("primary_roles", id);
 const relationName = id => taxonomyName("agent_relations", id);
 const architectureName = id => taxonomyName("architectures", id);
 const sourceModelName = id => taxonomyName("source_models", id);
+const modelLicenseName = id => state.taxonomy.source_models.find(item => item.id === id)?.model_name || id;
 const licenseName = id => taxonomyName("licenses", id);
 const scoreProfileName = id => taxonomyName("score_profiles", id);
 const traitNames = (group, values = []) => values.map(id => taxonomyName(group, id)).join(" · ");
@@ -235,7 +291,11 @@ let settledSearch = null;
 function writeDirectoryURL() {
   const url = new URL(window.location.href);
   if (state.directoryStage === "door") url.searchParams.delete("collection");
-  else url.searchParams.set("collection", state.directoryCollection);
+  else {
+    url.searchParams.set("collection", state.directoryCollection);
+    url.searchParams.delete("element");
+    url.searchParams.delete("elementRecord");
+  }
   if (state.comparison.ids.length && state.directoryStage !== "door") {
     url.searchParams.set("compare", `${state.comparison.kind}:${state.comparison.ids.join(",")}`);
   } else {
@@ -247,15 +307,15 @@ function writeDirectoryURL() {
 // Each scope's URL parameters and the control that holds each one. Keys are
 // AppCore.SCOPE_URL_PARAMS keys; selectors are web/index.html's.
 const SCOPE_CONTROLS = {
-  all: { q: "#all-directory-search" },
-  systems: { q: "#project-search", family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter", deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", capability: "#capability-filter", sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter", sort: "#sort-filter" },
-  inference: { q: "#inference-search", type: "#inference-type-filter", delivery: "#inference-delivery-filter", modelSource: "#inference-model-source-filter", apiStyle: "#inference-api-filter", sort: "#inference-sort-filter" },
-  runtimes: { q: "#runtime-search", type: "#runtime-type-filter", accelerator: "#runtime-accelerator-filter", modelFormat: "#runtime-format-filter", apiStyle: "#runtime-api-filter", sort: "#runtime-sort-filter" },
-  packs: { q: "#pack-search", type: "#pack-type-filter", host: "#pack-host-filter", install: "#pack-install-filter", license: "#pack-license-filter" },
-  robots: { q: "#robot-search", formFactor: "#robot-form-factor-filter", aiBasis: "#robot-ai-basis-filter", availability: "#robot-availability-filter", status: "#robot-status-filter" },
-  models: { q: "#model-search", type: "#model-type-filter", distribution: "#model-distribution-filter", modality: "#model-modality-filter", sourceModel: "#model-source-filter", license: "#model-license-filter", lab: "#model-lab-filter", sort: "#model-sort-filter" },
-  labs: { q: "#lab-search", type: "#lab-type-filter", headquarters: "#lab-country-filter", distribution: "#lab-distribution-filter" },
-  specifications: { q: "#specification-search", type: "#specification-type-filter", scope: "#specification-scope-filter", status: "#specification-status-filter", license: "#specification-license-filter" },
+  all: { q: "#results-search" },
+  systems: { q: "#results-search", family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter", deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", capability: "#capability-filter", retrieval: "#retrieval-filter", sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter", sort: "#sort-filter" },
+  inference: { q: "#results-search", type: "#inference-type-filter", delivery: "#inference-delivery-filter", modelSource: "#inference-model-source-filter", apiStyle: "#inference-api-filter", sort: "#inference-sort-filter" },
+  runtimes: { q: "#results-search", type: "#runtime-type-filter", accelerator: "#runtime-accelerator-filter", modelFormat: "#runtime-format-filter", apiStyle: "#runtime-api-filter", sort: "#runtime-sort-filter" },
+  packs: { q: "#results-search", type: "#pack-type-filter", host: "#pack-host-filter", install: "#pack-install-filter", license: "#pack-license-filter" },
+  robots: { q: "#results-search", formFactor: "#robot-form-factor-filter", aiBasis: "#robot-ai-basis-filter", availability: "#robot-availability-filter", status: "#robot-status-filter" },
+  models: { q: "#results-search", type: "#model-type-filter", distribution: "#model-distribution-filter", modality: "#model-modality-filter", sourceModel: "#model-source-filter", license: "#model-license-filter", lab: "#model-lab-filter", sort: "#model-sort-filter" },
+  labs: { q: "#results-search", type: "#lab-type-filter", headquarters: "#lab-country-filter", distribution: "#lab-distribution-filter" },
+  specifications: { q: "#results-search", type: "#specification-type-filter", scope: "#specification-scope-filter", status: "#specification-status-filter", license: "#specification-license-filter" },
 };
 
 // The scope whose state the URL carries: the Directory's collection while
@@ -274,12 +334,14 @@ function readScopeControls(scope) {
 }
 
 function allowedScopeValues(scope) {
-  return Object.fromEntries(Object.entries(SCOPE_CONTROLS[scope] || {}).map(([key, selector]) => {
+  const allowed = Object.fromEntries(Object.entries(SCOPE_CONTROLS[scope] || {}).map(([key, selector]) => {
     const control = $(selector);
     if (control.type === "checkbox") return [key, new Set(["1"])];
     if (control.tagName === "SELECT") return [key, new Set([...control.options].filter(option => !option.disabled).map(option => option.value))];
     return [key, "text"];
   }));
+  if (MATCH_SORTS[scope]) allowed.browseSort = new Set([...$(MATCH_SORTS[scope]).options].filter(option => !option.disabled && option.value !== "match").map(option => option.value));
+  return allowed;
 }
 
 // Rewrites the active scope's parameters in place: only `record` and
@@ -292,7 +354,9 @@ function writeScopeURL() {
   AppCore.SCOPE_URL_KEYS.forEach(key => url.searchParams.delete(key));
   const scope = activeScope();
   if (scope) {
-    for (const [key, value] of AppCore.scopeURLParams(scope, readScopeControls(scope))) url.searchParams.set(key, value);
+    const values = readScopeControls(scope);
+    if (MATCH_SORTS[scope] && !sortChosenDuringQuery[scope] && sortBeforeQuery[scope]) values.browseSort = sortBeforeQuery[scope];
+    for (const [key, value] of AppCore.scopeURLParams(scope, values)) url.searchParams.set(key, value);
     if (state.page[scope] > 1) url.searchParams.set("page", String(state.page[scope]));
   }
   // Every render and keystroke lands here, so this is the writer that spends
@@ -302,10 +366,11 @@ function writeScopeURL() {
 
 // Scopes whose Sort control has "Best match": a query selects it unless the
 // reader picked a sort since typing, and clearing the query gives back the
-// sort from before (spec, Phase 1 "Order"). syncMatchSort runs wherever a
-// scope's query changes: typing, a carried query, a Clear control, and the
-// Finder's handoff. So a sort chosen for one query never outlives it. Best
-// match orders a query's matches, so it is offered only beside a query.
+// sort from before (spec, Phase 1 "Order"). syncMatchSort runs wherever the
+// query or the collection changes: typing, a Clear control, a handoff that
+// clears the query, a collection switch, and a restore. So a sort chosen for
+// one query never outlives it. Best match orders a query's matches, so it is
+// offered only beside a query.
 const MATCH_SORTS = { systems: "#sort-filter", inference: "#inference-sort-filter", runtimes: "#runtime-sort-filter", models: "#model-sort-filter" };
 const sortBeforeQuery = {};
 const sortChosenDuringQuery = {};
@@ -317,8 +382,8 @@ function syncMatchSort(scope) {
   const hasQuery = Boolean($(SCOPE_CONTROLS[scope].q).value.trim());
   select.querySelector('option[value="match"]').disabled = !hasQuery;
   if (hasQuery && !sortChosenDuringQuery[scope] && select.value !== "match") {
-    // A carried query can replace one the box still holds, so the sort from
-    // before the first query is the one clearing gives back.
+    // A restored browseSort may already hold the sort from before the query;
+    // keep it, because it is the one clearing gives back.
     sortBeforeQuery[scope] ??= select.value;
     select.value = "match";
   } else if (!hasQuery) {
@@ -327,6 +392,106 @@ function syncMatchSort(scope) {
     sortChosenDuringQuery[scope] = false;
     if (scope === "systems") updateScoreSortAvailability();
   }
+}
+
+// The one query every collection reads (Phase 3 spec, section 1).
+const currentQuery = () => $("#results-search").value;
+
+// Whether a query searches at all: a query of stop words alone ("the", "me")
+// holds no search word, so every filter lists what browsing lists, and the
+// strip and an empty result treat it as browsing too.
+const isSearching = (term = currentQuery()) => AppCore.parseSearchQuery(term).tokens.length > 0;
+
+function syncMatchSorts() {
+  Object.keys(MATCH_SORTS).forEach(syncMatchSort);
+}
+
+// Every collection back to its first page: a page kept from one list
+// belongs to no other, after a new query or a new page size.
+function resetPages() {
+  Object.keys(state.page).forEach(key => { state.page[key] = 1; });
+}
+
+// What a change to the one query resets: every collection's page, and each
+// sort as syncMatchSort decides (docs/WEB.md, Phase 3 spec section 1).
+function resetForQuery() {
+  resetPages();
+  syncMatchSorts();
+}
+
+// Empties the one query, as the Finder's handoffs, Clear filters, "Browse
+// all in Models", and the front door do.
+function clearQuery() {
+  $("#results-search").value = "";
+  resetForQuery();
+}
+
+// One Clear control per collection, one behaviour: the collection's own
+// controls return to their defaults, and the query, which every collection
+// shares, clears everywhere (front-door spec, Phase 1).
+function resetCollection(scope) {
+  if (scope === "systems") applyDirectoryDefaults();
+  else {
+    for (const [key, selector] of Object.entries(SCOPE_CONTROLS[scope])) {
+      if (key !== "q") $(selector).value = AppCore.SCOPE_URL_PARAMS[scope][key] ?? "";
+    }
+  }
+  clearQuery();
+  RESULT_VIEWS[scope].render();
+  // Systems' defaults can change the family, which the strip's second row
+  // shows, so it rebuilds; elsewhere only the counts move.
+  if (scope === "systems") renderScopeStrip();
+  else syncScopeStrip();
+}
+
+// Every search index, loaded once a query is present: the strip counts the
+// query in every collection (CATALOG_INDEXES).
+function loadCatalogIndexes() {
+  for (const name of CATALOG_INDEXES) fetchSearchIndex(name);
+}
+
+// Typing repaints once the reader pauses (CR-21): the results, the strip's
+// counts, and the URL follow 150 ms after the last keystroke, while the
+// sort, a control's state rather than a paint, follows at once. The results
+// region says it is busy meanwhile.
+const RESULTS_PAUSE_MS = 150;
+let resultsTimer = null;
+function scheduleResults() {
+  clearTimeout(resultsTimer);
+  $(RESULT_VIEWS[state.directoryCollection].panel).setAttribute("aria-busy", "true");
+  resultsTimer = setTimeout(flushResults, RESULTS_PAUSE_MS);
+}
+
+function flushResults() {
+  clearTimeout(resultsTimer);
+  resultsTimer = null;
+  $$(".collection-panel[aria-busy]").forEach(panel => panel.removeAttribute("aria-busy"));
+  if (!activeScope()) return;
+  RESULT_VIEWS[state.directoryCollection].render();
+  syncScopeStrip();
+}
+
+// A change to the query's text starts every collection on its first page.
+// Typing on continues the same query, so a sort chosen during it stays.
+function onQueryInput() {
+  resetForQuery();
+  if (isSearching()) loadCatalogIndexes();
+  scheduleResults();
+}
+
+// The one match pass per query and index state, shared by the strip's
+// counts and the empty result's pointers.
+let matchCache = { key: null, matched: new Set() };
+function currentMatches(term = currentQuery()) {
+  const key = `${term}\u0000${CATALOG_INDEXES.filter(name => searchIndexes[name]).join(",")}`;
+  if (matchCache.key !== key) matchCache = { key, matched: AppCore.queryMatches(term, collectionPayloads(), searchIndexes, { labelOf: searchLabel }) };
+  return matchCache.matched;
+}
+
+// The bar speaks for the collection on screen: its search hint and its Sort.
+function syncResultsBar(scope) {
+  $("#results-search").placeholder = RESULT_VIEWS[scope].placeholder;
+  $$("#results-bar [data-sort-scope]").forEach(label => { label.hidden = label.dataset.sortScope !== scope; });
 }
 
 // "12 results" beside a search box while it holds a query.
@@ -359,6 +524,12 @@ function restoreScopeFromURL(scope) {
   for (const [key, value] of Object.entries(values)) {
     if (key === "page") {
       state.page[scope] = value;
+      continue;
+    }
+    // The sort clearing the query returns to; syncMatchSort keeps it
+    // (`sortBeforeQuery[scope] ??= …`).
+    if (key === "browseSort") {
+      sortBeforeQuery[scope] = value;
       continue;
     }
     const control = $(SCOPE_CONTROLS[scope][key]);
@@ -425,8 +596,8 @@ function renderComparisonControls() {
   const tray = $("#comparison-tray");
   if (!tray) return;
   tray.hidden = records.length === 0 || !COMPARISON_VIEWS.includes($(".view.is-active")?.id);
-  // The strip's dots follow the comparison; its render keeps a reader's focus.
-  if (state.directoryStage === "results") renderScopeStrip();
+  // The strip's dots follow the comparison, updated in place.
+  if (state.directoryStage === "results") syncScopeStrip();
   syncBadgeLegend();
   $("#comparison-tray-title").textContent = records.length === 1 ? "1 item selected" : `${records.length} items selected`;
   $("#comparison-tray-items").textContent = records.map(item => item.name).join(" · ");
@@ -499,6 +670,8 @@ function populateFilters() {
   state.taxonomy.agent_interfaces.filter(item => publishedInterfaces.has(item.id)).forEach(item => $("#agent-interface-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   const publishedCapabilities = new Set(state.projects.flatMap(project => project.agent_capabilities || []));
   state.taxonomy.agent_capabilities.filter(item => publishedCapabilities.has(item.id)).forEach(item => $("#capability-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
+  const publishedRetrievalModes = new Set(state.projects.flatMap(project => project.retrieval_modes || []));
+  state.taxonomy.retrieval_modes.filter(item => publishedRetrievalModes.has(item.id)).forEach(item => $("#retrieval-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   const publishedSourceModels = new Set(state.projects.map(project => project.source_model));
   state.taxonomy.source_models.filter(item => publishedSourceModels.has(item.id)).forEach(item => $("#source-model-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
   const publishedLicenses = new Set(state.projects.flatMap(project => project.licenses));
@@ -603,7 +776,7 @@ function populateCollectionFilters() {
       const published = new Set(records.flatMap(values));
       state.taxonomy[group]
         .filter(item => published.has(item.id))
-        .forEach(item => $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(item.name)}</option>`));
+        .forEach(item => $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(item.id)}">${escapeHTML(selector === "#model-source-filter" ? item.model_name : item.name)}</option>`));
     }
     if (!collection.licenseFilter) continue;
     const licenses = new Set(records.flatMap(item => item.licenses || []));
@@ -629,6 +802,7 @@ function updateAdvancedFilterSummary() {
     $("#deployment-filter").value,
     $("#agent-interface-filter").value,
     $("#capability-filter").value,
+    $("#retrieval-filter").value,
     $("#status-filter").value !== "active" ? $("#status-filter").value || "all" : "",
     $("#local-filter").value,
   ].filter(Boolean).length;
@@ -640,7 +814,6 @@ function applyDirectoryDefaults() {
   const defaults = AppCore.directoryDefaults();
   state.directoryRoles = null;
   state.directoryRolesLabel = null;
-  $("#project-search").value = defaults.term;
   $("#family-filter").value = defaults.family;
   $("#role-filter").value = defaults.role;
   populateRoleFilter();
@@ -651,6 +824,7 @@ function applyDirectoryDefaults() {
   $("#deployment-filter").value = defaults.deployment;
   $("#agent-interface-filter").value = defaults.agentInterface;
   $("#capability-filter").value = defaults.capability;
+  $("#retrieval-filter").value = defaults.retrieval;
   $("#status-filter").value = defaults.status;
   $("#sort-filter").value = defaults.sort;
   $("#local-filter").value = defaults.localOnly ? "1" : "";
@@ -660,6 +834,7 @@ function applyDirectoryDefaults() {
 
 function renderStats() {
   const { count } = AppCore.collectionCount("all", collectionPayloads());
+  $("#directory-count").textContent = count.toLocaleString("en-US");
   $("#hero-kicker").textContent = `${count} systems, source models, services, runtimes, packs, and robots`;
 }
 
@@ -697,7 +872,8 @@ function tileMarks(id) {
     .map(recordId => AppCore.collectionEntries(id, collectionPayloads()).find(record => record.id === recordId))
     .filter(Boolean);
   if (!records.length) return "";
-  return `<span class="tile-marks" aria-hidden="true">${records.map(cardMark).join("")}</span>`;
+  const markKind = id === "models" ? "model" : null;
+  return `<span class="tile-marks" aria-hidden="true">${records.map(record => cardMark(record, markKind)).join("")}</span>`;
 }
 
 // The index: one tile per registry entry, hidden while its collection is
@@ -708,7 +884,7 @@ function renderCollectionIndex() {
   const payloads = collectionPayloads();
   $("#collection-index").innerHTML = AppCore.COLLECTIONS.map(entry => {
     const { count, note } = AppCore.collectionCount(entry.id, payloads);
-    if (count === 0 && entry.id !== "all") return "";
+    if (AppCore.collectionHidden(entry.id, payloads)) return "";
     const categories = AppCore.collectionCategories(entry.id, payloads);
     const categoryList = categories.length
       ? `<ul class="tile-categories" role="list">${categories.map(category => `<li><button type="button" class="tile-category" data-open-collection="${escapeHTML(entry.id)}" data-facet-key="${escapeHTML(category.key)}" data-facet-value="${escapeHTML(category.value)}">${escapeHTML(category.label)} <strong>${category.count}</strong></button></li>`).join("")}</ul>`
@@ -720,9 +896,198 @@ function renderCollectionIndex() {
   }).join("");
 }
 
+// Elements uses the boot records for navigation; only a selected record loads
+// detail. Repaints touch sheet content, never its focused select or role tiles.
+let elementGroups = [];
+let selectedElement = null;
+let selectedElementRecord = null;
+let elementRequest = 0;
+// Phones show one family at a time. Agents leads the tabs and is the family
+// shown until a restored role reveals its own.
+const MOBILE_ELEMENT_FAMILIES = ["agent_system", "memory_system", "assistant_system"];
+let mobileElementFamily = MOBILE_ELEMENT_FAMILIES[0];
+const mobileLayout = window.matchMedia("(max-width: 767px)");
+
+// A role tile previews the organizations that build its systems, so every mark
+// on it is a company logo. A lab with no mark contributes nothing rather than a
+// monogram placeholder, and a role whose systems no lab owns previews nothing at
+// all. Marks arrive after first paint, so the strip renders empty and
+// paintElementMarks fills it; the three slots and the remainder count are
+// decided there, over the labs that actually have a mark.
+function elementMarks(role) {
+  return `<span class="element-marks" data-element-marks="${escapeHTML(role.id)}" aria-hidden="true"></span>`;
+}
+
+function paintElementMarks(root = document) {
+  // Whether a lab has a mark decides whether it is previewed, so an unloaded
+  // mark map previews nothing and would empty every strip rather than fill it.
+  if (!state.logosLoaded) return;
+  const marks = state.logos.records;
+  const marked = new Set(Object.keys(marks).filter(id => marks[id]));
+  $$("[data-element-marks]", root).forEach(strip => {
+    const role = elementGroups.flatMap(group => group.roles).find(item => item.id === strip.dataset.elementMarks);
+    if (!role) return;
+    const labs = AppCore.elementLabs(role.records, state.labIndex, marked);
+    if (!labs.length) {
+      strip.remove();
+      return;
+    }
+    const remaining = limit => labs.length > limit ? `+${labs.length - limit}` : "";
+    strip.title = `Organizations in this role: ${labs.map(lab => lab.name).join(", ")}`;
+    strip.innerHTML = `${labs.slice(0, 3).map(labMark).join("")}<span class="element-more-desktop">${remaining(3)}</span><span class="element-more-mobile">${remaining(2)}</span>`;
+    paintMarks(strip);
+  });
+}
+
+function renderElements() {
+  elementGroups = AppCore.systemElements(state.projects, state.taxonomy);
+  $("#elements-count").textContent = `${elementGroups.reduce((sum, group) => sum + group.count, 0)} active systems · ${elementGroups.reduce((sum, group) => sum + group.roles.length, 0)} operational roles`;
+  const tabGroups = MOBILE_ELEMENT_FAMILIES
+    .map(id => elementGroups.find(group => group.id === id))
+    .filter(Boolean)
+    .concat(elementGroups.filter(group => !MOBILE_ELEMENT_FAMILIES.includes(group.id)));
+  $("#element-family-tabs").innerHTML = tabGroups.map(group => `<button type="button" data-element-family-tab="${escapeHTML(group.id)}" aria-pressed="false" aria-controls="element-group-${escapeHTML(group.id)}">${escapeHTML(AppCore.FAMILY_SHORT_NAMES[group.id] || group.name)}</button>`).join("");
+  $("#element-groups").innerHTML = elementGroups.map(group => `<section class="element-group" id="element-group-${escapeHTML(group.id)}" data-element-family="${escapeHTML(group.id)}" aria-labelledby="element-family-${escapeHTML(group.id)}">
+    <div class="element-family-heading"><h3 id="element-family-${escapeHTML(group.id)}">${escapeHTML(group.name)}</h3><span>${group.count} active</span></div>
+    <div class="element-tiles">${group.roles.map(role => `<button type="button" class="element-tile" data-element="${escapeHTML(role.id)}" aria-pressed="false" aria-controls="element-sheet"${role.records.length ? "" : " disabled"} aria-label="${escapeHTML(role.name)}, ${role.records.length} active systems. Show reference sheet"><span class="element-count">${role.records.length}</span><span class="element-symbol" aria-hidden="true">${escapeHTML(role.symbol)}</span><span class="element-name">${escapeHTML(role.name)}</span>${elementMarks(role)}</button>`).join("")}</div></section>`).join("");
+  syncElementFamilies();
+  // A repaint after the marks have loaded previews straight away; the first
+  // paint waits for loadMarks.
+  paintElementMarks();
+}
+
+function syncElementFamilies() {
+  $$("[data-element-family-tab]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.elementFamilyTab === mobileElementFamily)));
+  $$("[data-element-family]").forEach(group => group.classList.toggle("mobile-family-active", group.dataset.elementFamily === mobileElementFamily));
+}
+
+function positionElementSheet() {
+  const sheet = $("#element-sheet");
+  const family = selectedElement && document.querySelector(`[data-element-family="${selectedElement.family}"]`);
+  if (family && mobileLayout.matches) family.after(sheet);
+  else $("#element-groups").after(sheet);
+}
+
+function writeElementURL() {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("element");
+  url.searchParams.delete("elementRecord");
+  if (selectedElement) {
+    url.searchParams.set("element", selectedElement.id);
+    url.searchParams.set("elementRecord", selectedElementRecord.id);
+  }
+  writeURL(url);
+}
+
+function selectElement(id, recordId = "", { focus = false } = {}) {
+  selectedElement = elementGroups.flatMap(group => group.roles).find(role => role.id === id && role.records.length) || null;
+  selectedElementRecord = selectedElement?.records.find(record => record.id === recordId) || selectedElement?.records[0] || null;
+  elementRequest += 1;
+  $$("[data-element]").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.element === selectedElement?.id)));
+  $("#element-sheet").hidden = !selectedElement;
+  if (selectedElement) mobileElementFamily = selectedElement.family;
+  syncElementFamilies();
+  positionElementSheet();
+  if (selectedElement) {
+    $("#element-sheet-title").textContent = selectedElement.name;
+    $("#element-role-description").textContent = selectedElement.definition || "";
+    $("#element-record").innerHTML = selectedElement.records.map(record => `<option value="${escapeHTML(record.id)}">${escapeHTML(record.name)}</option>`).join("");
+    $("#element-record").value = selectedElementRecord.id;
+    loadElementRecord();
+    if (focus) $("#element-sheet-title").focus();
+  }
+  writeElementURL();
+}
+
+function renderElementRecord() {
+  const record = selectedElementRecord;
+  const ready = loadedDetail.has(`system:${record.id}`);
+  const pending = ready ? "Not recorded" : "Review details not loaded";
+  $("#element-record-name").innerHTML = `${cardMark(record)}<span>${escapeHTML(record.name)}</span>`;
+  $("#element-record-description").textContent = record.description;
+  const rows = [
+    ["Operational role", selectedElement.name],
+    ["System family", taxonomyName("system_families", record.system_family)],
+    ["Deployment", record.deployment.map(value => taxonomyName("deployment_modes", value)).join(" · ")],
+    ["License classification", sourceModelName(record.source_model)],
+    ["Material licenses", record.licenses.join(" · ")],
+    ["Local-first", record.local_first === true ? "Yes" : record.local_first === false ? "No" : "Not recorded"],
+    ["Canonical data", ready ? record.canonical_data || "Not recorded" : pending],
+    ["Editorial review date", ready ? record.verified_at || "Not recorded" : pending],
+    ["Recorded limitations", ready ? (record.weaknesses || []).join(" · ") || "None recorded" : pending],
+  ];
+  $("#element-properties").innerHTML = rows.map(([name, value]) => `<tr><th scope="row">${escapeHTML(name)}</th><td>${escapeHTML(value)}</td></tr>`).join("");
+  const params = new URLSearchParams({ collection: "systems", family: selectedElement.family, role: selectedElement.id, sort: "name" });
+  $("#element-browse").href = `?${params}`;
+  $("#element-browse").textContent = `Browse all ${selectedElement.records.length} matching systems →`;
+  params.set("record", `system:${record.id}`);
+  $("#element-detail").href = `?${params}`;
+}
+
+async function loadElementRecord() {
+  const request = ++elementRequest;
+  const record = selectedElementRecord;
+  renderElementRecord();
+  $("#element-retry").hidden = true;
+  $("#element-load-status").textContent = "Loading reviewed details…";
+  await loadDetail("system", record);
+  if (request !== elementRequest) return;
+  renderElementRecord();
+  const ready = loadedDetail.has(`system:${record.id}`);
+  $("#element-load-status").textContent = ready ? `Review details loaded for ${record.name}.` : "Review details could not load. Basic catalog properties remain available.";
+  $("#element-retry").hidden = ready;
+}
+
 // The front door's Finder jobs: the first goal of each direction, opened at
 // the Finder's priority question with that direction and goal answered
 // (openFinderAt, which the job hint under a search already uses).
+function stageDate(kind, record) {
+  return kind === "model" ? AppCore.releaseDate(record) : state.systemReviewDates[record.id];
+}
+
+function stageMeta(kind, record) {
+  return kind === "model" ? record.developer || "" : roleName(record.primary_role);
+}
+
+function stageRecords(kind) {
+  if (kind === "model") return AppCore.newestDated(state.models.filter(model => model.review_status !== "imported"), AppCore.releaseDate);
+  return AppCore.newestDated(state.projects.filter(project => state.systemReviewDates[project.id]), project => state.systemReviewDates[project.id]);
+}
+
+function renderStageFace(kind, records) {
+  const root = $(`#stage-${kind}`);
+  const featured = records[0];
+  if (!featured) {
+    root.replaceChildren();
+    return;
+  }
+  const date = record => stageDate(kind, record);
+  const row = record => `<li><button type="button" data-stage-record="${kind}" data-stage-id="${escapeHTML(record.id)}"><span class="stage-list-name">${escapeHTML(record.name)}</span><span class="stage-list-meta">${escapeHTML(stageMeta(kind, record))}</span><time datetime="${escapeHTML(date(record))}">${escapeHTML(date(record))}</time></button></li>`;
+  const when = kind === "model" ? `released ${date(featured)}` : `reviewed ${date(featured)}`;
+  const where = kind === "model" ? featured.developer || "" : `${familyName(featured.system_family)} · ${roleName(featured.primary_role)}`;
+  const rest = records.slice(1);
+  root.innerHTML = `<article class="stage-feature${kind === "system" ? " is-system" : ""}">${cardMark(featured, kind)}<div>
+      <p class="eyebrow">Latest reviewed ${kind}</p>
+      <h2 class="stage-name">${escapeHTML(featured.name)}</h2>
+      <p class="stage-meta">${escapeHTML(`${where} · ${when}`)}</p>
+      <p class="stage-description">${escapeHTML(featured.description || "")}</p>
+      <p><button type="button" class="link-button" data-stage-record="${kind}" data-stage-id="${escapeHTML(featured.id)}">Open this ${kind}</button></p>
+    </div></article>${rest.length ? `<p class="stage-list-label">More ${kind}s, newest first</p><ol class="stage-list">${rest.map(row).join("")}</ol>` : ""}`;
+}
+
+function renderStage() {
+  for (const kind of ["model", "system"]) renderStageFace(kind, stageRecords(kind));
+}
+
+function showStage(face) {
+  $$("[data-stage-face]").forEach(button => {
+    const selected = button.dataset.stageFace === face;
+    button.classList.toggle("is-active", selected);
+    button.setAttribute("aria-selected", String(selected));
+  });
+  $$("[data-stage-panel]").forEach(panel => { panel.hidden = panel.dataset.stagePanel !== face; });
+}
+
 function renderDoorJobs() {
   $("#door-jobs").innerHTML = AppCore.FINDER_DIRECTIONS.map(direction => {
     const goal = AppCore.FINDER_GOALS[direction.id][0];
@@ -743,28 +1108,26 @@ function leaveFrontDoor() {
   return true;
 }
 
-// The front door is a clean start: the query of the collection last shown
-// is cleared, so no tile opens with a search the door's empty box never showed.
+// The front door is a clean start: the query is cleared, so no tile opens
+// with a search the door's empty box never showed.
 function showFrontDoor({ updateURL = true } = {}) {
   state.directoryStage = "door";
-  const collection = state.directoryCollection;
-  const query = $(SCOPE_CONTROLS[collection].q);
-  if (query.value) {
-    query.value = "";
-    state.page[collection] = 1;
-    syncMatchSort(collection);
-  }
+  if (currentQuery()) clearQuery();
   $$(".collection-panel").forEach(panel => { panel.hidden = true; });
   $("#scope-strip").hidden = true;
+  $("#results-bar").hidden = true;
+  $("#directory").classList.remove("is-results");
   $("#front-door").hidden = false;
   $("#hero-kicker").hidden = false;
   $("#directory-title").classList.remove("visually-hidden");
   syncStickyClearance();
+  syncMobileNavigation();
   renderCollectionIndex();
   syncBadgeLegend();
   if (updateURL) {
     writeDirectoryURL();
     writeScopeURL();
+    writeElementURL();
   }
 }
 
@@ -776,6 +1139,9 @@ function showResults() {
   $("#hero-kicker").hidden = true;
   $("#directory-title").classList.add("visually-hidden");
   $("#scope-strip").hidden = false;
+  $("#results-bar").hidden = false;
+  $("#directory").classList.add("is-results");
+  syncMobileNavigation();
 }
 
 // The results strip: one entry per registry entry, the collection pressed.
@@ -783,62 +1149,96 @@ function showResults() {
 // one's name and count read as a caption under the row (styles.css), so nine
 // entries fit a 320 px phone with slack and nothing scrolls sideways. Up to
 // 1407 px each shows its short name, so the row stays one row. Inside Systems
-// a second row lists the families, one pressed.
+// a second row lists the families, one pressed. It is rebuilt only when the
+// collection or the family changes; counts and dots update in place
+// (syncScopeStrip), so a click that lands during a repaint is never lost.
 const FAMILY_ORDER = ["memory_system", "agent_system", "assistant_system"];
 function renderScopeStrip() {
   const strip = $("#scope-strip");
-  // Every grid repaint lands here, so a reader's focus on an entry is put
-  // back on the rebuilt one rather than dropped to the page.
   const focused = strip.contains(document.activeElement) ? document.activeElement : null;
   const focusKey = focused?.dataset.openCollection !== undefined
     ? `[data-open-collection="${focused.dataset.openCollection}"]`
     : focused?.dataset.familyEntry !== undefined ? `[data-family-entry="${focused.dataset.familyEntry}"]` : null;
   const payloads = collectionPayloads();
-  let caption = "";
   const entries = AppCore.COLLECTIONS.map(entry => {
-    const { count } = AppCore.collectionCount(entry.id, payloads);
-    if (count === 0 && entry.id !== "all") return "";
+    if (AppCore.collectionHidden(entry.id, payloads)) return "";
     const pressed = entry.id === state.directoryCollection;
-    if (pressed) caption = `${entry.name} · ${count}`;
     // Keep an initial as a fallback for any future collection without a glyph.
     const emblem = collectionEmblem(entry) || `<span class="scope-monogram" aria-hidden="true">${escapeHTML(AppCore.monogramGlyph(entry.name))}</span>`;
-    return `<button type="button" class="scope-entry${pressed ? " is-active" : ""}" data-open-collection="${escapeHTML(entry.id)}" aria-pressed="${pressed}" title="${escapeHTML(entry.name)}">${emblem}<span class="scope-name">${escapeHTML(entry.name)}</span><span class="scope-short" aria-hidden="true">${escapeHTML(entry.short)}</span><strong class="scope-count">${count}</strong>${stateDot(collectionStateFor(entry.id))}</button>`;
+    return `<button type="button" class="scope-entry${pressed ? " is-active" : ""}" data-open-collection="${escapeHTML(entry.id)}" aria-pressed="${pressed}" title="${escapeHTML(entry.name)}">${emblem}<span class="scope-name">${escapeHTML(entry.name)}</span><span class="scope-short" aria-hidden="true">${escapeHTML(entry.short)}</span><strong class="scope-count"></strong><span class="scope-count-label visually-hidden"></span></button>`;
   }).join("");
-  const familyRow = state.directoryCollection === "systems" ? renderFamilyRow(payloads) : "";
-  strip.innerHTML = `<div class="scope-row">${entries}</div><p class="scope-caption" aria-hidden="true">${escapeHTML(caption)}</p>${familyRow}`;
+  const familyRow = state.directoryCollection === "systems" ? renderFamilyRow() : "";
+  strip.innerHTML = `<div class="scope-row">${entries}</div><p class="scope-caption" aria-hidden="true"></p>${familyRow}`;
+  syncScopeStrip();
   if (focusKey) strip.querySelector(focusKey)?.focus({ preventScroll: true });
   syncStickyClearance();
 }
 
-function renderFamilyRow(payloads) {
+function renderFamilyRow() {
   const current = $("#family-filter").value;
-  const categories = AppCore.collectionCategories("systems", payloads);
-  const total = AppCore.collectionCount("systems", payloads).count;
-  const entry = (value, label, count) => `<button type="button" class="family-entry${value === current ? " is-active" : ""}" data-family-entry="${escapeHTML(value)}" aria-pressed="${value === current}">${label} <strong>${count}</strong></button>`;
-  const families = FAMILY_ORDER.map(id => entry(id, escapeHTML(AppCore.FAMILY_SHORT_NAMES[id]), (categories.find(category => category.value === id) || { count: 0 }).count));
+  const entry = (value, label) => `<button type="button" class="family-entry${value === current ? " is-active" : ""}" data-family-entry="${escapeHTML(value)}" aria-pressed="${value === current}">${label} <strong></strong></button>`;
+  const families = FAMILY_ORDER.map(id => entry(id, escapeHTML(AppCore.FAMILY_SHORT_NAMES[id])));
   // A phone shows "All" alone so the row stays one row (styles.css); the
   // clipped rest keeps "All families" the accessible name at every width.
-  return `<div class="family-row" role="group" aria-label="System families">${entry("", 'All<span class="family-rest"> families</span>', total)}${families.join("")}</div>`;
+  return `<div class="family-row" role="group" aria-label="System families">${entry("", 'All<span class="family-rest"> families</span>')}${families.join("")}</div>`;
+}
+
+// Fills the strip's counts, caption, and dots in place. While a query is
+// present each entry counts its matches in its default view and says so;
+// otherwise what that view lists (Phase 3 spec, section 2).
+function syncScopeStrip() {
+  const strip = $("#scope-strip");
+  if (strip.hidden || !strip.firstElementChild) return;
+  const payloads = collectionPayloads();
+  const searching = isSearching();
+  const matched = searching ? currentMatches() : null;
+  const counts = searching ? AppCore.collectionMatchCounts(matched, payloads) : null;
+  const matchWord = count => (count === 1 ? " match" : " matches");
+  for (const button of strip.querySelectorAll(".scope-entry")) {
+    const id = button.dataset.openCollection;
+    const count = searching ? counts[id] : AppCore.collectionCount(id, payloads).count;
+    button.querySelector(".scope-count").textContent = String(count);
+    button.querySelector(".scope-count-label").textContent = searching ? matchWord(count) : "";
+    // A dot is replaced only when it changes, so a click on it is not lost.
+    const dot = stateDot(collectionStateFor(id));
+    const current = button.querySelector(".state-dot");
+    if ((current?.outerHTML ?? "") !== dot) {
+      current?.remove();
+      button.insertAdjacentHTML("beforeend", dot);
+    }
+    if (id === state.directoryCollection) {
+      const name = AppCore.COLLECTIONS.find(entry => entry.id === id).name;
+      strip.querySelector(".scope-caption").textContent = `${name} · ${count}${searching ? matchWord(count) : ""}`;
+    }
+  }
+  const families = AppCore.familyMatchCounts(matched, payloads);
+  strip.querySelectorAll(".family-entry").forEach(button => {
+    button.querySelector("strong").textContent = String(families[button.dataset.familyEntry] ?? 0);
+  });
 }
 
 // The strip sticks under the header at every width, so the header's
-// live height is a custom property the stylesheet reads. The sticky height
-// is another, html's scroll-padding-top, so focus moving through a grid
-// stops below the header and the strip rather than under them. The strip's
-// height changes with the family row, so every strip render re-measures.
+// live height is a custom property the stylesheet reads; the strip's is
+// another, which the results bar sticks under above 1000 px. The sticky
+// height is a third, html's scroll-padding-top, so focus moving through a
+// grid stops below the header, the strip, and the bar rather than under
+// them. The strip's height changes with the family row, so every strip
+// render re-measures.
 function syncStickyClearance() {
   const header = $(".site-header");
   if (!header) return;
   document.documentElement.style.setProperty("--header-height", `${header.getBoundingClientRect().height}px`);
+  const strip = $("#scope-strip");
+  document.documentElement.style.setProperty("--strip-height", `${strip && !strip.hidden ? strip.getBoundingClientRect().height : 0}px`);
   document.documentElement.style.setProperty("--sticky-clearance", `${stickyHeight()}px`);
 }
 
 // The one way a tile or a strip entry opens a collection. A facet narrows
 // the collection to one category first; a family goes through
 // jumpToDirectoryFamily so the role and Finder set are cleared as ever.
-// setDirectoryCollection carries the query the reader leaves, so a query
-// only a lab or a specification answers follows the reader from the All
-// results into Labs or Specifications; the front door itself carries none.
+// Every collection reads the one query, so a query only a lab or a
+// specification answers follows the reader from the All results into Labs
+// or Specifications; the front door clears it on arrival.
 function openCollection(id, { facet = null } = {}) {
   const entry = AppCore.COLLECTIONS.find(item => item.id === id);
   if (!entry) return;
@@ -896,9 +1296,7 @@ function jumpToDirectoryFamily(family) {
 }
 
 function setDirectoryCollection(collection, { updateURL = true, carryQuery = updateURL } = {}) {
-  const selected = ["all", "systems", "inference", "runtimes", "packs", "robots", "models", "labs", "specifications"].includes(collection) ? collection : "all";
-  // Read before the scope changes: the query the reader is leaving.
-  const previousQuery = carryQuery ? $(SCOPE_CONTROLS[state.directoryCollection].q).value : null;
+  const selected = AppCore.COLLECTIONS.some(entry => entry.id === collection) ? collection : "all";
   const compatible = (selected === "systems" && state.comparison.kind === "system")
     || (selected === "inference" && state.comparison.kind === "inference")
     || (selected === "runtimes" && state.comparison.kind === "runtime")
@@ -907,86 +1305,50 @@ function setDirectoryCollection(collection, { updateURL = true, carryQuery = upd
   state.directoryCollection = selected;
   showResults();
   renderScopeStrip();
-  if (previousQuery !== null) {
-    const input = $(SCOPE_CONTROLS[selected].q);
-    // Changed text is a new query in this scope: it starts on the first page,
-    // and a sort the reader chose for the old text gives way to Best match.
-    if (input.value !== previousQuery) {
-      input.value = previousQuery;
-      state.page[selected] = 1;
-      sortChosenDuringQuery[selected] = false;
-    }
-    syncMatchSort(selected);
-    // A carried query searches what a typed one does: the indexes the box
-    // fetches on focus, with a repaint as each one lands.
-    if (previousQuery.trim()) SEARCH_SCOPES[SCOPE_CONTROLS[selected].q].forEach(name => loadSearchIndex(name)?.then(renderSearchSurfaces));
+  syncResultsBar(selected);
+  // One box holds the query for every collection, so nothing is carried:
+  // the new collection reads it, and its sort follows it.
+  syncMatchSort(selected);
+  if (carryQuery && isSearching()) loadCatalogIndexes();
+  for (const [name, view] of Object.entries(RESULT_VIEWS)) {
+    $(view.panel).hidden = name !== selected;
+    if (name !== selected) $(view.grid).innerHTML = "";
   }
-  $("#all-directory-panel").hidden = selected !== "all";
-  $("#systems-directory-panel").hidden = selected !== "systems";
-  $("#inference-directory-panel").hidden = selected !== "inference";
-  $("#runtimes-directory-panel").hidden = selected !== "runtimes";
-  $("#packs-directory-panel").hidden = selected !== "packs";
-  $("#robots-directory-panel").hidden = selected !== "robots";
-  $("#models-directory-panel").hidden = selected !== "models";
-  $("#labs-directory-panel").hidden = selected !== "labs";
-  $("#specifications-directory-panel").hidden = selected !== "specifications";
-  const renderers = {
-    all: renderAllDirectoryEntries,
-    systems: renderProjects,
-    inference: renderInferenceServices,
-    runtimes: renderLocalRuntimes,
-    packs: renderPacks,
-    robots: () => renderCollection("robots"),
-    models: renderModels,
-    labs: renderLabs,
-    specifications: renderSpecifications,
-  };
-  for (const [name, grid] of [
-    ["all", "#all-directory-grid"], ["systems", "#project-grid"],
-    ["inference", "#inference-grid"], ["runtimes", "#runtime-grid"], ["packs", "#pack-grid"],
-    ["robots", "#robot-grid"], ["models", "#model-grid"], ["labs", "#lab-grid"],
-    ["specifications", "#specification-grid"],
-  ]) {
-    if (name !== selected) $(grid).innerHTML = "";
-  }
-  renderers[selected]();
+  RESULT_VIEWS[selected].render();
   if (updateURL) writeDirectoryURL();
   syncBadgeLegend();
 }
 
-const PAGE_CONTAINERS = {
-  all: "#all-directory-pager",
-  systems: "#project-pager",
-  inference: "#inference-pager",
-  runtimes: "#runtime-pager",
-  models: "#model-pager",
-  specifications: "#specification-pager",
-  packs: "#pack-pager",
-  labs: "#lab-pager",
-  robots: "#robot-pager",
+// One entry per collection: where its results live, how it paints, its
+// Clear control, and its search box's hint. The collection switch, the
+// pager, the page size, and the Clear controls read this table instead of
+// lists of their own. renderCollection's table (COLLECTIONS below) still
+// names seven of these grids and result counts again, for Phase 3 task 4 to
+// fold into one (CR-20; RECORD_DIALOGS is the pattern).
+const RESULT_VIEWS = {
+  all: { panel: "#all-directory-panel", grid: "#all-directory-grid", pager: "#all-directory-pager", count: "#all-directory-result-count", clear: "#reset-all-directory", placeholder: "Search systems, models, services, runtimes, packs, and robots", render: () => renderAllDirectoryEntries() },
+  systems: { panel: "#systems-directory-panel", grid: "#project-grid", pager: "#project-pager", count: "#result-count", clear: "#reset-filters", placeholder: "Search all systems", render: () => renderCollection("systems") },
+  inference: { panel: "#inference-directory-panel", grid: "#inference-grid", pager: "#inference-pager", count: "#inference-result-count", clear: "#reset-inference-filters", placeholder: "Search services and boundaries", render: () => renderCollection("inference") },
+  runtimes: { panel: "#runtimes-directory-panel", grid: "#runtime-grid", pager: "#runtime-pager", count: "#runtime-result-count", clear: "#reset-runtime-filters", placeholder: "Search runtimes and boundaries", render: () => renderCollection("runtimes") },
+  packs: { panel: "#packs-directory-panel", grid: "#pack-grid", pager: "#pack-pager", count: "#pack-result-count", clear: "#reset-pack-filters", placeholder: "Search packs and stewards", render: () => renderPacks() },
+  robots: { panel: "#robots-directory-panel", grid: "#robot-grid", pager: "#robot-pager", count: "#robot-result-count", clear: "#reset-robot-filters", placeholder: "Search robots, makers, and named models", render: () => renderCollection("robots") },
+  models: { panel: "#models-directory-panel", grid: "#model-grid", pager: "#model-pager", count: "#model-result-count", clear: "#reset-model-filters", placeholder: "Search models, developers, and boundaries", render: () => renderCollection("models") },
+  labs: { panel: "#labs-directory-panel", grid: "#lab-grid", pager: "#lab-pager", count: "#lab-result-count", clear: "#reset-lab-filters", placeholder: "Search labs, units, and parent companies", render: () => renderCollection("labs") },
+  specifications: { panel: "#specifications-directory-panel", grid: "#specification-grid", pager: "#specification-pager", count: "#specification-result-count", clear: "#reset-specification-filters", placeholder: "Search specifications and purposes", render: () => renderCollection("specifications") },
 };
 
-function pageRenderer(key) {
-  return {
-    all: renderAllDirectoryEntries, systems: renderProjects, inference: renderInferenceServices,
-    runtimes: renderLocalRuntimes, models: renderModels, specifications: renderSpecifications,
-    packs: renderPacks, labs: renderLabs, robots: () => renderCollection("robots"),
-  }[key];
-}
+const pageRenderer = key => RESULT_VIEWS[key]?.render;
 
 function setPageSize(pageSize) {
   if (!PAGE_SIZE_OPTIONS.includes(pageSize) || pageSize === state.pageSize) return;
   state.pageSize = pageSize;
   writeStoredPageSize(pageSize);
-  Object.keys(state.page).forEach(key => { state.page[key] = 1; });
-  pageRenderer(state.directoryCollection)();
-  renderModels();
-  renderLabs();
-  renderSpecifications();
+  resetPages();
+  RESULT_VIEWS[state.directoryCollection].render();
 }
 
 function renderPager(key, { page, pageCount }) {
-  const container = $(PAGE_CONTAINERS[key]);
+  const container = $(RESULT_VIEWS[key]?.pager);
   if (!container) return;
   container.innerHTML = `
     <label class="pager-size"><span>Show</span>
@@ -1020,7 +1382,7 @@ function modelModalityRoute(model) {
 // controls and take no tab stop.
 function badgeRow(badges) {
   if (!badges.length) return "";
-  return `<ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul>`;
+  return `<div class="badge-group"><ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul><details class="badge-help"><summary>Badge meanings</summary><dl>${badges.map(badge => `<dt>${escapeHTML(badge.name)}</dt><dd>${escapeHTML(badge.definition)}</dd>`).join("")}</dl></details></div>`;
 }
 
 // The one control that opens a card's record. Its hidden text names the
@@ -1045,6 +1407,8 @@ const systemStatus = project => project.status === "active" ? "" : `<b class="ar
 // A footer reads its facts in order, a dot between each, skipping any absent.
 const footerFacts = (...facts) => facts.filter(Boolean).join(" · ");
 
+const evidenceReviewLabel = record => record.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : "";
+
 // One tooltip serves every emblem. It is pointer-only help: screen readers
 // already get the same words from each badge's hidden text, so the tooltip is
 // aria-hidden and emblems stay out of the tab order.
@@ -1058,6 +1422,7 @@ function initBadgeTooltip() {
   const hide = () => { tooltip.hidden = true; anchor = null; };
   hideDetachedBadgeTooltip = () => { if (anchor && !anchor.isConnected) hide(); };
   const show = badge => {
+    if (anchor === badge) return;
     anchor = badge;
     tooltip.dataset.family = badge.dataset.family;
     tooltip.querySelector(".badge-tooltip-family").textContent = AppCore.BADGE_FAMILIES[badge.dataset.family]?.name || "";
@@ -1077,6 +1442,15 @@ function initBadgeTooltip() {
   // hover lift slides its emblems under a resting pointer, and a repaint or a
   // clamped scroll does the same. Each hands an emblem a pointerover at the
   // same spot, which must not bring back what the reader dismissed.
+  const inHoverRegion = event => {
+    if (!anchor) return false;
+    const a = anchor.getBoundingClientRect();
+    const b = tooltip.getBoundingClientRect();
+    const inside = box => event.clientX >= box.left && event.clientX <= box.right && event.clientY >= box.top && event.clientY <= box.bottom;
+    // The narrow bridge joins the trigger to the nearest edge of the tooltip.
+    const bridge = { left: Math.min(a.left, b.left), right: Math.max(a.right, Math.min(b.right, a.right)), top: Math.min(a.bottom, b.bottom), bottom: Math.max(a.top, b.top) };
+    return inside(a) || inside(b) || inside(bridge);
+  };
   let pointer = null;
   let dismissedAt = null;
   const movedFrom = (spot, event) => Math.abs(event.clientX - spot.x) > 1 || Math.abs(event.clientY - spot.y) > 1;
@@ -1084,6 +1458,7 @@ function initBadgeTooltip() {
     if (event.pointerType === "touch") return;
     if (dismissedAt && movedFrom(dismissedAt, event)) dismissedAt = null;
     pointer = { x: event.clientX, y: event.clientY };
+    if (anchor && !inHoverRegion(event)) hide();
   }, { passive: true });
   document.addEventListener("pointerover", event => {
     if (event.pointerType === "touch") return;
@@ -1092,10 +1467,11 @@ function initBadgeTooltip() {
     pointer = { x: event.clientX, y: event.clientY };
     const badge = event.target.closest?.(".card-badge");
     if (badge) show(badge);
-    else if (anchor) hide();
+    else if (anchor && !inHoverRegion(event)) hide();
   });
   document.addEventListener("click", event => {
     dismissedAt = null;
+    if (tooltip.contains(event.target)) return;
     const badge = event.target.closest?.(".card-badge");
     if (badge && badge !== anchor) show(badge);
     else hide();
@@ -1190,6 +1566,7 @@ function labRelationsFor(lab) {
   return AppCore.labRelations(lab, {
     models: state.models, projects: state.projects, services: state.inferenceServices,
     runtimes: state.localRuntimes, specifications: state.specifications, packs: state.packs,
+    robots: state.robots,
   });
 }
 
@@ -1197,25 +1574,81 @@ const labDistributionOrder = () => state.taxonomy.model_distribution_modes.map(i
 
 // Every Atlas count on a lab card is a join over reviewed records; nothing on it
 // ranks the lab. The newest reviewed release date is a tracking signal only.
-function labCard(lab) {
+// One specification card serves the Specifications and All grids, which differ only
+// in the mark the family label carries.
+function specificationCard(specification, { mixed = false } = {}) {
+  const version = specification.current_version ? `Version ${escapeHTML(specification.current_version)}` : escapeHTML(taxonomyName("specification_statuses", specification.status));
+  return `<article class="project-card specification-card${mixed ? " mixed-directory-card" : ""}">
+      <div class="card-top"><div><p class="family-label">${mixed ? "Specification · " : ""}${escapeHTML(taxonomyName("specification_types", specification.specification_type))}</p><h2>${escapeHTML(specification.short_name)}</h2><div class="repo">${escapeHTML(specification.repo || new URL(specification.url).hostname)}</div></div><span class="status-badge">${version}</span></div>
+      <span class="role-badge">${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</span>
+      <div class="license-row">${specification.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+      <p>${escapeHTML(specification.description)}</p>
+      <div class="tags"><span>${escapeHTML(taxonomyName("specification_statuses", specification.status))}</span><span>${escapeHTML(specification.stewards[0])}</span></div>
+      ${badgeRow(AppCore.cardBadges("spec", specification))}
+      <div class="card-footer"><span>${footerFacts(starCount(specification), "No editorial score")}</span>${detailsButton("data-specification", specification.id, specification.name)}</div>
+    </article>`;
+}
+
+// How many of a lab's releases, and of its systems, its card names before
+// handing off to its dialog, which holds the full join.
+const LAB_CARD_RECORDS = 3;
+
+// The two joins a lab card lists inline, so a reader scanning results sees the
+// records behind the organization rather than a count and a date. A card shows
+// records, never a conclusion about the organization, so nothing here joins the
+// card's own terms together: each row is one record with its own (ADR 025).
+function labRelatedMarkup(lab, releases, systems) {
+  const groups = [
+    { label: "Reviewed releases", noun: "reviewed releases", attribute: "data-open-model", records: releases, dated: true },
+    { label: "Systems it builds", noun: "systems", attribute: "data-open-project", records: systems, dated: false },
+  ];
+  const blocks = groups.filter(group => group.records.length).map(({ label, noun, attribute, records, dated }) => {
+    const rows = records.slice(0, LAB_CARD_RECORDS).map(record => {
+      const date = dated ? AppCore.releaseDate(record) : "";
+      return `<li><button type="button" class="link-button" ${attribute}="${escapeHTML(record.id)}">${escapeHTML(record.name)}</button>${date ? `<span class="lab-related-date">${escapeHTML(date)}</span>` : ""}</li>`;
+    }).join("");
+    // The cap states a total the card cannot show, so the rest is one step away
+    // rather than silent. The dialog is the full list in every collection.
+    const more = records.length > LAB_CARD_RECORDS
+      ? `<li class="lab-related-more"><button type="button" data-lab="${escapeHTML(lab.id)}">All ${records.length} ${escapeHTML(noun)}<span class="visually-hidden"> from ${escapeHTML(lab.name)}</span><span aria-hidden="true"> →</span></button></li>`
+      : "";
+    return `<div class="lab-related-group"><p class="lab-related-label">${escapeHTML(label)} · ${records.length}</p><ul class="lab-related-list">${rows}${more}</ul></div>`;
+  }).join("");
+  return blocks ? `<div class="lab-related">${blocks}</div>` : "";
+}
+
+// A card's own details control stretches over the whole card, so the records a
+// lab card names need their own handlers and their own stacking level to stay
+// clickable above it, the way the badge row already is.
+function bindLabCardRecords(root) {
+  for (const [attribute, open] of [["data-open-model", openModel], ["data-open-project", openProject]]) {
+    $$(`.lab-card [${attribute}]`, root).forEach(button =>
+      button.addEventListener("click", () => open(button.getAttribute(attribute))));
+  }
+}
+
+function labCard(lab, { mixed = false } = {}) {
   const relations = labRelationsFor(lab);
   const modes = AppCore.labDistributionModes(relations.models, labDistributionOrder());
-  const newest = AppCore.releasesNewestFirst(relations.models)[0];
+  const releases = AppCore.releasesNewestFirst(relations.models);
+  const systems = [...relations.systems].sort((a, b) => a.name.localeCompare(b.name));
+  // The two joins the card names below carry their own totals, so the tags row
+  // counts only the four it does not list. Every type is still counted once.
   const counts = [
-    [relations.models.length, "reviewed release", "reviewed releases"],
-    [relations.systems.length, "system", "systems"],
     [relations.services.length, "inference service", "inference services"],
     [relations.runtimes.length, "local runtime", "local runtimes"],
     [relations.specifications.length, "specification", "specifications"],
     [relations.packs.length, "agent pack", "agent packs"],
+    [relations.robots.length, "robot", "robots"],
   ].filter(([count]) => count).map(([count, one, many]) => `<span>${count} ${count === 1 ? one : many}</span>`).join("");
   const origin = lab.parent_organization ? `Part of ${escapeHTML(lab.parent_organization)}` : escapeHTML(new URL(lab.url).hostname.replace(/^www\./, ""));
-  const newestDate = newest && AppCore.releaseDate(newest);
-  return `<article class="project-card lab-card">
-    <div class="card-top"><div class="card-identity">${cardMark(lab)}<div><p class="family-label">${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
+  const newestDate = AppCore.releaseDate(releases[0] || {});
+  return `<article class="project-card lab-card${mixed ? " mixed-directory-card" : ""}">
+    <div class="card-top"><div class="card-identity">${cardMarkWithGeography("lab", lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
     <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
     <p>${escapeHTML(lab.description)}</p>
-    <div class="tags">${counts}</div>
+    ${counts ? `<div class="tags">${counts}</div>` : ""}
+    ${labRelatedMarkup(lab, releases, systems)}
     ${badgeRow(AppCore.cardBadges("lab", lab))}
     <div class="card-footer"><span>${newestDate ? `Newest reviewed release ${escapeHTML(newestDate)}` : ""}</span>${detailsButton("data-lab", lab.id, lab.name)}</div>
   </article>`;
@@ -1231,9 +1664,10 @@ function labLinksMarkup(kind, record) {
 function robotCard(robot, { mixed = false } = {}) {
   const formLabel = taxonomyName("robot_form_factors", robot.form_factor);
   return `<article class="project-card robot-card${mixed ? " mixed-directory-card" : ""}">
-    <div class="card-top"><div class="card-identity">${cardMark(robot)}<div><p class="family-label">${mixed ? "Robot · " : ""}${escapeHTML(formLabel)}</p><h2>${escapeHTML(robot.name)}</h2><div class="repo">${escapeHTML(robot.manufacturer)}</div></div></div></div>
+    <div class="card-top"><div class="card-identity">${cardMarkWithGeography("robot", robot)}<div><p class="family-label">${mixed ? "Robot · " : ""}${escapeHTML(formLabel)}</p><h2>${escapeHTML(robot.name)}</h2><div class="repo">${escapeHTML(robot.manufacturer)}</div></div></div></div>
     <span class="role-badge">${escapeHTML(taxonomyName("robot_availability", robot.availability))}</span>
     <p>${escapeHTML(robot.description)}</p>
+    ${badgeRow(AppCore.cardBadges("robot", robot))}
     <div class="card-footer"><span>${robot.status === "active" ? "Unscored" : escapeHTML(label(robot.status))}</span>${detailsButton("data-robot", robot.id, robot.name)}</div>
   </article>`;
 }
@@ -1254,7 +1688,7 @@ function importedModelCard(model, { mixed = false } = {}) {
     ? "Open weights not reported"
     : metadata.reported_open_weights ? "Open weights reported" : "Closed weights reported";
   return `<article class="project-card model-card imported-model-card${mixed ? " mixed-directory-card" : ""}">
-    <div class="card-top"><div class="card-identity">${cardMark(model)}<div><p class="family-label">models.dev source record</p><h2>${escapeHTML(model.name)}</h2><div class="repo">Namespace · ${escapeHTML(model.developer)}</div></div></div></div>
+    <div class="card-top"><div class="card-identity">${cardMarkWithGeography("model", model)}<div><p class="family-label">models.dev source record</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(AppCore.modelCardDeveloperLabel(model, state.labIndex))}</div></div></div></div>
     <span class="role-badge">Imported metadata · Not Atlas reviewed</span>
     <div class="license-row"><span class="source-badge">models.dev</span><span class="review-badge">Reported license · ${escapeHTML(reportedLicense)}</span></div>
     <p>${escapeHTML(model.description || "Imported provider-independent model metadata from models.dev.")}</p>
@@ -1268,9 +1702,9 @@ function importedModelCard(model, { mixed = false } = {}) {
 function mixedSystemCard(record) {
   const location = projectLocation(record);
   return `<article class="project-card mixed-directory-card ${escapeHTML(record.system_family)}">
-      <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div></div>
+      <div class="card-top"><div class="card-identity">${cardMarkWithGeography("system", record)}<div><p class="family-label">System · ${escapeHTML(familyName(record.system_family))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(location)}</div></div></div></div>
       <span class="role-badge">${escapeHTML(roleName(record.primary_role))}</span>
-      <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+      <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${evidenceReviewLabel(record)}</div>
       <p>${escapeHTML(record.description)}</p>
       ${badgeRow(AppCore.cardBadges("system", record))}
       <div class="card-footer"><span>${footerFacts(starCount(record), systemStatus(record))}</span>${detailsButton("data-project", record.id, record.name)}</div>
@@ -1278,30 +1712,32 @@ function mixedSystemCard(record) {
 }
 
 function renderAllDirectoryEntries() {
-  // The mixed directory searches five collections, so it reads five index
-  // namespaces; each is absent until that collection's index lands, and the
-  // filter falls back to the boot record for whichever is still missing.
+  // The mixed directory searches every collection the site publishes, so it reads
+  // each one's index namespace; each is absent until that collection's index lands,
+  // and the filter falls back to the boot record for whichever is still missing.
   const entries = AppCore.filterDirectoryEntries(state.projects, state.inferenceServices, state.localRuntimes, state.models, {
-    term: $("#all-directory-search").value,
+    term: currentQuery(),
     searchIndex: searchIndexes.systems,
     serviceSearchIndex: searchIndexes.inference,
     runtimeSearchIndex: searchIndexes.runtimes,
     modelSearchIndex: searchIndexes.models,
     packSearchIndex: searchIndexes.packs,
     robotSearchIndex: searchIndexes.robots,
+    labSearchIndex: searchIndexes.labs,
+    specSearchIndex: searchIndexes.specifications,
     labelOf: searchLabel,
-  }, state.packs, state.robots);
+  }, state.packs, state.robots, state.labs, state.specifications);
   $("#all-directory-result-count").textContent = `${entries.length} ${entries.length === 1 ? "entry" : "entries"} · Scores hidden across collections`;
   setSearchCount("all", entries.length);
-  renderJobHint("all", $("#all-directory-search").value);
+  renderJobHint("all", currentQuery());
   const paged = AppCore.paginate(entries, { page: state.page.all, pageSize: state.pageSize });
   state.page.all = paged.page;
   $("#all-directory-grid").innerHTML = paged.items.map(({ kind, record }) => {
     if (kind === "model") {
       if (!isReviewedModel(record)) return importedModelCard(record, { mixed: true });
       return `<article class="project-card model-card mixed-directory-card">
-        <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Model release · ${escapeHTML(taxonomyName("model_types", record.model_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.developer)}</div></div></div></div>
-        <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+        <div class="card-top"><div class="card-identity">${cardMarkWithGeography("model", record)}<div><p class="family-label">Model release · ${escapeHTML(taxonomyName("model_types", record.model_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.developer)}</div></div></div></div>
+        <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(record.description)}</p>
         ${modelSourceMeta(record)}
         ${badgeRow(AppCore.cardBadges("model", record))}
@@ -1310,6 +1746,8 @@ function renderAllDirectoryEntries() {
     }
     if (kind === "pack") return packCard(record, { mixed: true });
     if (kind === "robot") return robotCard(record, { mixed: true });
+    if (kind === "lab") return labCard(record, { mixed: true });
+    if (kind === "spec") return specificationCard(record, { mixed: true });
     if (kind === "runtime") {
       return `<article class="project-card local-runtime-card mixed-directory-card">
         <div class="card-top"><div class="card-identity">${cardMark(record)}<div><p class="family-label">Local runtime · ${escapeHTML(taxonomyName("local_runtime_types", record.runtime_type))}</p><h2>${escapeHTML(record.name)}</h2><div class="repo">${escapeHTML(record.maintainer)}</div></div></div></div>
@@ -1329,13 +1767,16 @@ function renderAllDirectoryEntries() {
       </article>`;
     }
     return mixedSystemCard(record);
-  }).join("") || emptyStateMarkup("all", "No systems, model releases, inference services, local runtimes, agent packs, or robots match this search.");
+  }).join("") || emptyStateMarkup("all", "No systems, model releases, inference services, local runtimes, agent packs, robots, labs, or specifications match this search.");
   $$('[data-project]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
   $$('[data-inference-service]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openInferenceService(button.dataset.inferenceService)));
   $$('[data-local-runtime]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLocalRuntime(button.dataset.localRuntime)));
   $$('[data-model]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openModel(button.dataset.model)));
   $$('[data-pack]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openPack(button.dataset.pack)));
   $$('[data-robot]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openRobot(button.dataset.robot)));
+  $$('[data-lab]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openLab(button.dataset.lab)));
+  $$('[data-specification]', $("#all-directory-grid")).forEach(button => button.addEventListener("click", () => openSpecification(button.dataset.specification)));
+  bindLabCardRecords($("#all-directory-grid"));
   hideDetachedBadgeTooltip();
   renderPager("all", paged);
   if (activeScope() === "all") writeScopeURL();
@@ -1354,6 +1795,7 @@ function filteredProjects(term) {
     deployment: $("#deployment-filter").value,
     agentInterface: $("#agent-interface-filter").value,
     capability: $("#capability-filter").value,
+    retrieval: $("#retrieval-filter").value,
     sourceModel: $("#source-model-filter").value,
     license: $("#license-filter").value,
     status: $("#status-filter").value,
@@ -1402,9 +1844,9 @@ const COLLECTIONS = {
     // Only this grid sorts by stars, so only its cards explain a missing count.
     const githubSignal = project.stars == null ? "No GitHub metrics" : starCount(project);
     return `<article class="project-card ${escapeHTML(project.system_family)}">
-      <div class="card-top"><div class="card-identity">${cardMark(project)}<div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(projectLocation(project))}</div></div></div>${score}</div>
+      <div class="card-top"><div class="card-identity">${cardMarkWithGeography("system", project)}<div><p class="family-label">${escapeHTML(familyName(project.system_family))}</p><h2>${escapeHTML(project.name)}</h2><div class="repo">${escapeHTML(projectLocation(project))}</div></div></div>${score}</div>
       <span class="role-badge">${escapeHTML(roleName(project.primary_role))}</span>
-      <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${project.license_review_status === "review_required" ? '<span class="review-badge">Evidence review</span>' : ""}</div>
+      <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(project.source_model))}</span>${project.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}${evidenceReviewLabel(project)}</div>
       <p>${escapeHTML(project.description)}</p>
       ${badgeRow(AppCore.cardBadges("system", project))}
       <div class="card-footer"><span>${footerFacts(githubSignal, systemStatus(project))}</span><div class="card-actions">${family ? `<button class="compare-toggle" data-compare-kind="system" data-compare-id="${escapeHTML(project.id)}" aria-label="Add ${escapeHTML(project.name)} to comparison" aria-pressed="false">Compare</button>` : ""}${detailsButton("data-project", project.id, project.name)}</div></div>
@@ -1432,19 +1874,7 @@ const COLLECTIONS = {
       status: $("#specification-status-filter").value,
       license: $("#specification-license-filter").value,
     }),
-    card: specification => {
-
-    const version = specification.current_version ? `Version ${escapeHTML(specification.current_version)}` : escapeHTML(taxonomyName("specification_statuses", specification.status));
-    return `<article class="project-card specification-card">
-      <div class="card-top"><div><p class="family-label">${escapeHTML(taxonomyName("specification_types", specification.specification_type))}</p><h2>${escapeHTML(specification.short_name)}</h2><div class="repo">${escapeHTML(specification.repo || new URL(specification.url).hostname)}</div></div><span class="status-badge">${version}</span></div>
-      <span class="role-badge">${escapeHTML(taxonomyName("specification_scopes", specification.scope))}</span>
-      <div class="license-row">${specification.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
-      <p>${escapeHTML(specification.description)}</p>
-      <div class="tags"><span>${escapeHTML(taxonomyName("specification_statuses", specification.status))}</span><span>${escapeHTML(specification.stewards[0])}</span></div>
-      ${badgeRow(AppCore.cardBadges("spec", specification))}
-      <div class="card-footer"><span>${footerFacts(starCount(specification), "No editorial score")}</span>${detailsButton("data-specification", specification.id, specification.name)}</div>
-    </article>`;
-    },
+    card: specification => specificationCard(specification),
   },
   labs: {
     grid: "#lab-grid",
@@ -1558,8 +1988,8 @@ const COLLECTIONS = {
     card: model => {
       if (!isReviewedModel(model)) return importedModelCard(model);
       return `<article class="project-card model-card">
-        <div class="card-top"><div class="card-identity">${cardMark(model)}<div><p class="family-label">${escapeHTML(taxonomyName("model_types", model.model_type))}</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(model.developer)}</div></div></div><div class="score-ring" aria-label="Model-access score ${escapeHTML(model.score.overall)} out of 10">${escapeHTML(model.score.overall)}</div></div>
-        <div class="license-row"><span class="source-badge">${escapeHTML(sourceModelName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
+        <div class="card-top"><div class="card-identity">${cardMarkWithGeography("model", model)}<div><p class="family-label">${escapeHTML(taxonomyName("model_types", model.model_type))}</p><h2>${escapeHTML(model.name)}</h2><div class="repo">${escapeHTML(model.developer)}</div></div></div><div class="score-ring" aria-label="Model-access score ${escapeHTML(model.score.overall)} out of 10">${escapeHTML(model.score.overall)}</div></div>
+        <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
         ${modelSourceMeta(model)}
         ${badgeRow(AppCore.cardBadges("model", model))}
@@ -1592,11 +2022,11 @@ const COLLECTIONS = {
 function renderCollection(name) {
   const collection = COLLECTIONS[name];
   const context = collection.context();
-  const records = collection.records($(SCOPE_CONTROLS[name].q).value);
+  const records = collection.records(currentQuery());
   const noun = collection.noun[records.length === 1 ? 0 : 1];
   $(collection.resultCount).textContent = `${records.length} ${noun}${context.suffix}`;
   setSearchCount(name, records.length);
-  renderJobHint(name, $(SCOPE_CONTROLS[name].q).value);
+  renderJobHint(name, currentQuery());
   const paged = AppCore.paginate(records, { page: state.page[collection.pageKey], pageSize: state.pageSize });
   state.page[collection.pageKey] = paged.page;
   const grid = $(collection.grid);
@@ -1604,6 +2034,7 @@ function renderCollection(name) {
     || emptyStateMarkup(name, collection.empty);
   $$(`[${AppCore.datasetAttribute(collection.dataset)}]`, grid).forEach(button =>
     button.addEventListener("click", () => collection.open(button.dataset[collection.dataset])));
+  bindLabCardRecords(grid);
   if (context.comparable) {
     bindComparisonButtons(grid);
     renderComparisonControls();
@@ -1752,7 +2183,7 @@ function modelAccessCell(mode, row) {
 }
 
 function renderModelAccess() {
-  const summary = AppCore.modelAccessSummary(state.models, state.taxonomy.source_models, state.taxonomy.model_distribution_modes);
+  const summary = AppCore.modelAccessSummary(state.models, AppCore.modelLicenseCategories(state.taxonomy.source_models), state.taxonomy.model_distribution_modes);
   const date = state.modelsVerifiedAt ? ` · Catalog review date ${state.modelsVerifiedAt}` : "";
   $("#explore-data-note").textContent = `${summary.total} reviewed releases · ${summary.excluded} imported records excluded${date}`;
   if (!summary.total) {
@@ -1773,7 +2204,7 @@ function renderModelAccess() {
       <div class="access-scale" aria-hidden="true"><span>0%</span><span>100% of reviewed releases</span></div>
     </section>
     <section class="access-matrix-section" aria-labelledby="access-matrix-title">
-      <div class="explore-section-heading"><h2 id="access-matrix-title">Access meets licensing</h2><p>Downloadable weights do not imply an open-source license. Select a count to inspect the matching releases and their terms.</p></div>
+      <div class="explore-section-heading"><h2 id="access-matrix-title">Access meets licensing</h2><p>Artifact licensing does not assess training code or training data openness. Downloadable weights alone do not establish open-source AI. Select a count to inspect the matching releases and their terms.</p></div>
       <table class="access-matrix">
         <caption>Reviewed releases by license classification and access route. Percentages are of each row; routes overlap.</caption>
         <thead><tr><th scope="col">License classification</th>${summary.modes.map(mode => `<th scope="col">${escapeHTML(mode.name)}</th>`).join("")}</tr></thead>
@@ -1816,7 +2247,7 @@ function packScope(term) {
 }
 
 function renderPacks() {
-  const { packs, systems, entries } = packScope($("#pack-search").value);
+  const { packs, systems, entries } = packScope(currentQuery());
   const packNoun = packs.length === 1 ? "pack" : "packs";
   const systemNoun = systems.length === 1 ? "installed system" : "installed systems";
   $("#pack-result-count").textContent = `${packs.length} ${packNoun} · ${systems.length} ${systemNoun} · Scores hidden`;
@@ -1837,10 +2268,15 @@ function renderPacks() {
 
 // Repaint whatever a search index could have widened. A search box may have a
 // term in it already when its index lands, so this runs for the collection on
-// screen. The others are painted when they open (setDirectoryCollection), so
-// a hidden grid is not repainted here.
+// screen, and the strip's counts. The others are painted when they open
+// (setDirectoryCollection), so a hidden grid is not repainted here. While the
+// reader is still typing, the repaint that waits for the pause reads the
+// index instead, so an index landing mid-word paints nothing (CR-21).
 function renderSearchSurfaces() {
-  pageRenderer(state.directoryCollection)?.();
+  if (!resultsTimer) {
+    pageRenderer(state.directoryCollection)?.();
+    syncScopeStrip();
+  }
   if (state.directoryRoles) renderFinder();
 }
 
@@ -1850,108 +2286,188 @@ function bindComparisonButtons(root) {
   }));
 }
 
-function finderChoice(key, item) {
-  return `<button class="finder-choice" data-finder-choice="${escapeHTML(key)}" data-finder-value="${escapeHTML(item.id)}">
-    ${item.cue ? `<span class="finder-choice-cue">${escapeHTML(item.cue)}</span>` : ""}
-    <strong>${escapeHTML(item.label)}</strong>
-    <span>${escapeHTML(item.description)}</span>
-  </button>`;
-}
+const finderDetailAwaited = new Set();
 
-function renderFinderProgress() {
-  const step = state.finder.step;
-  const labels = ["Direction", "Job", "Priority"];
-  $("#finder-progress").innerHTML = labels.map((item, index) => {
-    const status = step > index ? "is-complete" : step === index ? "is-active" : "";
-    return `<div class="finder-progress-step ${status}"><span>${step > index ? "✓" : index + 1}</span><strong>${item}</strong></div>`;
-  }).join("") + `<p>${step >= 3 ? "Shortlist ready" : `Step ${step + 1} of 3`}</p>`;
-}
-
-function renderFinder() {
-  renderFinderProgress();
-  const { step, answers } = state.finder;
-  let content;
-  if (step === 0) {
-    content = `<div class="finder-question"><p class="eyebrow">Start with the outcome</p><h2>What should it do?</h2><p>Preserve knowledge, carry out delegated work, assist interactively, or serve models through a managed inference layer.</p></div>
-      <div class="finder-choice-grid direction-grid">${AppCore.FINDER_DIRECTIONS.map(item => finderChoice("direction", item)).join("")}</div>`;
-  } else if (step === 1) {
-    const choices = AppCore.FINDER_GOALS[answers.direction];
-    content = `<div class="finder-question"><p class="eyebrow">${escapeHTML(finderDirectionName(answers.direction))}</p><h2>Choose the closest job.</h2><p>You can broaden the directory afterward.</p></div>
-      <div class="finder-choice-grid">${choices.map(item => finderChoice("goal", item)).join("")}</div>`;
-  } else if (step === 2) {
-    // The shortlist's candidates are known once the goal is: fetch their detail
-    // now, while the priority question is on screen.
-    ensureFinderDetail();
-    const choices = AppCore.FINDER_PRIORITIES[answers.direction];
-    content = `<div class="finder-question"><p class="eyebrow">Final tradeoff</p><h2 tabindex="-1">What matters most?</h2><p>This adjusts ranking only within the selected score profile.</p></div>
-      <div class="finder-choice-grid">${choices.map(item => finderChoice("priority", item)).join("")}</div>`;
-  } else {
-    const { direction, goal } = answers;
-    const pending = ensureFinderDetail();
-    if (pending) {
-      pending.then(() => {
-        if (state.finder.step === 3 && answers.direction === direction && answers.goal === goal) renderFinder();
-      });
-      content = `<div class="finder-question"><p class="eyebrow">Your shortlist</p><h2>Reading the reviewed scores…</h2><p>Ranking these matches needs the full score for each candidate.</p></div>`;
-    } else {
-      content = renderFinderResults();
-    }
-  }
-  const navigation = step > 0 ? `<div class="finder-navigation"><button class="ghost-button" data-finder-back>← Back</button><button class="ghost-button" data-finder-reset>Start over</button></div>` : "";
-  $("#finder-content").innerHTML = content + navigation;
-}
-
-// How much sticks to the top of the viewport. The header sticks only above
-// phone widths, and in results the scope strip sticks under it, so each
-// counts only while it is sticky; a hidden strip measures no height.
+// How much sticks to the top of the viewport: the header, and in results
+// the strip and, above 1000 px, the results bar. Each counts only while it
+// is sticky; a hidden one measures no height.
 function stickyHeight() {
-  const sticky = element => element && getComputedStyle(element).position === "sticky" ? element.getBoundingClientRect().height : 0;
-  return sticky($(".site-header")) + sticky($("#scope-strip"));
+  const sticky = element => element && !element.hidden && getComputedStyle(element).position === "sticky" ? element.getBoundingClientRect().height : 0;
+  return sticky($(".site-header")) + sticky($("#scope-strip")) + sticky($("#results-bar"));
 }
 
-// The sticky height plus the reading margin both Finder scroll corrections
-// leave beneath it, measured once so the two never disagree.
+// The sticky height plus the reading margin a scroll correction leaves beneath
+// it, measured once so the two never disagree.
 function headerClearance() {
   return stickyHeight() + 12;
 }
 
-// A choice replaces the panel's content, which can leave the step indicator
-// under the sticky header; bring the shell's top back into view, instantly.
-function keepFinderInView() {
-  const shell = $(".finder-shell");
-  const clearance = headerClearance();
-  const top = shell.getBoundingClientRect().top;
-  if (top < clearance) window.scrollBy({ top: top - clearance, behavior: "instant" });
+// The collections the Finder ranks over, handed to AppCore so its counts and
+// its candidate set come from one predicate and can be tested without state.
+function finderCollections() {
+  return { projects: state.projects, inferenceServices: state.inferenceServices, localRuntimes: state.localRuntimes };
 }
 
-const finderDetailAwaited = new Set();
-
-// The records a Finder goal can draw on: active systems in its family and
-// role set, or services or runtimes of its type (docs/WEB.md).
+// The records a Finder goal can draw on: active systems in its family and role
+// set, or services or runtimes of its type (docs/WEB.md).
 function finderGoalRecords(direction, goalConfig) {
-  if (direction === "inference_service") return state.inferenceServices.filter(item => goalConfig.serviceTypes.includes(item.service_type));
-  if (direction === "local_runtime") return state.localRuntimes.filter(item => goalConfig.runtimeTypes.includes(item.runtime_type));
-  return state.projects.filter(item => item.status === "active" && item.system_family === direction && goalConfig.roles.includes(item.primary_role));
+  return AppCore.finderGoalRecords(direction, goalConfig, finderCollections());
 }
 
 function finderCandidates() {
-  const { direction, goal } = state.finder.answers;
+  const { direction, goal } = state.finder;
   const goalConfig = AppCore.FINDER_GOALS[direction]?.find(item => item.id === goal);
   return goalConfig ? finderGoalRecords(direction, goalConfig) : [];
 }
 
 let finderGoalList = null;
 function finderGoalEntries() {
-  finderGoalList ||= Object.entries(AppCore.FINDER_GOALS).flatMap(([direction, goals]) =>
-    goals.map(goal => ({ ...goal, direction, eligible: finderGoalRecords(direction, goal).length })));
+  finderGoalList ||= AppCore.finderGoalEntries(finderCollections());
   return finderGoalList;
 }
 
-// The job is already chosen, so focus lands on the question it leaves open.
-function openFinderAt(direction, goal) {
-  state.finder = { step: 2, answers: { direction, goal } };
+// A goal carries the direction that offers it, so a URL's `job` alone is
+// enough to restore both and `direction` is only ever written to make the
+// link legible.
+function finderGoalEntry(goalId, direction = "") {
+  const entries = finderGoalEntries();
+  return entries.find(item => item.id === goalId && (!direction || item.direction === direction)) || null;
+}
+
+// Choosing a goal settles the direction with it. A priority carries over only
+// when the new direction offers it, so a shared link's preference cannot rank
+// against a profile it was never written for.
+function chooseFinderGoal(goalId, direction = "") {
+  const entry = finderGoalEntry(goalId, direction);
+  if (!entry) return false;
+  state.finder = {
+    direction: entry.direction,
+    goal: entry.id,
+    priority: finderPriorityFor(entry.direction, state.finder.priority),
+  };
   renderFinder();
-  activateView("finder", { focusTarget: $("#finder-content h2") });
+  return true;
+}
+
+// Each answer is one history entry, so Back steps from priority to job to the
+// bare tiles and Forward replays them.
+function writeFinderURL({ push = false } = {}) {
+  const url = new URL(window.location.href);
+  url.searchParams.delete("direction");
+  url.searchParams.delete("job");
+  url.searchParams.delete("prefer");
+  if (state.finder.goal) {
+    url.searchParams.set("direction", state.finder.direction);
+    url.searchParams.set("job", state.finder.goal);
+    url.searchParams.set("prefer", state.finder.priority);
+  }
+  writeURL(url, { push });
+}
+
+// The job is already chosen, so the screen opens with its shortlist rather
+// than with a question standing between the reader and it.
+function openFinderAt(direction, goal) {
+  chooseFinderGoal(goal, direction);
+  writeFinderURL();
+  activateView("finder");
+}
+
+function finderPriorityFor(direction, priority) {
+  return AppCore.FINDER_PRIORITIES[direction].some(item => item.id === priority) ? priority : "balanced";
+}
+
+// The goal's own tile, sharing the front door's element tile so the Finder's
+// density is the door's rather than a parallel rule that can drift from it.
+function finderGoalTile(entry) {
+  const selected = state.finder.goal === entry.id;
+  return `<button type="button" class="finder-goal" data-finder-goal="${escapeHTML(entry.id)}" data-finder-dir="${escapeHTML(entry.direction)}" aria-pressed="${selected}"${entry.eligible ? "" : " disabled"} aria-label="${escapeHTML(entry.label)}, ${entry.eligible} active ${entry.eligible === 1 ? "record" : "records"}"><span class="element-count">${entry.eligible}</span><span class="element-name">${escapeHTML(entry.label)}</span></button>`;
+}
+
+function renderFinderGroups() {
+  return `<div class="finder-groups">${AppCore.FINDER_DIRECTIONS.map(direction => {
+    const total = AppCore.finderDirectionTotal(direction.id, finderCollections());
+    const goals = AppCore.FINDER_GOALS[direction.id].map(goal => finderGoalEntry(goal.id)).filter(Boolean);
+    return `<section class="finder-group" data-finder-direction="${escapeHTML(direction.id)}" aria-labelledby="finder-group-${escapeHTML(direction.id)}">
+      <div class="element-family-heading"><h3 id="finder-group-${escapeHTML(direction.id)}">${escapeHTML(finderDirectionName(direction.id))}</h3><span>${total} active</span></div>
+      <div class="finder-goals">${goals.map(finderGoalTile).join("")}</div>
+    </section>`;
+  }).join("")}</div>`;
+}
+
+// The priority is a soft ranking signal inside one score profile, never an
+// eligibility filter (docs/TAXONOMY.md "Guided finder"), so it reads as a row
+// of toggles beside the shortlist rather than a question that gates it.
+function renderFinderPriorities() {
+  const { direction, goal, priority } = state.finder;
+  if (!goal) return "";
+  return `<div class="finder-priorities" role="radiogroup" aria-label="What matters most">
+    <span class="finder-priorities-label">Rank by</span>
+    ${AppCore.FINDER_PRIORITIES[direction].map(item => `<button type="button" class="door-job finder-priority" role="radio" aria-checked="${priority === item.id}" data-finder-priority="${escapeHTML(item.id)}" title="${escapeHTML(item.description)}">${escapeHTML(item.label)}</button>`).join("")}
+  </div>`;
+}
+
+function renderFinderStatus() {
+  const { goal, priority } = state.finder;
+  const entry = goal ? finderGoalEntry(goal) : null;
+  const label = AppCore.FINDER_PRIORITIES[entry?.direction]?.find(item => item.id === priority)?.label;
+  // Counted from the tables and the records, never transcribed: both figures
+  // move as the catalog does, and a stale one would misstate the screen.
+  const collections = finderCollections();
+  const directions = AppCore.FINDER_DIRECTIONS.length;
+  const jobs = AppCore.FINDER_DIRECTIONS.reduce((sum, direction) => sum + AppCore.FINDER_GOALS[direction.id].length, 0);
+  const records = AppCore.FINDER_DIRECTIONS.reduce((sum, direction) => sum + AppCore.finderDirectionTotal(direction.id, collections), 0);
+  $("#finder-status").textContent = entry
+    ? `${entry.label}: ${entry.eligible} active ${entry.eligible === 1 ? "record" : "records"} match, ranked for “${label}”.`
+    : `${jobs} jobs in ${directions} directions, over ${records} active records. Choose one to see its three strongest reviewed matches.`;
+}
+
+// The three answers, on the Finder's own keys. A goal the tables no longer
+// offer, or one whose direction contradicts the `direction` beside it, leaves
+// the URL as any value a control cannot take, and leaves the tiles.
+function restoreFinderFromURL(params) {
+  const goal = params.get("job") || "";
+  if (!goal) {
+    // Only a Finder URL with no job clears the screen. The tab and the
+    // mobile bar open the view without writing, so returning to it keeps the
+    // shortlist the reader had.
+    if (params.get("view") !== "finder") return;
+    state.finder = { direction: "", goal: "", priority: "balanced" };
+    renderFinder();
+    return;
+  }
+  const entry = finderGoalEntry(goal, params.get("direction") || "");
+  if (!entry) {
+    const current = new URL(window.location.href);
+    current.searchParams.delete("direction");
+    current.searchParams.delete("job");
+    current.searchParams.delete("prefer");
+    writeURL(current);
+    state.finder = { direction: "", goal: "", priority: "balanced" };
+    renderFinder();
+    return;
+  }
+  state.finder = { direction: entry.direction, goal: entry.id, priority: finderPriorityFor(entry.direction, params.get("prefer") || "") };
+  renderFinder();
+}
+
+function renderFinder() {
+  $("#finder-content").innerHTML = renderFinderGroups() + (state.finder.goal ? renderFinderPriorities() + renderFinderShortlist() : "");
+  renderFinderStatus();
+}
+
+function renderFinderShortlist() {
+  // Ranking needs each candidate's full score, which boot does not carry, so
+  // the fetches start as soon as the goal is chosen and the shortlist waits
+  // for them rather than ranking on an overall alone.
+  const pending = ensureFinderDetail();
+  if (pending) {
+    const chosen = state.finder.goal;
+    pending.then(() => {
+      if (state.finder.goal === chosen) renderFinder();
+    });
+    return `<div class="finder-result-heading"><div><p class="eyebrow">Your shortlist</p><h2>Reading the reviewed scores…</h2><p>Ranking these matches needs the full score for each candidate.</p></div></div>`;
+  }
+  return renderFinderResults();
 }
 
 function renderJobHint(scope, term) {
@@ -1983,27 +2499,33 @@ const SCOPE_RECORDS = {
   specifications: () => [["spec", state.specifications, searchIndexes.specifications]],
 };
 
-// What a query still finds when a scope lists nothing for it, across the whole
-// catalog: All's six kinds, then Labs and Specifications, which All leaves
-// out. It runs the matcher every scope's filter runs, with each kind's index
-// once that index has loaded, and every facet ignored.
-// - `hidden`: this scope's own matches. It lists none of them, so its facets
-//   hide every one. All has no facets, so it hides nothing.
-// - `elsewhere`: matches of All's kinds outside this scope, which All lists.
+// What a query still finds when a scope lists nothing for it:
+// - `hidden`: this scope's own matches, which its facets hide. All has no
+//   facets, so it hides nothing.
+// - `elsewhere`: every other collection whose default view lists matches,
+//   with its count, in registry order. From All that is Labs and
+//   Specifications, which All leaves out (Phase 3 spec, section 2).
+// - `searchAll`: whether All lists matches this scope does not.
 // - `found`: whether anything in the catalog matches at all.
 function emptyResultMatches(scope, term) {
   const query = AppCore.parseSearchQuery(term);
-  const matches = [...SCOPE_RECORDS.all(), ...SCOPE_RECORDS.labs(), ...SCOPE_RECORDS.specifications()]
-    .flatMap(([kind, records, index]) => records
-      .filter(record => AppCore.recordMatch(query, AppCore.searchFields(kind, record, { index, labelOf: searchLabel })) > 0)
-      .map(record => ({ kind, record })));
-  if (scope === "all") return { hidden: [], elsewhere: [], found: matches.length > 0 };
-  const own = new Set((SCOPE_RECORDS[scope]?.() || []).flatMap(([, records]) => records));
-  const allKinds = new Set(SCOPE_RECORDS.all().map(([kind]) => kind));
+  const ownGroups = SCOPE_RECORDS[scope]?.() || [];
+  const hidden = scope === "all" ? [] : ownGroups.flatMap(([kind, records, index]) => records
+    .filter(record => AppCore.recordMatch(query, AppCore.searchFields(kind, record, { index, labelOf: searchLabel })) > 0)
+    .map(record => ({ kind, record })));
+  const counts = AppCore.collectionMatchCounts(currentMatches(term), collectionPayloads());
+  const elsewhere = AppCore.COLLECTIONS
+    .filter(entry => entry.id !== scope && entry.id !== "all" && counts[entry.id] > 0)
+    .map(entry => ({ id: entry.id, name: entry.name, count: counts[entry.id] }));
+  // Everything holds every collection, so the count to compare against is hidden.length
+  // whole: the two lines this replaced subtracted labs and specifications from the
+  // numerator and added them back to the denominator, which was correct only while
+  // collectionEntries("all") left them out.
   return {
-    hidden: matches.filter(({ record }) => own.has(record)),
-    elsewhere: matches.filter(({ kind, record }) => allKinds.has(kind) && !own.has(record)),
-    found: matches.length > 0,
+    hidden,
+    elsewhere,
+    searchAll: scope !== "all" && counts.all > hidden.length,
+    found: counts.all > 0,
   };
 }
 
@@ -2041,17 +2563,14 @@ function clearScopeFacets(scope, { focus = true } = {}) {
   if (focus) $(SCOPE_CONTROLS[scope].q).focus();
 }
 
-// "Search all" under an empty result: lists the query in All, opening the
-// Directory first when another view is active. It writes All's box itself
-// and opens All without a carry, so All searches exactly the text the empty
-// result named. Focusing All's box loads its indexes, as it does for a typed
-// query.
-function searchAllCollections(term) {
+// "Search all" under an empty result lists the one query in All, opening
+// the Directory first when another view is active, and hands the search box
+// focus. The query stays: every collection reads the same one.
+function searchAllCollections() {
   if ($(".view.is-active")?.id !== "directory") activateView("directory");
-  $("#all-directory-search").value = term;
   state.page.all = 1;
   setDirectoryCollection("all", { carryQuery: false });
-  $("#all-directory-search").focus();
+  $("#results-search").focus();
 }
 
 // Names compared the way search and suggestNames compare them: a hyphen reads
@@ -2103,17 +2622,18 @@ function catalogIndexesPending() {
 
 // An empty result names what the reader can do next (R-P1-11, R-P1-15): a
 // match the facets hide is offered back, and a match in another collection is
-// offered through All. The query is suggested for review only when nothing in
-// the catalog answers it and no exclusion names it. An imported models.dev row
-// is not Atlas reviewed, so a hidden count holding one does not say "reviewed".
+// offered through that collection or All. The query is suggested for review
+// only when nothing in the catalog answers it and no exclusion names it. An
+// imported models.dev row is not Atlas reviewed, so a hidden count holding
+// one does not say "reviewed".
 // Until every index has settled, part of the catalog is searched by its boot
 // fields alone, so only did-you-mean, which reads names, and the Finder show.
 function emptyStateMarkup(scope, fallback) {
   const selector = SCOPE_CONTROLS[scope]?.q;
   const term = selector ? $(selector).value : "";
-  if (!term.trim()) return `<div class="notice">${fallback}</div>`;
+  if (!isSearching(term)) return `<div class="notice">${fallback}</div>`;
   const settled = !catalogIndexesPending();
-  const { hidden, elsewhere, found } = settled ? emptyResultMatches(scope, term) : { hidden: [], elsewhere: [], found: false };
+  const { hidden, elsewhere, searchAll, found } = settled ? emptyResultMatches(scope, term) : { hidden: [], elsewhere: [], searchAll: false, found: false };
   const typed = comparableName(term);
   const names = AppCore.suggestNames(facetedRecords(scope), term).filter(name => comparableName(name) !== typed);
   const excluded = settled ? excludedEntry(term) : null;
@@ -2124,7 +2644,10 @@ function emptyStateMarkup(scope, fallback) {
   return `<div class="notice empty-search">
     <p><strong>No matches for “${escapeHTML(term.trim())}”${hidden.length ? " with these filters" : ""}.</strong></p>
     ${hidden.length ? `<p>It matches ${hidden.length} ${reviewed}${hidden.length === 1 ? "record" : "records"} your filters hide. <button type="button" class="link-button" data-empty-unfilter>${hidden.length === 1 ? "Show it" : "Show them"}</button></p>` : ""}
-    ${elsewhere.length ? `<p>It matches ${elsewhere.length} ${elsewhere.length === 1 ? "record" : "records"} in other collections. <button type="button" class="link-button" data-empty-search-all>Search all</button></p>` : ""}
+    ${elsewhere.length || searchAll ? `<p>It matches records in other collections: ${[
+      ...elsewhere.map(entry => `<button type="button" class="link-button" data-empty-open-collection="${escapeHTML(entry.id)}">${escapeHTML(entry.name)} ${entry.count}</button>`),
+      ...(searchAll ? ['<button type="button" class="link-button" data-empty-search-all>Search all</button>'] : []),
+    ].join(" · ")}</p>` : ""}
     ${names.length ? `<p>Did you mean ${names.map(name => `<button type="button" class="link-button" data-suggest-query="${escapeHTML(name)}">${escapeHTML(name)}</button>`).join(", ")}?</p>` : ""}
     ${excluded ? `<p><strong>Reviewed and left out:</strong> ${escapeHTML(excluded.name)}. ${escapeHTML(excluded.reason)}</p>` : ""}
     <p><button type="button" class="link-button" data-empty-finder>Try the Finder</button>${suggest ? ` · <a href="${escapeHTML(suggestionURL(term))}" target="_blank" rel="noreferrer">Suggest it for review</a>` : ""}</p>
@@ -2135,7 +2658,7 @@ function emptyStateMarkup(scope, fallback) {
 // never arrives costs one wait and then a shortlist built from what landed —
 // never an endless retry.
 function ensureFinderDetail() {
-  const { direction, goal } = state.finder.answers;
+  const { direction, goal } = state.finder;
   const key = `${direction}:${goal}`;
   if (finderDetailAwaited.has(key)) return null;
   const kind = AppCore.FINDER_DETAIL_KINDS[direction] || "system";
@@ -2148,7 +2671,7 @@ function ensureFinderDetail() {
 }
 
 function recommendedFinderRecords() {
-  const { direction, goal, priority } = state.finder.answers;
+  const { direction, goal, priority } = state.finder;
   const goalConfig = AppCore.FINDER_GOALS[direction].find(item => item.id === goal);
   return finderCandidates()
     .map(project => {
@@ -2163,10 +2686,11 @@ function recommendedFinderRecords() {
 }
 
 function renderFinderResults() {
-  const { direction, goal, priority } = state.finder.answers;
+  const { direction, goal, priority } = state.finder;
   const goalConfig = AppCore.FINDER_GOALS[direction].find(item => item.id === goal);
   const priorityConfig = AppCore.FINDER_PRIORITIES[direction].find(item => item.id === priority);
   const results = recommendedFinderRecords();
+  const eligible = finderGoalEntry(goal, direction)?.eligible ?? 0;
   const isInference = direction === "inference_service";
   const isRuntime = direction === "local_runtime";
   const classificationLabel = record => isInference ? taxonomyName("inference_service_types", record.service_type)
@@ -2175,11 +2699,11 @@ function renderFinderResults() {
   const identityRow = record => {
     if (isInference) return `<span class="source-badge">${escapeHTML(record.operator)}</span><span class="license-badge">${escapeHTML(record.terms.label)}</span>`;
     const badge = isRuntime ? record.maintainer : sourceModelName(record.source_model);
-    return `<span class="source-badge">${escapeHTML(badge)}</span>${record.licenses.map(license => `<span class="license-badge" title="${escapeHTML(licenseName(license))}">${escapeHTML(license)}</span>`).join("")}`;
+    return `<span class="source-badge">${escapeHTML(badge)}</span>${record.licenses.map(license => `<span class="license-badge" title="${escapeHTML(licenseName(license))}">${escapeHTML(license)}</span>`).join("")}${isRuntime ? "" : evidenceReviewLabel(record)}`;
   };
   const detailAttribute = isInference ? "data-finder-inference" : isRuntime ? "data-finder-runtime" : "data-finder-project";
   const profileLabel = isInference ? "inference-service" : isRuntime ? "local-runtime" : "";
-  return `<div class="finder-result-heading"><div><p class="eyebrow">Your shortlist</p><h2>${escapeHTML(goalConfig.label)}</h2><p>Within ${escapeHTML(finderDirectionName(direction).toLowerCase())}, weighted for “${escapeHTML(priorityConfig.label.toLowerCase())}.”</p></div><button class="primary-button" data-finder-directory>Browse matches →</button></div>
+  return `<div class="finder-result-heading"><div><p class="eyebrow">Your shortlist</p><h2>${escapeHTML(goalConfig.label)}</h2><p>${results.length} of ${eligible} active ${eligible === 1 ? "record" : "records"}, ranked for “${escapeHTML(priorityConfig.label)}”. ${escapeHTML(goalConfig.description)}</p></div><button class="primary-button" data-finder-directory>Browse matches →</button></div>
     <div class="finder-results">${results.map(({ project, reasons }, index) => `<article class="finder-result ${escapeHTML(project.system_family || direction)}">
       <div class="finder-result-top">${cardMark(project)}<div class="finder-rank">0${index + 1}</div></div>
       <div><p class="family-label">${escapeHTML(classificationLabel(project))}</p><h3>${escapeHTML(project.name)}</h3><p>${escapeHTML(project.description)}</p>
@@ -2196,11 +2720,19 @@ function renderFinderResults() {
 // Each branch lands on the first page of its matches: a page kept from
 // earlier browsing, or restored from the URL, belongs to another list.
 function applyFinderToDirectory() {
-  const { direction, goal } = state.finder.answers;
+  const { direction, goal } = state.finder;
   const goalConfig = AppCore.FINDER_GOALS[direction].find(item => item.id === goal);
+  // The three answers belong to the Finder's own view. Leaving them on a
+  // Directory URL would make them outlive the screen that gives them meaning
+  // and would re-apply themselves if the reader came back by tab.
+  const url = new URL(window.location.href);
+  url.searchParams.delete("direction");
+  url.searchParams.delete("job");
+  url.searchParams.delete("prefer");
+  writeURL(url);
   clearComparison();
   if (direction === "local_runtime") {
-    $("#runtime-search").value = "";
+    clearQuery();
     $("#runtime-type-filter").value = goalConfig.runtimeTypes[0];
     $("#runtime-accelerator-filter").value = "";
     $("#runtime-format-filter").value = "";
@@ -2214,7 +2746,7 @@ function applyFinderToDirectory() {
     return;
   }
   if (direction === "inference_service") {
-    $("#inference-search").value = "";
+    clearQuery();
     $("#inference-type-filter").value = goalConfig.serviceTypes[0];
     $("#inference-delivery-filter").value = "";
     $("#inference-model-source-filter").value = "";
@@ -2227,7 +2759,7 @@ function applyFinderToDirectory() {
     revealDirectoryResults();
     return;
   }
-  $("#project-search").value = "";
+  clearQuery();
   $("#family-filter").value = direction;
   populateRoleFilter();
   state.directoryRoles = goalConfig.roles.length > 1 ? [...goalConfig.roles] : null;
@@ -2238,6 +2770,7 @@ function applyFinderToDirectory() {
   $("#deployment-filter").value = "";
   $("#agent-interface-filter").value = "";
   $("#capability-filter").value = "";
+  $("#retrieval-filter").value = "";
   $("#source-model-filter").value = "";
   $("#license-filter").value = "";
   $("#status-filter").value = "active";
@@ -2281,7 +2814,9 @@ function renderTaxonomy() {
   ]);
   const groups = [
     ["System families", state.taxonomy.system_families], ...roleGroups,
+    ["Collection symbols", AppCore.COLLECTIONS.map(entry => ({ name: entry.name, definition: entry.meaning, emblem: AppCore.collectionEmblem(entry), family: "type" })), { lede: "Navigation symbols identify collections. Card badges describe individual records; shared artwork does not imply the same record type." }],
     ...badgeGroups,
+    ["Model artifact licensing", AppCore.modelLicenseCategories(state.taxonomy.source_models), { lede: "These labels describe reviewed release artifacts and mandatory terms, not training code or training data openness. Downloadable weights are a separate access fact. Imported records have reported licenses only." }],
     ["AI relationship", state.taxonomy.agent_relations], ["Architecture", state.taxonomy.architectures],
     ["Retrieval modes", state.taxonomy.retrieval_modes], ["Capture modes", state.taxonomy.capture_modes],
     ["Memory lifecycle", state.taxonomy.memory_lifecycle], ["Agent interfaces", state.taxonomy.agent_interfaces],
@@ -2344,15 +2879,28 @@ function systemDialogMarkup(project) {
   const providerDetail = project.provider_relationship && project.model_backends
     ? `<section class="detail-block"><h3>Model provider support</h3><p><strong>Relationship:</strong> ${escapeHTML(taxonomyName("provider_relationships", project.provider_relationship))}</p><p><strong>Reviewed backends:</strong> ${escapeHTML(project.model_backends.map(item => taxonomyName("model_backends", item)).join(" · "))}</p><p class="unscored-note">These traits describe reviewed support, not an inference-service score. Missing traits mean not reviewed.</p></section>`
     : "";
-  const successor = project.superseded_by
-    ? state.projects.find(item => item.id === project.superseded_by)
-    : null;
+  const successor = AppCore.successorSystem(project, state.projects);
   const statusNotice = project.status === "superseded"
     ? `<section class="detail-block status-notice"><h3>Superseded</h3><p>The maintainer designates ${successor ? `<button class="link-button" data-successor="${escapeHTML(successor.id)}">${escapeHTML(successor.name)}</button>` : "a named successor"} as this project's successor. The review below stands; the record is kept as a historical reference rather than a current recommendation.</p></section>`
+    : "";
+  const predecessors = AppCore.predecessorSystems(project, state.projects);
+  const predecessorNotice = predecessors.length
+    ? `<section class="detail-block status-notice"><h3>Superseded predecessor</h3><p>The maintainer superseded ${predecessors.map(item => `<button class="link-button" data-open-project="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`).join(" · ")} with this record. Their reviews stand as historical references.</p></section>`
+    : "";
+  const related = AppCore.relatedSystems(project, state.projects);
+  const moreFromLab = AppCore.moreFromLabSystems(project, { index: state.labIndex, projects: state.projects });
+  const relatedMarkup = `<section class="detail-block"><h3>Related in ${escapeHTML(roleName(project.primary_role))}</h3>${related.length ? `<p>${related.map(item => `<button type="button" class="ghost-button" data-open-project="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`).join(" ")}</p>` : "<p>None recorded.</p>"}</section>`;
+  const moreFromLabMarkup = moreFromLab
+    ? `<section class="detail-block"><h3>More from ${escapeHTML(moreFromLab.lab.name)}</h3><p>${moreFromLab.systems.map(item => `<button type="button" class="ghost-button" data-open-project="${escapeHTML(item.id)}">${escapeHTML(item.name)}</button>`).join(" ")} <button type="button" class="link-button" data-open-lab="${escapeHTML(moreFromLab.lab.id)}">All from ${escapeHTML(moreFromLab.lab.name)} →</button></p></section>`
+    : "";
+  const boundaryNote = project.current_repo_note
+    ? `<section class="detail-block"><h3>Product boundary</h3><p>${detailText(project.current_repo_note)}</p></section>`
     : "";
   return `<p class="eyebrow">${escapeHTML(familyName(project.system_family))} · ${escapeHTML(roleName(project.primary_role))}</p><h1>${escapeHTML(project.name)}</h1><p>${detailText(project.why_it_matters)}</p>
     <div class="detail-grid">
       ${statusNotice}
+      ${predecessorNotice}
+      ${boundaryNote}
       <section class="detail-block"><h3>System identity</h3><p><strong>AI relationship:</strong> ${escapeHTML(relationName(project.agent_relation))}</p><p><strong>Canonical data:</strong> ${detailText(project.canonical_data)}</p><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(project.source_model))}</p><p><strong>Deployment:</strong> ${escapeHTML(project.deployment.map(item => taxonomyName("deployment_modes", item)).join(", "))}</p>${labLinksMarkup("system", project)}<p><a href="${escapeHTML(project.url)}" target="_blank" rel="noreferrer">${project.repo ? "Open repository" : "Open official product"} ↗</a></p></section>
       <section class="detail-block"><h3>Licenses and terms</h3>${licenseLinks}${project.license_review_status === "review_required" ? '<p class="notice">The reviewed license evidence may be stale and requires human review.</p>' : ""}</section>
       <section class="detail-block"><h3>${escapeHTML(scoreProfileName(project.score_profile))}</h3><table class="score-table">${dimensions.map(([name, value]) => `<tr><td>${escapeHTML(label(name))}</td><td>${escapeHTML(value)}</td></tr>`).join("")}<tr><td><strong>Overall</strong></td><td>${escapeHTML(project.score.overall)}</td></tr></table></section>
@@ -2361,6 +2909,8 @@ function systemDialogMarkup(project) {
       <section class="detail-block"><h3>Architecture</h3><p>${project.architectures.map(architectureName).map(escapeHTML).join(" · ")}</p><h3>Retrieval</h3><p>${detailText((project.retrieval_modes || []).map(label).join(" · "))}</p></section>
       ${providerDetail}
       ${familyDetail}
+      ${relatedMarkup}
+      ${moreFromLabMarkup}
     </div>`;
 }
 
@@ -2431,7 +2981,7 @@ function robotDialogMarkup(robot) {
   const reviewedLine = robot.verified_at ? `<p>Reviewed ${escapeHTML(robot.verified_at)}.</p>` : "";
   return `<p class="eyebrow">Robot · ${escapeHTML(taxonomyName("robot_form_factors", robot.form_factor))} · Unscored</p><h1>${escapeHTML(robot.name)}</h1><p>${escapeHTML(robot.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>What it is</h3><p><strong>Maker:</strong> ${escapeHTML(robot.manufacturer)}</p><p><strong>Status:</strong> ${escapeHTML(label(robot.status))}</p>${robot.variants ? `<p><strong>Variants:</strong> ${escapeHTML(robot.variants)}</p>` : ""}<p><a href="${escapeHTML(robot.url)}" target="_blank" rel="noreferrer">Open official page ↗</a></p>${robot.repo ? `<p><a href="https://github.com/${escapeHTML(robot.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
+      <section class="detail-block"><h3>What it is</h3><p><strong>Maker:</strong> ${escapeHTML(robot.manufacturer)}</p>${labLinksMarkup("robot", robot)}<p><strong>Status:</strong> ${escapeHTML(label(robot.status))}</p>${robot.variants ? `<p><strong>Variants:</strong> ${escapeHTML(robot.variants)}</p>` : ""}<p><a href="${escapeHTML(robot.url)}" target="_blank" rel="noreferrer">Open official page ↗</a></p>${robot.repo ? `<p><a href="https://github.com/${escapeHTML(robot.repo)}" target="_blank" rel="noreferrer">Open repository ↗</a></p>` : ""}</section>
       <section class="detail-block"><h3>Models the vendor names</h3>${modelsSection}${notVerifiedMarkup}</section>
       ${(robot.ai_basis || []).includes("open_model_interface") ? `<section class="detail-block"><h3>Running your own models</h3><p>${detailText(robot.developer_access || "")}</p></section>` : ""}
       <section class="detail-block"><h3>Hardware</h3><p><strong>Compute:</strong> ${detailText(hardware.compute || "—")}</p><p><strong>Sensors:</strong> ${detailText(hardware.sensors || "—")}</p><p><strong>Actuation:</strong> ${detailText(hardware.actuation || "—")}</p><p><strong>Power:</strong> ${detailText(hardware.power || "—")}</p></section>
@@ -2488,7 +3038,11 @@ function trustBlockMarkup(service) {
   }
   const rows = TRUST_PROPERTY_ORDER.map(name => {
     const item = trust.properties[name];
-    return `<tr><td>${escapeHTML(TRUST_PROPERTY_LABELS[name])}</td><td>${escapeHTML(trustStatusName(item.status))}</td><td>${escapeHTML(item.note)} ${trustSourceLink(item, "source")} <span class="evidence-date">${escapeHTML(item.verified_at)}</span></td></tr>`;
+    // The status cell repeats the property name for a screen reader, because the phone
+    // layout stacks the row into blocks (styles.css, the trust-table rules in the 720px
+    // query) and a stacked cell has no column header left to announce it against.
+    const label = TRUST_PROPERTY_LABELS[name];
+    return `<tr><td>${escapeHTML(label)}</td><td><span class="visually-hidden">${escapeHTML(label)}: </span>${escapeHTML(trustStatusName(item.status))}</td><td>${escapeHTML(item.note)} ${trustSourceLink(item, "source")} <span class="evidence-date">${escapeHTML(item.verified_at)}</span></td></tr>`;
   }).join("");
   const findings = trust.findings.length
     ? `<ul>${trust.findings.map(trustFindingMarkup).join("")}</ul>`
@@ -2630,6 +3184,16 @@ function loadSearchIndex(collection) {
   return searchIndexRequests[collection];
 }
 
+// Starts one index's fetch and repaints once it lands, but only for a fetch
+// this call starts: a keystroke that finds the index already on its way adds
+// no second repaint to it (CR-21). A failed index waits for a focused search
+// box, the one caller that passes `retry`, as an empty result leaves it.
+function fetchSearchIndex(collection, { retry = false } = {}) {
+  if (searchIndexes[collection] || searchIndexRequests[collection]) return;
+  if (searchIndexFailed.has(collection) && !retry) return;
+  loadSearchIndex(collection).then(renderSearchSurfaces);
+}
+
 const reportedCapability = value => value == null ? "Not reported" : value ? "Yes" : "No";
 const reportedTokenLimit = value => value == null ? "Not reported" : Intl.NumberFormat("en").format(value);
 
@@ -2676,7 +3240,7 @@ function modelDialogMarkup(model) {
       <section class="detail-block"><h3>Modalities and limits</h3><p><strong>Input:</strong> ${escapeHTML(metadata.modalities.input.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Output:</strong> ${escapeHTML(metadata.modalities.output.map(item => taxonomyName("model_modalities", item)).join(" · "))}</p><p><strong>Context:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.context))}</p><p><strong>Input limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.input))}</p><p><strong>Output limit:</strong> ${escapeHTML(reportedTokenLimit(metadata.limits.output))}</p></section>
       <section class="detail-block"><h3>Reported capabilities</h3>${Object.entries(metadata.capabilities).map(([name, value]) => `<p><strong>${escapeHTML(label(name))}:</strong> ${escapeHTML(reportedCapability(value))}</p>`).join("")}<p class="unscored-note">${escapeHTML(attribution.capabilityNote)}</p></section>
       <section class="detail-block"><h3>Release metadata</h3><p><strong>Family:</strong> ${escapeHTML(metadata.family || "Not reported")}</p><p><strong>Released:</strong> ${escapeHTML(metadata.release_date || "Not reported")}</p><p><strong>Last updated:</strong> ${escapeHTML(metadata.last_updated || "Not reported")}</p><p><strong>Knowledge cutoff:</strong> ${escapeHTML(metadata.knowledge_cutoff || "Not reported")}</p><p><strong>${escapeHTML(openWeightsLabel)}:</strong> ${escapeHTML(reportedCapability(metadata.reported_open_weights))}</p><p><strong>${escapeHTML(licenseLabel)}:</strong> ${escapeHTML(metadata.reported_license || "Not reported")}</p></section>
-      <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Source model:</strong> ${escapeHTML(sourceModelName(model.source_model))}</p><p>${detailText(model.license_note)}</p>${(model.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
+      <section class="detail-block"><h3>Licenses and terms</h3><p><strong>Artifact licensing:</strong> ${escapeHTML(modelLicenseName(model.source_model))}</p><p>These labels describe the reviewed release artifacts and mandatory terms; they do not assess training code or training data openness.</p><p>${detailText(model.license_note)}</p>${(model.license_evidence || []).map(runtimeLicenseEvidenceLink).join("")}</section>
       <section class="detail-block"><h3>${escapeHTML(attribution.linksHeading)}</h3>${modelSourceLinks(metadata, attribution.noLinksText)}</section>
       <section class="detail-block"><h3>Strengths</h3>${detailList(model.strengths)}</section>
       <section class="detail-block"><h3>Tradeoffs</h3>${detailList(model.tradeoffs)}</section>
@@ -2727,19 +3291,27 @@ function labDialogMarkup(lab) {
     ["Agent packs it publishes", relations.packs, "data-open-pack"],
   ].filter(([, records]) => records.length).map(([title, records, attribute]) =>
     `<section class="detail-block"><h3>${title}</h3><p>${labRecordButtons(records, attribute)}</p></section>`).join("");
-  // A lab admitted on a published frontier commitment has nothing to join, and
-  // an empty heading over an empty list would read as a gap in the catalog
-  // rather than as the state the record is in (ADR 044).
+  // A lab whose join to Models is empty explains it in the words its basis calls
+  // for, because an empty heading over an empty list reads as a gap in the catalog
+  // rather than as the state the record is in (ADR 044, ADR 048).
   const announced = lab.admission_basis === "frontier_announcement";
+  const systemBased = lab.admission_basis === "reviewed_system";
+  const robotBased = lab.admission_basis === "reviewed_robot";
+  const noReleases = !relations.models.length;
   const releaseBlock = announced
     ? `<section class="detail-block"><h3>Reviewed model releases · 0</h3><p>None reviewed. The Atlas has reviewed no release this organization developed, which is why it is recorded on its own published statement of intent rather than on a release. Nothing here is a claim that it has released nothing.</p></section>`
-    : `<section class="detail-block"><h3>Reviewed model releases · ${relations.models.length}</h3><p>${modeCounts}</p><ul class="lab-release-list">${recent}</ul>${pending}<p><button type="button" class="ghost-button" data-browse-lab-models="${escapeHTML(lab.id)}">Browse all ${total} in Models →</button></p></section>`;
+    : noReleases && robotBased
+      ? `<section class="detail-block"><h3>Reviewed model releases · 0</h3><p>None reviewed. The Atlas has reviewed no model release this organization developed, which is why it is recorded on a robot it makes rather than on a release. Nothing here is a claim that it has developed no models: the models such an organization names on its own pages are policies that act on its robots, which this collection keeps out of Models.</p></section>`
+    : noReleases && systemBased
+      ? `<section class="detail-block"><h3>Reviewed model releases · 0</h3><p>None reviewed. The Atlas has reviewed no model release this organization developed, which is why it is recorded on a system it built rather than on a release. Nothing here is a claim that it has developed no software.</p></section>`
+      : `<section class="detail-block"><h3>Reviewed model releases · ${relations.models.length}</h3><p>${modeCounts}</p><ul class="lab-release-list">${recent}</ul>${pending}<p><button type="button" class="ghost-button" data-browse-lab-models="${escapeHTML(lab.id)}">Browse all ${total} in Models →</button></p></section>`;
   return `<p class="eyebrow">Lab · ${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · Unscored</p><h1>${escapeHTML(lab.name)}</h1><p>${escapeHTML(lab.description)}</p>
     <div class="detail-grid">
-      <section class="detail-block"><h3>Organization</h3><p><strong>Type:</strong> ${escapeHTML(taxonomyName("lab_types", lab.lab_type))}</p><p><strong>Headquarters:</strong> ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p>${lab.parent_organization ? `<p><strong>Parent organization:</strong> ${escapeHTML(lab.parent_organization)}</p>` : ""}<p><strong>Recorded because:</strong> ${escapeHTML(taxonomyName("lab_admission_bases", lab.admission_basis))}</p>${lab.catalog_names.length ? `<p><strong>Named in the catalog as:</strong> ${escapeHTML(lab.catalog_names.join(" · "))}</p>` : ""}<p><a href="${escapeHTML(lab.url)}" target="_blank" rel="noreferrer">Open official site ↗</a></p></section>
+      <section class="detail-block"><h3>Organization</h3><p><strong>Type:</strong> ${escapeHTML(taxonomyName("lab_types", lab.lab_type))}</p><p><strong>Headquarters:</strong> ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p>${(lab.research_locations || []).length ? `<p><strong>Work also happens in:</strong> ${escapeHTML((lab.research_locations || []).map(country => taxonomyName("countries", country)).join(" · "))}</p>` : ""}${lab.parent_organization ? `<p><strong>Parent organization:</strong> ${escapeHTML(lab.parent_organization)}</p>` : ""}<p><strong>Recorded because:</strong> ${escapeHTML(taxonomyName("lab_admission_bases", lab.admission_basis))}</p>${lab.catalog_names.length ? `<p><strong>Named in the catalog as:</strong> ${escapeHTML(lab.catalog_names.join(" · "))}</p>` : ""}<p><a href="${escapeHTML(lab.url)}" target="_blank" rel="noreferrer">Open official site ↗</a></p></section>
       <section class="detail-block"><h3>How it is organized</h3><p>${detailText(lab.organization_note)}</p></section>
       ${releaseBlock}
       <section class="detail-block"><h3>Systems it builds</h3>${relations.systems.length ? `<p>${labRecordButtons(relations.systems, "data-open-project")}</p>` : "<p>None recorded in the catalog.</p>"}</section>
+      <section class="detail-block"><h3>Robots it makes</h3>${relations.robots.length ? `<p>${labRecordButtons(relations.robots, "data-open-robot")}</p>` : "<p>None recorded in the catalog.</p>"}</section>
       <section class="detail-block"><h3>Inference services it operates</h3>${relations.services.length ? `<p>${labRecordButtons(relations.services, "data-open-inference")}</p>` : "<p>None recorded in the catalog.</p>"}</section>
       ${others}
       <section class="detail-block"><h3>Where it publishes</h3>${(lab.channels || []).map(labChannelMarkup).join("") || "<p>—</p>"}</section>
@@ -2756,6 +3328,7 @@ function bindLabDialogLinks() {
     ["data-open-model", openModel], ["data-open-project", openProject],
     ["data-open-inference", openInferenceService], ["data-open-runtime", openLocalRuntime],
     ["data-open-spec", openSpecification], ["data-open-pack", openPack],
+    ["data-open-robot", openRobot],
   ]) {
     $$(`[${attribute}]`, root).forEach(button => button.addEventListener("click", () => {
       $("#lab-dialog").close();
@@ -2766,9 +3339,12 @@ function bindLabDialogLinks() {
 }
 
 // The grid continues the dialog's newest-first release list rather than
-// switching to the access-score order.
+// switching to the access-score order. Its label promises all of the lab's
+// releases, so it clears the search first, as the Finder's handoff does, and
+// release is then the sort clearing a later query returns to.
 function browseLabModels(labId) {
   $("#lab-dialog").close();
+  clearQuery();
   $("#model-lab-filter").value = labId;
   $("#model-sort-filter").value = "release";
   state.page.models = 1;
@@ -2784,8 +3360,12 @@ const RECORD_DIALOGS = {
     find: id => state.projects.find(item => item.id === id),
     markup: systemDialogMarkup,
     hydrate: ensureLicenseEvidence,
-    afterRender: () => $$('[data-successor]', $("#dialog-content")).forEach(button =>
-      button.addEventListener("click", () => openProject(button.dataset.successor))),
+    afterRender: () => {
+      $$('[data-successor]', $("#dialog-content")).forEach(button =>
+        button.addEventListener("click", () => openProject(button.dataset.successor)));
+      $$('[data-open-project]', $("#dialog-content")).forEach(button =>
+        button.addEventListener("click", () => openProject(button.dataset.openProject)));
+    },
   },
   spec: {
     dialog: "#specification-dialog",
@@ -3005,38 +3585,48 @@ function restoreFromURL({ boot = false } = {}) {
     view = "directory";
   }
   const scope = AppCore.scopeFromURL(params);
-  state.urlReady = false;
   let restored = {};
-  if (scope) {
-    resetScopeControls(scope, params);
-    restored = restoreScopeFromURL(scope);
+  let comparisonRestored;
+  let onDoor;
+  // A restore that throws still hands the URL back to the page.
+  try {
+    state.urlReady = false;
+    if (scope) {
+      resetScopeControls(scope, params);
+      restored = restoreScopeFromURL(scope);
+      // Beside a query, the URL names every sort but Best match (scopeURLParams,
+      // rulings R-P1-2 and R-P1-2b). So a link with a query and no sort lists by
+      // match, and a sort it names is one the reader chose, which typing keeps.
+      // A sort the scope cannot take was removed on restore, so it counts as none.
+      // It is marked before the collection switch below, whose syncMatchSort
+      // would otherwise replace it with Best match.
+      if (restored.q?.trim() && restored.sort !== undefined) sortChosenDuringQuery[scope] = true;
+    }
+    comparisonRestored = restoreComparisonFromURL();
+    if (!comparisonRestored && state.comparison.ids.length) clearComparison({ updateURL: false });
+    onDoor = view === "directory" && AppCore.directoryStageFromURL(params) === "door";
+    if (onDoor) showFrontDoor({ updateURL: false });
+    else if (scope && !comparisonRestored) setDirectoryCollection(scope, { updateURL: false });
+    activateView(view);
+    restoreFinderFromURL(params);
+    // The one restored query, or its absence, reaches every collection's
+    // sort, so a sort chosen during a query the URL no longer holds ends too.
+    if (scope) syncMatchSorts();
+    // The record is read from the URL as it arrived; an open dialog names it
+    // already, so showRecordDialog writes nothing and nothing pushes.
+    const reference = AppCore.parseRecordReference(params.get("record"));
+    if (!reference || !openRecord(reference.kind, reference.id)) {
+      closeRecordDialogs();
+      // A record the page cannot show leaves the URL, as any value a control
+      // cannot take does.
+      const current = new URL(window.location.href);
+      current.searchParams.delete("record");
+      writeURL(current);
+    }
+  } finally {
+    state.urlReady = true;
   }
-  const comparisonRestored = restoreComparisonFromURL();
-  if (!comparisonRestored && state.comparison.ids.length) clearComparison({ updateURL: false });
-  const onDoor = view === "directory" && AppCore.directoryStageFromURL(params) === "door";
-  if (onDoor) showFrontDoor({ updateURL: false });
-  else if (scope && !comparisonRestored) setDirectoryCollection(scope, { updateURL: false });
-  activateView(view);
-  // Beside a query, the URL names every sort but Best match (scopeURLParams,
-  // rulings R-P1-2 and R-P1-2b). So a link with a query and no sort lists by
-  // match, and a sort it names is one the reader chose, which typing keeps.
-  // A sort the scope cannot take was removed on restore, so it counts as none.
-  if (scope && restored.q?.trim()) {
-    if (restored.sort !== undefined) sortChosenDuringQuery[scope] = true;
-    syncMatchSort(scope);
-  }
-  // The record is read from the URL as it arrived; an open dialog names it
-  // already, so showRecordDialog writes nothing and nothing pushes.
-  const reference = AppCore.parseRecordReference(params.get("record"));
-  if (!reference || !openRecord(reference.kind, reference.id)) {
-    closeRecordDialogs();
-    // A record the page cannot show leaves the URL, as any value a control
-    // cannot take does.
-    const current = new URL(window.location.href);
-    current.searchParams.delete("record");
-    writeURL(current);
-  }
-  state.urlReady = true;
+  if (onDoor) selectElement(params.get("element"), params.get("elementRecord"));
   writeDirectoryURL();
   writeScopeURL();
   if (restored.q) loadRestoredSearch(scope, restored.page);
@@ -3162,7 +3752,7 @@ function openComparison() {
   } else if (state.comparison.kind === "model") {
     profile = state.taxonomy.model_score_profile;
     eyebrow = profile.name;
-    note = "This comparison covers model access, distribution, and deployability. It excludes output quality, benchmarks, parameter count, current price, latency, and throughput.";
+    note = "This comparison covers model access, distribution, and deployability. Artifact licensing does not assess training code or training data openness. It excludes output quality, benchmarks, parameter count, current price, latency, and throughput.";
     rows = [
       ["Developer", records.map(item => item.developer)],
       ["Model type", records.map(item => taxonomyName("model_types", item.model_type))],
@@ -3181,7 +3771,7 @@ function openComparison() {
         if (!limits) return null;
         return limits.context == null ? "Not reported" : Intl.NumberFormat("en").format(limits.context);
       })],
-      ["Source model", records.map(item => sourceModelName(item.source_model))],
+      ["Artifact licensing", records.map(item => modelLicenseName(item.source_model))],
       ["Licenses", records.map(item => item.licenses.map(value => `${value} — ${licenseName(value)}`).join(" · "))],
       ["Strengths", records.map(item => listCell(item.strengths))],
       ["Tradeoffs", records.map(item => listCell(item.tradeoffs))],
@@ -3262,6 +3852,7 @@ function openComparison() {
 // for a collection, a comparison, and a record.
 function writeViewURL(id) {
   const url = new URL(window.location.href);
+  if (id !== "directory") { url.searchParams.delete("element"); url.searchParams.delete("elementRecord"); }
   if (id !== "explore") Object.keys(RUNTIME_MATRIX_CONTROLS).forEach(key => url.searchParams.delete(key));
   if (id === "directory") url.searchParams.delete("view");
   else url.searchParams.set("view", id);
@@ -3312,6 +3903,10 @@ function activateView(id, { focusTarget } = {}) {
     else item.removeAttribute("aria-current");
   });
   $$(".view").forEach(view => view.classList.toggle("is-active", view.id === id));
+  // A strip rendered while its view was hidden measured no height, so the
+  // sticky clearance, which places the results bar, is taken again here.
+  syncStickyClearance();
+  syncMobileNavigation();
   if (id === "explore") restoreRuntimeMatrix();
   if (leaving && leaving.id !== id) {
     const heading = focusTarget || document.getElementById(document.getElementById(id)?.getAttribute("aria-labelledby"));
@@ -3327,14 +3922,7 @@ function activateView(id, { focusTarget } = {}) {
 
 // Which collections a search box can widen, and so which indexes its focus
 // is worth fetching.
-const SEARCH_SCOPES = {
-  "#project-search": ["systems"], "#specification-search": ["specifications"],
-  "#inference-search": ["inference"], "#runtime-search": ["runtimes"],
-  "#model-search": ["models"], "#pack-search": ["packs", "systems"], "#lab-search": ["labs"],
-  "#robot-search": ["robots"],
-  "#all-directory-search": ["systems", "inference", "runtimes", "models", "packs", "robots"],
-  "#door-search": ["systems", "inference", "runtimes", "models", "packs", "robots"],
-};
+const SEARCH_SCOPES = { "#results-search": CATALOG_INDEXES, "#door-search": CATALOG_INDEXES };
 
 // Docs groups the explanatory views so the primary row stays on the catalog
 // loop. It is a plain menu: toggle on click, close on Escape, outside click,
@@ -3371,6 +3959,91 @@ function initDocsMenu() {
   });
 }
 
+// Mobile navigation uses existing views and search state; no parallel catalog.
+function syncMobileNavigation() {
+  const view = $(".view.is-active")?.id;
+  const active = view === "directory" ? (state.directoryStage === "door" ? "home" : "search")
+    : view === "finder" || view === "explore" ? view : "more";
+  $$("[data-mobile-nav]").forEach(button => {
+    if (button.dataset.mobileNav === active) button.setAttribute("aria-current", "page");
+    else button.removeAttribute("aria-current");
+  });
+}
+
+function openMobileSearch() {
+  if (!$("#directory").classList.contains("is-active") && state.directoryStage !== "door") {
+    try { window.history.pushState(null, "", window.location.href); } catch {}
+  }
+  openCollection("all");
+  activateView("directory");
+  $("#results-search").focus();
+}
+
+function initMobileNavigation() {
+  const more = $("#mobile-more");
+  const tools = $(".header-tools");
+  function syncLayout() {
+    const focused = document.activeElement;
+    const toolsFocused = tools.contains(focused);
+    const moreFocused = more.contains(focused);
+    const focusedFamily = focused?.closest("[data-element-family]")?.dataset.elementFamily;
+    if (more.open) more.close();
+    (mobileLayout.matches ? $("#mobile-tools") : $(".site-header")).append(tools);
+    if (selectedElement) mobileElementFamily = selectedElement.family;
+    else if (focusedFamily) mobileElementFamily = focusedFamily;
+    syncElementFamilies();
+    positionElementSheet();
+    syncStickyClearance();
+    if (toolsFocused && !mobileLayout.matches) focused.focus();
+    else if (moreFocused && !mobileLayout.matches) $(".docs-button").focus();
+    else if (toolsFocused && mobileLayout.matches) $('[data-mobile-nav="more"]').focus();
+  }
+  syncLayout();
+  mobileLayout.addEventListener("change", syncLayout);
+  $("#element-family-tabs").addEventListener("click", event => {
+    const button = event.target.closest("[data-element-family-tab]");
+    if (!button) return;
+    if (selectedElement && selectedElement.family !== button.dataset.elementFamilyTab) selectElement(null);
+    mobileElementFamily = button.dataset.elementFamilyTab;
+    syncElementFamilies();
+  });
+  $("#mobile-nav").addEventListener("click", event => {
+    const button = event.target.closest("[data-mobile-nav]");
+    if (!button) return;
+    const target = button.dataset.mobileNav;
+    if (target === "more") { more.showModal(); return; }
+    if (target === "search") { openMobileSearch(); return; }
+    // A destination switch gets its own history entry, just like catalog links.
+    try { window.history.pushState(null, "", window.location.href); } catch {}
+    if (target === "home") {
+      selectElement(null);
+      activateView("directory");
+      showFrontDoor();
+    } else activateView(target);
+    document.getElementById($(".view.is-active").getAttribute("aria-labelledby"))?.focus({ preventScroll: true });
+  });
+  $("#mobile-more-close").addEventListener("click", () => more.close());
+  more.addEventListener("click", event => {
+    if (event.target === more) more.close();
+    const button = event.target.closest("[data-mobile-view]");
+    if (!button) return;
+    more.close();
+    try { window.history.pushState(null, "", window.location.href); } catch {}
+    activateView(button.dataset.mobileView);
+    document.getElementById($(".view.is-active").getAttribute("aria-labelledby"))?.focus({ preventScroll: true });
+  });
+  // Mobile browsers resize their visual viewport for the keyboard. Hide the
+  // dock only while editing and zoom is unchanged, so it cannot float over keys.
+  const viewport = window.visualViewport;
+  const syncKeyboard = () => {
+    const editing = document.activeElement?.matches("input, textarea, select");
+    document.body.classList.toggle("mobile-keyboard", Boolean(editing && viewport && viewport.scale === 1 && window.innerHeight - viewport.height > 120));
+  };
+  viewport?.addEventListener("resize", syncKeyboard);
+  document.addEventListener("focusin", syncKeyboard);
+  document.addEventListener("focusout", () => requestAnimationFrame(syncKeyboard));
+}
+
 function bindEvents() {
   Object.values(RUNTIME_MATRIX_CONTROLS).forEach(({ selector }) => $(selector).addEventListener("change", updateRuntimeMatrix));
   $("#matrix-reset").addEventListener("click", () => {
@@ -3380,7 +4053,6 @@ function bindEvents() {
   syncStickyClearance();
   window.addEventListener("resize", syncStickyClearance);
   for (const [scope, selector] of Object.entries(MATCH_SORTS)) {
-    $(SCOPE_CONTROLS[scope].q).addEventListener("input", () => syncMatchSort(scope));
     $(selector).addEventListener("input", () => {
       if ($(SCOPE_CONTROLS[scope].q).value.trim()) sortChosenDuringQuery[scope] = true;
     });
@@ -3395,6 +4067,7 @@ function bindEvents() {
     const selector = onDoor ? "#door-search" : SCOPE_CONTROLS[activeScope()]?.q;
     if (!selector) return;
     event.preventDefault();
+    if (onDoor && mobileLayout.matches) { openMobileSearch(); return; }
     $(selector).focus();
   });
   // The Docs menu button carries .tab styling but no data-tab, so the primary
@@ -3406,6 +4079,7 @@ function bindEvents() {
   $$('[data-open-tab]').forEach(button => button.addEventListener("click", () => activateView(button.dataset.openTab)));
   $$('[data-open-view]').forEach(button => button.addEventListener("click", () => { closeDocsMenu(); activateView(button.dataset.openView); }));
   initDocsMenu();
+  initMobileNavigation();
   // The brand mark links home. A plain left click stays in the single-page
   // app on the directory landing view; modified clicks and new tabs follow
   // the href to the site root.
@@ -3418,13 +4092,11 @@ function bindEvents() {
   });
   // Fetching on focus rather than on the first keystroke usually beats the
   // second character, so the widened results arrive before anyone sees the
-  // narrow ones. The All view searches five collections, so it loads five.
+  // narrow ones. Either box searches every collection, so it loads every index.
   for (const [selector, collections] of Object.entries(SEARCH_SCOPES)) {
     const input = $(selector);
     const loadIndexes = () => {
-      for (const collection of collections) {
-        loadSearchIndex(collection)?.then(renderSearchSurfaces);
-      }
+      for (const collection of collections) fetchSearchIndex(collection, { retry: true });
     };
     input.addEventListener("focus", loadIndexes);
     // Boot data can take longer to parse as catalogs grow. If someone focuses
@@ -3432,25 +4104,42 @@ function bindEvents() {
     // instead of waiting for a second focus cycle.
     if (document.activeElement === input) loadIndexes();
   }
-  $("#all-directory-search").addEventListener("input", () => { state.page.all = 1; renderAllDirectoryEntries(); });
+  $("#results-search").addEventListener("input", onQueryInput);
   initBadgeTooltip();
   initBadgeLegend();
-  // The front door's search hands its text to the All search and lands in
+  // The front door's search hands its text to the results search and lands in
   // results, so the first character is the search; the caret follows.
+  $("#front-door").addEventListener("click", event => {
+    const face = event.target.closest("[data-stage-face]");
+    if (face) showStage(face.dataset.stageFace);
+    const record = event.target.closest("[data-stage-record]");
+    if (!record) return;
+    (record.dataset.stageRecord === "model" ? openModel : openProject)(record.dataset.stageId);
+  });
+  $("#element-groups").addEventListener("click", event => {
+    const button = event.target.closest("[data-element]");
+    if (button) selectElement(button.dataset.element, "", { focus: true });
+  });
+  $("#element-record").addEventListener("change", event => {
+    selectedElementRecord = selectedElement.records.find(record => record.id === event.target.value);
+    writeElementURL();
+    loadElementRecord();
+  });
+  $("#element-close").addEventListener("click", () => {
+    const id = selectedElement.id;
+    selectElement(null);
+    document.querySelector(`[data-element="${id}"]`)?.focus();
+  });
+  $("#element-retry").addEventListener("click", loadElementRecord);
   $("#door-search").addEventListener("input", event => {
     const value = event.target.value;
     if (!value) return;
     event.target.value = "";
-    $("#all-directory-search").value = value;
     state.page.all = 1;
+    const target = $("#results-search");
+    target.value = value;
     openCollection("all");
-    // Leaving the door carries the query of the scope last shown, which can
-    // replace the text just typed; the typed text is the search.
-    const target = $("#all-directory-search");
-    if (target.value !== value) {
-      target.value = value;
-      target.dispatchEvent(new Event("input", { bubbles: true }));
-    }
+    target.dispatchEvent(new Event("input", { bubbles: true }));
     target.focus({ preventScroll: true });
     target.setSelectionRange(value.length, value.length);
   });
@@ -3486,95 +4175,15 @@ function bindEvents() {
     renderScopeStrip();
   });
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.directoryRolesLabel = null; state.page.systems = 1; renderProjects(); });
-  ["#project-search", "#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#capability-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
-  ["#specification-search", "#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.specifications = 1; renderSpecifications(); }));
-  ["#inference-search", "#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.inference = 1; renderInferenceServices(); }));
-  ["#runtime-search", "#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.runtimes = 1; renderLocalRuntimes(); }));
-  ["#model-search", "#model-type-filter", "#model-distribution-filter", "#model-modality-filter", "#model-source-filter", "#model-license-filter", "#model-lab-filter", "#model-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.models = 1; renderModels(); }));
-  ["#lab-search", "#lab-type-filter", "#lab-country-filter", "#lab-distribution-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.labs = 1; renderLabs(); }));
-  ["#pack-search", "#pack-type-filter", "#pack-host-filter", "#pack-install-filter", "#pack-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.packs = 1; renderPacks(); }));
-  ["#robot-search", "#robot-form-factor-filter", "#robot-ai-basis-filter", "#robot-availability-filter", "#robot-status-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.robots = 1; renderCollection("robots"); }));
-  $("#reset-specification-filters").addEventListener("click", () => {
-    $("#specification-search").value = "";
-    $("#specification-type-filter").value = "";
-    $("#specification-scope-filter").value = "";
-    $("#specification-status-filter").value = "";
-    $("#specification-license-filter").value = "";
-    state.page.specifications = 1;
-    renderSpecifications();
-  });
-  $("#reset-inference-filters").addEventListener("click", () => {
-    $("#inference-search").value = "";
-    $("#inference-type-filter").value = "";
-    $("#inference-delivery-filter").value = "";
-    $("#inference-model-source-filter").value = "";
-    $("#inference-api-filter").value = "";
-    $("#inference-sort-filter").value = "score";
-    syncMatchSort("inference");
-    state.page.inference = 1;
-    renderInferenceServices();
-  });
-  $("#reset-runtime-filters").addEventListener("click", () => {
-    $("#runtime-search").value = "";
-    $("#runtime-type-filter").value = "";
-    $("#runtime-accelerator-filter").value = "";
-    $("#runtime-format-filter").value = "";
-    $("#runtime-api-filter").value = "";
-    $("#runtime-sort-filter").value = "score";
-    syncMatchSort("runtimes");
-    state.page.runtimes = 1;
-    renderLocalRuntimes();
-  });
-  $("#reset-model-filters").addEventListener("click", () => {
-    $("#model-search").value = "";
-    $("#model-type-filter").value = "";
-    $("#model-distribution-filter").value = "";
-    $("#model-modality-filter").value = "";
-    $("#model-source-filter").value = "";
-    $("#model-license-filter").value = "";
-    $("#model-lab-filter").value = "";
-    $("#model-sort-filter").value = "score";
-    syncMatchSort("models");
-    state.page.models = 1;
-    renderModels();
-  });
-  $("#reset-pack-filters").addEventListener("click", () => {
-    $("#pack-search").value = "";
-    $("#pack-type-filter").value = "";
-    $("#pack-host-filter").value = "";
-    $("#pack-install-filter").value = "";
-    $("#pack-license-filter").value = "";
-    state.page.packs = 1;
-    renderPacks();
-  });
-  $("#reset-lab-filters").addEventListener("click", () => {
-    $("#lab-search").value = "";
-    $("#lab-type-filter").value = "";
-    $("#lab-country-filter").value = "";
-    $("#lab-distribution-filter").value = "";
-    state.page.labs = 1;
-    renderLabs();
-  });
-  $("#reset-robot-filters").addEventListener("click", () => {
-    $("#robot-search").value = "";
-    $("#robot-form-factor-filter").value = "";
-    $("#robot-ai-basis-filter").value = "";
-    $("#robot-availability-filter").value = "";
-    $("#robot-status-filter").value = "";
-    state.page.robots = 1;
-    renderCollection("robots");
-  });
-  $("#reset-all-directory").addEventListener("click", () => {
-    $("#all-directory-search").value = "";
-    state.page.all = 1;
-    renderAllDirectoryEntries();
-  });
-  $("#reset-filters").addEventListener("click", () => {
-    applyDirectoryDefaults();
-    syncMatchSort("systems");
-    state.page.systems = 1;
-    renderProjects();
-  });
+  ["#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#capability-filter", "#retrieval-filter", "#status-filter", "#sort-filter", "#local-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
+  ["#specification-type-filter", "#specification-scope-filter", "#specification-status-filter", "#specification-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.specifications = 1; renderSpecifications(); }));
+  ["#inference-type-filter", "#inference-delivery-filter", "#inference-model-source-filter", "#inference-api-filter", "#inference-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.inference = 1; renderInferenceServices(); }));
+  ["#runtime-type-filter", "#runtime-accelerator-filter", "#runtime-format-filter", "#runtime-api-filter", "#runtime-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.runtimes = 1; renderLocalRuntimes(); }));
+  ["#model-type-filter", "#model-distribution-filter", "#model-modality-filter", "#model-source-filter", "#model-license-filter", "#model-lab-filter", "#model-sort-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.models = 1; renderModels(); }));
+  ["#lab-type-filter", "#lab-country-filter", "#lab-distribution-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.labs = 1; renderLabs(); }));
+  ["#pack-type-filter", "#pack-host-filter", "#pack-install-filter", "#pack-license-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.packs = 1; renderPacks(); }));
+  ["#robot-form-factor-filter", "#robot-ai-basis-filter", "#robot-availability-filter", "#robot-status-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.robots = 1; renderCollection("robots"); }));
+  for (const [scope, view] of Object.entries(RESULT_VIEWS)) $(view.clear).addEventListener("click", () => resetCollection(scope));
   $("#finder-roles-chip").addEventListener("click", () => {
     state.directoryRoles = null;
     state.directoryRolesLabel = null;
@@ -3586,33 +4195,16 @@ function bindEvents() {
     $("#result-count").focus();
   });
   $("#finder-content").addEventListener("click", event => {
-    const choice = event.target.closest("[data-finder-choice]");
-    if (choice) {
-      const key = choice.dataset.finderChoice;
-      state.finder.answers[key] = choice.dataset.finderValue;
-      if (key === "direction") {
-        delete state.finder.answers.goal;
-        delete state.finder.answers.priority;
-      } else if (key === "goal") {
-        delete state.finder.answers.priority;
-      }
-      state.finder.step = Math.min(3, state.finder.step + 1);
-      renderFinder();
-      keepFinderInView();
+    const goalButton = event.target.closest("[data-finder-goal]");
+    if (goalButton) {
+      if (chooseFinderGoal(goalButton.dataset.finderGoal, goalButton.dataset.finderDir)) writeFinderURL({ push: true });
       return;
     }
-    if (event.target.closest("[data-finder-back]")) {
-      state.finder.step = Math.max(0, state.finder.step - 1);
-      if (state.finder.step < 2) delete state.finder.answers.priority;
-      if (state.finder.step < 1) delete state.finder.answers.goal;
+    const priorityButton = event.target.closest("[data-finder-priority]");
+    if (priorityButton) {
+      state.finder.priority = priorityButton.dataset.finderPriority;
       renderFinder();
-      keepFinderInView();
-      return;
-    }
-    if (event.target.closest("[data-finder-reset]")) {
-      state.finder = { step: 0, answers: {} };
-      renderFinder();
-      keepFinderInView();
+      writeFinderURL({ push: true });
       return;
     }
     const projectButton = event.target.closest("[data-finder-project]");
@@ -3682,8 +4274,13 @@ function bindEvents() {
       return;
     }
     if (event.target.closest("[data-empty-search-all]")) {
-      const selector = SCOPE_CONTROLS[activeScope()]?.q;
-      if (selector) searchAllCollections($(selector).value);
+      searchAllCollections();
+      return;
+    }
+    const collectionButton = event.target.closest("[data-empty-open-collection]");
+    if (collectionButton) {
+      openCollection(collectionButton.dataset.emptyOpenCollection);
+      $("#results-search").focus();
       return;
     }
     if (event.target.closest("[data-empty-finder]")) activateView("finder");

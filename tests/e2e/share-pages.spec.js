@@ -1,4 +1,5 @@
 const { test, expect } = require("@playwright/test");
+const { recordHeading, recordView } = require("./helpers/results");
 
 test("a share page carries record metadata and opens the record in the Atlas", async ({ page }) => {
   await page.goto("/records/systems/kilo-code/");
@@ -11,16 +12,16 @@ test("a share page carries record metadata and opens the record in the Atlas", a
 
   await page.getByRole("link", { name: /Open in the directory/ }).click();
   await expect(page).toHaveURL(/record=system(%3A|:)kilo-code/);
-  await expect(page.locator("#project-dialog h1")).toHaveText("Kilo Code");
+  await expect(recordHeading(page, "system")).toHaveText("Kilo Code");
 });
 
 test("copy link in a record dialog copies the share page URL", async ({ page, context, baseURL }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/?collection=runtimes&record=runtime:ollama");
-  await expect(page.locator("#runtime-dialog-content h1")).toHaveText("Ollama");
+  await expect(recordHeading(page, "runtime")).toHaveText("Ollama");
 
-  await page.locator("#runtime-dialog [data-copy-record-link]").click();
-  await expect(page.locator("#runtime-dialog [data-record-link-status]")).toHaveText("Share link copied.");
+  await recordView(page, "runtime").locator("[data-copy-record-link]").click();
+  await expect(recordView(page, "runtime").locator("[data-record-link-status]")).toHaveText("Share link copied.");
   expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(`${baseURL}/records/local-runtimes/ollama/`);
 });
 

@@ -1,6 +1,6 @@
 # ADR 041: Labs are unscored records of who develops the catalog's models
 
-**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order) and [ADR 043](043-the-directory-opens-on-a-front-door-of-collection-tiles.md) (Labs is a Directory collection with a tile and a strip entry, not a sibling view; labs stay unscored).
+**Status:** Accepted. Amended by [ADR 040](040-search-orders-by-match-never-by-score.md) (search order), [ADR 043](043-the-directory-opens-on-a-front-door-of-collection-tiles.md) (Labs is a Directory collection with a tile and a strip entry, not a sibling view; labs stay unscored), [ADR 048](048-a-research-group-may-be-admitted-on-a-system-it-developed.md) (a research group may be admitted on a system it developed), [ADR 052](052-a-lab-records-where-its-work-happens-separately-from-its-headquarters.md) (a lab records where its work happens, separately from its headquarters), and [ADR 053](053-a-robots-maker-joins-labs-on-the-robot-it-makes.md) (a robot's maker joins Labs on the robot it makes).
 
 ## Context
 
@@ -19,6 +19,8 @@ A reader therefore cannot ask the catalog who develops its models, where those o
 A record is one organization, either a company or a public research institution, that develops model releases the Atlas has reviewed. It is recorded at the level at which the catalog's own records name it. Google is one record whose names include `Google`, `Google DeepMind`, and `Google Cloud`, and its organization note says which unit develops the models and which operates the services.
 
 The gate is the Models collection itself. An organization is recorded only once the catalog has reviewed a release it developed: one of its `catalog_names` must equal a reviewed model's `developer`, and validation enforces it. Size, funding, frontier status, popularity, openness, nationality, and licence decide nothing. The gate keeps the collection bounded by a boundary the Atlas already maintains. A service operator with no model of its own is not a lab, and neither is a company whose only releases are image generators or a company that has released nothing. Each of them waits until a release of theirs is reviewed.
+
+[ADR 051](051-generative-media-releases-join-the-reviewed-models-collection.md) supersedes the image-generator clause of that sentence only, because an image generator is now a reviewable release and such an organization reaches the gate the ordinary way. A service operator with no model of its own, and a company that has released nothing, still wait.
 
 ### Names, not copies
 

@@ -1,17 +1,20 @@
 const { test, expect } = require("@playwright/test");
 const { allSearch, categoryEntry, collectionDot, collectionEntry, entryCount, familyEntry, openCollection, openView, pressedEntry, searchAll } = require("./helpers/landing");
+const { finderHandoff } = require("./helpers/finder");
 const counts = require("./helpers/catalog-counts");
+const { closeRecord, expectFilter, recordView, search, searchBox, setFilter, sortControl } = require("./helpers/results");
 
-test("a bare URL opens the front door with every collection above the fold", async ({ page }) => {
+test("a bare URL opens the Elements front door with search and the role map above the fold", async ({ page }) => {
   for (const [width, height] of [[1440, 900], [375, 812]]) {
     await page.setViewportSize({ width, height });
     await page.goto("/");
     await expect(page.locator("#front-door")).toBeVisible();
+    await expect(page.locator("#directory-title")).toHaveText(`${counts.allDirectoryEntries.toLocaleString("en-US")} elements of AI`);
     await expect(page.locator(".collection-panel:not([hidden])")).toHaveCount(0);
     await expect(page).not.toHaveURL(/collection=/);
-    const index = page.locator("#collection-index");
+    const index = page.locator("#elements");
     const top = await index.evaluate(element => element.getBoundingClientRect().top + window.scrollY);
-    expect(top, `${width}: the index starts above the fold`).toBeLessThan(height);
+    expect(top, `${width}: the role map starts above the fold`).toBeLessThan(height);
     await expect(page.locator("[data-tile]")).toHaveCount(9);
     await expect(page.locator(".atlas-map")).toHaveCount(0);
   }
@@ -68,16 +71,16 @@ test("the Everything tile is the A–Z list, and the Models, Labs, and Specifica
 test("a category link opens the scope narrowed to it", async ({ page }) => {
   await page.goto("/");
   await familyEntry(page, "memory_system").click();
-  await expect(page.locator("#family-filter")).toHaveValue("memory_system");
+  await expectFilter(page, "systems", "family", "memory_system");
   await expect(page).toHaveURL(/family=memory_system/);
   await page.goto("/");
   await categoryEntry(page, "inference", "direct_model_api").click();
-  await expect(page.locator("#inference-type-filter")).toHaveValue("direct_model_api");
+  await expectFilter(page, "inference", "type", "direct_model_api");
   await expect(page).toHaveURL(/type=direct_model_api/);
   await page.goto("/");
   await categoryEntry(page, "labs", "ai_company").click();
   await expect(page.locator("#labs-directory-panel")).toBeVisible();
-  await expect(page.locator("#lab-type-filter")).toHaveValue("ai_company");
+  await expectFilter(page, "labs", "type", "ai_company");
 });
 
 test("typing on the front door searches everything and lands in results", async ({ page }) => {
@@ -104,11 +107,11 @@ test("text typed on the front door before the page finishes loading still search
   await expect(page).toHaveURL(/q=Ollama/);
 });
 
-// Leaving the door carries the query of the collection last shown; the text
-// typed on the door must win over it.
+// The front door clears the query a collection left behind, so the text
+// typed on the door is the search.
 test("text typed on the front door replaces a query left in another collection", async ({ page }) => {
   await page.goto("/?collection=inference&q=vllm");
-  await expect(page.locator("#inference-search")).toHaveValue("vllm");
+  await expect(searchBox(page, "inference")).toHaveValue("vllm");
   await openView(page, "directory");
   await searchAll(page, "Ollama");
   await expect(page.locator("#all-directory-panel")).toBeVisible();
@@ -118,19 +121,29 @@ test("text typed on the front door replaces a query left in another collection",
 
 // Every lab's name also names its models, so the query is a word only a lab's
 // own record holds (AI Singapore's note names the Infocomm Media Development
-// Authority). The All list finds nothing; opening Labs from the results
-// carries the query in. The front door carries none (a clean start).
+// Authority). This used to be a dead end in Everything -- the All grid summed six
+// collections and omitted Labs, so the reader got an empty result and a pointer into
+// the Labs scope. Everything holds every collection now, so the lab is listed where
+// the search landed, and the pointer into Labs is what a narrower scope is for.
 /* global activateView, searchIndexes */
-test("a query only a lab answers follows the reader from the All results into Labs", async ({ page }) => {
+test("a query only a lab answers lists the lab in Everything, and opens Labs on request", async ({ page }) => {
   await page.goto("/");
   await searchAll(page, "Infocomm");
   await page.waitForFunction(() =>
-    ["systems", "inference", "runtimes", "models", "packs", "robots"].every(key => searchIndexes[key] !== undefined));
-  await expect(page.locator("#all-directory-grid .empty-search")).toBeVisible();
-  await expect(page.locator("#all-directory-grid .project-card")).toHaveCount(0);
+    ["systems", "inference", "runtimes", "models", "packs", "robots", "labs", "specifications"]
+      .every(key => searchIndexes[key] !== undefined));
+  await expect(page.locator("#all-directory-grid .empty-search")).toHaveCount(0);
+  const labCard = page.locator("#all-directory-grid .lab-card");
+  await expect(labCard).toHaveCount(1);
+  await expect(labCard).toContainText("AI Singapore");
+  await labCard.getByRole("button", { name: /^View details for / }).click();
+  await expect(recordView(page, "lab")).toContainText("AI Singapore");
+  await closeRecord(page, "lab");
+
+  // The narrower scope still answers, and carries the query with it.
   await openCollection(page, "labs");
   await expect(page.locator("#labs-directory-panel")).toBeVisible();
-  await expect(page.locator("#lab-search")).toHaveValue("Infocomm");
+  await expect(searchBox(page, "labs")).toHaveValue("Infocomm");
   await expect(page.locator("#lab-grid .project-card")).toHaveCount(1);
   await expect(page.locator("#lab-grid .project-card")).toContainText("AI Singapore");
 });
@@ -140,13 +153,13 @@ test("a query only a lab answers follows the reader from the All results into La
 // cleared on arrival, so a tile never opens with a search the door never showed.
 test("a tile opened from the front door carries no query from the collection last shown", async ({ page }) => {
   await page.goto("/?collection=inference");
-  await page.locator("#inference-search").fill("vllm");
+  await search(page, "vllm");
   await expect(page).toHaveURL(/q=vllm/);
   await openView(page, "directory");
   await expect(page.locator("#front-door")).toBeVisible();
   await openCollection(page, "runtimes");
   await expect(page.locator("#runtimes-directory-panel")).toBeVisible();
-  await expect(page.locator("#runtime-search")).toHaveValue("");
+  await expect(searchBox(page, "runtimes")).toHaveValue("");
   await expect(page).not.toHaveURL(/[?&]q=/);
 });
 
@@ -154,13 +167,13 @@ test("a tile opened from the front door carries no query from the collection las
 // category, so the link clears any other facet a previous visit left set.
 test("a category link opens its collection narrowed to that category alone", async ({ page }) => {
   await page.goto("/?collection=inference&delivery=reserved_capacity");
-  await expect(page.locator("#inference-delivery-filter")).toHaveValue("reserved_capacity");
+  await expectFilter(page, "inference", "delivery", "reserved_capacity");
   await openView(page, "directory");
   const link = categoryEntry(page, "inference", "direct_model_api");
   const count = Number(await link.locator("strong").textContent());
   await link.click();
-  await expect(page.locator("#inference-type-filter")).toHaveValue("direct_model_api");
-  await expect(page.locator("#inference-delivery-filter")).toHaveValue("");
+  await expectFilter(page, "inference", "type", "direct_model_api");
+  await expectFilter(page, "inference", "delivery", "");
   await expect(page).toHaveURL(address => {
     const keys = [...address.searchParams.keys()].sort();
     return keys.join(",") === "collection,type" && address.searchParams.get("type") === "direct_model_api";
@@ -181,9 +194,9 @@ test("a focused tile keeps its focus while the search indexes land", async ({ pa
   await page.goto("/");
   await expect(page.locator("#door-jobs button")).toHaveCount(5);
   await page.locator("#door-search").focus();
-  // Past the five Finder jobs to the first tile's button.
-  for (let step = 0; step < 6; step += 1) await page.keyboard.press("Tab");
+  // The role map precedes the collection index; test the same late-load focus contract.
   const tile = collectionEntry(page, "all");
+  await tile.focus();
   await expect(tile).toBeFocused();
   release();
   await page.waitForFunction(() =>
@@ -205,7 +218,10 @@ test("a Finder job opens the Finder at its priority question", async ({ page }) 
   await expect(page.locator("#door-jobs button")).toHaveCount(5);
   await page.locator('#door-jobs [data-door-direction="agent_system"]').click();
   await expect(page.locator("#finder")).toHaveClass(/is-active/);
-  await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
+  // The Finder is one screen, so the job is chosen and its shortlist is what
+  // the pill leaves open — there is no standing question left to answer.
+  await expect(page.locator(".finder-result-heading h2")).toHaveText("Delegate general knowledge work");
+  await expect(page.locator("#finder-status")).toContainText("match, ranked for");
 });
 
 test("tiles carry the three most recently reviewed marks and no example ranking", async ({ page }) => {
@@ -246,7 +262,7 @@ test("results carry a sticky strip with exactly one pressed entry, families insi
   await familyEntry(page, "memory_system").click();
   await expect(strip.locator('.family-row [aria-pressed="true"]')).toHaveAccessibleName(/^Memory \d/);
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Systems \d/);
-  await expect(page.locator("#family-filter")).toHaveValue("memory_system");
+  await expectFilter(page, "systems", "family", "memory_system");
 });
 
 test("up to tablet width the strip shows emblems only in one row with slack, sticky under the header at every width", async ({ page }) => {
@@ -305,10 +321,7 @@ test("a state dot marks a comparison in progress and Finder roles applied", asyn
   await page.locator("#comparison-clear").click();
   await expect(page.locator("#scope-strip .state-dot")).toHaveCount(0);
   await page.goto("/?view=finder");
-  for (const value of ["agent_system", "coding", "balanced"]) {
-    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-  }
-  await page.locator("[data-finder-directory]").click();
+  await finderHandoff(page, "coding");
   await expect(collectionDot(page, "systems")).toHaveClass(/is-finder/);
   await page.locator("#finder-roles-chip").click();
   await expect(page.locator("#scope-strip .state-dot")).toHaveCount(0);
@@ -317,7 +330,7 @@ test("a state dot marks a comparison in progress and Finder roles applied", asyn
 test("the Systems entry clears a family, and the Models entry opens its collection", async ({ page }) => {
   await page.goto("/?collection=systems&family=memory_system");
   await openCollection(page, "systems");
-  await expect(page.locator("#family-filter")).toHaveValue("");
+  await expectFilter(page, "systems", "family", "");
   await expect(page).not.toHaveURL(/family=/);
   await openCollection(page, "models");
   await expect(page.locator("#models-directory-panel")).toBeVisible();
@@ -330,8 +343,7 @@ test("a focused strip entry keeps its focus while the grid repaints", async ({ p
   await page.goto("/?collection=inference");
   const entry = collectionEntry(page, "runtimes");
   await entry.focus();
-  await page.evaluate(() => {
-    const input = document.querySelector("#inference-search");
+  await searchBox(page, "inference").evaluate(input => {
     input.value = "vllm";
     input.dispatchEvent(new Event("input", { bubbles: true }));
   });
@@ -414,8 +426,8 @@ test("focus walking back up the results stays clear of the strip", async ({ page
 
 test("a record URL with no collection opens over its own collection's results", async ({ page }) => {
   await page.goto("/?record=runtime:ollama");
-  await expect(page.locator("#runtime-dialog")).toBeVisible();
-  await page.locator("#runtime-dialog .dialog-close").click();
+  await expect(recordView(page, "runtime")).toBeVisible();
+  await closeRecord(page, "runtime");
   await expect(page.locator("#runtimes-directory-panel")).toBeVisible();
   await expect(page).toHaveURL(/collection=runtimes/);
   await expect(page).not.toHaveURL(/record=/);
@@ -423,9 +435,9 @@ test("a record URL with no collection opens over its own collection's results", 
   // A record opened over the All results keeps All (ruling R17).
   await page.goto("/?collection=all&record=pack:agent-toolkit");
   await page.reload();
-  await expect(page.locator("#pack-dialog")).toBeVisible();
+  await expect(recordView(page, "pack")).toBeVisible();
   await expect(page.locator("#all-directory-panel")).toBeVisible();
-  await page.locator("#pack-dialog .dialog-close").click();
+  await closeRecord(page, "pack");
   await expect(page.locator("#all-directory-panel")).toBeVisible();
   await expect(page).toHaveURL(/collection=all/);
   await expect(page).not.toHaveURL(/record=/);
@@ -434,27 +446,26 @@ test("a record URL with no collection opens over its own collection's results", 
 test("a comparison decides the scope before the collection's filters are applied", async ({ page }) => {
   await page.goto("/?collection=systems&family=memory_system&compare=inference:openai-api,anthropic-api");
   await expect(page.locator("#inference-directory-panel")).toBeVisible();
-  await expect(page.locator("#family-filter")).toHaveValue("");
+  await expectFilter(page, "systems", "family", "");
   await expect(page).not.toHaveURL(/family=/);
   await expect(page.locator("#comparison-tray")).toBeVisible();
 });
 
 test("Back after closing a record restores the filters the URL carries", async ({ page }) => {
   await page.goto("/?collection=systems");
-  await page.locator(".advanced-filter-shell summary").click();
-  await page.locator("#license-filter").selectOption("MIT");
+  await setFilter(page, "systems", "license", "MIT");
   await expect(page).toHaveURL(/license=MIT/);
   const before = await page.locator("#result-count").textContent();
   await page.locator("#project-grid [data-project]").first().click();
-  await expect(page.locator("#project-dialog")).toBeVisible();
-  await page.locator("#project-dialog .dialog-close").click();
-  await page.locator("#license-filter").selectOption("Apache-2.0");
+  await expect(recordView(page, "system")).toBeVisible();
+  await closeRecord(page, "system");
+  await setFilter(page, "systems", "license", "Apache-2.0");
   await expect(page).toHaveURL(/license=Apache-2\.0/);
   await page.goBack();
   await expect(page).toHaveURL(/license=MIT/);
-  await expect(page.locator("#license-filter")).toHaveValue("MIT");
+  await expectFilter(page, "systems", "license", "MIT");
   await expect(page.locator("#result-count")).toHaveText(before);
-  await expect(page.locator("#project-dialog")).toBeHidden();
+  await expect(recordView(page, "system")).toBeHidden();
 });
 
 // Typing replaces the entry a closed record left, so Back lands on the entry
@@ -462,29 +473,29 @@ test("Back after closing a record restores the filters the URL carries", async (
 test("Back after closing a record restores the query the URL carries", async ({ page }) => {
   await page.goto("/?collection=systems");
   const index = page.waitForResponse(response => new URL(response.url()).pathname === "/app/search/systems.json");
-  await page.locator("#project-search").fill("ollama");
+  await search(page, "ollama");
   await index;
   await page.waitForFunction(() => searchIndexes.systems !== undefined);
   const before = await page.locator("#result-count").textContent();
   await page.locator("#project-grid [data-project]").first().click();
-  await expect(page.locator("#project-dialog")).toBeVisible();
-  await page.locator("#project-dialog .dialog-close").click();
-  await page.locator("#project-search").fill("vllm");
+  await expect(recordView(page, "system")).toBeVisible();
+  await closeRecord(page, "system");
+  await search(page, "vllm");
   await expect(page).toHaveURL(/q=vllm/);
   await page.goBack();
   await expect(page).toHaveURL(/q=ollama/);
-  await expect(page.locator("#project-search")).toHaveValue("ollama");
+  await expect(searchBox(page, "systems")).toHaveValue("ollama");
   await expect(page.locator("#result-count")).toHaveText(before);
-  await expect(page.locator("#project-dialog")).toBeHidden();
+  await expect(recordView(page, "system")).toBeHidden();
 });
 
 test("Back and forward move between the front door, results, and a record", async ({ page }) => {
   await page.goto("/");
   await openCollection(page, "packs");
   await page.locator('#pack-grid [data-pack="agent-toolkit"]').click();
-  await expect(page.locator("#pack-dialog")).toBeVisible();
+  await expect(recordView(page, "pack")).toBeVisible();
   await page.goBack();
-  await expect(page.locator("#pack-dialog")).toBeHidden();
+  await expect(recordView(page, "pack")).toBeHidden();
   await expect(page.locator("#packs-directory-panel")).toBeVisible();
   await page.goBack();
   await expect(page.locator("#front-door")).toBeVisible();
@@ -492,7 +503,7 @@ test("Back and forward move between the front door, results, and a record", asyn
   await expect(page.locator("#packs-directory-panel")).toBeVisible();
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Agent packs \d/);
   await page.goForward();
-  await expect(page.locator("#pack-dialog")).toBeVisible();
+  await expect(recordView(page, "pack")).toBeVisible();
   await expect(page.locator("#packs-directory-panel")).toBeVisible();
 });
 
@@ -504,51 +515,51 @@ test("Back to a comparison restores the selection without opening its table", as
   await page.locator('#project-grid [data-compare-id="aider"]').click();
   await expect(page).toHaveURL(/compare=system%3Akilo-code%2Caider/);
   await page.locator('#project-grid [data-project="aider"]').click();
-  await expect(page.locator("#project-dialog")).toBeVisible();
+  await expect(recordView(page, "system")).toBeVisible();
   await page.goBack();
-  await expect(page.locator("#project-dialog")).toBeHidden();
+  await expect(recordView(page, "system")).toBeHidden();
   await expect(page.locator("#comparison-tray-title")).toHaveText("2 items selected");
   await expect(page.locator("#comparison-dialog")).toBeHidden();
 });
 
 test("a restored query with no sort lands on Best match", async ({ page }) => {
   await page.goto("/?collection=inference&q=router");
-  await expect(page.locator("#inference-sort-filter")).toHaveValue("match");
+  await expect(sortControl(page, "inference")).toHaveValue("match");
 });
 
 // Following the skip link changes only the fragment, which fires popstate;
 // nothing the URL's search carries changed, so nothing is restored.
 test("the skip link restores nothing, so a sort chosen before typing still comes back", async ({ page }) => {
   await page.goto("/?collection=inference");
-  await page.locator("#inference-sort-filter").selectOption("name");
+  await sortControl(page, "inference").selectOption("name");
   const index = page.waitForResponse(response => new URL(response.url()).pathname === "/app/search/inference.json");
-  await page.locator("#inference-search").fill("router");
+  await search(page, "router");
   await index;
   await page.waitForFunction(() => searchIndexes.inference !== undefined);
-  await expect(page.locator("#inference-sort-filter")).toHaveValue("match");
+  await expect(sortControl(page, "inference")).toHaveValue("match");
   const before = await page.locator("#inference-result-count").textContent();
-  const search = new URL(page.url()).search;
+  const urlSearch = new URL(page.url()).search;
   await page.locator(".skip-link").focus();
   await page.keyboard.press("Enter");
   await expect(page).toHaveURL(/#main$/);
-  expect(new URL(page.url()).search).toBe(search);
-  await expect(page.locator("#inference-sort-filter")).toHaveValue("match");
+  expect(new URL(page.url()).search).toBe(urlSearch);
+  await expect(sortControl(page, "inference")).toHaveValue("match");
   await expect(page.locator("#inference-result-count")).toHaveText(before);
-  await page.locator("#inference-search").fill("");
-  await expect(page.locator("#inference-sort-filter")).toHaveValue("name");
+  await search(page, "");
+  await expect(sortControl(page, "inference")).toHaveValue("name");
 });
 
-// A sort chosen before typing is what clearing the query gives back, but
-// beside a query the URL names only a sort the reader chose since typing,
-// so a reload forgets the earlier one (BACKLOG, Phase 1 leftover).
-test.fixme("a sort chosen before typing survives a reload and returns when the query is cleared", async ({ page }) => {
+// A sort chosen before typing is what clearing the query gives back. Beside
+// a query still listed by Best match the URL carries it as browseSort, so a
+// reload keeps it (Phase 3 spec, section 8).
+test("a sort chosen before typing survives a reload and returns when the query is cleared", async ({ page }) => {
   await page.goto("/?collection=inference");
-  await page.locator("#inference-sort-filter").selectOption("name");
-  await page.locator("#inference-search").fill("router");
-  await expect(page.locator("#inference-sort-filter")).toHaveValue("match");
+  await sortControl(page, "inference").selectOption("name");
+  await search(page, "router");
+  await expect(sortControl(page, "inference")).toHaveValue("match");
   await page.reload();
-  await page.locator("#inference-search").fill("");
-  await expect(page.locator("#inference-sort-filter")).toHaveValue("name");
+  await search(page, "");
+  await expect(sortControl(page, "inference")).toHaveValue("name");
   await expect(page).toHaveURL(/sort=name/);
 });
 
@@ -608,16 +619,13 @@ test("a comparison in progress stays off the front door's URL and the Systems ti
   await expect(page.locator("#comparison-tray-title")).toHaveText("2 items selected");
   await expect(page.locator("#comparison-tray-items")).toContainText("Kilo Code");
   await expect(page.locator("#comparison-tray-items")).toContainText("Aider");
-  await expect(page.locator("#family-filter")).toHaveValue("agent_system");
+  await expectFilter(page, "systems", "family", "agent_system");
   await expect(page).toHaveURL(/compare=system%3Akilo-code%2Caider/);
 });
 
 test("the Systems tile reopens a Finder role set its dot marks", async ({ page }) => {
   await page.goto("/?view=finder");
-  for (const value of ["agent_system", "coding", "balanced"]) {
-    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-  }
-  await page.locator("[data-finder-directory]").click();
+  await finderHandoff(page, "coding");
   await expect(page.locator("#finder-roles-chip")).toBeVisible();
   const before = await page.locator("#result-count").textContent();
   await openView(page, "directory");
@@ -635,12 +643,12 @@ test("a tile opens what its count promises, whatever the last visit left set", a
   await page.goto("/");
   const count = await entryCount(page, "inference");
   await openCollection(page, "inference");
-  await page.locator("#inference-delivery-filter").selectOption("reserved_capacity");
+  await setFilter(page, "inference", "delivery", "reserved_capacity");
   await expect(page).toHaveURL(/delivery=reserved_capacity/);
   await page.goBack();
   await expect(page.locator("#front-door")).toBeVisible();
   await openCollection(page, "inference");
-  await expect(page.locator("#inference-delivery-filter")).toHaveValue("");
+  await expectFilter(page, "inference", "delivery", "");
   await expect(page).toHaveURL(address => [...address.searchParams.keys()].join(",") === "collection"
     && address.searchParams.get("collection") === "inference");
   await expect(page.locator("#inference-result-count")).toContainText(new RegExp(`^${count} services?\\b`));
@@ -672,4 +680,42 @@ test("inside Systems on a phone the strip stays short and the family row fits on
     await expect(familyEntry(page, "agent_system")).toHaveAccessibleName(/^Agents \d/);
     await expect(familyEntry(page, "assistant_system")).toHaveAccessibleName(/^Assistants \d/);
   }
+});
+
+test("the catalog stage leads each face with one record and lists the rest newest first", async ({ page }) => {
+  await page.goto("/");
+  const elements = page.getByRole("tab", { name: "Elements" });
+  const models = page.getByRole("tab", { name: "Models" });
+  const systems = page.getByRole("tab", { name: "Systems" });
+  await expect(elements).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator("#elements")).toBeVisible();
+
+  await models.click();
+  await expect(page.locator("#elements")).toBeHidden();
+  await expect(page.locator("#collection-index")).toBeVisible();
+  const modelName = (await page.locator("#stage-model .stage-name").textContent()).trim();
+  const modelRows = page.locator("#stage-model .stage-list-name");
+  await expect(modelRows).not.toHaveCount(0);
+  expect(await modelRows.allTextContents()).not.toContain(modelName);
+  const modelDates = await page.locator("#stage-model .stage-list time").allTextContents();
+  for (let i = 1; i < modelDates.length; i += 1) expect(modelDates[i] <= modelDates[i - 1]).toBeTruthy();
+  await page.locator("#stage-model .link-button").click();
+  await expect(page.locator("#model-dialog")).toBeVisible();
+  await page.locator("#model-dialog").getByRole("button", { name: "Close" }).click();
+
+  await systems.click();
+  await expect(page.locator("#stage-model")).toBeHidden();
+  const systemName = (await page.locator("#stage-system .stage-name").textContent()).trim();
+  const systemRows = page.locator("#stage-system .stage-list-name");
+  await expect(systemRows).not.toHaveCount(0);
+  expect(await systemRows.allTextContents()).not.toContain(systemName);
+  const systemDates = await page.locator("#stage-system .stage-list time").allTextContents();
+  for (let i = 1; i < systemDates.length; i += 1) expect(systemDates[i] <= systemDates[i - 1]).toBeTruthy();
+  await page.locator("#stage-system .stage-list button").first().click();
+  await expect(page.locator("#project-dialog")).toBeVisible();
+  await page.locator("#project-dialog").getByRole("button", { name: "Close" }).click();
+
+  await elements.click();
+  await expect(page.locator("#elements")).toBeVisible();
+  await expect(page.locator("#stage-system")).toBeHidden();
 });

@@ -280,12 +280,15 @@ LAB_REQUIRED = {
     "systems",
     "channels",
     "admission_basis",
+    "display_order",
     "evidence",
     "verified_at",
 }
-LAB_OPTIONAL = {"parent_organization", "safety_framework"}
+LAB_OPTIONAL = {"parent_organization", "safety_framework", "research_locations"}
 # A lab is recorded, never ranked, and a licence belongs to a release, not to the
-# organization that made it (ADR 041, ADR 025).
+# organization that made it (ADR 041, ADR 025). display_order is a preview
+# precedence, not a ranking: it never reaches a score, a sort in a collection, or
+# a claim about the organization (ADR 049).
 LAB_FORBIDDEN = {
     "score",
     "score_profile",
@@ -297,6 +300,16 @@ LAB_FORBIDDEN = {
     "source_model",
 }
 LAB_ID_PATTERN = re.compile(r"lab-[a-z0-9][a-z0-9-]*")
+# A preview precedence is a positive multiple of ten, so a reviewer can insert a
+# lab between two others without renumbering the collection, and the number never
+# pretends to a precision the ordering does not have (ADR 049).
+LAB_DISPLAY_ORDER_STEP = 10
+# Where a lab says its own work happens is reviewed editorial data, distinct from
+# the headquarters (ADR 052). It is capped because it is both a review budget and
+# a display one: a card's flag row has room for the headquarters and three more,
+# and an organization with more sites than that keeps the full list in its
+# organization_note rather than in a row of flags a reader cannot use.
+LAB_RESEARCH_LOCATIONS_MAX = 3
 LAB_CHANNEL_REQUIRED = {"kind", "url"}
 LAB_SAFETY_FRAMEWORK_REQUIRED = {"title", "url", "verified_at"}
 # A channel of these kinds names an organization, not a page inside one, so the
@@ -556,6 +569,19 @@ SHARED_PUBLISHER_HOSTS = frozenset(
 )
 # Second-level labels under a two-letter country code (example.co.uk, example.com.cn).
 SECOND_LEVEL_LABELS = frozenset({"ac", "co", "com", "edu", "gov", "net", "org"})
+
+# ADR 051: a type states what the release is for, so the record's own output
+# modalities have to agree with it. The two language types keep the text
+# requirement their definitions always had, and the three generative-media types
+# name the modality they exist to produce. An action-emitting policy has no type
+# here on purpose, so no row can satisfy this table by emitting robot actions.
+MODEL_TYPE_OUTPUT_MODALITY = {
+    "language_model": "text",
+    "multimodal_language_model": "text",
+    "image_generation_model": "image",
+    "video_generation_model": "video",
+    "audio_generation_model": "audio",
+}
 
 
 def load_document(directory: Path, name: str) -> dict[str, Any]:
@@ -1829,15 +1855,66 @@ def validate_packs(
     return packs_value
 
 
+def validate_lab_research_locations(
+    lab: dict[str, Any],
+    prefix: str,
+    enum_ids: dict[str, set[str]],
+    errors: list[str],
+) -> None:
+    """Where a lab says its work happens, apart from where it is headquartered
+    (ADR 052). Optional, and never derived from the headquarters: an organization
+    whose engineering sits in another country carries both facts."""
+    if "research_locations" not in lab:
+        return
+    values = lab["research_locations"]
+    if not isinstance(values, list):
+        errors.append(f"{prefix}: research_locations must be a list when present")
+        return
+    if len(values) > LAB_RESEARCH_LOCATIONS_MAX:
+        errors.append(
+            f"{prefix}: research_locations carries {len(values)} entries, more than "
+            f"the {LAB_RESEARCH_LOCATIONS_MAX} a card's flag row has room for; keep "
+            "the full list in organization_note"
+        )
+    seen: set[str] = set()
+    for value in values:
+        if not isinstance(value, str) or value not in enum_ids["countries"]:
+            errors.append(
+                f"{prefix}: research_locations entry {value!r} is not a "
+                "country in the taxonomy"
+            )
+            continue
+        # The headquarters already has its own flag and its own rule, so listing
+        # it here would print the same circle twice.
+        if value == lab.get("headquarters"):
+            errors.append(
+                f"{prefix}: research_locations entry {value!r} is the headquarters, "
+                "which is recorded there"
+            )
+        if value == "none_listed":
+            errors.append(
+                f"{prefix}: none_listed is not a place work happens, so it cannot be "
+                "a research_locations entry"
+            )
+        if value in seen:
+            errors.append(
+                f"{prefix}: research_locations entry {value!r} is listed twice"
+            )
+        seen.add(value)
+
+
 def validate_lab_catalog_names(
     lab: dict[str, Any],
     prefix: str,
     names_by_field: dict[str, set[str]],
     enum_ids: dict[str, set[str]],
+    project_ids: set[str],
+    robot_ids: set[str],
     errors: list[str],
 ) -> set[str]:
-    """Each catalog name must name a record; a lab needs a reviewed release or a
-    published frontier-model commitment (ADR 044)."""
+    """Each catalog name must name a record; a lab needs a reviewed release, a
+    reviewed system it developed, or a published frontier-model commitment
+    (ADR 044, ADR 048)."""
     # An announced lab joins to nothing, so it may carry no names at all (ADR 044).
     validate_string_list(lab, "catalog_names", None, prefix, errors, allow_empty=True)
     values = lab.get("catalog_names")
@@ -1847,6 +1924,11 @@ def validate_lab_catalog_names(
     if not isinstance(values, list):
         return set()
     names = {name for name in values if isinstance(name, str)}
+    # `systems` spans the systems and robot collections (ADR 048, ADR 053), so the
+    # bases read the two apart: a robot is not a reviewed system.
+    listed = {item for item in lab.get("systems") or [] if isinstance(item, str)}
+    systems = listed & project_ids
+    robots = listed & robot_ids
     for name in sorted(names):
         if not name.strip() or name != name.strip():
             errors.append(
@@ -1854,20 +1936,73 @@ def validate_lab_catalog_names(
             )
         elif not any(name in field_names for field_names in names_by_field.values()):
             errors.append(f"{prefix}: catalog name {name!r} names no catalog record")
+    # The bases are ordered from the strongest join to the weakest, so a record
+    # never understates its own join and never hides an absence behind stronger
+    # vocabulary. Each direction is refused, not merely permitted.
+    develops_release = bool(names & names_by_field["developer"])
+    strongest = "reviewed_release" if develops_release else None
+    for present, basis_name in (
+        (systems, "reviewed_system"),
+        (robots, "reviewed_robot"),
+    ):
+        if present and strongest is None:
+            strongest = basis_name
     if basis == "reviewed_release":
         # The original gate: the organization must have a release in the collection.
-        if not names & names_by_field["developer"]:
+        if not develops_release:
+            weaker = strongest or "frontier_announcement"
             errors.append(
                 f"{prefix}: develops no reviewed model release, so its admission basis "
-                "must be frontier_announcement (ADR 044)"
+                f"must be {weaker} (ADR 044, ADR 048, ADR 053)"
             )
-    # Recorded before any release, so it joins to nothing by construction. A
-    # reviewed release would make the stronger basis the honest one.
-    elif basis == "frontier_announcement" and names & names_by_field["developer"]:
-        errors.append(
-            f"{prefix}: has a reviewed model release, so its admission basis must "
-            "be reviewed_release (ADR 044)"
-        )
+    elif basis == "reviewed_system":
+        # A research group whose reviewed work is a system, not a release (ADR 048).
+        if develops_release:
+            errors.append(
+                f"{prefix}: has a reviewed model release, so its admission basis must "
+                "be reviewed_release (ADR 044)"
+            )
+        elif not systems:
+            weaker = strongest or "frontier_announcement"
+            errors.append(
+                f"{prefix}: develops no reviewed system, so its admission basis must "
+                f"be {weaker} (ADR 048, ADR 053)"
+            )
+    elif basis == "reviewed_robot":
+        # A hardware maker whose reviewed work is a robot it makes (ADR 053).
+        if develops_release:
+            errors.append(
+                f"{prefix}: has a reviewed model release, so its admission basis must "
+                "be reviewed_release (ADR 044)"
+            )
+        elif systems:
+            errors.append(
+                f"{prefix}: has a reviewed system, so its admission basis must be "
+                "reviewed_system (ADR 048)"
+            )
+        elif not robots:
+            errors.append(
+                f"{prefix}: makes no reviewed robot, so its admission basis must be "
+                f"{strongest or 'frontier_announcement'} (ADR 053)"
+            )
+    elif basis == "frontier_announcement":
+        # Recorded before any release, so it joins to nothing by construction. Any
+        # reviewed record would make a stronger basis the honest one.
+        if develops_release:
+            errors.append(
+                f"{prefix}: has a reviewed model release, so its admission basis must "
+                "be reviewed_release (ADR 044)"
+            )
+        elif systems:
+            errors.append(
+                f"{prefix}: has a reviewed system, so its admission basis must be "
+                "reviewed_system (ADR 048)"
+            )
+        elif robots:
+            errors.append(
+                f"{prefix}: makes a reviewed robot, so its admission basis must be "
+                "reviewed_robot (ADR 053)"
+            )
     return names
 
 
@@ -1982,9 +2117,15 @@ def validate_labs(
     tax: Taxonomy,
     catalog: dict[str, list[Any]],
     index: ProjectIndex,
+    robot_ids: set[str],
+    *,
     errors: list[str],
 ) -> list[Any]:
-    """Validate unscored lab records: organizations joined to what they develop (ADR 041)."""
+    """Validate unscored lab records: organizations joined to what they develop (ADR 041).
+
+    A lab's `systems` lists ids from the systems and robot collections (ADR 048,
+    ADR 053), so both id sets are checked against it.
+    """
     enum_ids = tax.enum_ids
     labs_value = validate_collection_envelope(
         labs_data, "labs.json", "1.0", "labs", errors
@@ -2024,11 +2165,21 @@ def validate_labs(
             errors.append(f"{prefix}: unknown lab type")
         if lab.get("headquarters") not in enum_ids["countries"]:
             errors.append(f"{prefix}: unknown headquarters country")
+        if not isinstance(lab.get("display_order"), int) or isinstance(
+            lab.get("display_order"), bool
+        ):
+            errors.append(f"{prefix}: display_order must be an integer")
+        elif lab["display_order"] <= 0 or lab["display_order"] % LAB_DISPLAY_ORDER_STEP:
+            errors.append(
+                f"{prefix}: display_order must be a positive multiple of "
+                f"{LAB_DISPLAY_ORDER_STEP}"
+            )
         names = validate_lab_catalog_names(
-            lab, prefix, names_by_field, enum_ids, errors
+            lab, prefix, names_by_field, enum_ids, index.ids, robot_ids, errors
         )
+        validate_lab_research_locations(lab, prefix, enum_ids, errors)
         validate_string_list(
-            lab, "systems", index.ids, prefix, errors, allow_empty=True
+            lab, "systems", index.ids | robot_ids, prefix, errors, allow_empty=True
         )
         systems = {item for item in lab.get("systems") or [] if isinstance(item, str)}
         github_orgs = validate_lab_channels(
@@ -2769,8 +2920,6 @@ def validate_model_source_metadata(
     prefix: str,
     tax: Taxonomy,
     errors: list[str],
-    *,
-    require_text: bool = True,
 ) -> None:
     """Validate the models.dev-owned snapshot without treating it as editorial truth."""
     if (
@@ -2811,8 +2960,6 @@ def validate_model_source_metadata(
                 f"{prefix}: source_metadata.modalities",
                 errors,
             )
-        if require_text and "text" not in modalities.get("output", []):
-            errors.append(f"{prefix}: model candidates must produce text")
 
     capabilities = metadata.get("capabilities")
     if not isinstance(capabilities, dict) or set(capabilities) != MODEL_CAPABILITIES:
@@ -3098,7 +3245,8 @@ def validate_models(
             "https://"
         ):
             errors.append(f"{prefix}: url must be authoritative HTTPS")
-        if model.get("model_type") not in tax.enum_ids["model_types"]:
+        model_type = model.get("model_type")
+        if model_type not in tax.enum_ids["model_types"]:
             errors.append(f"{prefix}: unknown model type")
         validate_string_list(
             model,
@@ -3110,6 +3258,19 @@ def validate_models(
         validate_model_source_metadata(
             model.get("source_metadata"), prefix, tax, errors
         )
+        # ADR 051: the type says what the release produces, so the attributed
+        # output modalities have to agree with it rather than the other way round.
+        required_modality = MODEL_TYPE_OUTPUT_MODALITY.get(model_type)
+        outputs = (model.get("source_metadata") or {}).get("modalities", {})
+        if (
+            required_modality is not None
+            and isinstance(outputs, dict)
+            and required_modality not in (outputs.get("output") or [])
+        ):
+            errors.append(
+                f"{prefix}: {model_type} must record {required_modality} "
+                "as an output modality"
+            )
 
         validate_string_list(
             model, "licenses", tax.enum_ids["licenses"], prefix, errors
@@ -3277,7 +3438,6 @@ def validate_models_dev(
             prefix,
             tax,
             errors,
-            require_text=False,
         )
     return records
 
@@ -4394,21 +4554,9 @@ def validate(root: Path = ROOT) -> list[str]:
         for item in packs_value
         if isinstance(item, dict) and isinstance(item.get("repo"), str)
     }
-    labs_value = validate_labs(
-        catalog["labs.json"],
-        tax,
-        {
-            "projects": index.projects,
-            "models": models_value,
-            "source_models": source_models_value,
-            "services": inference_services_value,
-            "runtimes": local_runtimes_value,
-            "specifications": specifications_value,
-            "packs": packs_value,
-        },
-        index,
-        errors,
-    )
+    # Robots validate before labs because a robot manufacturer is now a lab join
+    # source and an admission basis (ADR 053): a lab's `systems` may list a robot
+    # id, and a `reviewed_robot` lab must name a robot this catalog has reviewed.
     model_ids = {
         item["id"]
         for item in models_value
@@ -4421,6 +4569,23 @@ def validate(root: Path = ROOT) -> list[str]:
         errors,
         model_ids=model_ids,
         pack_repos=pack_repos,
+    )
+    labs_value = validate_labs(
+        catalog["labs.json"],
+        tax,
+        {
+            "projects": index.projects,
+            "models": models_value,
+            "source_models": source_models_value,
+            "services": inference_services_value,
+            "runtimes": local_runtimes_value,
+            "specifications": specifications_value,
+            "packs": packs_value,
+            "robots": robots_value,
+        },
+        index,
+        robot_ids={item["id"] for item in robots_value if isinstance(item, dict)},
+        errors=errors,
     )
     robot_repos = {
         item["repo"].lower()

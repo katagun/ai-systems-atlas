@@ -14,6 +14,7 @@
       deployment: "",
       agentInterface: "",
       capability: "",
+      retrieval: "",
       sourceModel: "",
       license: "",
       status: "active",
@@ -24,6 +25,37 @@
 
   function monogramGlyph(name) {
     return (String(name || "").match(/[a-zA-Z0-9]/)?.[0] || "•").toUpperCase();
+  }
+
+  // A lab's headquarters country as a flag. The card already prints the country's
+  // name in its eyebrow, so the flag repeats what the text says and carries no
+  // label of its own. Regional indicator pairs are the flag: they are drawn by the
+  // platform's own font rather than by artwork this catalog would have to keep
+  // accurate, and a country the taxonomy records but this map does not — and
+  // `none_listed`, which is not a country — gets no flag at all. `research_locations`
+  // (ADR 052) names the same vocabulary, so one map serves both fields.
+  const COUNTRY_FLAGS = {
+    be: "🇧🇪",
+    br: "🇧🇷",
+    ca: "🇨🇦",
+    ch: "🇨🇭",
+    cn: "🇨🇳",
+    de: "🇩🇪",
+    es: "🇪🇸",
+    fr: "🇫🇷",
+    gb: "🇬🇧",
+    il: "🇮🇱",
+    in: "🇮🇳",
+    jp: "🇯🇵",
+    kr: "🇰🇷",
+    kz: "🇰🇿",
+    sg: "🇸🇬",
+    tr: "🇹🇷",
+    us: "🇺🇸",
+  };
+
+  function countryFlag(code) {
+    return COUNTRY_FLAGS[String(code || "").toLowerCase()] || "";
   }
 
   // Search (ADR 040): words, not substrings; results ordered by match, never
@@ -69,6 +101,39 @@
     return normalizeSearchText(text).replace(/-/g, " ").replace(/\.+(?=\s|$)/g, "").replace(/\s+/g, " ").trim();
   }
 
+  // A short reviewed synonym list: a phrase readers type that the catalog's
+  // own words never say, mapped to the catalog words that answer it. Every
+  // entry is pinned by a real-catalog probe in tests/test_web.js, so an
+  // entry that stops matching anything fails the suite rather than rotting.
+  // Matching stays word-based (ADR 040): a synonym replaces whole query
+  // words, never substrings. Expansions carry no stop words, which the
+  // parser would have dropped from a typed query anyway.
+  const SEARCH_SYNONYMS = [
+    { match: ["note", "taking"], expand: ["notes"] },
+    { match: ["chatbot"], expand: ["chat"] },
+    { match: ["sso"], expand: ["single", "sign"] },
+    { match: ["k8s"], expand: ["kubernetes"] },
+  ];
+
+  // Alternate word sequences for a parsed query: each synonym whose match
+  // words appear as one contiguous run is tried with that run replaced by
+  // its expansion. Callers take the best variant, so a synonym widens a
+  // query without adding required words.
+  function queryVariants(query) {
+    const variants = [];
+    for (const synonym of SEARCH_SYNONYMS) {
+      const span = synonym.match.length;
+      for (let i = 0; i + span <= query.words.length; i += 1) {
+        if (synonym.match.every((word, j) => query.words[i + j] === word)) {
+          const words = [...query.words.slice(0, i), ...synonym.expand, ...query.words.slice(i + span)];
+          const tokens = words.map(stemQueryWord);
+          variants.push({ words, tokens, text: tokens.join(" ") });
+        }
+      }
+    }
+    return variants;
+  }
+
   // `words` holds each query word as typed, index for index with its stem in
   // `tokens`, because a stem is not always a prefix of its own spelling:
   // "series" stems to "sery".
@@ -76,7 +141,9 @@
     const words = comparableText(raw).split(" ")
       .filter(word => word && !SEARCH_STOP_WORDS.has(word));
     const tokens = words.map(stemQueryWord);
-    return { raw: String(raw || ""), text: tokens.join(" "), tokens, words };
+    const query = { raw: String(raw || ""), text: tokens.join(" "), tokens, words };
+    query.alternates = queryVariants(query);
+    return query;
   }
 
   // How one query word hits one field's words: 1 for a whole word, 0.8 for a
@@ -97,6 +164,46 @@
     if (value === "0") return project.local_first === false;
     if (value === "unknown") return typeof project.local_first !== "boolean";
     return true;
+  }
+
+  // Display notation only: canonical role ids and names remain taxonomy-owned.
+  const ELEMENT_SYMBOLS = {
+    human_pkm: "Pk", ai_knowledge_app: "Kb", agent_memory_service: "Ms",
+    context_graph_engine: "Kg", memory_bridge: "Mb", ambient_capture: "Ac",
+    retrieval_infrastructure: "Ri", general_work_agent: "Ga", coding_agent: "Ca",
+    research_agent: "Ra", browser_computer_agent: "Bc", data_analysis_agent: "Da",
+    stateful_agent_runtime: "Hr", coding_agent_workflow: "Cw", multi_agent_orchestrator: "Mo",
+    agent_framework_sdk: "Fw", general_ai_assistant: "As", enterprise_work_assistant: "Ea",
+    multi_model_chat_client: "Mc",
+  };
+
+  function systemElements(projects, taxonomy) {
+    return taxonomy.system_families.map(family => {
+      const roles = taxonomy.primary_roles.filter(role => role.family === family.id).map(role => {
+        const records = projects.filter(project => project.status === "active"
+          && project.system_family === family.id && project.primary_role === role.id)
+          .sort((a, b) => a.name.localeCompare(b.name));
+        return { ...role, symbol: ELEMENT_SYMBOLS[role.id] || role.name.slice(0, 2), records };
+      });
+      return { ...family, roles, count: roles.reduce((sum, role) => sum + role.records.length, 0) };
+    });
+  }
+
+  // A role tile previews the organizations behind its systems, not the systems
+  // themselves, so a tile carries company marks and never a monogram
+  // placeholder. A lab qualifies by owning one of the role's systems and by
+  // having a mark; `markedLabIds` is the page's loaded mark map, because whether
+  // a logo exists is a rendering fact rather than a catalog one. Preview
+  // precedence is the reviewed `display_order`, then the name (ADR 049).
+  function elementLabs(records, index, markedLabIds = null) {
+    const owners = new Map();
+    for (const record of records) {
+      const lab = index && index.bySystem.get(record.id);
+      if (lab) owners.set(lab.id, lab);
+    }
+    return [...owners.values()]
+      .filter(lab => !markedLabIds || markedLabIds.has(lab.id))
+      .sort((a, b) => (a.display_order - b.display_order) || a.name.localeCompare(b.name));
   }
 
   function systemDeploymentSummary(projects, taxonomy) {
@@ -134,6 +241,7 @@
       (!filters.deployment || project.deployment.includes(filters.deployment)) &&
       (!filters.agentInterface || (project.agent_interfaces || []).includes(filters.agentInterface)) &&
       (!filters.capability || (project.agent_capabilities || []).includes(filters.capability)) &&
+      (!filters.retrieval || (project.retrieval_modes || []).includes(filters.retrieval)) &&
       (!filters.sourceModel || project.source_model === filters.sourceModel) &&
       (!filters.license || project.licenses.includes(filters.license)) &&
       (!filters.status || project.status === filters.status) &&
@@ -297,6 +405,9 @@
       specifications: (catalog.specifications || []).filter(item => (item.stewards || []).some(name => names.has(name))),
       packs: (catalog.packs || []).filter(item => names.has(item.steward)),
       systems: (catalog.projects || []).filter(item => systemIds.has(item.id)),
+      // A robot joins by the organization that makes it, the way a model joins by
+      // its developer (ADR 053).
+      robots: (catalog.robots || []).filter(item => names.has(item.manufacturer)),
     };
   }
 
@@ -308,6 +419,12 @@
 
   function releasesNewestFirst(models) {
     return [...models].sort((a, b) => releaseDate(b).localeCompare(releaseDate(a)) || a.name.localeCompare(b.name));
+  }
+
+  // The front-door stage: dated records only, newest date first, a shared
+  // date broken by name. Undated records are left out rather than sorted last.
+  function newestDated(records, dateOf) {
+    return [...(records || [])].filter(record => dateOf(record)).sort((a, b) => dateOf(b).localeCompare(dateOf(a)) || a.name.localeCompare(b.name));
   }
 
   // The union of the distribution modes the lab's reviewed releases carry, in
@@ -325,6 +442,40 @@
     return filterScoredCollection(labs, { ...filters, sort: unscoredSort(filters) }, LAB_VIEW).filter(lab =>
       !filters.distribution || labRelations(lab, { models: filters.models || [] }).models
         .some(model => (model.distribution_modes || []).includes(filters.distribution)));
+  }
+
+  // Related navigation inside a system dialog, from data the boot payload
+  // already carries: the same primary role for siblings, superseded_by links
+  // for previous and next. Active records come first, then names A–Z, and the
+  // record itself is never listed.
+  function relatedSystems(project, projects = [], limit = 5) {
+    return (projects || [])
+      .filter(item => item.id !== project.id && item.primary_role === project.primary_role)
+      .sort((a, b) => Number(isActiveRecord(b)) - Number(isActiveRecord(a)) || a.name.localeCompare(b.name))
+      .slice(0, limit);
+  }
+  function successorSystem(project, projects = []) {
+    return (projects || []).find(item => item.id === project.superseded_by) || null;
+  }
+  function predecessorSystems(project, projects = [], limit = 3) {
+    return (projects || [])
+      .filter(item => item.superseded_by === project.id)
+      .sort((a, b) => Number(isActiveRecord(b)) - Number(isActiveRecord(a)) || a.name.localeCompare(b.name))
+      .slice(0, limit);
+  }
+
+  // "More from this lab" for a system dialog: sibling systems joined through
+  // the same lab index the Lab line uses, excluding the record itself. The
+  // lab dialog remains the full list across every collection; this is the
+  // short way across inside one role.
+  function moreFromLabSystems(project, { index = null, projects = [], limit = 4 } = {}) {
+    const lab = labsForRecord("system", project, index)[0];
+    if (!lab) return null;
+    const systems = (projects || [])
+      .filter(item => item.id !== project.id && (lab.systems || []).includes(item.id))
+      .sort((a, b) => Number(isActiveRecord(b)) - Number(isActiveRecord(a)) || a.name.localeCompare(b.name));
+    if (!systems.length) return null;
+    return { lab, systems: systems.slice(0, limit), total: systems.length };
   }
 
   // Which lab claims each name, system, and models.dev namespace, so a record
@@ -360,8 +511,40 @@
     else if (kind === "runtime") labs = [index.byName.get(record.maintainer)];
     else if (kind === "spec") labs = (record.stewards || []).map(name => index.byName.get(name));
     else if (kind === "pack") labs = [index.byName.get(record.steward)];
+    // A robot joins by the organization that makes it, the way a model joins by
+    // its developer (ADR 053).
+    else if (kind === "robot") labs = [index.byName.get(record.manufacturer)];
     else labs = [];
     return [...new Set(labs.filter(Boolean))];
+  }
+
+  // Model cards prefer a mark mapped to the release id, then to a joined lab's
+  // operator mark. The returned id is what logos.json keys and data-mark carry.
+  function markRecordId(kind, record, index, recordMarks = {}) {
+    if (recordMarks[record.id]) return record.id;
+    if (kind !== "model" || !index) return record.id;
+    const labs = labsForRecord(kind, record, index);
+    const marked = labs.find(lab => recordMarks[lab.id]);
+    if (marked) return marked.id;
+    if (labs.length) return labs[0].id;
+    return record.id;
+  }
+
+  function markMonogramName(kind, record, markId, index) {
+    if (markId === record.id) return record.name;
+    if (kind === "model" && index) {
+      const lab = labsForRecord(kind, record, index).find(item => item.id === markId);
+      if (lab) return lab.name;
+    }
+    return record.name;
+  }
+
+  // Imported models.dev rows store a namespace slug in developer; prefer the
+  // joined lab's catalog name on cards when one exists.
+  function modelCardDeveloperLabel(model, index) {
+    const labs = labsForRecord("model", model, index);
+    if (labs.length) return labs[0].name;
+    return model.developer || "";
   }
 
   // Robots are unscored (ADR 037): the shared collection filter supplies the
@@ -382,7 +565,7 @@
   // index narrows a search, never widens it (for systems, the mixed
   // directory's old list).
   const SEARCH_TEXT_FIELDS = {
-    system: ["id", "name", "description", "repo", "url", "why_it_matters", "strengths", "weaknesses"],
+    system: ["id", "name", "description", "repo", "url", "why_it_matters", "strengths", "weaknesses", "retrieval_modes"],
     spec: ["id", "name", "short_name", "description", "standardizes", "does_not_standardize", "repo", "stewards"],
     inference: INFERENCE_SERVICE_VIEW.searchFields,
     runtime: LOCAL_RUNTIME_VIEW.searchFields,
@@ -505,7 +688,9 @@
   // hold the joined word whole hold the phrase, and the heaviest earns its
   // phrase bonus, the name's included, so "lang chain agents" still lists
   // LangChain first. The typed words are joined beside their stems.
-  function recordMatch(query, fields) {
+  // One query variant matched and ordered: the base weight, plus the
+  // split-name join the same variant would earn on its own words.
+  function recordMatchVariant(query, fields) {
     let weight = searchMatch(query, fields);
     const nameWords = cachedSearchWords(fields.name);
     const join = (list, i) => [...list.slice(0, i), list[i] + list[i + 1], ...list.slice(i + 2)];
@@ -527,6 +712,13 @@
       weight = Math.max(weight, joinedWeight + bonus);
     }
     return weight;
+  }
+
+  // A record's weight is its best variant's: the query as typed, then each
+  // synonym expansion on its own words.
+  function recordMatch(query, fields) {
+    const variants = [query, ...(query.alternates || []).map(alternate => ({ ...query, words: alternate.words, tokens: alternate.tokens, text: alternate.text }))];
+    return Math.max(0, ...variants.map(variant => recordMatchVariant(variant, fields)));
   }
 
   // Every record status the taxonomy defines that means a record is no longer
@@ -582,14 +774,18 @@
   const DIRECTORY_KINDS = [
     ["system", "searchIndex"], ["inference", "serviceSearchIndex"], ["runtime", "runtimeSearchIndex"],
     ["model", "modelSearchIndex"], ["pack", "packSearchIndex"], ["robot", "robotSearchIndex"],
+    ["lab", "labSearchIndex"], ["spec", "specSearchIndex"],
   ];
 
   // All is A–Z while browsing (ADR 013) and ordered by match while searching,
   // never by score (ADR 040). Each collection reads its own index namespace;
   // a missing one narrows that collection to its boot fields.
-  function filterDirectoryEntries(projects, services, runtimes = [], models = [], filters = {}, packs = [], robots = []) {
+  function filterDirectoryEntries(projects, services, runtimes = [], models = [], filters = {}, packs = [], robots = [], labs = [], specifications = []) {
     const query = parseSearchQuery(filters.term);
-    const lists = { system: projects, inference: services, runtime: runtimes, model: models, pack: packs, robot: robots };
+    const lists = {
+      system: projects, inference: services, runtime: runtimes, model: models,
+      pack: packs, robot: robots, lab: labs, spec: specifications,
+    };
     const entries = [];
     for (const [kind, indexKey] of DIRECTORY_KINDS) {
       for (const record of lists[kind]) {
@@ -681,24 +877,28 @@
   // such word names a goal only when that goal's label holds the word and no
   // other eligible goal holds it anywhere, so "browser" names a goal while a
   // generic word such as "agent" or "model" names none, and neither does a
-  // word only a description mentions ("open", in "open-weight"). The goal
-  // matching the most words wins, then the one whose label holds more of
-  // them, then the first listed. Each kept position is scored with
-  // queryWordHit, the better of its stem and its typed spelling, since a stem
-  // is not always a prefix of its own spelling ("libraries" stems to
-  // "library"): a stem-only hit test would miss it.
-  function matchFinderGoal(goals, raw) {
-    const query = parseSearchQuery(raw);
+  // word only a description mentions ("open", in "open-weight"). A goal may
+  // carry reviewed `keywords` — catalog words readers type that its label
+  // and description never say, such as "sql" for the data-analysis goal —
+  // and those count as the label for the one-word rule. The goal matching
+  // the most words wins, then the one whose label holds more of them, then
+  // the first listed. Each kept position is scored with queryWordHit, the
+  // better of its stem and its typed spelling, since a stem is not always a
+  // prefix of its own spelling ("libraries" stems to "library"): a stem-only
+  // hit test would miss it. A query that matches no goal as typed is retried
+  // once per synonym variant, so "note taking" can name the goal "notes"
+  // names; the first variant that names a goal wins.
+  function matchParsedFinderGoal(goals, query) {
     const positions = [...query.tokens.keys()].filter(i => query.tokens[i].length >= 3);
     if (!positions.length) return null;
     const needed = Math.max(1, Math.ceil(positions.length * 0.6));
     const matched = [];
     for (const goal of goals) {
       if (!goal.eligible) continue;
-      const goalWords = cachedSearchWords(`${goal.label} ${goal.description}`);
+      const goalWords = cachedSearchWords(`${goal.label} ${goal.description} ${(goal.keywords || []).join(" ")}`);
       const hits = positions.filter(i => queryWordHit(goalWords, query, i, false) > 0).length;
       if (hits < needed) continue;
-      const labelWords = cachedSearchWords(goal.label);
+      const labelWords = cachedSearchWords(`${goal.label} ${(goal.keywords || []).join(" ")}`);
       matched.push({ goal, hits, labelHits: positions.filter(i => queryWordHit(labelWords, query, i, false) > 0).length });
     }
     if (positions.length === 1 && (matched.length !== 1 || !matched[0].labelHits)) return null;
@@ -708,6 +908,12 @@
     }
     return best ? best.goal : null;
   }
+  function matchFinderGoal(goals, raw) {
+    const query = parseSearchQuery(raw);
+    return matchParsedFinderGoal(goals, query)
+      || (query.alternates || []).map(alternate => matchParsedFinderGoal(goals, { ...query, words: alternate.words, tokens: alternate.tokens })).find(Boolean)
+      || null;
+  }
 
   // The collections the Directory offers, in the order the front door's index
   // and the results strip list them (Phase 2 spec, section 2). Every entry is
@@ -715,21 +921,21 @@
   // is one word. `emblem` names the card badge whose emblem the entry shows:
   // the family's own type badge for a system family, else the collection's
   // first type badge in CARD_BADGES order (Agent packs shares the agent head).
-  // All shows the type family's empty
-  // frame; Robots has a navigation-only glyph, independent of form-factor
+  // All shows the type family's empty frame. Systems and Robots have
+  // navigation-only glyphs, independent of system-family and form-factor
   // card badges (ADR 037). `field` is what the tile's categories tally; `facet` is the
   // URL key that opens the scope narrowed to one.
   const FAMILY_SHORT_NAMES = { memory_system: "Memory", agent_system: "Agents", assistant_system: "Assistants" };
   const COLLECTIONS = [
-    { id: "all", name: "Everything", short: "All", kind: "scope", emblem: null, field: null, facet: null },
-    { id: "systems", name: "Systems", short: "Systems", kind: "scope", emblem: "memory-system", field: "system_family", facet: "family" },
-    { id: "models", name: "Models", short: "Models", kind: "scope", emblem: "language-model", field: "model_type", facet: "type" },
-    { id: "inference", name: "Inference services", short: "Services", kind: "scope", emblem: "direct-model-api", field: "service_type", facet: "type" },
-    { id: "runtimes", name: "Local runtimes", short: "Runtimes", kind: "scope", emblem: "desktop-runner", field: "runtime_type", facet: "type" },
-    { id: "packs", name: "Agent packs", short: "Packs", kind: "scope", emblem: "agent-system", field: "pack_type", facet: "type" },
-    { id: "robots", name: "Robots", short: "Robots", kind: "scope", emblem: null, glyph: '<path d="M10 23h12M13 23v-3.5l4.5-4.5M15.5 12l-3-2M19 13l2-2 2 1M21 11l-1-2"/><circle cx="11" cy="9" r="1.7"/><circle cx="17.5" cy="13.5" r="2"/><path d="m10 10.4 3 7.1"/>', field: "form_factor", facet: "formFactor" },
-    { id: "labs", name: "Labs", short: "Labs", kind: "scope", emblem: "ai-company", field: "lab_type", facet: "type" },
-    { id: "specifications", name: "Specifications", short: "Specs", kind: "scope", emblem: "protocol", field: "specification_type", facet: "type" },
+    { id: "all", meaning: "Browse systems, models, services, runtimes, packs, robots, labs, and specifications together. The empty circle represents mixed record types.", name: "Everything", short: "All", kind: "scope", emblem: null, field: null, facet: null },
+    { id: "systems", meaning: "Browse memory systems, agent systems, and assistants. Connected modules represent the collection, not a database or one system family.", name: "Systems", short: "Systems", kind: "scope", emblem: null, glyph: '<path d="m14.8 12.5-3.1 6M17.2 12.5l3.1 6M13 21h6"/><rect x="13.5" y="7.5" width="5" height="5" rx="1"/><rect x="8" y="18.5" width="5" height="5" rx="1"/><rect x="19" y="18.5" width="5" height="5" rx="1"/>', field: "system_family", facet: "family" },
+    { id: "models", meaning: "Browse reviewed model releases and attributed source records. The collection includes more than language-only models.", name: "Models", short: "Models", kind: "scope", emblem: "language-model", field: "model_type", facet: "type" },
+    { id: "inference", meaning: "Browse managed inference services, including hosts, cloud platforms, and routers.", name: "Inference services", short: "Services", kind: "scope", emblem: "direct-model-api", field: "service_type", facet: "type" },
+    { id: "runtimes", meaning: "Browse software that runs models on hardware you operate, including desktop tools, servers, libraries, and gateways.", name: "Local runtimes", short: "Runtimes", kind: "scope", emblem: "desktop-runner", field: "runtime_type", facet: "type" },
+    { id: "packs", meaning: "Browse agent packs and host-installed systems. The bot head indicates the agent ecosystem; individual pack cards retain their own type badges.", name: "Agent packs", short: "Packs", kind: "scope", emblem: "agent-system", field: "pack_type", facet: "type" },
+    { id: "robots", meaning: "Browse AI robot hardware. The arm represents the collection; each record has its own form-factor badge.", name: "Robots", short: "Robots", kind: "scope", emblem: null, glyph: '<path d="M10 23h12M13 23v-3.5l4.5-4.5M15.5 12l-3-2M19 13l2-2 2 1M21 11l-1-2"/><circle cx="11" cy="9" r="1.7"/><circle cx="17.5" cy="13.5" r="2"/><path d="m10 10.4 3 7.1"/>', field: "form_factor", facet: "formFactor" },
+    { id: "labs", meaning: "Browse organizations that develop AI models and systems. Each organization retains its own lab type.", name: "Labs", short: "Labs", kind: "scope", emblem: "ai-company", field: "lab_type", facet: "type" },
+    { id: "specifications", meaning: "Browse protocols, schemas, conventions, and packaging specifications.", name: "Specifications", short: "Specs", kind: "scope", emblem: "protocol", field: "specification_type", facet: "type" },
   ];
 
   // What a collection's default view lists, so a tile and a strip entry never
@@ -738,7 +944,7 @@
     const { projects = [], services = [], runtimes = [], models = [], packs = [], robots = [], labs = [], specifications = [] } = payloads;
     const { status } = directoryDefaults();
     const listed = projects.filter(project => !status || project.status === status);
-    if (id === "all") return [...projects, ...services, ...runtimes, ...models, ...packs, ...robots];
+    if (id === "all") return [...projects, ...services, ...runtimes, ...models, ...packs, ...robots, ...labs, ...specifications];
     if (id === "systems") return listed;
     if (id === "models") return models;
     if (id === "inference") return services;
@@ -766,6 +972,48 @@
       return { count, note: `${packs} ${packs === 1 ? "pack" : "packs"} · ${count - packs} host-installed` };
     }
     return { count, note: "" };
+  }
+
+  // An empty collection offers no tile and no strip entry; All always does.
+  function collectionHidden(id, payloads = {}) {
+    return id !== "all" && collectionCount(id, payloads).count === 0;
+  }
+
+  // One match pass over the whole catalog for a query: the set of records
+  // any collection's search finds, each kind read through its own search
+  // index once that index has landed (Phase 3 spec, section 1). The strip's
+  // counts and an empty result's pointers both read it; the results keep
+  // their own ranked pass, which also orders them.
+  const MATCH_GROUPS = [
+    ["system", "projects", "systems"], ["inference", "services", "inference"], ["runtime", "runtimes", "runtimes"],
+    ["model", "models", "models"], ["pack", "packs", "packs"], ["robot", "robots", "robots"],
+    ["lab", "labs", "labs"], ["spec", "specifications", "specifications"],
+  ];
+  function queryMatches(term, payloads = {}, indexes = {}, { labelOf } = {}) {
+    const query = parseSearchQuery(term);
+    const matched = new Set();
+    if (!query.tokens.length) return matched;
+    for (const [kind, payloadKey, indexKey] of MATCH_GROUPS) {
+      for (const record of payloads[payloadKey] || []) {
+        if (recordMatch(query, searchFields(kind, record, { index: indexes[indexKey], labelOf })) > 0) matched.add(record);
+      }
+    }
+    return matched;
+  }
+
+  // What each collection's default view lists of a query's matches: the
+  // strip's counts while searching, in registry order.
+  function collectionMatchCounts(matched, payloads = {}) {
+    return Object.fromEntries(COLLECTIONS.map(entry => [entry.id, collectionEntries(entry.id, payloads).filter(record => matched.has(record)).length]));
+  }
+
+  // The Systems family row: active systems per family, and while a query is
+  // present only its matches (`matched` is null without one). "" is All families.
+  function familyMatchCounts(matched, payloads = {}) {
+    const listed = collectionEntries("systems", payloads).filter(record => !matched || matched.has(record));
+    const counts = { "": listed.length };
+    for (const record of listed) counts[record.system_family] = (counts[record.system_family] || 0) + 1;
+    return counts;
   }
 
   function humanize(value) {
@@ -832,12 +1080,12 @@
   // is Best match (scopeURLParams).
   const SCOPE_URL_PARAMS = {
     all: { q: "" },
-    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name" },
-    inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", sort: "score" },
-    runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", sort: "score" },
+    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", retrieval: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name", browseSort: "" },
+    inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", sort: "score", browseSort: "" },
+    runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", sort: "score", browseSort: "" },
     packs: { q: "", type: "", host: "", install: "", license: "" },
     robots: { q: "", formFactor: "", aiBasis: "", availability: "", status: "" },
-    models: { q: "", type: "", distribution: "", modality: "", sourceModel: "", license: "", lab: "", sort: "score" },
+    models: { q: "", type: "", distribution: "", modality: "", sourceModel: "", license: "", lab: "", sort: "score", browseSort: "" },
     labs: { q: "", type: "", headquarters: "", distribution: "" },
     specifications: { q: "", type: "", scope: "", status: "", license: "" },
   };
@@ -846,12 +1094,18 @@
   // A query lists by Best match unless the reader chose another sort, so
   // while one is present the URL leaves out "match" and names any other sort,
   // the browsing default included. A reload or a shared link then restores
-  // the sort the reader chose (ruling R-P1-2b).
+  // the sort the reader chose (ruling R-P1-2b). Beside a query still listed
+  // by Best match, `browseSort` carries the sort clearing the query returns
+  // to, when that is not the default (Phase 3 spec, section 8).
   function scopeURLParams(scope, values = {}) {
+    const owned = SCOPE_URL_PARAMS[scope] || {};
     const searching = String(values.q ?? "").trim() !== "";
-    return Object.entries(SCOPE_URL_PARAMS[scope] || {})
-      .filter(([key, fallback]) => values[key] !== undefined
-        && String(values[key]) !== (key === "sort" && searching ? "match" : fallback))
+    return Object.entries(owned)
+      .filter(([key, fallback]) => {
+        if (values[key] === undefined) return false;
+        if (key === "browseSort") return searching && values.sort === "match" && values[key] !== "" && values[key] !== owned.sort;
+        return String(values[key]) !== (key === "sort" && searching ? "match" : fallback);
+      })
       .map(([key]) => [key, String(values[key])]);
   }
 
@@ -867,6 +1121,14 @@
       if (key === "page" || !params.has(key)) continue;
       const value = params.get(key);
       const accepts = allowed[key];
+      // A browsing sort means something only beside a query the URL lists by
+      // Best match, so it is refused without a query or beside a chosen sort.
+      if (key === "browseSort") {
+        const query = String(params.get("q") || "").trim();
+        if (key in owned && query && !params.has("sort") && accepts instanceof Set && accepts.has(value)) values[key] = value;
+        else rejected.push(key);
+        continue;
+      }
       if (key in owned && (accepts === "text" || (accepts instanceof Set && accepts.has(value)))) values[key] = value;
       else rejected.push(key);
     }
@@ -902,7 +1164,7 @@
     if (Object.hasOwn(COMPARISON_COLLECTIONS, kind)) return COMPARISON_COLLECTIONS[kind];
     if (params.has("collection")) {
       const collection = params.get("collection");
-      return ["systems", "inference", "runtimes", "packs", "robots", "models", "labs", "specifications"].includes(collection) ? collection : "all";
+      return COLLECTIONS.some(entry => entry.id === collection) ? collection : "all";
     }
     const record = parseRecordReference(params.get("record"));
     return record ? RECORD_COLLECTIONS[record.kind] ?? "all" : "all";
@@ -1027,6 +1289,41 @@
   // exactly one, and it restates the type the card's eyebrow prints so the
   // emblem row always leads with the record's kind.
   const CARD_BADGES = {
+    "robot-humanoid": {
+      name: "Humanoid",
+      definition: "A robot with a torso, two arms, and legs or a wheeled base standing in for them, built to work in spaces made for people.",
+      test: { field: "form_factor", equals: "humanoid" },
+      family: "type",
+      glyph: '<circle cx="16" cy="10" r="2"/><path d="M12 14h8v6h-8ZM12 15l-3 4M20 15l3 4M14 20l-2 4M18 20l2 4"/>',
+    },
+    "robot-quadruped": {
+      name: "Quadruped",
+      definition: "A four-legged walking robot.",
+      test: { field: "form_factor", equals: "quadruped" },
+      family: "type",
+      glyph: '<path d="M10 13h11v5H10ZM10 18l-2 5M13 18v5M18 18v5M21 18l2 5M21 13l2-2 1 3"/>',
+    },
+    "robot-arm": {
+      name: "Arm",
+      definition: "A fixed or bench-mounted manipulator with no locomotion of its own.",
+      test: { field: "form_factor", equals: "arm" },
+      family: "type",
+      glyph: '<path d="M10 23h12M13 23v-4l5-5M16 12l-4-3M20 12l2-2 2 1M22 10l-1-2"/><circle cx="11" cy="8" r="2"/><circle cx="18" cy="13" r="2"/>',
+    },
+    "robot-mobile-manipulator": {
+      name: "Mobile manipulator",
+      definition: "One or more arms on a wheeled or tracked base that moves itself.",
+      test: { field: "form_factor", equals: "mobile_manipulator" },
+      family: "type",
+      glyph: '<path d="M9 19h14v3H9ZM14 19v-5l4-3M18 11l3 2 2-2"/><circle cx="12" cy="23" r="1.5"/><circle cx="20" cy="23" r="1.5"/><circle cx="18" cy="10" r="1.5"/>',
+    },
+    "robot-other": {
+      name: "Other",
+      definition: "A robot whose body fits none of the named forms; the record's description says what it is. Never a vehicle, a drone, or a component.",
+      test: { field: "form_factor", equals: "other" },
+      family: "type",
+      glyph: '<path d="m11 9 10 2 2 9-7 4-7-6ZM11 9l5 7 7 4M16 16v8M16 16l5-5"/>',
+    },
     "memory-system": {
       name: "Memory system",
       definition: "Its main job is keeping knowledge: capturing, organizing, and recalling what it is given.",
@@ -1117,6 +1414,27 @@
       test: { field: "model_type", equals: "multimodal_language_model" },
       family: "type",
       glyph: '<rect x="10.5" y="11" width="11" height="10" rx="1.4"/><path d="m10.8 19.2 3.4-3.4 2.8 2.8 1.9-1.9 2.4 2.4"/><circle class="badge-dot" cx="18.6" cy="13.9" r="1.1"/>',
+    },
+    "image-generation-model": {
+      name: "Image generation model",
+      definition: "A model whose documented primary output is images.",
+      test: { field: "model_type", equals: "image_generation_model" },
+      family: "type",
+      glyph: '<rect x="9.5" y="11" width="13" height="10" rx="1.4"/><circle class="badge-dot" cx="12.9" cy="14.4" r="1.1"/><path d="m9.9 20.6 4-4 3.1 3.1 2.2-2.2 2.9 2.9"/>',
+    },
+    "video-generation-model": {
+      name: "Video generation model",
+      definition: "A model whose documented primary output is video.",
+      test: { field: "model_type", equals: "video_generation_model" },
+      family: "type",
+      glyph: '<rect x="8.5" y="11.5" width="15" height="9.5" rx="1.4"/><path d="m15.2 14.4 3.7 2.1-3.7 2.1Z"/>',
+    },
+    "audio-generation-model": {
+      name: "Audio generation model",
+      definition: "A model whose documented primary output is audio.",
+      test: { field: "model_type", equals: "audio_generation_model" },
+      family: "type",
+      glyph: '<path d="M10.8 13.6v4.8M13.8 11.2v9.6M16.8 13.6v4.8M19.8 15.4v1.2"/>',
     },
     "source-record": {
       name: "Source record",
@@ -1367,7 +1685,8 @@
     },
   };
 
-  // Order is priority: a card shows the first MAX_CARD_BADGES that match. Each
+  // Order is priority: show every match. Tests enforce MAX_CARD_BADGES; never
+  // silently discard a fact if future data exceeds that design budget. Each
   // set opens with its type badges, which all test one field for one value, so
   // exactly one of them matches a well-formed record and it always leads.
   const CARD_BADGE_SETS = {
@@ -1376,11 +1695,12 @@
     "system:assistant_system": ["assistant-system", "local-first", "self-hostable", "desktop-app", "mobile-app"],
     inference: ["direct-model-api", "cloud-model-platform", "managed-inference-host", "routing-aggregator", "dedicated-endpoints", "reserved-capacity", "batch"],
     runtime: ["desktop-runner", "server-engine", "embedded-library", "compatibility-gateway", "apple-metal", "amd-rocm", "distributed-serving", "npu"],
-    model: ["language-model", "multimodal-language-model", "downloadable-weights", "developer-api", "third-party-hosting"],
+    model: ["language-model", "multimodal-language-model", "image-generation-model", "video-generation-model", "audio-generation-model", "downloadable-weights", "developer-api", "third-party-hosting"],
     "model-source": ["source-record"],
     spec: ["protocol", "metadata-schema", "instruction-convention", "capability-format", "package-format"],
     pack: ["skills-bundle", "plugin", "process-kit", "vault-bundle", "marketplace"],
     lab: ["ai-company", "technology-company", "public-research"],
+    robot: ["robot-humanoid", "robot-quadruped", "robot-arm", "robot-mobile-manipulator", "robot-other"],
   };
   const CARD_BADGE_SET_NAMES = {
     "system:agent_system": "Agent systems",
@@ -1393,6 +1713,7 @@
     spec: "Specifications",
     pack: "Agent packs",
     lab: "Labs",
+    robot: "Robots",
   };
   const MAX_CARD_BADGES = 6;
 
@@ -1420,7 +1741,6 @@
     if (!key || !Object.hasOwn(CARD_BADGE_SETS, key)) return [];
     return CARD_BADGE_SETS[key]
       .filter(id => matchesBadgeTest(record, CARD_BADGES[id].test))
-      .slice(0, MAX_CARD_BADGES)
       .map(id => ({ id, name: CARD_BADGES[id].name, definition: CARD_BADGES[id].definition, family: CARD_BADGES[id].family }));
   }
 
@@ -1468,6 +1788,7 @@
       : collection === "models" ? ["model", "model-source"]
       : collection === "specifications" ? ["spec"]
       : collection === "labs" ? ["lab"]
+      : collection === "robots" ? ["robot"]
       : [];
     const ids = [...new Set(keys.flatMap(key => (Object.hasOwn(CARD_BADGE_SETS, key) ? CARD_BADGE_SETS[key] : [])))];
     if (!ids.length) return null;
@@ -1479,6 +1800,10 @@
   // ADR 038: Atlas can review a release before models.dev lists it. Such a
   // record has source_id null and metadata written by Atlas, so nothing on
   // the page may credit models.dev for it.
+  // Model licensing describes reviewed artifacts/terms, never training openness.
+  function modelLicenseCategories(sourceModels) {
+    return sourceModels.map(item => ({ ...item, name: item.model_name, definition: item.model_definition }));
+  }
   const UNLISTED_MODEL_LABEL = "Not yet listed on models.dev";
   function modelSourceLabel(model) {
     return model.source_id || UNLISTED_MODEL_LABEL;
@@ -1545,13 +1870,13 @@
       { id: "knowledge_assistant", label: "Ask questions over documents", description: "A ready-to-use AI knowledge app or RAG workspace.", roles: ["ai_knowledge_app"] },
       { id: "agent_memory", label: "Give agents durable memory", description: "Memory services, temporal context, or a bridge to human-owned knowledge.", roles: ["agent_memory_service", "context_graph_engine", "memory_bridge"] },
       { id: "ambient_recall", label: "Automatically remember activity", description: "Passive capture for reconstructing digital work and context.", roles: ["ambient_capture"] },
-      { id: "memory_infrastructure", label: "Build a custom memory product", description: "Retrieval or context-graph infrastructure for developers.", roles: ["retrieval_infrastructure", "context_graph_engine"] }
+      { id: "memory_infrastructure", label: "Build a custom memory product", description: "Retrieval or context-graph infrastructure for developers.", roles: ["retrieval_infrastructure", "context_graph_engine"], keywords: ["retrieval"] }
     ],
     agent_system: [
       { id: "general_work", label: "Delegate general knowledge work", description: "An end-user agent that plans and completes broad multi-step work across files, web sources, and applications.", roles: ["general_work_agent"] },
       { id: "coding", label: "Write and maintain software", description: "An interactive coding agent or a repeatable coding-agent workflow.", roles: ["coding_agent", "coding_agent_workflow"] },
       { id: "research", label: "Research and synthesize information", description: "A multi-step researcher that gathers sources and produces reports.", roles: ["research_agent"] },
-      { id: "analyze_data", label: "Analyze data with natural language", description: "A text-to-SQL or analytics agent that plans, validates, and explains queries.", roles: ["data_analysis_agent"] },
+      { id: "analyze_data", label: "Analyze data with natural language", description: "A text-to-SQL or analytics agent that plans, validates, and explains queries.", roles: ["data_analysis_agent"], keywords: ["sql"] },
       { id: "browser", label: "Operate websites or browsers", description: "An agent specialized in browser and graphical interaction.", roles: ["browser_computer_agent"] },
       { id: "persistent", label: "Run a persistent, stateful agent", description: "Identity, memory, schedules, skills, and long-running state.", roles: ["stateful_agent_runtime"] },
       { id: "build_agents", label: "Build and orchestrate agents", description: "A framework for tools, workflows, state, and multi-agent coordination.", roles: ["agent_framework_sdk", "multi_agent_orchestrator"] }
@@ -1571,7 +1896,7 @@
       { id: "personal_machine", label: "Run models on my own computer", description: "A packaged runner that manages download, storage, and local serving.", runtimeTypes: ["desktop_runner"] },
       { id: "serve_workload", label: "Serve a sustained request load", description: "An engine built for batching, concurrency, and multi-accelerator serving.", runtimeTypes: ["server_engine"] },
       { id: "embed_inference", label: "Embed inference in my own software", description: "A library or binary a host application links rather than operates as a service.", runtimeTypes: ["embedded_library"] },
-      { id: "self_host_endpoint", label: "Self-host one compatible endpoint", description: "A gateway presenting familiar APIs over interchangeable local backends.", runtimeTypes: ["compatibility_gateway"] }
+      { id: "self_host_endpoint", label: "Self-host one compatible endpoint", description: "A gateway presenting familiar APIs over interchangeable local backends.", runtimeTypes: ["compatibility_gateway"], keywords: ["gateway"] }
     ]
   };
   const FINDER_PRIORITIES = {
@@ -1638,7 +1963,9 @@
     }
     if (project.system_family === "memory_system") {
       if (priority === "local_editable") return (project.local_first ? 2.2 : 0) + (project.human_editable ? 2 : 0) + (project.architectures.includes("plain_files") ? 0.8 : 0);
-      if (priority === "local_control") return (project.local_first ? 3 : 0) + (project.deployment.includes("self_hosted") ? 0.8 : 0) + dimension("data_sovereignty") / 10;
+      // ADR 030 made local_first a data trait, so the boolean is worth half the
+      // sovereignty range: where execution happens (self-hosted) decides first.
+      if (priority === "local_control") return (project.local_first ? 1 : 0) + (project.deployment.includes("self_hosted") ? 1 : 0) + dimension("data_sovereignty") / 5;
       if (priority === "easy") return dimension("operational_simplicity") / 2;
       if (priority === "portable") return dimension("interoperability") / 1.8 + (project.architectures.includes("plain_files") ? 0.6 : 0);
       return dimension("overall") / 3;
@@ -1646,7 +1973,9 @@
     if (project.system_family === "agent_system") {
       if (priority === "direct_use") return project.agent_interfaces.some(item => ["terminal", "ide", "web_app"].includes(item)) ? 3 : 0;
       if (priority === "developer") return project.agent_interfaces.some(item => ["library", "api_sdk"].includes(item)) ? 3 : 0;
-      if (priority === "local") return (project.local_first ? 3 : 0) + ((project.execution_boundaries || []).includes("host") ? 1 : 0) + dimension("data_sovereignty") / 10;
+      // Same rebalance as local_control above: the host boundary judges where
+      // execution happens, local_first judges the data, and sovereignty decides.
+      if (priority === "local") return (project.local_first ? 1 : 0) + ((project.execution_boundaries || []).includes("host") ? 1 : 0) + dimension("data_sovereignty") / 5;
       if (priority === "control") return dimension("human_control") / 3 + dimension("observability_recovery") / 4;
       return dimension("overall") / 3;
     }
@@ -1703,8 +2032,40 @@
   // hydrated before results paint. The fetches start when the goal is chosen, so
   // the priority question usually covers the wait.
   const FINDER_DETAIL_KINDS = { inference_service: "inference", local_runtime: "runtime" };
+
+  // The records a Finder goal can draw on: active systems in its family and
+  // role set, or services or runtimes of its type (docs/WEB.md). Collections
+  // are passed in rather than read from app state, so the tile counts and the
+  // shortlist's candidate set come from one predicate and this can be tested
+  // against the real payloads.
+  function finderGoalRecords(direction, goalConfig, collections) {
+    const { projects, inferenceServices, localRuntimes } = collections;
+    if (direction === "inference_service") return inferenceServices.filter(item => goalConfig.serviceTypes.includes(item.service_type));
+    if (direction === "local_runtime") return localRuntimes.filter(item => goalConfig.runtimeTypes.includes(item.runtime_type));
+    return projects.filter(item => item.status === "active" && item.system_family === direction && goalConfig.roles.includes(item.primary_role));
+  }
+
+  // One entry per goal, carrying the count its tile prints. A goal may claim a
+  // role another goal in the same direction also claims — context_graph_engine
+  // is both agent_memory's and memory_infrastructure's — so these counts are
+  // per goal and a direction's total is never their sum.
+  function finderGoalEntries(collections) {
+    return Object.entries(FINDER_GOALS).flatMap(([direction, goals]) =>
+      goals.map(goal => ({ ...goal, direction, eligible: finderGoalRecords(direction, goal, collections).length })));
+  }
+
+  // How many active records a direction holds, which its group heading prints
+  // beside goals that may overlap.
+  function finderDirectionTotal(direction, collections) {
+    const { projects, inferenceServices, localRuntimes } = collections;
+    if (direction === "inference_service") return inferenceServices.length;
+    if (direction === "local_runtime") return localRuntimes.length;
+    return projects.filter(item => item.status === "active" && item.system_family === direction).length;
+  }
+
   return {
     BADGE_FAMILIES,
+    MAX_CARD_BADGES,
     CARD_BADGES,
     CARD_BADGE_SETS,
     COLLECTIONS,
@@ -1728,6 +2089,8 @@
     collectionCount,
     collectionEmblem,
     collectionEntries,
+    collectionHidden,
+    collectionMatchCounts,
     collectionState,
     comparableText,
     compareProjects,
@@ -1736,7 +2099,9 @@
     directoryDefaults,
     directoryStageFromURL,
     editDistance,
+    elementLabs,
     familyEmblem,
+    familyMatchCounts,
     filterAndSortProjects,
     filterDirectoryEntries,
     filterInferenceServices,
@@ -1747,19 +2112,31 @@
     filterRobots,
     filterScoredCollection,
     filterSpecifications,
+    finderDirectionTotal,
+    finderGoalEntries,
+    finderGoalRecords,
     holdsPhrase,
     labDistributionModes,
     labRelations,
     labsForRecord,
+    markMonogramName,
+    markRecordId,
     matchFinderGoal,
+    modelCardDeveloperLabel,
     matchesProject,
     mergePackScopeEntries,
     modelAccessSummary,
+    moreFromLabSystems,
+    predecessorSystems,
+    relatedSystems,
     systemDeploymentSummary,
+    systemElements,
     modelMetadataAttribution,
     modelSourceLabel,
+    modelLicenseCategories,
     modelsKickerText,
     monogramGlyph,
+    countryFlag,
     normalizeSearchText,
     packShapedSystems,
     paginate,
@@ -1768,14 +2145,18 @@
     parseViewAlias,
     parseViewId,
     priorityBoost,
+    queryMatches,
     readScopeURLParams,
     recommendationReasons,
     recordMatch,
     releaseDate,
     releasesNewestFirst,
+    newestDated,
     scopeFromURL,
+    successorSystem,
     scopeURLParams,
     scoreDimension,
+    SEARCH_SYNONYMS,
     searchFields,
     searchWords,
     shareRecordPath,

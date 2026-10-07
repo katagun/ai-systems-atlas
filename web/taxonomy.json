@@ -253,6 +253,21 @@
       "id": "multimodal_language_model",
       "name": "Multimodal language model",
       "definition": "A model that accepts image, audio, video, or document input and produces text as a primary output."
+    },
+    {
+      "id": "image_generation_model",
+      "name": "Image generation model",
+      "definition": "A model whose documented primary output is images."
+    },
+    {
+      "id": "video_generation_model",
+      "name": "Video generation model",
+      "definition": "A model whose documented primary output is video."
+    },
+    {
+      "id": "audio_generation_model",
+      "name": "Audio generation model",
+      "definition": "A model whose documented primary output is audio."
     }
   ],
   "model_modalities": [
@@ -1021,7 +1036,7 @@
     {
       "id": "public_research",
       "name": "Public research organization",
-      "definition": "A government-funded, academic, or nonprofit research organization that develops and releases models."
+      "definition": "A government-funded, academic, or nonprofit research organization. Its work may be model releases, research systems the catalog reviews, or a published statement of frontier intent."
     }
   ],
   "lab_admission_bases": [
@@ -1029,6 +1044,16 @@
       "id": "reviewed_release",
       "name": "Reviewed release",
       "definition": "The catalog has reviewed at least one model release the organization developed, so the record joins to that release."
+    },
+    {
+      "id": "reviewed_system",
+      "name": "Reviewed system",
+      "definition": "The catalog holds a reviewed system record the organization developed, and no reviewed model release of its own, so the record joins to that system instead."
+    },
+    {
+      "id": "reviewed_robot",
+      "name": "Reviewed robot",
+      "definition": "The catalog holds a reviewed robot record the organization makes, and no reviewed model release or reviewed system of its own, so the record joins to that robot instead."
     },
     {
       "id": "frontier_announcement",
@@ -1070,6 +1095,11 @@
       "definition": "Headquartered in Belgium (ISO 3166-1 BE)."
     },
     {
+      "id": "br",
+      "name": "Brazil",
+      "definition": "Where a lab says it is headquartered, or where its reviewed research, engineering, or creative work happens (ISO 3166-1 BR)."
+    },
+    {
       "id": "ca",
       "name": "Canada",
       "definition": "Headquartered in Canada (ISO 3166-1 CA)."
@@ -1083,6 +1113,11 @@
       "id": "fr",
       "name": "France",
       "definition": "Headquartered in France (ISO 3166-1 FR)."
+    },
+    {
+      "id": "de",
+      "name": "Germany",
+      "definition": "Headquartered in Germany (ISO 3166-1 DE)."
     },
     {
       "id": "in",
@@ -1100,6 +1135,11 @@
       "definition": "Headquartered in Japan (ISO 3166-1 JP)."
     },
     {
+      "id": "kz",
+      "name": "Kazakhstan",
+      "definition": "Where a lab says it is headquartered, or where its reviewed research, engineering, or creative work happens (ISO 3166-1 KZ)."
+    },
+    {
       "id": "sg",
       "name": "Singapore",
       "definition": "Headquartered in Singapore (ISO 3166-1 SG)."
@@ -1110,6 +1150,11 @@
       "definition": "Headquartered in the Republic of Korea (ISO 3166-1 KR)."
     },
     {
+      "id": "es",
+      "name": "Spain",
+      "definition": "Where a lab says it is headquartered, or where its reviewed research, engineering, or creative work happens (ISO 3166-1 ES)."
+    },
+    {
       "id": "ch",
       "name": "Switzerland",
       "definition": "Headquartered in Switzerland (ISO 3166-1 CH)."
@@ -1118,6 +1163,11 @@
       "id": "tr",
       "name": "Türkiye",
       "definition": "Headquartered in Türkiye (ISO 3166-1 TR)."
+    },
+    {
+      "id": "gb",
+      "name": "United Kingdom",
+      "definition": "Where a lab says it is headquartered, or where its reviewed research, engineering, or creative work happens (ISO 3166-1 GB)."
     },
     {
       "id": "us",
@@ -1688,6 +1738,11 @@
       "kind": "restricted"
     },
     {
+      "id": "LicenseRef-FLUX-Dev-Non-Commercial-2.0",
+      "name": "FLUX [dev] Non-Commercial License 2.0",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-GLM-5.3",
       "name": "GLM-5.3 License",
       "kind": "restricted"
@@ -1878,6 +1933,11 @@
       "kind": "restricted"
     },
     {
+      "id": "LicenseRef-SQLBot-Modified-GPLv3",
+      "name": "SQLBot Modified GPLv3 License",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-Qwen-License-Agreement",
       "name": "Qwen License Agreement",
       "kind": "restricted"
@@ -1953,6 +2013,11 @@
       "kind": "open_content"
     },
     {
+      "id": "PostgreSQL",
+      "name": "PostgreSQL License",
+      "kind": "open_source"
+    },
+    {
       "id": "Unlicense",
       "name": "The Unlicense",
       "kind": "open_source"
@@ -1962,37 +2027,51 @@
     {
       "id": "open_source",
       "name": "Open source",
-      "definition": "Operational code is released under one OSI-approved license."
+      "definition": "Operational code is released under one OSI-approved license.",
+      "model_name": "Open-licensed artifacts",
+      "model_definition": "The reviewed release artifacts use one open license. This classifies the published artifacts and mandatory terms, not the openness of training code or training data."
     },
     {
       "id": "mixed_open_source",
       "name": "Mixed open licenses",
-      "definition": "Operational code or repository content uses multiple open code or content licenses without production restrictions."
+      "definition": "Operational code or repository content uses multiple open code or content licenses without production restrictions.",
+      "model_name": "Mixed open artifact licenses",
+      "model_definition": "The reviewed release artifacts use multiple open licenses without production restrictions. This does not assess training code or training data openness."
     },
     {
       "id": "mixed_source",
       "name": "Mixed open and proprietary",
-      "definition": "The operational product combines reusable open-source components with a proprietary or restricted core, runtime, or distribution boundary."
+      "definition": "The operational product combines reusable open-source components with a proprietary or restricted core, runtime, or distribution boundary.",
+      "model_name": "Mixed open and restricted artifacts",
+      "model_definition": "The reviewed release combines open artifacts with proprietary or restricted components or distribution terms. See every material license and the release boundary."
     },
     {
       "id": "open_core",
       "name": "Open core",
-      "definition": "An open-source core is accompanied by restricted components or enterprise features."
+      "definition": "An open-source core is accompanied by restricted components or enterprise features.",
+      "model_name": "Open core with restricted components",
+      "model_definition": "The reviewed release has an open core and restricted components or features. See the release boundary and every material license."
     },
     {
       "id": "source_available",
       "name": "Source available",
-      "definition": "Operational source is visible but use, modification, or production deployment is restricted."
+      "definition": "Operational source is visible but use, modification, or production deployment is restricted.",
+      "model_name": "Restricted artifact terms",
+      "model_definition": "The reviewed release makes artifacts available under terms that restrict use, modification, or distribution. Availability does not establish open-source AI."
     },
     {
       "id": "proprietary",
       "name": "Proprietary",
-      "definition": "Operational implementation is not provided under reusable source terms."
+      "definition": "Operational implementation is not provided under reusable source terms.",
+      "model_name": "Proprietary access",
+      "model_definition": "The reviewed release is not provided under reusable open artifact terms. See its documented access routes and mandatory terms."
     },
     {
       "id": "unclear",
       "name": "Unclear",
-      "definition": "Available evidence does not yet support a confident source-model conclusion."
+      "definition": "Available evidence does not yet support a confident source-model conclusion.",
+      "model_name": "Unclear artifact terms",
+      "model_definition": "The available evidence does not support a confident classification of the release artifacts and mandatory terms."
     }
   ],
   "score_profiles": [

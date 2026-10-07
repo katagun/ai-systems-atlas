@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-28",
+  "generated_at": "2026-10-03",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -47,8 +47,8 @@
       "human_editable": true,
       "provenance": "moderate",
       "status": "active",
-      "stars": 4213,
-      "stars_verified_at": "2026-09-14",
+      "stars": 4218,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -76,9 +76,9 @@
       "research_confidence": "medium",
       "verified_at": "2026-09-13",
       "pushed_at": "2026-05-29T05:49:13Z",
-      "forks": 385,
-      "open_issues": 67,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 386,
+      "open_issues": 68,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -177,13 +177,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 27206,
-      "stars_verified_at": "2026-09-14",
+      "stars": 27385,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-13T19:26:13Z",
-      "forks": 3041,
-      "open_issues": 24,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-25T19:13:46Z",
+      "forks": 3068,
+      "open_issues": 28,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "GPL-3.0"
     },
     {
@@ -248,8 +248,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 42165,
-      "stars_verified_at": "2026-09-14",
+      "stars": 42386,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -276,10 +276,10 @@
       "why_it_matters": "Shows what an integrated, self-hostable agent platform looks like when runtime operations are treated as part of the framework rather than an afterthought.",
       "research_confidence": "high",
       "verified_at": "2026-08-25",
-      "pushed_at": "2026-09-14T13:03:07Z",
-      "forks": 5926,
-      "open_issues": 1441,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:22:59Z",
+      "forks": 6040,
+      "open_issues": 1699,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -331,8 +331,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 48953,
-      "stars_verified_at": "2026-09-14",
+      "stars": 49280,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -359,9 +359,9 @@
       "research_confidence": "high",
       "verified_at": "2026-08-23",
       "pushed_at": "2026-05-22T14:02:20Z",
-      "forks": 4948,
-      "open_issues": 1868,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 5016,
+      "open_issues": 1903,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -466,13 +466,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 32811,
-      "stars_verified_at": "2026-09-14",
+      "stars": 33228,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "pushed_at": "2026-09-09T07:57:01Z",
-      "forks": 3389,
-      "open_issues": 903,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 3459,
+      "open_issues": 933,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -626,8 +626,8 @@
       "provenance": "strong",
       "status": "superseded",
       "superseded_by": "microsoft-agent-framework",
-      "stars": 60979,
-      "stars_verified_at": "2026-09-14",
+      "stars": 61223,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The README (fetched 2026-08-29) carries a maintenance-mode caution: AutoGen \"is now in maintenance mode. It will not receive new features or enhancements and is community managed going forward.\" It directs new users to Microsoft Agent Framework as the \"enterprise-ready successor to AutoGen,\" links an AutoGen to Microsoft Agent Framework migration guide, and limits contributions to bug fixes, security patches, and documentation. The repository's last push was 2026-04-15.",
       "score": {
@@ -656,9 +656,9 @@
       "research_confidence": "high",
       "verified_at": "2026-08-29",
       "pushed_at": "2026-04-15T11:59:09Z",
-      "forks": 9206,
-      "open_issues": 1066,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 9269,
+      "open_issues": 1110,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "CC-BY-4.0",
       "licenses": [
         "MIT",
@@ -742,13 +742,13 @@
       "why_it_matters": "The original create-prioritize-execute task loop that seeded the 2023 wave of autonomous LLM agents (AutoGPT and its many forks); most later agent frameworks either extended this pattern or were built explicitly to fix its lack of tool use, approvals, and recovery.",
       "research_confidence": "high",
       "verified_at": "2026-09-02",
-      "stars": 109,
-      "stars_verified_at": "2026-09-14",
+      "stars": 110,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": 22356,
       "pushed_at": "2024-09-30T07:52:44Z",
       "forks": 27,
       "open_issues": 1,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -846,13 +846,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 3399,
-      "stars_verified_at": "2026-09-14",
+      "stars": 3422,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-08T11:10:29Z",
-      "forks": 492,
-      "open_issues": 13,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-28T18:54:47Z",
+      "forks": 507,
+      "open_issues": 19,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -995,8 +995,8 @@
       "human_editable": false,
       "provenance": "moderate",
       "status": "active",
-      "stars": 114578,
-      "stars_verified_at": "2026-09-14",
+      "stars": 116738,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -1022,10 +1022,10 @@
       "why_it_matters": "A focused reference for agents acting through unstable visual environments.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-13T20:04:16Z",
-      "forks": 12593,
-      "open_issues": 410,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T19:10:06Z",
+      "forks": 12871,
+      "open_issues": 521,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -1131,13 +1131,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 17713,
-      "stars_verified_at": "2026-09-14",
+      "stars": 17797,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-07T06:24:13Z",
-      "forks": 2076,
-      "open_issues": 479,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-20T04:56:23Z",
+      "forks": 2099,
+      "open_issues": 520,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -1198,8 +1198,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 4047,
-      "stars_verified_at": "2026-09-14",
+      "stars": 4054,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Originating organisation opactorai renamed to anymorph-ai; the last commit is dated 2026-03-04 and feature PRs and issues opened through 2026-07-28 remain unaddressed as of this review.",
       "score": {
@@ -1227,9 +1227,9 @@
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
       "pushed_at": "2026-04-11T03:03:40Z",
-      "forks": 615,
+      "forks": 626,
       "open_issues": 45,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -1294,8 +1294,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 8094,
-      "stars_verified_at": "2026-09-14",
+      "stars": 8189,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The Python repository is the representative open wrapper; the product also ships a commercially governed TypeScript SDK and bundles the Claude Code runtime.",
       "score": {
@@ -1322,10 +1322,10 @@
       "why_it_matters": "Shows the tradeoff of embedding a mature provider-owned agent runtime: unusually deep tools and controls with materially less model and licensing portability than open provider-agnostic frameworks.",
       "research_confidence": "high",
       "verified_at": "2026-09-14",
-      "pushed_at": "2026-09-12T19:46:45Z",
-      "forks": 1275,
-      "open_issues": 454,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:08:04Z",
+      "forks": 1308,
+      "open_issues": 515,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT",
@@ -1396,14 +1396,14 @@
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
-      "stars": 144981,
-      "stars_verified_at": "2026-09-14",
+      "stars": 148585,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The public repository is canonical, but the operational distribution remains proprietary under Anthropic commercial terms.",
-      "pushed_at": "2026-09-14T03:39:01Z",
-      "forks": 23141,
-      "open_issues": 12586,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T19:39:25Z",
+      "forks": 25085,
+      "open_issues": 13730,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": null,
       "score": {
         "task_reliability": 9.1,
@@ -1529,10 +1529,10 @@
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
-      "stars_verified_at": "2026-09-14",
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The repository describes itself as maintained without human intervention; its philosophy document instead describes humans directing work through a chat channel while agents implement, its contributor guide is conventional, and recent commits carry a dozen human author identities with no automated account. Direct pushes to the main branch are policy-blocked and merges are performed by people.",
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "research_confidence": "high",
       "id": "claw-code",
       "name": "Claw Code",
@@ -1575,9 +1575,9 @@
         "mcp",
         "workflows"
       ],
-      "stars": 195227,
-      "forks": 108553,
-      "open_issues": 44,
+      "stars": 195289,
+      "forks": 108329,
+      "open_issues": 48,
       "pushed_at": "2026-08-16T06:18:45Z",
       "github_detected_license": "MIT",
       "score": {
@@ -1656,8 +1656,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 67970,
-      "stars_verified_at": "2026-09-14",
+      "stars": 69567,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -1683,10 +1683,10 @@
       "why_it_matters": "A leading example of human control around autonomous coding tools.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T11:42:26Z",
-      "forks": 7346,
-      "open_issues": 1299,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:37:06Z",
+      "forks": 7552,
+      "open_issues": 1487,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -1791,13 +1791,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 40968,
-      "stars_verified_at": "2026-09-14",
+      "stars": 41042,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T09:36:53Z",
-      "forks": 3564,
-      "open_issues": 103,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:34:57Z",
+      "forks": 3565,
+      "open_issues": 205,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -1851,8 +1851,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 124035,
-      "stars_verified_at": "2026-09-14",
+      "stars": 127172,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -1878,10 +1878,10 @@
       "why_it_matters": "A reference implementation for controlled, tool-using coding agents.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T12:55:56Z",
-      "forks": 19126,
-      "open_issues": 17083,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:22:52Z",
+      "forks": 19869,
+      "open_issues": 19545,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -1983,13 +1983,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 35900,
-      "stars_verified_at": "2026-09-14",
+      "stars": 36066,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T04:33:35Z",
-      "forks": 5378,
-      "open_issues": 961,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T13:29:59Z",
+      "forks": 5445,
+      "open_issues": 846,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -2096,13 +2096,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 46969,
-      "stars_verified_at": "2026-09-14",
+      "stars": 47168,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T10:28:38Z",
-      "forks": 10350,
-      "open_issues": 23,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T15:22:23Z",
+      "forks": 10378,
+      "open_issues": 62,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -2153,8 +2153,8 @@
       "human_editable": true,
       "provenance": "moderate",
       "status": "active",
-      "stars": 58518,
-      "stars_verified_at": "2026-09-14",
+      "stars": 59192,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -2180,10 +2180,10 @@
       "why_it_matters": "A prominent test case for whether multi-agent structure improves outcomes enough to justify complexity.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T13:12:11Z",
-      "forks": 8443,
-      "open_issues": 796,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:34:49Z",
+      "forks": 8607,
+      "open_issues": 503,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -2281,13 +2281,13 @@
       ],
       "source_model": "source_available",
       "license_review_status": "verified",
-      "stars": 28067,
-      "stars_verified_at": "2026-09-14",
+      "stars": 28368,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T13:14:52Z",
-      "forks": 2241,
-      "open_issues": 729,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T15:28:39Z",
+      "forks": 2302,
+      "open_issues": 826,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION"
     },
     {
@@ -2346,8 +2346,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 22622,
-      "stars_verified_at": "2026-09-14",
+      "stars": 27250,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "This record covers the MIT-licensed Cua libraries and self-hostable computer-use infrastructure; optional Cua Cloud sandbox capacity is a separate managed service boundary.",
       "score": {
@@ -2374,10 +2374,10 @@
       "why_it_matters": "A prominent open implementation of the infrastructure layer needed to test and run agents that operate complete desktop environments rather than only browser APIs.",
       "research_confidence": "high",
       "verified_at": "2026-08-28",
-      "pushed_at": "2026-09-14T12:55:58Z",
-      "forks": 1569,
-      "open_issues": 904,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:32:10Z",
+      "forks": 1900,
+      "open_issues": 1000,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -2581,13 +2581,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 2379,
-      "stars_verified_at": "2026-09-28",
+      "stars": 2382,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "pushed_at": "2025-08-13T10:40:14Z",
-      "forks": 450,
+      "forks": 451,
       "open_issues": 27,
-      "metadata_verified_at": "2026-09-28",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -2660,8 +2660,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 19952,
-      "stars_verified_at": "2026-09-14",
+      "stars": 20067,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -2688,10 +2688,10 @@
       "why_it_matters": "A comprehensive reference for data agents that combine query generation, code execution, skills, sandboxing, and reports in one runtime.",
       "research_confidence": "high",
       "verified_at": "2026-08-25",
-      "pushed_at": "2026-09-14T05:49:30Z",
-      "forks": 2927,
-      "open_issues": 437,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T08:39:22Z",
+      "forks": 2946,
+      "open_issues": 450,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -2799,13 +2799,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 29400,
-      "stars_verified_at": "2026-09-14",
+      "stars": 29855,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T08:48:42Z",
-      "forks": 4118,
-      "open_issues": 204,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:21:27Z",
+      "forks": 4195,
+      "open_issues": 182,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -2880,8 +2880,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 223506,
-      "stars_verified_at": "2026-09-14",
+      "stars": 239929,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -2908,10 +2908,10 @@
       "why_it_matters": "A rare open implementation of a durable agent harness where execution policy, event history, recovery, and extension seams are explicit runtime primitives.",
       "research_confidence": "high",
       "verified_at": "2026-08-25",
-      "pushed_at": "2026-09-11T03:06:25Z",
-      "forks": 26572,
+      "pushed_at": "2026-09-29T09:41:57Z",
+      "forks": 28809,
       "open_issues": 0,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -3024,14 +3024,14 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 82417,
-      "stars_verified_at": "2026-09-14",
+      "stars": 83225,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "pushed_at": "2026-09-14T10:24:51Z",
-      "forks": 11368,
-      "open_issues": 894,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T14:10:30Z",
+      "forks": 11547,
+      "open_issues": 923,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -3324,13 +3324,13 @@
       ],
       "source_model": "unclear",
       "license_review_status": "verified",
-      "stars": 27595,
-      "stars_verified_at": "2026-09-14",
+      "stars": 27627,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-08-04T15:20:42Z",
-      "forks": 3412,
-      "open_issues": 101,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-23T19:56:36Z",
+      "forks": 3411,
+      "open_issues": 104,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": null
     },
     {
@@ -3344,14 +3344,14 @@
       "local_first": false,
       "human_editable": true,
       "provenance": "strong",
-      "stars": 155679,
-      "stars_verified_at": "2026-09-14",
+      "stars": 157518,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "GitHub reports NOASSERTION, which is correct here: the licence is a modified Apache 2.0 rather than the standard text, so no identifier applies.",
-      "pushed_at": "2026-09-14T13:05:33Z",
-      "forks": 24587,
-      "open_issues": 1045,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T16:22:52Z",
+      "forks": 24827,
+      "open_issues": 906,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION",
       "research_confidence": "high",
       "repo": "langgenius/dify",
@@ -3477,8 +3477,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 38006,
-      "stars_verified_at": "2026-09-14",
+      "stars": 38423,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -3505,10 +3505,10 @@
       "why_it_matters": "Broadens the Atlas beyond orchestration by treating AI-system behavior as typed, evaluable, optimizable programs.",
       "research_confidence": "high",
       "verified_at": "2026-08-25",
-      "pushed_at": "2026-09-11T22:21:38Z",
-      "forks": 3316,
-      "open_issues": 689,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T17:52:41Z",
+      "forks": 3379,
+      "open_issues": 756,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -3612,14 +3612,14 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 258090,
-      "stars_verified_at": "2026-09-14",
+      "stars": 269559,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "pushed_at": "2026-09-14T04:55:52Z",
-      "forks": 38600,
-      "open_issues": 203,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T19:08:37Z",
+      "forks": 40284,
+      "open_issues": 237,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -3713,13 +3713,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 5742,
-      "stars_verified_at": "2026-09-14",
+      "stars": 5879,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T12:53:58Z",
-      "forks": 588,
-      "open_issues": 96,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T03:00:49Z",
+      "forks": 617,
+      "open_issues": 97,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -3788,8 +3788,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 1405,
-      "stars_verified_at": "2026-09-14",
+      "stars": 1473,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -3816,10 +3816,10 @@
       "why_it_matters": "One of the few open harnesses built explicitly around recursive self-modification: it isolates an immutable event log and sandbox substrate from fully agent-editable semantics, letting future models safely evolve every layer of their own runtime rather than only their memory.",
       "research_confidence": "high",
       "verified_at": "2026-09-02",
-      "pushed_at": "2026-09-14T06:28:32Z",
-      "forks": 105,
-      "open_issues": 105,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T07:29:52Z",
+      "forks": 110,
+      "open_issues": 110,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -3838,14 +3838,14 @@
       "local_first": false,
       "human_editable": true,
       "provenance": "strong",
-      "stars": 55456,
-      "stars_verified_at": "2026-09-14",
+      "stars": 55494,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "GitHub reports NOASSERTION; the repository actually splits Apache-2.0 for the bulk against a commercial licence covering packages/server/src/enterprise. Archived on 2026-08-13 with end of life announced for 2026-08-31 and no successor named.",
       "pushed_at": "2026-08-13T12:38:19Z",
-      "forks": 25010,
+      "forks": 25052,
       "open_issues": 1040,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION",
       "research_confidence": "medium",
       "repo": "FlowiseAI/Flowise",
@@ -3993,14 +3993,14 @@
       "local_first": false,
       "human_editable": false,
       "provenance": "strong",
-      "stars": 8325,
-      "stars_verified_at": "2026-09-20",
+      "stars": 8396,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The root LICENSE is the full Apache-2.0 text and every packages/*/package.json manifest declares Apache-2.0. The runtime depends on the MIT-licensed Pi agent core and model API packages, which the Atlas reviews as the separate Pi record.",
-      "pushed_at": "2026-09-19T17:14:48Z",
-      "forks": 498,
-      "open_issues": 33,
-      "metadata_verified_at": "2026-09-20",
+      "pushed_at": "2026-09-28T20:37:26Z",
+      "forks": 501,
+      "open_issues": 50,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "score": {
         "task_reliability": 7.8,
@@ -4088,8 +4088,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 3041,
-      "stars_verified_at": "2026-09-17",
+      "stars": 3217,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Vercel's separate AI SDK harness adapter launches fx inside a Vercel sandbox over ACP; that adapter belongs to the AI SDK and is not part of this record.",
       "score": {
@@ -4116,10 +4116,10 @@
       "why_it_matters": "A vendor-backed coding agent built to be embedded rather than to be a platform: one small native binary that speaks ACP, reads the skill and MCP conventions of other agents, and loads into a browser or server as a library.",
       "research_confidence": "high",
       "verified_at": "2026-09-17",
-      "pushed_at": "2026-09-18T00:18:39Z",
-      "forks": 350,
-      "open_issues": 237,
-      "metadata_verified_at": "2026-09-17",
+      "pushed_at": "2026-09-29T19:31:22Z",
+      "forks": 362,
+      "open_issues": 260,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -4138,10 +4138,10 @@
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
-      "stars_verified_at": "2026-09-14",
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "research_confidence": "high",
       "id": "gajae-code",
       "name": "Gajae-Code",
@@ -4196,10 +4196,10 @@
         "mcp",
         "workflows"
       ],
-      "stars": 2784,
-      "forks": 383,
-      "open_issues": 56,
-      "pushed_at": "2026-09-14T12:49:01Z",
+      "stars": 2884,
+      "forks": 396,
+      "open_issues": 48,
+      "pushed_at": "2026-09-29T19:54:40Z",
       "github_detected_license": "MIT",
       "score": {
         "task_reliability": 6.8,
@@ -4276,8 +4276,8 @@
       "human_editable": true,
       "provenance": "moderate",
       "status": "active",
-      "stars": 106970,
-      "stars_verified_at": "2026-09-14",
+      "stars": 107194,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Google's May 2026 transition post says it is unifying its efforts into Antigravity and that Gemini CLI stopped serving free and Google AI Pro or Ultra requests on 2026-06-18, while committing to continue supporting the tool for Code Assist Standard and Enterprise licensees. The repository is not archived and shipped code during this review, and Google designated no successor record, so the status stays active and no supersession is recorded.",
       "score": {
@@ -4304,10 +4304,10 @@
       "why_it_matters": "Shows how a provider-backed terminal agent can remain extensible and open source.",
       "research_confidence": "high",
       "verified_at": "2026-09-03",
-      "pushed_at": "2026-09-14T01:45:57Z",
-      "forks": 14570,
-      "open_issues": 831,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:23:48Z",
+      "forks": 14663,
+      "open_issues": 801,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -4459,8 +4459,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 6437,
-      "stars_verified_at": "2026-09-14",
+      "stars": 6457,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -4487,10 +4487,10 @@
       "why_it_matters": "Represents the application-framework approach to agent construction, where typed flows, evaluation, and a developer inspection loop matter more than autonomous execution.",
       "research_confidence": "medium",
       "verified_at": "2026-08-29",
-      "pushed_at": "2026-09-14T11:33:40Z",
-      "forks": 840,
-      "open_issues": 734,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T19:20:02Z",
+      "forks": 854,
+      "open_issues": 819,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -4556,8 +4556,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 6858,
-      "stars_verified_at": "2026-09-15",
+      "stars": 7398,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Engram, the memory the README leads with, is a separate repository — `Gentleman-Programming/engram` — that this command line installs with `go install` and health-probes; its behaviour belongs to that review, not this record.",
       "score": {
@@ -4583,7 +4583,12 @@
       ],
       "why_it_matters": "Shows a workflow layer can hold durable state of its own — a ledger of what each change claimed and evidenced — while leaving execution to whichever coding agent the developer already runs.",
       "research_confidence": "high",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "pushed_at": "2026-09-29T20:38:12Z",
+      "forks": 815,
+      "open_issues": 937,
+      "metadata_verified_at": "2026-09-29",
+      "github_detected_license": "MIT"
     },
     {
       "id": "google-adk",
@@ -4655,8 +4660,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 21530,
-      "stars_verified_at": "2026-09-14",
+      "stars": 21678,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The Python repository is the canonical metadata source for one ADK product also implemented by Google in TypeScript, Go, Java, and Kotlin; language feature parity varies.",
       "score": {
@@ -4683,10 +4688,10 @@
       "why_it_matters": "A significant provider-published framework whose operational runner remains open and replaceable across model, storage, tool, protocol, and deployment seams.",
       "research_confidence": "high",
       "verified_at": "2026-08-25",
-      "pushed_at": "2026-09-13T06:36:26Z",
-      "forks": 4008,
-      "open_issues": 506,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:34:18Z",
+      "forks": 4080,
+      "open_issues": 497,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -4843,8 +4848,8 @@
       "source_model": "unclear",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 3380,
-      "stars_verified_at": "2026-09-14",
+      "stars": 3577,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The repository's own README states cloning it is not sufficient to run the SDK: the package depends on a compiled runtime binary bundled only in the platform-specific wheels published to PyPI. The reviewed Apache-2.0 LICENSE text covers the Python wrapper source in this repository; neither the repository nor the PyPI project page states separate terms for that binary, so source_model is recorded as unclear rather than mixed_source (no proprietary terms were found to cite) or open_source (the binary that actually runs the agent loop ships no source).",
       "score": {
@@ -4871,10 +4876,10 @@
       "why_it_matters": "The embeddable, code-first counterpart to Google's Antigravity desktop platform: developers who want the same agent loop inside their own application, rather than Antigravity's IDE/desktop surface, get a Python SDK instead of a GUI product.",
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
-      "pushed_at": "2026-09-02T15:29:10Z",
-      "forks": 1339,
-      "open_issues": 31,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-27T22:12:00Z",
+      "forks": 1408,
+      "open_issues": 32,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -4924,8 +4929,8 @@
       "human_editable": true,
       "provenance": "moderate",
       "status": "active",
-      "stars": 54250,
-      "stars_verified_at": "2026-09-14",
+      "stars": 54778,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The project moved from block/goose to aaif-goose/goose.",
       "score": {
@@ -4951,10 +4956,10 @@
       "why_it_matters": "A practical model for local, protocol-extensible agents.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T04:35:07Z",
-      "forks": 6233,
-      "open_issues": 336,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T19:35:24Z",
+      "forks": 6340,
+      "open_issues": 418,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -5011,8 +5016,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 29445,
-      "stars_verified_at": "2026-09-14",
+      "stars": 29808,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -5038,10 +5043,10 @@
       "why_it_matters": "Separates research-agent evaluation from generic coding autonomy.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-08-27T19:34:56Z",
-      "forks": 4003,
-      "open_issues": 95,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-26T17:46:25Z",
+      "forks": 4070,
+      "open_issues": 17,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -5227,13 +5232,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 3469,
-      "stars_verified_at": "2026-09-14",
+      "stars": 3484,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "pushed_at": "2026-07-06T14:05:33Z",
-      "forks": 420,
-      "open_issues": 32,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 422,
+      "open_issues": 35,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -5293,8 +5298,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 132952,
-      "stars_verified_at": "2026-09-14",
+      "stars": 134496,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Multi-host support is generated from a Claude-oriented canonical skill set; GBrain integration is adjacent and separately cataloged. Its README installs the skill set by cloning the repository into `~/.claude/skills/gstack` and running its setup script, so the workflow runs inside the host agent's sessions.",
       "score": {
@@ -5321,10 +5326,10 @@
       "why_it_matters": "Shows how structured roles, artifacts, safety gates, and verification turn general coding agents into a repeatable software-delivery system.",
       "research_confidence": "high",
       "verified_at": "2026-09-20",
-      "pushed_at": "2026-09-11T19:40:16Z",
-      "forks": 19845,
-      "open_issues": 888,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:29:36Z",
+      "forks": 20022,
+      "open_issues": 942,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT",
@@ -5403,8 +5408,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 26508,
-      "stars_verified_at": "2026-09-14",
+      "stars": 26634,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -5431,10 +5436,10 @@
       "why_it_matters": "A mature reference for transparent, production-oriented orchestration where retrieval and agent control flow remain explicit.",
       "research_confidence": "high",
       "verified_at": "2026-08-25",
-      "pushed_at": "2026-09-14T08:26:21Z",
-      "forks": 3131,
-      "open_issues": 145,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T17:01:14Z",
+      "forks": 3207,
+      "open_issues": 159,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -5514,8 +5519,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 245350,
-      "stars_verified_at": "2026-09-14",
+      "stars": 250040,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -5542,10 +5547,10 @@
       "why_it_matters": "A notable open implementation of a personal agent that treats memory, learned skills, schedules, channels, and execution policy as durable runtime state.",
       "research_confidence": "high",
       "verified_at": "2026-08-28",
-      "pushed_at": "2026-09-14T13:17:49Z",
-      "forks": 51067,
-      "open_issues": 42966,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:38:59Z",
+      "forks": 53361,
+      "open_issues": 47157,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -5706,8 +5711,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 3280,
-      "stars_verified_at": "2026-09-14",
+      "stars": 3722,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Candidate triage recorded 1,791 stars on 2026-08-25; this review's live check found 2,999, a fast-growing single-maintainer project at release v0.11.1. The Python package's `hyperresearch install` step places the `/hyperresearch` command into Claude Code, per the README's Install section, so the pipeline runs inside that host's sessions.",
       "score": {
@@ -5735,10 +5740,10 @@
       "why_it_matters": "Shows a deep-research pipeline that treats citation integrity and retraction-checking as hard gates rather than best-effort prompting, with a durable, human-readable vault instead of a one-shot report.",
       "research_confidence": "medium",
       "verified_at": "2026-09-18",
-      "pushed_at": "2026-09-12T22:25:32Z",
-      "forks": 320,
-      "open_issues": 17,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-25T18:24:03Z",
+      "forks": 368,
+      "open_issues": 14,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -5907,8 +5912,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 27301,
-      "stars_verified_at": "2026-09-14",
+      "stars": 27444,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "This record covers the MIT-licensed Kilo Code IDE extensions and CLI; Kilo Gateway and Cloud Agent are optional hosted service boundaries and are not classified as open source here.",
       "score": {
@@ -5935,10 +5940,10 @@
       "why_it_matters": "A substantial open coding-agent implementation that combines editor and CLI operation with unusually broad provider choice and explicit permission controls.",
       "research_confidence": "high",
       "verified_at": "2026-08-28",
-      "pushed_at": "2026-09-14T13:17:44Z",
-      "forks": 3154,
-      "open_issues": 551,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T18:40:31Z",
+      "forks": 3217,
+      "open_issues": 623,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -6179,8 +6184,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 146294,
-      "stars_verified_at": "2026-09-14",
+      "stars": 147274,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -6207,10 +6212,10 @@
       "why_it_matters": "A mature reference for a high-level, provider-portable agent API layered over a durable workflow runtime.",
       "research_confidence": "high",
       "verified_at": "2026-08-25",
-      "pushed_at": "2026-09-14T08:34:31Z",
-      "forks": 24446,
-      "open_issues": 493,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T15:29:05Z",
+      "forks": 24656,
+      "open_issues": 584,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -6229,14 +6234,14 @@
       "local_first": false,
       "human_editable": true,
       "provenance": "strong",
-      "stars": 154788,
-      "stars_verified_at": "2026-09-14",
+      "stars": 155378,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "pushed_at": "2026-09-14T12:58:33Z",
-      "forks": 10083,
-      "open_issues": 1050,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:26:53Z",
+      "forks": 10149,
+      "open_issues": 1176,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "research_confidence": "high",
       "repo": "langflow-ai/langflow",
@@ -6365,8 +6370,8 @@
       "human_editable": false,
       "provenance": "strong",
       "status": "active",
-      "stars": 41618,
-      "stars_verified_at": "2026-09-14",
+      "stars": 42476,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -6392,16 +6397,97 @@
       "why_it_matters": "A benchmark for treating control, persistence, and recovery as runtime primitives.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-13T21:14:44Z",
-      "forks": 7030,
-      "open_issues": 785,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T16:44:15Z",
+      "forks": 7195,
+      "open_issues": 836,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
       ],
       "source_model": "open_source",
       "license_review_status": "verified"
+    },
+    {
+      "id": "lerobot",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "LeRobot",
+      "repo": "huggingface/lerobot",
+      "url": "https://github.com/huggingface/lerobot",
+      "description": "A PyTorch framework for building robot-controlling agents: a policy chooses an action from the robot's observation, including vision-language-action policies that take a language instruction, and a Robot interface sends that action to physical hardware.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "versioned"
+      ],
+      "canonical_data": "policy checkpoints and recorded episode datasets as files",
+      "deployment": [
+        "library",
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "robot_control"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0",
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 27860,
+      "stars_verified_at": "2026-09-29",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 6.8,
+        "autonomy": 7.6,
+        "human_control": 7.0,
+        "observability_recovery": 6.5,
+        "data_sovereignty": 8.8,
+        "interoperability": 8.4,
+        "maturity": 8.0,
+        "overall": 7.46
+      },
+      "strengths": [
+        "Documented control loop from a policy's decision to a physical robot, across supported arms and humanoids",
+        "Vision-language-action policies take a language instruction and act",
+        "Installs as a pip package and runs on the operator's own machine"
+      ],
+      "weaknesses": [
+        "Recovery and monitoring are left to the application; the framework ships no supervisor",
+        "Training and dataset tooling dominate the documentation, so the control path is one section among many"
+      ],
+      "why_it_matters": "The clearest open example of a framework whose agent loop ends at a robot rather than at a software tool.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-28",
+      "github_detected_license": "Apache-2.0",
+      "pushed_at": "2026-09-29T17:13:32Z",
+      "forks": 5773,
+      "open_issues": 957,
+      "metadata_verified_at": "2026-09-29"
     },
     {
       "id": "letta-code",
@@ -6459,8 +6545,8 @@
       "human_editable": true,
       "provenance": "limited",
       "status": "active",
-      "stars": 3335,
-      "stars_verified_at": "2026-09-14",
+      "stars": 3481,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": 24363,
       "current_repo_note": "The former letta-ai/letta repository is now a landing page; active code moved here.",
       "score": {
@@ -6487,10 +6573,10 @@
       "why_it_matters": "Defines embedded, self-editing agent memory and long-horizon runtime behavior.",
       "research_confidence": "high",
       "verified_at": "2026-09-13",
-      "pushed_at": "2026-09-14T05:48:34Z",
-      "forks": 402,
-      "open_issues": 361,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:32:44Z",
+      "forks": 424,
+      "open_issues": 474,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -6566,8 +6652,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 52155,
-      "stars_verified_at": "2026-09-14",
+      "stars": 52361,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "This entry represents the MIT-licensed LlamaIndex OSS framework; LlamaParse and LlamaCloud are separate commercial services.",
       "score": {
@@ -6594,10 +6680,10 @@
       "why_it_matters": "A foundational framework for data-intensive AI systems where retrieval, documents, structured data, and agents converge.",
       "research_confidence": "high",
       "verified_at": "2026-08-25",
-      "pushed_at": "2026-09-11T18:09:01Z",
-      "forks": 8134,
-      "open_issues": 764,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T04:49:06Z",
+      "forks": 8252,
+      "open_issues": 818,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -6693,13 +6779,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 10087,
-      "stars_verified_at": "2026-09-14",
+      "stars": 10089,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-10T22:59:08Z",
-      "forks": 1014,
-      "open_issues": 14,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-23T23:43:21Z",
+      "forks": 1015,
+      "open_issues": 20,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -6777,8 +6863,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 28029,
-      "stars_verified_at": "2026-09-14",
+      "stars": 28429,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The root license path map makes repository content outside ee/ Apache-2.0; every ee/ path is commercially restricted, and Mastra Platform is a separate proprietary service.",
       "score": {
@@ -6805,10 +6891,10 @@
       "why_it_matters": "An unusually integrated TypeScript agent stack that treats tools, memory, workflows, evaluation, human control, observability, and deployment as one operational framework while exposing a clear open-core boundary.",
       "research_confidence": "high",
       "verified_at": "2026-08-25",
-      "pushed_at": "2026-09-14T13:17:55Z",
-      "forks": 2783,
-      "open_issues": 623,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:33:32Z",
+      "forks": 2887,
+      "open_issues": 462,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION",
       "licenses": [
         "Apache-2.0",
@@ -6880,8 +6966,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 1101,
-      "stars_verified_at": "2026-09-14",
+      "stars": 1144,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Repository created 2026-04-04 (about five months old) but already at v2.2.0 with roughly 1,500 commits; pushed as recently as 2026-09-12, indicating rapid, current development despite the short track record.",
       "score": {
@@ -6911,10 +6997,10 @@
       "why_it_matters": "A fast-moving, enterprise-oriented alternative to single-user personal-agent runtimes, adding multi-user governance and a pluggable execution-engine contract on top of the same durable-agent pattern.",
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
-      "pushed_at": "2026-09-14T13:09:26Z",
-      "forks": 331,
-      "open_issues": 169,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T09:38:26Z",
+      "forks": 337,
+      "open_issues": 180,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -7049,8 +7135,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 13514,
-      "stars_verified_at": "2026-09-14",
+      "stars": 13867,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Microsoft identifies Agent Framework as the successor path for AutoGen and Semantic Kernel agent APIs.",
       "score": {
@@ -7076,10 +7162,10 @@
       "why_it_matters": "Represents the convergence of agent SDKs and durable workflow orchestration.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T13:09:40Z",
-      "forks": 2318,
-      "open_issues": 649,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T19:28:15Z",
+      "forks": 2398,
+      "open_issues": 669,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -7340,8 +7426,8 @@
       "source_model": "mixed_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 39729,
-      "stars_verified_at": "2026-09-14",
+      "stars": 39781,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "This repository is a superproject: its top-level MIT LICENSE covers only the build/glue code. It pins four Git submodules, each under its own license, reviewed here at the exact commits mindshub's main branch pins: frontend (mindsdb/cowork) is AGPL-3.0; backend/core_agent (mindsdb/anton) is MIT; backend/core_api (mindsdb/cowork-server) -- the agent backend the whole product depends on to run -- carries an all-rights-reserved proprietary notice with no reuse grant; and backend/data-vault (mindsdb/data-vault, the MindsDB core engine) splits Elastic License 2.0 for its core against MIT for its `/mindsdb/integrations` subdirectory. The taxonomy has no dedicated id for Elastic License 2.0, so it is recorded here as LicenseRef-Commercial (source-available with reuse and hosting restrictions), the same bucket other Atlas records use for comparable dual-licensed cores. The README's own 'released under the MIT License' framing describes only the top-level repository, not the product a user actually runs.",
       "score": {
@@ -7368,10 +7454,10 @@
       "why_it_matters": "A widely starred example of a vendor packaging a broad, connected-data agent workspace as an ostensibly open-source superproject whose actual operational core is proprietary, which matters for any reader evaluating it on the top-level MIT badge alone.",
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
-      "pushed_at": "2026-09-11T02:43:59Z",
-      "forks": 6241,
-      "open_issues": 5,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-16T21:37:33Z",
+      "forks": 6246,
+      "open_issues": 6,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -7458,13 +7544,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 7532,
-      "stars_verified_at": "2026-09-14",
+      "stars": 8093,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-07T22:16:21Z",
-      "forks": 1021,
-      "open_issues": 63,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-28T22:56:08Z",
+      "forks": 1110,
+      "open_issues": 81,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -7666,13 +7752,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 48149,
-      "stars_verified_at": "2026-09-14",
+      "stars": 48678,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T09:48:11Z",
-      "forks": 8505,
-      "open_issues": 770,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T17:11:46Z",
+      "forks": 8601,
+      "open_issues": 826,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -7721,8 +7807,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 13793,
-      "stars_verified_at": "2026-09-14",
+      "stars": 13846,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Last functional commit and release (v0.1.13) landed 2025-11-22; the only later commit (2026-08-18) was a README edit. Several feature/fix PRs opened through September 2026 remain open and unmerged.",
       "score": {
@@ -7750,9 +7836,9 @@
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
       "pushed_at": "2026-08-18T00:42:48Z",
-      "forks": 1453,
-      "open_issues": 81,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 1465,
+      "open_issues": 80,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -7819,8 +7905,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 80,
-      "stars_verified_at": "2026-09-14",
+      "stars": 87,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -7847,10 +7933,10 @@
       "why_it_matters": "A working, self-hosted example of a persistent agent runtime with real plan/approve governance and dual-layer memory built directly on a provider's own agent SDK rather than a bespoke orchestration layer.",
       "research_confidence": "high",
       "verified_at": "2026-09-12",
-      "pushed_at": "2026-09-13T15:04:52Z",
-      "forks": 30,
-      "open_issues": 47,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T18:12:31Z",
+      "forks": 31,
+      "open_issues": 61,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -7943,13 +8029,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 39151,
-      "stars_verified_at": "2026-09-14",
+      "stars": 39415,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T08:47:40Z",
-      "forks": 3500,
-      "open_issues": 3,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T17:15:38Z",
+      "forks": 3525,
+      "open_issues": 1,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -7963,10 +8049,10 @@
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
-      "stars_verified_at": "2026-09-14",
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Distributed for one host command line under the separate name LazyCodex, whose repository is a thin installer that vendors this engine as a submodule; the installer carries a permissive licence but the engine it fetches does not.",
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "research_confidence": "high",
       "id": "oh-my-openagent",
       "name": "oh-my-openagent",
@@ -8015,10 +8101,10 @@
         "mcp",
         "workflows"
       ],
-      "stars": 69032,
-      "forks": 5682,
-      "open_issues": 1015,
-      "pushed_at": "2026-09-14T09:55:36Z",
+      "stars": 69655,
+      "forks": 5733,
+      "open_issues": 1071,
+      "pushed_at": "2026-09-29T20:34:05Z",
       "github_detected_license": "NOASSERTION",
       "score": {
         "task_reliability": 6.4,
@@ -8143,14 +8229,96 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 31073,
-      "stars_verified_at": "2026-09-14",
+      "stars": 33762,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T13:15:07Z",
-      "forks": 3232,
-      "open_issues": 2926,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:12:42Z",
+      "forks": 3625,
+      "open_issues": 3299,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
+    },
+    {
+      "id": "om1",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "OM1",
+      "repo": "OpenMind/OM1",
+      "url": "https://github.com/OpenMind/OM1",
+      "description": "A configurable framework for building robot-controlling agents: camera, audio, and LIDAR inputs feed an LLM that chooses named actions, and action plugins carry them out on humanoid and quadruped robots or in simulators.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "audio",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "canonical_data": "json5 agent configurations and system prompts",
+      "deployment": [
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "robot_control"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "status": "active",
+      "current_repo_note": "The Go runtime on main ships only as the rolling nightly pre-release; the latest tagged release, v1.0.2-beta.2 of 2026-04-29, is the deprecated Python runtime with no binaries.",
+      "score": {
+        "task_reliability": 6.4,
+        "tool_use": 7.2,
+        "autonomy": 7.8,
+        "human_control": 6.0,
+        "observability_recovery": 6.2,
+        "data_sovereignty": 5.5,
+        "interoperability": 7.6,
+        "maturity": 5.8,
+        "overall": 6.53
+      },
+      "strengths": [
+        "An LLM chooses named actions and connectors carry them out; the README documents a Unitree Go2 movement connector and full autonomy with the BrainPack module on four robots",
+        "Inputs, models, and actions are composed in a json5 config file",
+        "Ollama is documented as a local substitute for the language model"
+      ],
+      "weaknesses": [
+        "The default model path runs through OpenMind's hosted endpoint and needs an account key; only the LLM has a documented local substitute",
+        "The maintained runtime has no tagged release; the README's release link points at a deprecated beta",
+        "The docs describe a robot-identity network and a blockchain governance system it says it is exploring, neither of which the README mentions",
+        "Low-level control and collision avoidance are delegated to the robot's own SDK"
+      ],
+      "why_it_matters": "An LLM agent loop whose actions are a robot's motion rather than a file or a browser.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-28",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "stars": 2937,
+      "stars_verified_at": "2026-09-29",
+      "historical_stars": null,
+      "github_detected_license": "MIT",
+      "pushed_at": "2026-09-28T19:23:52Z",
+      "forks": 998,
+      "open_issues": 63,
+      "metadata_verified_at": "2026-09-29"
     },
     {
       "id": "omnigent",
@@ -8258,13 +8426,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 9925,
-      "stars_verified_at": "2026-09-14",
+      "stars": 10346,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T13:14:57Z",
-      "forks": 1553,
-      "open_issues": 1356,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:08:36Z",
+      "forks": 1648,
+      "open_issues": 1558,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -8362,13 +8530,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 96095,
-      "stars_verified_at": "2026-09-14",
+      "stars": 98703,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T13:15:34Z",
-      "forks": 11131,
-      "open_issues": 1009,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T18:33:48Z",
+      "forks": 11438,
+      "open_issues": 1148,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -8420,8 +8588,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 75,
-      "stars_verified_at": "2026-09-14",
+      "stars": 74,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Open Grok is a community-maintained fork of the Grok Build coding-agent codebase. It is unrelated to the long-running OpenGrok source-code search and cross-reference project.",
       "score": {
@@ -8448,10 +8616,10 @@
       "why_it_matters": "Makes an otherwise provider-associated coding-agent implementation inspectable and reusable while adding a distinct community-maintained execution path.",
       "research_confidence": "medium",
       "verified_at": "2026-08-28",
-      "pushed_at": "2026-09-12T01:42:46Z",
-      "forks": 8,
-      "open_issues": 5,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-25T16:55:35Z",
+      "forks": 9,
+      "open_issues": 6,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -8503,8 +8671,8 @@
       "human_editable": true,
       "provenance": "moderate",
       "status": "active",
-      "stars": 68318,
-      "stars_verified_at": "2026-09-14",
+      "stars": 68476,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The canonical repository is openinterpreter/openinterpreter.",
       "score": {
@@ -8530,10 +8698,10 @@
       "why_it_matters": "Makes the tradeoff between local control and host-execution safety especially visible.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T04:58:54Z",
-      "forks": 5885,
-      "open_issues": 1,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-27T09:51:50Z",
+      "forks": 5884,
+      "open_issues": 7,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -8643,13 +8811,13 @@
       ],
       "source_model": "mixed_source",
       "license_review_status": "verified",
-      "stars": 10711,
-      "stars_verified_at": "2026-09-14",
+      "stars": 10772,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T13:15:55Z",
-      "forks": 1268,
-      "open_issues": 118,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:36:39Z",
+      "forks": 1288,
+      "open_issues": 172,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -8806,8 +8974,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 29420,
-      "stars_verified_at": "2026-09-14",
+      "stars": 29767,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -8834,15 +9002,112 @@
       "why_it_matters": "Shows how a provider-published SDK can keep its operational loop open while exposing replaceable model, storage, tracing, and execution seams.",
       "research_confidence": "high",
       "verified_at": "2026-08-25",
-      "pushed_at": "2026-09-14T00:24:18Z",
-      "forks": 4727,
-      "open_issues": 60,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:29:33Z",
+      "forks": 4833,
+      "open_issues": 9,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
       ],
       "source_model": "open_source",
+      "license_review_status": "verified"
+    },
+    {
+      "id": "openai-dots",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "dots",
+      "repo": null,
+      "url": "https://developers.openai.com/codex/dots",
+      "description": "OpenAI's always-on delegated agent, powered by GPT-6 Astra, that keeps work moving across a user's tools and projects from its own cloud computer and browser, with cross-channel memory, scheduled and event-triggered tasks, background agents, and connected computers and apps.",
+      "primary_role": "general_work_agent",
+      "secondary_roles": [
+        "stateful_agent_runtime"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "openai"
+      ],
+      "architectures": [
+        "undisclosed_managed"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "canonical_data": "service-managed dot identity, appearance, and handle, conversations across ChatGPT, calls, Slack, and Teams, saved notes separate from ChatGPT memory, connected-app and connected-computer context, schedules, and background research findings",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "managed_cloud"
+      ],
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "remote_cloud",
+        "host"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "status": "active",
+      "stars": null,
+      "stars_verified_at": null,
+      "historical_stars": null,
+      "current_repo_note": "This record covers the dots product documented under OpenAI's Codex developer documentation and created from the ChatGPT desktop app. It is distinct from the ChatGPT assistant record, the Codex coding agent, and the OpenAI Agents API; GPT-6 Astra is its documented model backend and remains a separate model record.",
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 8.6,
+        "autonomy": 8.8,
+        "human_control": 8.2,
+        "observability_recovery": 6.8,
+        "data_sovereignty": 4.6,
+        "interoperability": 6.4,
+        "maturity": 4.8,
+        "overall": 7.13
+      },
+      "strengths": [
+        "A durable named agent rather than a session, reached from ChatGPT, voice calls, Slack, and Teams without creating a new dot or resetting its notes",
+        "Runs in the cloud with its own computer and browser, so assigned work continues when the user's devices are off",
+        "Assigned, scheduled, and event-triggered work is paired with an Activity surface, per-action approval review, and optional custom rules"
+      ],
+      "weaknesses": [
+        "Gradual rollout gated by plan, region, and workspace settings, so availability differs across Pro, Business Premium, and Enterprise accounts",
+        "Operational implementation, model runtime, and all retained context are proprietary and service-managed",
+        "Stopping a task does not undo actions already taken, and cross-channel sharing requires explicit per-request permission"
+      ],
+      "why_it_matters": "Documents the always-on personal agent as a shipping product boundary: one named agent with durable notes, its own cloud computer, background sub-agents, and scheduled work, reached identically from chat, voice, and workplace messaging.",
+      "research_confidence": "medium",
+      "verified_at": "2026-09-30",
+      "pushed_at": null,
+      "forks": null,
+      "open_issues": null,
+      "metadata_verified_at": null,
+      "github_detected_license": null,
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
       "license_review_status": "verified"
     },
     {
@@ -8908,14 +9173,14 @@
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
-      "stars": 389657,
-      "stars_verified_at": "2026-09-14",
+      "stars": 390794,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "pushed_at": "2026-09-14T13:17:00Z",
-      "forks": 81916,
-      "open_issues": 7291,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:38:46Z",
+      "forks": 82190,
+      "open_issues": 9060,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION",
       "score": {
         "task_reliability": 7.5,
@@ -8994,8 +9259,8 @@
       "human_editable": true,
       "provenance": "moderate",
       "status": "active",
-      "stars": 207283,
-      "stars_verified_at": "2026-09-14",
+      "stars": 210892,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -9021,10 +9286,10 @@
       "why_it_matters": "A strong benchmark for provider-neutral coding-agent design.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T13:05:49Z",
-      "forks": 27176,
-      "open_issues": 5790,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:38:20Z",
+      "forks": 27930,
+      "open_issues": 6294,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -9084,8 +9349,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 6019,
-      "stars_verified_at": "2026-09-14",
+      "stars": 6027,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Repository was registered in 2022 as an unrelated project; the current OpenCursor coding-agent product began at v0.0.1 on 2026-07-05, so its accumulated star count predates and overstates this product's track record.",
       "score": {
@@ -9112,10 +9377,10 @@
       "why_it_matters": "Shows a fully offline-capable coding agent built directly into VS Code's extension surface, an open alternative to cloud-anchored IDE agents.",
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
-      "pushed_at": "2026-09-11T10:16:59Z",
-      "forks": 1032,
-      "open_issues": 3,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-25T08:24:32Z",
+      "forks": 1036,
+      "open_issues": 5,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -9176,8 +9441,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 7367,
-      "stars_verified_at": "2026-09-14",
+      "stars": 7461,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -9204,10 +9469,10 @@
       "why_it_matters": "An open, self-hostable implementation of the AlphaEvolve evolutionary-coding pattern, usable as a library or CLI to drive LLM-mutated program search against a user's own evaluator rather than a closed research demo.",
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
-      "pushed_at": "2026-07-18T13:16:12Z",
-      "forks": 1155,
-      "open_issues": 118,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T03:59:52Z",
+      "forks": 1170,
+      "open_issues": 105,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -9270,14 +9535,14 @@
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
-      "stars": 87859,
-      "stars_verified_at": "2026-09-14",
+      "stars": 89531,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "pushed_at": "2026-09-14T12:48:05Z",
-      "forks": 11511,
-      "open_issues": 785,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:32:58Z",
+      "forks": 11811,
+      "open_issues": 887,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "score": {
         "task_reliability": 8.0,
@@ -9405,14 +9670,14 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 68340,
-      "stars_verified_at": "2026-09-14",
+      "stars": 81550,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "pushed_at": "2026-09-14T13:17:48Z",
-      "forks": 4461,
-      "open_issues": 5943,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:38:38Z",
+      "forks": 5291,
+      "open_issues": 7075,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -9452,8 +9717,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 3012,
-      "stars_verified_at": "2026-09-18",
+      "stars": 3591,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The repository ships as a skill package rather than a standalone product: role documents and stage prompts the host coding agent executes, plus helper scripts that do the enforced verification work. The host, not this repository, runs the coordination loop; the skill’s own orchestration document states that a role description alone is not a running agent. A legacy-cli tag preserves an earlier shell-based CLI that the current tree no longer ships.",
       "score": {
@@ -9502,9 +9767,9 @@
         "workflows"
       ],
       "pushed_at": "2026-09-17T16:56:07Z",
-      "forks": 431,
+      "forks": 527,
       "open_issues": 0,
-      "metadata_verified_at": "2026-09-18"
+      "metadata_verified_at": "2026-09-29"
     },
     {
       "id": "perplexity-computer",
@@ -9648,14 +9913,14 @@
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
-      "stars": 104991,
-      "stars_verified_at": "2026-09-14",
+      "stars": 110371,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "pushed_at": "2026-09-14T09:36:27Z",
-      "forks": 13180,
-      "open_issues": 210,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:30:51Z",
+      "forks": 14034,
+      "open_issues": 235,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "score": {
         "task_reliability": 8.1,
@@ -9733,8 +9998,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 15636,
-      "stars_verified_at": "2026-09-14",
+      "stars": 15682,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Plandex Cloud (the hosted offering) began winding down 2025-10-03 and no longer accepts new users; self-hosted/local mode is the only supported path going forward, and the repository has had no commits since that announcement.",
       "score": {
@@ -9762,9 +10027,9 @@
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
       "pushed_at": "2025-10-03T21:49:58Z",
-      "forks": 1176,
-      "open_issues": 62,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 1178,
+      "open_issues": 66,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -9825,8 +10090,8 @@
       "human_editable": true,
       "provenance": "moderate",
       "status": "active",
-      "stars": 426,
-      "stars_verified_at": "2026-09-14",
+      "stars": 430,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The public repository carries documentation, a changelog, and third-party notices only; pool itself is distributed as a precompiled binary under Poolside's Terms of Use, so its GitHub metadata measures the distribution and issue-tracking repository rather than the agent's source.",
       "score": {
@@ -9855,8 +10120,8 @@
       "verified_at": "2026-09-02",
       "pushed_at": "2026-08-18T13:07:36Z",
       "forks": 25,
-      "open_issues": 27,
-      "metadata_verified_at": "2026-09-14",
+      "open_issues": 30,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": null,
       "licenses": [
         "LicenseRef-Proprietary"
@@ -10011,8 +10276,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 6751,
-      "stars_verified_at": "2026-09-14",
+      "stars": 5136,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "PRAXIST is in beta. Its public source is governed by a Fair Source license with internal-use, distribution, revenue, and commercial-license restrictions, so it is not classified as open source.",
       "score": {
@@ -10039,10 +10304,10 @@
       "why_it_matters": "A distinctive research-agent design centered on falsifiable, computer-executable evidence and evolutionary parallel search rather than a single linear report workflow.",
       "research_confidence": "medium",
       "verified_at": "2026-08-28",
-      "pushed_at": "2026-09-09T05:16:58Z",
-      "forks": 679,
-      "open_issues": 10,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-23T07:00:20Z",
+      "forks": 681,
+      "open_issues": 7,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION",
       "licenses": [
         "LicenseRef-Commercial"
@@ -10113,14 +10378,14 @@
       "local_first": true,
       "human_editable": true,
       "provenance": "strong",
-      "stars": 20749,
-      "stars_verified_at": "2026-09-14",
+      "stars": 21388,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "pushed_at": "2026-09-14T12:16:16Z",
-      "forks": 2272,
-      "open_issues": 114,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:39:27Z",
+      "forks": 2346,
+      "open_issues": 86,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "score": {
         "task_reliability": 8.4,
@@ -10197,8 +10462,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 19928,
-      "stars_verified_at": "2026-09-14",
+      "stars": 20272,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -10224,10 +10489,10 @@
       "why_it_matters": "Shows how software-engineering rigor can reduce agent uncertainty.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T13:07:38Z",
-      "forks": 2713,
-      "open_issues": 879,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:38:51Z",
+      "forks": 2823,
+      "open_issues": 1338,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -10333,13 +10598,13 @@
       ],
       "source_model": "mixed_open_source",
       "license_review_status": "verified",
-      "stars": 27831,
-      "stars_verified_at": "2026-09-14",
+      "stars": 28224,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T13:07:56Z",
-      "forks": 3039,
-      "open_issues": 1410,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:34:41Z",
+      "forks": 3130,
+      "open_issues": 1560,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -10437,13 +10702,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 35537,
-      "stars_verified_at": "2026-09-14",
+      "stars": 35717,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T12:46:24Z",
-      "forks": 2390,
-      "open_issues": 1881,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T19:10:32Z",
+      "forks": 2429,
+      "open_issues": 133,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -10626,13 +10891,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 24303,
-      "stars_verified_at": "2026-09-14",
+      "stars": 24290,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "pushed_at": "2026-05-15T18:08:47Z",
-      "forks": 3418,
+      "forks": 3421,
       "open_issues": 1033,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -10736,14 +11001,14 @@
       ],
       "source_model": "mixed_open_source",
       "license_review_status": "verified",
-      "stars": 72401,
-      "stars_verified_at": "2026-09-14",
+      "stars": 73513,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "pushed_at": "2026-09-14T09:18:32Z",
-      "forks": 8569,
-      "open_issues": 1001,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:37:39Z",
+      "forks": 8726,
+      "open_issues": 1025,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -10899,8 +11164,8 @@
       "human_editable": true,
       "provenance": "moderate",
       "status": "active",
-      "stars": 645,
-      "stars_verified_at": "2026-09-14",
+      "stars": 678,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -10927,10 +11192,10 @@
       "why_it_matters": "One of the few open, client-agnostic runtimes that treats agent session state, sandbox isolation, credentials, and audit/replay as infrastructure separate from the reasoning loop, letting operators pair it with whichever coding or chat agent they already use.",
       "research_confidence": "low",
       "verified_at": "2026-09-03",
-      "pushed_at": "2026-09-13T14:16:16Z",
-      "forks": 67,
-      "open_issues": 20,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T15:19:15Z",
+      "forks": 75,
+      "open_issues": 17,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -11000,8 +11265,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 638,
-      "stars_verified_at": "2026-09-14",
+      "stars": 663,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -11030,10 +11295,10 @@
       "why_it_matters": "Shows a model-agnostic, self-hosted general work agent that pairs scheduled file and messaging automation with a durable, self-maintaining memory bundle.",
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
-      "pushed_at": "2026-09-13T20:44:17Z",
-      "forks": 77,
+      "pushed_at": "2026-09-26T04:22:28Z",
+      "forks": 84,
       "open_issues": 1,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -11182,8 +11447,8 @@
       "provenance": "strong",
       "status": "superseded",
       "superseded_by": "microsoft-agent-framework",
-      "stars": 28556,
-      "stars_verified_at": "2026-09-14",
+      "stars": 28614,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The README (fetched 2026-08-29) opens with an important notice: \"Semantic Kernel is now Microsoft Agent Framework!\" It describes Microsoft Agent Framework as \"the enterprise-ready successor to Semantic Kernel,\" now at a production-ready 1.0 with stable APIs and long-term support, and points readers to a Semantic Kernel migration guide. Unlike AutoGen, the README carries no maintenance-mode notice and the repository still received commits on 2026-08-27.",
       "score": {
@@ -11211,10 +11476,10 @@
       "why_it_matters": "Semantic Kernel is the enterprise-facing half of the lineage that Microsoft consolidated into Microsoft Agent Framework, and it is the framework that carried plugin-based agent orchestration into .NET and Java shops; recording it as superseded preserves that reach while pointing adopters at the maintained path.",
       "research_confidence": "high",
       "verified_at": "2026-08-29",
-      "pushed_at": "2026-09-11T06:58:37Z",
-      "forks": 4770,
-      "open_issues": 298,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T15:51:33Z",
+      "forks": 4796,
+      "open_issues": 316,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -11315,13 +11580,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 1389,
-      "stars_verified_at": "2026-09-14",
+      "stars": 1419,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-08-21T13:07:37Z",
-      "forks": 279,
-      "open_issues": 5,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-24T06:14:27Z",
+      "forks": 282,
+      "open_issues": 7,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -11417,13 +11682,13 @@
       ],
       "source_model": "open_core",
       "license_review_status": "verified",
-      "stars": 22996,
-      "stars_verified_at": "2026-09-14",
+      "stars": 23095,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T12:40:02Z",
-      "forks": 2160,
-      "open_issues": 237,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:33:24Z",
+      "forks": 2181,
+      "open_issues": 263,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0"
     },
     {
@@ -11472,8 +11737,8 @@
       "human_editable": false,
       "provenance": "moderate",
       "status": "active",
-      "stars": 29322,
-      "stars_verified_at": "2026-09-14",
+      "stars": 29589,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -11499,10 +11764,10 @@
       "why_it_matters": "A useful counterpoint to heavier orchestration frameworks.",
       "research_confidence": "high",
       "verified_at": "2026-09-14",
-      "pushed_at": "2026-08-25T18:36:00Z",
-      "forks": 2962,
-      "open_issues": 809,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T18:35:17Z",
+      "forks": 3009,
+      "open_issues": 860,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -11605,13 +11870,13 @@
       ],
       "source_model": "open_core",
       "license_review_status": "verified",
-      "stars": 6814,
-      "stars_verified_at": "2026-09-14",
+      "stars": 6824,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T09:03:36Z",
-      "forks": 505,
-      "open_issues": 24,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:34:02Z",
+      "forks": 507,
+      "open_issues": 29,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0"
     },
     {
@@ -11660,8 +11925,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 7240,
-      "stars_verified_at": "2026-09-14",
+      "stars": 8562,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "AWS renamed the canonical repository from strands-agents/sdk-python to strands-agents/harness-sdk; the published packages remain strands-agents.",
       "score": {
@@ -11688,10 +11953,10 @@
       "why_it_matters": "Gives the Atlas a provider-published, model-driven agent SDK whose design deliberately minimizes framework scaffolding, contrasting with graph-and-workflow frameworks.",
       "research_confidence": "medium",
       "verified_at": "2026-08-29",
-      "pushed_at": "2026-09-14T12:33:53Z",
-      "forks": 1136,
-      "open_issues": 753,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:34:56Z",
+      "forks": 1287,
+      "open_issues": 877,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -11754,8 +12019,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 288145,
-      "stars_verified_at": "2026-09-18",
+      "stars": 292901,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The record rests on `skills/brainstorming/scripts/server.cjs`, the one long-running program this pack runs during a session: a zero-dependency HTTP and WebSocket server the brainstorming skill tells the host to start, which serves and live-reloads screens, opens the user's browser through `child_process.execFile`, and collects the reader's selections. The port, token, process, and instance-id files under `.superpowers/brainstorm/` that the server and `stop-server.sh` read back are operational plumbing for that server, not a memory the pack keeps. The session hook and the OpenCode, Pi, and Hermes plugins register the skills directory and print the pack's own `using-superpowers` document, which is distribution machinery rather than operation.",
       "score": {
@@ -11783,7 +12048,12 @@
       ],
       "why_it_matters": "Shows where a skills pack stops being documentation: the brainstorming companion is a server the pack runs and a browser it opens, work no host agent performs on its own, while the rest of the repository remains prose a host executes.",
       "research_confidence": "high",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "pushed_at": "2026-09-27T02:37:47Z",
+      "forks": 26217,
+      "open_issues": 278,
+      "metadata_verified_at": "2026-09-29",
+      "github_detected_license": "MIT"
     },
     {
       "id": "swarmclaw",
@@ -11849,8 +12119,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 670,
-      "stars_verified_at": "2026-09-14",
+      "stars": 686,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Most recent commit and release (v1.9.40) are from 2026-06-30, about ten weeks before verification; several issues opened since then (through early September 2026) show no visible maintainer follow-up as of this review.",
       "score": {
@@ -11880,9 +12150,9 @@
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
       "pushed_at": "2026-06-30T20:58:13Z",
-      "forks": 136,
-      "open_issues": 18,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 140,
+      "open_issues": 20,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -11976,13 +12246,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 7169,
-      "stars_verified_at": "2026-09-14",
+      "stars": 7219,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T10:46:18Z",
-      "forks": 1020,
-      "open_issues": 200,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T19:12:46Z",
+      "forks": 1029,
+      "open_issues": 243,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -12068,13 +12338,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 20322,
-      "stars_verified_at": "2026-09-14",
+      "stars": 20447,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-07T22:17:28Z",
-      "forks": 2217,
-      "open_issues": 111,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-28T22:56:26Z",
+      "forks": 2242,
+      "open_issues": 127,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -12170,13 +12440,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 6171,
-      "stars_verified_at": "2026-09-14",
+      "stars": 6167,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "pushed_at": "2026-03-23T06:17:21Z",
-      "forks": 783,
+      "forks": 780,
       "open_issues": 53,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -12265,13 +12535,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 36759,
-      "stars_verified_at": "2026-09-14",
+      "stars": 36941,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "pushed_at": "2026-09-01T14:12:12Z",
-      "forks": 4078,
-      "open_issues": 352,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 4102,
+      "open_issues": 355,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -12332,8 +12602,8 @@
       "human_editable": false,
       "provenance": "strong",
       "status": "archived",
-      "stars": 23813,
-      "stars_verified_at": "2026-09-14",
+      "stars": 23809,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "GitHub marks the repository archived; the reviewed Vanna 2.0 code and documentation remain available.",
       "score": {
@@ -12361,9 +12631,9 @@
       "research_confidence": "high",
       "verified_at": "2026-08-25",
       "pushed_at": "2026-02-02T14:14:20Z",
-      "forks": 2505,
+      "forks": 2522,
       "open_issues": 289,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -12436,8 +12706,8 @@
       "human_editable": false,
       "provenance": "strong",
       "status": "active",
-      "stars": 26861,
-      "stars_verified_at": "2026-09-20",
+      "stars": 27041,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "GitHub reports no recognised licence because the root LICENSE file is the short Apache-2.0 notice rather than the full text; all 80 package manifests declare Apache-2.0, and one vendored schema converter carries its own ISC file.",
       "score": {
@@ -12464,10 +12734,10 @@
       "why_it_matters": "The most widely adopted TypeScript agent toolkit, and the first framework to treat other vendors' finished coding agents as swappable backends the way it already treats models.",
       "research_confidence": "high",
       "verified_at": "2026-09-20",
-      "pushed_at": "2026-09-20T10:06:53Z",
-      "forks": 5160,
-      "open_issues": 1524,
-      "metadata_verified_at": "2026-09-20",
+      "pushed_at": "2026-09-29T20:38:05Z",
+      "forks": 5226,
+      "open_issues": 1474,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION",
       "licenses": [
         "Apache-2.0",
@@ -12563,13 +12833,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 28078,
-      "stars_verified_at": "2026-09-14",
+      "stars": 28220,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-12T06:20:43Z",
-      "forks": 3004,
-      "open_issues": 540,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-19T06:52:48Z",
+      "forks": 3029,
+      "open_issues": 544,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -12610,8 +12880,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 1128,
-      "stars_verified_at": "2026-09-15",
+      "stars": 1139,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -12653,9 +12923,9 @@
         "persistent_state",
         "workflows"
       ],
-      "forks": 233,
-      "open_issues": 20,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 235,
+      "open_issues": 23,
+      "metadata_verified_at": "2026-09-29",
       "pushed_at": "2026-06-21T08:31:44Z"
     },
     {
@@ -12718,8 +12988,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 65015,
-      "stars_verified_at": "2026-09-14",
+      "stars": 65270,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Most of the Warp repository is AGPL-3.0; the warpui_core and warpui UI framework packages are MIT. Optional Oz hosted runners and managed orchestration are separate cloud boundaries.",
       "score": {
@@ -12746,10 +13016,10 @@
       "why_it_matters": "A large-scale attempt to make the terminal itself an open agentic development environment while supporting both native and competing command-line agents.",
       "research_confidence": "high",
       "verified_at": "2026-08-28",
-      "pushed_at": "2026-09-14T13:12:53Z",
-      "forks": 5539,
-      "open_issues": 5242,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:14:28Z",
+      "forks": 5595,
+      "open_issues": 5313,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0",
       "licenses": [
         "AGPL-3.0",
@@ -12817,8 +13087,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 17632,
-      "stars_verified_at": "2026-09-14",
+      "stars": 17782,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The current open-core product separates its Apache-licensed engine and SDKs from commercial Agentic Mode, GenBI UI, security, and enterprise deployment features.",
       "score": {
@@ -12845,10 +13115,10 @@
       "why_it_matters": "A strong example of data-agent reliability built from governed context, validation, recoverable errors, and explicit open-core boundaries.",
       "research_confidence": "high",
       "verified_at": "2026-08-25",
-      "pushed_at": "2026-09-14T09:25:15Z",
-      "forks": 2006,
-      "open_issues": 300,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T09:04:18Z",
+      "forks": 2031,
+      "open_issues": 292,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION",
       "licenses": [
         "Apache-2.0",
@@ -13505,13 +13775,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 44461,
-      "stars_verified_at": "2026-09-14",
+      "stars": 44710,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T12:57:36Z",
-      "forks": 3021,
-      "open_issues": 529,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T10:42:20Z",
+      "forks": 3063,
+      "open_issues": 542,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION"
     },
     {
@@ -13596,14 +13866,14 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 43402,
-      "stars_verified_at": "2026-09-14",
+      "stars": 45128,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "pushed_at": "2026-09-14T13:18:39Z",
-      "forks": 8985,
-      "open_issues": 734,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:23:50Z",
+      "forks": 9245,
+      "open_issues": 816,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -14357,14 +14627,14 @@
       "human_editable": false,
       "provenance": "limited",
       "status": "active",
-      "stars": 1178,
-      "stars_verified_at": "2026-09-14",
+      "stars": 1188,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Source-installable at version 0.0.1 with no tagged GitHub release. The documented AgenticMemorySystem creates an in-memory Chroma client and resets it on initialization; persistent retriever classes exist in the package but are not wired into the documented main constructor.",
       "pushed_at": "2025-12-12T21:15:29Z",
       "forks": 122,
       "open_issues": 20,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "score": {
         "second_brain_fit": 5.0,
@@ -14429,8 +14699,8 @@
       "human_editable": false,
       "provenance": "strong",
       "status": "active",
-      "stars": 18887,
-      "stars_verified_at": "2026-09-14",
+      "stars": 19017,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -14455,10 +14725,10 @@
       "why_it_matters": "Broadens ambient capture beyond screenshots: app and time telemetry can become evidence for work recall.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-10T19:58:27Z",
-      "forks": 1009,
-      "open_issues": 186,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-26T23:36:21Z",
+      "forks": 1022,
+      "open_issues": 188,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MPL-2.0",
       "licenses": [
         "MPL-2.0"
@@ -14535,13 +14805,13 @@
       ],
       "source_model": "open_core",
       "license_review_status": "verified",
-      "stars": 72555,
-      "stars_verified_at": "2026-09-14",
+      "stars": 73100,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-13T09:59:21Z",
-      "forks": 5272,
-      "open_issues": 743,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T16:46:40Z",
+      "forks": 5315,
+      "open_issues": 758,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION"
     },
     {
@@ -14591,8 +14861,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 1276,
-      "stars_verified_at": "2026-09-27",
+      "stars": 1689,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -14619,7 +14889,11 @@
       "why_it_matters": "A local-first agent memory runtime whose human-legible Markdown truth, rebuildable index, and sleep-time consolidation give coding agents durable memory with no accounts, keys, or network in the read path.",
       "research_confidence": "high",
       "verified_at": "2026-09-27",
-      "github_detected_license": "MIT"
+      "github_detected_license": "MIT",
+      "pushed_at": "2026-09-28T09:29:00Z",
+      "forks": 108,
+      "open_issues": 10,
+      "metadata_verified_at": "2026-09-29"
     },
     {
       "id": "neo4j-agent-memory",
@@ -14666,8 +14940,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 551,
-      "stars_verified_at": "2026-09-28",
+      "stars": 572,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -14694,7 +14968,11 @@
       "why_it_matters": "The only agent memory that stores knowledge as a Neo4j property graph with audit-trailed reasoning, reachable from Python and TypeScript through the same memory model.",
       "research_confidence": "high",
       "verified_at": "2026-09-28",
-      "github_detected_license": "Apache-2.0"
+      "github_detected_license": "Apache-2.0",
+      "pushed_at": "2026-09-28T18:21:40Z",
+      "forks": 106,
+      "open_issues": 100,
+      "metadata_verified_at": "2026-09-29"
     },
     {
       "system_family": "memory_system",
@@ -14705,10 +14983,10 @@
       "verified_at": "2026-08-31",
       "human_editable": true,
       "provenance": "strong",
-      "stars_verified_at": "2026-09-14",
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "research_confidence": "high",
       "agent_relation": "external_memory",
       "retrieval_modes": [
@@ -14751,10 +15029,10 @@
         "ide_extension"
       ],
       "local_first": true,
-      "stars": 28418,
-      "forks": 2461,
-      "open_issues": 588,
-      "pushed_at": "2026-09-14T06:11:28Z",
+      "stars": 29023,
+      "forks": 2532,
+      "open_issues": 617,
+      "pushed_at": "2026-09-28T15:48:45Z",
       "github_detected_license": "Apache-2.0",
       "score": {
         "second_brain_fit": 5.4,
@@ -14821,8 +15099,8 @@
       "human_editable": false,
       "provenance": "limited",
       "status": "active",
-      "stars": 66003,
-      "stars_verified_at": "2026-09-14",
+      "stars": 66605,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -14847,10 +15125,10 @@
       "why_it_matters": "Demonstrates low-friction, provider-agnostic local AI over personal sources.",
       "research_confidence": "high",
       "verified_at": "2026-09-13",
-      "pushed_at": "2026-09-11T01:01:33Z",
-      "forks": 7323,
-      "open_issues": 320,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T18:12:14Z",
+      "forks": 7424,
+      "open_issues": 318,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -14896,8 +15174,8 @@
       "human_editable": true,
       "provenance": "limited",
       "status": "active",
-      "stars": 76650,
-      "stars_verified_at": "2026-09-14",
+      "stars": 76993,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -14922,10 +15200,10 @@
       "why_it_matters": "Shows how structured workspaces and approachable UX can coexist with user control.",
       "research_confidence": "high",
       "verified_at": "2026-09-13",
-      "pushed_at": "2026-09-10T07:05:13Z",
-      "forks": 6008,
-      "open_issues": 1036,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-22T07:09:34Z",
+      "forks": 6046,
+      "open_issues": 1031,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0",
       "licenses": [
         "AGPL-3.0"
@@ -14977,8 +15255,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 3955,
-      "stars_verified_at": "2026-09-14",
+      "stars": 4064,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -15004,10 +15282,10 @@
       "why_it_matters": "The clearest human-readable bridge between personal knowledge and multiple agents.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T06:36:23Z",
-      "forks": 282,
-      "open_issues": 50,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T18:59:31Z",
+      "forks": 298,
+      "open_issues": 75,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0",
       "licenses": [
         "AGPL-3.0"
@@ -15048,8 +15326,8 @@
       "human_editable": false,
       "provenance": "limited",
       "status": "active",
-      "stars": 29295,
-      "stars_verified_at": "2026-09-14",
+      "stars": 29407,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -15072,10 +15350,10 @@
       "why_it_matters": "Included as a building block so vector storage is visible without being mistaken for a product category.",
       "research_confidence": "medium",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-12T17:45:29Z",
-      "forks": 2507,
-      "open_issues": 861,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T17:39:39Z",
+      "forks": 2539,
+      "open_issues": 906,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -15092,10 +15370,10 @@
       "verified_at": "2026-09-13",
       "human_editable": false,
       "provenance": "strong",
-      "stars_verified_at": "2026-09-14",
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The project describes an open-core structure, but everything in the repository carries one permissive licence; the reserved capabilities are hosted-service features such as cloud sync, team memory, administration, and enterprise access control rather than restricted source, so the record classifies it by the code it publishes.",
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "research_confidence": "high",
       "agent_relation": "external_memory",
       "retrieval_modes": [
@@ -15133,10 +15411,10 @@
         "managed_cloud"
       ],
       "local_first": true,
-      "stars": 93838,
-      "forks": 8254,
-      "open_issues": 183,
-      "pushed_at": "2026-09-13T09:42:20Z",
+      "stars": 94930,
+      "forks": 8397,
+      "open_issues": 330,
+      "pushed_at": "2026-09-28T22:37:31Z",
       "github_detected_license": "Apache-2.0",
       "score": {
         "second_brain_fit": 5.6,
@@ -15211,8 +15489,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 14890,
-      "stars_verified_at": "2026-09-14",
+      "stars": 15297,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -15240,9 +15518,9 @@
       "research_confidence": "medium",
       "verified_at": "2026-09-18",
       "pushed_at": "2026-09-10T17:44:23Z",
-      "forks": 1479,
-      "open_issues": 20,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 1522,
+      "open_issues": 22,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -15309,14 +15587,14 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 70789,
-      "stars_verified_at": "2026-09-14",
+      "stars": 72376,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "pushed_at": "2026-09-14T06:54:13Z",
-      "forks": 4541,
-      "open_issues": 508,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:31:24Z",
+      "forks": 4646,
+      "open_issues": 504,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -15360,8 +15638,8 @@
       "human_editable": false,
       "provenance": "limited",
       "status": "active",
-      "stars": 30677,
-      "stars_verified_at": "2026-09-14",
+      "stars": 31222,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -15386,10 +15664,10 @@
       "why_it_matters": "Represents knowledge-graph enrichment and memory pipelines across heterogeneous data.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T12:55:16Z",
-      "forks": 3025,
-      "open_issues": 496,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:22:52Z",
+      "forks": 3135,
+      "open_issues": 446,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -15440,8 +15718,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 587,
-      "stars_verified_at": "2026-09-14",
+      "stars": 582,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -15466,10 +15744,10 @@
       "why_it_matters": "A clean, self-contained illustration of encrypted, fully local, cross-client agent memory reachable from any MCP tool, though it is too new to show durability.",
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
-      "pushed_at": "2026-09-11T03:18:05Z",
-      "forks": 4,
-      "open_issues": 1,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-22T21:08:40Z",
+      "forks": 5,
+      "open_issues": 0,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -15536,13 +15814,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 7467,
-      "stars_verified_at": "2026-09-14",
+      "stars": 7472,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "pushed_at": "2025-11-13T05:31:19Z",
-      "forks": 302,
+      "forks": 301,
       "open_issues": 800,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -15616,13 +15894,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 18262,
-      "stars_verified_at": "2026-09-14",
+      "stars": 18297,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T13:12:25Z",
-      "forks": 2148,
-      "open_issues": 129,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T19:19:35Z",
+      "forks": 2163,
+      "open_issues": 145,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -15680,8 +15958,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 6628,
-      "stars_verified_at": "2026-09-15",
+      "stars": 6938,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "Installed and health-probed by the published Gentle-AI workflow command line, but a separate operational boundary: its own repository, releases, and install path, and agent-agnostic by design.",
       "score": {
@@ -15705,7 +15983,12 @@
       ],
       "why_it_matters": "Shows an agent's long-term memory can be an ordinary local database a person can read, edit, export, and re-import, rather than a hosted service the agent alone can reach.",
       "research_confidence": "high",
-      "verified_at": "2026-09-15"
+      "verified_at": "2026-09-15",
+      "pushed_at": "2026-09-29T20:13:29Z",
+      "forks": 716,
+      "open_issues": 101,
+      "metadata_verified_at": "2026-09-29",
+      "github_detected_license": "MIT"
     },
     {
       "id": "foam",
@@ -15743,8 +16026,8 @@
       "human_editable": true,
       "provenance": "limited",
       "status": "active",
-      "stars": 17400,
-      "stars_verified_at": "2026-09-14",
+      "stars": 17428,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -15769,10 +16052,10 @@
       "why_it_matters": "Represents the smallest viable local-first graph: Markdown, links, editor, and Git.",
       "research_confidence": "medium",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-05T21:41:46Z",
-      "forks": 775,
-      "open_issues": 31,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:30:44Z",
+      "forks": 780,
+      "open_issues": 30,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION",
       "licenses": [
         "MIT"
@@ -15846,8 +16129,8 @@
       "human_editable": true,
       "provenance": "strong",
       "status": "active",
-      "stars": 29903,
-      "stars_verified_at": "2026-09-14",
+      "stars": 30441,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The Git repository is the canonical project and install source; the unrelated npm package named gbrain is not this system.",
       "score": {
@@ -15873,10 +16156,10 @@
       "why_it_matters": "Combines human-owned, Git-versioned memory with production-oriented retrieval, graph, synthesis, provenance, and agent integration in one local-first system.",
       "research_confidence": "high",
       "verified_at": "2026-08-25",
-      "pushed_at": "2026-09-11T00:27:35Z",
-      "forks": 4462,
-      "open_issues": 252,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T18:42:13Z",
+      "forks": 4573,
+      "open_issues": 582,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -15956,14 +16239,14 @@
       ],
       "source_model": "source_available",
       "license_review_status": "verified",
-      "stars": 47332,
-      "stars_verified_at": "2026-09-14",
+      "stars": 47649,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
-      "pushed_at": "2026-09-14T12:19:48Z",
-      "forks": 5166,
-      "open_issues": 282,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:14:28Z",
+      "forks": 5178,
+      "open_issues": 280,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION"
     },
     {
@@ -16007,8 +16290,8 @@
       "human_editable": false,
       "provenance": "strong",
       "status": "active",
-      "stars": 30866,
-      "stars_verified_at": "2026-09-14",
+      "stars": 31308,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -16034,10 +16317,10 @@
       "why_it_matters": "Supplies the strongest model for changing truth, provenance, and as-of retrieval.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-11T20:16:31Z",
-      "forks": 3137,
-      "open_issues": 506,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T15:40:48Z",
+      "forks": 3211,
+      "open_issues": 477,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -16118,13 +16401,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 23592,
-      "stars_verified_at": "2026-09-14",
+      "stars": 42707,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T12:56:13Z",
-      "forks": 1753,
-      "open_issues": 98,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T19:33:58Z",
+      "forks": 5760,
+      "open_issues": 154,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -16165,8 +16448,8 @@
       "human_editable": true,
       "provenance": "limited",
       "status": "active",
-      "stars": 56354,
-      "stars_verified_at": "2026-09-14",
+      "stars": 56533,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -16191,10 +16474,10 @@
       "why_it_matters": "Contributes mature offline-first, encryption, sync, and import/export lessons.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T06:49:15Z",
-      "forks": 6284,
-      "open_issues": 632,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T17:56:14Z",
+      "forks": 6312,
+      "open_issues": 647,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION",
       "licenses": [
         "AGPL-3.0-or-later"
@@ -16244,8 +16527,8 @@
       "human_editable": true,
       "provenance": "limited",
       "status": "active",
-      "stars": 37325,
-      "stars_verified_at": "2026-09-14",
+      "stars": 37538,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -16271,9 +16554,9 @@
       "research_confidence": "high",
       "verified_at": "2026-09-13",
       "pushed_at": "2026-08-02T01:55:40Z",
-      "forks": 2479,
-      "open_issues": 151,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 2496,
+      "open_issues": 162,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0",
       "licenses": [
         "AGPL-3.0"
@@ -16315,8 +16598,8 @@
       "human_editable": false,
       "provenance": "limited",
       "status": "active",
-      "stars": 1664,
-      "stars_verified_at": "2026-09-14",
+      "stars": 1689,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -16342,9 +16625,9 @@
       "research_confidence": "high",
       "verified_at": "2026-08-23",
       "pushed_at": "2026-09-09T06:44:43Z",
-      "forks": 188,
+      "forks": 193,
       "open_issues": 66,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -16393,8 +16676,8 @@
       "human_editable": true,
       "provenance": "limited",
       "status": "active",
-      "stars": 44898,
-      "stars_verified_at": "2026-09-14",
+      "stars": 45086,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -16419,10 +16702,10 @@
       "why_it_matters": "Contributes durable user-controlled knowledge, backlinks, blocks, and graph-native thinking.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T08:29:11Z",
-      "forks": 2811,
-      "open_issues": 950,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:16:13Z",
+      "forks": 2822,
+      "open_issues": 1001,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0",
       "licenses": [
         "AGPL-3.0"
@@ -16469,7 +16752,7 @@
       "license_review_status": "verified",
       "status": "active",
       "stars": 703,
-      "stars_verified_at": "2026-09-14",
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -16499,7 +16782,7 @@
       "pushed_at": "2026-05-01T14:46:54Z",
       "forks": 18,
       "open_issues": 9,
-      "metadata_verified_at": "2026-09-14"
+      "metadata_verified_at": "2026-09-29"
     },
     {
       "id": "mem0",
@@ -16542,8 +16825,8 @@
       "human_editable": false,
       "provenance": "partial",
       "status": "active",
-      "stars": 65270,
-      "stars_verified_at": "2026-09-14",
+      "stars": 66320,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -16568,10 +16851,10 @@
       "why_it_matters": "Defines the external-memory service pattern and a strong retrieval baseline.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T05:26:28Z",
-      "forks": 7649,
-      "open_issues": 755,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-25T17:36:35Z",
+      "forks": 7809,
+      "open_issues": 765,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -16648,13 +16931,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 2896,
-      "stars_verified_at": "2026-09-14",
+      "stars": 2922,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "pushed_at": "2026-01-11T03:51:40Z",
-      "forks": 235,
-      "open_issues": 32,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 237,
+      "open_issues": 34,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -16698,8 +16981,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 611,
-      "stars_verified_at": "2026-09-14",
+      "stars": 615,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -16727,7 +17010,7 @@
       "github_detected_license": "Apache-2.0",
       "forks": 43,
       "open_issues": 6,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "pushed_at": "2026-09-08T05:54:46Z"
     },
     {
@@ -16775,8 +17058,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 596,
-      "stars_verified_at": "2026-09-14",
+      "stars": 607,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -16802,10 +17085,10 @@
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
       "github_detected_license": "Apache-2.0",
-      "forks": 77,
-      "open_issues": 43,
-      "metadata_verified_at": "2026-09-14",
-      "pushed_at": "2026-09-11T07:25:07Z"
+      "forks": 78,
+      "open_issues": 45,
+      "metadata_verified_at": "2026-09-29",
+      "pushed_at": "2026-09-29T08:52:08Z"
     },
     {
       "id": "memorix",
@@ -16853,8 +17136,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 767,
-      "stars_verified_at": "2026-09-14",
+      "stars": 816,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -16879,10 +17162,10 @@
       "why_it_matters": "Demonstrates a local-first, protocol-agnostic memory bridge that lets a project's context follow the developer across whichever coding agent they use that day.",
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
-      "pushed_at": "2026-09-14T03:14:26Z",
-      "forks": 61,
-      "open_issues": 4,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-28T15:11:00Z",
+      "forks": 66,
+      "open_issues": 6,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -16919,8 +17202,8 @@
       "human_editable": true,
       "provenance": "limited",
       "status": "active",
-      "stars": 63030,
-      "stars_verified_at": "2026-09-14",
+      "stars": 63427,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -16945,10 +17228,10 @@
       "why_it_matters": "A reminder that capture friction matters more than elaborate ontology at the moment of thought.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T11:48:16Z",
-      "forks": 4753,
-      "open_issues": 71,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-28T14:26:11Z",
+      "forks": 4796,
+      "open_issues": 87,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -17029,13 +17312,13 @@
       ],
       "source_model": "open_source",
       "license_review_status": "verified",
-      "stars": 11314,
-      "stars_verified_at": "2026-09-14",
+      "stars": 11647,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-09T12:54:27Z",
-      "forks": 1037,
-      "open_issues": 69,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T03:09:34Z",
+      "forks": 1065,
+      "open_issues": 113,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0"
     },
     {
@@ -17047,10 +17330,10 @@
       "verified_at": "2026-08-31",
       "human_editable": true,
       "provenance": "strong",
-      "stars_verified_at": "2026-09-14",
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The licence file follows the structure of a well-known permissive licence but rewrites its grant using the wording of a different one, so no standard identifier applies and the hosting platform reports it only as other. The project's package metadata has its licence declaration commented out and publishes with none.",
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "research_confidence": "high",
       "agent_relation": "external_memory",
       "retrieval_modes": [
@@ -17085,10 +17368,10 @@
         "managed_cloud"
       ],
       "local_first": false,
-      "stars": 14404,
-      "forks": 1066,
-      "open_issues": 120,
-      "pushed_at": "2026-09-14T08:30:50Z",
+      "stars": 14488,
+      "forks": 1080,
+      "open_issues": 124,
+      "pushed_at": "2026-09-21T11:46:16Z",
       "github_detected_license": "NOASSERTION",
       "score": {
         "second_brain_fit": 4.4,
@@ -17148,8 +17431,8 @@
       "human_editable": false,
       "provenance": "limited",
       "status": "active",
-      "stars": 46101,
-      "stars_verified_at": "2026-09-14",
+      "stars": 46282,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -17172,10 +17455,10 @@
       "why_it_matters": "Included as a building block so vector storage is visible without being mistaken for a product category.",
       "research_confidence": "medium",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T12:30:48Z",
-      "forks": 4254,
-      "open_issues": 1413,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T15:55:58Z",
+      "forks": 4276,
+      "open_issues": 1427,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -17299,8 +17582,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 911,
-      "stars_verified_at": "2026-09-14",
+      "stars": 913,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -17326,9 +17609,9 @@
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
       "pushed_at": "2026-07-17T17:01:40Z",
-      "forks": 77,
+      "forks": 78,
       "open_issues": 36,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0"
     },
     {
@@ -17383,8 +17666,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 4446,
-      "stars_verified_at": "2026-09-14",
+      "stars": 4643,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -17410,10 +17693,10 @@
       "research_confidence": "medium",
       "verified_at": "2026-09-18",
       "github_detected_license": "MIT",
-      "forks": 557,
-      "open_issues": 13,
-      "metadata_verified_at": "2026-09-14",
-      "pushed_at": "2026-09-13T19:28:28Z"
+      "forks": 577,
+      "open_issues": 4,
+      "metadata_verified_at": "2026-09-29",
+      "pushed_at": "2026-09-28T23:41:41Z"
     },
     {
       "id": "okf-agent-memory",
@@ -17457,8 +17740,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 619,
-      "stars_verified_at": "2026-09-28",
+      "stars": 738,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -17486,7 +17769,11 @@
       "why_it_matters": "A Git-native project memory that costs zero tokens at baseline and retrieves in microseconds, trading vector semantics for an open specification bundle that agents and humans read alike.",
       "research_confidence": "high",
       "verified_at": "2026-09-28",
-      "github_detected_license": "MIT"
+      "github_detected_license": "MIT",
+      "pushed_at": "2026-09-27T21:24:27Z",
+      "forks": 57,
+      "open_issues": 3,
+      "metadata_verified_at": "2026-09-29"
     },
     {
       "id": "onyx",
@@ -17563,13 +17850,13 @@
       ],
       "source_model": "open_core",
       "license_review_status": "verified",
-      "stars": 32075,
-      "stars_verified_at": "2026-09-14",
+      "stars": 32289,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T10:16:34Z",
-      "forks": 4429,
-      "open_issues": 445,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:39:46Z",
+      "forks": 4513,
+      "open_issues": 510,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION"
     },
     {
@@ -17610,8 +17897,8 @@
       "human_editable": false,
       "provenance": "limited",
       "status": "active",
-      "stars": 38774,
-      "stars_verified_at": "2026-09-14",
+      "stars": 39635,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -17636,10 +17923,10 @@
       "why_it_matters": "Contributes source-grounded synthesis and notebook-level context boundaries.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-13T21:50:29Z",
-      "forks": 4482,
-      "open_issues": 111,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-27T21:43:17Z",
+      "forks": 4588,
+      "open_issues": 125,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -17656,10 +17943,10 @@
       "verified_at": "2026-09-11",
       "human_editable": true,
       "provenance": "strong",
-      "stars_verified_at": "2026-09-14",
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": "The memory implementation lives in a separate component referenced as a submodule, which carries the same strong copyleft licence as the application.",
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "research_confidence": "high",
       "agent_relation": "external_memory",
       "retrieval_modes": [
@@ -17704,10 +17991,10 @@
         "managed_cloud"
       ],
       "local_first": true,
-      "stars": 39777,
-      "forks": 3923,
-      "open_issues": 187,
-      "pushed_at": "2026-09-14T11:22:11Z",
+      "stars": 40174,
+      "forks": 3967,
+      "open_issues": 261,
+      "pushed_at": "2026-09-29T19:18:26Z",
       "github_detected_license": "GPL-3.0",
       "score": {
         "second_brain_fit": 8.8,
@@ -17770,8 +18057,8 @@
       "human_editable": false,
       "provenance": "strong",
       "status": "active",
-      "stars": 2938,
-      "stars_verified_at": "2026-09-14",
+      "stars": 2947,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -17797,9 +18084,9 @@
       "research_confidence": "high",
       "verified_at": "2026-08-23",
       "pushed_at": "2025-09-24T08:19:55Z",
-      "forks": 194,
+      "forks": 197,
       "open_issues": 79,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0",
       "licenses": [
         "AGPL-3.0"
@@ -17882,13 +18169,13 @@
       ],
       "source_model": "mixed_open_source",
       "license_review_status": "verified",
-      "stars": 37156,
-      "stars_verified_at": "2026-09-14",
+      "stars": 38975,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T13:04:10Z",
-      "forks": 2856,
-      "open_issues": 722,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T12:29:17Z",
+      "forks": 3054,
+      "open_issues": 698,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0"
     },
     {
@@ -18007,8 +18294,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 819,
-      "stars_verified_at": "2026-09-28",
+      "stars": 846,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -18035,7 +18322,11 @@
       "why_it_matters": "The only coding-agent memory that pairs an event-sourced project log with an enforceable pre-commit judgment gate, so agents inherit experience instead of repeating yesterday's bug.",
       "research_confidence": "high",
       "verified_at": "2026-09-28",
-      "github_detected_license": "MIT"
+      "github_detected_license": "MIT",
+      "pushed_at": "2026-09-15T00:14:50Z",
+      "forks": 45,
+      "open_issues": 5,
+      "metadata_verified_at": "2026-09-29"
     },
     {
       "id": "qdrant",
@@ -18070,8 +18361,8 @@
       "human_editable": false,
       "provenance": "limited",
       "status": "active",
-      "stars": 34540,
-      "stars_verified_at": "2026-09-14",
+      "stars": 34882,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -18094,10 +18385,10 @@
       "why_it_matters": "Included as a building block so vector storage is visible without being mistaken for a product category.",
       "research_confidence": "medium",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T11:59:11Z",
-      "forks": 2673,
-      "open_issues": 721,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:32:10Z",
+      "forks": 2707,
+      "open_issues": 735,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "Apache-2.0",
       "licenses": [
         "Apache-2.0"
@@ -18142,8 +18433,8 @@
       "human_editable": false,
       "provenance": "limited",
       "status": "active",
-      "stars": 39521,
-      "stars_verified_at": "2026-09-14",
+      "stars": 39568,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -18169,9 +18460,9 @@
       "research_confidence": "high",
       "verified_at": "2026-08-23",
       "pushed_at": "2026-08-31T18:02:45Z",
-      "forks": 3731,
-      "open_issues": 37,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 3736,
+      "open_issues": 34,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION",
       "licenses": [
         "Apache-2.0"
@@ -18216,8 +18507,8 @@
       "human_editable": true,
       "provenance": "limited",
       "status": "archived",
-      "stars": 8558,
-      "stars_verified_at": "2026-09-14",
+      "stars": 8549,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -18245,7 +18536,7 @@
       "pushed_at": "2025-05-13T21:28:59Z",
       "forks": 527,
       "open_issues": 127,
-      "metadata_verified_at": "2026-09-14",
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0",
       "licenses": [
         "AGPL-3.0"
@@ -18321,13 +18612,13 @@
       ],
       "source_model": "source_available",
       "license_review_status": "verified",
-      "stars": 21569,
-      "stars_verified_at": "2026-09-14",
+      "stars": 21778,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-14T05:04:37Z",
-      "forks": 2195,
-      "open_issues": 47,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:07:12Z",
+      "forks": 2223,
+      "open_issues": 32,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION"
     },
     {
@@ -18365,8 +18656,8 @@
       "human_editable": true,
       "provenance": "limited",
       "status": "active",
-      "stars": 6045,
-      "stars_verified_at": "2026-09-14",
+      "stars": 6179,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -18391,10 +18682,10 @@
       "why_it_matters": "Shows how a second brain can remain programmable without surrendering canonical files.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T12:04:17Z",
-      "forks": 478,
-      "open_issues": 344,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T13:40:02Z",
+      "forks": 492,
+      "open_issues": 355,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT",
       "licenses": [
         "MIT"
@@ -18441,8 +18732,8 @@
       "human_editable": true,
       "provenance": "limited",
       "status": "active",
-      "stars": 46342,
-      "stars_verified_at": "2026-09-14",
+      "stars": 46562,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -18467,10 +18758,10 @@
       "why_it_matters": "Shows the power of block-level identity, queries, and rich local knowledge work.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T13:05:20Z",
-      "forks": 3001,
-      "open_issues": 14,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T16:54:36Z",
+      "forks": 3029,
+      "open_issues": 15,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0",
       "licenses": [
         "AGPL-3.0"
@@ -18601,8 +18892,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 1257,
-      "stars_verified_at": "2026-09-14",
+      "stars": 1303,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -18629,10 +18920,10 @@
       "why_it_matters": "Shows that meaningful offline search and graph intelligence can be added to an existing PKM vault without requiring a hosted model.",
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
-      "pushed_at": "2026-09-14T13:11:29Z",
-      "forks": 119,
-      "open_issues": 29,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-28T09:54:27Z",
+      "forks": 120,
+      "open_issues": 30,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -18704,13 +18995,13 @@
       ],
       "source_model": "mixed_source",
       "license_review_status": "verified",
-      "stars": 29665,
-      "stars_verified_at": "2026-09-14",
+      "stars": 31018,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
-      "pushed_at": "2026-09-13T23:49:05Z",
-      "forks": 2596,
-      "open_issues": 98,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:33:31Z",
+      "forks": 2722,
+      "open_issues": 118,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -18764,8 +19055,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 687,
-      "stars_verified_at": "2026-09-14",
+      "stars": 704,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -18793,9 +19084,9 @@
       "research_confidence": "medium",
       "verified_at": "2026-09-12",
       "pushed_at": "2026-06-30T20:28:43Z",
-      "forks": 79,
-      "open_issues": 8,
-      "metadata_verified_at": "2026-09-14",
+      "forks": 85,
+      "open_issues": 9,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "MIT"
     },
     {
@@ -18842,8 +19133,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 26553,
-      "stars_verified_at": "2026-09-28",
+      "stars": 27517,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -18870,7 +19161,11 @@
       "why_it_matters": "The only team-scoped agent memory: a self-hosted hub and proxy where memory assets carry owners, bindings, and access control so agent teams inherit work instead of repeating it.",
       "research_confidence": "high",
       "verified_at": "2026-09-28",
-      "github_detected_license": "NOASSERTION"
+      "github_detected_license": "NOASSERTION",
+      "pushed_at": "2026-09-29T08:48:49Z",
+      "forks": 2649,
+      "open_issues": 857,
+      "metadata_verified_at": "2026-09-29"
     },
     {
       "id": "trilium",
@@ -18911,8 +19206,8 @@
       "human_editable": true,
       "provenance": "limited",
       "status": "active",
-      "stars": 37832,
-      "stars_verified_at": "2026-09-14",
+      "stars": 38082,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -18938,10 +19233,10 @@
       "why_it_matters": "Contributes hierarchy, revisions, encryption, automation, and proven large-vault behavior.",
       "research_confidence": "high",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T12:57:50Z",
-      "forks": 2542,
-      "open_issues": 684,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:13:08Z",
+      "forks": 2566,
+      "open_issues": 667,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "AGPL-3.0",
       "licenses": [
         "AGPL-3.0"
@@ -18984,8 +19279,8 @@
       "human_editable": false,
       "provenance": "limited",
       "status": "active",
-      "stars": 16805,
-      "stars_verified_at": "2026-09-14",
+      "stars": 16860,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -19008,10 +19303,10 @@
       "why_it_matters": "Included as a building block so vector storage is visible without being mistaken for a product category.",
       "research_confidence": "medium",
       "verified_at": "2026-08-23",
-      "pushed_at": "2026-09-14T13:09:29Z",
-      "forks": 1400,
-      "open_issues": 750,
-      "metadata_verified_at": "2026-09-14",
+      "pushed_at": "2026-09-29T20:05:36Z",
+      "forks": 1417,
+      "open_issues": 771,
+      "metadata_verified_at": "2026-09-29",
       "github_detected_license": "NOASSERTION",
       "licenses": [
         "BSD-3-Clause"
@@ -19061,8 +19356,8 @@
       "source_model": "open_source",
       "license_review_status": "verified",
       "status": "active",
-      "stars": 1911,
-      "stars_verified_at": "2026-09-14",
+      "stars": 2534,
+      "stars_verified_at": "2026-09-29",
       "historical_stars": null,
       "current_repo_note": null,
       "score": {
@@ -19089,10 +19384,10 @@
       "research_confidence": "medium",
       "verified_at": "2026-09-13",
       "github_detected_license": "Apache-2.0",
-      "pushed_at": "2026-09-14T12:40:05Z",
-      "forks": 237,
-      "open_issues": 14,
-      "metadata_verified_at": "2026-09-14"
+      "pushed_at": "2026-09-29T12:47:29Z",
+      "forks": 228,
+      "open_issues": 5,
+      "metadata_verified_at": "2026-09-29"
     },
     {
       "id": "zep-cloud",
@@ -19168,6 +19463,890 @@
       ],
       "source_model": "proprietary",
       "license_review_status": "verified"
+    },
+    {
+      "id": "openai-agents-js",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "OpenAI Agents SDK for JavaScript",
+      "repo": "openai/openai-agents-js",
+      "url": "https://github.com/openai/openai-agents-js",
+      "description": "JavaScript/TypeScript framework for building multi-agent workflows: instruction-configured agents with tools, guardrails, handoffs, session memory, tracing, sandbox execution, and realtime voice behind a provider-agnostic model contract.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "agent definitions, handoffs, session histories, and run traces",
+      "deployment": [
+        "library"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "external_sandbox",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 3869,
+      "stars_verified_at": "2026-09-29",
+      "historical_stars": null,
+      "current_repo_note": "JavaScript/TypeScript sibling of openai-agents-python (reviewed as openai-agents-sdk); provider coupling is left unreviewed beyond the documented provider-agnostic model-provider contract.",
+      "score": {
+        "task_reliability": 8.0,
+        "tool_use": 8.8,
+        "autonomy": 8.0,
+        "human_control": 8.6,
+        "observability_recovery": 8.4,
+        "data_sovereignty": 6.2,
+        "interoperability": 8.6,
+        "maturity": 8.0,
+        "overall": 8.12
+      },
+      "strengths": [
+        "Small core loop of agents, handoffs, guardrails, and approvals covers multi-agent orchestration with tracing, sessions, and human-in-the-loop built in",
+        "Substitutable model-provider contract plus a Vercel AI SDK adapter keeps the runtime usable beyond OpenAI models",
+        "Sandbox agents, realtime voice agents, and MCP transports ship in one documented package with CI and hosted docs"
+      ],
+      "weaknesses": [
+        "OpenAI models and hosted execution paths remain the most complete and documented route",
+        "Deployment, persistence beyond sessions, permissions, and production hardening stay application-defined",
+        "Named non-OpenAI backends were not individually re-verified in this review"
+      ],
+      "why_it_matters": "Shows the provider-published SDK pattern in JavaScript: an open operational loop with replaceable model, session, and sandbox seams.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-29",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "koog",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Koog",
+      "repo": "JetBrains/koog",
+      "url": "https://github.com/JetBrains/koog",
+      "description": "Kotlin-first framework for building predictable, fault-tolerant AI agents across JVM, Android, iOS, and web targets, with graph workflows, retries, state persistence, history compression, tracing, MCP and ACP integration, and multi-provider LLM support.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "google",
+        "openai",
+        "anthropic",
+        "deepseek",
+        "openrouter",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "agent graph definitions, execution state snapshots, conversation history, and vector retrieval indexes",
+      "deployment": [
+        "library"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "workflows",
+        "mcp",
+        "persistent_state"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 4598,
+      "stars_verified_at": "2026-09-29",
+      "historical_stars": null,
+      "current_repo_note": "Default branch is develop; license evidence pinned from LICENSE.txt on that branch.",
+      "score": {
+        "task_reliability": 7.4,
+        "tool_use": 8.2,
+        "autonomy": 7.6,
+        "human_control": 7.8,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 7.6,
+        "interoperability": 8.8,
+        "maturity": 6.8,
+        "overall": 7.73
+      },
+      "strengths": [
+        "Kotlin Multiplatform targets across JVM, JS, Wasm, Android, and iOS with Spring and Ktor embedding for enterprise JVM shops",
+        "Reliability machinery is built in: retries, state persistence with restore points, and history compression",
+        "Six maintained provider integrations plus Ollama behind a switchable contract with history adaptation, alongside MCP and ACP support"
+      ],
+      "weaknesses": [
+        "JetBrains incubator status and a develop-branch workflow signal API instability ahead of maturity",
+        "JVM and Kotlin centered; other platforms are reached only through multiplatform targets",
+        "Production hardening, permissions, and cost controls stay application-defined"
+      ],
+      "why_it_matters": "Represents the enterprise-JVM approach to agents: type-safe, fault-tolerant orchestration that meets Kotlin shops where they are.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-29",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "claude-agent-acp",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Claude Agent ACP",
+      "repo": "agentclientprotocol/claude-agent-acp",
+      "url": "https://github.com/agentclientprotocol/claude-agent-acp",
+      "description": "Apache-2.0 adapter that exposes the Claude Agent SDK coding loop to any ACP client through a local CLI.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "ACP session transcripts and tool results, backed by Claude Agent SDK session state on the local host",
+      "deployment": [
+        "local_cli"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 2597,
+      "stars_verified_at": "2026-09-30",
+      "historical_stars": null,
+      "current_repo_note": "Third-party ACP adapter over Anthropic's Claude Agent SDK; the Agent Client Protocol itself is recorded as specification acp, and the SDK as claude-agent-sdk.",
+      "score": {
+        "task_reliability": 6.5,
+        "tool_use": 8.0,
+        "autonomy": 7.0,
+        "human_control": 8.0,
+        "observability_recovery": 7.5,
+        "data_sovereignty": 5.5,
+        "interoperability": 9.0,
+        "maturity": 6.0,
+        "overall": 7.18
+      },
+      "strengths": [
+        "Exposes Claude tool calls, subagents, MCP servers, and terminals to any ACP client",
+        "Permission presentation, edit review, and structured session errors and recovery",
+        "Versioned npm distribution with a preview channel and changelog"
+      ],
+      "weaknesses": [
+        "Pre-1.0 protocol surface still evolving through opt-in extensions",
+        "Model processing is remote via Anthropic even though the agent runs locally",
+        "No adapter-level editable store; coupled to the Claude Agent SDK release line"
+      ],
+      "why_it_matters": "The reference open implementation of a provider coding loop behind an open agent protocol, letting any ACP editor drive Claude.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-30",
+      "github_detected_license": "Apache-2.0",
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "mcp",
+        "workflows"
+      ]
+    },
+    {
+      "id": "sqlbot",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "SQLBot",
+      "repo": "dataease/SQLBot",
+      "url": "https://github.com/dataease/SQLBot",
+      "description": "Docker-deployed conversational text-to-SQL and ChatBI product from DataEase that generates, executes, and repairs queries, with charts and analysis.",
+      "primary_role": "data_analysis_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "relational_db",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "workspace data connections, calibrated SQL examples, term libraries, chat history, and generated charts",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "LicenseRef-SQLBot-Modified-GPLv3"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 6863,
+      "stars_verified_at": "2026-09-30",
+      "historical_stars": null,
+      "current_repo_note": "Modified GPLv3 with logo-retention and contributor terms beyond copyleft. The ChatBI scope covers this Docker-deployed product, not the DataEase BI suite.",
+      "score": {
+        "task_reliability": 7.5,
+        "tool_use": 7.5,
+        "autonomy": 7.0,
+        "human_control": 8.0,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 7.5,
+        "interoperability": 8.5,
+        "maturity": 7.5,
+        "overall": 7.55
+      },
+      "strengths": [
+        "Executes generated SQL and feeds failures back for repair",
+        "Term libraries and calibrated SQL examples that improve with use",
+        "Workspace isolation with fine-grained data permissions, plus MCP and embed integrations"
+      ],
+      "weaknesses": [
+        "Vendor telemetry defaults are unstated",
+        "Modified GPLv3 adds logo-retention and contributor terms beyond copyleft",
+        "Chinese-first documentation with English lagging under docs/"
+      ],
+      "why_it_matters": "A vendor-maintained, self-hosted ChatBI that closes the text-to-SQL loop with execution and repair rather than generation alone.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-30",
+      "github_detected_license": "NOASSERTION",
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing"
+      ]
+    },
+    {
+      "id": "aihawk",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "AIHawk",
+      "repo": "feder-cr/AIHawk",
+      "url": "https://github.com/feder-cr/AIHawk",
+      "description": "MIT-licensed stealth browser agent, served over MCP or a local web UI, that operates pages like a person to stay invisible to anti-bots.",
+      "primary_role": "browser_computer_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "screen"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "browser profiles, cookies, and task transcripts on the local host",
+      "deployment": [
+        "local_cli"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 31725,
+      "stars_verified_at": "2026-09-30",
+      "historical_stars": null,
+      "current_repo_note": "Rewritten from the 2024 job-application tool into the invisible_playwright_mcp stealth browser agent; repository adoption signals predate the rewrite.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 8.0,
+        "autonomy": 7.5,
+        "human_control": 7.0,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 6.5,
+        "interoperability": 8.5,
+        "maturity": 6.0,
+        "overall": 7.18
+      },
+      "strengths": [
+        "Human-like page operation with proxy, profile, and seed identity controls",
+        "MCP server plus Claude Code, Codex, and Gemini CLI plugins and a local web UI",
+        "Any OpenRouter model id, with worked examples and transcripts in articles/"
+      ],
+      "weaknesses": [
+        "Repository adoption signals belong to the earlier job-application product",
+        "Headline anti-bot-evasion positioning implicates target sites' terms of use",
+        "Changing the host exposes an unauthenticated interface, per the README's own warning"
+      ],
+      "why_it_matters": "A widely adopted open browser agent that pairs human-like page operation with open-model routing through OpenRouter.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-30",
+      "github_detected_license": "MIT",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openrouter"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "mcp"
+      ]
+    },
+    {
+      "id": "obsidian-llm-wiki",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Obsidian LLM Wiki",
+      "repo": "GD4AI/obsidian-llm-wiki",
+      "url": "https://github.com/GD4AI/obsidian-llm-wiki",
+      "description": "Marketplace-listed Obsidian plugin that turns vault notes into a connected wiki with embedding-free graph retrieval, multi-format ingest, and 16+ model providers.",
+      "primary_role": "human_pkm",
+      "secondary_roles": [],
+      "agent_relation": "none",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "graph_traversal"
+      ],
+      "capture_modes": [
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "vault notes and generated wiki pages joined by the wiki-link graph",
+      "deployment": [
+        "desktop",
+        "mobile"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0",
+        "MIT"
+      ],
+      "source_model": "mixed_open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 676,
+      "stars_verified_at": "2026-09-30",
+      "historical_stars": null,
+      "current_repo_note": "Covers the karpathywiki Obsidian plugin alone; the headless karpathywiki-cli in green-dalii/obsidian-llm-wiki-cli is a separate dormant product. The shipped main.js bundles MIT-noticed packages listed in THIRD-PARTY-NOTICES.md.",
+      "score": {
+        "second_brain_fit": 8.5,
+        "data_sovereignty": 8.5,
+        "interoperability": 7.0,
+        "memory_intelligence": 8.0,
+        "operational_simplicity": 8.5,
+        "maturity": 7.5,
+        "overall": 8.03
+      },
+      "strengths": [
+        "Personalized PageRank retrieval with no embeddings or vector database",
+        "Marketplace-listed plugin with PDF and Office ingest and an 11-language UI",
+        "Large test suite with per-task cost accounting in the release notes"
+      ],
+      "weaknesses": [
+        "Sibling headless CLI is dormant and outside this record",
+        "Retrieval benchmark is the project's own corpus figure",
+        "Sixteen-provider breadth exceeds what one review can exercise end to end"
+      ],
+      "why_it_matters": "A marketplace plugin proving graph retrieval can carry a personal knowledge wiki without embeddings.",
+      "research_confidence": "high",
+      "verified_at": "2026-09-30",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "pgvector",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "pgvector",
+      "repo": "pgvector/pgvector",
+      "url": "https://github.com/pgvector/pgvector",
+      "description": "Vector similarity search for Postgres: a vector data type with ivfflat and HNSW index access methods, in the database you already run.",
+      "primary_role": "retrieval_infrastructure",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "Vector, halfvec, bit, and sparsevec columns in tables of the operator's own PostgreSQL database, queried with ordinary SQL predicates, joins, and transaction semantics.",
+      "deployment": [
+        "library",
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "licenses": [
+        "PostgreSQL"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 23229,
+      "stars_verified_at": "2026-10-03",
+      "historical_stars": null,
+      "current_repo_note": "A PostgreSQL extension, not a server or a service. Every query runs inside a PostgreSQL database the operator runs, and the embedding pipeline, chunking, and record identity around the vectors stay with the application. Managed availability comes from hosted PostgreSQL providers that ship the extension, not from a pgvector-operated service.",
+      "score": {
+        "second_brain_fit": 3,
+        "data_sovereignty": 8,
+        "interoperability": 9,
+        "memory_intelligence": 6.5,
+        "operational_simplicity": 7,
+        "maturity": 9,
+        "overall": 6.81
+      },
+      "strengths": [
+        "Vectors live in the same tables as the rows they describe, so retrieval filters, joins, transactions, backups, and point-in-time recovery stay ordinary SQL",
+        "Reaches any language with a PostgreSQL client rather than requiring a second service and its own client library",
+        "Exact and approximate search, four vector types, six distance functions, quantization for scale, and iterative index scans for filtered queries"
+      ],
+      "weaknesses": [
+        "Not a retrieval product on its own: embedding, chunking, record identity, and ranking are the caller's work, and approximate indexes apply filtering after the scan",
+        "Hybrid search is a composition rather than a feature, documented as use together with PostgreSQL full-text search with fusion left to scripts in a separate repository",
+        "Approximate-index tuning (lists, probes, ef_search, scan limits) is Postgres index maintenance, so recall under filtering depends on settings the operator has to learn and watch"
+      ],
+      "why_it_matters": "The retrieval substrate most RAG systems in production actually sit on, published as infrastructure so the choice of vector store is visible without being mistaken for a product category, and as the counter-example to a dedicated vector database: the same retrieval inside the database the rest of the data is already in.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-03",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "vespa",
+      "system_family": "memory_system",
+      "score_profile": "memory",
+      "name": "Vespa",
+      "repo": "vespa-engine/vespa",
+      "url": "https://github.com/vespa-engine/vespa",
+      "description": "Search and ranking platform that stores, indexes, and serves structured documents with BM25, nearest-neighbour, and hybrid retrieval at production scale.",
+      "primary_role": "retrieval_infrastructure",
+      "secondary_roles": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "full_text",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "semantic_vector",
+        "hybrid",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "Application-defined schemas and documents in Vespa's own distributed document store, with rank profiles, query profiles, and Java components the application supplies.",
+      "deployment": [
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": false,
+      "provenance": "limited",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 7118,
+      "stars_verified_at": "2026-10-03",
+      "historical_stars": null,
+      "current_repo_note": "Vespa is the platform, not a hosted product with an Atlas-visible boundary of its own: the same Apache-2.0 code runs as a self-operated cluster or as Vespa Cloud, and the two differ in operations rather than in retrieval behaviour.",
+      "score": {
+        "second_brain_fit": 3,
+        "data_sovereignty": 7,
+        "interoperability": 6.5,
+        "memory_intelligence": 7.5,
+        "operational_simplicity": 3.5,
+        "maturity": 9,
+        "overall": 5.99
+      },
+      "strengths": [
+        "Lexical, vector, and hybrid retrieval in one engine: a documented hybrid rank profile combines bm25 title scoring with HNSW closeness in a single expression",
+        "Ranking is programmable rather than fixed, with rank profiles, ranking expressions, cross-encoder and TensorFlow, ONNX, and XGBoost model stages",
+        "Operated at internet scale for a decade, with a new release built from master every morning from Monday to Thursday"
+      ],
+      "weaknesses": [
+        "The heaviest operational commitment among retrieval stores reviewed here: configuration servers, content nodes, JVMs, and an application package to author and deploy",
+        "Schemas, rank profiles, and the YQL query language are Vespa-specific, so an application written against them is portable only through Vespa query and document APIs",
+        "A retrieval and ranking engine only: provenance, contradiction handling, consolidation, and any memory lifecycle stay with the application above it"
+      ],
+      "why_it_matters": "The retrieval substrate for search and recommendation systems at scale, published so a reader comparing stores can see that the lexical-plus-vector-plus-ranking option is a different commitment from a vector database, not a competitor to one.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-03",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "ragflow",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "RAGFlow",
+      "repo": "infiniflow/ragflow",
+      "url": "https://github.com/infiniflow/ragflow",
+      "description": "Document-grounded AI application platform: knowledge-base ingestion and agentic retrieval with a no-code agent canvas, deployable with Docker or as the vendor cloud.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "vector_index",
+        "full_text",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "hybrid",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors",
+        "scheduled",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation",
+        "human_curated"
+      ],
+      "canonical_data": "Parsed and chunked knowledge-base documents with their embeddings in the configured document engine (Elasticsearch by default, or Infinity, OpenSearch, OceanBase, SeekDB, or GaussDB), dataset and agent definitions on the canvas, and chat sessions in the configured business database (MySQL by default, or PostgreSQL, GaussDB, or OceanBase).",
+      "deployment": [
+        "self_hosted",
+        "managed_cloud"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 91622,
+      "stars_verified_at": "2026-10-03",
+      "historical_stars": null,
+      "current_repo_note": "The record covers the Apache-2.0 repository, which ships both products RAGFlow documents separately: Chat, \"suitable for applications mainly based on knowledge base Q&A and multi-turn dialogue\", and Agent, \"suitable for business workflows requiring conditional branching, tool calling, data processing or multi-step orchestration\". The vendor's own cloud service at cloud.ragflow.io is a separate hosted product whose terms this record does not review.",
+      "score": {
+        "task_reliability": 8,
+        "tool_use": 8,
+        "autonomy": 7.5,
+        "human_control": 7,
+        "observability_recovery": 6.5,
+        "data_sovereignty": 6.5,
+        "interoperability": 8.5,
+        "maturity": 8,
+        "overall": 7.52
+      },
+      "strengths": [
+        "The corpus is a first-class object rather than a side index: template-based chunking with a visualisation for human intervention, and knowledge compilation into Wikis, Graphs, Trees, PageIndex, Mind Maps, Timelines, and Skills that can be viewed, updated, and regenerated",
+        "Agentic retrieval is explicit rather than implied: the model analyses the question, breaks it down, retrieves, and verifies evidence, with Low, Medium, High, and Ultra thinking modes choosing the depth",
+        "Retrieval is not locked to one store: the document engine is selected at deployment across Elasticsearch, Infinity, OpenSearch, OceanBase, SeekDB, and GaussDB, and the business database across MySQL, PostgreSQL, GaussDB, and OceanBase",
+        "MCP and a sandbox executor are optional capabilities rather than requirements, and the agent canvas calls HTTP interfaces, databases, MCP tools, and custom code with conditional branches and loop logic"
+      ],
+      "weaknesses": [
+        "The heaviest deployment in this class: a working install needs a document engine, a business database, Redis, and object storage, with the vendor recommending 4 CPU cores, 16 GB RAM, and 50 GB of disk before any local model",
+        "Observability is a community-contributed Langfuse integration requiring a separate Langfuse workspace rather than a trace store the product owns, so recovery and replay are somebody else's product",
+        "The release train reached v1.0.0-rc1 on 2026-09-29 after a long 0.27.x line, so the current version is a release candidate and the API surface a builder depends on may still move",
+        "Agentic retrieval is the vendor's own claim about its reasoning depth; no independent evaluation of grounding accuracy or citation faithfulness is recorded here"
+      ],
+      "why_it_matters": "The most-adopted repository in the RAG-engine category, and the clearest statement of what that category became: document understanding and citation-grounded retrieval on one side, an agent canvas with tool calling on the other, in one deployable platform rather than a library.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-03",
+      "github_detected_license": "Apache-2.0",
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "container",
+        "external_sandbox",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "workflows",
+        "mcp",
+        "persistent_state",
+        "research"
+      ]
+    },
+    {
+      "id": "private-gpt",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "PrivateGPT",
+      "repo": "zylon-ai/private-gpt",
+      "url": "https://github.com/zylon-ai/private-gpt",
+      "description": "Self-hosted API layer that puts messages, ingestion, cited retrieval, tools, MCP, and database access behind a Claude-shaped API on top of any OpenAI-compatible local model server.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "vector_index",
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "Ingested files and artifact nodes under the operator's local data folder, with the vector, document, and index stores chosen per install (Qdrant for vectors; PostgreSQL, MySQL, SQL Server, or DB2 for the document and index stores), plus application-held message history.",
+      "deployment": [
+        "library",
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 57559,
+      "stars_verified_at": "2026-10-03",
+      "historical_stars": null,
+      "current_repo_note": "The record covers PrivateGPT 1.0, \"rebuilt from the ground up as a proper API layer for private AI applications\". The 2023 proof of concept that gave the repository its following was a local chat-with-your-documents script, which is a different product and is not this record; the bundled /ui workbench ships with the release and is described by the maintainers as \"a demonstrator, not the core product\". The vendor's commercial Zylon platform is built on this code and is not reviewed here.",
+      "score": {
+        "task_reliability": 8,
+        "tool_use": 8.5,
+        "autonomy": 7.5,
+        "human_control": 6.5,
+        "observability_recovery": 6,
+        "data_sovereignty": 9,
+        "interoperability": 9,
+        "maturity": 7.5,
+        "overall": 7.7
+      },
+      "strengths": [
+        "Mirrors the Claude API surface feature for feature, so agent code, tools, and MCP clients written against one run against local models on the other",
+        "Runs against any OpenAI-compatible server rather than a model vendor, with an offline mode setting for air-gapped installs",
+        "Local by default: ingested files and artifact nodes stay in the operator's data folder, and the vector, document, and index stores are chosen per install",
+        "Built-in tools go past retrieval to web search, web fetch, and code execution, with custom tools and remote MCP servers alongside them"
+      ],
+      "weaknesses": [
+        "The shipped settings enable no authentication and allow every CORS origin, so an operator who exposes the port exposes the tool surface, code execution included, until they turn auth on",
+        "It is an API layer rather than an agent: the loop, the plan, and failure recovery belong to the application built on top, so the framework scores the caller's work as its own capability surface",
+        "The maintainers' own comparison marks skills as basic, batch and async as async-only, structured outputs as inference-dependent, and prompt caching and OAuth as unsupported",
+        "Repository popularity measures the 2023 script rather than the 1.0 rewrite: the current release line began at v1.0.0 on 2026-06-03, so the star count overstates how long this code has been a product"
+      ],
+      "why_it_matters": "The reference answer to the question a private deployment actually asks, which is not which model to run but what to put in front of it: one API surface that keeps a laptop and a datacentre on the same client code, with the data never leaving the operator's hardware.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-03",
+      "github_detected_license": "Apache-2.0",
+      "agent_interfaces": [
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "research",
+        "shell_execution",
+        "mcp"
+      ]
+    },
+    {
+      "id": "txtai",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "txtai",
+      "repo": "neuml/txtai",
+      "url": "https://github.com/neuml/txtai",
+      "description": "All-in-one Python framework whose embeddings database of vector, sparse, and graph indexes backs agents, RAG, pipelines, and multi-model workflows over one API.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "vector_index",
+        "graph_db",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "canonical_data": "An embeddings database of local content carrying dense and sparse vector indexes, an optional graph index, and SQL-queryable columns, held under the operator's data directory unless a remote store is configured.",
+      "deployment": [
+        "library",
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 12991,
+      "stars_verified_at": "2026-10-03",
+      "historical_stars": null,
+      "current_repo_note": "One framework with two products: the repository's own words call the embeddings database \"the key component\", a union of vector indexes, graph networks and relational databases, while the feature list leads with agents, pipelines, and workflows built on top of it. This record follows the framework, on the Haystack and RAGFlow precedent, because the agents and workflows are the outcome a reader adopts it for; the database is what makes that outcome cheap. The vendor's txtai.cloud is described in the README as still being built and is not reviewed here.",
+      "score": {
+        "task_reliability": 7.5,
+        "tool_use": 8,
+        "autonomy": 8,
+        "human_control": 7,
+        "observability_recovery": 6.5,
+        "data_sovereignty": 8.5,
+        "interoperability": 9,
+        "maturity": 8.5,
+        "overall": 7.76
+      },
+      "strengths": [
+        "One object rather than four: agents, pipelines, workflows, and the embeddings database share a single API and can call each other, and agents can be tools so an \"Agent Team\" is a list of agents",
+        "Retrieval is four ways over one index set, with dense and sparse vector indexes, a NetworkX graph for topic modelling and path traversal, and SQL over the content columns",
+        "Local by default with nothing to stand up: Faiss for approximate search, SQLite for content, and NetworkX for the graph, with remote stores as the opt-in",
+        "Reaches past Python through web and MCP APIs and published JavaScript, Java, Rust, and Go bindings"
+      ],
+      "weaknesses": [
+        "Observability is an MLflow plugin and its tracing module rather than a trace store the framework owns, so evaluation and replay depend on another product",
+        "Breadth is the trade: embeddings, pipelines, workflows, agents, an API server, and model hosting in one project means each is less governed than a focused product, and the project says so about agents, recommending workflows and RAG for simple or rule-based requests",
+        "Content storage is disabled by default, so the retrieval features that need it have to be switched on before they do anything",
+        "The maintainers are a consulting company selling around the stack, and the hosted product they point at is unfinished"
+      ],
+      "why_it_matters": "The most complete answer to building an agentic system out of one local dependency rather than a database, an orchestrator, and a model server: the retrieval substrate and the agent loop are the same library and the same index, which is also why the record is filed as a framework rather than as a store.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-03",
+      "github_detected_license": "Apache-2.0",
+      "agent_interfaces": [
+        "library",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research",
+        "multi_agent",
+        "workflows",
+        "mcp"
+      ]
     }
   ],
   "verified_at": "2026-09-28"

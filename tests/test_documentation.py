@@ -28,6 +28,7 @@ COLLECTION_SCHEMA = {
 CATALOG_COUNTS_BLOCK = re.compile(
     r"<!-- catalog-counts.*?-->.*?```text\n(?P<block>.*?)```", re.DOTALL
 )
+BACKLOG = ROOT / "BACKLOG.md"
 MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 CODE_FENCE = re.compile(r"```.*?```", re.DOTALL)
 GENERATED_DIRECTORIES = {
@@ -369,6 +370,314 @@ class DocumentationTests(unittest.TestCase):
             sorted(catalog.REVIEW_AGE_ORDER),
             sorted(name for name, *_ in catalog.COLLECTIONS),
             "REVIEW_AGE_ORDER and COLLECTIONS name different collections",
+        )
+
+    def test_backlog_engineering_anchors_still_resolve(self) -> None:
+        """The Engineering debt section's anchors must point at things that exist.
+
+        These items quote line numbers, function counts, and complexity maxima to
+        size their work, and every one of those drifts on an ordinary merge. On
+        2026-09-29 three stale sets of figures for `web/app.js` were in circulation
+        in the same afternoon (3,694, 3,728, and 3,740), and #382's own verification
+        of seven line anchors was overtaken by #384 minutes later.
+
+        So this asserts the stable property, not the volatile one: a named symbol
+        is still declared, and a cited Python line is still inside its file. A
+        reader sent to `syncMatchSort` (319) should find a `syncMatchSort`, even
+        though the number beside it is now wrong. Asserting the line numbers themselves
+        would fail on nearly every merge and train people to skip the check, which
+        is worth less than no check at all.
+        """
+        from scripts.measure_engineering import (
+            engineering_debt_section,
+            javascript_anchor_failures,
+            python_line_anchor_failures,
+        )
+
+        section = engineering_debt_section()
+        self.assertIn("### Engineering debt", BACKLOG.read_text(encoding="utf-8"))
+        failures = javascript_anchor_failures(section) + python_line_anchor_failures(
+            section
+        )
+        self.assertEqual([], failures, "; ".join(failures) or "no anchors to check")
+
+    def test_engineering_ratchet_is_not_undercut(self) -> None:
+        """The complexity ratchet must stay above the worst function carried.
+
+        `pyproject.toml` sets `max-complexity` as a ratchet rather than a target:
+        it passes today and fails any new function worse than the worst one already
+        carried. That only holds while the configured value is at or above the live
+        maximum, and nothing in the linter would catch the ratchet being lowered
+        past it — ruff would simply report fewer violations. The live maximum comes
+        from ruff itself rather than a reimplementation, since the claim is about
+        the number ruff computes.
+        """
+        from scripts.measure_engineering import (
+            ROOT as MEASURE_ROOT,
+        )
+        from scripts.measure_engineering import (
+            configured_ratchet,
+            live_max_complexity,
+        )
+
+        configured = configured_ratchet()
+        _, live = live_max_complexity(
+            MEASURE_ROOT / "scripts" / "validate_directory.py"
+        )
+        self.assertGreater(
+            live,
+            0,
+            "ruff reported no complexity, so the ratchet has no measured maximum",
+        )
+        self.assertLessEqual(
+            live,
+            configured,
+            f"live maximum complexity {live} exceeds the configured ratchet "
+            f"{configured}; CR-19's ratchet no longer constrains the worst function",
+        )
+
+    def test_web_app_js_still_declares_global_bindings(self) -> None:
+        """CR-18's premise: `web/app.js` is a classic script sharing globals.
+
+        The finding argues that the file's remaining declarations are reachable
+        from the e2e suite and uncovered by unit tests, which is only true while
+        they sit at global scope in a script with no module boundary. If a change
+        encapsulates the file, the finding stops describing the code and prose
+        that says the opposite becomes misleading — the same class of drift this
+        suite exists to catch, one level up from the counts.
+        """
+        from scripts.measure_engineering import ROOT as MEASURE_ROOT
+        from scripts.measure_engineering import module_level_declarations
+
+        declarations = module_level_declarations(MEASURE_ROOT / "web" / "app.js")
+        self.assertGreater(
+            declarations,
+            0,
+            "web/app.js declares nothing at global scope, so CR-18's description no "
+            "longer matches the file; update the finding rather than leaving it",
+        )
+        source = (MEASURE_ROOT / "web" / "app.js").read_text(encoding="utf-8")
+        self.assertNotIn(
+            "\nexport ",
+            source,
+            "web/app.js grew an export, so it is a module and CR-18's global-scope "
+            "premise needs revisiting",
+        )
+
+    def test_adr_numbers_are_unique_and_match_their_titles(self) -> None:
+        """No two ADRs may claim one number, and a filename must state its own.
+
+        On 2026-09-29 a lab ADR was merged as 047 while a badge ADR merged as 047
+        earlier the same afternoon, so `docs/adr/` carried two files claiming one
+        number and every cross-reference silently picked whichever a reader opened
+        first. Nothing else checks this: the link assertions above confirm a cited
+        ADR *exists*, not that the one it names is the one that means. The rule is
+        cheap, so it is enforced rather than remembered.
+        """
+        directory = ROOT / "docs" / "adr"
+        numbered: dict[str, list[str]] = {}
+        for path in sorted(directory.glob("*.md")):
+            match = re.match(r"^(\d{3})-", path.name)
+            self.assertIsNotNone(
+                match, f"{path.name}: an ADR filename must start with its number"
+            )
+            title = path.read_text(encoding="utf-8").splitlines()[0]
+            heading = re.match(r"^# ADR (\d{3}):", title)
+            self.assertIsNotNone(
+                heading,
+                f"{path.name}: first line must be an ADR heading, got {title!r}",
+            )
+            self.assertEqual(
+                match.group(1),
+                heading.group(1),
+                f"{path.name}: filename number does not match its heading {title!r}",
+            )
+            numbered.setdefault(match.group(1), []).append(path.name)
+        duplicates = {n: names for n, names in numbered.items() if len(names) > 1}
+        self.assertEqual(
+            {},
+            duplicates,
+            "these ADR numbers are claimed more than once; renumber the newest: "
+            + "; ".join(f"{n}: {names}" for n, names in sorted(duplicates.items())),
+        )
+
+    def test_adr_cross_references_name_the_adrs_they_cite(self) -> None:
+        """An `ADR nnn` citation in prose must resolve to the nnn ADR on disk.
+
+        The uniqueness test above cannot see a citation that names a number no file
+        claims, which is what a renumber leaves behind: the number is unique and
+        the reference is still wrong.
+        """
+        numbers = {path.name[:3] for path in (ROOT / "docs" / "adr").glob("*.md")}
+        cited: dict[str, list[str]] = {}
+        for path in sorted(ROOT.rglob("*.md")):
+            if any(
+                part in {".git", "node_modules", ".venv", ".claude", ".muse"}
+                for part in path.parts
+            ):
+                continue
+            # A dated design spec and an ADR are both point-in-time records, and a
+            # citation that was right when it was written is not a defect in it.
+            if "adr" in path.parts or "superpowers" in path.parts:
+                continue
+            text = path.read_text(encoding="utf-8", errors="ignore")
+            for number in set(re.findall(r"ADR (\d{3})", text)):
+                if number not in numbers:
+                    cited.setdefault(number, []).append(str(path.relative_to(ROOT)))
+        self.assertEqual(
+            {},
+            cited,
+            "these citations name an ADR number no file in docs/adr claims: "
+            + "; ".join(f"{n}: {paths[:3]}" for n, paths in sorted(cited.items())),
+        )
+
+    def test_measured_claims_name_a_date(self) -> None:
+        """A measurement quoted in the backlog must say when it was taken.
+
+        The numbers themselves cannot be checked without failing every ordinary
+        commit, but a reader can be told what a number is: a snapshot. This requires
+        a date on any line that asserts a measurement of the code, so a stale
+        figure announces itself instead of reading as current. It is the cheap half
+        of the fix — the anchors above are the half that can be enforced.
+        """
+        text = BACKLOG.read_text(encoding="utf-8")
+        start = text.index("### Engineering debt")
+        section = text[start : text.index("### AI systems papers")]
+        dated = re.compile(r"20\d\d-\d\d-\d\d")
+        undated: list[str] = []
+        for number, line in enumerate(section.splitlines(), start=1):
+            if not line.startswith("- [ ]"):
+                continue
+            # A line that quotes a size and does not date it is a figure that will
+            # silently read as current. Proportions, counts of items, and PR
+            # references are exempt: only a measurement of the tree itself is at
+            # risk, and a line that already carries a date is fine.
+            measures = re.search(
+                r"\b\d{1,3}(?:,\d{3})+\b|\b\d+\s*(?:lines|functions)\b", line
+            )
+            if measures and not dated.search(line):
+                undated.append(f"line {number}: {line[:90]}")
+        self.assertEqual(
+            [],
+            undated,
+            "these lines quote a measurement with no date; add one, or drop the "
+            "figure in favour of `uv run python scripts/measure_engineering.py`: "
+            + "; ".join(undated),
+        )
+
+    def test_every_corner_in_the_stylesheet_comes_from_a_radius_token(self) -> None:
+        """`web/styles.css` must take every corner radius from a token.
+
+        The radius scale once encoded size rather than role, so a 112px tile and a
+        dialog picked different steps and two adjacent grids rendered visibly
+        different corners. That drift is invisible to a linter and only shows up
+        in a screenshot, so the rule is asserted here instead: a corner is one of
+        four tokens or it is a finding. A literal `50%` is the same class of
+        problem, since the circle value then has a second home.
+        """
+        css = (ROOT / "web" / "styles.css").read_text(encoding="utf-8")
+        tokens = {"var(--radius)", "var(--radius-control)", "var(--radius-chip)"}
+        literals: list[str] = []
+        for number, line in enumerate(css.splitlines(), start=1):
+            for value in re.findall(r"border-radius:\s*([^;]+);", line):
+                if value.strip() not in tokens | {"var(--radius-pill)", "0"}:
+                    literals.append(f"line {number}: {value.strip()}")
+        self.assertEqual(
+            [],
+            literals,
+            "these corners set a radius directly; use --radius for containers, "
+            "--radius-control for inputs and buttons, --radius-chip for badges "
+            "and toggle chips, and --radius-pill only for circles: "
+            + "; ".join(literals),
+        )
+
+    def test_container_components_take_the_container_radius(self) -> None:
+        """A component's radius token must follow its role, not its size.
+
+        `--radius-control` names the controls a pointer enters — inputs, buttons,
+        menu items — so a panel that happens to be small cannot claim it. The
+        classes below are the surfaces that drifted: popovers, table wrappers,
+        dialog blocks, and grid tiles, several of which rendered beside each other
+        with different corners.
+        """
+        css = (ROOT / "web" / "styles.css").read_text(encoding="utf-8")
+        containers = (
+            ".element-tile",
+            ".finder-goal",
+            ".finder-result",
+            ".tile",
+            ".detail-block",
+            ".comparison-table-wrap",
+            ".badge-tooltip",
+            ".badge-legend-chip",
+            ".taxonomy-item",
+        )
+        wrong: list[str] = []
+        for selector in containers:
+            # The selector may head a list, as `.element-tile` and `.finder-goal`
+            # do: the Finder's goal tile IS the door's element tile, so one
+            # declaration serves both and a second copy could drift. What the
+            # rule has to state is that the named component takes --radius,
+            # wherever else it shares the line.
+            rule = re.search(
+                rf"(?m)^{re.escape(selector)}(?:\s*,[^{{}}]*)?\s*\{{(.*?)\}}",
+                css,
+                re.DOTALL,
+            )
+            self.assertIsNotNone(rule, f"{selector} no longer exists in styles.css")
+            radius = re.search(r"border-radius:\s*([^;]+);", rule.group(1))
+            self.assertIsNotNone(radius, f"{selector} sets no border-radius")
+            if radius.group(1).strip() != "var(--radius)":
+                wrong.append(f"{selector}: {radius.group(1).strip()}")
+        self.assertEqual(
+            [],
+            wrong,
+            "these containers take a radius token that is not --radius; a "
+            "container's corners should not depend on how big it is: "
+            + "; ".join(wrong),
+        )
+
+    def test_the_radius_scale_stays_sharp_and_ordered(self) -> None:
+        """The four steps must keep their order and stay small.
+
+        Order is the scale's whole contract: a container's corner may never be
+        tighter than a chip's, or the nesting reads inverted. The ceiling keeps
+        the corners sharp, which is the intended character and the reason the
+        tokens were rescaled in the first place.
+        """
+        css = (ROOT / "web" / "styles.css").read_text(encoding="utf-8")
+        declared = dict(
+            (name, int(px))
+            for name, px in re.findall(r"--radius(-chip|-control)?:\s*(\d+)px;", css)
+        )
+        scale = {
+            "chip": declared.get("-chip"),
+            "control": declared.get("-control"),
+            "container": declared.get(""),
+            "pill": 999 if "--radius-pill: 999px;" in css else None,
+        }
+        self.assertEqual(
+            [],
+            [name for name, value in scale.items() if value is None],
+            f"a radius token is missing or unparsable: {scale}",
+        )
+        self.assertLess(
+            scale["chip"],
+            scale["control"],
+            f"chip radius {scale['chip']}px is not tighter than control "
+            f"{scale['control']}px",
+        )
+        self.assertLess(
+            scale["control"],
+            scale["container"],
+            f"control radius {scale['control']}px is not tighter than container "
+            f"{scale['container']}px",
+        )
+        self.assertLessEqual(
+            scale["container"],
+            10,
+            f"container radius {scale['container']}px exceeds the 10px ceiling; "
+            "these corners are meant to read as sharp",
         )
 
 

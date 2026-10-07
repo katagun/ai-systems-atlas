@@ -1,6 +1,7 @@
 const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
 const { collectionEntry, entryCount, openCollection, pressedEntry, searchAll } = require("./helpers/landing");
+const { clearFilters, recordHeading, recordView, search, setFilter, sortControl } = require("./helpers/results");
 
 const ROBOTS = [
   { id: "g-one", name: "G One", manufacturer: "Unibot", url: "https://unibot.example/g-one", description: "A compact humanoid.", form_factor: "humanoid", ai_basis: ["vendor_named_model", "open_model_interface"], availability: "orderable", status: "active" },
@@ -54,10 +55,29 @@ test("the published robots open from the real collection", async ({ page }) => {
   await expect(collectionEntry(page, "robots")).toBeVisible();
   expect(await entryCount(page, "robots")).toBe(catalogCounts.robots);
   await page.locator('#robot-grid [data-robot="spot"]').click();
-  await expect(page.locator("#robot-dialog")).toBeVisible();
-  await expect(page.locator("#robot-dialog-content")).toContainText("Models the vendor names");
-  await expect(page.locator("#robot-dialog-content")).toContainText("Reinforcement-learning locomotion controller");
+  await expect(recordView(page, "robot")).toBeVisible();
+  await expect(recordView(page, "robot")).toContainText("Models the vendor names");
+  await expect(recordView(page, "robot")).toContainText("Reinforcement-learning locomotion controller");
   await expect(page).toHaveURL(/record=robot(%3A|:)spot/);
+});
+
+test("a robot's card and dialog join to the lab that makes it", async ({ page }) => {
+  // ADR 053: the maker is a lab record, so the robot inherits its geography and
+  // cross-links to it. Unitree is the worked example: Hangzhou, three robots.
+  await page.goto("/?collection=robots");
+  await page.locator('#robot-pager select[aria-label="Results per page"]').selectOption("24");
+  await expect(page.locator("#robot-grid .robot-card .card-flag")).toHaveCount(catalogCounts.robotFlagsOnCards());
+  await expect(page.locator('#robot-grid .robot-card:has([data-robot="unitree-g1"]) .card-flag')).toHaveCount(1);
+  await expect(page.locator('#robot-grid .robot-card:has([data-robot="unitree-g1"]) .card-flag')).toHaveAttribute("aria-hidden", "true");
+
+  await page.locator('#robot-grid [data-robot="unitree-g1"]').click();
+  await recordView(page, "robot").getByRole("button", { name: "Unitree Robotics" }).click();
+  await expect(recordHeading(page, "lab")).toHaveText("Unitree Robotics");
+  await expect(recordView(page, "lab")).toContainText("Recorded because:");
+  await expect(recordView(page, "lab")).toContainText("Reviewed robot");
+  // The lab's own dialog lists the robots it makes, in both directions.
+  await expect(recordView(page, "lab").locator(".detail-block").filter({ hasText: "Robots it makes" }))
+    .toContainText("Unitree G1");
 });
 
 test("the robots scope filters, opens its own dialog, and never scores or compares", async ({ page }) => {
@@ -69,36 +89,36 @@ test("the robots scope filters, opens its own dialog, and never scores or compar
   await expect(page.locator("#robot-result-count")).toContainText("2 robots · Unscored");
   await expect(page.locator("#robot-grid .score-ring")).toHaveCount(0);
   await expect(page.locator("#robot-grid .compare-toggle")).toHaveCount(0);
-  await expect(page.locator("#robot-sort-filter")).toHaveCount(0);
+  await expect(sortControl(page, "robots")).toHaveCount(0);
   await expect(page.locator("#robot-grid .project-card h2")).toHaveText(["G One", "Rover"]);
 
-  await page.locator("#robot-form-factor-filter").selectOption("quadruped");
+  await setFilter(page, "robots", "formFactor", "quadruped");
   await expect(page.locator("#robot-grid .project-card h2")).toHaveText(["Rover"]);
-  await page.locator("#reset-robot-filters").click();
-  await page.locator("#robot-ai-basis-filter").selectOption("vendor_named_model");
+  await clearFilters(page, "robots");
+  await setFilter(page, "robots", "aiBasis", "vendor_named_model");
   await expect(page.locator("#robot-grid .project-card h2")).toHaveText(["G One"]);
-  await page.locator("#reset-robot-filters").click();
-  await page.locator("#robot-search").fill("unibot");
+  await clearFilters(page, "robots");
+  await search(page, "unibot");
   await expect(page.locator("#robot-grid .project-card h2")).toHaveText(["G One"]);
 
   await page.locator('#robot-grid [data-robot="g-one"]').click();
-  await expect(page.locator("#robot-dialog")).toBeVisible();
-  await expect(page.locator("#robot-dialog-content .eyebrow")).toContainText("Unscored");
-  await expect(page.locator("#robot-dialog-content")).toContainText("Models the vendor names");
-  await expect(page.locator("#robot-dialog-content")).toContainText("vendor-stated");
-  await expect(page.locator("#robot-dialog-content")).toContainText("Running your own models");
-  await expect(page.locator("#robot-dialog-content")).toContainText("not verified by the Atlas");
-  await expect(page.locator("#robot-dialog-content")).toContainText("This page changes between visits, so the Atlas cannot pin what it said.");
+  await expect(recordView(page, "robot")).toBeVisible();
+  await expect(recordView(page, "robot").locator(".eyebrow")).toContainText("Unscored");
+  await expect(recordView(page, "robot")).toContainText("Models the vendor names");
+  await expect(recordView(page, "robot")).toContainText("vendor-stated");
+  await expect(recordView(page, "robot")).toContainText("Running your own models");
+  await expect(recordView(page, "robot")).toContainText("not verified by the Atlas");
+  await expect(recordView(page, "robot")).toContainText("This page changes between visits, so the Atlas cannot pin what it said.");
   // Once for the evidence entry and once for the terms entry: robotTermsLink
   // now carries the same unpinnable note robotEvidenceLink already adds.
-  await expect(page.locator("#robot-dialog-content .unscored-note", { hasText: "This page changes between visits" })).toHaveCount(2);
-  await expect(page.locator("#robot-dialog-content")).toContainText("Reviewed 2026-09-20.");
+  await expect(recordView(page, "robot").locator(".unscored-note", { hasText: "This page changes between visits" })).toHaveCount(2);
+  await expect(recordView(page, "robot")).toContainText("Reviewed 2026-09-20.");
   await expect(page).toHaveURL(/record=robot(%3A|:)g-one/);
 
   await page.reload();
-  await expect(page.locator("#robot-dialog")).toBeVisible();
+  await expect(recordView(page, "robot")).toBeVisible();
   await page.goBack();
-  await expect(page.locator("#robot-dialog")).toBeHidden();
+  await expect(recordView(page, "robot")).toBeHidden();
 });
 
 test("the models section reads as an em dash, not a false absence claim, while a robot's detail never arrives", async ({ page }) => {
@@ -110,8 +130,8 @@ test("the models section reads as an em dash, not a false absence claim, while a
   await page.route(/\/app\/detail\/robot\/rover\.json/, route => route.fulfill({ status: 404, body: "not found" }));
   await page.goto("/?collection=robots");
   await page.locator('#robot-grid [data-robot="rover"]').click();
-  await expect(page.locator("#robot-dialog")).toBeVisible();
-  const content = page.locator("#robot-dialog-content");
+  await expect(recordView(page, "robot")).toBeVisible();
+  const content = recordView(page, "robot");
   const modelsSection = content.locator("section.detail-block", { hasText: "Models the vendor names" });
   await expect(modelsSection).not.toContainText("names no model");
   await expect(modelsSection.locator("p").first()).toHaveText("—");
@@ -125,8 +145,8 @@ test("a robot with a named-model basis also reads as an em dash before its detai
   await page.route(/\/app\/detail\/robot\/solo-arm\.json/, route => route.fulfill({ status: 404, body: "not found" }));
   await page.goto("/?collection=robots");
   await page.locator('#robot-grid [data-robot="solo-arm"]').click();
-  await expect(page.locator("#robot-dialog")).toBeVisible();
-  const content = page.locator("#robot-dialog-content");
+  await expect(recordView(page, "robot")).toBeVisible();
+  const content = recordView(page, "robot");
   const modelsSection = content.locator("section.detail-block", { hasText: "Models the vendor names" });
   await expect(modelsSection).not.toContainText("names no model");
   await expect(modelsSection.locator("p").first()).toHaveText("—");

@@ -1,21 +1,21 @@
 const { test, expect } = require("@playwright/test");
 const { openCollection, openFamily, pressedEntry, pressedFamily } = require("./helpers/landing");
+const { closeRecord, expectFilter, recordView, search, searchBox, setFilter, sortControl } = require("./helpers/results");
 
 test("a family chip, a query, and a filter survive a reload", async ({ page }) => {
   await page.goto("/");
   await openFamily(page, "memory_system");
-  await page.locator("#project-search").fill("graph");
-  await page.locator(".advanced-filter-shell summary").click();
-  await page.locator("#license-filter").selectOption("MIT");
+  await search(page, "graph");
+  await setFilter(page, "systems", "license", "MIT");
   await expect(page).toHaveURL(/family=memory_system/);
   await expect(page).toHaveURL(/q=graph/);
   await expect(page).toHaveURL(/license=MIT/);
   const before = await page.locator("#result-count").textContent();
 
   await page.reload();
-  await expect(page.locator("#family-filter")).toHaveValue("memory_system");
-  await expect(page.locator("#project-search")).toHaveValue("graph");
-  await expect(page.locator("#license-filter")).toHaveValue("MIT");
+  await expectFilter(page, "systems", "family", "memory_system");
+  await expect(searchBox(page, "systems")).toHaveValue("graph");
+  await expectFilter(page, "systems", "license", "MIT");
   await expect(page.locator("#result-count")).toHaveText(before);
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Systems /);
   await expect(pressedFamily(page)).toHaveAccessibleName(/^Memory /);
@@ -23,8 +23,8 @@ test("a family chip, a query, and a filter survive a reload", async ({ page }) =
 
 test("values a control cannot take are removed from the URL rather than half-applied", async ({ page }) => {
   await page.goto("/?collection=systems&family=nope&role=nope&q=agent&type=direct_model_api");
-  await expect(page.locator("#family-filter")).toHaveValue("");
-  await expect(page.locator("#project-search")).toHaveValue("agent");
+  await expectFilter(page, "systems", "family", "");
+  await expect(searchBox(page, "systems")).toHaveValue("agent");
   await expect(page).not.toHaveURL(/family=/);
   await expect(page).not.toHaveURL(/role=/);
   await expect(page).not.toHaveURL(/type=/);
@@ -32,7 +32,7 @@ test("values a control cannot take are removed from the URL rather than half-app
 
 test("a comparison decides the family, and a disagreeing family is dropped", async ({ page }) => {
   await page.goto("/?collection=systems&family=memory_system&compare=system:kilo-code,aider");
-  await expect(page.locator("#family-filter")).toHaveValue("agent_system");
+  await expectFilter(page, "systems", "family", "agent_system");
   await expect(page).not.toHaveURL(/family=memory_system/);
 });
 
@@ -40,10 +40,10 @@ test("the Models collection restores its query and filters", async ({ page }) =>
   await page.goto("/?collection=models&q=gemma&type=language_model");
   await expect(page.locator("#directory")).toHaveClass(/is-active/);
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
-  await expect(page.locator("#model-search")).toHaveValue("gemma");
-  await expect(page.locator("#model-type-filter")).toHaveValue("language_model");
+  await expect(searchBox(page, "models")).toHaveValue("gemma");
+  await expectFilter(page, "models", "type", "language_model");
   await page.reload();
-  await expect(page.locator("#model-search")).toHaveValue("gemma");
+  await expect(searchBox(page, "models")).toHaveValue("gemma");
 });
 
 test("a page number restores, and changing scope clears the last scope's parameters", async ({ page }) => {
@@ -51,7 +51,7 @@ test("a page number restores, and changing scope clears the last scope's paramet
   await expect(page.locator("#all-directory-pager .pager-nav span")).toContainText("Page 2 of");
 
   await openCollection(page, "inference");
-  await page.locator("#inference-type-filter").selectOption("direct_model_api");
+  await setFilter(page, "inference", "type", "direct_model_api");
   await expect(page).toHaveURL(/type=direct_model_api/);
   await openCollection(page, "runtimes");
   await expect(page).not.toHaveURL(/type=/);
@@ -69,7 +69,9 @@ test("a family chip opens its family on the first page", async ({ page }) => {
 test("every scope's URL keys match its controls, and every control exists", async ({ page }) => {
   // AppCore.SCOPE_URL_PARAMS says which keys a scope writes, and app.js's
   // SCOPE_CONTROLS says which control holds each one. A key in only one of
-  // them is never written, or always rejected on restore.
+  // them is never written, or always rejected on restore. `browseSort` is the
+  // one key no control holds: it carries the sort from before a query, so it
+  // belongs to exactly the scopes with a Sort.
   await page.goto("/");
   const problems = await page.evaluate(() => {
     // Both are page globals. SCOPE_CONTROLS is a top-level const in a classic
@@ -78,10 +80,13 @@ test("every scope's URL keys match its controls, and every control exists", asyn
     const params = AppCore.SCOPE_URL_PARAMS;
     const found = [];
     for (const scope of new Set([...Object.keys(params), ...Object.keys(SCOPE_CONTROLS)])) {
-      const urlKeys = Object.keys(params[scope] || {}).sort().join(",");
-      const controlKeys = Object.keys(SCOPE_CONTROLS[scope] || {}).sort().join(",");
+      const owned = params[scope] || {};
+      const controls = SCOPE_CONTROLS[scope] || {};
+      const urlKeys = Object.keys(owned).filter(key => key !== "browseSort").sort().join(",");
+      const controlKeys = Object.keys(controls).sort().join(",");
       if (urlKeys !== controlKeys) found.push(`${scope}: URL keys [${urlKeys}], controls [${controlKeys}]`);
-      for (const [key, selector] of Object.entries(SCOPE_CONTROLS[scope] || {})) {
+      if (Object.hasOwn(owned, "browseSort") !== Object.hasOwn(controls, "sort")) found.push(`${scope}: browseSort and a Sort control go together`);
+      for (const [key, selector] of Object.entries(controls)) {
         if (!document.querySelector(selector)) found.push(`${scope}.${key}: nothing matches ${selector}`);
       }
     }
@@ -102,11 +107,11 @@ test("a record opens while the browser refuses history writes", async ({ page })
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));
   await page.goto("/?collection=systems");
-  await page.locator("#project-search").fill("Aider");
+  await search(page, "Aider");
   await page.locator('#project-grid [data-project="aider"]').click();
-  await expect(page.locator("#project-dialog")).toBeVisible();
-  await page.locator("#project-dialog .dialog-close").click();
-  await expect(page.locator("#project-dialog")).toBeHidden();
+  await expect(recordView(page, "system")).toBeVisible();
+  await closeRecord(page, "system");
+  await expect(recordView(page, "system")).toBeHidden();
   await openFamily(page, "memory_system");
   await openCollection(page, "models");
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
@@ -116,16 +121,16 @@ test("a record opens while the browser refuses history writes", async ({ page })
 test("a comparison keeps the role and score sort chosen beside it", async ({ page }) => {
   await page.goto("/");
   await openFamily(page, "agent_system");
-  await page.locator("#role-filter").selectOption("coding_agent");
-  await page.locator("#sort-filter").selectOption("score");
+  await setFilter(page, "systems", "role", "coding_agent");
+  await sortControl(page, "systems").selectOption("score");
   await page.locator('#project-grid [data-compare-id="kilo-code"]').click();
   await page.locator('#project-grid [data-compare-id="aider"]').click();
   await expect(page).toHaveURL(/compare=system%3Akilo-code%2Caider/);
 
   await page.reload();
   await expect(page.locator("#comparison-tray-title")).toHaveText("2 items selected");
-  await expect(page.locator("#role-filter")).toHaveValue("coding_agent");
-  await expect(page.locator("#sort-filter")).toHaveValue("score");
+  await expectFilter(page, "systems", "role", "coding_agent");
+  await expect(sortControl(page, "systems")).toHaveValue("score");
   await expect(page).toHaveURL(/role=coding_agent/);
   await expect(page).toHaveURL(/sort=score/);
 });
@@ -164,8 +169,7 @@ test("a reader who changes a filter before the index lands keeps their own page"
   await page.route("**/app/search/systems.json*", async route => { await held; await route.continue(); });
   await page.goto("/?collection=systems&q=approval&page=2");
   await expect(page.locator("#project-pager .pager-nav span")).toHaveText("Page 1 of 1");
-  await page.locator(".advanced-filter-shell summary").click();
-  await page.locator("#status-filter").selectOption("");
+  await setFilter(page, "systems", "status", "");
   release();
   await expect(page.locator("#project-pager .pager-nav span")).toHaveText(/^Page 1 of [2-9]/);
   await expect(page).not.toHaveURL(/page=/);

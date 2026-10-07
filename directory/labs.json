@@ -1,7 +1,104 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-29",
+  "verified_at": "2026-10-03",
   "labs": [
+    {
+      "id": "lab-one-x-technologies",
+      "name": "1X Technologies",
+      "url": "https://www.1x.tech/",
+      "description": "The Palo Alto company that develops the NEO home robot and Redwood, the world model it plans with, having shipped EVE industrial humanoids before it.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The organization's own about page says it is \"an AI and robotics company based in Palo Alto, California\", which is the headquarters statement the record uses; the same page records that it was founded in 2014 as Halodi Robotics by Bernt Øyvind Børnich, so the company is Norwegian-founded and American-based, and the record says so rather than choosing a country for the origin, because `headquarters` is where the organization says it is based and nothing here is a claim about where it began. It is an AI company because the AI is the product: its own site separates an \"AI\" section from the robots, names Redwood as its world model, and describes NEO as its flagship product, so the organization develops both the robot and the model that runs it. It is recorded on the robot rather than a release because the catalog reviews no Redwood release, and Redwood is documented as a world model that plans actions rather than as a language release, which is outside the Models collection on the ground the robotics scope records. The reviewed robot is NEO, the home robot the record covers, not the earlier EVE industrial line, which the about page describes as deployed in customer factories from 2022. No parent organization is recorded: the pages read name no holding or controlling entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted. The organization's own about page says it is based in Palo Alto, California, and names no other base for its research or engineering work. The Norwegian origin it records there is where the company began, not where the work happens, so the review records nothing beyond the headquarters.",
+      "catalog_names": [
+        "1X Technologies"
+      ],
+      "systems": [
+        "neo"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.1x.tech/stories"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/1X-Technologies"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "About page: an AI and robotics company based in Palo Alto, California, founded in 2014 as Halodi Robotics, with the 2022 EVE factory deployments and the NEO home robot timeline; about page: \"an AI and robotics company based in Palo Alto, California\"",
+          "url": "https://www.1x.tech/about",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "NEO product page, the reviewed robot record neo",
+          "url": "https://www.1x.tech/neo",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Redwood AI world model page: the organization's own world model for its robots",
+          "url": "https://www.1x.tech/discover/redwood-ai-world-model",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 640,
+      "research_locations": []
+    },
+    {
+      "id": "lab-agibot",
+      "name": "AgiBot",
+      "url": "https://www.agibot.com/",
+      "description": "The Shanghai company that develops the AgiBot A2 humanoid and documents its own named motion and perception components on first-party product pages.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "AGIBOT Innovation (Shanghai) Technology Co., Ltd. operates the AGIBOT Store and names a Shanghai address at 7th Floor, Building E2, Caohejing Business Oasis, No. 2555 Xiupu Road, Pudong New Area, Shanghai in its store terms, which is why the headquarters is China. The about page titles the company the same way. It is recorded on the reviewed robot agibot-a2 rather than on a model release because the catalog reviews no release of its own: the A2 product page names ActionGPT, HIMUS, VectorFlux, and RTMOF as the maker's components, and those are vendor-named learned components rather than reviewed model releases in this collection. No parent organization is recorded on the pages read. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "catalog_names": [
+        "AgiBot"
+      ],
+      "systems": [
+        "agibot-a2"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.agibot.com/news"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/Link-U-OS"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Store terms of service, last updated February 4, 2026: AGIBOT Innovation (Shanghai) Technology Co., Ltd., Shanghai mailing address",
+          "url": "https://store.agibot.com/policies/terms-of-service",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "About page naming AGIBOT Innovation (Shanghai) Technology Co., Ltd.",
+          "url": "https://www.agibot.com/about",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "AgiBot A2 product page, the reviewed robot record agibot-a2",
+          "url": "https://www.agibot.com/products/A2",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 670
+    },
     {
       "id": "lab-ai-singapore",
       "name": "AI Singapore",
@@ -39,7 +136,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 580
     },
     {
       "id": "lab-ai21-labs",
@@ -90,7 +188,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 220
     },
     {
       "id": "lab-aikido-security",
@@ -135,7 +234,86 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 520
+    },
+    {
+      "id": "lab-aleph-alpha",
+      "name": "Aleph Alpha",
+      "url": "https://aleph-alpha.com/",
+      "description": "The Heidelberg company that trains Kolibri, its sovereign German-English open-weight language model for public administration and regulated industry.",
+      "lab_type": "ai_company",
+      "headquarters": "de",
+      "organization_note": "Two entities carry the organization's name, and the Kolibri model card separates them: it names \"Model Provider Aleph Alpha GmbH\" and \"Model Developer Aleph Alpha Research GmbH\", so the model record names the research company as developer and this record's catalog_names carries that string. Aleph Alpha GmbH is the entity on the imprint, entered in the commercial register at Mannheim as HRB 732804, represented by Ilhan Scheer, with the registered office at Speyerer Straße 14, 69115 Heidelberg and further offices in Berlin, Bayreuth, and München; it publishes the Kolibri weights under its own name. The organization develops and serves the Kolibri line itself, its models-overview page listing Kolibri as the only current model, and it offers enterprise deployment and specialization through sales contact rather than a documented self-serve API, so no inference-service, runtime, specification, or pack record names it and the tags row counts none of them. It publishes no frontier-safety, responsible-scaling, preparedness, or risk-management framework on its own pages: the site navigation carries Models, Offering, Blog, and Newsroom only, and the newsroom files announcements under Company, Partnership, and Product. What it does publish is per-release documentation — a model card with Responsible Use and Risks and limitations sections, a public training-data summary, a 189-page technical report, and a General-Purpose AI Code of Practice point of contact for rightsholders — so safety_framework is omitted rather than filled with a model card. Its position is unsettled by its own announcement: on 16 September 2026 Aleph Alpha and Cohere signed a definitive business combination agreement under which the unified company will \"operate globally as Cohere\", be \"dual-headquartered in Berlin and in Toronto\", keep Aleph Alpha's Heidelberg office as a research center, and appoint Ilhan Scheer as Cohere's Chief Operating Officer and Samuel Weinbach as its Chief Research Officer. The announcement states the transaction \"remains subject to final regulatory approvals\" and is \"expected to close later this year\", so no parent_organization is recorded while the deal is unclosed; both headquarters named for the combined company are a Cohere question, tracked separately, and the separate legal entities here are Heidelberg's.",
+      "catalog_names": [
+        "Aleph Alpha Research GmbH"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://aleph-alpha.com/en/models-overview/"
+        },
+        {
+          "kind": "news",
+          "url": "https://aleph-alpha.com/en/news/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/Aleph-Alpha"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/Aleph-Alpha"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Kolibri-1 model card: Model Provider Aleph Alpha GmbH and Model Developer Aleph Alpha Research GmbH, release date 3 October 2026, and the Apache 2.0 licence scope over the repository's weights and configuration files",
+          "url": "https://huggingface.co/Aleph-Alpha/Kolibri-1",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Imprint: Aleph Alpha GmbH, Speyerer Straße 14, 69115 Heidelberg, represented by Ilhan Scheer, entered in the commercial register at Mannheim as HRB 732804",
+          "url": "https://aleph-alpha.com/en/imprint/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Models overview: specialized sovereign LLMs built for the public sector, defence, and industry, with Kolibri as the only model listed and enterprise deployment offered on Aleph Alpha infrastructure",
+          "url": "https://aleph-alpha.com/en/models-overview/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "News announcement of 16 September 2026: a definitive business combination agreement with Cohere, the unified company operating globally as Cohere, dual-headquartered in Berlin and Toronto with Heidelberg kept as a research center, subject to regulatory approvals and expected to close later in 2026",
+          "url": "https://aleph-alpha.com/en/news/cohere-agreement-transatlantic-sovereign-ai/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Newsroom index: company announcements filed under Company, Partnership, and Product, with no frontier-safety, responsible-scaling, or preparedness framework published",
+          "url": "https://aleph-alpha.com/en/news/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Official GitHub organization linked from the site footer, publishing the aleph-alpha-inference serving package and the training frameworks",
+          "url": "https://github.com/Aleph-Alpha",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Aleph-Alpha Hugging Face organization publishing the Kolibri weights",
+          "url": "https://huggingface.co/Aleph-Alpha",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 280
     },
     {
       "id": "lab-alibaba",
@@ -186,7 +364,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 80
     },
     {
       "id": "lab-amazon",
@@ -195,7 +374,7 @@
       "description": "The technology company that develops the Amazon Nova models and builds Amazon Bedrock, Amazon Quick, Kiro, and the Strands Agents SDK.",
       "lab_type": "technology_company",
       "headquarters": "us",
-      "organization_note": "Amazon develops the Nova models, and Amazon Web Services, Inc., of Seattle, serves them through Amazon Bedrock; Kiro Enterprise plans are purchased and billed through AWS. The catalog names the developer Amazon and the Bedrock operator Amazon Web Services, so both names belong to this record.",
+      "organization_note": "Amazon develops the Nova models, and Amazon Web Services, Inc., of Seattle, serves them through Amazon Bedrock; Kiro Enterprise plans are purchased and billed through AWS. The catalog names the developer Amazon and the Bedrock operator Amazon Web Services, so both names belong to this record. Its own science site states that Amazon scientists work \"across the globe\" and pins its research locations, and four of the pinned countries are not the United States: Brazil at Sao Paulo, the United Kingdom at London, Israel at Tel Aviv, and Spain at Madrid. The record keeps three, Brazil, the United Kingdom, and Israel, and the fourth, Spain, is left in this note rather than in a list a reader would take for complete.",
       "catalog_names": [
         "Amazon",
         "Amazon Web Services"
@@ -237,10 +416,22 @@
           "label": "Kiro FAQ: Enterprise plans are purchased and billed through AWS, and its output indemnity is in the AWS Service Terms",
           "url": "https://kiro.dev/faq/",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "About Amazon Science: \"Science at Amazon around the world\", Amazon scientists working \"across the globe\" from named research locations including Sao Paulo, Brazil, London, Tel Aviv, Madrid, New York, Seattle, and Sunnyvale",
+          "url": "https://www.amazon.science/about/",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 70,
+      "research_locations": [
+        "gb",
+        "il",
+        "br"
+      ]
     },
     {
       "id": "lab-ant-group",
@@ -293,7 +484,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 530
     },
     {
       "id": "lab-anthropic",
@@ -302,7 +494,7 @@
       "description": "The AI company that develops the Claude models and builds the Claude apps, Claude Code, and the Anthropic API on them.",
       "lab_type": "ai_company",
       "headquarters": "us",
-      "organization_note": "Anthropic PBC, a public benefit corporation based and headquartered in the United States, develops the models and runs the products; Anthropic Ireland, Limited contracts with customers in the European Economic Area, Switzerland, and the UK. Its board is elected by stockholders and by its Long-Term Benefit Trust. One name, Anthropic, covers the models, the API, and the specifications it stewards.",
+      "organization_note": "Anthropic PBC, a public benefit corporation based and headquartered in the United States, develops the models and runs the products; Anthropic Ireland, Limited contracts with customers in the European Economic Area, Switzerland, and the UK. Its board is elected by stockholders and by its Long-Term Benefit Trust. One name, Anthropic, covers the models, the API, and the specifications it stewards. Its careers page answers the remote-work question directly: \"Most staff are in the Bay Area and come to the office regularly\", with some staff living further away and coming in for one week a month, plus home-office stipends and relocation support. The work is in the country the record already names as its headquarters, so the review records nothing further.",
       "catalog_names": [
         "Anthropic"
       ],
@@ -349,10 +541,78 @@
           "label": "Company page: the board is elected by stockholders and the Long-Term Benefit Trust",
           "url": "https://www.anthropic.com/company",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: \"Most staff are in the Bay Area and come to the office regularly\", with some staff living further away and coming in for one week a month, plus home-office stipends and relocation support",
+          "url": "https://www.anthropic.com/careers",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 20,
+      "research_locations": []
+    },
+    {
+      "id": "lab-apodex-ai",
+      "name": "Apodex AI",
+      "url": "https://www.apodex.com/",
+      "description": "The AI company that develops the Apodex reasoning models for complex long-horizon research work and the Apodex platform tiers built on them.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "Apodex US, Inc. is the contracting entity named in both its Commercial Terms of Service and its Privacy Policy, and the Privacy Policy gives its address as 303 Twin Dolphin Dr, Ste 6054, Redwood City, CA 94065, USA. Its Commercial Terms of Service, last updated 23 July 2026, are governed by Delaware law with JAMS arbitration seated in San Francisco, California. It develops the Apodex models, publishes their weights under its own apodex Hugging Face organization, and serves the Deep Research, Deep Solve, and Deep Discover product tiers through its own platform at platform.apodex.ai; the catalog therefore names one developer, Apodex AI. The pages reviewed name no parent company.",
+      "catalog_names": [
+        "Apodex AI"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://www.apodex.com/api"
+        },
+        {
+          "kind": "news",
+          "url": "https://www.apodex.com/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/ApodexAI"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/apodex"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy Policy, last updated 24 July 2026: Apodex US, Inc., 303 Twin Dolphin Dr, Ste 6054, Redwood City, CA 94065, USA",
+          "url": "https://www.apodex.com/policies/privacy",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Commercial Terms of Service, last updated 23 July 2026: contract with Apodex US, Inc., governed by Delaware law, JAMS arbitration seated in San Francisco",
+          "url": "https://www.apodex.com/policies/commercial-terms-of-service",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official Apodex 1.1 Mini weight repository carrying the Apache-2.0 LICENSE and the declared Qwen/Qwen3.5-35B-A3B base model",
+          "url": "https://huggingface.co/apodex/Apodex-1.1-mini",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Official Apodex 1.1 release announcement: the 35B mini as the locally deployable checkpoint, the FrontierAgent harness, and the unreleased full model",
+          "url": "https://www.apodex.com/blog/apodex-1.1-scaling-agentic-intelligence-for-complex-work",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "verified_at": "2026-10-01",
+      "admission_basis": "reviewed_release",
+      "display_order": 260
     },
     {
       "id": "lab-arcee-ai",
@@ -405,7 +665,144 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 410
+    },
+    {
+      "id": "lab-black-forest-labs",
+      "name": "Black Forest Labs",
+      "url": "https://bfl.ai/",
+      "description": "The Freiburg and San Francisco lab that develops the FLUX family, publishing gated open weights from its Hugging Face organization and serving the FLUX 3 and FLUX.2 tiers through its own API.",
+      "lab_type": "ai_company",
+      "headquarters": "de",
+      "organization_note": "Two entities appear on the organization's own pages and it does not reconcile them: the imprint names BFL GmbH, registered at Ingeborg-Krummer-Schroth-Straße 18 in 79106 Freiburg im Breisgau with commercial register number HRB 291820 at Amtsgericht München and managing directors Robin Rombach, Andreas Blattmann, and Axel Sauer, while the FLUX [dev] Non-Commercial License 2.0 names Black Forest Labs Inc. as the licensor. This record takes the registered entity and the German address from the imprint as the headquarters, because that is the one document that states a registered address, and its about page says the organization works \"from our labs in Freiburg and San Francisco\", so the American lab is a second site rather than a second headquarters. No parent organization is recorded: the pages name a founding team of the Stable Diffusion and FLUX.1 authors and a managing-director list, and no holding company. The organization has two separate surfaces and they do not carry the same models. Its developer API serves FLUX 3 Image, FLUX 3 Video, and the FLUX.2 [max], [pro], [flex], and [klein] tiers, and its documentation says FLUX.2 [klein] is the open-weight family reachable through that API. The open weights are published from its Hugging Face organization instead, gated behind the FLUX [dev] Non-Commercial License 2.0, and the reviewed FLUX.2 [dev] release is one of them rather than an API tier. Commercial self-hosting is not a licence a reader can fetch: the site's \"Talk to us about commercial weights\" path sells it by negotiation under separate Self-Hosted Commercial License Terms, which is why the reviewed release records no first-party developer API for that checkpoint. Its own pages call it \"the frontier AI research lab for visual intelligence\", which the record reads as a claim about a field rather than a statement that it is building frontier language models; the organization is recorded on its reviewed release, not on that sentence. It is an AI company because the models and what it builds on them are its principal business, with an API, a playground, an MCP server, and a creator programme around them.",
+      "catalog_names": [
+        "Black Forest Labs"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://bfl.ai/models"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.bfl.ai/release-notes"
+        },
+        {
+          "kind": "news",
+          "url": "https://bfl.ai/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/black-forest-labs"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/black-forest-labs"
+        }
+      ],
+      "safety_framework": {
+        "title": "Responsible AI Development Policy",
+        "url": "https://bfl.ai/legal/responsible-ai-development-policy",
+        "verified_at": "2026-10-01"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Imprint: BFL GmbH registered in Freiburg im Breisgau, commercial register HRB 291820, and its managing directors",
+          "url": "https://bfl.ai/legal/imprint",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "About page: the frontier AI research lab for visual intelligence, working from labs in Freiburg and San Francisco",
+          "url": "https://bfl.ai/about",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Model catalogue: FLUX 3 Image, Video, and Action alongside the FLUX.2 and FLUX.1 tiers",
+          "url": "https://bfl.ai/models",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "FLUX.2 documentation: the API tiers are [max], [pro], [flex], and [klein], with [klein] also published as open weights",
+          "url": "https://docs.bfl.ai/flux_2/flux2_overview",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "FLUX [dev] Non-Commercial License 2.0 naming Black Forest Labs Inc. as licensor of the open weights",
+          "url": "https://bfl.ai/legal/non-commercial-license-terms",
+          "verified_at": "2026-10-01"
+        },
+        {
+          "kind": "web",
+          "label": "Responsible AI Development Policy: safeguards before, during, and after release",
+          "url": "https://bfl.ai/legal/responsible-ai-development-policy",
+          "verified_at": "2026-10-01"
+        }
+      ],
+      "verified_at": "2026-10-01",
+      "admission_basis": "reviewed_release",
+      "display_order": 600
+    },
+    {
+      "id": "lab-boston-dynamics",
+      "name": "Boston Dynamics",
+      "url": "https://bostondynamics.com/",
+      "description": "The Waltham robotics company that develops Spot and Atlas, and publishes theSpot SDK and Orbit developer interfaces other teams build their own control on.",
+      "lab_type": "technology_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "Boston Dynamics, Inc. is the entity the site's ownTerms of Use name as the property of the site, and the same terms give its address as 200 Smith Street, Suite 4100, Waltham, MA 02451 and say it administers and operates the site from Waltham, Massachusetts, so the headquarters is the United States. No parent organization is recorded: the pages read for this record name no holding or controlling entity, and an ownership relation reported elsewhere is not first-party evidence, so the field is omitted rather than filled from a press account. It is a technology company rather than an AI company because the catalog records robots and the interfaces around them rather than models, and its own about page describes it as \"the global leader in developing and deploying highly mobile robots\" rather than as a model developer, though it develops the perception and control software its own robots run and the Gemini Robotics integrations it demonstrates. The record is admitted on the robot it makes, Spot, which the catalog reviews as a quadruped whose vendor names learned policies and documents an open control interface; the robot record is what places the organization in this collection, and no model or system of its own is reviewed here. Its developer surface is the Spot SDK: the same first-party documentation the robot record cites, dev.bostondynamics.com, publishes the arm and network-compute-bridge interfaces another vendor's robot software targets, so the organization develops software other catalogs record. Its site names no safety framework of the frontier-safety, responsible-scaling, orpreparedness kind, so the field is omitted rather than filled with its robotics safety material. The company's terms say it administers its site from Waltham, Massachusetts, and no page reviewed places its research or engineering work in another country, so the review records nothing beyond the headquarters.",
+      "catalog_names": [
+        "Boston Dynamics"
+      ],
+      "systems": [
+        "spot"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://bostondynamics.com/blog/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/boston-dynamics"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms of Use: the site is the property of Boston Dynamics, Inc., its address is 200 Smith Street, Suite 4100, Waltham, MA 02451, USA, and it administers and operates the site from Waltham, Massachusetts; terms of Use: the site is administered and operated from Waltham, Massachusetts",
+          "url": "https://bostondynamics.com/terms/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "About page: Boston Dynamics as the global leader in developing and deploying highly mobile robots, with a link to its R&D lab results and commercial news",
+          "url": "https://bostondynamics.com/about/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Spot product page, the reviewed robot record spot",
+          "url": "https://bostondynamics.com/products/spot/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Spot SDK documentation, the developer interface another vendor's robot software targets",
+          "url": "https://dev.bostondynamics.com/",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 650,
+      "research_locations": []
     },
     {
       "id": "lab-bytedance",
@@ -491,7 +888,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 110
     },
     {
       "id": "lab-cohere",
@@ -500,7 +898,7 @@
       "description": "The AI company that develops the Command and North models for enterprise use and, through its research lab Cohere Labs, the Aya models.",
       "lab_type": "ai_company",
       "headquarters": "ca",
-      "organization_note": "Cohere Inc., with its principal place of business in Toronto, develops the Command models and operates the Cohere API; Cohere Labs, its research lab, publishes the Aya and North releases under the CohereLabs organization. The catalog names the developer Cohere or Cohere Labs release by release, so both names belong to this record.",
+      "organization_note": "Cohere Inc., with its principal place of business in Toronto, develops the Command models and operates the Cohere API; Cohere Labs, its research lab, publishes the Aya and North releases under the CohereLabs organization. The catalog names the developer Cohere or Cohere Labs release by release, so both names belong to this record. Its careers page describes \"a globally dispersed company that supports a remote work culture\" and names the offices it lists: Toronto, where the organization is headquartered, and San Francisco, New York, London, Paris, and Seoul. The record keeps the United States, the United Kingdom, and France, the three countries a reader most likely meets besides Canada; New York is the same country as San Francisco and Seoul is a fourth, left here rather than in a capped list.",
       "catalog_names": [
         "Cohere",
         "Cohere Labs"
@@ -535,10 +933,95 @@
           "label": "SaaS agreement giving Cohere Inc.'s principal place of business at 171 John Street, Toronto",
           "url": "https://cohere.com/saas-agreement",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: a globally dispersed company supporting a remote work culture, listing offices in Toronto, San Francisco, New York, London, Paris, and Seoul",
+          "url": "https://cohere.com/careers",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 150,
+      "research_locations": [
+        "us",
+        "gb",
+        "fr"
+      ]
+    },
+    {
+      "id": "lab-cognition-ai",
+      "name": "Cognition AI",
+      "url": "https://cognition.com/",
+      "description": "The applied AI lab that builds Devin, the hosted autonomous software-engineering agent, and Devin Desktop, its local agentic IDE formerly Windsurf.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_system",
+      "organization_note": "Cognition AI, Inc. is the legal entity on every governing page read: the Platform Terms of Service call the agreement one between the customer and Cognition AI, Inc. (\"Cognition,\" \"we,\" \"us,\" or \"our\"), and the Privacy Policy names Cognition AI, Inc. as the company behind cognition.com and the software-as-a-service offerings that include Devin and Windsurf. The headquarters is the United States because the terms' Notice of Arbitration address is Cognition AI, Inc., 550 Third Street, San Francisco, CA 94107, which is the one principal notice address named for the company in the documents reviewed; New York governs the agreement and hosts arbitration, which is not read as a headquarters statement. No parent organization is recorded. Section 14 of the terms preserves a carve-out for users who licensed Devin Desktop under Exafunction, Inc. before assignment to Cognition AI, Inc., which matches the reviewed Devin Desktop record's rename note after Cognition's acquisition of the Windsurf product from Exafunction; that predecessor licensor is not a parent. It is an AI company because its own homepage says Cognition operates Devin and calls itself an applied AI lab building end-to-end software agents, and its Privacy Policy describes Devin and Windsurf as its SaaS offerings rather than one feature inside a broader non-AI business. It is recorded on a system rather than a release, so ADR 048's basis applies: this catalog has reviewed no Cognition model release. Its blog describes an in-house SWE-2 coding model served only inside Devin Desktop and the CLI, which this catalog records in exclusions.json as having no separate release boundary, so that line is noted here and not admitted as a model record. The reviewed systems are Devin, the cloud autonomous software-engineering agent documented as Cognition's product, and Devin Desktop, whose reviewed description names Cognition as the maker of the local IDE; both records name no organization field, which is the shape ADR 048 calls a maker's join. The catalog spells the organization \"Cognition\" once, as the steward of the Devin Desktop Rules specification, so that string belongs in catalog_names; it is no model developer, inference-service operator, runtime maintainer, or pack steward in this collection. Its channels are the Devin release notes, where product changes are announced, and the Cognition blog, where the organization publishes its own news; no model-catalog channel is recorded because no reviewed model release of its own exists and SWE-2 is hosted only inside the published systems. No GitHub or Hugging Face organization is recorded as a channel, because neither reviewed system carries a repository and no first-party page reviewed links an organization that publishes the lab's AI work from either host. It publishes no frontier-safety, responsible-scaling, preparedness, or risk-management framework on the pages read, so the field is omitted rather than filled with platform terms or acceptable-use policy alone.",
+      "catalog_names": [
+        "Cognition"
+      ],
+      "systems": [
+        "devin",
+        "devin-desktop"
+      ],
+      "channels": [
+        {
+          "kind": "release_notes",
+          "url": "https://docs.devin.ai/release-notes/overview"
+        },
+        {
+          "kind": "news",
+          "url": "https://cognition.com/blog"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Platform Terms of Service: Cognition AI, Inc. governs the Cognition Platform and other software offerings, with Notice of Arbitration addressed to Cognition AI, Inc., 550 Third Street, San Francisco, CA 94107, and section 14 naming Devin Desktop (fka Windsurf) users who licensed under Exafunction, Inc.",
+          "url": "https://cognition.com/legal/platform-terms-of-service",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy Policy: Cognition AI, Inc. collects and uses information for cognition.com and SaaS offerings including Devin and Windsurf, with contact at privacy@cognition.ai",
+          "url": "https://cognition.com/legal/privacy-policy",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Homepage: Cognition operates Devin, the first autonomous software engineer, and describes itself as an applied AI lab building tools for software creation",
+          "url": "https://cognition.com/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Devin introduction documentation: Devin is an autonomous AI software engineer that writes, runs, and tests code, with an About Cognition section calling the organization an applied AI lab building end-to-end software agents",
+          "url": "https://docs.devin.ai/get-started/devin-intro",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Devin Desktop getting-started documentation: the local agentic IDE product whose reviewed catalog record names Cognition as its maker",
+          "url": "https://docs.devin.ai/desktop/getting-started",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Devin release notes overview, the first-party changelog index for the Devin product line",
+          "url": "https://docs.devin.ai/release-notes/overview",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Cognition blog index, the organization's own news and product announcements including model and benchmark posts",
+          "url": "https://cognition.com/blog",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 270
     },
     {
       "id": "lab-deepseek",
@@ -588,7 +1071,63 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 120
+    },
+    {
+      "id": "lab-figure-ai",
+      "name": "Figure AI",
+      "url": "https://www.figure.ai/",
+      "description": "The San Jose company that develops the Figure humanoid robots and Helix, the vision-language-action model its own robots run.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The site's Terms & Conditions name the operator as Figure AI Inc., and the privacy policy's contact block gives 3960 N First St, San Jose CA 95134 with privacy@figure.ai, so the headquarters is the United States; the same terms choose California law and California courts, which is a governing-law clause and not read as a headquarters statement, so the address in the privacy policy is the one that carries it. The organization is an AI company because it develops both the robots and the model that runs them: Helix is documented by the company as its own vision-language-action model, published on its own pages, and the reviewed robot record Figure 03 rests on those pages. It is recorded on the robot rather than on a release because the catalog reviews no Helix release, and an action-emitting policy is out of the Models collection on the ground the robotics scope records, so the robot is the strongest join the catalog holds. No parent organization is recorded: the pages read name no holding or controlling entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted rather than filled with its product-safety material. The pages reviewed place the organization in San Jose, California, through its privacy contact address, and name no other place its work happens. The review records nothing beyond the headquarters.",
+      "catalog_names": [
+        "Figure AI"
+      ],
+      "systems": [
+        "figure-03"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.figure.ai/news"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/figure-ai"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms & Conditions: the site is operated by Figure AI Inc., with California governing law and California courts as the exclusive venue",
+          "url": "https://www.figure.ai/terms-and-conditions",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy Policy, effective January 21, 2026: its contact block gives 3960 N First St, San Jose CA 95134 and privacy@figure.ai; privacy Policy: its contact block gives 3960 N First St, San Jose CA 95134",
+          "url": "https://figure.ai/privacy-policy",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Helix page: the organization's own vision-language-action model, named as the model its robots run",
+          "url": "https://www.figure.ai/helix",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Figure 03 product page, the reviewed robot record figure-03",
+          "url": "https://www.figure.ai/figure",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 630,
+      "research_locations": []
     },
     {
       "id": "lab-google",
@@ -597,8 +1136,11 @@
       "description": "The technology company whose Google DeepMind unit develops the Gemini and Gemma models that Google serves through the Gemini API, Gemini Enterprise Agent Platform, and the Gemini apps.",
       "lab_type": "technology_company",
       "headquarters": "us",
+      "research_locations": [
+        "gb"
+      ],
       "parent_organization": "Alphabet Inc.",
-      "organization_note": "Google DeepMind develops the models. Google LLC, of Mountain View and the largest of Alphabet Inc.'s companies, offers the Gemini API, the Gemini apps, and the developer tools, while Google Cloud operates the Gemini Enterprise Agent Platform, formerly Vertex AI. The catalog names the developer Google for most releases and Google DeepMind for one, and names the Gemini Enterprise Agent Platform operator Google Cloud, so all three names belong to this record.",
+      "organization_note": "Google DeepMind develops the models. Google LLC, of Mountain View and the largest of Alphabet Inc.'s companies, offers the Gemini API, the Gemini apps, and the developer tools, while Google Cloud operates the Gemini Enterprise Agent Platform, formerly Vertex AI. The catalog names the developer Google for most releases and Google DeepMind for one, and names the Gemini Enterprise Agent Platform operator Google Cloud, so all three names belong to this record. The unit that develops them is not where the entity is headquartered: DeepMind's own careers page lists ten locations, London first among them, with the Bay Area, New York City, Cambridge (US), Bangalore, Montreal, Paris, Tokyo, Toronto, and Zurich beside it, so the research that produces the catalog's releases is spread across those cities rather than sitting under the Mountain View address this record is named for. Its about page says DeepMind started in 2010 and names no city, so the record does not assert where it began and carries the United Kingdom as the site that distinguishes it from the headquarters.",
       "catalog_names": [
         "Google",
         "Google DeepMind",
@@ -662,10 +1204,240 @@
           "label": "Google Cloud documentation for the Gemini Enterprise Agent Platform, where the Vertex AI generative AI documentation now redirects",
           "url": "https://docs.cloud.google.com/gemini-enterprise-agent-platform/models",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Google DeepMind careers page: its ten locations, London first, then the Bay Area, Bangalore, Cambridge (US), Montreal, New York City, Paris, Tokyo, Toronto, and Zurich, and its statement of an intentional location strategy",
+          "url": "https://deepmind.google/careers/",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 30
+    },
+    {
+      "id": "lab-hello-robot",
+      "name": "Hello Robot",
+      "url": "https://hello-robot.com/",
+      "description": "The company behind the Stretch mobile manipulator, built by the two researchers who led Georgia Tech'sCharlie Kemp lab and Google's robotics directorate, and sold as a platform other teams build on.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The imprint names the owner of the site as Hello Robot Inc. at 825 Ferry St., Suite A, Martinez, CA 94553, and the about page says the company maintains offices in Atlanta, GA and Martinez, CA and manufactures all robots in-house at the Martinez facility; both are in the United States, so the headquarters is the United States and the record does not choose between the two offices, which the labs guide treats as no headquarters listed only when no country can be found at all. The two co-founders are named on the about page, Dr. Aaron Edsinger, a former Director of Robotics at Google, and Dr. Charlie Kemp, a former tenured professor at Georgia Tech, and it says the company was founded in 2017 and builds on the research from Kemp's lab; the record names the organization, not the founders, because a person is not a lab. It is an AI company because the platform's software, its ROS 2 packages, its Python bridge, and the grasping demo that runs named third-party models are what a customer buys alongside the hardware, and the reviewed robot record is that platform. It is recorded on the robot rather than a release because the catalog reviews no model of its own: the demo it ships calls Molmo 2, another organization's model, which is a fact about the record and not a release of Hello Robot's own. No parent organization is recorded: the pages read name no holding entity, and an investor named as an advisor is not one. Its site names no frontier-safety or scaling framework, so the field is omitted. Its about page says it maintains offices in Atlanta, Georgia and Martinez, California, and manufactures all robots in-house at Martinez. Both are in the headquarters country, so the review records nothing beyond it.",
+      "catalog_names": [
+        "Hello Robot"
+      ],
+      "systems": [
+        "hello-robot-stretch-4"
+      ],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/hello-robot"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Imprint, last updated August 17, 2026: the owner of the website is Hello Robot Inc., 825 Ferry St., Suite A, Martinez, CA 94553, USA",
+          "url": "https://hello-robot.com/imprint/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "About page: founded in 2017 by Dr. Aaron Edsinger and Dr. Charlie Kemp, offices in Atlanta, GA and Martinez, CA, all robots manufactured in-house at the Martinez facility; about page: offices in Atlanta, GA and Martinez, CA, with all robots manufactured in-house at the Martinez facility",
+          "url": "https://hello-robot.com/about",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Stretch 4 product page, the reviewed robot record hello-robot-stretch-4",
+          "url": "https://hello-robot.com/stretch-4/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Develop page: the ROS 2 packages and Python bridge published for the platform",
+          "url": "https://hello-robot.com/develop/",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 660,
+      "research_locations": []
+    },
+    {
+      "id": "lab-higgsfield-ai",
+      "name": "Higgsfield AI",
+      "url": "https://higgsfield.ai/",
+      "description": "The San Francisco company that develops the Soul, Genjutsu, and Cinema Studio image and video models and serves them, with other developers' models, from one API, and builds the Supercomputer creative agent on the same platform.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "research_locations": [
+        "kz"
+      ],
+      "admission_basis": "reviewed_system",
+      "organization_note": "One entity names the organization on every page read: the Terms of Use Agreement describes the reader's relationship with \"Higgsfield Inc. and our affiliated entities\" and calls them \"Company\", \"Higgsfield\", \"we\", and \"us\", the Privacy Policy opens the same way, and the site footer is \"© 2026 Higgsfield, Inc.\". The headquarters is the United States because the about page says the organization is \"Headquartered in San Francisco\" and its notice address in the terms, its privacy contact address, and its footer are one address, 535 Mission St, 14th Floor, San Francisco, CA 94105, named three times in the governing documents; the about page's mention of leading venture firms is backing, not a parent, so no parent organization is recorded. It is an AI company because the models and the creative product built on them are its whole business: its own pages call it an \"AI-native creative suite\" and \"your all-in-one AI creative studio\", and its Privacy Policy describes generating and editing images, video, audio, and other media \"using a combination of proprietary and third-party artificial intelligence models\". Its one serving surface carries both, and the API catalog is where that is legible: routes marked \"Higgsfield Exclusive\" appear under a higgsfield namespace — Genjutsu, Cinema Studio 4.0, Soul 2 — beside other developers' routes under their own namespaces, bytedance / Seedance 2.5 and Seedance 2.0, kling / Kling 3.0, alibaba / Wan 3.0 Prime, minimax / MiniMax H3, and xai / Grok Imagine 2.0, each with published per-second rates, so the organization both develops models and resells others' on the same API. Its changelog records models arriving from outside, FLUX 3 Image \"per Black Forest Labs\" among them, which is the same split seen in the catalog. It is recorded on a system rather than a release, so ADR 048's basis applies: this catalog has reviewed no Higgsfield model release, and the record it does have is the Supercomputer Agent, published as higgsfield-supercomputer, whose own product-boundary note says it covers that product and not the individual generators and not the company as a whole. That product is the organization's own on two first-party pages — the terms list \"an AI agent service (\\\"Supercomputer Agent\\\")\" among the services the agreement covers, and the product page documents it as one superagent for the creative stack with skills, schedules, and media-production workflows. Nothing else in the catalog names the organization: it is no model developer, no inference-service operator, no runtime maintainer, no specification steward, and no pack steward, and the one reviewed record names no organization, which is what ADR 048 calls the shape of a maker, so catalog_names is empty and the join runs from the system. Its channels are the three first-party pages a reader can watch: the API catalog, the changelog, and the Creator Hub blog. No GitHub or Hugging Face organization is recorded as a channel, because no page read links one from higgsfield.ai and no reviewed record of the organization is published from either, its one system record having no repository. It publishes no frontier-safety, responsible-scaling, preparedness, or risk-management framework: the Trust page covers content moderation, community guidelines, creator-programme terms, and fraud prevention, which are platform policies rather than a frontier framework, and neither the terms nor the privacy policy carries one, so the field is omitted rather than filled with a moderation policy. Its work is not where its entity is. Its own careers board, the page its own footer links as Careers and which resolves to its Ashby board, lists 81 open roles of which 50 are on-site in Almaty, Kazakhstan: every Engineering & Product role except four that sit in the San Francisco Bay Area, all eight Creative content roles, both Customer Experience roles, and its Head of Recruitment and Office Manager. The 27 United States roles are the corporate side — G&A in legal, contracts, tax, treasury, FP&A and revenue accounting, Marketing & Sales, public relations, and the four San Francisco engineering roles in IT security, GRC, and technical programs. The board also keeps the record honest about what the Almaty work is not: the single role in its Research & Development department, Machine Learning Engineer, Ads, is San Francisco Bay Area and hybrid. So the record says the engineering, product, creative, and support work is on-site in Almaty and does not say all of its research and development is there, which is what the page supports. The San Francisco entity, its notice address, and its venture backing are facts about where the company is incorporated and financed, not about where the product is built, and the record keeps the two apart.",
+      "catalog_names": [],
+      "systems": [
+        "higgsfield-supercomputer"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://higgsfield.ai/api"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://higgsfield.ai/changelog"
+        },
+        {
+          "kind": "news",
+          "url": "https://higgsfield.ai/blog"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms of Use Agreement: the relationship is with Higgsfield Inc. and its affiliated entities, the agreement covers an AI agent service (\"Supercomputer Agent\") alongside the API, MCP, and CLI, and the notice address is Higgsfield Inc., Attn: Legal Dept., 535 Mission St, 14th Floor, San Francisco, CA 94105, United States",
+          "url": "https://higgsfield.ai/terms-of-use-agreement",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy Policy: Higgsfield Inc. offers an AI-powered creative platform that generates and edits images, video, audio, and other media using a combination of proprietary and third-party artificial intelligence models, and its contact address is Higgsfield Inc., 535 Mission St, 14th Floor, San Francisco, CA 94105",
+          "url": "https://higgsfield.ai/privacy-policy",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "About page: titled About Higgsfield AI, calls the organization an all-in-one AI creative studio launched in 2025, and states it is headquartered in San Francisco and backed by leading venture firms",
+          "url": "https://higgsfield.ai/about",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Homepage: an AI-native creative suite whose footer gives 535 Mission St, 14th floor, San Francisco, CA, 94105 and reads © 2026 Higgsfield, Inc. All rights reserved.",
+          "url": "https://higgsfield.ai/",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "API catalog: Higgsfield Exclusive routes under a higgsfield namespace (Genjutsu, Cinema Studio 4.0, Soul 2) listed with published per-second rates beside other developers' routes under their own namespaces, bytedance / Seedance 2.5, kling / Kling 3.0, alibaba / Wan 3.0 Prime, and xai / Grok Imagine 2.0",
+          "url": "https://higgsfield.ai/api",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Changelog: a dated model entry for FLUX 3 Image, a new model for creating and editing images now available on Higgsfield, attributed per Black Forest Labs",
+          "url": "https://higgsfield.ai/changelog",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Creator Hub blog index, the organization's own news index, carrying Inside Higgsfield and News categories alongside guides and creator stories",
+          "url": "https://higgsfield.ai/blog",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Supercomputer product page: one superagent for the entire creative stack, with agents, skills, and scheduled workflows across marketing and production, the reviewed system higgsfield-supercomputer",
+          "url": "https://higgsfield.ai/supercomputer-intro",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Trust page: content moderation at the model level, community guidelines and moderation, creator-programme terms, and fraud prevention, with no frontier-safety, responsible-scaling, preparedness, or risk-management framework",
+          "url": "https://higgsfield.ai/trust",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page, resolving to the organization's own Ashby board: 81 open positions, 50 of them on-site in Almaty, Kazakhstan, including nearly every Engineering & Product role, all eight Creative content roles, and both Customer Experience roles, against 27 in the San Francisco Bay Area in G&A, Marketing & Sales, and Public Relations, with the single Research & Development role, Machine Learning Engineer, Ads, listed in San Francisco Bay Area as hybrid",
+          "url": "https://higgsfield.ai/careers",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 610
+    },
+    {
+      "id": "lab-hugging-face",
+      "name": "Hugging Face",
+      "url": "https://huggingface.co/",
+      "description": "The machine-learning collaboration platform that publishes the SmolLM model family, the smolagents agent framework, and the LeRobot robotics library, and hosts the model, dataset, and Space hub that other developers release on.",
+      "lab_type": "technology_company",
+      "headquarters": "none_listed",
+      "admission_basis": "reviewed_system",
+      "organization_note": "Hugging Face, Inc. is \"a Delaware corporation\" in the only governing document that names it, and its privacy policy names the same entity, so this is one organization and not a parent with a subsidiary; no parent organization is recorded because the entity is the company itself. It states no headquarters. Its careers page calls it \"a remote-first company\", says \"we have spaces in NYC and Paris\", and lists both under Our Offices: 20 Jay Street, Brooklyn, New York 11201, USA, and 124 Rue Réaumur, 75002 Paris, France. Two offices in two countries and no statement of a base is the case docs/LABS.md records as no headquarters listed. Its terms name New York only as the governing law and the exclusive venue for courts, which is not a headquarters statement and is not read as one, and no page reviewed gives the company a postal address: the contact routes are legal@huggingface and privacy@huggingface. It is a technology company rather than an AI company because the hub, the datasets, the Spaces, the libraries, and the storage and enterprise products are its principal business, and its own homepage describes it as \"the platform where the machine learning community collaborates on models, datasets, and applications\", with its own model line one part of that. It is recorded on a system rather than on a release: the catalog has reviewed no model release of its own, so ADR 048's basis applies and the record joins from the two systems it makes, smolagents and LeRobot, both published from the GitHub organization listed as a channel, and both already carrying reviewed Apache-2.0 evidence in this collection. The model line is real and is not claimed here: the SmolLM series is published from its own Hugging Face organization, and whether a SmolLM release can be reviewed is a separate open question, because no repository in that organization ships a licence file and Apache-2.0 appears only as a declaration in a model card header. The catalog already spells the organization \"Hugging Face\", as the operator of two inference services and the maintainer of Text Embeddings Inference, so that is its one catalog name; those services serve other developers' models as well as its own, which is why the record does not treat them as its serving surface. It publishes no frontier-safety, responsible-scaling, preparedness, or risk-management framework: the obvious /safety and /about paths both return an individual user profile page rather than a company page, the terms and privacy policy carry none, and the careers page states only a mission of democratizing machine learning, so the field is omitted rather than filled with a mission statement.",
+      "catalog_names": [
+        "Hugging Face"
+      ],
+      "systems": [
+        "lerobot",
+        "smolagents"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://huggingface.co/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/huggingface"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/HuggingFaceTB"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms of Service: a binding agreement between the user and Hugging Face, Inc., a Delaware corporation, with New York governing law and exclusive New York courts and a legal@huggingface contact",
+          "url": "https://huggingface.co/terms-of-service",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy Policy: Hugging Face, Inc. as the Company, with privacy@huggingface as the contact and no postal address",
+          "url": "https://huggingface.co/privacy",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: a remote-first company with spaces in NYC and Paris, both office addresses (20 Jay Street, Brooklyn NY 11201 USA and 124 Rue Réaumur, 75002 Paris, France), and the mission to democratize good machine learning",
+          "url": "https://huggingface.co/careers",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Homepage: the AI community building the future, described as the platform where the machine learning community collaborates on models, datasets, and applications",
+          "url": "https://huggingface.co/",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "smolagents repository under the organization's own GitHub organization, shipping the verbatim Apache License 2.0 text and published as the reviewed system smolagents",
+          "url": "https://github.com/huggingface/smolagents",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Verified huggingface GitHub organization, from which smolagents and LeRobot are published",
+          "url": "https://github.com/huggingface",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Verified HuggingFaceTB Hugging Face organization, from which the SmolLM weights are published and which is recorded as a channel rather than as a reviewed release",
+          "url": "https://huggingface.co/HuggingFaceTB",
+          "verified_at": "2026-09-29"
+        }
+      ],
+      "verified_at": "2026-09-29",
+      "display_order": 400
     },
     {
       "id": "lab-ibm",
@@ -674,7 +1446,7 @@
       "description": "The technology company that develops the Granite models and serves them through watsonx.ai, alongside its watsonx Orchestrate agent platform.",
       "lab_type": "technology_company",
       "headquarters": "us",
-      "organization_note": "International Business Machines Corporation, incorporated in New York, has its principal executive office in Armonk, New York. It develops the Granite models, publishes them under its ibm-granite organizations, and serves them through watsonx.ai; watsonx Orchestrate is its agent platform. BeeAI Framework began at IBM but was contributed to the Linux Foundation, so it is not listed here. One name, IBM, covers the models, the service, and the platform.",
+      "organization_note": "International Business Machines Corporation, incorporated in New York, has its principal executive office in Armonk, New York. It develops the Granite models, publishes them under its ibm-granite organizations, and serves them through watsonx.ai; watsonx Orchestrate is its agent platform. BeeAI Framework began at IBM but was contributed to the Linux Foundation, so it is not listed here. One name, IBM, covers the models, the service, and the platform. IBM Research states where it works rather than only where the company is registered: its own labs page says \"11 labs spread across 18 sites around the world\" and groups them by region, among them Israel, the United Kingdom, and Zurich, alongside Africa, India, Ireland, Japan, Albany, Silicon Valley, and Yorktown Heights. The record keeps the three non-US sites that host research labs, Israel, the United Kingdom, and Switzerland, and the rest stay named here rather than in a list capped at three.",
       "catalog_names": [
         "IBM"
       ],
@@ -722,10 +1494,22 @@
           "label": "watsonx Orchestrate product page",
           "url": "https://www.ibm.com/products/watsonx-orchestrate",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "IBM Research Labs page: \"11 labs spread across 18 sites around the world\", grouped as Africa, Albany, Cambridge, India, Ireland, Israel, Japan, Silicon Valley, United Kingdom, Yorktown Heights, and Zurich",
+          "url": "https://www.ibm.com/research/locations",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 100,
+      "research_locations": [
+        "il",
+        "gb",
+        "ch"
+      ]
     },
     {
       "id": "lab-liquid-ai",
@@ -734,7 +1518,7 @@
       "description": "The AI company spun out of MIT CSAIL that develops the Liquid Foundation Models for on-device and edge deployment and publishes their weights on Hugging Face.",
       "lab_type": "ai_company",
       "headquarters": "us",
-      "organization_note": "Liquid AI, Inc., whose privacy policy gives its address as 314 Main Street, Cambridge, Massachusetts, and whose terms of service are governed by Massachusetts law, develops and publishes the Liquid Foundation Models; it states that it does not offer a hosted API of its own, so no other catalog name reaches it and OpenRouter's route to the same weights belongs to that operator, not to this lab. Its company page says it was spun out of MIT CSAIL in 2023 by Ramin Hasani, Mathias Lechner, Alexander Amini, and Daniela Rus, and that MIT is its origin rather than a parent it reports. The verified GitHub organization is Liquid4All, linked from liquid.ai, and the weights are published under the LiquidAI Hugging Face organization; the unrelated github.com/LiquidAI account, which is registered to an individual in Cleveland and publishes three forked tutorial repositories, is not this lab's.",
+      "organization_note": "Liquid AI, Inc., whose privacy policy gives its address as 314 Main Street, Cambridge, Massachusetts, and whose terms of service are governed by Massachusetts law, develops and publishes the Liquid Foundation Models; it states that it does not offer a hosted API of its own, so no other catalog name reaches it and OpenRouter's route to the same weights belongs to that operator, not to this lab. Its company page says it was spun out of MIT CSAIL in 2023 by Ramin Hasani, Mathias Lechner, Alexander Amini, and Daniela Rus, and that MIT is its origin rather than a parent it reports. The verified GitHub organization is Liquid4All, linked from liquid.ai, and the weights are published under the LiquidAI Hugging Face organization; the unrelated github.com/LiquidAI account, which is registered to an individual in Cleveland and publishes three forked tutorial repositories, is not this lab's. Its careers page lists every role in San Francisco, Boston, Cambridge, Massachusetts, or remote, which is the United States alone, so the review records nothing beyond the headquarters.",
       "catalog_names": [
         "Liquid AI"
       ],
@@ -805,10 +1589,18 @@
           "label": "LiquidAI Hugging Face organization publishing the LFM2.5 weight collections and model cards",
           "url": "https://huggingface.co/LiquidAI",
           "verified_at": "2026-09-28"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: roles in San Francisco, Boston, Cambridge, Massachusetts, or Remote, all in the United States",
+          "url": "https://www.liquid.ai/careers",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-28",
-      "admission_basis": "reviewed_release"
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 430,
+      "research_locations": []
     },
     {
       "id": "lab-meituan",
@@ -847,7 +1639,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 540
     },
     {
       "id": "lab-meta",
@@ -904,7 +1697,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 50
     },
     {
       "id": "lab-microsoft",
@@ -913,7 +1707,7 @@
       "description": "The technology company that develops the MAI and Phi models and builds the Copilot assistants, Microsoft Foundry, and several agent frameworks.",
       "lab_type": "technology_company",
       "headquarters": "us",
-      "organization_note": "Microsoft Corporation, of Redmond, develops the MAI models through Microsoft AI and publishes the Phi models and ONNX Runtime GenAI, and Microsoft Azure operates Microsoft Foundry Models. The catalog names the developer and runtime maintainer Microsoft and the Foundry operator Microsoft Azure, so both names belong to this record.",
+      "organization_note": "Microsoft Corporation, of Redmond, develops the MAI models through Microsoft AI and publishes the Phi models and ONNX Runtime GenAI, and Microsoft Azure operates Microsoft Foundry Models. The catalog names the developer and runtime maintainer Microsoft and the Foundry operator Microsoft Azure, so both names belong to this record. Its AI work is not only where its headquarters is. The same page describes its offices city by city, and two are research and engineering sites in other countries: its London AI hub, where \"researchers, engineers, and product teams advance language models, build foundational AI tools, and drive responsible innovation\", and its Beijing campus, home to Microsoft China and the Asia Pacific R&D Group. Those two countries are this record's work locations; the page's other cities, Redmond, New York City, Berkeley, San Francisco, Mountain View, and Hyderabad, are in the United States, which is already the headquarters.",
       "catalog_names": [
         "Microsoft",
         "Microsoft Azure"
@@ -958,10 +1752,21 @@
           "label": "Privacy statement naming Microsoft Corporation, One Microsoft Way, Redmond",
           "url": "https://www.microsoft.com/en-us/privacy/privacystatement",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "About | Microsoft AI locations: the London AI hub, where researchers, engineers, and product teams advance language models, and the Beijing campus, home to Microsoft China and the Asia Pacific R&D Group, beside Redmond, New York City, and the Bay Area",
+          "url": "https://microsoft.ai/about/",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 40,
+      "research_locations": [
+        "gb",
+        "cn"
+      ]
     },
     {
       "id": "lab-minimax",
@@ -1018,7 +1823,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 200
     },
     {
       "id": "lab-mistral-ai",
@@ -1063,7 +1869,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 130
     },
     {
       "id": "lab-mixedbread-ai",
@@ -1072,7 +1879,7 @@
       "description": "The AI company that develops search and retrieval models, including the Toast model, and serves them through the Mixedbread API.",
       "lab_type": "ai_company",
       "headquarters": "none_listed",
-      "organization_note": "mixedbread ai inc., whose terms are governed by Delaware law, is the contracting entity; the pages reviewed give no address or headquarters. The catalog names the developer Mixedbread AI.",
+      "organization_note": "mixedbread ai inc., whose terms are governed by Delaware law, is the contracting entity; the pages reviewed give no address or headquarters. The catalog names the developer Mixedbread AI. The record lists no headquarters because the pages reviewed name no base, a registered office, or a notice address. Its careers page does say where the work is: every role it advertises is \"San Francisco, CA / Remote\", which places the organization in the United States without saying it is headquartered there. That distinction is why the work location is recorded and the headquarters is not.",
       "catalog_names": [
         "Mixedbread AI"
       ],
@@ -1107,10 +1914,20 @@
           "label": "Privacy policy naming mixedbread ai inc.",
           "url": "https://www.mixedbread.com/pages/privacy",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: open roles located in San Francisco, CA or Remote, with no other city named",
+          "url": "https://www.mixedbread.com/about",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 440,
+      "research_locations": [
+        "us"
+      ]
     },
     {
       "id": "lab-moonshot-ai",
@@ -1153,7 +1970,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 180
     },
     {
       "id": "lab-motif-technologies",
@@ -1196,7 +2014,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 550
     },
     {
       "id": "lab-nvidia",
@@ -1242,7 +2061,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 90
     },
     {
       "id": "lab-openai",
@@ -1259,7 +2079,9 @@
       "systems": [
         "chatgpt",
         "codex",
-        "openai-agents-sdk"
+        "openai-agents-sdk",
+        "openai-agents-js",
+        "openai-dots"
       ],
       "channels": [
         {
@@ -1299,7 +2121,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 10
     },
     {
       "id": "lab-openbmb",
@@ -1338,7 +2161,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 420
     },
     {
       "id": "lab-ornith-ai",
@@ -1383,7 +2207,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 450
     },
     {
       "id": "lab-perplexity",
@@ -1438,7 +2263,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 160
     },
     {
       "id": "lab-poolside",
@@ -1493,7 +2319,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 170
     },
     {
       "id": "lab-safe-superintelligence",
@@ -1503,7 +2330,7 @@
       "lab_type": "ai_company",
       "headquarters": "us",
       "admission_basis": "frontier_announcement",
-      "organization_note": "Safe Superintelligence Inc., which calls itself an American company with offices in Palo Alto and Tel Aviv, states on its own site that it started \"the world's first straight-shot SSI lab, with one goal and one product: a safe superintelligence\", and that \"SSI is our mission, our name, and our entire product roadmap\". The pages name no legal form beyond the Inc. in the site title and footer, no registered address, no directors, and no governing terms; there is no privacy policy, terms of service, model catalog, release-notes page, or safety framework, and the /safety path returns not-found. Its GitHub organization exists and publishes no repositories at all, and it has no Hugging Face organization, so neither is listed as a channel: a channel is a page or organization a reader can watch for the lab's work, and an empty account is not one. It is recorded on its own published statement of intent rather than on a release, which is why it joins to nothing in this collection; the safety language on its site is a mission statement rather than a framework, so no framework is recorded. Its own updates page names Ilya Sutskever as CEO and Daniel Levy as President as of July 2025 and records a July 2026 NVIDIA partnership.",
+      "organization_note": "Safe Superintelligence Inc., which calls itself an American company with offices in Palo Alto and Tel Aviv, states on its own site that it started \"the world's first straight-shot SSI lab, with one goal and one product: a safe superintelligence\", and that \"SSI is our mission, our name, and our entire product roadmap\". The pages name no legal form beyond the Inc. in the site title and footer, no registered address, no directors, and no governing terms; there is no privacy policy, terms of service, model catalog, release-notes page, or safety framework, and the /safety path returns not-found. Its GitHub organization exists and publishes no repositories at all, and it has no Hugging Face organization, so neither is listed as a channel: a channel is a page or organization a reader can watch for the lab's work, and an empty account is not one. It is recorded on its own published statement of intent rather than on a release, which is why it joins to nothing in this collection; the safety language on its site is a mission statement rather than a framework, so no framework is recorded. Its own updates page names Ilya Sutskever as CEO and Daniel Levy as President as of July 2025 and records a July 2026 NVIDIA partnership. The organization's own site says it is \"an American company with offices in Palo Alto and Tel Aviv, where we have deep roots and the ability to recruit top technical talent\", so the work is not only where the American entity is: Tel Aviv is the second office the record names.",
       "catalog_names": [],
       "systems": [],
       "channels": [
@@ -1515,7 +2342,7 @@
       "evidence": [
         {
           "kind": "web",
-          "label": "Company site: an American company with offices in Palo Alto and Tel Aviv, building safe superintelligence as its one goal and entire product roadmap",
+          "label": "Company site: an American company with offices in Palo Alto and Tel Aviv, building safe superintelligence as its one goal and entire product roadmap; company site: an American company with offices in Palo Alto and Tel Aviv, where it says it has deep roots and the ability to recruit top technical talent",
           "url": "https://ssi.inc/",
           "verified_at": "2026-09-29"
         },
@@ -1532,7 +2359,11 @@
           "verified_at": "2026-09-29"
         }
       ],
-      "verified_at": "2026-09-29"
+      "verified_at": "2026-10-03",
+      "display_order": 560,
+      "research_locations": [
+        "il"
+      ]
     },
     {
       "id": "lab-sakana-ai",
@@ -1613,7 +2444,8 @@
         }
       ],
       "verified_at": "2026-09-28",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 250
     },
     {
       "id": "lab-xai",
@@ -1672,7 +2504,61 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 60
+    },
+    {
+      "id": "lab-stanford-nlp",
+      "name": "Stanford NLP Group",
+      "url": "https://nlp.stanford.edu/",
+      "description": "The Stanford University research group that develops CoreNLP, Stanza, and DSPy, the framework for programming rather than prompting language models.",
+      "lab_type": "public_research",
+      "headquarters": "us",
+      "parent_organization": "Stanford University",
+      "admission_basis": "reviewed_system",
+      "organization_note": "The Stanford Natural Language Processing Group describes itself on its own site as \"a passionate, inclusive group of students, faculty, postdocs, and research engineers\" and states that it \"is part of the Stanford AI Lab (SAIL)\" with close associations to the Stanford Institute for Human-Centered Artificial Intelligence and the Center for Research on Foundation Models, and that it includes members of the Linguistics, Computer Science, and Psychology departments and the Graduate School of Education. It is a group inside Stanford University rather than a separate legal entity, so the parent is the university and the group gives its address as the Gates Computer Science Building, 353 Jane Stanford Way, Stanford, California. It is recorded on a system rather than a release: its own page names DSPy, \"a Python framework for programming rather than prompting LLMs\", and DSPy is the reviewed system record stanfordnlp/dspy, which the group publishes from its own GitHub organization. Nothing in the catalog names the group as a model developer, service operator, runtime maintainer, or steward, so catalog_names is empty and the record joins from the system instead. The group's published software is otherwise Java and Python NLP tooling rather than model weights: CoreNLP, Stanza, and GloVe, which its software page says are \"open source, licensed under the GNU General Public License\", a different license from the MIT-licensed DSPy, so the record names DSPy as the reviewed system and does not claim the others. It publishes no frontier-safety, responsible-scaling, preparedness, or risk-management framework on its own pages, so the field is omitted rather than filled with the AI Index its affiliated HAI institute produces, which is a research report and not a framework.",
+      "catalog_names": [],
+      "systems": [
+        "dspy"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://nlp.stanford.edu/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/stanfordnlp"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Group page: the Natural Language Processing Group at Stanford University, part of the Stanford AI Lab with close associations to HAI and the Center for Research on Foundation Models, and the developer of DSPy, a Python framework for programming rather than prompting LLMs, plus Stanza for text in over 75 languages; address Gates Computer Science Building, 353 Jane Stanford Way, Stanford, CA 94305-9020",
+          "url": "https://nlp.stanford.edu/",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Software page: CoreNLP, Stanza, and GloVe distributed as open source under the GNU General Public License, with commercial licensing available",
+          "url": "https://nlp.stanford.edu/software/",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "Verified stanfordnlp GitHub organization, from which the group publishes DSPy",
+          "url": "https://github.com/stanfordnlp",
+          "verified_at": "2026-09-29"
+        },
+        {
+          "kind": "web",
+          "label": "DSPy repository under the group's own organization: DSPy, Programming - not prompting - Foundation Models, the framework named as the group's own on its group page",
+          "url": "https://github.com/stanfordnlp/dspy",
+          "verified_at": "2026-09-29"
+        }
+      ],
+      "verified_at": "2026-09-29",
+      "display_order": 570
     },
     {
       "id": "lab-stepfun",
@@ -1681,7 +2567,7 @@
       "description": "The AI company that develops the Step models and offers them through the StepFun Open Platform in China and internationally.",
       "lab_type": "ai_company",
       "headquarters": "cn",
-      "organization_note": "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology), registered in Xuhui District, Shanghai, develops the models and operates the mainland StepFun Open Platform; StepFun Technology (HK) Limited operates the international platform. The catalog names the developer StepFun and both operating entities, so all three names belong to this record.",
+      "organization_note": "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology), registered in Xuhui District, Shanghai, develops the models and operates the mainland StepFun Open Platform; StepFun Technology (HK) Limited operates the international platform. The catalog names the developer StepFun and both operating entities, so all three names belong to this record. The pages reviewed name one place for the organization, its address at Floor 30, No. 701 Yunjin Road in Xuhui District, Shanghai, alongside its Shanghai public-network-security and ICP filings. Nothing names work outside China, so the review records nothing beyond the headquarters.",
       "catalog_names": [
         "StepFun",
         "上海阶跃星辰智能科技股份有限公司 (Shanghai StepFun Intelligent Technology)",
@@ -1720,10 +2606,18 @@
           "label": "International platform terms: a contract between STEPFUN TECHNOLOGY (HK) LIMITED and the user of the StepFun Open Platform services",
           "url": "https://platform.stepfun.ai/docs/en/agreement/userservice",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Homepage: the company's ICP filing and address at Floor 30, No. 701 Yunjin Road, Xuhui District, Shanghai",
+          "url": "https://www.stepfun.com/",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 190,
+      "research_locations": []
     },
     {
       "id": "lab-swiss-ai-initiative",
@@ -1772,7 +2666,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 590
     },
     {
       "id": "lab-tencent",
@@ -1818,7 +2713,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 230
     },
     {
       "id": "lab-thinking-machines-lab",
@@ -1865,7 +2761,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 460
     },
     {
       "id": "lab-trendyol",
@@ -1906,7 +2803,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 510
     },
     {
       "id": "lab-typesafe-ai",
@@ -1952,7 +2850,59 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 470
+    },
+    {
+      "id": "lab-unitree-robotics",
+      "name": "Unitree Robotics",
+      "url": "https://www.unitree.com/",
+      "description": "The Hangzhou company that develops the G1, H1, and Go2 legged and humanoid robots and self-researchs the motors, reducers, controllers, and perception software they run on.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The contact page names a Hangzhou Headquarters at 3rd Floor, Building 1, Fengda Creative Park, No. 88 Dongliu Road, Binjiang District, Hangzhou City, Zhejiang Province, China, with a Shenzhen office and a Shanghai entity, Shanghai Gaoyi Technology Co., Ltd., given by name; the record takes the Hangzhou address because the page itself labels it the headquarters and names the other two as an office and a differently named entity, and the record notes them here rather than treating three addresses as three headquarters. Its own about page calls it a \"civilian robotics company\" focused on the R&D, production, and sales of general-purpose legged and humanoid robots, says it has worked on that since 2017, and states that it self-researchs the motors, reducers, controllers, LIDAR, and perception and motion-control algorithms its robots use, which is why the organization is an AI company rather than a hardware vendor that buys its intelligence: the software is developed in house and the catalog reviews three of its robots. It is recorded on those robots rather than on a release because the catalog reviews no model of its own, and the UnifoLM-X1-0 embodied intelligence model its about page describes is a policy that acts on a robot, which the robotics scope keeps out of the Models collection; the record says so rather than implying the organization publishes no model. No parent organization is recorded: the pages read name no holding entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted. Its contact page names a Hangzhou headquarters, a Shenzhen office, and a Shanghai entity, and every one of them is in China, which is the headquarters country. Nothing on the pages reviewed places its research or engineering work outside China.",
+      "catalog_names": [
+        "Unitree Robotics"
+      ],
+      "systems": [
+        "unitree-g1",
+        "unitree-go2",
+        "unitree-h1"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.unitree.com/news"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/unitreerobotics"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Contact page: the Hangzhou Headquarters address in Binjiang District, Hangzhou, Zhejiang, China, a Shenzhen office, and a Shanghai entity named Shanghai Gaoyi Technology Co., Ltd; contact page: the Hangzhou Headquarters in Binjiang District, Zhejiang, a Shenzhen office, and a Shanghai entity named Shanghai Gaoyi Technology Co., Ltd.",
+          "url": "https://www.unitree.com/contact",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "About page: a civilian robotics company focused on the R&D, production, and sales of general-purpose legged and humanoid robots since 2017, self-researching motors, reducers, controllers, LIDAR, and perception and motion-control algorithms, and the UnifoLM-X1-0 embodied intelligence model deployed at its own manufacturing facility",
+          "url": "https://www.unitree.com/about",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "G1 product page, one of the three reviewed robot records unitree-g1, unitree-go2, and unitree-h1",
+          "url": "https://www.unitree.com/g1",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 620,
+      "research_locations": []
     },
     {
       "id": "lab-upstage",
@@ -1961,7 +2911,7 @@
       "description": "The AI company that develops the Solar language models and document-processing engines and builds agents for document workflows on them.",
       "lab_type": "ai_company",
       "headquarters": "kr",
-      "organization_note": "Upstage Co., Ltd. (주식회사 업스테이지) gives its business address in Gangnam-gu, Seoul. It develops the Solar models and its document-processing engines, offers them through its console API, and publishes the Solar Open 2 weights on Hugging Face. One name, Upstage, covers the models in the catalog.",
+      "organization_note": "Upstage Co., Ltd. (주식회사 업스테이지) gives its business address in Gangnam-gu, Seoul. It develops the Solar models and its document-processing engines, offers them through its console API, and publishes the Solar Open 2 weights on Hugging Face. One name, Upstage, covers the models in the catalog. Its careers page advertises \"an autonomous and flexible remote work environment\" with support for office space, and gives the company's address in Gangnam-gu, Seoul. Nothing on the page places its work outside South Korea, so the review records nothing beyond the headquarters.",
       "catalog_names": [
         "Upstage"
       ],
@@ -1996,10 +2946,18 @@
           "label": "Terms of service giving the Korea Science and Technology Center address, 22 Teheran-ro 7-gil, Gangnam-gu, Seoul",
           "url": "https://www.upstage.ai/terms-of-service",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: an autonomous and flexible remote work environment with office-space support, and a Seoul address at the Korea Science and Technology Center in Gangnam-gu",
+          "url": "https://www.upstage.ai/careers",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 210,
+      "research_locations": []
     },
     {
       "id": "lab-vispark",
@@ -2044,7 +3002,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 490
     },
     {
       "id": "lab-vivgrid",
@@ -2079,7 +3038,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 500
     },
     {
       "id": "lab-writer",
@@ -2088,7 +3048,7 @@
       "description": "The AI company that develops the Palmyra models and builds its enterprise agent platform on them.",
       "lab_type": "ai_company",
       "headquarters": "us",
-      "organization_note": "Writer, Inc., whose newsroom gives its headquarters at 111 Maiden Lane, San Francisco, takes legal notices there, and its terms are governed by California law. It develops the Palmyra models and serves them through its developer platform. One name, Writer, covers the models in the catalog.",
+      "organization_note": "Writer, Inc., whose newsroom gives its headquarters at 111 Maiden Lane, San Francisco, takes legal notices there, and its terms are governed by California law. It develops the Palmyra models and serves them through its developer platform. One name, Writer, covers the models in the catalog. The company's careers page says it runs a hybrid culture of in-office and remote work, and names three offices, San Francisco, New York, and London. Two are in the United States, which is the headquarters; the third is the organization's work outside it.",
       "catalog_names": [
         "Writer"
       ],
@@ -2096,7 +3056,7 @@
       "channels": [
         {
           "kind": "model_catalog",
-          "url": "https://dev.writer.com/home/models-overview"
+          "url": "https://dev.writer.com/home/models"
         },
         {
           "kind": "news",
@@ -2129,10 +3089,20 @@
           "label": "Newsroom giving its headquarters at 111 Maiden Lane, San Francisco",
           "url": "https://writer.com/newsroom/",
           "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: a hybrid culture of in-office and remote work, with \"SF/NY/London office space\" in three offices",
+          "url": "https://writer.com/careers",
+          "verified_at": "2026-10-03"
         }
       ],
-      "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 480,
+      "research_locations": [
+        "gb"
+      ]
     },
     {
       "id": "lab-xiaomi",
@@ -2177,7 +3147,8 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 240
     },
     {
       "id": "lab-z-ai",
@@ -2235,7 +3206,9 @@
         }
       ],
       "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release"
+      "admission_basis": "reviewed_release",
+      "display_order": 140
     }
-  ]
+  ],
+  "updated_at": "2026-09-29"
 }

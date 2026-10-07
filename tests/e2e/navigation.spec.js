@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { openView, viewTab } = require("./helpers/landing");
+const { searchBox } = require("./helpers/results");
 
 const styleOf = (page, selector, property) =>
   page.locator(selector).evaluate((element, name) => getComputedStyle(element)[name], property);
@@ -8,20 +9,20 @@ test("the primary navigation is plain text with an underline rather than a fille
   await page.setViewportSize({ width: 1280, height: 700 });
   await page.goto("/");
 
-  expect(await styleOf(page, ".tabs", "borderTopLeftRadius")).toBe("0px");
-  expect(await styleOf(page, ".tabs", "borderTopWidth")).toBe("0px");
-  expect(await styleOf(page, ".tabs", "backgroundColor")).toBe("rgba(0, 0, 0, 0)");
-  expect(await styleOf(page, ".tab.is-active", "boxShadow")).toBe("none");
-  expect(await styleOf(page, ".tab.is-active", "backgroundColor")).toBe("rgba(0, 0, 0, 0)");
-  expect(await styleOf(page, ".tab.is-active", "borderBottomWidth")).toBe("2px");
-  expect(await styleOf(page, ".tab.is-active", "borderTopLeftRadius")).toBe("0px");
+  expect(await styleOf(page, ".site-header .tabs", "borderTopLeftRadius")).toBe("0px");
+  expect(await styleOf(page, ".site-header .tabs", "borderTopWidth")).toBe("0px");
+  expect(await styleOf(page, ".site-header .tabs", "backgroundColor")).toBe("rgba(0, 0, 0, 0)");
+  expect(await styleOf(page, ".site-header .tab.is-active", "boxShadow")).toBe("none");
+  expect(await styleOf(page, ".site-header .tab.is-active", "backgroundColor")).toBe("rgba(0, 0, 0, 0)");
+  expect(await styleOf(page, ".site-header .tab.is-active", "borderBottomWidth")).toBe("2px");
+  expect(await styleOf(page, ".site-header .tab.is-active", "borderTopLeftRadius")).toBe("0px");
 });
 
 for (const width of [390, 360, 320]) {
   test(`every navigation item is fully visible at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 800 });
     await page.goto("/");
-    const fit = await page.locator(".tabs").evaluate(nav => {
+    const fit = await page.locator("#mobile-nav").evaluate(nav => {
       const box = nav.getBoundingClientRect();
       const items = [...nav.querySelectorAll(":scope > *")].map(item => item.getBoundingClientRect());
       return {
@@ -33,7 +34,7 @@ for (const width of [390, 360, 320]) {
     expect(fit.overflow).toBeLessThanOrEqual(0);
     expect(fit.outside).toBe(0);
     if (width === 390) expect(fit.rows).toBe(1);
-    expect(await styleOf(page, ".tab.is-active", "borderTopLeftRadius")).toBe("0px");
+    await expect(page.locator("#mobile-nav")).toBeInViewport();
   });
 }
 
@@ -83,7 +84,7 @@ test("a legacy sibling-view URL lands on its unified collection", async ({ page 
   await page.goto("/?view=models&q=gemma");
   await expect(page.locator("#directory")).toHaveClass(/is-active/);
   await expect(page.locator("#models-directory-panel")).not.toHaveAttribute("hidden");
-  await expect(page.locator("#model-search")).toHaveValue("gemma");
+  await expect(searchBox(page, "models")).toHaveValue("gemma");
   await expect(page).not.toHaveURL(/view=models/);
   await expect(page).toHaveURL(/collection=models/);
 });

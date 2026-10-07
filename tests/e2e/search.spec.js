@@ -2,20 +2,25 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { allSearch, collectionEntry, openCollection, openView, pressedEntry } = require("./helpers/landing");
+const { chooseFinderGoal, finderHandoff } = require("./helpers/finder");
+const { clearFilters, expectFilter, filterControl, recordView, search, searchBox, setFilter, settled, sortControl } = require("./helpers/results");
 
 // The page binds its search and keyboard listeners once its data has loaded,
 // and paints the All grid right after, so a card on screen means they are live.
 // The All list is results, so the page opens on it rather than the front door.
+// The results repaint once typing pauses, so this waits for that.
 async function searchAll(page, text) {
   await page.goto("/?collection=all");
   await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
   const input = allSearch(page);
   await input.focus();
   await input.fill(text);
+  await settled(page);
 }
 
-// Focusing the All box fetches six search indexes, and each one repaints the
-// grid as it lands, so a count read before they all land can still grow.
+// Focusing the search box fetches every search index, and each of All's six
+// repaints the grid as it lands, so a count read before they all land can
+// still grow.
 /* global searchIndexes */
 const allIndexesLanded = page => page.waitForFunction(() =>
   ["systems", "inference", "runtimes", "models", "packs", "robots"].every(key => searchIndexes[key] !== undefined));
@@ -41,6 +46,69 @@ async function addArchivedSystems(page, names) {
     };
   });
   await page.route(/\/app\/systems\.json(\?.*)?$/, route => route.fulfill({ json: { ...payload, systems: [...payload.systems, ...added] } }));
+}
+
+// A probe that names a published record fails the moment a data batch adds,
+// renames, or excludes one, which puts the merge gate at the mercy of the
+// catalog rather than of the behaviour under test. So these fixtures add a
+// record the test owns, with a name no real record can hold, and leave the
+// rest of the published catalog in place: the page reads and searches exactly
+// what it reads in production, over one record nobody else can edit.
+//
+// The payload carries the fields a card renders and the index carries the text
+// search matches, so a fixture has to route both or the record either paints
+// nothing or matches nothing.
+async function addFixture(page, { payload, collection, record, indexed }) {
+  const published = readWeb(payload);
+  const [template] = published[collection];
+  await page.route(new RegExp(`/${payload.replace(".", "\\.")}(\\?.*)?$`), route =>
+    route.fulfill({ json: { ...published, [collection]: [...published[collection], { ...template, ...record }] } }));
+  const index = readWeb(`app/search/${collection}.json`);
+  await page.route(indexRoute(collection), route => route.fulfill({ json: { ...index, [record.id]: indexed } }));
+}
+
+// The runtime the exact-name, hyphen, count-placement, and misspelling probes
+// use. Its name is nonsense on purpose: no catalog batch can supply or remove it.
+const FIXTURE_RUNTIME = {
+  id: "snorpel-runtime",
+  name: "Snorpel",
+  description: "A runtime this test adds, running on-premises hardware.",
+  runtime_type: "desktop_runner",
+};
+
+// The specification the cross-collection probes use, for the same reason. The
+// hyphenated word lives in its indexed prose so the hyphen probe has something
+// to split without borrowing a published record's text.
+const FIXTURE_SPEC = {
+  id: "flarnum-protocol",
+  name: "Flarnum Protocol",
+  short_name: "FLARNUM",
+  description: "A specification this test adds.",
+};
+
+// The exact name, its one-letter misspelling, and the hyphenated pair, all
+// derived from the fixture rather than typed.
+const RUNTIME_QUERY = "Snorpel";
+const RUNTIME_TYPO = "Snorpl";
+const HYPHENATED = "on-premises";
+const SPEC_QUERY = "Flarnum Protocol";
+
+async function addRuntimeFixture(page) {
+  await addFixture(page, {
+    payload: "app/runtimes.json",
+    collection: "runtimes",
+    record: FIXTURE_RUNTIME,
+    indexed: `${FIXTURE_RUNTIME.id} ${FIXTURE_RUNTIME.name} ${FIXTURE_RUNTIME.description}`,
+  });
+}
+
+async function addSpecFixture(page) {
+  await addFixture(page, {
+    payload: "app/specifications.json",
+    collection: "specifications",
+    record: FIXTURE_SPEC,
+    indexed: `${FIXTURE_SPEC.id} ${FIXTURE_SPEC.name} ${FIXTURE_SPEC.description}`,
+  });
 }
 
 // Every request the page makes for one path, whatever its content stamp.
@@ -83,22 +151,28 @@ const placeCount = count => count.evaluate(async element => {
 });
 
 test("an exact name comes first", async ({ page }) => {
-  await searchAll(page, "ollama");
-  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
+  await addRuntimeFixture(page);
+  await searchAll(page, RUNTIME_QUERY);
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText(FIXTURE_RUNTIME.name);
 });
 
 test("hyphens and spaces ask the same question", async ({ page }) => {
-  await searchAll(page, "self-hosted");
+  await addRuntimeFixture(page);
+  await searchAll(page, HYPHENATED);
   await allIndexesLanded(page);
+  // Two empty results would agree on a count of zero and prove nothing about the
+  // hyphen rule, so this asserts the fixture is actually matched first.
+  await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
   const hyphenated = await page.locator("#all-directory-result-count").textContent();
-  await allSearch(page).fill("self hosted");
+  await allSearch(page).fill(HYPHENATED.replace("-", " "));
   await expect(page.locator("#all-directory-result-count")).toHaveText(hyphenated);
 });
 
 test("the result count shows beside the box, uncovered, without scrolling", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
-  await searchAll(page, "ollama");
-  const count = page.locator("#all-directory-panel .search-count");
+  await addRuntimeFixture(page);
+  await searchAll(page, RUNTIME_QUERY);
+  const count = page.locator("#results-bar .search-count");
   await expect(count).toHaveText(/^\d+ results?$/);
   const placed = await placeCount(count);
   await expect(count).toBeInViewport();
@@ -120,7 +194,7 @@ test("slash focuses the search box", async ({ page }) => {
   await expect(page.locator("#all-directory-grid .project-card").first()).toBeVisible();
   await page.locator("body").click({ position: { x: 5, y: 300 } });
   await page.keyboard.press("/");
-  await expect(allSearch(page)).toHaveId("all-directory-search");
+  await expect(allSearch(page)).toHaveId("results-search");
   await expect(allSearch(page)).toBeFocused();
 });
 
@@ -129,7 +203,7 @@ test("slash focuses the search box", async ({ page }) => {
 test("slash does nothing while a dialog is open", async ({ page }) => {
   const [runtime] = readWeb("app/runtimes.json").runtimes;
   await page.goto(`/?record=runtime:${runtime.id}`);
-  const close = page.locator("#runtime-dialog .dialog-close");
+  const close = recordView(page, "runtime").locator(".dialog-close");
   await expect(close).toBeVisible();
   await page.evaluate(() => window.addEventListener("keydown", event => { window.slashPrevented = event.defaultPrevented; }));
   await close.focus();
@@ -141,187 +215,176 @@ test("slash does nothing while a dialog is open", async ({ page }) => {
 test("a query follows the reader to another scope, and Best match selects itself and gives way", async ({ page }) => {
   await searchAll(page, "coding agent");
   await openCollection(page, "systems");
-  await expect(page.locator("#project-search")).toHaveValue("coding agent");
-  await expect(page.locator("#sort-filter")).toHaveValue("match");
-  await page.locator("#project-search").fill("");
-  await expect(page.locator("#sort-filter")).toHaveValue("name");
+  await expect(searchBox(page, "systems")).toHaveValue("coding agent");
+  await expect(sortControl(page, "systems")).toHaveValue("match");
+  await search(page, "");
+  await expect(sortControl(page, "systems")).toHaveValue("name");
 });
 
 test("a sort chosen during a query is kept", async ({ page }) => {
   await page.goto("/?collection=inference");
   await expect(page.locator("#inference-grid .project-card").first()).toBeVisible();
-  await page.locator("#inference-search").fill("api");
-  await expect(page.locator("#inference-sort-filter")).toHaveValue("match");
-  await page.locator("#inference-sort-filter").selectOption("name");
-  await page.locator("#inference-search").fill("apis");
-  await expect(page.locator("#inference-sort-filter")).toHaveValue("name");
+  await search(page, "api");
+  await expect(sortControl(page, "inference")).toHaveValue("match");
+  await sortControl(page, "inference").selectOption("name");
+  await search(page, "apis");
+  await expect(sortControl(page, "inference")).toHaveValue("name");
 });
 
 test("a shared query lists by Best match unless the link names a sort", async ({ page }) => {
   // The restored query shows once boot has restored the scope, which is the
   // same step that settles the sort, so each sort is read after it settles.
   await page.goto("/?collection=systems&q=coding%20agent");
-  await expect(page.locator("#project-search")).toHaveValue("coding agent");
-  await expect(page.locator("#sort-filter")).toHaveValue("match");
+  await expect(searchBox(page, "systems")).toHaveValue("coding agent");
+  await expect(sortControl(page, "systems")).toHaveValue("match");
 
   await page.goto("/?collection=systems&q=coding%20agent&sort=name");
-  await expect(page.locator("#project-search")).toHaveValue("coding agent");
-  await expect(page.locator("#sort-filter")).toHaveValue("name");
+  await expect(searchBox(page, "systems")).toHaveValue("coding agent");
+  await expect(sortControl(page, "systems")).toHaveValue("name");
 });
 
 test("a sort the link names is kept while the reader types", async ({ page }) => {
   await page.goto("/?collection=systems&q=coding%20agent&sort=name");
-  await expect(page.locator("#project-search")).toHaveValue("coding agent");
-  await page.locator("#project-search").fill("coding agents");
-  await expect(page.locator("#sort-filter")).toHaveValue("name");
+  await expect(searchBox(page, "systems")).toHaveValue("coding agent");
+  await search(page, "coding agents");
+  await expect(sortControl(page, "systems")).toHaveValue("name");
 });
 
 // Each scope with a Sort control, and its sort while browsing.
 const BROWSING_SORTS = [
-  ["/?collection=systems", "#project-search", "#sort-filter", "name"],
-  ["/?collection=inference", "#inference-search", "#inference-sort-filter", "score"],
-  ["/?collection=runtimes", "#runtime-search", "#runtime-sort-filter", "score"],
-  ["/?collection=models", "#model-search", "#model-sort-filter", "score"],
+  ["/?collection=systems", "systems", "name"],
+  ["/?collection=inference", "inference", "score"],
+  ["/?collection=runtimes", "runtimes", "score"],
+  ["/?collection=models", "models", "score"],
 ];
 
 test("the browsing sort chosen during a query survives a reload", async ({ page }) => {
-  for (const [url, search, sort, browsing] of BROWSING_SORTS) {
+  for (const [url, scope, browsing] of BROWSING_SORTS) {
     await page.goto(url);
     await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
-    await page.locator(search).fill("api");
-    await expect(page.locator(sort)).toHaveValue("match");
-    await page.locator(sort).selectOption(browsing);
+    await search(page, "api", scope);
+    await expect(sortControl(page, scope)).toHaveValue("match");
+    await sortControl(page, scope).selectOption(browsing);
     await page.reload();
-    await expect(page.locator(search)).toHaveValue("api");
-    await expect(page.locator(sort), `${sort} keeps ${browsing} across a reload`).toHaveValue(browsing);
+    await expect(searchBox(page, scope)).toHaveValue("api");
+    await expect(sortControl(page, scope), `${scope} keeps ${browsing} across a reload`).toHaveValue(browsing);
     await expect(page).toHaveURL(address => address.searchParams.get("sort") === browsing);
   }
 });
 
 test("Best match left in place during a query returns after a reload, and the URL names no sort", async ({ page }) => {
-  for (const [url, search, sort] of BROWSING_SORTS) {
+  for (const [url, scope] of BROWSING_SORTS) {
     await page.goto(url);
     await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
-    await page.locator(search).fill("api");
-    await expect(page.locator(sort)).toHaveValue("match");
+    await search(page, "api", scope);
+    await expect(sortControl(page, scope)).toHaveValue("match");
     await page.reload();
-    await expect(page.locator(search)).toHaveValue("api");
-    await expect(page.locator(sort)).toHaveValue("match");
+    await expect(searchBox(page, scope)).toHaveValue("api");
+    await expect(sortControl(page, scope)).toHaveValue("match");
     await expect(page, `${url} with a query leaves Best match out of the URL`)
       .toHaveURL(address => address.searchParams.get("q") === "api" && !address.searchParams.has("sort"));
   }
 });
 
 test("Clear filters ends the query, so the next query selects Best match again", async ({ page }) => {
-  for (const [url, search, sort, clear, chosen, fallback] of [
-    ["/?collection=systems", "#project-search", "#sort-filter", "#reset-filters", "stars", "name"],
-    ["/?collection=inference", "#inference-search", "#inference-sort-filter", "#reset-inference-filters", "name", "score"],
-    ["/?collection=runtimes", "#runtime-search", "#runtime-sort-filter", "#reset-runtime-filters", "name", "score"],
-    ["/?collection=models", "#model-search", "#model-sort-filter", "#reset-model-filters", "name", "score"],
+  for (const [url, scope, chosen, fallback] of [
+    ["/?collection=systems", "systems", "stars", "name"],
+    ["/?collection=inference", "inference", "name", "score"],
+    ["/?collection=runtimes", "runtimes", "name", "score"],
+    ["/?collection=models", "models", "name", "score"],
   ]) {
     await page.goto(url);
     await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
-    await page.locator(search).fill("api");
-    await page.locator(sort).selectOption(chosen);
-    await page.locator(clear).click();
-    await expect(page.locator(sort)).toHaveValue(fallback);
-    await page.locator(search).fill("apis");
-    await expect(page.locator(sort), `${clear} forgets the sort chosen for the last query`).toHaveValue("match");
+    await search(page, "api", scope);
+    await sortControl(page, scope).selectOption(chosen);
+    await clearFilters(page, scope);
+    await expect(sortControl(page, scope)).toHaveValue(fallback);
+    await search(page, "apis", scope);
+    await expect(sortControl(page, scope), `Clear filters in ${scope} forgets the sort chosen for the last query`).toHaveValue("match");
   }
 });
 
 test("the Finder's handoff ends an earlier query, so the next query selects Best match again", async ({ page }) => {
-  for (const [url, search, sort, chosen, direction, goal, priority] of [
-    ["/?collection=systems", "#project-search", "#sort-filter", "stars", "agent_system", "coding", "balanced"],
-    ["/?collection=inference", "#inference-search", "#inference-sort-filter", "name", "inference_service", "route_models", "balanced"],
-    ["/?collection=runtimes", "#runtime-search", "#runtime-sort-filter", "name", "local_runtime", "serve_workload", "hardware"],
+  for (const [url, scope, chosen, direction, goal, priority] of [
+    ["/?collection=systems", "systems", "stars", "agent_system", "coding", "balanced"],
+    ["/?collection=inference", "inference", "name", "inference_service", "route_models", "balanced"],
+    ["/?collection=runtimes", "runtimes", "name", "local_runtime", "serve_workload", "hardware"],
   ]) {
     await page.goto(url);
     await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
-    await page.locator(search).fill("api");
-    await page.locator(sort).selectOption(chosen);
+    await search(page, "api", scope);
+    await sortControl(page, scope).selectOption(chosen);
     await page.getByRole("button", { name: "Find your fit", exact: true }).click();
-    for (const value of [direction, goal, priority]) await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
+    await chooseFinderGoal(page, goal, priority);
     await page.locator("[data-finder-directory]").click();
-    await expect(page.locator(search)).toHaveValue("");
-    await expect(page.locator(sort)).toHaveValue("score");
-    await page.locator(search).fill("apis");
-    await expect(page.locator(sort), `the ${direction} handoff forgets the sort chosen for the last query`).toHaveValue("match");
+    await expect(searchBox(page, scope)).toHaveValue("");
+    await expect(sortControl(page, scope)).toHaveValue("score");
+    await search(page, "apis", scope);
+    await expect(sortControl(page, scope), `the ${direction} handoff forgets the sort chosen for the last query`).toHaveValue("match");
   }
 });
 
-// A sort chosen for one query must not outlive it (D9). Text carried in that
-// differs from what the box held is a new query there, so it selects Best
-// match, and clearing it restores the sort from before the box held a query.
-test("a query carried in with new text selects Best match, and clearing it restores the earlier sort", async ({ page }) => {
+test("clearing a query everywhere keeps a sort chosen during it, and the next query starts from that sort", async ({ page }) => {
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
-  const sort = page.locator("#sort-filter");
-  await page.locator("#project-search").fill("memory");
+  const sort = sortControl(page, "systems");
+  await search(page, "memory");
   await expect(sort).toHaveValue("match");
   await sort.selectOption("stars");
   await openCollection(page, "all");
-  await page.locator("#reset-all-directory").click();
-  await allSearch(page).fill("browser");
+  await clearFilters(page, "all");
+  await expect(searchBox(page), "All's Clear control clears the one query").toHaveValue("");
+  await search(page, "browser");
   await openCollection(page, "systems");
-  await expect(page.locator("#project-search")).toHaveValue("browser");
-  await expect(sort, "a sort chosen for the old text gives way").toHaveValue("match");
-  await page.locator("#project-search").fill("");
-  await expect(sort, "clearing restores the sort from before the first query").toHaveValue("name");
+  await expect(searchBox(page)).toHaveValue("browser");
+  await expect(sort, "a new query selects Best match").toHaveValue("match");
+  await search(page, "");
+  await expect(sort, "clearing gives back the sort the reader had before this query").toHaveValue("stars");
 });
 
-// Search all writes All's box alone. Writing the hidden Directory scope's box
-// would make a later carry back look unchanged and keep a stale sort (D9).
-test("Search all from a sibling view leaves the Directory scope's own query alone", async ({ page }) => {
+test("Search all lists the one query in All and keeps it for every collection", async ({ page }) => {
   // Only a system holds this word, so Models lists nothing and offers All.
   const systems = readWeb("app/search/systems.json");
   const [first] = Object.keys(systems);
   await page.route(indexRoute("systems"), route => route.fulfill({ json: withIndexWord(systems, first) }));
-  await page.goto("/?collection=systems");
-  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
-  const sort = page.locator("#sort-filter");
-  await page.locator("#project-search").fill("memory");
-  await sort.selectOption("stars");
-  await openCollection(page, "models");
-  await page.locator("#model-search").fill(INDEX_WORD);
+  await page.goto("/?collection=models");
+  await search(page, INDEX_WORD);
   await page.locator("#model-grid").getByRole("button", { name: "Search all" }).click();
-  await expect(allSearch(page)).toHaveValue(INDEX_WORD);
-  await expect(page.locator("#project-search"), "Search all writes only All's box").toHaveValue("memory");
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Everything /);
+  await expect(searchBox(page)).toHaveValue(INDEX_WORD);
+  await expect(searchBox(page)).toBeFocused();
   await openCollection(page, "systems");
-  await expect(page.locator("#project-search")).toHaveValue(INDEX_WORD);
-  await expect(sort).toHaveValue("match");
+  await expect(searchBox(page)).toHaveValue(INDEX_WORD);
+  await expect(sortControl(page, "systems")).toHaveValue("match");
 });
 
 // Best match orders a query's matches, so browsing never offers it (D23). A
 // link naming it without a query loses it, typing offers it, and clearing
 // takes it away. Playwright's toBeDisabled does not read an option's state.
 test("Best match is offered only while a query is present", async ({ page }) => {
-  for (const [url, search, sortSelector, browsing] of BROWSING_SORTS) {
+  for (const [url, scope, browsing] of BROWSING_SORTS) {
     await page.goto(`${url}&sort=match`);
     await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
-    const sort = page.locator(sortSelector);
+    const sort = sortControl(page, scope);
     const bestMatch = sort.locator('option[value="match"]');
     await expect(sort, `${url} restores its browsing sort`).toHaveValue(browsing);
     await expect(page, `${url} drops a Best match named without a query`).toHaveURL(address => !address.searchParams.has("sort"));
     await expect(bestMatch).toHaveJSProperty("disabled", true);
-    await page.locator(search).fill("api");
+    await search(page, "api", scope);
     await expect(bestMatch).toHaveJSProperty("disabled", false);
     await expect(sort).toHaveValue("match");
-    await page.locator(search).fill("");
+    await search(page, "", scope);
     await expect(bestMatch).toHaveJSProperty("disabled", true);
     await expect(sort).toHaveValue(browsing);
   }
   // A link with a query offers Best match beside a sort it names.
   await page.goto("/?collection=inference&q=api&sort=name");
-  await expect(page.locator("#inference-search")).toHaveValue("api");
-  await expect(page.locator("#inference-sort-filter")).toHaveValue("name");
-  await expect(page.locator('#inference-sort-filter option[value="match"]')).toHaveJSProperty("disabled", false);
+  await expect(searchBox(page, "inference")).toHaveValue("api");
+  await expect(sortControl(page, "inference")).toHaveValue("name");
+  await expect(sortControl(page, "inference").locator('option[value="match"]')).toHaveJSProperty("disabled", false);
 });
 
-// A page kept from browsing belongs to another list, so a query carried in
-// with new text starts on the first page. Every service holds this word, so
-// the carried query still fills several pages and no clamp can hide a kept one.
-test("a query carried in with new text starts on the first page", async ({ page }) => {
+test("a changed query starts every collection on its first page", async ({ page }) => {
   const index = readWeb("app/search/inference.json");
   await page.route(indexRoute("inference"), route => route.fulfill({
     json: Object.fromEntries(Object.entries(index).map(([id, text]) => [id, `${text} ${INDEX_WORD}`])),
@@ -330,43 +393,44 @@ test("a query carried in with new text starts on the first page", async ({ page 
   const pager = page.locator("#inference-pager");
   await expect(pager).toContainText("Page 2 of");
   await openCollection(page, "all");
-  await allSearch(page).fill(INDEX_WORD);
+  await search(page, INDEX_WORD);
   await page.waitForFunction(() => searchIndexes.inference !== undefined);
   await openCollection(page, "inference");
-  await expect(page.locator("#inference-search")).toHaveValue(INDEX_WORD);
+  await expect(searchBox(page)).toHaveValue(INDEX_WORD);
   await expect(pager).toContainText(/Page 1 of ([2-9]|\d{2,})/);
 });
 
 test("a carried query searches the same text a typed one does", async ({ page }) => {
-  // Focusing the Systems box fetches only the Systems index, so the
-  // Inference index is fetched for the carried query or not at all.
+  // A query fetches every collection's index, so the one query reaches
+  // Inference with its index, and lists what typing it there lists.
   let requested = false;
   page.on("request", request => {
     if (new URL(request.url()).pathname === "/app/search/inference.json") requested = true;
   });
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
-  await page.locator("#project-search").fill("privacy");
+  await search(page, "privacy");
   await openCollection(page, "inference");
-  await expect(page.locator("#inference-search")).toHaveValue("privacy");
+  await expect(searchBox(page, "inference")).toHaveValue("privacy");
   await expect.poll(() => requested, { message: "the carried query fetches the Inference index" }).toBe(true);
   await page.waitForFunction(() => searchIndexes.inference !== undefined);
   const carried = await page.locator("#inference-result-count").textContent();
 
   await page.goto("/?collection=inference");
   await expect(page.locator("#inference-grid .project-card").first()).toBeVisible();
-  await page.locator("#inference-search").fill("privacy");
+  await search(page, "privacy");
   await page.waitForFunction(() => searchIndexes.inference !== undefined);
   await expect(page.locator("#inference-result-count")).toHaveText(carried);
 });
 
 test("a misspelled name offers the right one", async ({ page }) => {
-  await searchAll(page, "olama");
-  const suggestion = page.getByRole("button", { name: "Ollama", exact: true });
+  await addRuntimeFixture(page);
+  await searchAll(page, RUNTIME_TYPO);
+  const suggestion = page.getByRole("button", { name: FIXTURE_RUNTIME.name, exact: true });
   await expect(suggestion).toBeVisible();
   await suggestion.click();
-  await expect(allSearch(page)).toHaveValue("Ollama");
-  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
+  await expect(allSearch(page)).toHaveValue(FIXTURE_RUNTIME.name);
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText(FIXTURE_RUNTIME.name);
   // The choice repaints away, so focus lands back in the search box.
   await expect(allSearch(page)).toBeFocused();
 });
@@ -398,19 +462,23 @@ test("a name the review left out says why, however its hyphen is typed", async (
 });
 
 test("an intent query offers the Finder job and opens its shortlist step", async ({ page }) => {
+  // A goal is only offered when records are eligible for it, so this needs a
+  // desktop-runner runtime whatever the catalog happens to hold.
+  await addRuntimeFixture(page);
   await searchAll(page, "run models locally");
   const hint = page.locator('[data-job-hint="all"]');
   await expect(hint).toContainText("Run models on my own computer");
   await hint.getByRole("button", { name: /Open shortlist/ }).click();
   await expect(page.locator("#finder")).toHaveClass(/is-active/);
-  await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
+  await expect(page.locator(".finder-result-heading h2")).toHaveText("Run models on my own computer");
 });
 
 // The banner is a flex box, and an author display rule overrides the one the
 // hidden attribute brings, so the stylesheet has to restore it.
 test("the job banner shows only while the query names a job", async ({ page }) => {
-  await searchAll(page, "ollama");
-  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("Ollama");
+  await addRuntimeFixture(page);
+  await searchAll(page, RUNTIME_QUERY);
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText(FIXTURE_RUNTIME.name);
   const hint = page.locator('[data-job-hint="all"]');
   await expect(hint).toBeHidden();
   await allSearch(page).fill("run models locally");
@@ -420,7 +488,7 @@ test("the job banner shows only while the query names a job", async ({ page }) =
   await expect(hint).toBeHidden();
   await allSearch(page).fill("run models locally");
   await expect(hint).toBeVisible();
-  await page.locator("#reset-all-directory").click();
+  await clearFilters(page, "all");
   await expect(hint).toBeHidden();
 });
 
@@ -442,7 +510,7 @@ test("the exclusions list is fetched once, stamped, and only for a search that f
   const [system] = readWeb("app/systems.json").systems;
   await searchAll(page, system.name);
   await allIndexesLanded(page);
-  await expect(page.locator("#all-directory-panel .search-count")).toHaveText(/^[1-9]\d* results?$/);
+  await expect(page.locator("#results-bar .search-count")).toHaveText(/^[1-9]\d* results?$/);
   expect(fetched, "a search that found something never needs the list").toEqual([]);
 
   // A second empty result while the first fetch is still in flight.
@@ -455,7 +523,12 @@ test("the exclusions list is fetched once, stamped, and only for a search that f
   release();
   await page.waitForFunction(() => Array.isArray(state.exclusions));
   expect(fetched, "one fetch serves every empty result").toHaveLength(1);
-  expect(new URL(fetched[0]).searchParams.get("v"), "the list is fetched under its content stamp").toMatch(/^[0-9a-f]{12}$/);
+  // ADR 050: a committed page carries the placeholder and the deploy job writes the
+  // hash, so a served page cannot show a content hash here. The caching guarantee is
+  // asserted against the stamper's own output in tests/test_web.js; what this checks is
+  // that the data fetch is versioned at all, so a future change cannot quietly drop the
+  // query string and leave every reader on a stale list.
+  expect(new URL(fetched[0]).searchParams.get("v"), "the list is fetched under a version stamp").toBe("BUILD");
 });
 
 // The suggestion form waits for the exclusions list, so the list's arrival
@@ -472,7 +545,7 @@ test("an empty result in another view gains the suggestion form when the exclusi
   });
   await page.goto("/?collection=models");
   await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
-  await page.locator("#model-search").fill("Zyxwvut Frobnicator");
+  await search(page, "Zyxwvut Frobnicator");
   await expect.poll(() => fetched.length, "the settled empty result asks for the list").toBe(1);
   // The Finder, not the Catalog tab: the Catalog opens on the front door,
   // which clears the query this test leaves behind in Models.
@@ -507,28 +580,28 @@ test("an exclusions list that fails to load counts as empty, and is asked for on
 
 // Every search surface besides All, each with the job banner when its panel has one.
 const EMPTY_STATE_SCOPES = [
-  { url: "/?collection=systems", search: "#project-search", grid: "#project-grid", hint: "systems" },
-  { url: "/?collection=inference", search: "#inference-search", grid: "#inference-grid", hint: "inference" },
-  { url: "/?collection=runtimes", search: "#runtime-search", grid: "#runtime-grid", hint: "runtimes" },
-  { url: "/?collection=packs", search: "#pack-search", grid: "#pack-grid" },
-  { url: "/?collection=robots", search: "#robot-search", grid: "#robot-grid" },
-  { url: "/?collection=models", search: "#model-search", grid: "#model-grid" },
-  { url: "/?collection=labs", search: "#lab-search", grid: "#lab-grid" },
-  { url: "/?collection=specifications", search: "#specification-search", grid: "#specification-grid" },
+  { url: "/?collection=systems", scope: "systems", grid: "#project-grid", hint: "systems" },
+  { url: "/?collection=inference", scope: "inference", grid: "#inference-grid", hint: "inference" },
+  { url: "/?collection=runtimes", scope: "runtimes", grid: "#runtime-grid", hint: "runtimes" },
+  { url: "/?collection=packs", scope: "packs", grid: "#pack-grid" },
+  { url: "/?collection=robots", scope: "robots", grid: "#robot-grid" },
+  { url: "/?collection=models", scope: "models", grid: "#model-grid" },
+  { url: "/?collection=labs", scope: "labs", grid: "#lab-grid" },
+  { url: "/?collection=specifications", scope: "specifications", grid: "#specification-grid" },
 ];
 
 test("every scope's empty search offers the next steps, and each Directory panel with a banner offers the job", async ({ page }) => {
-  for (const { url, search, grid, hint } of EMPTY_STATE_SCOPES) {
+  for (const { url, scope, grid, hint } of EMPTY_STATE_SCOPES) {
     await page.goto(url);
     await expect(page.locator(".view.is-active .project-card").first()).toBeVisible();
     const banner = hint && page.locator(`[data-job-hint="${hint}"]`);
     if (banner) {
       // Any Finder goal with records to shortlist, asked for by its own label.
       const goal = await page.evaluate(() => finderGoalEntries().find(entry => entry.eligible).label);
-      await page.locator(search).fill(goal);
+      await search(page, goal, scope);
       await expect(banner, `${hint} names a job`).toContainText("Looks like a job:");
     }
-    await page.locator(search).fill("Zyxwvut Frobnicator");
+    await search(page, "Zyxwvut Frobnicator", scope);
     const results = page.locator(grid);
     await expect(results, `${grid} explains the empty result`).toContainText("No matches for “Zyxwvut Frobnicator”.");
     await expect(results.getByRole("button", { name: "Try the Finder" })).toBeVisible();
@@ -536,7 +609,7 @@ test("every scope's empty search offers the next steps, and each Directory panel
     // the query can be suggested for review.
     await expect(results.getByRole("link", { name: "Suggest it for review" })).toBeVisible();
     await expect(results.getByRole("button", { name: /^Show (it|them)$/ })).toHaveCount(0);
-    await expect(page.locator(`.search-field:has(${search}) .search-count`), `${search} counts nothing`).toHaveText("0 results");
+    await expect(page.locator(".search-field").filter({ has: searchBox(page, scope) }).locator(".search-count"), `${scope} counts nothing`).toHaveText("0 results");
     if (banner) await expect(banner, `${hint} drops the banner`).toBeHidden();
   }
 });
@@ -547,40 +620,39 @@ test("a search the filters hide says so, offers to show it, and never offers it 
   await addArchivedSystems(page, ["Zyxwvut Alpha", "Zyxwvut Beta"]);
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
-  const search = page.locator("#project-search");
+  const input = searchBox(page, "systems");
   const grid = page.locator("#project-grid");
-  await search.fill("Zyxwvut");
+  await input.fill("Zyxwvut");
   await expect(grid).toContainText("It matches 2 reviewed records your filters hide.");
   await expect(grid.getByRole("button", { name: "Show them" })).toBeVisible();
   // Did-you-mean offers only what the filters let through, never a hidden name.
   await expect(grid.getByRole("button", { name: "Zyxwvut Alpha", exact: true })).toHaveCount(0);
 
-  await search.fill("Zyxwvut Alpha");
+  await input.fill("Zyxwvut Alpha");
   await expect(grid).toContainText("No matches for “Zyxwvut Alpha” with these filters.");
   await expect(grid).toContainText("It matches 1 reviewed record your filters hide.");
   await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
   await expect(grid.getByRole("button", { name: "Zyxwvut Alpha", exact: true })).toHaveCount(0);
   await grid.getByRole("button", { name: "Show it" }).click();
   await expect(page.locator("#project-grid .project-card h2")).toHaveText(["Zyxwvut Alpha"]);
-  await expect(search).toHaveValue("Zyxwvut Alpha");
-  await expect(page.locator("#status-filter")).toHaveValue("");
+  await expect(input).toHaveValue("Zyxwvut Alpha");
+  await expectFilter(page, "systems", "status", "");
   // The button repaints away, so focus lands back in the search box.
-  await expect(search).toBeFocused();
+  await expect(input).toBeFocused();
 });
 
 // The Finder's handoff narrows Systems by a role set no control shows, so
 // showing what the filters hide must drop it too: Family's own path does.
 test("showing what the filters hide also drops a Finder role set", async ({ page }) => {
   await page.goto("/?view=finder");
-  for (const value of ["memory_system", "agent_memory", "balanced"]) await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-  await page.locator("[data-finder-directory]").click();
+  await finderHandoff(page, "agent_memory");
   await expect(page.locator("#finder-roles-chip")).toBeVisible();
   // An active memory system whose role the set leaves out, so only the set hides it.
   const outside = await page.evaluate(() => state.projects.find(project => project.status === "active"
     && project.system_family === "memory_system" && !state.directoryRoles.includes(project.primary_role)));
   const index = readWeb("app/search/systems.json");
   await page.route(indexRoute("systems"), route => route.fulfill({ json: withIndexWord(index, outside.id) }));
-  await page.locator("#project-search").fill(INDEX_WORD);
+  await search(page, INDEX_WORD);
   const grid = page.locator("#project-grid");
   await expect(grid).toContainText("It matches 1 reviewed record your filters hide.");
   await grid.getByRole("button", { name: "Show it" }).click();
@@ -597,17 +669,17 @@ test("a search one facet hides says so, and showing it clears that facet and kee
   await page.route(indexRoute("inference"), route => route.fulfill({ json: withIndexWord(index, service.id) }));
   await page.goto("/?collection=inference");
   await expect(page.locator("#inference-grid .project-card").first()).toBeVisible();
-  await page.locator("#inference-type-filter").selectOption(type);
-  await page.locator("#inference-search").fill(INDEX_WORD);
+  await setFilter(page, "inference", "type", type);
+  await search(page, INDEX_WORD);
   const grid = page.locator("#inference-grid");
   await expect(grid).toContainText(`No matches for “${INDEX_WORD}” with these filters.`);
   await expect(grid).toContainText("It matches 1 reviewed record your filters hide.");
   await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
   await grid.getByRole("button", { name: "Show it" }).click();
-  await expect(page.locator("#inference-type-filter")).toHaveValue("");
+  await expectFilter(page, "inference", "type", "");
   await expect(page.locator("#inference-grid .project-card h2")).toHaveText([service.name]);
-  await expect(page.locator("#inference-directory-panel .search-count")).toHaveText("1 result");
-  await expect(page.locator("#inference-search")).toHaveValue(INDEX_WORD);
+  await expect(page.locator("#results-bar .search-count")).toHaveText("1 result");
+  await expect(searchBox(page, "inference")).toHaveValue(INDEX_WORD);
   await expect(page).toHaveURL(address => address.searchParams.get("q") === INDEX_WORD && !address.searchParams.has("type"));
 });
 
@@ -619,9 +691,9 @@ test("a hidden match that is an imported source row is not called reviewed", asy
   await page.route(indexRoute("models"), route => route.fulfill({ json: withIndexWord(index, imported.id) }));
   await page.goto("/?collection=models");
   await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
-  const type = await page.locator('#model-type-filter option:not([value=""])').first().getAttribute("value");
-  await page.locator("#model-type-filter").selectOption(type);
-  await page.locator("#model-search").fill(INDEX_WORD);
+  const type = await filterControl(page, "models", "type").locator('option:not([value=""])').first().getAttribute("value");
+  await setFilter(page, "models", "type", type);
+  await search(page, INDEX_WORD);
   const grid = page.locator("#model-grid");
   await expect(grid).toContainText("It matches 1 record your filters hide.");
   await grid.getByRole("button", { name: "Show it" }).click();
@@ -656,13 +728,19 @@ test("an empty result spans the grid, at a readable measure", async ({ page }) =
 // question when a job opens it partway (R-P1-14). Boot moves no focus.
 test("a button that switches views hands focus to the new view's heading", async ({ page }) => {
   await page.goto("/?view=finder");
-  await expect(page.locator("#finder-content h2")).toHaveText("What should it do?");
+  // The Finder's heading is the view's own h1; its screen opens on the goal
+  // tiles, with no question heading between the reader and them.
+  await expect(page.locator("#finder-title")).toHaveText("Find your fit");
+  await expect(page.locator(".finder-goal")).toHaveCount(23);
   expect(await page.evaluate(() => document.activeElement === document.body), "boot leaves focus alone").toBe(true);
 
   await page.goto("/");
   await page.locator("#door-jobs button").first().press("Enter");
-  await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
-  await expect(page.locator("#finder-content h2")).toBeFocused();
+  // Every entry into the Finder, whether it arrives with a job already chosen
+  // or not, lands on the view's own heading. The old wizard stopped at a
+  // standing question to focus; the one screen has none, and a heading the
+  // reader has not scrolled to is the honest thing to put focus on.
+  await expect(page.locator("#finder-title")).toBeFocused();
 
   await searchAll(page, "Zyxwvut Frobnicator");
   await page.getByRole("button", { name: "Try the Finder" }).press("Enter");
@@ -673,53 +751,63 @@ test("a button that switches views hands focus to the new view's heading", async
   const goal = await page.evaluate(() => finderGoalEntries().find(entry => entry.eligible).label);
   await searchAll(page, goal);
   await page.locator('[data-job-hint="all"]').getByRole("button", { name: /Open shortlist/ }).press("Enter");
-  await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
-  await expect(page.locator("#finder-content h2")).toBeFocused();
+  await expect(page.locator("#finder-title")).toBeFocused();
+  await expect(page.locator(".finder-goal[aria-pressed='true']")).toHaveAttribute("aria-label", new RegExp(`^${goal}`));
 });
 
 // "Suggest it for review" waits until nothing anywhere in the catalog answers
 // the query. A match in another collection is offered through All, from a
 // Directory scope or from a sibling view (R-P1-15).
 test("a query another collection answers offers Search all, not the suggestion form", async ({ page }) => {
-  // vLLM is a local runtime, so Systems lists nothing for it.
+  // The fixture runtime is a local runtime, so Systems lists nothing for it, and
+  // its name is one no published record holds, so nothing else answers either.
+  await addRuntimeFixture(page);
+  await addSpecFixture(page);
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
-  await page.locator("#project-search").fill("vLLM");
+  await search(page, RUNTIME_QUERY);
   const systems = page.locator("#project-grid");
-  await expect(systems).toContainText(/It matches \d+ records? in other collections\./);
+  await expect(systems).toContainText("It matches records in other collections:");
   await expect(systems.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
   await systems.getByRole("button", { name: "Search all" }).click();
   await expect(pressedEntry(page)).toHaveAccessibleName(/^Everything /);
-  await expect(allSearch(page)).toHaveValue("vLLM");
-  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("vLLM");
+  await expect(allSearch(page)).toHaveValue(RUNTIME_QUERY);
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText(FIXTURE_RUNTIME.name);
   await expect(allSearch(page)).toBeFocused();
-  await expect(page).toHaveURL(address => address.searchParams.get("q") === "vLLM" && address.searchParams.get("collection") === "all");
+  await expect(page).toHaveURL(address => address.searchParams.get("q") === RUNTIME_QUERY && address.searchParams.get("collection") === "all");
 
   await page.goto("/?collection=specifications");
   await expect(page.locator("#specification-grid .project-card").first()).toBeVisible();
-  await page.locator("#specification-search").fill("vLLM");
+  await search(page, RUNTIME_QUERY);
   await page.locator("#specification-grid").getByRole("button", { name: "Search all" }).click();
   await expect(page.locator("#directory")).toHaveClass(/is-active/);
-  await expect(allSearch(page)).toHaveValue("vLLM");
-  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText("vLLM");
+  await expect(allSearch(page)).toHaveValue(RUNTIME_QUERY);
+  await expect(page.locator("#all-directory-grid .project-card h2").first()).toHaveText(FIXTURE_RUNTIME.name);
   await expect(allSearch(page)).toBeFocused();
-  await expect(page).toHaveURL(address => address.searchParams.get("q") === "vLLM" && !address.searchParams.has("view"));
+  await expect(page).toHaveURL(address => address.searchParams.get("q") === RUNTIME_QUERY && !address.searchParams.has("view"));
 
-  // Only Specifications answers this one, and All lists no specifications:
-  // no suggestion form, and nothing for Search all to show.
+  // Only Specifications answers this one, so Systems offers neither a suggestion form
+  // nor nothing: Everything holds specifications, so Search all has something to show
+  // and leads to it. This used to expect no Search all button at all, on the comment
+  // "All lists no specifications" -- the omission this fix removed.
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
-  await page.locator("#project-search").fill("Agent2Agent Protocol");
-  await expect(systems).toContainText("No matches for “Agent2Agent Protocol”.");
+  await search(page, SPEC_QUERY);
+  await expect(systems).toContainText(`No matches for “${SPEC_QUERY}”.`);
   await expect(systems.getByRole("button", { name: "Try the Finder" })).toBeVisible();
   await expect(systems.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
-  await expect(systems.getByRole("button", { name: "Search all" })).toHaveCount(0);
+  await systems.getByRole("button", { name: "Search all" }).click();
+  await expect(pressedEntry(page)).toHaveAccessibleName(/^Everything /);
+  await expect(page.locator("#all-directory-grid .specification-card")).toHaveCount(1);
+  // A specification card leads with its short name when it has one, as the A2A
+  // card did, so the assertion names the same field the card renders.
+  await expect(page.locator("#all-directory-grid .specification-card h2")).toHaveText(FIXTURE_SPEC.short_name);
 });
 
-// An empty result judges the whole catalog, and the Systems box loads only its
-// own index, so the empty result loads the rest itself. Until they land it
-// offers nothing that judges the catalog: no count, no suggestion form, and
-// no exclusions fetch. Here only a model holds the query, in its held index.
+// An empty result judges the whole catalog, so it waits for every search
+// index a query loads. Until they land it offers nothing that judges the
+// catalog: no collection button, no suggestion form, and no exclusions
+// fetch. Here only a model holds the query, in its held index.
 test("an empty result waits for every search index before it counts other collections", async ({ page }) => {
   const models = readWeb("app/search/models.json");
   const [first] = Object.keys(models);
@@ -736,7 +824,7 @@ test("an empty result waits for every search index before it counts other collec
   });
   await page.goto("/?collection=systems");
   await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
-  await page.locator("#project-search").fill(INDEX_WORD);
+  await search(page, INDEX_WORD);
   const grid = page.locator("#project-grid");
   await expect(grid).toContainText(`No matches for “${INDEX_WORD}”.`);
   await expect(grid.getByRole("button", { name: "Try the Finder" })).toBeVisible();
@@ -749,12 +837,12 @@ test("an empty result waits for every search index before it counts other collec
   expect(exclusions, "no exclusions fetch while an index is pending").toEqual([]);
 
   release();
-  await expect(grid).toContainText("It matches 1 record in other collections.");
+  await expect(grid).toContainText("It matches records in other collections: Models 1 · Search all");
   await expect(grid.getByRole("button", { name: "Search all" })).toBeVisible();
   await expect(grid.getByRole("link", { name: "Suggest it for review" })).toHaveCount(0);
 
   // Once every index has landed, a later empty result fetches none again.
-  await page.locator("#project-search").fill("Zyxwvut Frobnicator");
+  await search(page, "Zyxwvut Frobnicator");
   await expect(grid.getByRole("link", { name: "Suggest it for review" })).toBeVisible();
   expect([...indexes].sort(), "each index is fetched once").toEqual([...new Set(indexes)].sort());
   expect(indexes, "every collection's index").toHaveLength(8);
@@ -824,7 +912,7 @@ test("a search index that fails is asked for once, and a focused search box retr
 
   await page.unroute(indexRoute("labs"));
   await openCollection(page, "labs");
-  await page.locator("#lab-search").focus();
+  await searchBox(page, "labs").focus();
   await page.waitForFunction(() => searchIndexes.labs !== undefined);
 });
 
@@ -845,7 +933,7 @@ test("a search index whose body is not an object counts as failed, so the page s
 
   await page.unroute(indexRoute("labs"));
   await openCollection(page, "labs");
-  await page.locator("#lab-search").focus();
+  await searchBox(page, "labs").focus();
   await page.waitForFunction(() => searchIndexes.labs !== undefined);
 });
 
@@ -868,7 +956,7 @@ test("a repaint that lands in another view leaves the comparison tray hidden", a
   const tray = page.locator("#comparison-tray");
   await page.locator("#project-grid .compare-toggle").first().click();
   await expect(tray).toBeVisible();
-  await page.locator("#project-search").fill(INDEX_WORD);
+  await search(page, INDEX_WORD);
   await page.waitForFunction(() => ["systems", "inference", "runtimes", "packs", "robots", "labs"]
     .every(key => searchIndexes[key] !== undefined));
 
@@ -953,7 +1041,7 @@ for (const colorScheme of ["light", "dark"]) {
     const { status } = readWeb("app/systems.json").systems.find(record => record.id === system);
     await page.goto(`/?collection=systems&status=${status === "active" ? "archived" : "active"}`);
     await page.waitForFunction(() => state.urlReady);
-    await page.locator("#project-search").fill(INDEX_WORD);
+    await search(page, INDEX_WORD);
     const systems = page.locator("#project-grid .empty-search");
     await expectLegible(systems.getByRole("button", { name: "Show it" }), "Show it");
     await expectLegible(systems.getByRole("button", { name: "Search all" }), "Search all");

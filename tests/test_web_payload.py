@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import contextlib
+import io
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -432,6 +435,24 @@ class WebPayloadTests(unittest.TestCase):
                 collection,
             )
 
+    def test_active_system_review_dates_ride_the_boot_envelope(self) -> None:
+        """The stage orders active systems by review date, which the boot record does not carry."""
+        payload = json.loads(self.payloads["app/systems.json"])
+        systems = self.catalog["projects.json"]["projects"]
+        expected = {
+            record["id"]: record["verified_at"]
+            for record in systems
+            if record.get("status") == "active" and record.get("verified_at")
+        }
+        self.assertEqual(payload["review_dates"], expected)
+        inactive = [
+            record["id"]
+            for record in systems
+            if record.get("status") != "active" and record.get("verified_at")
+        ]
+        self.assertTrue(inactive, "the fixture needs an inactive dated system")
+        self.assertTrue(set(inactive).isdisjoint(payload["review_dates"]))
+
     def test_recent_record_ids_orders_by_review_date_then_name(self) -> None:
         records = [
             {"id": "b", "name": "Beta", "verified_at": "2026-09-01"},
@@ -499,6 +520,75 @@ class WebPayloadCheckGateTests(unittest.TestCase):
             (web / "app" / "leftover.json").write_text("{}", encoding="utf-8")
 
         self.assertEqual(1, self._run_check({"app/systems.json": "fresh"}, orphan))
+
+    def test_boot_payload_list_matches_what_the_page_awaits(self) -> None:
+        """The blocking-payload list is derived, so it cannot drift from COLLECTIONS.
+
+        `bootstrap()` awaits one payload per collection plus the shared taxonomy as
+        a single `Promise.all`, and the 60 KB budget in docs/WEB.md is measured
+        against exactly those. A hand-maintained list is the failure this closes:
+        a new collection would be generated and paid for at boot while the budget
+        silently stopped counting it.
+        """
+        from scripts.build_web_payload import BOOT_PAYLOADS
+
+        expected = [f"app/{collection}.json" for collection, *_ in COLLECTIONS]
+        self.assertEqual(expected, list(BOOT_PAYLOADS[:-1]))
+        self.assertEqual("taxonomy.json", BOOT_PAYLOADS[-1])
+        source = (ROOT / "web" / "app.js").read_text(encoding="utf-8")
+        for path in BOOT_PAYLOADS:
+            self.assertIn(
+                f'loadJSON("{path}")',
+                source,
+                f"{path} is counted against the boot budget but bootstrap() never awaits it",
+            )
+
+    def test_counts_reports_every_boot_payload_and_its_budget(self) -> None:
+        """`--counts` is the budget's measurement, so it must be complete and honest.
+
+        It prints per file and names the verdict against the budget in
+        docs/WEB.md. The report always exits 0: the budget is currently exceeded,
+        and a check that failed today would be skipped rather than obeyed. This
+        asserts the report says so plainly instead.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            web = Path(tmp)
+            for name, body in (
+                ("app/systems.json", b'{"systems": []}'),
+                ("taxonomy.json", b"{}"),
+            ):
+                target = web / name
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(body)
+            counts = build_web_payload.boot_payload_counts(web)
+            self.assertEqual(
+                ["app/systems.json", "taxonomy.json"], [c[0] for c in counts]
+            )
+            self.assertEqual(
+                sorted(counts, key=lambda entry: entry[1], reverse=True), counts
+            )
+            report = build_web_payload.render_boot_counts(counts)
+            self.assertIn("blocking boot payload:", report)
+            self.assertIn(f"{build_web_payload.BOOT_BUDGET_KB} KB", report)
+            self.assertIn("within", report)
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(0, build_web_payload.main(["--counts"]))
+
+    def test_counts_over_budget_says_over(self) -> None:
+        """A payload over the budget must not be described as within it."""
+        with tempfile.TemporaryDirectory() as tmp:
+            web = Path(tmp)
+            target = web / "taxonomy.json"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            # 96 KB of incompressible noise, so the reading cannot be shrunk away
+            # by gzip. A repeating byte pattern would compress to almost nothing
+            # and the assertion would pass or fail for the wrong reason.
+            target.write_bytes(os.urandom(96 * 1024))
+            report = build_web_payload.render_boot_counts(
+                build_web_payload.boot_payload_counts(web)
+            )
+            self.assertIn("over", report)
+            self.assertNotIn("within", report)
 
 
 if __name__ == "__main__":

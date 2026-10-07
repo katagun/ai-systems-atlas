@@ -1,9 +1,10 @@
 const test = require("node:test");
 const crypto = require("node:crypto");
+const { relative, sep } = require("node:path");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, familyEmblem, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, holdsPhrase, labDistributionModes, labRelations, labsForRecord, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelMetadataAttribution, modelSourceLabel, modelsKickerText, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, priorityBoost, readScopeURLParams, recommendationReasons, recordMatch, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, suggestNames, systemDeploymentSummary, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, holdsPhrase, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -16,6 +17,83 @@ const projects = [
   { name: "GStack", primary_role: "coding_agent_workflow", system_family: "agent_system", agent_relation: "coding_workflow", architectures: ["git_versioned"], deployment: ["local_cli"], agent_interfaces: ["terminal"], source_model: "mixed_open_source", licenses: ["MIT", "OFL-1.1"], status: "active", local_first: true, stars: 25, score: { overall: 8.6 } },
   { name: "Assistant", primary_role: "general_ai_assistant", system_family: "assistant_system", agent_relation: "agent_enabled_ui", architectures: ["hybrid"], deployment: ["desktop", "managed_cloud", "mobile"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: false, stars: null, score: { overall: 8.8 } },
 ];
+
+test("Elements uses primary roles, active status, taxonomy grouping and alphabetical records", () => {
+  const taxonomy = { system_families: [{ id: "agent", name: "Agents" }], primary_roles: [
+    { id: "coding_agent", family: "agent", name: "Coding agent" },
+    { id: "future_role", family: "agent", name: "Future role" },
+  ] };
+  const rows = systemElements([
+    { id: "b", name: "Beta", system_family: "agent", primary_role: "coding_agent", status: "active", score: { overall: 10 } },
+    { id: "a", name: "Alpha", system_family: "agent", primary_role: "coding_agent", status: "active", score: { overall: 0 } },
+    { id: "old", name: "Old", system_family: "agent", primary_role: "coding_agent", status: "archived" },
+    { id: "wrong", name: "Wrong", system_family: "other", primary_role: "coding_agent", status: "active" },
+  ], taxonomy);
+  assert.equal(rows[0].count, 2);
+  assert.equal(rows[0].roles[0].symbol, "Ca");
+  assert.deepEqual(rows[0].roles[0].records.map(record => record.id), ["a", "b"]);
+  assert.deepEqual(rows[0].roles[1].records, []);
+  assert.equal(rows[0].roles[1].symbol, "Fu");
+  assert.equal(systemElements([], taxonomy)[0].count, 0);
+});
+
+test("Elements covers every active system once with unique role symbols", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const projects = readWebJSON("app/systems.json").systems;
+  const groups = systemElements(projects, taxonomy);
+  const roles = groups.flatMap(group => group.roles);
+  const ids = roles.flatMap(role => role.records.map(record => record.id));
+  assert.deepEqual(ids.slice().sort(), projects.filter(project => project.status === "active").map(project => project.id).sort());
+  assert.equal(new Set(ids).size, ids.length);
+  assert.equal(new Set(roles.map(role => role.symbol)).size, roles.length);
+});
+
+test("Elements previews the labs that build a role, in display order, marks only", () => {
+  const labs = [
+    { id: "lab-lead", name: "Zeta", display_order: 10, systems: ["one"] },
+    { id: "lab-unmarked", name: "Gamma", display_order: 10, systems: ["five"] },
+    { id: "lab-tied-a", name: "Alpha", display_order: 20, systems: ["two"] },
+    { id: "lab-tied-b", name: "Beta", display_order: 20, systems: ["three"] },
+    { id: "lab-small", name: "Small", display_order: 30, systems: ["four"] },
+    { id: "lab-absent", name: "Delta", display_order: 10, systems: [] },
+  ];
+  const index = buildLabIndex(labs, []);
+  const records = [{ id: "one" }, { id: "two" }, { id: "three" }, { id: "four" }, { id: "five" }];
+  // A lab with no mark is left out rather than previewed as a monogram, and the
+  // remaining tiers are read in display order.
+  const marked = new Set(["lab-lead", "lab-small", "lab-tied-a", "lab-tied-b"]);
+  assert.deepEqual(elementLabs(records, index, marked).map(lab => lab.id), ["lab-lead", "lab-tied-a", "lab-tied-b", "lab-small"]);
+  // Without the mark filter the ordering still holds, and it is total: labs
+  // sharing a display_order fall to the name.
+  assert.deepEqual(elementLabs(records, index).map(lab => lab.id), ["lab-unmarked", "lab-lead", "lab-tied-a", "lab-tied-b", "lab-small"]);
+  // A role whose systems no lab owns previews nothing, and neither does a
+  // missing index or an empty record list.
+  assert.deepEqual(elementLabs([{ id: "unknown" }], index, marked), []);
+  assert.deepEqual(elementLabs(records, null, marked), []);
+  assert.deepEqual(elementLabs([], index, marked), []);
+});
+
+test("every lab carries a preview precedence and roles preview only marked labs", () => {
+  const labs = readWebJSON("labs.json").labs;
+  const projects = readWebJSON("app/systems.json").systems;
+  const taxonomy = readWebJSON("taxonomy.json");
+  const logos = readWebJSON("logos.json");
+  // Every lab carries a preview precedence, and no two share one, so the
+  // ordering a tile draws its three marks from is a total order.
+  const orders = labs.map(lab => lab.display_order);
+  assert.equal(new Set(orders).size, orders.length);
+  assert.ok(orders.every(order => Number.isInteger(order) && order > 0 && order % 10 === 0));
+  const index = buildLabIndex(labs, readWebJSON("app/models.json").models);
+  const marked = new Set(Object.keys(logos.records).filter(id => logos.records[id]));
+  const roles = systemElements(projects, taxonomy).flatMap(group => group.roles);
+  for (const role of roles) {
+    const previews = elementLabs(role.records, index, marked);
+    for (const lab of previews) assert.ok(marked.has(lab.id), `${role.id} previews the unmarked ${lab.id}`);
+    // The preview is the whole ordered set the tile draws three from, so the
+    // tiles' remainder counts stay a property of the catalog, not of the layout.
+    assert.deepEqual(previews.map(lab => lab.id), elementLabs(role.records, index, marked).map(lab => lab.id));
+  }
+});
 
 test("deployment summaries retain missing values and count overlapping modes once", () => {
   const taxonomy = { system_families: [{ id: "agent", name: "Agents" }], source_models: [{ id: "open", name: "Open" }], deployment_modes: [{ id: "local", name: "Local" }, { id: "cloud", name: "Cloud" }] };
@@ -132,6 +210,7 @@ test("directory defaults expose every active family without a hidden role constr
     deployment: "",
     agentInterface: "",
     capability: "",
+    retrieval: "",
     sourceModel: "",
     license: "",
     status: "active",
@@ -676,6 +755,79 @@ test("the systems scope writes the capability to the URL", () => {
   assert.equal(restored.values.capability, "robot_control");
 });
 
+// Retrieval is a trait, not a role (ADR 003): RAG reaches the catalog as the
+// modes a record carries, and the filter is how a reader reaches it.
+const retrievalProjects = [
+  { name: "Vector App", primary_role: "ai_knowledge_app", system_family: "memory_system", agent_relation: "agent_runtime", architectures: ["vector_index"], deployment: ["self_hosted"], agent_interfaces: ["web_app"], retrieval_modes: ["semantic_vector", "hybrid", "agentic"], source_model: "open_source", licenses: ["MIT"], status: "active", local_first: true, stars: 5, score: { overall: 8 } },
+  { name: "Graph Agent", primary_role: "coding_agent", system_family: "agent_system", agent_relation: "agent_runtime", architectures: ["graph_versioned"], deployment: ["local_cli"], agent_interfaces: ["terminal"], retrieval_modes: ["graph_traversal", "agentic"], source_model: "open_source", licenses: ["MIT"], status: "active", local_first: true, stars: 6, score: { overall: 9 } },
+  { name: "Prompt Only", primary_role: "general_ai_assistant", system_family: "assistant_system", agent_relation: "agent_enabled_ui", architectures: ["hybrid"], deployment: ["managed_cloud"], agent_interfaces: ["web_app"], retrieval_modes: [], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: false, stars: null, score: { overall: 7 } },
+];
+
+test("retrieval filtering reaches the systems that carry a mode", () => {
+  const vector = filterAndSortProjects(retrievalProjects, { retrieval: "semantic_vector", status: "active", sort: "name" });
+  const graph = filterAndSortProjects(retrievalProjects, { retrieval: "graph_traversal", status: "active", sort: "name" });
+
+  assert.deepEqual(vector.map(project => project.name), ["Vector App"]);
+  assert.deepEqual(graph.map(project => project.name), ["Graph Agent"]);
+});
+
+test("the retrieval filter defaults to unset and skips records with no modes", () => {
+  assert.equal(directoryDefaults().retrieval, "");
+  assert.equal(matchesProject(retrievalProjects[0], { retrieval: "" }), true);
+  assert.equal(matchesProject(retrievalProjects[2], { retrieval: "semantic_vector" }), false);
+});
+
+test("the retrieval filter combines with family rather than replacing it", () => {
+  const agents = filterAndSortProjects(retrievalProjects, {
+    family: "agent_system",
+    retrieval: "agentic",
+    status: "active",
+    sort: "name",
+  });
+  assert.deepEqual(agents.map(project => project.name), ["Graph Agent"]);
+  const memory = filterAndSortProjects(retrievalProjects, {
+    family: "memory_system",
+    retrieval: "agentic",
+    status: "active",
+    sort: "name",
+  });
+  assert.deepEqual(memory.map(project => project.name), ["Vector App"]);
+});
+
+test("system search reaches a record by the retrieval modes it carries", () => {
+  const results = filterAndSortProjects(retrievalProjects, {
+    ...directoryDefaults(),
+    term: "semantic vector",
+  });
+  assert.deepEqual(results.map(project => project.name), ["Vector App"]);
+  assert.deepEqual(filterAndSortProjects(retrievalProjects, {
+    ...directoryDefaults(),
+    term: "traversal",
+  }).map(project => project.name), ["Graph Agent"]);
+});
+
+test("the systems scope writes the retrieval mode to the URL", () => {
+  assert.equal(SCOPE_URL_PARAMS.systems.retrieval, "");
+  const written = scopeURLParams("systems", { retrieval: "graph_traversal", status: "active", sort: "name" });
+  assert.deepEqual(written, [["retrieval", "graph_traversal"]]);
+  const restored = readScopeURLParams("systems", new URLSearchParams(written), {
+    retrieval: new Set(["", "graph_traversal"]),
+  });
+  assert.equal(restored.values.retrieval, "graph_traversal");
+});
+
+test("the published systems index carries retrieval modes as searchable words", () => {
+  const index = readWebJSON("app/search/systems.json");
+  assert.match(index.llamaindex, /semantic_vector/);
+  // The index holds the raw trait id; the tokenizer is what turns an
+  // underscore into the space a reader's two-word query carries.
+  const vectorRecords = filterAndSortProjects(
+    [readWebJSON("app/systems.json").systems.find(record => record.id === "llamaindex")],
+    { ...directoryDefaults(), term: "semantic vector", searchIndex: index },
+  );
+  assert.deepEqual(vectorRecords.map(record => record.id), ["llamaindex"]);
+});
+
 test("robot control has no card badge (ADR 045)", () => {
   const tests = Object.values(CARD_BADGES).map(badge => JSON.stringify(badge.test || {}));
   assert.ok(tests.every(test => !test.includes("robot_control")), "a badge tests robot_control");
@@ -689,6 +841,55 @@ test("monogram glyphs use the first alphanumeric character uppercased", () => {
   assert.equal(monogramGlyph(".NET"), "N");
   assert.equal(monogramGlyph(""), "•");
   assert.equal(monogramGlyph(undefined), "•");
+});
+
+test("a lab card's flag covers every country the taxonomy records, and nothing else", () => {
+  const fs = require("node:fs");
+  const path = require("node:path");
+  const { countryFlag } = require("../web/app-core.js");
+  const readJSON = file => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "web", file), "utf8"));
+
+  // A regional indicator pair: two code points in the flag block, so a flag
+  // cannot be a letter, a digit, or a country the taxonomy has not recorded.
+  const isFlag = value => /^[\u{1F1E6}-\u{1F1FF}]{2}$/u.test(value);
+  for (const country of readJSON("taxonomy.json").countries) {
+    const flag = countryFlag(country.id);
+    if (country.id === "none_listed") assert.equal(flag, "", "no headquarters is not a country to flag");
+    else assert.ok(isFlag(flag), `no flag for the taxonomy country ${country.id} (${country.name})`);
+  }
+  // A record that joins to a lab inherits its geography on the card (ADR 053),
+  // so a robot whose maker is a lab carries the same circles the lab card does.
+  const robots = readJSON("robots.json").robots;
+  const labs = readJSON("labs.json").labs;
+  const labNames = new Set(labs.flatMap(lab => lab.catalog_names));
+  const makerLab = lab => (lab.research_locations || []).concat(lab.headquarters);
+  for (const robot of robots) {
+    const makers = labs.filter(lab => lab.catalog_names.includes(robot.manufacturer));
+    assert.ok(labNames.has(robot.manufacturer), `${robot.id} names no lab for its manufacturer`);
+    if (makers.length) {
+      const expected = makers.flatMap(makerLab);
+      assert.equal(makers.length, 1, `${robot.manufacturer} is claimed by more than one lab`);
+      assert.deepEqual(expected, [...new Set(expected)], `${robot.id} would print a country twice`);
+      assert.equal(makerLab(makers[0]).includes("none_listed"), false, `${robot.id} has no country to flag`);
+    }
+  }
+
+  for (const lab of labs) {
+    assert.ok(lab.headquarters, `${lab.id} records no headquarters to flag`);
+    // Both geography fields ride on the boot record, so a card can paint them
+    // without its detail payload (ADR 052).
+    const boot = readJSON("app/labs.json").labs.find(entry => entry.id === lab.id);
+    for (const code of [lab.headquarters, ...(lab.research_locations || [])]) {
+      assert.equal(countryFlag(code), countryFlag(code.toLowerCase()));
+      if (code === "none_listed") assert.equal(countryFlag(code), "", `${lab.id} has no country to flag`);
+      else assert.notEqual(countryFlag(code), "", `${lab.id} has no flag for ${code}`);
+      if (code === lab.headquarters) assert.ok("headquarters" in boot, `${lab.id} boot record lacks headquarters`);
+      else assert.ok((boot.research_locations || []).includes(code), `${lab.id} boot record lacks ${code}`);
+    }
+  }
+  for (const unknown of ["none_listed", "", undefined, "zz", "usa"]) {
+    assert.equal(countryFlag(unknown), "", `${unknown} must not borrow a flag`);
+  }
 });
 
 test("every logo mapping points at a published record and a vendored plain mark", () => {
@@ -829,6 +1030,20 @@ test("lab releases list newest first and fall back to the name when a date is mi
   assert.deepEqual(alpha.map(item => item.id), ["alpha-one", "alpha-two", "alpha-early"], "sorting copies rather than reorders");
 });
 
+test("a stage lists dated records newest first and breaks a shared date by name", () => {
+  const { newestDated } = require("../web/app-core.js");
+  const records = [
+    { id: "late-b", name: "Beta", release: "2026-09-22" },
+    { id: "late-a", name: "Alpha", release: "2026-09-22" },
+    { id: "mid", name: "Mid", release: "2026-09-21" },
+    { id: "undated", name: "Undated", release: "" },
+  ];
+  const dateOf = record => record.release;
+  assert.deepEqual(newestDated(records, dateOf).map(item => item.id), ["late-a", "late-b", "mid"]);
+  assert.deepEqual(records.map(item => item.id), ["late-b", "late-a", "mid", "undated"], "sorting copies rather than reorders");
+  assert.deepEqual(newestDated([], dateOf), []);
+});
+
 test("a lab shows which distribution modes its releases carry, in taxonomy order", () => {
   const alpha = labRelations(labs[0], labCatalog).models;
   assert.deepEqual(labDistributionModes(alpha, ["downloadable_weights", "developer_api", "third_party_hosting"]), ["downloadable_weights", "developer_api", "third_party_hosting"]);
@@ -867,6 +1082,61 @@ test("a record dialog finds its lab by its own collection's join rule", () => {
   assert.deepEqual(ids("system", { id: "alpha-chat" }), ["lab-alpha"]);
   assert.deepEqual(ids("system", { id: "unrelated" }), []);
   assert.deepEqual(labsForRecord("model", labCatalog.models[0], null), []);
+});
+
+test("model card marks prefer a release mapping, then a joined lab mark", () => {
+  const index = buildLabIndex(labs, labCatalog.models);
+  const reviewed = labCatalog.models[0];
+  const imported = labCatalog.models[3];
+  const marks = { "lab-alpha": "lobe:alpha", "alpha-one": "lobe:alpha-one" };
+  assert.equal(markRecordId("model", reviewed, index, marks), "alpha-one");
+  assert.equal(markRecordId("model", { ...reviewed, id: "model-new" }, index, marks), "lab-alpha");
+  assert.equal(markRecordId("model", imported, index, marks), "lab-alpha");
+  assert.equal(markRecordId("model", labCatalog.models[6], index, marks), "gamma-two");
+  assert.equal(markRecordId("system", { id: "alpha-chat" }, index, marks), "alpha-chat");
+  assert.equal(markMonogramName("model", { id: "model-new", name: "New Chat", developer: "Alpha" }, "lab-alpha", index), "Alpha");
+});
+
+test("imported model cards name the joined lab instead of the namespace slug", () => {
+  const index = buildLabIndex(labs, labCatalog.models);
+  assert.equal(modelCardDeveloperLabel(labCatalog.models[3], index), "Alpha");
+  assert.equal(modelCardDeveloperLabel(labCatalog.models[6], index), "gamma");
+});
+
+// Related navigation inside a system dialog comes from data the boot payload
+// already carries: the same primary role for siblings, superseded_by links
+// for previous and next. Active records come first, then names A–Z, and the
+// record itself is never listed.
+test("a system dialog lists same-role siblings and predecessor and successor links", () => {
+  const systems = [
+    { id: "alpha-chat", name: "Alpha Chat", primary_role: "general_ai_assistant", status: "active" },
+    { id: "beta-chat", name: "Beta Chat", primary_role: "general_ai_assistant", status: "active" },
+    { id: "old-chat", name: "Old Chat", primary_role: "general_ai_assistant", status: "archived" },
+    { id: "agent-one", name: "Agent One", primary_role: "coding_agent", status: "active", superseded_by: "agent-two" },
+    { id: "agent-two", name: "Agent Two", primary_role: "coding_agent", status: "active" },
+  ];
+  assert.deepEqual(relatedSystems(systems[0], systems).map(item => item.id), ["beta-chat", "old-chat"]);
+  assert.deepEqual(relatedSystems(systems[0], systems, 1).map(item => item.id), ["beta-chat"]);
+  assert.deepEqual(relatedSystems(systems[3], systems).map(item => item.id), ["agent-two"]);
+  assert.equal(successorSystem(systems[3], systems).id, "agent-two");
+  assert.equal(successorSystem(systems[4], systems), null);
+  assert.deepEqual(predecessorSystems(systems[4], systems).map(item => item.id), ["agent-one"]);
+  assert.deepEqual(predecessorSystems(systems[0], systems), []);
+});
+
+test("more-from-lab lists same-lab systems besides the record itself", () => {
+  const owned = [{ id: "lab-a", name: "A", catalog_names: ["A"], systems: ["chat-a", "chat-b"] }];
+  const index = buildLabIndex(owned, []);
+  const projects = [
+    { id: "chat-a", name: "Chat A", status: "active" },
+    { id: "chat-b", name: "Chat B", status: "active" },
+    { id: "chat-c", name: "Chat C", status: "active" },
+  ];
+  const more = moreFromLabSystems(projects[0], { index, projects });
+  assert.equal(more.lab.id, "lab-a");
+  assert.deepEqual(more.systems.map(item => item.id), ["chat-b"]);
+  assert.equal(more.total, 1);
+  assert.equal(moreFromLabSystems(projects[2], { index, projects }), null);
 });
 
 test("the models lab filter narrows to the ids it is given", () => {
@@ -954,36 +1224,119 @@ function indexHTML() {
   return fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
 }
 
-test("index.html references each web asset under its content hash so a change is never served from a stale cache", () => {
-  const references = [...indexHTML().matchAll(/(?:href|src)="([\w./-]+)\?v=([^"]*)"/g)];
-  assert.deepEqual(references.map(match => match[1]).sort(), ["app-core.js", "app.js", "fonts.css", "styles.css"]);
-  for (const [, file, version] of references) {
-    const digest = crypto.createHash("sha256").update(fs.readFileSync(path.join(__dirname, "..", "web", file))).digest("hex").slice(0, 12);
-    assert.equal(version, digest, `${file} is referenced as ?v=${version} but its content hashes to ${digest}; run node scripts/build_asset_version.mjs`);
+// A generator that vendors bytes out of node_modules produces a file that CI
+// regenerates from the pinned versions, so a drifted local install is a wrong artifact
+// rather than a wrong check. On 2026-09-30 simple-icons 16.32.0 sat in node_modules
+// against a 16.33.0 pin in both package.json and package-lock.json: every local
+// `--check` passed and CI rejected the committed logos.json on two consecutive runs,
+// because logos.json records the version that produced it. Nothing compared the two, so
+// the guard is the thing that has to exist rather than a note asking for `npm ci`.
+const { assertPinnedInstall, installDrift, pinnedVersion: pinned } = require("../scripts/install_pin.mjs");
+
+test("a generator refuses an install that is not the one CI installs, and says how to fix it", () => {
+  assert.deepEqual(
+    installDrift(["icons", "fonts"], {
+      pinned: name => (name === "icons" ? "16.33.0" : "5.3.0"),
+      installed: name => (name === "icons" ? "16.32.0" : "5.3.0"),
+    }),
+    [{ name: "icons", installed: "16.32.0", locked: "16.33.0", problem: "installed 16.32.0, pinned 16.33.0" }],
+    "one entry per drifted package, naming both versions",
+  );
+  assert.throws(
+    () => assertPinnedInstall(["icons"], { pinned: () => "16.33.0", installed: () => "16.32.0" }),
+    /npm ci --ignore-scripts/,
+    "the error has to name the command that fixes it",
+  );
+  // A package that is merely absent is drift, and `npm ci` fixes it. A name the
+  // lockfile never declared is a repository defect that `npm ci` cannot fix, so it must
+  // not be dressed as a version mismatch with that remedy attached.
+  assert.deepEqual(installDrift(["icons"], { pinned: () => "1.0.0", installed: () => null }).map(d => d.problem), ["not installed"]);
+  assert.throws(() => installDrift(["undeclared"]), /not a declared dependency in package-lock\.json/);
+});
+
+test("this checkout's packages are the pinned ones, which is what makes a passing freshness check mean anything", () => {
+  for (const name of ["@lobehub/icons-static-svg", "simple-icons", "@fontsource/ibm-plex-sans", "@fontsource-variable/bricolage-grotesque", "@fontsource-variable/jetbrains-mono"]) {
+    assert.deepEqual(installDrift([name]), [], `${name} is not installed at the pinned version; run npm ci --ignore-scripts`);
+  }
+  // Both artifacts already record the version that produced them, so a stamp that
+  // disagrees with the lock is the exact shape of the failure and is checkable here
+  // without regenerating either file.
+  const logos = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "web", "logos.json"), "utf8"));
+  assert.equal(logos.sources.simple.version, pinned("simple-icons"), "logos.json records the simple-icons version it was built from");
+  assert.equal(logos.sources.lobe.version, pinned("@lobehub/icons-static-svg"), "logos.json records the lobehub version it was built from");
+  const fonts = fs.readFileSync(path.join(__dirname, "..", "web", "fonts.css"), "utf8");
+  for (const [, name, version] of fonts.matchAll(/(@fontsource[a-z-]*\/[a-z0-9-]+)@([0-9][^ ]*?)(?: \(|$)/gm)) {
+    assert.equal(version, pinned(name), `fonts.css records ${name}@${version}`);
   }
 });
 
-test("every catalog file app.js fetches is stamped with its content hash so the data can be cached", () => {
-  const stamped = JSON.parse(indexHTML().match(/<script type="application\/json" id="data-versions">([^<]*)<\/script>/)[1]);
-  const fetched = [...fs.readFileSync(path.join(__dirname, "..", "web", "app.js"), "utf8")
+const { DETAIL_VERSION_KEY, PLACEHOLDER, pageFiles, readDetailTree, readPageAsset, stampAssetVersions, violations } =
+  require("../scripts/build_asset_version.mjs");
+
+// ADR 050: committed pages carry PLACEHOLDER, and the deploy job substitutes content
+// hashes. So the committed file cannot be checked for a correct hash any more, and the
+// coverage that check used to give is asserted against the stamper's *output* instead:
+// the guarantee that a changed asset is never served from a stale cache still has to
+// hold, it just lives in a function call rather than in a committed line.
+const webRoot = path.join(__dirname, "..", "web");
+const stampedPage = (name = "index.html") => {
+  const page = path.join(webRoot, name);
+  return stampAssetVersions(fs.readFileSync(page, "utf8"), readPageAsset(page), readDetailTree);
+};
+const stampsOf = (html) => new Map([...html.matchAll(/(?:href|src)="([\w./-]+)\?v=([^"]*)"/g)].map(m => [m[1], m[2]]));
+const dataVersionsOf = (html) => JSON.parse(html.match(/id="data-versions">([^<]*)</)[1]);
+
+test("no committed page carries a content hash, which is what makes hash-only merge conflicts impossible", () => {
+  const committed = pageFiles().map(page => violations(page, fs.readFileSync(page, "utf8"))).flat();
+  assert.deepEqual(committed, [], `a deploy build was committed, or a reference is broken:\n  ${committed.join("\n  ")}`);
+  for (const page of pageFiles()) {
+    const html = fs.readFileSync(page, "utf8");
+    for (const [file, version] of stampsOf(html)) {
+      assert.equal(version, PLACEHOLDER, `${page} references ${file} under ?v=${version}, not the placeholder`);
+    }
+  }
+});
+
+test("the deploy stamper resolves every page's references, so one file changed on one branch moves only that file's stamp", () => {
+  const app = stampsOf(stampedPage("index.html"));
+  assert.deepEqual([...app.keys()].sort(), ["app-core.js", "app.js", "fonts.css", "styles.css"]);
+  for (const [file, version] of app) {
+    const digest = crypto.createHash("sha256").update(fs.readFileSync(path.join(webRoot, file))).digest("hex").slice(0, 12);
+    assert.equal(version, digest, `${file} would be published as ?v=${version} but hashes to ${digest}`);
+  }
+  // The blog reaches the same two stylesheets by a different, page-relative path and must
+  // land on the same hashes, which is the whole point of one implementation replacing the
+  // second copy this module used to have in build_blog.py.
+  for (const page of pageFiles().filter(name => name.includes(`${sep}blog${sep}`))) {
+    for (const [file, version] of stampsOf(stampedPage(relative(webRoot, page)))) {
+      const shared = file.replace(/^(\.\.\/)+/, "");
+      assert.equal(version, app.get(shared), `${relative(webRoot, page)} and the app disagree on ${shared}`);
+    }
+  }
+});
+
+test("every catalog file app.js fetches is stamped at deploy so the data can be cached", () => {
+  const fetched = [...fs.readFileSync(path.join(webRoot, "app.js"), "utf8")
     .matchAll(/loadJSON\("([\w./-]+)"\)/g)].map(match => match[1]);
+  const committed = dataVersionsOf(indexHTML());
   for (const file of fetched) {
-    assert.ok(file in stamped, `app.js fetches ${file} but index.html does not stamp it`);
+    assert.ok(file in committed, `app.js fetches ${file} but index.html does not stamp it`);
   }
+  const stamped = dataVersionsOf(stampedPage());
   for (const [file, version] of Object.entries(stamped)) {
-    if (file === "app/detail") continue; // one shared stamp over a directory, not a single file's hash
-    const digest = crypto.createHash("sha256").update(fs.readFileSync(path.join(__dirname, "..", "web", file))).digest("hex").slice(0, 12);
-    assert.equal(version, digest, `${file} is stamped ${version} but hashes to ${digest}; run node scripts/build_asset_version.mjs`);
+    if (file === DETAIL_VERSION_KEY) continue; // one shared stamp over a directory, not a single file's hash
+    const digest = crypto.createHash("sha256").update(fs.readFileSync(path.join(webRoot, file))).digest("hex").slice(0, 12);
+    assert.equal(version, digest, `${file} would be published as ${version} but hashes to ${digest}`);
   }
 });
 
-// The loop above exempts app/detail because it stamps a tree rather than a
-// file. Nothing else checked its value, so a builder whose hashing changed —
-// or one whose stamp depended on where the checkout lived — was invisible
-// here. This recomputes it independently: over the whole tree, in sorted order,
-// under each file's slash-separated path relative to the detail root.
+// The two loops above exempt app/detail because it stamps a tree rather than a file.
+// Nothing else checked its value, so a builder whose hashing changed -- or one whose
+// stamp depended on where the checkout lived -- was invisible here. This recomputes it
+// independently: over the whole tree, in sorted order, under each file's slash-separated
+// path relative to the detail root.
 test("the shared app/detail stamp hashes every detail file's content under a checkout-independent name", () => {
-  const detailRoot = path.join(__dirname, "..", "web", "app", "detail");
+  const detailRoot = path.join(webRoot, "app", "detail");
   const names = fs.readdirSync(detailRoot, { recursive: true })
     .filter(name => fs.statSync(path.join(detailRoot, name)).isFile())
     .map(name => name.split(path.sep).join("/"))
@@ -995,22 +1348,26 @@ test("the shared app/detail stamp hashes every detail file's content under a che
     hash.update(Buffer.from(name));
     hash.update(fs.readFileSync(path.join(detailRoot, name)));
   }
-  const digest = hash.digest("hex").slice(0, 12);
-  const versions = JSON.parse(indexHTML().match(/id="data-versions">([^<]*)</)[1]);
-  assert.equal(versions["app/detail"], digest,
-    `index.html stamps app/detail ${versions["app/detail"]} but the tree hashes to ${digest}; run node scripts/build_asset_version.mjs`);
+  const versions = dataVersionsOf(stampedPage());
+  assert.equal(versions[DETAIL_VERSION_KEY], hash.digest("hex").slice(0, 12),
+    `app/detail would be published as ${versions[DETAIL_VERSION_KEY]} but the tree hashes to something else`);
 });
 
-test("every app payload class is versioned, with one shared stamp for detail", () => {
-  const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
-  const versions = JSON.parse(html.match(/id="data-versions">([^<]*)</)[1]);
+test("every app payload class is versioned at deploy, with one shared stamp for detail", () => {
+  const versions = dataVersionsOf(stampedPage());
   for (const collection of ["systems", "inference", "runtimes", "specifications", "packs", "labs", "robots"]) {
     assert.match(versions[`app/${collection}.json`], /^[0-9a-f]{12}$/);
     assert.match(versions[`app/search/${collection}.json`], /^[0-9a-f]{12}$/);
   }
-  assert.match(versions["app/detail"], /^[0-9a-f]{12}$/);
+  assert.match(versions[DETAIL_VERSION_KEY], /^[0-9a-f]{12}$/);
   const perRecord = Object.keys(versions).filter(key => key.startsWith("app/detail/"));
   assert.deepEqual(perRecord, [], "detail files share one stamp; they are not versioned individually");
+});
+
+test("the stamper refuses to leave a page half-stamped, so a deploy cannot ship mixed freshness", () => {
+  const once = stampedPage();
+  const twice = stampAssetVersions(once, readPageAsset(path.join(webRoot, "index.html")), readDetailTree);
+  assert.equal(twice, once, "stamping an already-stamped page changed it again");
 });
 
 test("the app does not disable the HTTP cache it just earned a content hash for", () => {
@@ -1203,7 +1560,7 @@ test("no card can overflow the cap of six: one type badge plus its set's traits"
     assert.deepEqual(ids.slice(0, types.length), types, `${key} must list its type badges first`);
     assert.equal(new Set(types.map(id => CARD_BADGES[id].test.field)).size, 1, `${key} type badges must all test one field`);
     assert.equal(new Set(types.map(id => CARD_BADGES[id].test.equals)).size, types.length, `${key} type badges must test distinct values`);
-    assert.ok(1 + ids.length - types.length <= 6, `${key} can show ${1 + ids.length - types.length} badges`);
+    assert.ok(1 + ids.length - types.length <= MAX_CARD_BADGES, `${key} can show ${1 + ids.length - types.length} badges`);
   }
 });
 
@@ -1254,7 +1611,7 @@ test("specifications, packs, and labs carry only their type; imported rows only 
   assert.deepEqual(cardBadges("model", { review_status: "retracted", model_type: "language_model" }), []);
   assert.deepEqual(cardBadges("toString", { local_first: true }), []);
   assert.deepEqual(cardBadges("system", { system_family: "constructor", local_first: true }), []);
-  assert.deepEqual(cardBadges("robot", robots[0]), []);
+  assert.deepEqual(badgeNames(cardBadges("robot", { form_factor: "quadruped" })), ["Quadruped"]);
 });
 
 // Reviewed-model cards trade their role pill for the same distribution_modes
@@ -1384,7 +1741,7 @@ test("the legend lists only what the active scope can show", () => {
   }
   // Models lists reviewed and imported rows together, so its legend names the
   // reviewed set and the source-record badge, types first.
-  assert.deepEqual(ids(badgeLegend("models")), ["language-model", "multimodal-language-model", "source-record", "downloadable-weights", "developer-api", "third-party-hosting"]);
+  assert.deepEqual(ids(badgeLegend("models")), ["language-model", "multimodal-language-model", "image-generation-model", "video-generation-model", "audio-generation-model", "source-record", "downloadable-weights", "developer-api", "third-party-hosting"]);
   assert.deepEqual(ids(badgeLegend("specifications")), CARD_BADGE_SETS.spec);
   assert.deepEqual(ids(badgeLegend("labs")), CARD_BADGE_SETS.lab);
   assert.equal(badgeLegend("systems", "constructor"), null);
@@ -1419,6 +1776,7 @@ const TYPE_FIELD_VOCABULARIES = {
   specification_type: "specification_types",
   pack_type: "pack_types",
   lab_type: "lab_types",
+  form_factor: "robot_form_factors",
 };
 
 test("every value a badge tests exists in its taxonomy vocabulary", () => {
@@ -1449,7 +1807,7 @@ test("every value a badge tests exists in its taxonomy vocabulary", () => {
 // value of every type vocabulary must have a type badge in the matching set.
 test("every value of every type vocabulary has a type badge", () => {
   const taxonomy = readWebJSON("taxonomy.json");
-  const setsFor = { system_family: key => key.startsWith("system:"), service_type: key => key === "inference", runtime_type: key => key === "runtime", model_type: key => key === "model", specification_type: key => key === "spec", pack_type: key => key === "pack", lab_type: key => key === "lab" };
+  const setsFor = { system_family: key => key.startsWith("system:"), service_type: key => key === "inference", runtime_type: key => key === "runtime", model_type: key => key === "model", specification_type: key => key === "spec", pack_type: key => key === "pack", lab_type: key => key === "lab", form_factor: key => key === "robot" };
   for (const [field, group] of Object.entries(TYPE_FIELD_VOCABULARIES)) {
     const listed = Object.entries(CARD_BADGE_SETS).filter(([key]) => setsFor[field](key)).flatMap(([, ids]) => ids).filter(id => CARD_BADGES[id].test.field === field);
     const covered = new Set(listed.map(id => CARD_BADGES[id].test.equals));
@@ -1479,6 +1837,7 @@ function publishedBadgeScopes() {
     spec: ["spec", readWebJSON("specifications.json").specifications],
     pack: ["pack", readWebJSON("packs.json").packs],
     lab: ["lab", readWebJSON("labs.json").labs],
+    robot: ["robot", readWebJSON("robots.json").robots],
   };
 }
 
@@ -1500,7 +1859,7 @@ test("every published card carries exactly one type badge, and it leads the row"
   for (const [scope, [kind, records]] of Object.entries(publishedBadgeScopes())) {
     for (const record of records) {
       const badges = cardBadges(kind, record);
-      assert.ok(badges.length > 0 && badges.length <= 6, `${scope}/${record.id} shows ${badges.length} badges`);
+      assert.ok(badges.length > 0 && badges.length <= MAX_CARD_BADGES, `${scope}/${record.id} shows ${badges.length} badges`);
       assert.equal(badges[0].family, "type", `${scope}/${record.id} does not lead with its type`);
       assert.equal(badges.filter(badge => badge.family === "type").length, 1, `${scope}/${record.id} shows more than one type badge`);
     }
@@ -1521,18 +1880,29 @@ test("every field a badge tests reaches the boot payload", () => {
     spec: [readWebJSON("specifications.json").specifications, readWebJSON("app/specifications.json").specifications],
     pack: [readWebJSON("packs.json").packs, readWebJSON("app/packs.json").packs],
     lab: [readWebJSON("labs.json").labs, readWebJSON("app/labs.json").labs],
+    robot: [readWebJSON("robots.json").robots, readWebJSON("app/robots.json").robots],
   };
   for (const [key, ids] of Object.entries(CARD_BADGE_SETS)) {
     const kind = key.split(":")[0];
     const [published, boot] = boots[kind];
     const bootById = new Map(boot.map(record => [record.id, record]));
+    for (const record of published) {
+      const bootRecord = bootById.get(record.id);
+      assert.ok(bootRecord, `${kind}/${record.id} has no boot record`);
+      // Reviewed overlays replace source rows; their parity is checked above.
+      if (kind === "model-source" && bootRecord.review_status === "reviewed") continue;
+      const status = kind === "model-source" ? "imported" : "reviewed";
+      const canonical = kind.startsWith("model") ? { ...record, review_status: status } : record;
+      const badgeKind = kind === "model-source" ? "model" : kind;
+      assert.deepEqual(cardBadges(badgeKind, bootRecord).map(badge => badge.id), cardBadges(badgeKind, canonical).map(badge => badge.id), `${kind}/${record.id} badge IDs/order differ between canonical and boot`);
+    }
     for (const id of ids) {
       const { field } = CARD_BADGES[id].test;
       for (const record of published) {
         if (!(field in record)) continue;
         const bootRecord = bootById.get(record.id);
         assert.ok(bootRecord, `${kind}/${record.id} has no boot record`);
-        assert.ok(field in bootRecord, `${kind}/${record.id} boot record lacks ${field}, which the ${id} badge tests`);
+        assert.deepEqual(bootRecord[field], record[field], `${kind}/${record.id} boot value differs for ${field}, which the ${id} badge tests`);
       }
     }
   }
@@ -1894,6 +2264,22 @@ test("real-catalog probes: known names first and loose queries answered", () => 
   assert.ok(run("run models locally").length > 0);
   assert.ok(run("memory for agents").length > 0);
   assert.ok(run("open source coding agent").length > 0);
+  // Every reviewed synonym answers the query its catalog words answer: the
+  // synonym's matches are a superset of its expansion's, so a rotting entry
+  // fails here rather than silently listing nothing.
+  for (const { match, expand } of SEARCH_SYNONYMS) {
+    const phrase = match.join(" ");
+    const expanded = expand.join(" ");
+    assert.ok(run(phrase).length > 0, `"${phrase}" lists nothing`);
+    const listed = new Set(run(phrase));
+    for (const name of run(expanded)) assert.ok(listed.has(name), `"${phrase}" misses ${name}, which "${expanded}" finds`);
+  }
+  // Every reviewed goal keyword names its goal on the shipped goal set.
+  const shippedGoals = Object.entries(FINDER_GOALS).flatMap(([direction, goals]) =>
+    goals.map(goal => ({ ...goal, direction, eligible: 1 })));
+  for (const [term, id] of [["sql", "analyze_data"], ["retrieval", "memory_infrastructure"], ["gateway", "self_host_endpoint"]]) {
+    assert.equal(matchFinderGoal(shippedGoals, term).id, id);
+  }
   // Short words stay whole outside names: "rag" never matches inside a prose
   // word such as "storage", and "pi" never matches "API".
   const rag = hits("rag");
@@ -2006,6 +2392,41 @@ test("a query names a Finder job by an -ies word matched as typed, not only its 
   assert.equal(matchFinderGoal(goals, "libraries").id, "sdk_builder");
 });
 
+// A synonym replaces whole query words with the catalog words that answer
+// them, and a record matches on the best variant.
+test("a reviewed synonym widens the query without adding required words", () => {
+  const query = parseSearchQuery("note taking");
+  assert.deepEqual(query.alternates.map(alternate => alternate.words), [["notes"]]);
+  assert.deepEqual(parseSearchQuery("notes").alternates, []);
+  const fields = searchFields("system", { id: "n", name: "Notebook", description: "Take notes and link ideas." });
+  assert.ok(recordMatch(parseSearchQuery("notes"), fields) > 0);
+  assert.ok(recordMatch(query, fields) > 0);
+  const other = searchFields("system", { id: "o", name: "Orchestrator", description: "Coordinate agents." });
+  assert.equal(recordMatch(query, other), 0);
+});
+
+// Goal keywords count as the label for the one-word rule, so "sql" names the
+// data-analysis goal while a word two goals share names none.
+test("a goal keyword names the goal for a one-word query", () => {
+  const goals = [
+    { id: "analyze_data", direction: "agent_system", label: "Analyze data with natural language", description: "An analytics agent.", keywords: ["sql"], eligible: 4 },
+    { id: "build_agents", direction: "agent_system", label: "Build and orchestrate agents", description: "A framework for tools.", eligible: 7 },
+  ];
+  assert.equal(matchFinderGoal(goals, "sql").id, "analyze_data");
+  const shared = goals.map(goal => ({ ...goal, keywords: ["sql"] }));
+  assert.equal(matchFinderGoal(shared, "sql"), null);
+});
+
+// A synonym variant retries goal naming, so "note taking" names the goal
+// "notes" names.
+test("a synonym variant names the Finder job its expansion names", () => {
+  const goals = [
+    { id: "personal_knowledge", direction: "memory_system", label: "Keep my own notes and knowledge", description: "A workspace for ideas.", eligible: 6 },
+  ];
+  assert.equal(matchFinderGoal(goals, "notes").id, "personal_knowledge");
+  assert.equal(matchFinderGoal(goals, "note taking").id, "personal_knowledge");
+});
+
 const registryPayloads = {
   projects: [
     { id: "m1", name: "M1", system_family: "memory_system", status: "active", deployment: [] },
@@ -2034,16 +2455,16 @@ const registryPayloads = {
 test("the registry lists every collection once, each a Directory collection, in front-door order", () => {
   assert.deepEqual(COLLECTIONS.map(entry => entry.id), ["all", "systems", "models", "inference", "runtimes", "packs", "robots", "labs", "specifications"]);
   assert.ok(COLLECTIONS.every(entry => entry.kind === "scope"));
-  // Every emblem names a type badge that exists; All and Robots have none yet.
+  // Collections use a known type badge or their own navigation glyph;
+  // Everything alone uses the empty frame.
   for (const entry of COLLECTIONS) {
-    if (entry.emblem === null) assert.ok(["all", "robots"].includes(entry.id));
+    if (entry.emblem === null) assert.ok(entry.id === "all" || entry.glyph, entry.id);
     else assert.equal(CARD_BADGES[entry.emblem].family, "type", entry.id);
   }
-  assert.equal(COLLECTIONS.find(entry => entry.id === "systems").emblem, "memory-system");
 });
 
 test("each collection counts what its default view lists, with its split", () => {
-  assert.deepEqual(collectionCount("all", registryPayloads), { count: 5 + 3 + 1 + 3 + 1 + 2, note: "A–Z, no scores" });
+  assert.deepEqual(collectionCount("all", registryPayloads), { count: 5 + 3 + 1 + 3 + 1 + 2 + 1 + 1, note: "A–Z, no scores" });
   assert.deepEqual(collectionCount("systems", registryPayloads), { count: 4, note: "active" });
   assert.deepEqual(collectionCount("models", registryPayloads), { count: 3, note: "2 reviewed · 1 imported" });
   assert.deepEqual(collectionCount("packs", registryPayloads), { count: 2, note: "1 pack · 1 host-installed" });
@@ -2052,6 +2473,73 @@ test("each collection counts what its default view lists, with its split", () =>
   assert.deepEqual(collectionCount("labs", registryPayloads), { count: 1, note: "" });
   assert.deepEqual(collectionCount("specifications", registryPayloads), { count: 1, note: "" });
   assert.deepEqual(collectionCount("robots", { ...registryPayloads, robots: [] }), { count: 0, note: "" });
+});
+
+test("Everything holds every record the site publishes, so its count cannot drift from the collections", () => {
+  // Not the sum of the eight tile counts: Everything lists archived and superseded
+  // systems too, and counts a host-installed system once, inside projects, where the
+  // Agent packs tile also counts it. What it must equal is every record in every
+  // collection's payload -- so that is the invariant, stated from the payloads.
+  const everyRecord = ["projects", "services", "runtimes", "models", "packs", "robots", "labs", "specifications"]
+    .reduce((total, key) => total + registryPayloads[key].length, 0);
+  assert.equal(collectionCount("all", registryPayloads).count, everyRecord);
+  assert.equal(collectionCount("all", { ...registryPayloads, labs: [], specifications: [] }).count,
+    everyRecord - 2, "emptying a collection has to move the Everything count");
+
+  // The scope's name, its search, and its grid are three separate code paths. The
+  // search reached eight kinds (MATCH_GROUPS) while the grid offered six, which is how
+  // a lab came to be findable and unbrowsable at once.
+  const browsed = new Set(filterDirectoryEntries(
+    registryPayloads.projects, registryPayloads.services, registryPayloads.runtimes, registryPayloads.models,
+    {}, registryPayloads.packs, registryPayloads.robots, registryPayloads.labs, registryPayloads.specifications,
+  ).map(entry => entry.kind));
+  assert.deepEqual([...browsed].sort(), ["inference", "lab", "model", "pack", "robot", "runtime", "spec", "system"]);
+  // And the scope states its own membership, in the one sentence a reader reads.
+  assert.match(COLLECTIONS[0].meaning, /labs, and specifications together/);
+});
+
+test("one match pass finds what a search finds, and nothing for a query without search words, which callers treat as browsing", () => {
+  assert.deepEqual([...queryMatches("a1", registryPayloads, {})].map(record => record.id), ["a1"]);
+  assert.equal(queryMatches("", registryPayloads, {}).size, 0);
+  assert.equal(queryMatches("the", registryPayloads, {}).size, 0, "stop words alone hold no search word, so the pass returns nothing");
+});
+
+test("each collection counts the query's matches its default view lists", () => {
+  const counts = collectionMatchCounts(queryMatches("m", registryPayloads, {}), registryPayloads);
+  assert.equal(counts.all, 2, "All lists the archived M2 as well");
+  assert.equal(counts.systems, 1, "Systems lists active systems only");
+  assert.equal(counts.labs, 0);
+  assert.deepEqual(Object.keys(counts), ["all", "systems", "models", "inference", "runtimes", "packs", "robots", "labs", "specifications"]);
+  const packs = collectionMatchCounts(queryMatches("a1", registryPayloads, {}), registryPayloads);
+  assert.equal(packs.packs, 1, "a host-installed system counts in Agent packs");
+});
+
+test("the family row counts active systems, and only the query's matches while searching", () => {
+  assert.deepEqual(familyMatchCounts(null, registryPayloads), { "": 4, memory_system: 1, agent_system: 2, assistant_system: 1 });
+  assert.deepEqual(familyMatchCounts(queryMatches("m", registryPayloads, {}), registryPayloads), { "": 1, memory_system: 1 });
+});
+
+test("an empty collection is hidden and All never is", () => {
+  assert.equal(collectionHidden("labs", registryPayloads), false);
+  assert.equal(collectionHidden("labs", { ...registryPayloads, labs: [] }), true);
+  assert.equal(collectionHidden("all", {}), false);
+});
+
+test("browseSort is written only beside a query listed by Best match, and never as the default", () => {
+  const params = values => Object.fromEntries(scopeURLParams("inference", values));
+  assert.deepEqual(params({ q: "router", sort: "match", browseSort: "name" }), { q: "router", browseSort: "name" });
+  assert.deepEqual(params({ q: "router", sort: "match", browseSort: "score" }), { q: "router" }, "the default is never written");
+  assert.deepEqual(params({ q: "router", sort: "name", browseSort: "score" }), { q: "router", sort: "name" }, "a sort chosen during the query wins");
+  assert.deepEqual(params({ q: "", sort: "name", browseSort: "score" }), { sort: "name" }, "without a query there is nothing to return to");
+});
+
+test("browseSort restores only beside a query and without a sort", () => {
+  const allowed = { q: "text", sort: new Set(["score", "name"]), browseSort: new Set(["score", "name"]) };
+  const read = query => readScopeURLParams("inference", new URLSearchParams(query), allowed);
+  assert.deepEqual(read("q=router&browseSort=name"), { values: { q: "router", browseSort: "name" }, rejected: [] });
+  assert.deepEqual(read("browseSort=name").rejected, ["browseSort"]);
+  assert.deepEqual(read("q=router&sort=score&browseSort=name").rejected, ["browseSort"]);
+  assert.deepEqual(read("q=router&browseSort=match").rejected, ["browseSort"]);
 });
 
 test("a collection's categories are its largest values with the facet that opens them", () => {
@@ -2254,7 +2742,7 @@ test("priorityBoost reads the memory and agent traits its priorities name, not a
     score: { data_sovereignty: 5, overall: 7 },
   };
   assert.equal(priorityBoost(memory, "local_editable"), 2.2 + 2 + 0.8);
-  assert.equal(priorityBoost(memory, "local_control"), 3 + 0.8 + 0.5);
+  assert.equal(priorityBoost(memory, "local_control"), 1 + 1 + 1);
   // deployment and architectures are required on every memory record, so the
   // unguarded .includes above is only safe because the validator guarantees them.
   const required = new Set(Object.keys(JSON.parse(fs.readFileSync(
@@ -2269,8 +2757,38 @@ test("priorityBoost reads the memory and agent traits its priorities name, not a
   };
   assert.equal(priorityBoost(agent, "direct_use"), 3);
   assert.equal(priorityBoost(agent, "developer"), 0);
-  assert.equal(priorityBoost(agent, "local"), 3 + 1 + 0.5);
+  assert.equal(priorityBoost(agent, "local"), 1 + 1 + 1);
   assert.equal(priorityBoost(agent, "control"), 3 + 2);
+});
+
+test("sovereignty outranks the local_first boolean on the local priorities", () => {
+  // ADR 030 made local_first a data trait (where kept content lives and
+  // whether the vendor keeps it), so on an execution-labelled priority the
+  // boolean alone must not beat the full data-sovereignty range. These two
+  // records disagree on exactly those two inputs.
+  const localLowSov = {
+    system_family: "agent_system", local_first: true, execution_boundaries: ["remote_cloud"],
+    agent_interfaces: ["terminal"], score: { data_sovereignty: 2, overall: 7 },
+  };
+  const remoteHighSov = {
+    system_family: "agent_system", local_first: false, execution_boundaries: ["host"],
+    agent_interfaces: ["terminal"], score: { data_sovereignty: 9, overall: 7 },
+  };
+  assert.ok(priorityBoost(remoteHighSov, "local") > priorityBoost(localLowSov, "local"),
+    `sovereignty 9 without local_first (${priorityBoost(remoteHighSov, "local")}) should beat ` +
+    `local_first with sovereignty 2 (${priorityBoost(localLowSov, "local")})`);
+
+  const memLocalLow = {
+    system_family: "memory_system", local_first: true, deployment: ["managed_cloud"],
+    human_editable: false, architectures: ["plain_files"], score: { data_sovereignty: 2, overall: 7 },
+  };
+  const memRemoteHigh = {
+    system_family: "memory_system", local_first: false, deployment: ["self_hosted"],
+    human_editable: false, architectures: ["plain_files"], score: { data_sovereignty: 9, overall: 7 },
+  };
+  assert.ok(priorityBoost(memRemoteHigh, "local_control") > priorityBoost(memLocalLow, "local_control"),
+    `sovereignty 9 without local_first (${priorityBoost(memRemoteHigh, "local_control")}) should beat ` +
+    `local_first with sovereignty 2 (${priorityBoost(memLocalLow, "local_control")})`);
 });
 
 test("recommendationReasons prints an em dash, never NaN, for a dimension no detail file carried", () => {
@@ -2426,4 +2944,98 @@ test("recommendationReasons is finite and chip-bounded for every real record and
       }
     }
   }
+});
+
+
+test("a future overflow cannot silently discard matching facts", () => {
+  const ids = CARD_BADGE_SETS["system:agent_system"];
+  ids.push("editable-by-you");
+  try {
+    const record = { system_family: "agent_system", local_first: true, human_editable: true, execution_boundaries: ["container"], agent_capabilities: ["browser_control", "mcp"], deployment: ["self_hosted"] };
+    const badges = cardBadges("system", record);
+    assert.equal(badges.length, MAX_CARD_BADGES + 1);
+    assert.equal(badges.at(-1).id, "editable-by-you");
+  } finally {
+    ids.pop();
+  }
+});
+
+test("model licensing has complete scoped labels without changing classification IDs", () => {
+  const categories = readWebJSON("taxonomy.json").source_models;
+  const scoped = modelLicenseCategories(categories);
+  assert.deepEqual(scoped.map(item => item.id), categories.map(item => item.id));
+  for (const item of scoped) {
+    assert.ok(item.name && item.definition, `${item.id} needs model-scoped wording`);
+    assert.notEqual(item.definition, categories.find(row => row.id === item.id).definition);
+  }
+  assert.equal(scoped.find(item => item.id === "open_source").name, "Open-licensed artifacts");
+  assert.equal(categories.find(item => item.id === "open_source").name, "Open source");
+});
+
+test("collection symbols have their own explanations independent of shared glyphs", () => {
+  for (const entry of COLLECTIONS) assert.ok(entry.meaning, entry.id);
+  assert.equal(COLLECTIONS.find(entry => entry.id === "packs").emblem, "agent-system");
+  assert.match(COLLECTIONS.find(entry => entry.id === "packs").meaning, /own type badges/);
+});
+
+// The Finder's screen is one counted map of its goal tables, so the counts it
+// prints are the numbers a reader trusts before choosing anything. These read
+// the real payloads, not fixtures: a tile that shows 0 for a job the directory
+// can satisfy is the defect they exist to catch.
+test("every goal the Finder offers can satisfy at least one active reviewed record", () => {
+  const records = findRecordsByProfile();
+  const collections = {
+    projects: Object.values(records).flatMap(byFamily => byFamily).filter(record => record.system_family),
+    inferenceServices: records.inference_service,
+    localRuntimes: records.local_runtime,
+  };
+  const entries = finderGoalEntries(collections);
+  assert.equal(entries.length, FINDER_DIRECTIONS.reduce((sum, direction) => sum + FINDER_GOALS[direction.id].length, 0));
+  for (const entry of entries) {
+    assert.ok(Number.isInteger(entry.eligible), `${entry.id} counts whole records`);
+    assert.ok(entry.eligible >= 1, `${entry.id} has at least one active reviewed record`);
+  }
+  // The same predicate ranks the shortlist, so a tile's count and the
+  // candidate set can never disagree.
+  for (const entry of entries) {
+    const goal = FINDER_GOALS[entry.direction].find(item => item.id === entry.id);
+    assert.equal(finderGoalRecords(entry.direction, goal, collections).length, entry.eligible);
+  }
+});
+
+test("a direction's total is never the sum of its goal counts, because goals overlap", () => {
+  // context_graph_engine is claimed by both memory's agent_memory and its
+  // memory_infrastructure, so the two counts share records and the column
+  // total is smaller than their sum. The tile heading prints the total and the
+  // tiles print the per-goal counts, so a rendering rule that summed them
+  // would misstate the column. A future overlap is then a deliberate change
+  // here rather than a silent regression.
+  const records = findRecordsByProfile();
+  const collections = {
+    projects: Object.values(records).flatMap(byFamily => byFamily).filter(record => record.system_family),
+    inferenceServices: records.inference_service,
+    localRuntimes: records.local_runtime,
+  };
+  const overlapping = finderGoalEntries(collections).filter(entry => entry.direction === "memory_system");
+  const summed = overlapping.reduce((sum, entry) => sum + entry.eligible, 0);
+  const total = finderDirectionTotal("memory_system", collections);
+  assert.ok(summed > total, `memory's goals sum to ${summed} against a family total of ${total}`);
+
+  // A direction whose goals partition their direction sums exactly, which is
+  // what makes memory's excess a property of the tables and not of the maths.
+  for (const direction of ["agent_system", "assistant_system"]) {
+    const summed = FINDER_GOALS[direction].reduce((sum, goal) => {
+      const entries = finderGoalEntries(collections).filter(entry => entry.direction === direction && entry.id === goal.id);
+      return sum + entries[0].eligible;
+    }, 0);
+    assert.equal(summed, finderDirectionTotal(direction, collections), `${direction}'s goals partition it`);
+  }
+});
+
+test("the direction total counts active records only, so a retired one leaves the heading", () => {
+  const base = { name: "Live", primary_role: "coding_agent", system_family: "agent_system", status: "active" };
+  const retired = { ...base, name: "Retired", status: "retired" };
+  const collections = { projects: [base, retired], inferenceServices: [], localRuntimes: [] };
+  assert.equal(finderDirectionTotal("agent_system", collections), 1);
+  assert.equal(finderGoalRecords("agent_system", FINDER_GOALS.agent_system.find(item => item.id === "coding"), collections).length, 1);
 });

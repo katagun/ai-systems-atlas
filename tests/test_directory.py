@@ -563,6 +563,73 @@ class DirectoryTests(unittest.TestCase):
         self.assertNotIn("algorithmicsuperintelligence/openevolve", excluded_repos)
         self.assertNotIn("AlphaEvolve", excluded_names)
 
+    def test_robot_software_batch_has_evidence_backed_dispositions(self) -> None:
+        """Coverage batch 98: the five ADR 045 candidates and the screened neighbours."""
+        candidates = json.loads(
+            (ROOT / "directory" / "candidates.json").read_text(encoding="utf-8")
+        )
+        exclusions = json.loads(
+            (ROOT / "directory" / "exclusions.json").read_text(encoding="utf-8")
+        )
+        projects = {project["id"]: project for project in self.document["projects"]}
+        queued = {item["repo"]: item for item in candidates["candidates"]}
+        excluded = {item["repo"] for item in exclusions["entries"]}
+
+        for project_id in ("lerobot", "om1"):
+            self.assertEqual(
+                "agent_framework_sdk", projects[project_id]["primary_role"]
+            )
+            self.assertIn("robot_control", projects[project_id]["agent_capabilities"])
+            self.assertIn("host", projects[project_id]["execution_boundaries"])
+        self.assertNotIn("huggingface/lerobot", queued)
+        self.assertNotIn("OpenMind/OM1", queued)
+
+        self.assertEqual(
+            "action-policy model boundary",
+            queued["Physical-Intelligence/openpi"]["triage"]["held_by"],
+        )
+        self.assertEqual(
+            "action-policy model boundary",
+            queued["octo-models/octo"]["triage"]["held_by"],
+        )
+        self.assertEqual(
+            "programme-gated run path",
+            queued["google-deepmind/gemini-robotics-sdk"]["triage"]["held_by"],
+        )
+        self.assertEqual(
+            "action-policy model boundary",
+            queued["NVIDIA/Isaac-GR00T"]["triage"]["held_by"],
+        )
+        self.assertEqual(
+            "action-policy model boundary",
+            queued["openvla/openvla"]["triage"]["held_by"],
+        )
+        self.assertFalse(
+            [
+                item["repo"]
+                for item in candidates["candidates"]
+                if item.get("triage", {}).get("held_by")
+                == "robot software role decision"
+            ]
+        )
+
+        for repo in (
+            "dora-rs/dora",
+            "Genesis-Embodied-AI/Genesis",
+            "ARISE-Initiative/robomimic",
+            "ros2/ros2",
+            "moveit/moveit2",
+            "NVIDIA-ISAAC-ROS/isaac_ros_common",
+            "google-deepmind/open_x_embodiment",
+            "isaac-sim/IsaacLab",
+            "mani-skill/ManiSkill",
+            "ARISE-Initiative/robosuite",
+        ):
+            self.assertIn(repo, excluded, repo)
+        self.assertNotIn("dora-rs/dora", queued)
+
+        self.assertIn("MIT", projects["lerobot"]["licenses"])
+
     def test_computer_research_terminal_and_media_agent_batch_has_explicit_boundaries(
         self,
     ) -> None:
@@ -1196,12 +1263,19 @@ class DirectoryTests(unittest.TestCase):
                 "source_model",
             ):
                 self.assertNotIn(field, record, record["id"])
-            # ADR 044: a lab joins a reviewed release, or is recorded on its own
-            # published statement of frontier intent and joins to nothing.
+            # ADR 041, 044, 048: a lab either develops a reviewed model release or
+            # it does not, and the three bases are exclusive in both directions. The
+            # invariant is about *developer* names, not about having no names: a lab
+            # on the announced or system basis may still be named by a service it
+            # operates or a runtime it maintains, which is how lab-hugging-face joins
+            # two inference services and a runtime while joining no release.
+            names = set(record["catalog_names"])
             if record["admission_basis"] == "reviewed_release":
-                self.assertTrue(set(record["catalog_names"]) & developers, record["id"])
+                self.assertTrue(names & developers, record["id"])
             else:
-                self.assertEqual(record["catalog_names"], [], record["id"])
+                self.assertEqual(
+                    names & developers, set(), f"{record['id']} names a developer"
+                )
             self.assertTrue(record["organization_note"].strip(), record["id"])
             for name in record["catalog_names"]:
                 self.assertNotIn(
