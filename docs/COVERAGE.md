@@ -29,13 +29,13 @@ systems: 256
 specifications: 22
 inference_services: 60
 local_runtimes: 17
-model_releases: 372
+model_releases: 373
 models_dev_source_records: 448
 model_candidates: 11
 system_candidates: 107
 exclusions: 109
 packs: 8
-labs: 63 covering 372 releases
+labs: 64 covering 373 releases
 robots: 16
 ```
 
