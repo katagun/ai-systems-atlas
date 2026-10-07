@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-10-03",
+  "updated_at": "2026-10-07",
   "candidates": [
     {
       "repo": "aden-hive/hive",
@@ -5504,9 +5504,9 @@
       ],
       "triage": {
         "verdict": "held",
-        "held_by": "robot collection review — conditions 3 and 4",
-        "rule": "docs/ROBOTS.md evidence workflow step 2 and Unavailable pages",
-        "finding": "On 2026-09-30 the vendor's own website was unreadable from the reviewer's network: `franka.ai` and `www.franka.ai` both refused the TLS handshake with `TLSV1_UNRECOGNIZED_NAME` under urllib, curl, and a headless Chromium, while control fetches to other vendors' sites succeeded in the same session. The maker's technical documentation is published instead on `frankarobotics.github.io`, which is the `github.com/<org>` form of a shared host that `docs/ROBOTS.md` admits, and that documentation was readable. It states that the software and its documentation support the Franka Research 3 and an older Franka Emika Robot, and that the FCI is reached through libfranka, 'a C++ library that provides low-level control of Franka Robotics research robots', plus franka_ros and franka_ros2. That documents a control interface, not a route the vendor offers for running a learned model: the interface specification page sets realtime limits for joint-space and Cartesian commands and torque control, and nothing on the pages read names a learned model or policy. Two conditions therefore stand unmet on this pass: condition 3, because a documented low-level control interface is programmability unless the maker documents it for running the reader's own model or policy; and condition 4, because the hardware specification this record needs would come from the product pages and technical specification sheets on the website that could not be read, and the specification page read here carries control limits rather than a hardware spec sheet. Re-review from a network that can resolve `franka.ai`, where the product page, the FR3 datasheet, the availability statement, and the sales terms would settle conditions 3, 4, 5, and 6. This is a hold on unreadable evidence, not a judgement about the product.",
+        "held_by": "robot collection review — condition 3 AI basis",
+        "rule": "docs/ROBOTS.md inclusion boundary condition 3 and Classification, on open_model_interface",
+        "finding": "Re-read on 2026-10-07 after the maker's website became reachable: franka.de answers, though franka.ai still refuses the TLS handshake with TLSV1_UNRECOGNIZED_NAME, so the 2026-09-30 hold on unreadable evidence no longer stands. Conditions 1, 2 and 4 are met on the Franka Research 3 page, which names the product, calls it \"the reference world-class, force-sensitive robot system tailored for robotics and AI\" and lists a payload of 3 kg, a reach of 855 mm, 7 degrees of freedom and 7 integrated torque sensors; the page carries a \"Buy now\" control and a request-a-quote route, and the 2026-09-30 reading of the documentation on frankarobotics.github.io still applies. Condition 3 is unmet. The page says the Franka Control Interface \"provides low-level, real-time control of the robot, without internal transformation\" and offers \"low-level access to robot’s control and learning capabilities\", which is a control interface, and the develop page lists libfranka, pylibfranka, ROS and ROS 2 packages and a MATLAB toolbox. The one learning-related item is LABS, which the develop page describes as an open-source data orchestration platform; its README is headed \"PROTOTYPE: This software stack is under development and subject to breaking changes\" and describes collecting episodes and exporting datasets \"in LeRobot format v2.1\" for model training, which is data collection, not a documented way to run a learned model or policy on the robot. Re-review if Franka documents running a model or policy on the FR3, or promotes LABS beyond a prototype for that purpose.",
         "evidence": [
           {
             "label": "franka_ros README",
@@ -5516,6 +5516,27 @@
             "fetched_at": "2026-09-30",
             "blob_sha": "1e166ddabb99c63cf2d52b822f1b0f8eef123835",
             "immutable_url": "https://api.github.com/repos/frankarobotics/franka_ros/git/blobs/1e166ddabb99c63cf2d52b822f1b0f8eef123835"
+          },
+          {
+            "label": "Franka Research 3 product page",
+            "url": "https://franka.de/franka-research-3",
+            "kind": "web",
+            "content_sha256": "fb795bc9ab918019d3603baab4211d5834add69bbbb3bab28dfe39d2e295adf7",
+            "fetched_at": "2026-10-07"
+          },
+          {
+            "label": "Franka develop page",
+            "url": "https://franka.de/develop",
+            "kind": "web",
+            "content_sha256": "d97b8e0d5e216ef0bbc6ad680ac0bb8034c70512b39335822d38b5f5045aab15",
+            "fetched_at": "2026-10-07"
+          },
+          {
+            "label": "LABS README",
+            "url": "https://github.com/frankarobotics/labs/blob/main/README.md",
+            "kind": "web",
+            "content_sha256": "a9ae9cca37529dbbc32e610b0d99cc0f6e0ca8c2ba7bdf323a11f27f8362ce8e",
+            "fetched_at": "2026-10-07"
           }
         ],
         "proposed_at": "2026-09-30",
@@ -5548,7 +5569,7 @@
         "verdict": "held",
         "held_by": "robot collection review — condition 3 AI basis",
         "rule": "docs/ROBOTS.md inclusion boundary condition 3",
-        "finding": "The product page, read on 2026-09-30, states the hardware the gate's condition 4 accepts: 6 and 7 DoF variants, a 891 mm maximum reach, 7.2 kg and 8.2 kg total weight, a 4 kg mid-range continuous payload, 50 cm/s maximum speed, infinite actuator joint range, 20 to 30 VDC supply, 36 W average power, IP33 ingress protection, and a -30 to 35 degrees Celsius operating range. It documents 1 kHz closed-loop low-level control, integrated joint torque sensors, and an optional 2D/3D vision module. It names no learned model or policy, and the software it lists — the KINOVA KORTEX API and Web App, MATLAB hardware support, ROS and ROS2, C++ and Python, Gazebo, and MoveIt Pro compatibility — is programmability: the guide refuses that as the AI basis, because a motion API the maker offers for general use is not a route the vendor documents for running the reader's own model or policy. Condition 3 is unmet on what was read. Kinova's documentation site was reachable and its KORTEX API documentation was not read in this pass, so a policy interface may exist there; re-review against the API documentation before treating this as settled.",
+        "finding": "The product page, read on 2026-09-30, states the hardware the gate's condition 4 accepts: 6 and 7 DoF variants, a 891 mm maximum reach, 7.2 kg and 8.2 kg total weight, a 4 kg mid-range continuous payload, 50 cm/s maximum speed, infinite actuator joint range, 20 to 30 VDC supply, 36 W average power, IP33 ingress protection, and a -30 to 35 degrees Celsius operating range. It documents 1 kHz closed-loop low-level control, integrated joint torque sensors, and an optional 2D/3D vision module. It names no learned model or policy, and the software it lists — the KINOVA KORTEX API and Web App, MATLAB hardware support, ROS and ROS2, C++ and Python, Gazebo, and MoveIt Pro compatibility — is programmability: the guide refuses that as the AI basis, because a motion API the maker offers for general use is not a route the vendor documents for running the reader's own model or policy. Condition 3 is unmet on what was read. Re-read on 2026-10-07: Kinova's KORTEX API repository says it \"contains documentation and examples explaining how to use the KINOVA ® KORTEX™ API client with C++ or Python\" and describes the API's Protocol Buffer messages, servoing modes and error management, and the ROS 2 driver repository calls itself \"the official ROS2 package to interact with KINOVA KORTEX™ and its related products\". Neither names a learned model or documents a way to run one, so condition 3 stays unmet. The Gen3 product page returned no text to this pass's fetch because it renders its text with JavaScript, so the hardware statement above is the 2026-09-30 reading and was not repeated. Re-review if Kinova documents a model or policy interface.",
         "evidence": [
           {
             "label": "Gen3 product page",
@@ -5556,6 +5577,20 @@
             "kind": "web",
             "content_sha256": "88a2181f1ddb17b9484a8cba04ad2f4ab32a87031987a39ea75234765500cccd",
             "fetched_at": "2026-09-30"
+          },
+          {
+            "label": "KORTEX API repository",
+            "url": "https://github.com/Kinovarobotics/Kinova-kortex2_Gen3_G3L",
+            "kind": "web",
+            "content_sha256": "cdc2c5b0a8493872c1b293985360e16e0cb20ea93d9d79dc67d2b38a1136c134",
+            "fetched_at": "2026-10-07"
+          },
+          {
+            "label": "ros2_kortex repository",
+            "url": "https://github.com/Kinovarobotics/ros2_kortex",
+            "kind": "web",
+            "content_sha256": "0e5ab277233024133ca0b7b7d1e894c57587882fc3a911a2a40cda898e0c0dc2",
+            "fetched_at": "2026-10-07"
           }
         ],
         "proposed_at": "2026-09-30",
@@ -5588,7 +5623,7 @@
         "verdict": "held",
         "held_by": "robot collection review — condition 3 AI basis",
         "rule": "docs/ROBOTS.md inclusion boundary condition 3 and Classification, on open_model_interface",
-        "finding": "Read on 2026-10-03. Conditions 1, 2, 4, 5 and 6 are met on the pages read: the product page names the X2 series, states its hardware in a full parameter table (25 to 30 degrees of freedom, a 1310 x 460 x 210 mm standing size, about 39 kg, RK3588 compute boards, an Orin NX option on the Ultra, a swappable battery and about two hours of runtime at 0.5 m/s), and AgiBot's store sells the X2 Neo at a stated price with an add-to-cart control. The store's terms of service settle terms. Condition 3 is unmet on what was read. The product page names no learned model or policy: its own words are 'algorithm-driven decision-making' and 'intelligent algorithms', with no model named, and the autonomy it claims for the X2 Ultra rests on LiDAR, RGB-D cameras and stereo vision rather than on a named model. Nothing the maker publishes documents a route for running the reader's own model or policy on the X2 either. The product page and the store page both carry a 'Secondary Development' row, and it reads 'Not supported' for the X2 and 'Supported' for the X2 Ultra, but a specification-table claim is not an interface: no SDK, control API or policy interface for the X2 was found on the maker's own pages. AgiBot's document centre lists an 'AGIBOT X1 Development Guide' and open-source documentation for the X1, the A3, the G2, the D1 and the OmniHand, and for the X2 lists only a quick start guide, a packaging list, an after-sales guide and instructional videos; no X2 development guide is published there. The maker's open-source GitHub organisation holds twenty-four repositories, of which the only X2 one is `AgibotTech/agibot_x2_urdf`, and its own README describes the repository as URDF and MuJoCo robot descriptions for ROS, RViz and MoveIt, which is a robot description rather than a control interface. The maker's Link-U-OS organisation, which the maker's own open-source page links, documents a locomotion policy framework for the A2 and names no X2. Re-review if the maker publishes an X2 SDK, a policy interface or a development guide; on the pages read this is a hold on absent evidence, not a judgement about the product.",
+        "finding": "Read on 2026-10-03. Conditions 1, 2, 4, 5 and 6 are met on the pages read: the product page names the X2 series, states its hardware in a full parameter table (25 to 30 degrees of freedom, a 1310 x 460 x 210 mm standing size, about 39 kg, RK3588 compute boards, an Orin NX option on the Ultra, a swappable battery and about two hours of runtime at 0.5 m/s), and AgiBot's store sells the X2 Neo at a stated price with an add-to-cart control. The store's terms of service settle terms. Condition 3 is unmet on what was read. The product page names no learned model or policy: its own words are 'algorithm-driven decision-making' and 'intelligent algorithms', with no model named, and the autonomy it claims for the X2 Ultra rests on LiDAR, RGB-D cameras and stereo vision rather than on a named model. Nothing the maker publishes documents a route for running the reader's own model or policy on the X2 either. The product page and the store page both carry a 'Secondary Development' row, and it reads 'Not supported' for the X2 and 'Supported' for the X2 Ultra, but a specification-table claim is not an interface: no SDK, control API or policy interface for the X2 was found on the maker's own pages. AgiBot's document centre lists an 'AGIBOT X1 Development Guide' and open-source documentation for the X1, the A3, the G2, the D1 and the OmniHand, and for the X2 lists only a quick start guide, a packaging list, an after-sales guide and instructional videos; no X2 development guide is published there. The maker's open-source GitHub organisation holds twenty-four repositories, of which the only X2 one is `AgibotTech/agibot_x2_urdf`, and its own README describes the repository as URDF and MuJoCo robot descriptions for ROS, RViz and MoveIt, which is a robot description rather than a control interface. The maker's Link-U-OS organisation, which the maker's own open-source page links, documents a locomotion policy framework for the A2 and names no X2. Re-review if the maker publishes an X2 SDK, a policy interface or a development guide; on the pages read this is a hold on absent evidence, not a judgement about the product. Re-read on 2026-10-07: the X2 product page and the store page hash identically to the 2026-10-03 capture, and the maker's GitHub organisation page still lists agibot_x2_urdf as its only X2 repository, with no X2 SDK, control API or development guide. Condition 3 stays unmet; AgiBot's document centre was not re-read in this pass.",
         "evidence": [
           {
             "label": "X2 product page",
@@ -5607,6 +5642,248 @@
         ],
         "proposed_at": "2026-10-03",
         "proposer": "robots batch 3 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "Apptronik Apollo",
+      "url": "https://apptronik.com/apollo/apollo-2",
+      "description": "Apptronik's humanoid robot, shown on its product page as Apollo 2 with bipedal and wheeled mobility options.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "humanoid",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — conditions 3, 4 and 5",
+        "rule": "docs/ROBOTS.md inclusion boundary conditions 3, 4 and 5",
+        "finding": "Read on 2026-10-07. Conditions 1 and 2 are met on the Apollo 2 page, which names the product and describes a humanoid robot with its own actuators and \"A bipedal configuration enables movement through spaces built for people, while a wheeled base offers stability and efficiency for high-throughput environments.\" Three conditions are unmet. Condition 3: the page's one reference to a model is \"Our work with Google DeepMind and Gemini Robotics highlights what becomes possible when frontier AI is paired with purpose-built robotics hardware\", which names Gemini Robotics as the subject of a collaboration and does not say that a model runs on Apollo or what it controls; the descriptions of Apptronik Artemis and Fleet Connect name software layers, not learned models, and nothing on the pages documents a way to run the reader's own model or policy. Condition 4: the page states hardware only in terms such as an actuator platform \"designed for 90%+ energy efficiency\" and \"Swappable batteries help enable 7x22 operation\", with no degrees of freedom, size, weight, payload, compute or sensor list. Condition 5: the only route offered is a \"get started\" contact form, and no page states whether Apollo is orderable, sold to enterprises or taken by reservation. Apptronik's press releases on its own site, which never count, were not used. Re-review if Apptronik publishes a hardware specification, says what Gemini Robotics or another named model controls on Apollo, or documents a developer route; on the pages read this is a hold on absent evidence, not a judgement about the product.",
+        "evidence": [
+          {
+            "label": "Apollo 2 product page",
+            "url": "https://apptronik.com/apollo/apollo-2",
+            "kind": "web",
+            "content_sha256": "f8142ca3c5883b169fac86958811aeb3df8dfde42de3879ef57117d64f41b769",
+            "fetched_at": "2026-10-07"
+          }
+        ],
+        "proposed_at": "2026-10-07",
+        "proposer": "robots batch 4 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "UBTech Walker S2",
+      "url": "https://www.ubtrobot.com/en/humanoid/products/Walker-S2",
+      "description": "UBTECH's industrial humanoid robot, sold as the Walker S2 with an autonomous battery-swap system.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "humanoid",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — condition 3 AI basis",
+        "rule": "docs/ROBOTS.md inclusion boundary condition 3 and Classification",
+        "finding": "Read on 2026-10-07, in a browser and as page text. Conditions 1 and 2 are met: the page names the Walker S2 and describes a humanoid that can \"lift 15kg payload and reach ±162° rotation angle\" at the waist. Condition 4 is met only in an image: the Product Specifications section is a labelled photograph of the robot's sensors (fish-eye, RGB and RGBD cameras, six-axis force sensors and dexterous hands), so none of it is text a reader can quote or a monitor can hash. Condition 3 is unmet on what the page text says. It names \"UBTECH's Self-developed Co-Agent\" and pairs BrainNet 2.0 with Co-Agents as a \"Dual-Loop AI System\", and says the vision system \"employs deep learning-based stereo depth estimation algorithms\", but it never says in text that BrainNet 2.0 or the Co-Agent is a learned model or what either controls on the robot; the architecture diagram that carries those labels is an image. Nothing documents a way to run the reader's own model or policy: the developer site linked from UBTECH's navigation, yandev.ubtrobot.com, returned no text to a page fetch, and UBTECH's innovation and industry-solutions pages add no model statement for the S2. Condition 5 is not stated: the page ends with \"Mass Productionand Delivery\" and a \"Contact Us\" form and names no ordering route. Re-review if UBTECH states in text what BrainNet 2.0 or the Co-Agent controls on the S2, publishes a developer interface, or states how the S2 is sold.",
+        "evidence": [
+          {
+            "label": "Walker S2 product page",
+            "url": "https://www.ubtrobot.com/en/humanoid/products/Walker-S2",
+            "kind": "web",
+            "content_sha256": "76adb8d122d10c2b635062733d98ae198d9590105e76cc488ae9487fd54c003e",
+            "fetched_at": "2026-10-07"
+          },
+          {
+            "label": "Core technology innovation page",
+            "url": "https://www.ubtrobot.com/en/core-technology/innovation",
+            "kind": "web",
+            "content_sha256": "7ea92ee35acc27ba3d78a4753ce6fb68901925878eab1a1b3ea479b11d37b8b4",
+            "fetched_at": "2026-10-07"
+          }
+        ],
+        "proposed_at": "2026-10-07",
+        "proposer": "robots batch 4 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "XPENG IRON",
+      "url": "https://www.xpeng.com/au/explore/xpeng_ai_robot_iron",
+      "description": "XPENG's humanoid robot, shown on a single page of its Australian site.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "humanoid",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — conditions 3, 4 and 5",
+        "rule": "docs/ROBOTS.md inclusion boundary conditions 3, 4 and 5",
+        "finding": "Read on 2026-10-07, in a browser and as page text. The page presents IRON as \"Dedicated to creating the world's most realistic humanoid robot\" and says \"This page is provided for technical demonstration purposes only.\" Its text is headings and captions (\"Human-Like Structure Design\", \"Natural Conversation & Natural Gait\", \"Biomimetic Dexterous Hands\"); it names no learned model or policy and no developer interface (condition 3), states no hardware figure for the robot (condition 4), and states no availability (condition 5). Its closing notice refers to vehicle configurations and dealerships. Press coverage of IRON's production line was not used, because press never counts. Re-review if XPENG publishes a product page for IRON that states its hardware, how it can be obtained and what AI it documents.",
+        "evidence": [
+          {
+            "label": "IRON page on XPENG's Australian site",
+            "url": "https://www.xpeng.com/au/explore/xpeng_ai_robot_iron",
+            "kind": "web",
+            "content_sha256": "7ac4e5c27b904700108a779cd82555c2b5115f9fe942ce757436ea5db56672e2",
+            "fetched_at": "2026-10-07"
+          }
+        ],
+        "proposed_at": "2026-10-07",
+        "proposer": "robots batch 4 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "Pollen Robotics Reachy 2",
+      "url": "https://pollen-robotics.com/reachy-2",
+      "description": "Pollen Robotics' open-source humanoid upper body on an omnidirectional mobile base, described as a bimanual mobile manipulator.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "humanoid",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — condition 3 AI basis",
+        "rule": "docs/ROBOTS.md inclusion boundary condition 3 and Classification, on open_model_interface",
+        "finding": "Read on 2026-10-07. Conditions 1, 2 and 4 are met on the product page, which names the Reachy 2, calls it \"The ideal bimanual mobile manipulator for AI & robotics labs.\" and lists 7 degrees of freedom per arm, about 3 kg of payload per arm, an adjustable height of 136-166 cm, a weight of up to 50 kg, stereo and RGB-D vision, a LiDAR and an omnidirectional base. Condition 3 is unmet on what was read. The page says \"Teleoperated or controlled with Python. Runs on ROS 2 Humble.\" and \"Built for modern AI. Reachy 2's CPU-powered system delivers strong performance and seamless compatibility with modern AI frameworks - everything you need to explore and implement new learning models.\" That is a claim about the computer, not a documented route: the documentation site's sections cover simulation, the Python SDK, basics, advanced tutorials, a hardware guide and teleoperation, and its SDK introduction calls the SDK \"the easiest and most intuitive way to program behaviors for your Reachy 2 robot\"; none of the pages read names a learned model or policy or documents running one. No purchase route or availability statement for the Reachy 2 was found on the page read (condition 5). Pollen's Reachy Mini, published in the same change, documents an LLM integration; the Reachy 2 documentation does not. Re-review if Pollen documents a model or policy interface for the Reachy 2 or states how it is sold.",
+        "evidence": [
+          {
+            "label": "Reachy 2 product page",
+            "url": "https://pollen-robotics.com/reachy-2",
+            "kind": "web",
+            "content_sha256": "7df7963cd289f4098fa023c0042c3e6170bed516a117b3c3282352018958ffa2",
+            "fetched_at": "2026-10-07"
+          },
+          {
+            "label": "Reachy 2 SDK introduction",
+            "url": "https://docs.pollen-robotics.com/developing-with-reachy-2/sdk-introduction/discover-sdk/",
+            "kind": "web",
+            "content_sha256": "336dd62e9de3bd747fc36b85b8b8b3addf099d1ca4714c5cc06726bef3557723",
+            "fetched_at": "2026-10-07"
+          },
+          {
+            "label": "Reachy 2 introduction",
+            "url": "https://docs.pollen-robotics.com/getting-started/robot-introduction/discover-robot/",
+            "kind": "web",
+            "content_sha256": "ec490220642b8dcc0058bcd462de2b73fed2886e4981edbe0d77b0b1a0a1b9e1",
+            "fetched_at": "2026-10-07"
+          }
+        ],
+        "proposed_at": "2026-10-07",
+        "proposer": "robots batch 4 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "PAL Robotics TIAGo",
+      "url": "https://pal-robotics.com/robot/tiago/",
+      "description": "PAL Robotics' modular research mobile manipulator, sold with no, one or two arms on a differential or omnidirectional base.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "mobile-manipulator",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-07",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — condition 3 AI basis",
+        "rule": "docs/ROBOTS.md inclusion boundary condition 3 and Classification, on open_model_interface",
+        "finding": "Read on 2026-10-07. Conditions 1, 2, 4, 5 and 6 are met on the product page, which names the TIAGo as \"The mobile manipulator robot that adapts to your research needs.\", states a height of 110-145 cm, a footprint of ø 54 cm, an arm payload of 3 Kg, a battery autonomy of 4-5h and an Ubuntu LTS real-time operating system, sells it through a \"Request a quote\" form, and says in its FAQ that \"The mobile manipulator robot has 1 year warranty on hardware.\" Condition 3 is unmet on what was read. The page names no learned model or policy. Its FAQ says \"The different motors of the mobile manipulator robot can be controlled using ROS interfaces.\" and offers ros_control plugins for new controllers, which is programmability, and an NVIDIA Jetson add-on is described as \"Take your AI and ML tasks to the next level with NVIDIA Jetson™.\", an accessory rather than a documented model interface. PAL OS documentation carries a tutorial on building an LLM-enabled chatbot, but it runs in a Docker social-interaction simulator, does not name the TIAGo, and does not document running a model on the robot; its Jetson page is a care guide. The separate TIAGo Pro page says \"From integrating large language models, to leveraging perception, teleoperation and data analysis for adaptive behavior\" and was not reviewed here; it is a different product. Re-review if PAL documents a model or policy route for the TIAGo itself.",
+        "evidence": [
+          {
+            "label": "TIAGo product page",
+            "url": "https://pal-robotics.com/robot/tiago/",
+            "kind": "web",
+            "content_sha256": "7e4f3b625a1d10a5959dae4a667f803cb7b674271d1b6bf5ded11ec02807df61",
+            "fetched_at": "2026-10-07"
+          },
+          {
+            "label": "PAL OS documentation: LLM-enabled interactive app tutorial",
+            "url": "https://docs.pal-robotics.com/25.01/reasoning/zero-to-llm.html",
+            "kind": "web",
+            "content_sha256": "0bee45b485ed6b0b9cdea093ada76685dbccbed2baba0edce1b49bfaf2c74c5b",
+            "fetched_at": "2026-10-07"
+          },
+          {
+            "label": "PAL OS documentation: using the Nvidia Jetson accelerator",
+            "url": "https://docs.pal-robotics.com/25.01/hardware/nvidia-jetson.html",
+            "kind": "web",
+            "content_sha256": "11b8d5b07369d266b083cab23c397ddb7f96a93f2f98771730af7e44072fa781",
+            "fetched_at": "2026-10-07"
+          },
+          {
+            "label": "TIAGo Pro product page",
+            "url": "https://pal-robotics.com/robot/tiago-pro/",
+            "kind": "web",
+            "content_sha256": "9b672a0a1292f2c2448eba53d89720daec646716202410f8671d1e40bdcd615d",
+            "fetched_at": "2026-10-07"
+          }
+        ],
+        "proposed_at": "2026-10-07",
+        "proposer": "robots batch 4 review"
       }
     }
   ]

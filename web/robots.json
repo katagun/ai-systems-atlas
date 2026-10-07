@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-10-03",
+  "verified_at": "2026-10-07",
   "robots": [
     {
       "id": "agibot-a2",
@@ -109,6 +109,447 @@
       "verified_at": "2026-10-03"
     },
     {
+      "id": "booster-t1",
+      "name": "Booster T1",
+      "manufacturer": "Booster Robotics",
+      "url": "https://www.booster.tech/booster-t1/",
+      "repo": "BoosterRobotics/booster_deploy",
+      "first_party_domains": [
+        "booster.tech",
+        "github.com/boosterrobotics"
+      ],
+      "description": "Booster Robotics' small humanoid development platform, listed on its product page as \"~1.2m, ~30kg, 23-41 DoFs\" and sold in Basic, Standard and Customized configurations. Booster names no learned model for it; its developer guide documents Python and C++ SDKs for sending control commands, and its open-source repositories document training reinforcement-learning locomotion policies and deploying exported policies to a physical T1.",
+      "variants": "Basic, Standard and Customized on the product page. The Basic and Standard columns list 23 degrees of freedom, and the Customized column lists 31 with grippers and 41 with dexterous hands. Booster sells the K1 and T2 on product pages of their own, which this record does not cover.",
+      "form_factor": "humanoid",
+      "availability": "enterprise_sales",
+      "availability_note": "Booster's product page carries Buy Now buttons that open an inquiry form on its store page, which says \"Booster Robotics will contact you\" and gives a sales email address. The product page states no price and no order path.",
+      "ai_basis": [
+        "open_model_interface"
+      ],
+      "named_models": [],
+      "research_confidence": "high",
+      "hardware": {
+        "compute": "An NVIDIA AGX Orin GPU rated at \"200 TOPS AI performance\" in every configuration, and an Intel i7 1370p CPU listed for the Standard and Customized configurations.",
+        "sensors": "A depth camera, a 9-axis IMU, and a circular 6-microphone array with a speaker. Wi-Fi 6 and Bluetooth 5.2 are listed as supported.",
+        "actuation": "23 degrees of freedom in the Basic and Standard configurations, 6 per leg, 1 at the waist, 4 per arm (extensible) and 2 in the head, with a maximum peak torque of 130 N·m and dual joint encoders. The page states a size of 118 x 47 x 23 cm and a weight of about 30 kg.",
+        "power": "A 10.5 Ah battery, with about 2 hours of walking and about 4 hours of standing listed for the battery life."
+      },
+      "developer_access": "Booster's developer guide documents a Python SDK for \"connecting to real or virtual K1/T1 robots to read data and send control commands\" and a C++ SDK \"covering both high-level RPC and low-level DDS interfaces\". Its booster_deploy repository says it \"supports running control policies on Booster robots (sim2real) and MuJoCo (sim2sim)\", with TorchScript and ONNX checkpoints chosen by file suffix and a T1 robot configuration. Its booster_train repository documents training reinforcement-learning tasks with \"support for the T2, T1, and K1 platforms\" and exporting the trained policy \"for deployment on real robots\", and its booster_gym repository documents training a T1 locomotion policy and deploying it to the physical robot. The product page lists secondary development as supported.",
+      "terms": [
+        "sdk_license",
+        "software_terms"
+      ],
+      "terms_note": "Booster's SDK repository says it is licensed under the Apache License, Version 2.0, and its LICENSE file carries the Apache licence notice rather than the full licence text. Booster's Service Terms & Policies page is a use policy for the robot product: it prohibits private disassembly or modification, restricts use of \"the functions and services of this product\" for weapons and export-controlled purposes, and says using the product is acceptance of the page, so it is recorded as software terms. It is not a sale contract, and no terms of sale were found at review time. The product page lists a one-year warranty.",
+      "terms_evidence": [
+        {
+          "terms_kind": "sdk_license",
+          "scope": "booster_robotics_sdk licence file",
+          "kind": "web_terms",
+          "url": "https://github.com/BoosterRobotics/booster_robotics_sdk/blob/main/LICENSE",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "terms_kind": "software_terms",
+          "scope": "Service Terms & Policies page",
+          "kind": "web_terms",
+          "url": "https://www.booster.tech/service",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "not_verified": "The documented policy interfaces are Booster's own claims; the Atlas has not verified them. Every source is a Booster web page or a file in a repository Booster can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://www.booster.tech/booster-t1/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "git_blob",
+          "role": "model_interface",
+          "label": "booster_deploy README",
+          "url": "https://github.com/BoosterRobotics/booster_deploy/blob/main/README.md",
+          "blob_sha": "44bd5a4fda33db4b43a7dade1e9a3c00fc9f984f",
+          "immutable_url": "https://api.github.com/repos/BoosterRobotics/booster_deploy/git/blobs/44bd5a4fda33db4b43a7dade1e9a3c00fc9f984f",
+          "path": "README.md"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "booster_train README",
+          "url": "https://github.com/BoosterRobotics/booster_train/blob/main/README.md",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "booster_gym README",
+          "url": "https://github.com/BoosterRobotics/booster_gym/blob/main/README.md",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "technical_documentation",
+          "label": "Developer guide",
+          "url": "https://docs.booster.tech/developer-guide/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Open-source development page",
+          "url": "https://www.booster.tech/open-source",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Store inquiry page",
+          "url": "https://www.booster.tech/store",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07"
+    },
+    {
+      "id": "deep-robotics-lite3",
+      "name": "DEEP Robotics Lite3",
+      "manufacturer": "DEEP Robotics",
+      "url": "https://www.deeprobotics.cn/en/index/product1.html",
+      "repo": "DeepRoboticsLab/Lite3_rl_deploy",
+      "first_party_domains": [
+        "deeprobotics.cn",
+        "github.com/DeepRoboticsLab"
+      ],
+      "description": "DEEP Robotics' compact quadruped robot dog, sold as the Lite3 in Basic, Venture, Pro and LIDAR versions. DEEP Robotics names no learned model for it; its product page lists secondary development with a motion-control SDK, and its repositories document training a reinforcement-learning locomotion policy for the Lite3 and deploying it to the physical robot.",
+      "variants": "Basic, Venture, Pro and LIDAR versions on the product page, which list the same secondary-development row for all four and add obstacle avoidance and auto navigation as the version rises.",
+      "form_factor": "quadruped",
+      "availability": "orderable",
+      "availability_note": "DEEP Robotics' Lite3 shop page states a price, has a BUY NOW button, asks buyers to contact it before purchase and estimates shipping in 30 days, and its Delivery Policy says the product is delivered within 30 working days after the order is placed. Its purchase page also offers a purchase intention form that a consultant answers.",
+      "ai_basis": [
+        "open_model_interface"
+      ],
+      "named_models": [],
+      "research_confidence": "high",
+      "hardware": {
+        "compute": "Not published.",
+        "sensors": "Front and rear obstacle stop and visual following on the Basic and Venture versions, forward obstacle avoidance added on the Pro version, and auto navigation added on the LIDAR version. Hardware interfaces run from two Ethernet ports on the Venture version to USB 3.0, HDMI, Ethernet and a power connector on the Pro and LIDAR versions.",
+        "actuation": "The page says \"50% joint torque increased\" and lists a standing size of 610 x 370 x 406 mm, a weight of 12 kg with battery, a walking load of 5 kg, a 40-degree slope and an 18 cm stair for the Basic version. The Venture, Pro and LIDAR versions list loads of 4.5, 4 and 2.5 kg and weights of 12.2, 12.9 and 13.5 kg. The page lists no joint count.",
+        "power": "A battery endurance of 1.5 to 2 hours and a mileage of 5 km on the Basic version, falling to 2.7 km on the LIDAR version. External power input of 24 V, 12 V and 5 V is listed on the Venture, Pro and LIDAR versions."
+      },
+      "developer_access": "DEEP Robotics' product page lists secondary development as \"Provide models, motion control SDK and APIs, as well as perception development interfaces with sample code.\" Its rl_training repository \"is a RL training library for deeprobotics robots, based on IsaacLab\", lists the Lite3 among its environments, and says \"If you want to deploy policies in mujoco or real robots, please use the corresponding deploy repo\". Its Lite3_rl_deploy repository documents Sim-to-Sim and Sim-to-Real deployment to the Lite3 and says \"To run the policy file trained with RL, you need to link the onnxruntime library, which supports models in the .onnx format.\" Its Lite3_MotionSDK repository documents the motion SDK and says Lite3_rl_deploy \"is a implementation of rl on lite3 robot\".",
+      "terms": [
+        "terms_of_sale",
+        "sdk_license"
+      ],
+      "terms_note": "DEEP Robotics' Lite3 shop page carries a Delivery Policy, an after-sales statement that the product does not support returns, and a warranty policy that starts when the buyer receives the goods; its Support page says the after-sales terms apply only in Chinese mainland. The Lite3_rl_deploy and rl_training repositories are released under the BSD 3-Clause License and the Lite3_MotionSDK repository under the MIT License.",
+      "terms_evidence": [
+        {
+          "terms_kind": "terms_of_sale",
+          "scope": "Delivery, after-sales and warranty policy on the Lite3 shop page",
+          "kind": "web_terms",
+          "url": "https://www.deeprobotics.cn/en/index/lite3.html",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "terms_kind": "sdk_license",
+          "scope": "Lite3_rl_deploy licence file",
+          "kind": "web_terms",
+          "url": "https://github.com/DeepRoboticsLab/Lite3_rl_deploy/blob/main/LICENSE",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "not_verified": "The documented policy interfaces are DEEP Robotics' own claims; the Atlas has not verified them. Every source is a DEEP Robotics web page or a file in a repository DEEP Robotics can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Lite3 product page",
+          "url": "https://www.deeprobotics.cn/en/index/product1.html",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "git_blob",
+          "role": "model_interface",
+          "label": "Lite3_rl_deploy English README",
+          "url": "https://github.com/DeepRoboticsLab/Lite3_rl_deploy/blob/main/README_EN.md",
+          "blob_sha": "6bb01cdc37417f1095278fe9a5bc05f53b23a798",
+          "immutable_url": "https://api.github.com/repos/DeepRoboticsLab/Lite3_rl_deploy/git/blobs/6bb01cdc37417f1095278fe9a5bc05f53b23a798",
+          "path": "README_EN.md"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "rl_training README",
+          "url": "https://github.com/DeepRoboticsLab/rl_training/blob/main/README.md",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "technical_documentation",
+          "label": "Lite3_MotionSDK README",
+          "url": "https://github.com/DeepRoboticsLab/Lite3_MotionSDK/blob/main/README.md",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Lite3 shop page",
+          "url": "https://www.deeprobotics.cn/en/index/lite3.html",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Purchase page",
+          "url": "https://www.deeprobotics.cn/en/index/buy.html",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07"
+    },
+    {
+      "id": "engineered-arts-ameca",
+      "name": "Ameca",
+      "manufacturer": "Engineered Arts",
+      "url": "https://engineeredarts.com/robots/ameca",
+      "first_party_domains": [
+        "engineeredarts.com"
+      ],
+      "description": "Engineered Arts' full-size social humanoid robot with a lifelike face and a 61-degree-of-freedom body, run by the company's Tritium software suite. Engineered Arts names no learned model that drives the robot's motion; its specifications list default Tritium AI integrations with OpenAI ChatGPT, OpenAI Whisper and Amazon Poly, and its Tritium AI page says the Pro agent platform can use a range of LLMs or a custom model.",
+      "variants": "Ameca (generation 2.6) on the product page. Engineered Arts sells Ameca Desktop, Ami Desktop, Azi Desktop and Mesmer on pages of their own, which this record does not cover.",
+      "form_factor": "humanoid",
+      "availability": "enterprise_sales",
+      "availability_note": "Engineered Arts' Ameca page has Book a Demo, Get a Quote and Rent buttons that open sales and rental inquiry forms, and the specifications say to configure a robot with \"a customized Ameca quote\". The pages state no price and no order path.",
+      "ai_basis": [
+        "open_model_interface"
+      ],
+      "named_models": [],
+      "research_confidence": "medium",
+      "hardware": {
+        "compute": "An embedded robot PC, listed with RJ45 Ethernet, two Thunderbolt ports and two USB ports; no processor is named.",
+        "sensors": "Two 8 MP cameras, one in each eye, two microphones, one in each ear, a 4-channel chest microphone, and 360-degree LiDAR safety sensors.",
+        "actuation": "61 actuated degrees of freedom: 27 in the head, 5 in the neck, 8 in the shoulders, 10 in the arms, 8 in the hands and 3 in the torso. The specifications list a height of 1870 mm, a weight of 62 kg and a 600 mm base.",
+        "power": "Two mains power outlets at 110-240 V AC, 50/60Hz, 400W, and a robot power supply of 2 x 24Vdc, 200W."
+      },
+      "developer_access": "Engineered Arts' specifications list a control API of \"REST, WebSocket, Python & Node.js SDKs\" and AI integration through \"Tritium AI. Default integrations with OpenAI ChatGPT, OpenAI Whisper, Amazon Poly. Custom integrations available.\" Its Ameca page says \"Build, train, and deploy your AI models with ease.\" and that \"Tritium AI is a cloud-based service that equips a humanoid robot with the ability to talk, listen, and generate responses using advanced AI technologies.\" Its Tritium AI page says the Pro agent platform lets you \"connect MCP servers and external API integrations, choose from a range of LLMs or bring your own custom model\". The model sits behind Tritium's cloud-based AI service rather than on the robot, and the developer documentation at docs.engineeredarts.co.uk is behind a login, so this record rests on the product and specification pages.",
+      "terms": [
+        "none_published"
+      ],
+      "terms_note": "Engineered Arts' Terms of Service, last updated August 2025, cover its website, products and services in general terms and are a site-level agreement, not terms of sale or software terms, so they are not classified. The specifications list a one-year warranty on parts and labor. No terms of sale or SDK licence were found at review time.",
+      "terms_evidence": [],
+      "not_verified": "The documented model route is Engineered Arts' own claim; the Atlas has not verified it. Every source is an Engineered Arts web page that the company can change at any time, and the pages render their text with JavaScript, so a link check sees no text to monitor.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Ameca product page",
+          "url": "https://engineeredarts.com/robots/ameca",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "Tritium AI page",
+          "url": "https://engineeredarts.com/software/tritium/ai",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "technical_documentation",
+          "label": "Ameca specifications page",
+          "url": "https://engineeredarts.com/robots/ameca/specs",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Terms of Service",
+          "url": "https://engineeredarts.com/terms",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07"
+    },
+    {
+      "id": "figure-03",
+      "name": "Figure 03",
+      "manufacturer": "Figure AI",
+      "url": "https://www.figure.ai/figure",
+      "first_party_domains": [
+        "figure.ai"
+      ],
+      "description": "Figure AI's third-generation humanoid robot, which Figure says is designed for household tasks and built around Helix, its vision-language-action model.",
+      "form_factor": "humanoid",
+      "availability": "announced",
+      "availability_note": "Figure's site offers no way to order Figure 03 and describes no pilot programme. Its news pages describe factory deployments instead: Figure 03 arrived at BMW Group Plant Spartanburg in 2026, after Figure 02 contributed to the assembly of 30,000 cars at BMW the year before.",
+      "ai_basis": [
+        "vendor_named_model"
+      ],
+      "named_models": [
+        {
+          "name": "Helix",
+          "kind": "vision_language_action",
+          "role_note": "Figure says Helix controls the full loop of perception, movement, and reasoning, on board and in real time, and that it outputs high-rate continuous control of the entire humanoid upper body, including wrists, torso, head, and individual fingers.",
+          "evidence_label": "Helix page"
+        },
+        {
+          "name": "Helix 02",
+          "kind": "vision_language_action",
+          "role_note": "Figure's BMW deployment page calls Helix 02 its proprietary pixels-to-actions VLA and says it coordinates Figure 03's hands, arms, torso, and feet, letting the robot manipulate parts while stepping and repositioning its body.",
+          "evidence_label": "Figure 03 at BMW"
+        }
+      ],
+      "research_confidence": "medium",
+      "hardware": {
+        "compute": "Not published.",
+        "sensors": "A camera system that Figure says delivers twice the frame rate, one-quarter the latency, and a 60% wider field of view per camera, a palm camera in each hand, and fingertip tactile sensors that detect forces as small as three grams. An upgraded audio system has a repositioned microphone.",
+        "actuation": "Electric. Figure says the actuators perform at 2x faster speeds with improved torque density; the product page lists a 20 kg payload and a speed of 1.2 m/s.",
+        "power": "A battery certified to the UN38.3 standard, with a 5-hour runtime on the product page. Charging coils in the robot's feet let it step onto a wireless stand and charge at 2 kW."
+      },
+      "developer_access": "Figure documents no SDK, API or programme for running your own model on Figure 03.",
+      "terms": [
+        "none_published"
+      ],
+      "terms_note": "The only terms page on figure.ai, last updated February 01, 2023, governs use of the figure.ai website and says nothing about the robot's sale, software, or warranty.",
+      "terms_evidence": [],
+      "not_verified": "Helix, and what it does on the robot, is Figure's own claim; the Atlas has not verified it. Every source is a Figure web page that Figure can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Product page",
+          "url": "https://www.figure.ai/figure",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "technical_documentation",
+          "label": "Introducing Figure 03",
+          "url": "https://www.figure.ai/news/introducing-figure-03",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "named_model",
+          "label": "Helix page",
+          "url": "https://www.figure.ai/helix",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "named_model",
+          "label": "Helix announcement",
+          "url": "https://www.figure.ai/news/helix",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "named_model",
+          "label": "Figure 03 at BMW",
+          "url": "https://www.figure.ai/news/f-03-at-bmw",
+          "verified_at": "2026-09-24"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Website terms",
+          "url": "https://www.figure.ai/terms-and-conditions",
+          "verified_at": "2026-09-24"
+        }
+      ],
+      "verified_at": "2026-09-24"
+    },
+    {
+      "id": "galbot-g1",
+      "name": "Galbot G1",
+      "manufacturer": "Galbot",
+      "url": "https://www.galbot.com/g1/",
+      "first_party_domains": [
+        "galbot.com"
+      ],
+      "description": "Galbot's wheeled humanoid, a dual-arm upper body with a neck, waist and leg lift on a four-wheel omnidirectional chassis, which its own page calls a \"Humanoid Structural Design\". Galbot's home page names the AstraBrain family of models and says what each does, its G1 page names AstraBrain as the robot's technology, and its developer platform documents an SDK with a control route for end-to-end model actions. The pages do not say which of the three models runs on which G1 configuration.",
+      "variants": "Galbot's developer platform lists the G1 and a G1 Lite as compatible robots; its G1 page lists end effectors swappable between dexterous hands, suction cups and grippers. This record covers the G1 page.",
+      "form_factor": "humanoid",
+      "availability": "orderable",
+      "availability_note": "Galbot's G1 page has a Buy Now button that opens a JD.com product page, a third-party retailer the record does not cite, and a Contact Us button. The page states no price and no delivery time.",
+      "ai_basis": [
+        "vendor_named_model",
+        "open_model_interface"
+      ],
+      "named_models": [
+        {
+          "name": "AstraBrain-WAM",
+          "kind": "other_learned",
+          "role_note": "Galbot's home page says \"AstraBrain-WAM is a general-purpose cerebrum model that unlocks the value of diverse data at global scale.\" Its architecture diagram labels the cerebrum a 3B-13B World Action Model that interprets task semantics, plans long-horizon tasks and issues high-level commands.",
+          "evidence_label": "Galbot home page"
+        },
+        {
+          "name": "AstraBrain-WBC",
+          "kind": "other_learned",
+          "role_note": "Galbot's home page says \"AstraBrain-WBC is the world's first general-purpose humanoid cerebellum GPT foundation model.\" Its architecture diagram labels the cerebellum an 80-300M Transformer that does real-time control and whole-body and whole-hand control.",
+          "evidence_label": "Galbot home page"
+        },
+        {
+          "name": "AstraBrain-Dex",
+          "kind": "other_learned",
+          "role_note": "Galbot's home page says \"AstraBrain-Dex is a world model that enables robots to perform high-precision in-hand manipulation with unprecedented dexterity.\"",
+          "evidence_label": "Galbot home page"
+        }
+      ],
+      "research_confidence": "medium",
+      "hardware": {
+        "compute": "An NVIDIA AGX Orin 64GB computing platform rated at 275 TOPS, with Wi-Fi 2.4/5GHz and Bluetooth 5.2.",
+        "sensors": "A binocular camera in the head, four RGB cameras and an IMU in the torso, two depth cameras and two 6-axis force sensors at the wrists, and a 3D LiDAR, eight ultrasonic sensors and an IMU in the chassis. A 5.5-inch touchscreen, two linear 4-microphone arrays and two 5 W speakers are listed.",
+        "actuation": "21 degrees of freedom excluding the chassis and end effector, 2 in the neck, 7 in each arm, 3 in the waist and 2 in the legs, with a payload of 5 kg per arm and 10 kg in total, a 4-wheel omnidirectional chassis and a maximum speed of 1.5 m/s. The page states a height of up to 1730 mm and a weight of 92.5 kg.",
+        "power": "A 48 V, 30 Ah battery with an 8-hour operating time and 3.5-hour adapter charging, and an IP54 ingress protection rating."
+      },
+      "developer_access": "Galbot's developer platform describes GalbotSDK with a high-level API that invokes the robot's built-in planning, navigation and whole-body control algorithms and a low-level API that directly controls joint motors, sets chassis velocity and reads raw sensor streams, and it lists the Control domain as \"High-precision, low-latency actuator control with end-to-end model action passthrough\". The platform adds an online simulation, one-click deployment from the platform to a real robot, and standard G1 and S1 digital models in URDF, MJCF and USD. A free developer tier lists GalbotSDK, the docs center and the digital models.",
+      "terms": [
+        "none_published"
+      ],
+      "terms_note": "Galbot's Terms of Use apply to the Galbot website and say it may be used for informational purposes only; that is a site notice, not terms of sale or software terms, and it is not classified. The G1 page and developer platform were read at review time and no terms of sale, SDK licence or warranty page was found on either.",
+      "terms_evidence": [],
+      "not_verified": "The named models and the documented SDK route are Galbot's own claims; the Atlas has not verified them. Every source is a Galbot web page that Galbot can change at any time, and the pages are bilingual, with the English text a rendered translation of the Chinese source.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "G1 product page",
+          "url": "https://www.galbot.com/g1/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "named_model",
+          "label": "Galbot home page",
+          "url": "https://www.galbot.com/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "Galbot developer platform",
+          "url": "https://developer.galbot.com/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Galbot website Terms of Use",
+          "url": "https://www.galbot.com/terms/",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07"
+    },
+    {
       "id": "hello-robot-stretch-4",
       "name": "Stretch 4",
       "manufacturer": "Hello Robot",
@@ -212,94 +653,109 @@
       "verified_at": "2026-09-30"
     },
     {
-      "id": "figure-03",
-      "name": "Figure 03",
-      "manufacturer": "Figure AI",
-      "url": "https://www.figure.ai/figure",
+      "id": "limx-tron-1",
+      "name": "LimX TRON 1",
+      "manufacturer": "LimX Dynamics",
+      "url": "https://www.limxdynamics.com/en/products/tron1",
+      "repo": "limxdynamics/tron1-rl-deploy-ros",
       "first_party_domains": [
-        "figure.ai"
+        "limxdynamics.com",
+        "github.com/limxdynamics"
       ],
-      "description": "Figure AI's third-generation humanoid robot, which Figure says is designed for household tasks and built around Helix, its vision-language-action model.",
-      "form_factor": "humanoid",
-      "availability": "announced",
-      "availability_note": "Figure's site offers no way to order Figure 03 and describes no pilot programme. Its news pages describe factory deployments instead: Figure 03 arrived at BMW Group Plant Spartanburg in 2026, after Figure 02 contributed to the assembly of 30,000 cars at BMW the year before.",
+      "description": "LimX Dynamics' two-legged robot, which its own pages call \"The First Multi-Modal Biped Robot\", sold in Standard and EDU editions with a foot end that switches between point-foot, sole and wheeled modes. It has no torso or arms in the base product, so the record files it under other. LimX names no learned model for it; its repositories document training reinforcement-learning locomotion policies for the TRON1, deploying ONNX policies to it, and driving it from an LLM voice agent.",
+      "variants": "TRON 1 Std. Ed. and TRON 1 EDU Ed. on the specification page, each with point-foot, sole and wheeled foot ends. Arm, sensor and voice-interaction expansion kits are sold separately. LimX sells TRON 2, Oli and Luna as separate products, which this record does not cover.",
+      "form_factor": "other",
+      "availability": "enterprise_sales",
+      "availability_note": "LimX's TRON 1 pages carry Buy Now buttons that open a Contact Sales form, which says \"we will contact you within 24 hours to provide more detailed product information and solutions\". The pages state no price and no order path.",
       "ai_basis": [
-        "vendor_named_model"
+        "open_model_interface"
       ],
-      "named_models": [
+      "named_models": [],
+      "research_confidence": "high",
+      "hardware": {
+        "compute": "A 12th Gen Intel i3 CPU with 16 GB of memory and 512 GB of storage.",
+        "sensors": "The specification table's sensor row lists an RGBD camera and an IMU that provides IMU data, and the page text does not preserve which edition carries the camera. The overview page describes a Sensor Expansion Kit that integrates LiDAR and a depth camera and a Voice Interaction Kit with an NVIDIA NX module and a microphone array.",
+        "actuation": "Actuators with a rated torque of 30 N·m, a peak torque of 60 N·m and a peak speed of 15 rad/s, in a body of at most 392 x 420 x 845 mm and at most 20 kg, with a load capacity of up to 10 kg. Point-foot and sole speeds are listed below 1 m/s and wheeled speed at up to 3 m/s.",
+        "power": "A 46.8 V, 4.5 Ah ternary lithium battery with a maximum power of 1,000 W, a range of up to 2 hours, quick battery swapping, and a charging time of under 1 hour from 20% to 80%."
+      },
+      "developer_access": "LimX's TRON 1 overview page lists a \"Fully Open SDK and Hardware Interface\", development \"in Python, C++ not required\", and a \"Detailed user manual, professional secondary development guide and code examples\". Its tron1-rl-deploy-ros repository says it will \"Deploy trained reinforcement learning (RL) walking policies to TRON1 biped and wheel-legged robots via ROS Noetic\" and \"Loads ONNX models through `ros_control` and runs them on Gazebo simulation or real hardware\". Its tron1-rl-isaaclab repository documents training PPO locomotion policies and extends Isaac Lab \"to support sim-to-real training for TRON1 robot variants\", and its tron1-agent repository documents a voice agent that relies on LLMs for dialogue and says it \"supports Tron action execution calls\".",
+      "terms": [
+        "sdk_license",
+        "warranty_only"
+      ],
+      "terms_note": "LimX's Terms & Policies page opens with an after-sales service policy for robotic products sold by LimX Dynamics Technology Co.,Ltd., covering returns, exchanges, warranty exclusions and a limit on liability; its other tabs (a disclaimer, privacy policy and terms of service) do not load as page text and were not read, so no sale terms beyond the after-sales policy are recorded. The tron1-rl-deploy-ros repository is released under the Apache License 2.0 and carries the full licence text; the limxsdk-lowlevel library the deployment repositories install ships as binary wheels, and no separate licence for it was read.",
+      "terms_evidence": [
         {
-          "name": "Helix",
-          "kind": "vision_language_action",
-          "role_note": "Figure says Helix controls the full loop of perception, movement, and reasoning, on board and in real time, and that it outputs high-rate continuous control of the entire humanoid upper body, including wrists, torso, head, and individual fingers.",
-          "evidence_label": "Helix page"
+          "terms_kind": "sdk_license",
+          "scope": "tron1-rl-deploy-ros licence file",
+          "kind": "web_terms",
+          "url": "https://github.com/limxdynamics/tron1-rl-deploy-ros/blob/master/LICENSE",
+          "verified_at": "2026-10-07"
         },
         {
-          "name": "Helix 02",
-          "kind": "vision_language_action",
-          "role_note": "Figure's BMW deployment page calls Helix 02 its proprietary pixels-to-actions VLA and says it coordinates Figure 03's hands, arms, torso, and feet, letting the robot manipulate parts while stepping and repositioning its body.",
-          "evidence_label": "Figure 03 at BMW"
+          "terms_kind": "warranty_only",
+          "scope": "After-sales service policy on the Terms & Policies page",
+          "kind": "web_terms",
+          "url": "https://www.limxdynamics.com/en/policy",
+          "verified_at": "2026-10-07"
         }
       ],
-      "research_confidence": "medium",
-      "hardware": {
-        "compute": "Not published.",
-        "sensors": "A camera system that Figure says delivers twice the frame rate, one-quarter the latency, and a 60% wider field of view per camera, a palm camera in each hand, and fingertip tactile sensors that detect forces as small as three grams. An upgraded audio system has a repositioned microphone.",
-        "actuation": "Electric. Figure says the actuators perform at 2x faster speeds with improved torque density; the product page lists a 20 kg payload and a speed of 1.2 m/s.",
-        "power": "A battery certified to the UN38.3 standard, with a 5-hour runtime on the product page. Charging coils in the robot's feet let it step onto a wireless stand and charge at 2 kW."
-      },
-      "developer_access": "Figure documents no SDK, API or programme for running your own model on Figure 03.",
-      "terms": [
-        "none_published"
-      ],
-      "terms_note": "The only terms page on figure.ai, last updated February 01, 2023, governs use of the figure.ai website and says nothing about the robot's sale, software, or warranty.",
-      "terms_evidence": [],
-      "not_verified": "Helix, and what it does on the robot, is Figure's own claim; the Atlas has not verified it. Every source is a Figure web page that Figure can change at any time.",
+      "not_verified": "The documented policy interfaces are LimX's own claims; the Atlas has not verified them. Every source is a LimX web page or a file in a repository LimX can change at any time.",
       "status": "active",
       "evidence": [
         {
           "kind": "web",
           "role": "product_page",
-          "label": "Product page",
-          "url": "https://www.figure.ai/figure",
-          "verified_at": "2026-09-24"
+          "label": "TRON 1 overview page",
+          "url": "https://www.limxdynamics.com/en/products/tron1",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "git_blob",
+          "role": "model_interface",
+          "label": "tron1-rl-deploy-ros README",
+          "url": "https://github.com/limxdynamics/tron1-rl-deploy-ros/blob/master/README.md",
+          "blob_sha": "6097ceb51cc4edaea8a83352853f41bde338b104",
+          "immutable_url": "https://api.github.com/repos/limxdynamics/tron1-rl-deploy-ros/git/blobs/6097ceb51cc4edaea8a83352853f41bde338b104",
+          "path": "README.md"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "tron1-rl-isaaclab README",
+          "url": "https://github.com/limxdynamics/tron1-rl-isaaclab/blob/main/README.md",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "tron1-agent README",
+          "url": "https://github.com/limxdynamics/tron1-agent/blob/main/README.md",
+          "verified_at": "2026-10-07"
         },
         {
           "kind": "web",
           "role": "technical_documentation",
-          "label": "Introducing Figure 03",
-          "url": "https://www.figure.ai/news/introducing-figure-03",
-          "verified_at": "2026-09-24"
-        },
-        {
-          "kind": "web",
-          "role": "named_model",
-          "label": "Helix page",
-          "url": "https://www.figure.ai/helix",
-          "verified_at": "2026-09-24"
-        },
-        {
-          "kind": "web",
-          "role": "named_model",
-          "label": "Helix announcement",
-          "url": "https://www.figure.ai/news/helix",
-          "verified_at": "2026-09-24"
-        },
-        {
-          "kind": "web",
-          "role": "named_model",
-          "label": "Figure 03 at BMW",
-          "url": "https://www.figure.ai/news/f-03-at-bmw",
-          "verified_at": "2026-09-24"
+          "label": "TRON 1 specification page",
+          "url": "https://www.limxdynamics.com/en/products/tron1/spec",
+          "verified_at": "2026-10-07"
         },
         {
           "kind": "web",
           "role": "supporting",
-          "label": "Website terms",
-          "url": "https://www.figure.ai/terms-and-conditions",
-          "verified_at": "2026-09-24"
+          "label": "tron1-rl-deploy-python README",
+          "url": "https://github.com/limxdynamics/tron1-rl-deploy-python/blob/main/README.md",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "Contact Sales page",
+          "url": "https://www.limxdynamics.com/en/order",
+          "verified_at": "2026-10-07"
         }
       ],
-      "verified_at": "2026-09-24"
+      "verified_at": "2026-10-07"
     },
     {
       "id": "neo",
@@ -390,6 +846,104 @@
         }
       ],
       "verified_at": "2026-09-24"
+    },
+    {
+      "id": "reachy-mini",
+      "name": "Reachy Mini",
+      "manufacturer": "Pollen Robotics",
+      "url": "https://pollen-robotics.com/reachy-mini/",
+      "repo": "pollen-robotics/reachy_mini",
+      "first_party_domains": [
+        "pollen-robotics.com",
+        "github.com/pollen-robotics"
+      ],
+      "description": "Pollen Robotics' desktop robot with a movable head, two antennas and a rotating body, sold as a kit in Wireless and Lite versions. It has no arms, legs or base, so the record files it under other. Pollen names no learned model for the robot itself; its documentation says it \"is designed for AI Builders\" and documents an SDK, a REST and WebSocket API, and a reference conversation app in which an LLM calls tools that move the robot.",
+      "variants": "Reachy Mini Wireless, which carries its own computer and battery, and Reachy Mini Lite, which runs from the buyer's Mac, PC or Linux machine. Pollen sells Reachy 2 separately, which this record does not cover.",
+      "form_factor": "other",
+      "availability": "orderable",
+      "availability_note": "Pollen Robotics' Reachy Mini page has Order Now buttons for the Wireless and Lite kits that open its store, offers its distributor Seeed Studio outside the EU, UK, US and Canada, states prices, and says the lead time is up to 90 days after purchase. Both versions ship as DIY kits.",
+      "ai_basis": [
+        "open_model_interface"
+      ],
+      "named_models": [],
+      "research_confidence": "high",
+      "hardware": {
+        "compute": "A Raspberry Pi 4 Compute Module (CM4104016 with Wi-Fi, 4 GB of RAM and 16 GB of flash) in the Wireless version. The Lite version uses the buyer's computer.",
+        "sensors": "A wide-angle 12 MP autofocus camera, a four-microphone array and a speaker, with an accelerometer on the Wireless version.",
+        "actuation": "Dynamixel motors driving 6 degrees of freedom in the head, 1 rotation of the body and 1 rotation of each of the two antennas, in a body of 30 x 20 x 15.5 cm extended and 1.475 kg.",
+        "power": "A 6.8 to 7.6 V input and, in the Wireless version, a LiFePO4 2000 mAh, 6.4 V, 12.8 Wh battery. The Lite version is powered from a wall outlet."
+      },
+      "developer_access": "Pollen's integration guide opens \"Reachy Mini is designed for AI Builders. Here is how to integrate LLMs and share your work.\" and says \"The Daemon exposes full control via REST.\" Its AI-integration guide describes the architecture as \"LLM decides → Tool call (e.g., \"dance\") → Queue move → Control loop executes smoothly\", says \"The LLM doesn't control motors directly\", and lists the tools the reference app gives the LLM: move_head, dance, play_emotion, camera and head_tracking. The reference reachy_mini_conversation_app repository describes itself as a \"Conversational app for the Reachy Mini robot combining realtime voice, vision, personality-aware tools, and choreographed motion.\" Pollen's page says the robot's built-in conversation is \"Powered by a realtime voice model\" without naming one.",
+      "terms": [
+        "terms_of_sale",
+        "sdk_license"
+      ],
+      "terms_note": "Pollen Robotics SAS's general terms and conditions of sale apply to any inquiry, quotation, order or delivery of its products. The reachy_mini repository is licensed under the Apache 2.0 License, and its README says the hardware design files are licensed under Creative Commons BY-SA-NC.",
+      "terms_evidence": [
+        {
+          "terms_kind": "terms_of_sale",
+          "scope": "General terms and conditions of sale",
+          "kind": "web_terms",
+          "url": "https://pollen-robotics.com/general-terms-and-conditions-of-sales/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "terms_kind": "sdk_license",
+          "scope": "reachy_mini licence file",
+          "kind": "web_terms",
+          "url": "https://github.com/pollen-robotics/reachy_mini/blob/develop/LICENSE",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "not_verified": "The documented model interface is Pollen Robotics' own claim; the Atlas has not verified it. Every source is a Pollen Robotics web page or a file in a repository Pollen can change at any time.",
+      "status": "active",
+      "evidence": [
+        {
+          "kind": "web",
+          "role": "product_page",
+          "label": "Reachy Mini product page",
+          "url": "https://pollen-robotics.com/reachy-mini/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "git_blob",
+          "role": "model_interface",
+          "label": "Integrations and apps guide",
+          "url": "https://github.com/pollen-robotics/reachy_mini/blob/develop/docs/source/SDK/integration.md",
+          "blob_sha": "f582594886ac8f57bd7348a7d1cbd7f450e4cce4",
+          "immutable_url": "https://api.github.com/repos/pollen-robotics/reachy_mini/git/blobs/f582594886ac8f57bd7348a7d1cbd7f450e4cce4",
+          "path": "docs/source/SDK/integration.md"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "AI integration guide",
+          "url": "https://github.com/pollen-robotics/reachy_mini/blob/develop/skills/ai-integration.md",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "model_interface",
+          "label": "Conversation app README",
+          "url": "https://github.com/pollen-robotics/reachy_mini_conversation_app/blob/main/README.md",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "technical_documentation",
+          "label": "Hardware datasheet",
+          "url": "https://github.com/pollen-robotics/reachy_mini/blob/develop/docs/source/platforms/reachy_mini/hardware.md",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "role": "supporting",
+          "label": "reachy_mini README",
+          "url": "https://github.com/pollen-robotics/reachy_mini/blob/develop/README.md",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07"
     },
     {
       "id": "spot",
