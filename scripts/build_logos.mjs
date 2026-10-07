@@ -101,6 +101,7 @@ const RECORD_MARKS = {
   qdrant: "simple:qdrant",
   siyuan: "simple:siyuan",
   trilium: "simple:trilium",
+  vespa: null, // simple:vespa is Piaggio's scooter, not vespa-engine/vespa
   // Inference services
   "ai21-studio": "lobe:ai21",
   "alibaba-cloud-model-studio": "lobe:alibabacloud",
@@ -227,6 +228,7 @@ const RECORD_MARKS = {
   "model-zhipuai-glm-5-3-flash": "lobe:zai",
   // Labs — the organization's own mark
   "lab-ai21-labs": "lobe:ai21",
+  "lab-aleph-alpha": "lobe:alephalpha",
   "lab-alibaba": "lobe:alibaba",
   "lab-amazon": "lobe:aws",
   "lab-ant-group": "lobe:antgroup",
