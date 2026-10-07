@@ -1377,14 +1377,18 @@ function openFilterSheet() {
 // "Show N results", and the sheet's own status, which says the new count:
 // the result counts' live regions sit outside the modal sheet, so a screen
 // reader would hear nothing while choosing (review M8). The status speaks
-// only for a change made in the open sheet, not as it opens.
+// only for a change made in the open sheet, not as it opens, and only when
+// the count differs from the one the button already shows, so a repaint
+// that changes no count, such as "Show all", says nothing (review N2).
 function syncFilterSheetButton({ announce = true } = {}) {
   const count = state.resultCounts[state.directoryCollection] ?? 0;
   const results = `${count} ${count === 1 ? "result" : "results"}`;
-  $("#filter-sheet-done").textContent = `Show ${results}`;
+  const done = $("#filter-sheet-done");
+  const changed = done.textContent !== `Show ${results}`;
+  done.textContent = `Show ${results}`;
   const status = $("#filter-sheet-status");
-  const said = announce ? results : "";
-  if (status.textContent !== said) status.textContent = said;
+  if (!announce) status.textContent = "";
+  else if (changed) status.textContent = results;
 }
 
 // The strip sticks under the header at every width, so the header's

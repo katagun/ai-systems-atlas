@@ -797,3 +797,23 @@ test("a focused control's whole ring shows in the phone sheet, on a short phone 
     expectWholeRings(rings, `${height}px sheet`);
   }
 });
+
+// The sheet's status speaks only when the count changes. "Show all" shows
+// more values but changes no filter, so it says nothing (review N2).
+test("in the phone sheet Show all says nothing, and a choice says the new count", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?collection=systems");
+  await page.locator("#filters-button").click();
+  const sheet = page.locator("#filter-sheet");
+  const status = sheet.getByRole("status");
+  const role = sheet.locator('[data-filter-group="role"]');
+  const values = role.locator("input");
+  const shown = await values.count();
+  await role.getByRole("button", { name: /^Show all \d+$/ }).click();
+  await expect(values).not.toHaveCount(shown);
+  expect(await status.textContent(), "Show all changes no count, so the status says nothing").toBe("");
+  await role.locator('input:not([value=""]):not([disabled])').first().check();
+  await settled(page);
+  const count = Number((await page.locator("#result-count").textContent()).match(/^\d+/)[0]);
+  await expect(status).toHaveText(`${count} ${count === 1 ? "result" : "results"}`);
+});
