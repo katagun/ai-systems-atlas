@@ -21013,6 +21013,495 @@
       "research_confidence": "medium",
       "verified_at": "2026-10-06",
       "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "holaos",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "holaOS",
+      "repo": "holaboss-ai/holaOS",
+      "url": "https://github.com/holaboss-ai/holaOS",
+      "description": "Electron desktop workspace and local runtime that runs Claude Code, Codex, or its own agent side by side with embedded apps, a signed-in browser, chat-channel and integration connectors, MCP, skills, scheduled automations, and one shared plain-file memory.",
+      "primary_role": "general_work_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "moonshot_ai",
+        "z_ai",
+        "openai_compatible"
+      ],
+      "architectures": [
+        "relational_db",
+        "plain_files",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "human_curated",
+        "consolidation"
+      ],
+      "canonical_data": "A local data database holding sessions and runtime state, plus workspace files and a Markdown memory tree with embeddings kept on the user's disk",
+      "deployment": [
+        "desktop",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "persistent_state",
+        "mcp",
+        "browser_control",
+        "shell_execution",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 11449,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the open-source desktop app and runtime in this repository. The built-in default model account, the HolaHub recipe platform, and the enterprise tier with SSO and audit logs the README describes are vendor-operated and not reviewed here, and the integration connectors run through a third-party broker. The same shared memory could support a memory reading, but the documented outcome is delegated work across apps, so it is recorded as a work agent. Claude Code and Codex remain separately licensed host agents.",
+      "score": {
+        "task_reliability": 5.8,
+        "tool_use": 8.0,
+        "autonomy": 7.0,
+        "human_control": 7.4,
+        "observability_recovery": 6.4,
+        "data_sovereignty": 7.4,
+        "interoperability": 8.0,
+        "maturity": 5.2,
+        "overall": 6.84
+      },
+      "strengths": [
+        "Hosts three agents, Claude Code, Codex, and its own, over one runtime that shares memory, tools, skills, and apps, so a person can switch agents without rebuilding the setup",
+        "Memory is stored locally as plain files a person can read, edit, and delete, backed by a local state store, with embeddings for recall",
+        "A large TypeScript runtime with a unit-test tree beside each service, covering the API server, channel gateway, harness host, and cron worker"
+      ],
+      "weaknesses": [
+        "The licence is Apache 2.0 with added conditions that forbid offering it as a hosted service or embedding it in a product sold to third parties and protect the interface branding, so it is source-available rather than open source",
+        "The licence defines the protected frontend as a desktop directory that does not exist at that path in the tree, where the app lives under apps/desktop, leaving the scope of the branding condition ambiguous",
+        "The repository was created in March 2026, and the zero-setup path routes inference through the vendor's own account, with integrations run through a third-party broker, so the local-first claim depends on the bring-your-own-keys route"
+      ],
+      "why_it_matters": "A heavily starred attempt to make the agent a workspace rather than a chat, hosting the incumbent coding agents alongside embedded apps and one user-owned memory.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "artemis",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "ARTEMIS",
+      "repo": "google/artemis",
+      "url": "https://github.com/google/artemis",
+      "description": "Python agent that turns natural-language test and automation requests into actions on a real Android phone or emulator over ADB, with a fast single-model loop and a planner, operator, and verifier graph, exposed as a CLI, web console, MCP server, and SDK.",
+      "primary_role": "browser_computer_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "google",
+        "openai",
+        "anthropic",
+        "openrouter",
+        "local_runtime"
+      ],
+      "architectures": [
+        "event_log",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "screen",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "Per-task execution traces, screenshots, replay recordings and compressed step-history chunks written locally, plus a Markdown task plan in the planning profile",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "mcp",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 11062,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the Android automation agent and its MCP server in this repository, which the README positions for mobile testing as well as everyday tasks. The third_party folder holds portions of Minitap's mobile-use project under its own Apache-2.0 licence file. The advertised AndroidWorld result is the maintainers' own measurement and is not reviewed here.",
+      "score": {
+        "task_reliability": 6.8,
+        "tool_use": 7.2,
+        "autonomy": 8.0,
+        "human_control": 6.6,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 7.2,
+        "interoperability": 7.8,
+        "maturity": 5.0,
+        "overall": 7.02
+      },
+      "strengths": [
+        "Two execution profiles with different failure behaviour: a fast reactive loop that compresses history instead of capping turns, and a planner, operator, and verifier graph that checks a target against the live screen before acting and returns blocked actions for recovery",
+        "Telemetry, replay recording, and structured final reports make a run inspectable after the fact, and the on-device helper can be removed or declined",
+        "Reachable from coding assistants through an MCP server and from test suites through a typed Python SDK, so one agent serves interactive and CI use"
+      ],
+      "weaknesses": [
+        "The repository was created in August 2026 and its headline 99 percent AndroidWorld figure is a self-reported result with no independent reproduction",
+        "It installs an accessibility service on the target phone, a broad permission that the README discloses and lets the operator opt out of",
+        "Its reach is limited to Android devices, since iOS support is a roadmap item, and the traces and plans it keeps are run outputs rather than content a person edits to steer later runs"
+      ],
+      "why_it_matters": "A Google-hosted mobile computer-use agent that pairs an accessibility-tree plus vision grounding approach with a testing-oriented MCP surface, giving the thin browser and computer-use role a rare Android entry.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "gptme",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "gptme",
+      "repo": "gptme/gptme",
+      "url": "https://github.com/gptme/gptme",
+      "description": "Terminal-first agent that runs shell, Python, file-patching, browser, vision, and desktop tools locally against many model providers, with confirmation prompts, plugins, skills, lessons, hooks, a shared Markdown memory, MCP and ACP integration, and scaffolding for scheduled persistent agents.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [
+        "general_work_agent"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "x_ai",
+        "deepseek",
+        "openrouter",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "supersession",
+        "self_editing"
+      ],
+      "canonical_data": "Local conversation logs and a Markdown memory store shared across agent harnesses, plus git-tracked workspace files for scaffolded persistent agents",
+      "deployment": [
+        "local_cli",
+        "desktop",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "ide",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "multi_agent",
+        "persistent_state",
+        "mcp"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 4444,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the gptme agent, its server and web UI, desktop shell, and ACP package in this repository. The managed gptme.ai cloud service the README lists as in progress, the community gptme-contrib plugins, and the reference autonomous agents it links are separate and not reviewed here. The cross-harness memory store is one feature of the agent and does not make this a memory product.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 8.6,
+        "autonomy": 7.6,
+        "human_control": 8.0,
+        "observability_recovery": 7.2,
+        "data_sovereignty": 9.0,
+        "interoperability": 8.6,
+        "maturity": 8.0,
+        "overall": 7.9
+      },
+      "strengths": [
+        "A very large tool surface in source form, with shell, patching, browser, computer-use, sub-agent, tmux, MCP, and memory tools, plus per-call confirmation, a circuit breaker, checkpoints, and a sandbox module",
+        "Works both as an MCP client and an MCP server and as an ACP coding agent inside Zed and JetBrains, so other tools can embed it",
+        "One of the longest-running agent CLIs, with a large test tree, a published evaluation suite, and plain-file memory, lessons, and configuration a person can edit"
+      ],
+      "weaknesses": [
+        "Breadth is the cost: the same package spans a terminal agent, a server, a web UI, a desktop shell, scheduled-agent scaffolding, and an eval harness, so the boundary of what is maintained to the same standard is wide",
+        "The persistent autonomous-agent and multi-agent coordination story is mostly scaffolding and reference agents hosted in other repositories, which this review did not read",
+        "Pre-1.0 versioning at 0.34.0 after three years signals that interfaces still change"
+      ],
+      "why_it_matters": "An early, still-active, provider-agnostic terminal agent whose local-first design and plain-file memory make it a transparent alternative to the vendor-owned coding CLIs.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "deepcode",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "DeepCode",
+      "repo": "HKUDS/DeepCode",
+      "url": "https://github.com/HKUDS/DeepCode",
+      "description": "Local coding agent from the HKU Data Intelligence Lab with terminal, desktop, and web clients over one shared background service, goal-driven loops that verify against tests and builds, durable sessions, per-tool permissions with a command sandbox, parallel agents in isolated worktrees, and the original Paper2Code workflow.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "openrouter",
+        "openai",
+        "anthropic",
+        "deepseek",
+        "google",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "Locally stored sessions linked to their project, holding tool calls, permission decisions, goals, model configuration and verification evidence, plus project and personal skill and memory files",
+      "deployment": [
+        "local_cli",
+        "desktop"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT",
+        "Apache-2.0"
+      ],
+      "source_model": "mixed_open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 16681,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the DeepCode coding agent as it stands in this repository, whose README now leads with an engineering agent and keeps Paper2Code, its original paper-to-code direction, as a dedicated workflow. Older descriptions and the arXiv paper describe the earlier multi-agent Paper2Code architecture. The bundled pinned skills carry their own Apache-2.0 licence files while the application is MIT.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 7.6,
+        "autonomy": 8.0,
+        "human_control": 8.4,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 8.6,
+        "interoperability": 7.8,
+        "maturity": 6.4,
+        "overall": 7.69
+      },
+      "strengths": [
+        "Execution is a stated product boundary: every project needs explicit trust, a tool call resumes exactly where an approval suspended it, and crash recovery settles incomplete turns without replaying side effects",
+        "Completion is judged against evidence the task selects, such as tests, builds, diagnostics, and diffs, and a failed check feeds the next repair rather than ending as success",
+        "Clients share one local service and session store, so a goal started in the terminal can be continued in the desktop app after a restart or a model switch"
+      ],
+      "weaknesses": [
+        "The README has been rewritten around a new engineering-agent architecture while the arXiv paper and older documentation describe a different Paper2Code design, so published results do not describe the current code",
+        "The Full access mode removes approval and filesystem sandbox boundaries once a person confirms it for a session",
+        "Much of the product is new relative to the repository's age, with the verification and loop claims resting on the maintainers' own documentation and tests"
+      ],
+      "why_it_matters": "A fast-growing academic-lab project that has been rebuilt from a paper-reproduction pipeline into a permissioned, verifying coding agent, giving a local-first option with an explicit evidence-based definition of done.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "openharness",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "OpenHarness",
+      "repo": "HKUDS/OpenHarness",
+      "url": "https://github.com/HKUDS/OpenHarness",
+      "description": "Open Python agent harness whose query, stream, tool-call loop sits behind permission modes, hooks, MCP, skills, memory, subagent coordination, and a Docker sandbox, with a terminal UI and ohmo, a personal agent that runs from chat channels with its own workspace, memory, and gateway.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [
+        "coding_agent"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "deepseek",
+        "moonshot_ai",
+        "z_ai",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "Markdown memory directories, saved sessions, and a per-user ohmo workspace on local disk, with settings in layered JSON files",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 15918,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers both the OpenHarness harness and the ohmo personal agent built on it, which live in one repository and one package. The README's subscription bridges read the Claude Code and Codex credential files on the same machine, so use through them is governed by those vendors' own terms, which are not reviewed here.",
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 8.0,
+        "autonomy": 7.4,
+        "human_control": 7.8,
+        "observability_recovery": 6.2,
+        "data_sovereignty": 8.0,
+        "interoperability": 7.8,
+        "maturity": 5.0,
+        "overall": 6.98
+      },
+      "strengths": [
+        "A readable, documented implementation of the whole harness pattern, with the agent loop, permission modes, path and command rules, hooks, and a Docker sandbox as separate modules rather than one opaque binary",
+        "ohmo adds a real persistent-agent layer: a gateway with channel adapters for ten chat, messaging, and email services, a workspace, and session and memory storage",
+        "Edits preview a diff before they apply and a person can approve once or for the rest of the session"
+      ],
+      "weaknesses": [
+        "The package is at version 0.1.9, was created in April 2026, and its last push was in June 2026, so the harness is young and has been quiet for months",
+        "The tool names, slash commands, and CLAUDE.md handling mirror another vendor's agent CLI, so behaviour is shaped by that tool's conventions and the project positions itself for study and extension",
+        "Its easiest setup runs through the user's existing Claude Code or Codex subscription credentials, which ties day-to-day use to those vendors' terms"
+      ],
+      "why_it_matters": "A heavily starred open implementation that makes the structure of a production agent harness inspectable and extendable, with a persistent chat-channel agent built on the same core.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
     }
   ],
   "verified_at": "2026-09-28"

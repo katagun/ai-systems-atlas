@@ -1153,7 +1153,8 @@
         "antigravity",
         "antigravity-sdk",
         "gemini-enterprise-agent-platform",
-        "genkit"
+        "genkit",
+        "artemis"
       ],
       "channels": [
         {
