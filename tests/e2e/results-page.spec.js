@@ -444,35 +444,48 @@ test("a focused chip keeps its focus while the results repaint", async ({ page }
   await expect(chip).toBeFocused();
 });
 
-// While a comparison is in progress the tray sits over the bottom of the
-// viewport, and at 1440 px it reaches over the rail's right edge, where the
-// counts are. The rail ends above it (ruling R-T3-5), even at the page's
-// top, where the rail sits lowest, so the last value, scrolled to, takes a
-// click there. The spot is tested for what it hits first: Playwright's own
-// click would scroll the rail on a retry.
-test("the rail's last value takes a click while the comparison tray shows", async ({ page }) => {
+// Overlays fixed to the bottom of the viewport cover the rail's last values
+// unless the rail ends above them (ruling R-T3-5): the closed legend's Key
+// chip sits at the left, over the radios, and the comparison tray, centred,
+// reaches over the rail's right edge at 1440 px, where the counts are. At
+// the page's top the rail sits lowest, so it is scrolled to its end there,
+// and its last value must take a real click where the overlay would be. The
+// spot is tested for what it hits first: Playwright's own click would
+// scroll the rail on a retry.
+async function expectRailEndsAbove(page, overlay, side) {
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  const rail = page.locator("#filter-rail");
+  await expect.poll(() => page.evaluate(selector => document.querySelector("#filter-rail").getBoundingClientRect().bottom
+    - document.querySelector(selector).getBoundingClientRect().top, overlay), { message: `the rail ends above ${overlay}` }).toBeLessThanOrEqual(0);
+  await rail.evaluate(element => element.scrollTo({ top: element.scrollHeight, behavior: "instant" }));
+  const last = rail.locator(".filter-option").last();
+  const spot = await last.evaluate((element, side) => new Promise(resolve => requestAnimationFrame(() => {
+    const box = element.getBoundingClientRect();
+    const x = side === "right" ? box.right - 6 : box.left + 8;
+    const y = box.top + box.height / 2;
+    resolve({ x, y, reached: element.contains(document.elementFromPoint(x, y)) });
+  })), side);
+  expect(spot.reached, `the rail's last value at ${Math.round(spot.x)},${Math.round(spot.y)} is clear of ${overlay}`).toBe(true);
+  await page.mouse.click(spot.x, spot.y);
+  await expect(last.locator("input")).toBeChecked();
+}
+
+test("the rail's last value takes a click beside the Key chip and the comparison tray", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?collection=runtimes");
+  await expect(page.locator("#runtime-grid .project-card").first()).toBeVisible();
+  // Closed, the legend leaves its Key chip at the bottom left.
+  await page.locator("#badge-legend-close").click();
+  await expect(page.locator("#badge-legend-chip")).toBeVisible();
+  await expectRailEndsAbove(page, "#badge-legend-chip", "left");
+  await clearFilters(page);
+  // A comparison opens the tray, which the Key chip steps aside for. The
+  // second toggle can sit under the tray the first one opened, so the click
+  // may scroll the page; the helper measures from the page's top again.
   await page.locator("#runtime-grid .compare-toggle").nth(0).click();
   await page.locator("#runtime-grid .compare-toggle").nth(1).click();
   await expect(page.locator("#comparison-tray")).toBeVisible();
-  // The second toggle sits under the tray the first one opened, so the click
-  // may have scrolled the page; the rail sits lowest at the page's top.
-  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
-  const rail = page.locator("#filter-rail");
-  await expect.poll(() => page.evaluate(() => document.querySelector("#filter-rail").getBoundingClientRect().bottom
-    - document.querySelector("#comparison-tray").getBoundingClientRect().top), { message: "the rail ends above the tray" }).toBeLessThanOrEqual(0);
-  await rail.evaluate(element => element.scrollTo({ top: element.scrollHeight, behavior: "instant" }));
-  const last = rail.locator(".filter-option").last();
-  const spot = await last.evaluate(element => new Promise(resolve => requestAnimationFrame(() => {
-    const box = element.getBoundingClientRect();
-    const x = box.right - 6;
-    const y = box.top + box.height / 2;
-    resolve({ x, y, reached: element.contains(document.elementFromPoint(x, y)) });
-  })));
-  expect(spot.reached, `the rail's last value at ${Math.round(spot.x)},${Math.round(spot.y)} is not under the tray`).toBe(true);
-  await page.mouse.click(spot.x, spot.y);
-  await expect(last.locator("input")).toBeChecked();
+  await expectRailEndsAbove(page, "#comparison-tray", "right");
 });
 
 // Every result count takes focus (ruling R-T3-6), so a chip or Clear

@@ -1399,12 +1399,13 @@ function syncStickyClearance() {
 }
 
 // The bottom's counterpart, which the rail ends above: how far up the
-// viewport the overlays fixed to its bottom reach, the badge legend or,
-// while a comparison is in progress, the tray the legend steps aside for
-// (ruling R-T3-5). Whichever top edge is higher decides, so the rail clears
-// whatever the two stack to.
+// viewport the overlays fixed to its bottom reach: the badge legend, its
+// Key chip while it is closed, or, while a comparison is in progress, the
+// tray both step aside for (ruling R-T3-5). Whichever top edge is highest
+// decides, so the rail clears whatever they stack to.
+const BOTTOM_OVERLAYS = ["#badge-legend", "#badge-legend-chip", "#comparison-tray"];
 function syncBottomClearance() {
-  const reaches = ["#badge-legend", "#comparison-tray"].map(selector => $(selector))
+  const reaches = BOTTOM_OVERLAYS.map(selector => $(selector))
     .filter(overlay => overlay.getClientRects().length && getComputedStyle(overlay).position === "fixed")
     .map(overlay => window.innerHeight - overlay.getBoundingClientRect().top);
   document.documentElement.style.setProperty("--bottom-clearance", `${Math.max(0, ...reaches)}px`);
@@ -4317,7 +4318,7 @@ function bindEvents() {
   window.addEventListener("resize", syncStickyClearance);
   // Each overlay changes size as it opens, closes, or wraps its text.
   const bottomOverlays = new ResizeObserver(syncBottomClearance);
-  ["#badge-legend", "#comparison-tray"].forEach(selector => bottomOverlays.observe($(selector)));
+  BOTTOM_OVERLAYS.forEach(selector => bottomOverlays.observe($(selector)));
   window.addEventListener("resize", syncBottomClearance);
   for (const [scope, selector] of Object.entries(MATCH_SORTS)) {
     $(selector).addEventListener("input", () => {
