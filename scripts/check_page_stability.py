@@ -11,6 +11,7 @@ An unpinnable page never holds a robot out of the collection (ADR 037).
 from __future__ import annotations
 
 import argparse
+import hashlib
 import time
 from collections.abc import Callable
 
@@ -32,6 +33,9 @@ except ImportError:  # Direct script execution places scripts/ on sys.path.
     )
 
 
+EMPTY_SHA256 = hashlib.sha256(b"").hexdigest()
+
+
 def _fetch(url: str) -> FetchResult:
     target = LinkTarget(
         url=url,
@@ -47,7 +51,11 @@ def fetch_hash(url: str, *, fetch: Callable[[str], FetchResult] = _fetch) -> str
     result = fetch(url)
     if result.body is None:
         raise FetchFailure("no body returned")
-    return content_sha256(result.body, result.headers.get("content-type", ""))
+    digest = content_sha256(result.body, result.headers.get("content-type", ""))
+    if digest == EMPTY_SHA256:
+        # Two empty pages hash identically, which would read as stable.
+        raise FetchFailure("no visible text after normalisation")
+    return digest
 
 
 def main(

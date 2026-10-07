@@ -158,6 +158,12 @@
     return 0;
   }
 
+  // One convention for a trait list on a system record: read it through here, never
+  // bare and never with an inline `|| []`. A record that omits the field (a boot
+  // record, or a future one) then counts as holding no values and ranks low,
+  // instead of throwing a TypeError inside filtering or ranking.
+  const traitList = (project, field) => project[field] || [];
+
   // Keep localOnly=1 links valid while exposing false separately from missing.
   function matchesLocalFirst(project, value) {
     if (value === true || value === "1") return project.local_first === true;
@@ -225,9 +231,9 @@
       deployments,
       localStates,
       families: groupRows("system_family", taxonomy.system_families, deployments,
-        (project, id) => (project.deployment || []).includes(id)),
+        (project, id) => traitList(project, "deployment").includes(id)),
       licensing: groupRows("source_model", taxonomy.source_models, localStates, matchesLocalFirst),
-      missingDeployment: active.filter(project => !deployments.some(mode => (project.deployment || []).includes(mode.id))).length,
+      missingDeployment: active.filter(project => !deployments.some(mode => traitList(project, "deployment").includes(mode.id))).length,
     };
   }
 
@@ -237,11 +243,11 @@
       (!filters.role || project.primary_role === filters.role) &&
       (!roles.length || roles.includes(project.primary_role)) &&
       (!filters.agent || project.agent_relation === filters.agent) &&
-      (!filters.architecture || project.architectures.includes(filters.architecture)) &&
-      (!filters.deployment || project.deployment.includes(filters.deployment)) &&
-      (!filters.agentInterface || (project.agent_interfaces || []).includes(filters.agentInterface)) &&
-      (!filters.capability || (project.agent_capabilities || []).includes(filters.capability)) &&
-      (!filters.retrieval || (project.retrieval_modes || []).includes(filters.retrieval)) &&
+      (!filters.architecture || traitList(project, "architectures").includes(filters.architecture)) &&
+      (!filters.deployment || traitList(project, "deployment").includes(filters.deployment)) &&
+      (!filters.agentInterface || traitList(project, "agent_interfaces").includes(filters.agentInterface)) &&
+      (!filters.capability || traitList(project, "agent_capabilities").includes(filters.capability)) &&
+      (!filters.retrieval || traitList(project, "retrieval_modes").includes(filters.retrieval)) &&
       (!filters.sourceModel || project.source_model === filters.sourceModel) &&
       (!filters.license || project.licenses.includes(filters.license)) &&
       (!filters.status || project.status === filters.status) &&
@@ -353,7 +359,7 @@
   // score order that does not exist.
   const PACK_VIEW = {
     kind: "pack",
-    searchFields: ["id", "name", "short_name", "steward", "repo", "description"],
+    searchFields: ["id", "name", "short_name", "steward", "repo", "description", "installs"],
     facets: {
       type: "pack_type",
       host: "hosts",
@@ -809,7 +815,7 @@
   function packShapedSystems(projects, filters = {}) {
     const query = parseSearchQuery(filters.term);
     return orderBySearch(
-      projects.filter(project => (project.deployment || []).includes("host_pack")),
+      projects.filter(project => traitList(project, "deployment").includes("host_pack")),
       query,
       project => searchFields("system", project, { index: filters.searchIndex, labelOf: filters.labelOf }),
       (a, b) => a.name.localeCompare(b.name),
@@ -1962,20 +1968,20 @@
       return dimension("overall") / 3;
     }
     if (project.system_family === "memory_system") {
-      if (priority === "local_editable") return (project.local_first ? 2.2 : 0) + (project.human_editable ? 2 : 0) + (project.architectures.includes("plain_files") ? 0.8 : 0);
+      if (priority === "local_editable") return (project.local_first ? 2.2 : 0) + (project.human_editable ? 2 : 0) + (traitList(project, "architectures").includes("plain_files") ? 0.8 : 0);
       // ADR 030 made local_first a data trait, so the boolean is worth half the
       // sovereignty range: where execution happens (self-hosted) decides first.
-      if (priority === "local_control") return (project.local_first ? 1 : 0) + (project.deployment.includes("self_hosted") ? 1 : 0) + dimension("data_sovereignty") / 5;
+      if (priority === "local_control") return (project.local_first ? 1 : 0) + (traitList(project, "deployment").includes("self_hosted") ? 1 : 0) + dimension("data_sovereignty") / 5;
       if (priority === "easy") return dimension("operational_simplicity") / 2;
-      if (priority === "portable") return dimension("interoperability") / 1.8 + (project.architectures.includes("plain_files") ? 0.6 : 0);
+      if (priority === "portable") return dimension("interoperability") / 1.8 + (traitList(project, "architectures").includes("plain_files") ? 0.6 : 0);
       return dimension("overall") / 3;
     }
     if (project.system_family === "agent_system") {
-      if (priority === "direct_use") return project.agent_interfaces.some(item => ["terminal", "ide", "web_app"].includes(item)) ? 3 : 0;
-      if (priority === "developer") return project.agent_interfaces.some(item => ["library", "api_sdk"].includes(item)) ? 3 : 0;
+      if (priority === "direct_use") return traitList(project, "agent_interfaces").some(item => ["terminal", "ide", "web_app"].includes(item)) ? 3 : 0;
+      if (priority === "developer") return traitList(project, "agent_interfaces").some(item => ["library", "api_sdk"].includes(item)) ? 3 : 0;
       // Same rebalance as local_control above: the host boundary judges where
       // execution happens, local_first judges the data, and sovereignty decides.
-      if (priority === "local") return (project.local_first ? 1 : 0) + ((project.execution_boundaries || []).includes("host") ? 1 : 0) + dimension("data_sovereignty") / 5;
+      if (priority === "local") return (project.local_first ? 1 : 0) + (traitList(project, "execution_boundaries").includes("host") ? 1 : 0) + dimension("data_sovereignty") / 5;
       if (priority === "control") return dimension("human_control") / 3 + dimension("observability_recovery") / 4;
       return dimension("overall") / 3;
     }
@@ -2014,7 +2020,7 @@
       if (priority === "easy") reasons.push(`Simplicity ${project.score.operational_simplicity ?? "—"}/10`);
       if (priority === "portable") reasons.push(`Interoperability ${project.score.interoperability ?? "—"}/10`);
     } else if (project.system_family === "agent_system") {
-      const interfaces = project.agent_interfaces.slice(0, 2).map(item => labelOf("agent_interfaces", item));
+      const interfaces = traitList(project, "agent_interfaces").slice(0, 2).map(item => labelOf("agent_interfaces", item));
       reasons.push(...interfaces);
       if (priority === "control") reasons.push(`Human control ${project.score.human_control ?? "—"}/10`);
     } else {
