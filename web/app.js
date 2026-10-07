@@ -1358,13 +1358,21 @@ function chooseFilter(key, value) {
 function openFilterSheet() {
   $("#filter-sheet .filter-groups").innerHTML = filterGroupsMarkup(state.directoryCollection, "sheet");
   syncFilterRail();
-  syncFilterSheetButton();
+  syncFilterSheetButton({ announce: false });
   $("#filter-sheet").showModal();
 }
 
-function syncFilterSheetButton() {
+// "Show N results", and the sheet's own status, which says the new count:
+// the result counts' live regions sit outside the modal sheet, so a screen
+// reader would hear nothing while choosing (review M8). The status speaks
+// only for a change made in the open sheet, not as it opens.
+function syncFilterSheetButton({ announce = true } = {}) {
   const count = state.resultCounts[state.directoryCollection] ?? 0;
-  $("#filter-sheet-done").textContent = `Show ${count} ${count === 1 ? "result" : "results"}`;
+  const results = `${count} ${count === 1 ? "result" : "results"}`;
+  $("#filter-sheet-done").textContent = `Show ${results}`;
+  const status = $("#filter-sheet-status");
+  const said = announce ? results : "";
+  if (status.textContent !== said) status.textContent = said;
 }
 
 // The strip sticks under the header at every width, so the header's

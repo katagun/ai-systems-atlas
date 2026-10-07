@@ -503,3 +503,32 @@ test("in Models a removed chip and Clear filters hand focus to the result count"
   await clearFilters(page);
   await expect(count).toBeFocused();
 });
+
+// The sheet's groups scroll inside it and "Show N results" stays at its
+// foot (review I3), so the reader sees the count change as they choose.
+test("on a phone the sheet keeps Show N results in view while the reader chooses", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?collection=systems");
+  await page.locator("#filters-button").click();
+  const done = page.locator("#filter-sheet-done");
+  await expect(done).toBeInViewport({ ratio: 1 });
+  const before = await done.textContent();
+  await page.locator('#filter-sheet [data-filter-group="role"] input').nth(1).check();
+  await expect(done).not.toHaveText(before);
+  await expect(done).toBeInViewport({ ratio: 1 });
+});
+
+// The result counts' own live regions sit outside the modal sheet, where a
+// screen reader cannot hear them, so the sheet says the new count itself
+// (review M8).
+test("the phone sheet tells a screen reader the new count as the reader chooses", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?collection=inference");
+  await page.locator("#filters-button").click();
+  const status = page.locator("#filter-sheet").getByRole("status");
+  await expect(status).toHaveAttribute("aria-live", "polite");
+  await page.locator('#filter-sheet [data-filter-group="type"] input').nth(1).check();
+  await settled(page);
+  const shown = Number((await page.locator("#inference-result-count").textContent()).match(/^\d+/)[0]);
+  await expect(status).toHaveText(`${shown} ${shown === 1 ? "result" : "results"}`);
+});

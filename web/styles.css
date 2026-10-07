@@ -711,9 +711,15 @@ h1 {
    wraps the × onto a line by itself. */
 .filter-chip > span[aria-hidden="true"] { white-space: nowrap; }
 .filter-sheet { width: min(100%, 32rem); max-height: 85vh; margin: auto auto 0; padding: 1rem 1rem 1.25rem; border: 1px solid var(--line); border-radius: var(--radius); border-bottom-left-radius: 0; border-bottom-right-radius: 0; background: var(--panel); color: var(--text); box-shadow: var(--shadow-dialog); }
+/* The open sheet is a column: its groups scroll inside it, without carrying
+   the page along, and "Show N results" stays at its foot, in view while the
+   reader chooses (review I3). Scoped to [open], so the closed dialog keeps
+   the display: none it is given. */
+.filter-sheet[open] { display: flex; flex-direction: column; }
 .filter-sheet::backdrop { background: var(--backdrop); }
 .filter-sheet h2 { margin: 0 0 .75rem; font: 700 1rem var(--font-display); }
-#filter-sheet-done { width: 100%; margin-top: .5rem; }
+.filter-sheet .filter-groups { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+#filter-sheet-done { flex: none; width: 100%; margin-top: .5rem; }
 #directory.view.is-results { padding-top: .75rem; }
 
 label span {
