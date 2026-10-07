@@ -31,7 +31,7 @@ inference_services: 60
 local_runtimes: 17
 model_releases: 373
 models_dev_source_records: 448
-model_candidates: 11
+model_candidates: 10
 system_candidates: 107
 exclusions: 109
 packs: 8
