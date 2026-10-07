@@ -3,7 +3,7 @@ const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { cardBadges, flagEmblemText, badgeLegend } = require("../../web/app-core.js");
 const { searchAll } = require("./helpers/landing");
-const { recordView, search } = require("./helpers/results");
+const { recordHeading, recordView, search } = require("./helpers/results");
 
 // No published model carries a flag until the ADR 042 backfill lands, so these
 // tests serve one, shaped as the payload builder shapes it: boot carries each
@@ -60,6 +60,9 @@ async function serveFlags(page, entries, { detail = true } = {}) {
 const modelCard = (page, record) => page.locator(`#model-grid .model-card:has([data-model="${record.id}"])`);
 const FLAG = ".card-reviewed-flag";
 const flagName = "“Fixture Level 3” · Precautionary";
+// Like every badge's "name: definition", a screen reader hears the family name
+// before the sentence.
+const hiddenText = text => `Maker risk statement: ${text.sentence}`;
 
 async function showModel(page, record) {
   await page.goto("/?collection=models");
@@ -68,18 +71,21 @@ async function showModel(page, record) {
 }
 
 // Hover races the page's smooth scrolling (see card-badges.spec.js), so scroll
-// the emblem into view and let the scroll settle first.
+// the emblem into view and wait for five still frames, as card-click.spec.js
+// does: one still frame can fall between two steps of a smooth scroll.
 async function settleOn(page, locator) {
   await locator.scrollIntoViewIfNeeded();
   await page.evaluate(() => document.fonts.ready);
   await page.evaluate(() => new Promise(resolve => {
     let last = window.scrollY;
-    const check = () => requestAnimationFrame(() => {
-      if (window.scrollY === last) return resolve();
+    let still = 0;
+    const frame = () => requestAnimationFrame(() => {
+      still = window.scrollY === last ? still + 1 : 0;
       last = window.scrollY;
-      check();
+      if (still >= 5) resolve();
+      else frame();
     });
-    check();
+    frame();
   }));
 }
 
@@ -95,7 +101,7 @@ test("a found statement sits second in a reviewed-model card's emblem row, after
   await expect(card.locator(FLAG)).toHaveCount(1);
   await expect(card.locator(`.card-badge:not(${FLAG})`)).toHaveCount(badges.length);
   const expected = flagEmblemText(FOUND, FLAGGED.developer, taxonomy);
-  await expect(card.locator(`${FLAG} .visually-hidden`)).toHaveText(expected.sentence);
+  await expect(card.locator(`${FLAG} .visually-hidden`)).toHaveText(hiddenText(expected));
   await expect(card.locator(`${FLAG} svg.badge-emblem`)).toHaveCount(1);
   await expect(card.locator(FLAG)).not.toHaveAttribute("tabindex");
   await expect(card.locator(FLAG)).toHaveAttribute("data-flag-record", FLAGGED.id);
@@ -110,7 +116,7 @@ test("hovering the flag shows the family, the developer's term, and the sentence
   await showModel(page, FLAGGED);
   const emblem = modelCard(page, FLAGGED).locator(FLAG);
   const expected = flagEmblemText(FOUND, FLAGGED.developer, taxonomy);
-  await expect(emblem.locator(".visually-hidden")).toHaveText(expected.sentence);
+  await expect(emblem.locator(".visually-hidden")).toHaveText(hiddenText(expected));
   await settleOn(page, emblem);
   await emblem.hover();
   const tooltip = page.locator("#badge-tooltip");
@@ -129,7 +135,7 @@ test("the flag paints its full words from boot without fetching the model's deta
   page.on("request", request => { if (request.url().includes(`/app/detail/model/${FLAGGED.id}.json`)) flaggedDetailRequests += 1; });
   await showModel(page, FLAGGED);
   const flag = modelCard(page, FLAGGED).locator(FLAG);
-  await expect(flag.locator(".visually-hidden")).toHaveText(flagEmblemText(FOUND, FLAGGED.developer, taxonomy).sentence);
+  await expect(flag.locator(".visually-hidden")).toHaveText(hiddenText(flagEmblemText(FOUND, FLAGGED.developer, taxonomy)));
   await expect(flag).toHaveAttribute("data-name", flagName);
   expect(flaggedDetailRequests).toBe(0);
 });
@@ -157,7 +163,7 @@ test("the mixed All grid shows the same flag in the same place", async ({ page }
   const card = page.locator(`#all-directory-grid .project-card:has([data-model="${FLAGGED.id}"])`);
   await expect(card.locator(".card-badges > li").nth(0)).toHaveAttribute("data-family", "type");
   await expect(card.locator(".card-badges > li").nth(1)).toHaveAttribute("data-family", "flags");
-  await expect(card.locator(`${FLAG} .visually-hidden`)).toHaveText(flagEmblemText(FOUND, FLAGGED.developer, taxonomy).sentence);
+  await expect(card.locator(`${FLAG} .visually-hidden`)).toHaveText(hiddenText(flagEmblemText(FOUND, FLAGGED.developer, taxonomy)));
 });
 
 test("the Models legend lists the flag after the type badges and the All legend names its family", async ({ page }) => {
@@ -198,4 +204,77 @@ test.describe("on a touch screen", () => {
     await expect(recordView(page, "model")).not.toBeVisible();
     expect(page.url()).toBe(before);
   });
+});
+
+// The dialog's Risk statements section (ADR 042) in each of its three states,
+// plus the found statement still waiting on its detail file.
+const riskSection = (page, state) => recordView(page, "model").locator(state ? `section[data-risk="${state}"]` : "section[data-risk]");
+
+test("a found statement is quoted in the dialog with its link, date, confidence, and scope", async ({ page }) => {
+  await serveFlags(page, { [FLAGGED.id]: FOUND });
+  await page.goto(`/?record=model:${FLAGGED.id}`);
+  const section = riskSection(page, "statement_found");
+  await expect(section.locator("h3")).toHaveText("Risk statements");
+  await expect(section.locator("h4")).toHaveText(flagName);
+  await expect(section.locator("blockquote")).toHaveText(FOUND.statement);
+  await expect(section).toContainText("Risk areas: Cyber · Biological or chemical");
+  await expect(section).toContainText("Covers: The model itself");
+  await expect(section.locator("a")).toHaveAttribute("href", FOUND.url);
+  await expect(section).toContainText("2026-09-01");
+  await expect(section).toContainText("Research confidence: High");
+  await expect(section).toContainText(flagEmblemText(FOUND, FLAGGED.developer, taxonomy).sentence);
+  await expect(section).not.toContainText(/high risk|dangerous/i);
+  // It follows the Model boundary section.
+  const headings = await recordView(page, "model").locator(".detail-block > h3").allInnerTexts();
+  expect(headings.indexOf("Risk statements")).toBe(headings.indexOf("Model boundary") + 1);
+});
+
+test("the dialog says when the developer publishes no statement, and when nobody has looked", async ({ page }) => {
+  await serveFlags(page, { [CHECKED.id]: NONE });
+  await page.goto(`/?record=model:${CHECKED.id}`);
+  const none = riskSection(page, "no_statement_found");
+  await expect(none).toContainText("The developer publishes no risk-threshold statement for this release. Absence is not evidence of safety.");
+  await expect(none.locator("a")).toHaveAttribute("href", NONE.url);
+  await expect(none).toContainText("Research confidence: Medium");
+
+  await page.goto(`/?record=model:${UNEXAMINED.id}`);
+  await expect(riskSection(page, "not_examined")).toHaveText("Risk statementsNot yet examined.");
+});
+
+test("a found statement whose detail never arrives never reads as unexamined or leaves a blank", async ({ page }) => {
+  await serveFlags(page, { [FLAGGED.id]: FOUND }, { detail: false });
+  await page.goto(`/?record=model:${FLAGGED.id}`);
+  // Boot already carries the term, domains, determination, and scope; only the
+  // quote, link, date, and confidence wait for the detail file.
+  const pending = riskSection(page, "pending");
+  await expect(pending.locator("h4")).toHaveText(flagName);
+  await expect(pending).toContainText("Risk areas: Cyber · Biological or chemical");
+  await expect(pending).toContainText("Covers: The model itself");
+  await expect(pending).toContainText(flagEmblemText(FOUND, FLAGGED.developer, taxonomy).sentence);
+  await expect(pending.locator("blockquote")).toHaveCount(0);
+  await expect(pending.locator("a")).toHaveCount(0);
+  await expect(riskSection(page, "not_examined")).toHaveCount(0);
+  // The same blank-body rule deferred-data.spec.js holds every dialog to.
+  const blanks = await pending.evaluate(root => [
+    ...[...root.querySelectorAll("p, blockquote")].filter(element => !element.textContent.trim()).map(element => `empty <${element.tagName.toLowerCase()}>`),
+    ...[...root.querySelectorAll("p > strong")].filter(strong => strong.parentElement.textContent.trim() === strong.textContent.trim()).map(strong => `dangling label: ${strong.textContent}`),
+  ]);
+  expect(blanks).toEqual([]);
+});
+
+test("imported models show no Risk statements section", async ({ page }) => {
+  await page.goto(`/?record=model:${IMPORTED.id}`);
+  await expect(recordHeading(page, "model")).toHaveText(IMPORTED.name);
+  await expect(riskSection(page)).toHaveCount(0);
+  await expect(recordView(page, "model")).not.toContainText("Risk statements");
+});
+
+test("a flag never enters a model comparison", async ({ page }) => {
+  await serveFlags(page, { [FLAGGED.id]: FOUND, [CHECKED.id]: NONE });
+  await page.goto(`/?collection=models&compare=model:${FLAGGED.id},${CHECKED.id}`);
+  const table = page.locator("#comparison-dialog-content .comparison-table");
+  await expect(table).toBeVisible();
+  await expect(table).not.toContainText("Fixture Level 3");
+  await expect(table).not.toContainText("Risk statements");
+  await expect(table).not.toContainText("risk-threshold");
 });
