@@ -1687,7 +1687,7 @@ function labCard(lab, { mixed = false } = {}) {
   const newestDate = AppCore.releaseDate(releases[0] || {});
   return `<article class="project-card lab-card${mixed ? " mixed-directory-card" : ""}">
     <div class="card-top"><div class="card-identity">${cardMarkWithGeography("lab", lab)}<div><p class="family-label">${mixed ? "Lab · " : ""}${escapeHTML(taxonomyName("lab_types", lab.lab_type))} · ${escapeHTML(taxonomyName("countries", lab.headquarters))}</p><h2>${escapeHTML(lab.name)}</h2><div class="repo">${origin}</div></div></div></div>
-    <span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>
+    ${modes.length ? `<span class="role-badge">${escapeHTML(modes.map(mode => taxonomyName("model_distribution_modes", mode)).join(" · "))}</span>` : ""}
     <p>${escapeHTML(lab.description)}</p>
     ${counts ? `<div class="tags">${counts}</div>` : ""}
     ${labRelatedMarkup(lab, releases, systems)}
