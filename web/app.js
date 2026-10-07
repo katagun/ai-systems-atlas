@@ -1054,6 +1054,23 @@ function stageRecords(kind) {
   return AppCore.newestDated(state.projects.filter(project => state.systemReviewDates[project.id]), project => state.systemReviewDates[project.id]);
 }
 
+// A face previews its collection; it is not the collection. Listing every
+// record after the featured one put the collection index (and "Browse every
+// collection" with it) some 14,000 px down the page at 1440 px wide, so a face
+// stops at this many rows and one control leaves for the rest.
+const STAGE_LIST_ROWS = 8;
+
+// The control under a face's list. It opens the whole collection through the
+// path a front-door tile takes (openCollection), so one entry is pushed on the
+// way out and Back returns to the door. Models asks for the release-date order,
+// the order the list above it is in; Systems has no review-date sort, so it
+// opens in its default order.
+function stageBrowseControl(kind) {
+  return kind === "model"
+    ? '<button type="button" class="link-button" data-open-collection="models" data-facet-key="sort" data-facet-value="release">Browse all models, newest first →</button>'
+    : '<button type="button" class="link-button" data-open-collection="systems">Browse all systems →</button>';
+}
+
 function renderStageFace(kind, records) {
   const root = $(`#stage-${kind}`);
   const featured = records[0];
@@ -1065,14 +1082,14 @@ function renderStageFace(kind, records) {
   const row = record => `<li><button type="button" data-stage-record="${kind}" data-stage-id="${escapeHTML(record.id)}"><span class="stage-list-name">${escapeHTML(record.name)}</span><span class="stage-list-meta">${escapeHTML(stageMeta(kind, record))}</span><time datetime="${escapeHTML(date(record))}">${escapeHTML(date(record))}</time></button></li>`;
   const when = kind === "model" ? `released ${date(featured)}` : `reviewed ${date(featured)}`;
   const where = kind === "model" ? featured.developer || "" : `${familyName(featured.system_family)} · ${roleName(featured.primary_role)}`;
-  const rest = records.slice(1);
+  const rest = records.slice(1, 1 + STAGE_LIST_ROWS);
   root.innerHTML = `<article class="stage-feature${kind === "system" ? " is-system" : ""}">${cardMark(featured, kind)}<div>
       <p class="eyebrow">Latest reviewed ${kind}</p>
       <h2 class="stage-name">${escapeHTML(featured.name)}</h2>
       <p class="stage-meta">${escapeHTML(`${where} · ${when}`)}</p>
       <p class="stage-description">${escapeHTML(featured.description || "")}</p>
       <p><button type="button" class="link-button" data-stage-record="${kind}" data-stage-id="${escapeHTML(featured.id)}">Open this ${kind}</button></p>
-    </div></article>${rest.length ? `<p class="stage-list-label">More ${kind}s, newest first</p><ol class="stage-list">${rest.map(row).join("")}</ol>` : ""}`;
+    </div></article>${rest.length ? `<p class="stage-list-label">More ${kind}s, newest first</p><ol class="stage-list">${rest.map(row).join("")}</ol>` : ""}<p class="stage-browse">${stageBrowseControl(kind)}</p>`;
 }
 
 function renderStage() {
@@ -1234,8 +1251,9 @@ function syncStickyClearance() {
 }
 
 // The one way a tile or a strip entry opens a collection. A facet narrows
-// the collection to one category first; a family goes through
-// jumpToDirectoryFamily so the role and Finder set are cleared as ever.
+// the collection to one category first (the stage's Models control passes the
+// `sort` key, which only orders it: the release-date sort); a family goes
+// through jumpToDirectoryFamily so the role and Finder set are cleared as ever.
 // Every collection reads the one query, so a query only a lab or a
 // specification answers follows the reader from the All results into Labs
 // or Specifications; the front door clears it on arrival.
