@@ -12,7 +12,7 @@ Atlas combines a human-reviewed catalog, automated discovery metadata, and a sta
 5. Base license classifications on authoritative, scoped license/terms evidence covering every material license; README claims and GitHub SPDX detection are insufficient.
 6. Assign exactly one compatible `system_family` and `primary_role` only to system records in `projects.json`; traits are not roles.
 7. Keep scores within their taxonomy-defined profiles: system families, inference services, local runtimes, and reviewed models. Specifications, agent packs, labs, and robots are unscored; mixed discovery hides scores and comparisons.
-8. Keep editorial fields human-owned: automation cannot change classifications, prose, scores, evidence, confidence, trust records, or `verified_at`.
+8. Keep editorial fields human-owned: automation cannot create, change, or clear classifications, prose, scores, evidence, confidence, trust records, reviewed flags, or `verified_at`.
 9. Require the collection's complete review workflow before promotion; candidate triage and attention signals are proposals, not accepted conclusions.
 10. Preserve license-drift incidents until human resolution; stale evidence must not hide a record or rewrite its reviewed classification.
 11. Keep models.dev data commit-pinned and attributed; its source snapshot is unreviewed metadata, with Atlas conclusions held in separate reviewed records. A reviewed model may exist before models.dev lists it (`source_id: null`, ADR 038); its metadata is then Atlas-authored, never attributed to models.dev. OpenRouter listings are unpublished leads, never source metadata or evidence, fetched only after a recorded terms review (ADR 039).

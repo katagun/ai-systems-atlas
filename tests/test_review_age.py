@@ -62,6 +62,26 @@ class ReviewAgeTests(unittest.TestCase):
     def rows(self, **catalog: tuple[dict, ...]) -> list[report.ReviewRow]:
         return report.review_rows(write_catalog(self.directory, **catalog), AS_OF)
 
+    def test_reviewed_flag_dates_count_as_evidence_review_dates(self) -> None:
+        """ADR 042: each flag's verified_at is one of the nested dates the report reads."""
+        model = record(
+            "model-alpha",
+            "2026-09-13",
+            evidence=[{"url": "https://example.com/a", "verified_at": "2026-09-01"}],
+            flags=[
+                {
+                    "kind": "maker_risk_safeguards",
+                    "status": "no_statement_found",
+                    "url": "https://example.com/safety",
+                    "verified_at": "2026-08-01",
+                    "research_confidence": "high",
+                }
+            ],
+        )
+        (row,) = self.rows(models=(model,))
+        self.assertEqual(row.oldest_evidence.on, date(2026, 8, 1))
+        self.assertEqual(row.oldest_evidence.source, "flags[0]")
+
     def test_reviewed_age_counts_days_before_as_of(self) -> None:
         (row,) = self.rows(specifications=(record("mcp", "2026-09-04"),))
         self.assertEqual(row.reviewed.on, date(2026, 9, 4))
