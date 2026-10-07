@@ -734,10 +734,13 @@ h1 {
 .filter-sheet[open] { display: flex; flex-direction: column; }
 .filter-sheet::backdrop { background: var(--backdrop); }
 .filter-sheet h2 { margin: 0 0 .75rem; font: 700 1rem var(--font-display); }
-/* The groups, the sheet's scroller, are inset 6 px on every side and given
-   the 6 px back by a negative margin, so a focused value's whole ring fits
-   inside them while the values stay in line with the title (review N1). */
-.filter-sheet .filter-groups { flex: 1 1 auto; min-height: 0; margin: -6px; padding: 6px; overflow-y: auto; overscroll-behavior: contain; scroll-padding-block: 6px; }
+/* The groups, the sheet's scroller, are inset 6 px at the sides and given
+   the 6 px back by a negative margin, as the rail is, so a focused value's
+   whole ring fits inside them while the values stay in line with the title;
+   their scroll-padding keeps a control that Tab scrolls to 6 px inside the
+   top and bottom edges (review N1). Their top and bottom stay put, so the
+   ring the groups draw when they hold focus clears the title and the button. */
+.filter-sheet .filter-groups { flex: 1 1 auto; min-height: 0; margin: 0 -6px; padding: 0 6px; overflow-y: auto; overscroll-behavior: contain; scroll-padding-block: 6px; }
 #filter-sheet-done { flex: none; width: 100%; margin-top: .5rem; }
 #directory.view.is-results { padding-top: .75rem; }
 

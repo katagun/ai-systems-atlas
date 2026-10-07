@@ -792,6 +792,17 @@ test("a focused control's whole ring shows in the phone sheet, on a short phone 
     await expect(page.locator("#filter-sheet")).toBeVisible();
     const [title, value] = await page.evaluate(() => ["#filter-sheet-title", "#filter-sheet .filter-option input"].map(selector => document.querySelector(selector).getBoundingClientRect().left));
     expect(value, `${height}px: the sheet's values start where its title does`).toBeCloseTo(title, 0);
+    // The groups take focus themselves too, so their own ring, 5 px out,
+    // must clear the title above them and the button below them.
+    const room = await page.evaluate(() => {
+      const groups = document.querySelector("#filter-sheet .filter-groups").getBoundingClientRect();
+      return {
+        above: groups.top - document.querySelector("#filter-sheet-title").getBoundingClientRect().bottom,
+        below: document.querySelector("#filter-sheet-done").getBoundingClientRect().top - groups.bottom,
+      };
+    });
+    expect(room.below, `${height}px: the groups' own ring clears the button`).toBeGreaterThanOrEqual(5);
+    expect(room.above, `${height}px: and the title`).toBeGreaterThanOrEqual(5);
     const rings = await walkRings(page, "#filter-sheet .filter-groups");
     expect(rings[0].name, `${height}px: the walk starts at the first value`).toBe("role=");
     expectWholeRings(rings, `${height}px sheet`);
