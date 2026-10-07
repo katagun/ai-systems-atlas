@@ -1153,6 +1153,9 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
   position: relative;
   z-index: 2;
 }
+/* A reviewed flag (ADR 042) stays above the details target on its own, so a
+   tap on it only opens its tooltip whatever its row does. */
+.project-card .card-reviewed-flag { position: relative; z-index: 2; }
 .project-card:has(.card-open:focus-visible),
 .finder-result:has(.card-open:focus-visible) {
   outline: 2px solid var(--cyan);

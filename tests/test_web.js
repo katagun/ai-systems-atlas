@@ -3111,7 +3111,41 @@ test("no flag text uses an Atlas word for the result", () => {
   const texts = [FLAG_FOUND, { ...FLAG_FOUND, determination: "determined", scope: "deployment" }]
     .flatMap(entry => Object.values(flagEmblemText(entry, "Example Lab", taxonomy)));
   texts.push(BADGE_FAMILIES.flags.name, BADGE_FAMILIES.flags.meaning, REVIEWED_FLAGS.maker_risk_safeguards.name);
+  // The dialog's fixed sentences for the two states that paint no emblem.
+  texts.push(riskStatementView(flagModel(), taxonomy).text, riskStatementView(flagModel([FLAG_NONE]), taxonomy).text);
   for (const text of texts) assert.doesNotMatch(text, /high risk|dangerous|unsafe/i, text);
+});
+
+// The flag copy names every vocabulary value through the taxonomy, so a raw
+// id such as "bio_chem" never reaches a reader.
+test("every flag domain, scope, and determination reads as its plain-language name", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const plain = item => {
+    assert.notEqual(item.name, item.id, `${item.id} has no plain-language name`);
+    assert.doesNotMatch(item.name, /_/, item.name);
+  };
+  for (const item of taxonomy.flag_domains) {
+    plain(item);
+    const entry = { ...FLAG_FOUND, domains: [item.id] };
+    assert.equal(riskStatementView(flagModel([entry]), taxonomy).domains, item.name);
+    assert.ok(flagEmblemText(entry, "Example Lab", taxonomy).sentence.includes(` in ${item.name.toLowerCase()} capability`), item.id);
+  }
+  for (const item of taxonomy.flag_scopes) {
+    plain(item);
+    const entry = { ...FLAG_FOUND, scope: item.id };
+    assert.equal(riskStatementView(flagModel([entry]), taxonomy).scope, item.name);
+    assert.ok(flagEmblemText(entry, "Example Lab", taxonomy).sentence.includes(`covers ${item.name.charAt(0).toLowerCase()}${item.name.slice(1)}.`), item.id);
+  }
+  for (const item of taxonomy.flag_determinations) {
+    plain(item);
+    assert.ok(flagEmblemText({ ...FLAG_FOUND, determination: item.id }, "Example Lab", taxonomy).name.endsWith(` · ${item.name}`), item.id);
+  }
+});
+
+test("an emblem lookup fails on an id that is neither a badge nor a reviewed flag", () => {
+  for (const id of ["not-a-badge", "toString", "constructor"]) {
+    assert.throws(() => badgeEmblem(id), new RegExp(`no badge or reviewed flag "${id}"`));
+  }
 });
 
 test("the Risk statements section has three states and imported models have none", () => {

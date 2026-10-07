@@ -1375,14 +1375,37 @@ function modelModalityRoute(model) {
   return `${modalities.input.map(item => taxonomyName("model_modalities", item)).join(" + ")} → ${modalities.output.map(item => taxonomyName("model_modalities", item)).join(" + ")}`;
 }
 
-// Badges replace the tags row on system, inference-service, and
-// local-runtime cards. Each is an icon-only emblem whose frame names its
-// family; the name and definition ride in visually hidden text for screen
-// readers and in data attributes for the pointer tooltip. Badges are never
-// controls and take no tab stop.
-function badgeRow(badges) {
-  if (!badges.length) return "";
-  return `<div class="badge-group"><ul class="card-badges" role="list">${badges.map(badge => `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`).join("")}</ul><details class="badge-help"><summary>Badge meanings</summary><dl>${badges.map(badge => `<dt>${escapeHTML(badge.name)}</dt><dd>${escapeHTML(badge.definition)}</dd>`).join("")}</dl></details></div>`;
+// Every card leads its badge row with one type badge (ADR 047). Each badge is
+// an icon-only emblem whose frame names its family; the name and definition
+// ride in visually hidden text for screen readers and in data attributes for
+// the pointer tooltip. Badges are never controls and take no tab stop. A
+// reviewed-model card's flag (ADR 042) sits directly after its type badge,
+// outside the badge cap, and "Badge meanings" lists every emblem in the row's
+// order.
+function badgeRow(badges, flags = [], record = null) {
+  if (!badges.length && !flags.length) return "";
+  const lead = badges[0]?.family === "type" ? 1 : 0;
+  const entries = [...badges.slice(0, lead).map(badgeItem), ...flags.map(flag => flagItem(flag, record)), ...badges.slice(lead).map(badgeItem)];
+  return `<div class="badge-group"><ul class="card-badges" role="list">${entries.map(entry => entry.emblem).join("")}</ul><details class="badge-help"><summary>Badge meanings</summary><dl>${entries.map(entry => entry.meaning).join("")}</dl></details></div>`;
+}
+
+function badgeItem(badge) {
+  return {
+    emblem: `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`,
+    meaning: `<dt>${escapeHTML(badge.name)}</dt><dd>${escapeHTML(badge.definition)}</dd>`,
+  };
+}
+
+// A flag's hidden text is its tooltip sentence. Boot carries a found
+// statement's term, domains, determination, and scope (ADR 042), so the card
+// paints the developer's own words without waiting for the detail file. The
+// class is not `card-flag`: that names a card's geography circles.
+function flagItem(flag, record) {
+  const text = AppCore.flagEmblemText(flag.entry, record.developer, state.taxonomy);
+  return {
+    emblem: `<li class="card-badge card-reviewed-flag" data-badge="${escapeHTML(flag.id)}" data-family="${escapeHTML(flag.family)}" data-flag-record="${escapeHTML(record.id)}" data-name="${escapeHTML(text.name)}" data-definition="${escapeHTML(text.sentence)}">${AppCore.badgeEmblem(flag.id)}<span class="visually-hidden">${escapeHTML(text.sentence)}</span></li>`,
+    meaning: `<dt>${escapeHTML(`${flag.name} · ${text.name}`)}</dt><dd>${escapeHTML(text.sentence)}</dd>`,
+  };
 }
 
 // The one control that opens a card's record. Its hidden text names the
@@ -1740,7 +1763,7 @@ function renderAllDirectoryEntries() {
         <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(record.source_model))}</span>${record.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(record.description)}</p>
         ${modelSourceMeta(record)}
-        ${badgeRow(AppCore.cardBadges("model", record))}
+        ${badgeRow(AppCore.cardBadges("model", record), AppCore.cardFlags("model", record), record)}
         <div class="card-footer"><span>Dedicated model-access score</span>${detailsButton("data-model", record.id, record.name)}</div>
       </article>`;
     }
@@ -1992,7 +2015,7 @@ const COLLECTIONS = {
         <div class="license-row"><span class="source-badge">${escapeHTML(modelLicenseName(model.source_model))}</span>${model.licenses.map(item => `<span class="license-badge" title="${escapeHTML(licenseName(item))}">${escapeHTML(item)}</span>`).join("")}</div>
         <p>${escapeHTML(model.description)}</p>
         ${modelSourceMeta(model)}
-        ${badgeRow(AppCore.cardBadges("model", model))}
+        ${badgeRow(AppCore.cardBadges("model", model), AppCore.cardFlags("model", model), model)}
         <div class="card-footer"><span>${escapeHTML(AppCore.modelSourceLabel(model))}</span><div class="card-actions"><button class="compare-toggle" data-compare-kind="model" data-compare-id="${escapeHTML(model.id)}" aria-label="Add ${escapeHTML(model.name)} to comparison" aria-pressed="false">Compare</button>${detailsButton("data-model", model.id, model.name)}</div></div>
       </article>`;
     },
@@ -2813,6 +2836,20 @@ function renderTaxonomy() {
     })),
     { lede: family.meaning, badgeFamily: id },
   ]);
+  // Reviewed flags (ADR 042): the kind with its emblem, then the vocabularies a
+  // flag entry uses. "Not examined" is a state, not a stored value.
+  const flagGroups = [
+    ["Reviewed flags", (state.taxonomy.flag_kinds || []).map(kind => ({
+      name: kind.name,
+      definition: kind.definition,
+      emblem: Object.hasOwn(AppCore.REVIEWED_FLAGS, kind.id) ? AppCore.badgeEmblem(kind.id) : "",
+      family: AppCore.FLAG_FAMILY,
+    })), { lede: AppCore.BADGE_FAMILIES[AppCore.FLAG_FAMILY].meaning, reviewedFlags: true }],
+    ["Reviewed flag states", [...(state.taxonomy.flag_statuses || []), { name: "Not examined", definition: "No entry exists yet for this release. Its record says “Not yet examined.”" }]],
+    ["Risk areas", state.taxonomy.flag_domains || []],
+    ["What the developer states", state.taxonomy.flag_determinations || []],
+    ["What a statement covers", state.taxonomy.flag_scopes || []],
+  ];
   const groups = [
     ["System families", state.taxonomy.system_families], ...roleGroups,
     ["Collection symbols", AppCore.COLLECTIONS.map(entry => ({ name: entry.name, definition: entry.meaning, emblem: AppCore.collectionEmblem(entry), family: "type" })), { lede: "Navigation symbols identify collections. Card badges describe individual records; shared artwork does not imply the same record type." }],
@@ -2838,6 +2875,7 @@ function renderTaxonomy() {
     ["Model modalities", state.taxonomy.model_modalities],
     ["Model distribution modes", state.taxonomy.model_distribution_modes],
     ["Model-access score", state.taxonomy.model_score_profile.dimensions.map(item => ({name: `${label(item.id)} · ${Math.round(item.weight * 100)}%`, definition: item.definition}))],
+    ...flagGroups,
     ["Specification types", state.taxonomy.specification_types],
     ["Specification scopes", state.taxonomy.specification_scopes], ["Specification statuses", state.taxonomy.specification_statuses],
     ["Pack types", state.taxonomy.pack_types], ["Pack hosts", state.taxonomy.pack_hosts],
@@ -2847,7 +2885,7 @@ function renderTaxonomy() {
     ["Kinds of model a robot maker names", state.taxonomy.robot_model_kinds], ["Robot terms", state.taxonomy.robot_terms_kinds],
     ["Licenses and terms", state.taxonomy.licenses]
   ];
-  $("#taxonomy-content").innerHTML = groups.map(([name, items, extra = {}]) => `<section class="taxonomy-group"${extra.badgeFamily ? ` data-badge-family="${escapeHTML(extra.badgeFamily)}"` : ""}><h2>${escapeHTML(name)}</h2>${extra.lede ? `<p class="taxonomy-lede">${escapeHTML(extra.lede)}</p>` : ""}<div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"${item.family ? ` data-family="${escapeHTML(item.family)}"` : ""}>${item.emblem || ""}<strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
+  $("#taxonomy-content").innerHTML = groups.map(([name, items, extra = {}]) => `<section class="taxonomy-group"${extra.badgeFamily ? ` data-badge-family="${escapeHTML(extra.badgeFamily)}"` : ""}${extra.reviewedFlags ? " data-reviewed-flags" : ""}><h2>${escapeHTML(name)}</h2>${extra.lede ? `<p class="taxonomy-lede">${escapeHTML(extra.lede)}</p>` : ""}<div class="taxonomy-grid">${items.map(item => `<article class="taxonomy-item"${item.family ? ` data-family="${escapeHTML(item.family)}"` : ""}>${item.emblem || ""}<strong>${escapeHTML(item.name)}</strong><p>${escapeHTML(item.definition || item.note || "An explicit comparison trait.")}</p></article>`).join("")}</div></section>`).join("");
 }
 
 // Every record dialog is the same frame — find the record, paint one content

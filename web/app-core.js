@@ -1792,7 +1792,10 @@
   }
   // A badge id or a reviewed flag kind id.
   function badgeEmblem(id) {
-    const mark = Object.hasOwn(CARD_BADGES, id) ? CARD_BADGES[id] : REVIEWED_FLAGS[id];
+    const mark = Object.hasOwn(CARD_BADGES, id) ? CARD_BADGES[id]
+      : Object.hasOwn(REVIEWED_FLAGS, id) ? REVIEWED_FLAGS[id]
+      : null;
+    if (!mark) throw new Error(`no badge or reviewed flag "${id}"`);
     return emblemSVG(mark.family, mark.glyph);
   }
   function familyEmblem(familyId) {
