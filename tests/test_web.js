@@ -2007,6 +2007,24 @@ test("the All intro promises scores only where a collection has them", () => {
   assert.match(indexHTML(), /Choose a collection for its own filters, and its scores where it has them\./);
 });
 
+// The count in the headline arrives with the boot payloads (renderStats), so the
+// markup the page ships must read as a sentence without it. The line above the
+// headline names the kinds and carries no number, so the count is shown once. The
+// headline's markup is compared whole, not stripped of its tags: the element
+// renderStats fills holds "The" until the count arrives.
+test("the front door's headline reads without its count and the kicker above it holds no number", () => {
+  const html = indexHTML();
+  const heading = html.match(/<h1 id="directory-title"[^>]*>([\s\S]*?)<\/h1>/);
+  assert.ok(heading, "index.html has the Directory heading");
+  assert.equal(heading[1], '<bdi id="directory-count">The</bdi> elements of <span>AI</span>');
+  const kicker = html.match(/<p[^>]*id="hero-kicker"[^>]*>([\s\S]*?)<\/p>/);
+  assert.ok(kicker, "index.html has the hero kicker");
+  assert.doesNotMatch(kicker[1], /\d/);
+  // Everything lists labs and specifications too (#404), so the line names them.
+  assert.match(kicker[1], /\blabs\b/);
+  assert.match(kicker[1], /\bspecifications\b/);
+});
+
 test("the API view does not call web-page evidence pinned", () => {
   const html = fs.readFileSync(path.join(__dirname, "..", "web", "index.html"), "utf8");
   // docs/DATA_MODEL.md: web terms carry "no claim of immutability".
