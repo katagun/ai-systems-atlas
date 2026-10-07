@@ -729,3 +729,71 @@ test("Escape closes the phone sheet and returns focus to the Filters button", as
   await expect(page.locator("#filter-sheet")).toBeHidden();
   await expect(page.locator("#filters-button")).toBeFocused();
 });
+
+// A focused control's ring, 2 px drawn 3 px out, must fit inside the
+// scroller that holds it, or the scroller clips the stroke where its edge
+// meets the control (review N1). The walk tabs through every control, so
+// the scroll each Tab causes is checked as well as the first value.
+async function walkRings(page, scroller) {
+  const rings = [];
+  for (let press = 0; press < 60; press += 1) {
+    await page.keyboard.press("Tab");
+    const ring = await page.evaluate(selector => {
+      const element = document.activeElement;
+      const port = document.querySelector(selector);
+      if (element === port || !port.contains(element)) return null;
+      const style = getComputedStyle(element);
+      const grow = parseFloat(style.outlineOffset) + parseFloat(style.outlineWidth);
+      const box = element.getBoundingClientRect();
+      const outer = port.getBoundingClientRect();
+      const left = outer.left + port.clientLeft;
+      const top = outer.top + port.clientTop;
+      return {
+        name: element.matches("input") ? `${element.closest("[data-filter-group]").dataset.filterGroup}=${element.value}` : element.textContent.trim(),
+        drawn: element.matches(":focus-visible") && style.outlineStyle !== "none" && grow > 0,
+        cut: Math.max(left - (box.left - grow), top - (box.top - grow), box.right + grow - (left + port.clientWidth), box.bottom + grow - (top + port.clientHeight)),
+      };
+    }, scroller);
+    if (ring) rings.push(ring);
+    else if (rings.length) break;
+  }
+  return rings;
+}
+
+function expectWholeRings(rings, where) {
+  expect(rings.length, `${where}: the walk crosses every group`).toBeGreaterThan(10);
+  for (const ring of rings) {
+    expect(ring.drawn, `${where}, ${ring.name}: its ring is drawn`).toBe(true);
+    expect(ring.cut, `${where}, ${ring.name}: the scroller clips its ring by`).toBeLessThanOrEqual(0);
+  }
+}
+
+test("a focused control's whole ring shows in the rail, which still lines up with the bar", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=systems");
+  await expect(page.locator("#filter-rail .filter-group").first()).toBeVisible();
+  const [bar, value] = await page.evaluate(() => ["#results-search", "#filter-rail .filter-option input"].map(selector => document.querySelector(selector).getBoundingClientRect().left));
+  expect(value, "the rail's values start where the search box does").toBeCloseTo(bar, 0);
+  await searchBox(page).focus();
+  const rings = await walkRings(page, "#filter-rail");
+  expect(rings[0].name, "the walk starts at the skip button").toBe("Skip to results");
+  expect(rings[1].name, "and goes on to the first value").toBe("role=");
+  expectWholeRings(rings, "rail");
+});
+
+// On a 667 px phone Tab scrolls the sheet's groups to controls near their
+// edges, so the walk there checks the groups' scroll-padding too.
+test("a focused control's whole ring shows in the phone sheet, on a short phone too", async ({ page }) => {
+  for (const height of [844, 667]) {
+    await page.setViewportSize({ width: 390, height });
+    await page.goto("/?collection=systems");
+    await page.locator("#filters-button").focus();
+    await page.keyboard.press("Enter");
+    await expect(page.locator("#filter-sheet")).toBeVisible();
+    const [title, value] = await page.evaluate(() => ["#filter-sheet-title", "#filter-sheet .filter-option input"].map(selector => document.querySelector(selector).getBoundingClientRect().left));
+    expect(value, `${height}px: the sheet's values start where its title does`).toBeCloseTo(title, 0);
+    const rings = await walkRings(page, "#filter-sheet .filter-groups");
+    expect(rings[0].name, `${height}px: the walk starts at the first value`).toBe("role=");
+    expectWholeRings(rings, `${height}px sheet`);
+  }
+});

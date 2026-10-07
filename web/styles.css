@@ -680,21 +680,29 @@ h1 {
    --bottom-clearance, so no value sits under either. Its height fits under
    its lowest top, where the frame starts (--frame-top) until the page
    scrolls it up to its sticky place, so it clears them at every scroll.
-   The front door hides the frame, whatever layout class it carries. */
+   The front door hides the frame, whatever layout class it carries.
+   A focused control's ring, 2 px drawn 3 px out, must fit inside the
+   scroller that holds it, or the scroller clips the stroke its edge meets
+   (review N1). The rail is inset 6 px on its left, where its controls
+   start, and a negative margin gives the 6 px back, so its values still
+   start where the search box does; its height is untouched, since the
+   clearances above size it. Its scroll-padding keeps a control that Tab
+   scrolls to 6 px inside the top and bottom edges. */
 .results-frame { display: block; }
 #results-frame[hidden] { display: none; }
 @media (min-width: 1001px) {
   .results-frame.has-rail { display: grid; grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
-  .filter-rail { position: sticky; top: calc(var(--sticky-clearance, 0px) + .5rem); max-height: calc(100vh - max(var(--sticky-clearance, 0px) + .5rem, var(--frame-top, 0px)) - var(--bottom-clearance, 0px) - 1rem); overflow-y: auto; padding-right: .25rem; }
+  .filter-rail { position: sticky; top: calc(var(--sticky-clearance, 0px) + .5rem); max-height: calc(100vh - max(var(--sticky-clearance, 0px) + .5rem, var(--frame-top, 0px)) - var(--bottom-clearance, 0px) - 1rem); overflow-y: auto; margin-left: -6px; padding: 0 .25rem 0 6px; scroll-padding-block: 6px; }
   .filters-button { display: none; }
 }
 @media (max-width: 1000px) {
   .filter-rail { display: none; }
 }
 /* The rail's first stop skips it, shown only while it has focus, as the
-   page's own skip link is (review I5). */
+   page's own skip link is (review I5). It sits 6 px below the rail's top,
+   so its ring shows above it too (review N1). */
 .rail-skip { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
-.rail-skip:focus { position: static; width: auto; height: auto; margin: 0 0 .75rem; padding: .45rem .8rem; overflow: visible; clip: auto; border-radius: var(--radius-chip); background: var(--text); color: var(--on-ink); cursor: pointer; }
+.rail-skip:focus { position: static; width: auto; height: auto; margin: 6px 0 .75rem; padding: .45rem .8rem; overflow: visible; clip: auto; border-radius: var(--radius-chip); background: var(--text); color: var(--on-ink); cursor: pointer; }
 .filter-group { margin: 0 0 1rem; padding: 0; border: 0; min-width: 0; }
 .filter-group legend { margin: 0 0 .35rem; padding: 0; color: var(--muted); font: 700 .66rem var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
 .filter-option { display: flex; align-items: center; gap: .45rem; padding: .15rem 0; font-size: .82rem; cursor: pointer; }
@@ -722,7 +730,10 @@ h1 {
 .filter-sheet[open] { display: flex; flex-direction: column; }
 .filter-sheet::backdrop { background: var(--backdrop); }
 .filter-sheet h2 { margin: 0 0 .75rem; font: 700 1rem var(--font-display); }
-.filter-sheet .filter-groups { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+/* The groups, the sheet's scroller, are inset 6 px on every side and given
+   the 6 px back by a negative margin, so a focused value's whole ring fits
+   inside them while the values stay in line with the title (review N1). */
+.filter-sheet .filter-groups { flex: 1 1 auto; min-height: 0; margin: -6px; padding: 6px; overflow-y: auto; overscroll-behavior: contain; scroll-padding-block: 6px; }
 #filter-sheet-done { flex: none; width: 100%; margin-top: .5rem; }
 #directory.view.is-results { padding-top: .75rem; }
 
