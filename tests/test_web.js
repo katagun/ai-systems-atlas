@@ -4,7 +4,7 @@ const { relative, sep } = require("node:path");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, INACTIVE_STATUSES, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, holdsPhrase, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1694,7 +1694,8 @@ test("the badge glossary lists each badge once with every place it appears", () 
 });
 
 test("every badge belongs to one family and owns a unique glyph", () => {
-  assert.deepEqual(Object.keys(BADGE_FAMILIES), ["type", "control", "capability", "platform"]);
+  // Flags sit second, as the flag emblem does in a model card's row (ADR 042).
+  assert.deepEqual(Object.keys(BADGE_FAMILIES), ["type", "flags", "control", "capability", "platform"]);
   const css = fs.readFileSync(path.join(__dirname, "..", "web", "styles.css"), "utf8");
   for (const [id, family] of Object.entries(BADGE_FAMILIES)) {
     assert.ok(family.name && family.meaning && family.frame, `${id} needs a name, a meaning, and a frame`);
@@ -1735,13 +1736,14 @@ test("the legend lists only what the active scope can show", () => {
   assert.deepEqual(new Set(ids(systems)), new Set([...CARD_BADGE_SETS["system:agent_system"], ...CARD_BADGE_SETS["system:memory_system"], ...CARD_BADGE_SETS["system:assistant_system"]]));
   const families = systems.badges.map(badge => Object.keys(BADGE_FAMILIES).indexOf(badge.family));
   assert.deepEqual(families, [...families].sort((a, b) => a - b), "grouped by family in registry order");
-  for (const scope of ["all", "packs"]) {
-    assert.equal(badgeLegend(scope).mode, "families");
-    assert.deepEqual(badgeLegend(scope).families.map(family => family.id), ["type", "control", "capability", "platform"]);
-  }
+  for (const scope of ["all", "packs"]) assert.equal(badgeLegend(scope).mode, "families");
+  // All lists reviewed-model cards, which can carry a flag; Packs never does.
+  // The legend follows the emblem row: type, then the flag, then the traits.
+  assert.deepEqual(badgeLegend("all").families.map(family => family.id), ["type", "flags", "control", "capability", "platform"]);
+  assert.deepEqual(badgeLegend("packs").families.map(family => family.id), ["type", "control", "capability", "platform"]);
   // Models lists reviewed and imported rows together, so its legend names the
-  // reviewed set and the source-record badge, types first.
-  assert.deepEqual(ids(badgeLegend("models")), ["language-model", "multimodal-language-model", "image-generation-model", "video-generation-model", "audio-generation-model", "source-record", "downloadable-weights", "developer-api", "third-party-hosting"]);
+  // reviewed set and the source-record badge, types first, then the flag.
+  assert.deepEqual(ids(badgeLegend("models")), ["language-model", "multimodal-language-model", "image-generation-model", "video-generation-model", "audio-generation-model", "source-record", "maker_risk_safeguards", "downloadable-weights", "developer-api", "third-party-hosting"]);
   assert.deepEqual(ids(badgeLegend("specifications")), CARD_BADGE_SETS.spec);
   assert.deepEqual(ids(badgeLegend("labs")), CARD_BADGE_SETS.lab);
   assert.equal(badgeLegend("systems", "constructor"), null);
@@ -1905,6 +1907,21 @@ test("every field a badge tests reaches the boot payload", () => {
         assert.deepEqual(bootRecord[field], record[field], `${kind}/${record.id} boot value differs for ${field}, which the ${id} badge tests`);
       }
     }
+  }
+});
+
+// A flag paints from boot too (ADR 042), so the boot projection must give the
+// same flag and the same tooltip as the canonical record. Vacuous until the
+// backfill gives a published model a flags entry; it guards that change.
+test("every published flag paints the same from boot as from the canonical record", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const bootById = new Map(readWebJSON("app/models.json").models.map(record => [record.id, record]));
+  for (const record of readWebJSON("models.json").models.filter(model => Array.isArray(model.flags))) {
+    const canonical = { ...record, review_status: "reviewed" };
+    const bootRecord = bootById.get(record.id);
+    assert.ok(bootRecord, `model/${record.id} has no boot record`);
+    const paint = model => cardFlags("model", model).map(flag => ({ id: flag.id, text: flagEmblemText(flag.entry, model.developer, taxonomy) }));
+    assert.deepEqual(paint(bootRecord), paint(canonical), `model/${record.id} flag differs between canonical and boot`);
   }
 });
 
@@ -3038,4 +3055,128 @@ test("the direction total counts active records only, so a retired one leaves th
   const collections = { projects: [base, retired], inferenceServices: [], localRuntimes: [] };
   assert.equal(finderDirectionTotal("agent_system", collections), 1);
   assert.equal(finderGoalRecords("agent_system", FINDER_GOALS.agent_system.find(item => item.id === "coding"), collections).length, 1);
+});
+
+// Reviewed flags (ADR 042): a developer's own risk-threshold statement, quoted
+// and classified in its own terms, never an Atlas verdict.
+const FLAG_FOUND = {
+  kind: "maker_risk_safeguards", status: "statement_found", tier_term: "Fixture Level 3",
+  domains: ["cyber", "bio_chem"], determination: "precautionary", scope: "weights",
+  statement: "A fixture sentence standing in for a developer's verbatim words.",
+  url: "https://www.example-lab.com/system-card", content_sha256: "a".repeat(64),
+  verified_at: "2026-09-01", research_confidence: "high",
+};
+const FLAG_NONE = { kind: "maker_risk_safeguards", status: "no_statement_found", url: "https://www.example-lab.com/safety", verified_at: "2026-09-01", research_confidence: "medium" };
+// What boot carries for a found statement: no quote, link, hash, or dates.
+const FLAG_FOUND_BOOT = { kind: FLAG_FOUND.kind, status: FLAG_FOUND.status, tier_term: FLAG_FOUND.tier_term, domains: FLAG_FOUND.domains, determination: FLAG_FOUND.determination, scope: FLAG_FOUND.scope };
+const flagModel = flags => ({ id: "model-example", developer: "Example Lab", review_status: "reviewed", model_type: "language_model", distribution_modes: ["developer_api"], ...(flags ? { flags } : {}) });
+const DISCLAIMER = "This is the developer's own statement, not an Atlas risk rating.";
+
+test("only a found statement on a reviewed model paints a flag, and a flag is not a badge", () => {
+  assert.deepEqual(cardFlags("model", flagModel([FLAG_FOUND])).map(flag => [flag.id, flag.family]), [["maker_risk_safeguards", "flags"]]);
+  assert.equal(cardFlags("model", flagModel([FLAG_FOUND_BOOT])).length, 1, "the boot entry is enough to paint");
+  assert.deepEqual(cardFlags("model", flagModel([FLAG_NONE])), []);
+  assert.deepEqual(cardFlags("model", flagModel()), []);
+  assert.deepEqual(cardFlags("model", { ...flagModel([FLAG_FOUND]), review_status: "imported" }), []);
+  assert.deepEqual(cardFlags("system", { system_family: "agent_system", flags: [FLAG_FOUND] }), []);
+  assert.deepEqual(badgeNames(cardBadges("model", flagModel([FLAG_FOUND]))), ["Language model", "Developer API"]);
+});
+
+test("a flag sits outside the badge budget", () => {
+  const model = { ...flagModel([FLAG_FOUND]), distribution_modes: ["downloadable_weights", "developer_api", "third_party_hosting"] };
+  assert.equal(cardBadges("model", model).length, 4);
+  assert.equal(cardFlags("model", model).length, 1);
+  assert.ok(!cardBadges("model", model).some(badge => badge.id === "maker_risk_safeguards"));
+  assert.equal(MAX_CARD_BADGES, 6);
+});
+
+test("the flag tooltip prints the developer's term and determination and ends with the disclaimer", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const precautionary = flagEmblemText(FLAG_FOUND, "Example Lab", taxonomy);
+  assert.equal(precautionary.name, "“Fixture Level 3” · Precautionary");
+  assert.equal(precautionary.sentence, `Example Lab names this release against “Fixture Level 3” in cyber and biological or chemical capability, as a precaution. The statement covers the model itself. ${DISCLAIMER}`);
+  const determined = flagEmblemText({ ...FLAG_FOUND, determination: "determined", domains: ["cyber", "bio_chem", "autonomy"], scope: "deployment" }, "Example Lab", taxonomy);
+  assert.equal(determined.name, "“Fixture Level 3” · Threshold reached");
+  assert.equal(determined.sentence, `Example Lab states that this release reached “Fixture Level 3” in cyber, biological or chemical, and autonomy capability. The statement covers safeguards on a release channel. ${DISCLAIMER}`);
+  assert.equal(flagEmblemText({ ...FLAG_FOUND, domains: ["autonomy"] }, "Example Lab", taxonomy).sentence.split(" capability")[0], "Example Lab names this release against “Fixture Level 3” in autonomy");
+});
+
+test("the boot entry alone gives the full tooltip and hidden text, with no detail fetch", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  assert.deepEqual(flagEmblemText(FLAG_FOUND_BOOT, "Example Lab", taxonomy), flagEmblemText(FLAG_FOUND, "Example Lab", taxonomy));
+});
+
+test("no flag text uses an Atlas word for the result", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const texts = [FLAG_FOUND, { ...FLAG_FOUND, determination: "determined", scope: "deployment" }]
+    .flatMap(entry => Object.values(flagEmblemText(entry, "Example Lab", taxonomy)));
+  texts.push(BADGE_FAMILIES.flags.name, BADGE_FAMILIES.flags.meaning, REVIEWED_FLAGS.maker_risk_safeguards.name);
+  for (const text of texts) assert.doesNotMatch(text, /high risk|dangerous|unsafe/i, text);
+});
+
+test("the Risk statements section has three states and imported models have none", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  assert.deepEqual(riskStatementView(flagModel(), taxonomy), { state: "not_examined", text: "Not yet examined." });
+  assert.deepEqual(riskStatementView(flagModel([FLAG_NONE]), taxonomy), {
+    state: "no_statement_found",
+    text: "The developer publishes no risk-threshold statement for this release. Absence is not evidence of safety.",
+    url: FLAG_NONE.url, verifiedAt: "2026-09-01", confidence: "Medium",
+  });
+  const found = riskStatementView(flagModel([FLAG_FOUND]), taxonomy);
+  assert.equal(found.state, "statement_found");
+  assert.equal(found.pending, false);
+  assert.equal(found.heading, "“Fixture Level 3” · Precautionary");
+  assert.equal(found.statement, FLAG_FOUND.statement);
+  assert.equal(found.domains, "Cyber · Biological or chemical");
+  assert.equal(found.scope, "The model itself");
+  assert.equal(found.url, FLAG_FOUND.url);
+  assert.equal(found.verifiedAt, "2026-09-01");
+  assert.equal(found.confidence, "High");
+  assert.ok(found.sentence.endsWith(DISCLAIMER));
+  // Before detail lands the section knows the term, domains, and scope from
+  // boot, but not the quote, link, date, or confidence.
+  const pending = riskStatementView(flagModel([FLAG_FOUND_BOOT]), taxonomy);
+  assert.equal(pending.state, "statement_found");
+  assert.equal(pending.pending, true);
+  assert.equal(pending.heading, found.heading);
+  assert.equal(pending.sentence, found.sentence);
+  assert.equal(pending.domains, found.domains);
+  assert.equal(pending.scope, found.scope);
+  assert.equal(pending.statement, null);
+  assert.equal(pending.url, null);
+  assert.equal(pending.verifiedAt, null);
+  assert.equal(pending.confidence, null);
+  const pendingNone = riskStatementView(flagModel([{ kind: FLAG_NONE.kind, status: "no_statement_found" }]), taxonomy);
+  assert.equal(pendingNone.text, "The developer publishes no risk-threshold statement for this release. Absence is not evidence of safety.");
+  assert.equal(pendingNone.url, null);
+  assert.equal(riskStatementView({ ...flagModel([FLAG_FOUND]), review_status: "imported" }, taxonomy), null);
+});
+
+test("the flag family is a triangle on --danger, a token nothing else uses and no accent shares", () => {
+  assert.equal(FLAG_FAMILY, "flags");
+  assert.equal(BADGE_FAMILIES.flags.name, "Maker risk statement");
+  assert.equal(BADGE_FAMILIES.flags.token, "--danger");
+  const frames = Object.values(BADGE_FAMILIES).map(family => family.frame);
+  assert.equal(new Set(frames).size, frames.length, "every family has its own frame");
+  const svg = badgeEmblem("maker_risk_safeguards");
+  assert.ok(svg.includes(`d="${BADGE_FAMILIES.flags.frame}"`));
+  assert.ok(svg.includes(REVIEWED_FLAGS.maker_risk_safeguards.glyph));
+  assert.ok(!Object.values(CARD_BADGES).some(badge => badge.glyph === REVIEWED_FLAGS.maker_risk_safeguards.glyph));
+  const { light, osDark, rest } = stylesheetBlocks();
+  assert.equal([...rest.matchAll(/var\(--danger\)/g)].length, 1, "--danger colours the flag family and nothing else");
+  for (const accent of ["--cyan", "--violet", "--amber", "--coral"]) {
+    assert.notEqual(light["--danger"], light[accent], `${accent} (light)`);
+    assert.notEqual(osDark["--danger"], osDark[accent], `${accent} (dark)`);
+  }
+});
+
+test("every reviewed flag is a taxonomy flag kind of the same name, allowed on models", () => {
+  const kinds = readWebJSON("taxonomy.json").flag_kinds;
+  for (const [id, flag] of Object.entries(REVIEWED_FLAGS)) {
+    const kind = kinds.find(item => item.id === id);
+    assert.ok(kind, `${id} is not a flag_kinds entry`);
+    assert.equal(kind.name, flag.name);
+    assert.deepEqual(kind.collections, ["models"]);
+    assert.equal(flag.family, FLAG_FAMILY);
+  }
 });

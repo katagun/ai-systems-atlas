@@ -1000,6 +1000,7 @@ input:focus, select:focus {
 [data-family="control"] { color: var(--cyan); }
 [data-family="capability"] { color: var(--violet); }
 [data-family="platform"] { color: var(--amber); }
+[data-family="flags"] { color: var(--danger); }
 .badge-emblem {
   display: block;
   width: 1.7rem;

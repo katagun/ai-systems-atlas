@@ -1246,13 +1246,22 @@
   // 32-unit viewBox; styles.css colours each family by its token through
   // [data-family]. A new family is one entry here plus its badges' glyphs.
   // Type comes first: every card leads with exactly one type badge, and the
-  // legend and Taxonomy list families in this order.
+  // legend and Taxonomy list families in this order. Flags come second because
+  // a flag emblem sits directly after the type badge in a card's row.
   const BADGE_FAMILIES = {
     type: {
       name: "Type",
       meaning: "What kind of record it is. Every card carries exactly one.",
       token: "--slate-ink",
       frame: "M16 3a13 13 0 1 1 0 26a13 13 0 1 1 0-26Z",
+    },
+    // Reviewed flags (ADR 042), not badges: the triangle frame the badge
+    // emblems reserved, on a token no other component uses.
+    flags: {
+      name: "Maker risk statement",
+      meaning: "A developer's own statement that names this release against a risk threshold. It is the developer's words, not an Atlas rating.",
+      token: "--danger",
+      frame: "M16 3.8 29.2 27.2H2.8Z",
     },
     control: {
       name: "Control and privacy",
@@ -1756,14 +1765,35 @@
     return [...entries.values()];
   }
 
+  // Reviewed flags (ADR 042) are a second tier beside badges. A flag records one
+  // kind of first-party statement a record's steward publishes about it, in the
+  // steward's own words, never an Atlas verdict. Flags share the emblem drawing
+  // but not the badge contract: they are not presence tests, sit directly after
+  // the type badge outside MAX_CARD_BADGES, never come from cardBadges, and
+  // never affect score, sort, the Finder, or comparison.
+  const FLAG_FAMILY = "flags";
+  const MAKER_RISK_FLAG = "maker_risk_safeguards";
+  const REVIEWED_FLAGS = {
+    [MAKER_RISK_FLAG]: {
+      name: "Maker risk statement",
+      family: FLAG_FAMILY,
+      glyph: '<path d="M16 12.4v6"/><circle class="badge-dot" cx="16" cy="22.1" r="1.1"/>',
+    },
+  };
+  const FLAG_DISCLAIMER = "This is the developer's own statement, not an Atlas risk rating.";
+  const FLAG_NO_STATEMENT_TEXT = "The developer publishes no risk-threshold statement for this release. Absence is not evidence of safety.";
+  const FLAG_NOT_EXAMINED_TEXT = "Not yet examined.";
+
   // Emblems are decoration: the card, the legend, and Taxonomy print the badge
   // name as text (visible or visually hidden) beside them.
   function emblemSVG(familyId, glyph) {
     const inner = glyph ? `<g class="badge-glyph">${glyph}</g>` : "";
     return `<svg class="badge-emblem" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><path class="badge-frame" d="${BADGE_FAMILIES[familyId].frame}"/>${inner}</svg>`;
   }
-  function badgeEmblem(badgeId) {
-    return emblemSVG(CARD_BADGES[badgeId].family, CARD_BADGES[badgeId].glyph);
+  // A badge id or a reviewed flag kind id.
+  function badgeEmblem(id) {
+    const mark = Object.hasOwn(CARD_BADGES, id) ? CARD_BADGES[id] : REVIEWED_FLAGS[id];
+    return emblemSVG(mark.family, mark.glyph);
   }
   function familyEmblem(familyId) {
     return emblemSVG(familyId, "");
@@ -1779,7 +1809,9 @@
   // mix. null means the scope shows no badges at all.
   function badgeLegend(collection, systemFamily = "") {
     if (collection === "all" || collection === "packs") {
-      return { mode: "families", families: Object.entries(BADGE_FAMILIES).map(([id, family]) => ({ id, name: family.name, meaning: family.meaning })) };
+      // All lists reviewed-model cards, which can carry a flag; Packs never does.
+      const families = Object.entries(BADGE_FAMILIES).filter(([id]) => collection === "all" || id !== FLAG_FAMILY);
+      return { mode: "families", families: families.map(([id, family]) => ({ id, name: family.name, meaning: family.meaning })) };
     }
     const systemKeys = Object.keys(CARD_BADGE_SETS).filter(key => key.startsWith("system:"));
     const keys = collection === "systems" ? (systemFamily ? [`system:${systemFamily}`] : systemKeys)
@@ -1792,9 +1824,89 @@
       : [];
     const ids = [...new Set(keys.flatMap(key => (Object.hasOwn(CARD_BADGE_SETS, key) ? CARD_BADGE_SETS[key] : [])))];
     if (!ids.length) return null;
+    const badges = ids.map(id => ({ id, name: CARD_BADGES[id].name, family: CARD_BADGES[id].family }));
+    // A reviewed model card's flag sits after its type badge, so the Models
+    // legend lists it there too; the family sort below puts it in place.
+    if (collection === "models") badges.push(...Object.entries(REVIEWED_FLAGS).map(([id, flag]) => ({ id, name: flag.name, family: flag.family })));
     const order = Object.keys(BADGE_FAMILIES);
-    ids.sort((a, b) => order.indexOf(CARD_BADGES[a].family) - order.indexOf(CARD_BADGES[b].family));
-    return { mode: "badges", badges: ids.map(id => ({ id, name: CARD_BADGES[id].name, family: CARD_BADGES[id].family })) };
+    badges.sort((a, b) => order.indexOf(a.family) - order.indexOf(b.family));
+    return { mode: "badges", badges };
+  }
+
+  function makerRiskEntry(record) {
+    const flags = Array.isArray(record.flags) ? record.flags : [];
+    return flags.find(entry => entry && entry.kind === MAKER_RISK_FLAG) || null;
+  }
+
+  // Flags a card paints after its type badge. Only a reviewed model with a
+  // found statement carries one; "no statement" and "not examined" are said in
+  // the dialog, never as an emblem, so an unflagged card claims nothing.
+  function cardFlags(kind, record) {
+    if (kind !== "model" || record.review_status !== "reviewed") return [];
+    const entry = makerRiskEntry(record);
+    if (!entry || entry.status !== "statement_found") return [];
+    return [{ id: MAKER_RISK_FLAG, name: REVIEWED_FLAGS[MAKER_RISK_FLAG].name, family: FLAG_FAMILY, entry }];
+  }
+
+  function vocabularyName(taxonomy, group, id) {
+    const item = ((taxonomy && taxonomy[group]) || []).find(candidate => candidate.id === id);
+    return item ? item.name : id;
+  }
+
+  function joinPlain(items) {
+    if (items.length < 2) return items.join("");
+    if (items.length === 2) return `${items[0]} and ${items[1]}`;
+    return `${items.slice(0, -1).join(", ")}, and ${items[items.length - 1]}`;
+  }
+
+  // Boot carries a found statement's term, domains, determination, and scope
+  // (ADR 042), so the emblem's words never wait for the detail file.
+  function flagSentence(entry, developer, taxonomy) {
+    const domains = joinPlain(entry.domains.map(id => vocabularyName(taxonomy, "flag_domains", id).toLowerCase()));
+    const claim = entry.determination === "determined"
+      ? `${developer} states that this release reached “${entry.tier_term}” in ${domains} capability.`
+      : `${developer} names this release against “${entry.tier_term}” in ${domains} capability, as a precaution.`;
+    const scope = vocabularyName(taxonomy, "flag_scopes", entry.scope);
+    return `${claim} The statement covers ${scope.charAt(0).toLowerCase()}${scope.slice(1)}. ${FLAG_DISCLAIMER}`;
+  }
+
+  // The tooltip's name line and sentence; the card's hidden text is the sentence.
+  function flagEmblemText(entry, developer, taxonomy) {
+    return {
+      name: `“${entry.tier_term}” · ${vocabularyName(taxonomy, "flag_determinations", entry.determination)}`,
+      sentence: flagSentence(entry, developer, taxonomy),
+    };
+  }
+
+  // What a reviewed model's "Risk statements" section shows in each of the
+  // three states. null for anything but a reviewed model: imported rows carry
+  // no Atlas conclusion and show nothing.
+  function riskStatementView(record, taxonomy) {
+    if (record.review_status !== "reviewed") return null;
+    const entry = makerRiskEntry(record);
+    if (!entry || !["statement_found", "no_statement_found"].includes(entry.status)) {
+      return { state: "not_examined", text: FLAG_NOT_EXAMINED_TEXT };
+    }
+    const checked = {
+      url: entry.url || null,
+      verifiedAt: entry.verified_at || null,
+      confidence: entry.research_confidence ? vocabularyName(taxonomy, "research_confidence_levels", entry.research_confidence) : null,
+    };
+    if (entry.status === "no_statement_found") return { state: "no_statement_found", text: FLAG_NO_STATEMENT_TEXT, ...checked };
+    // The quote, link, date, and confidence arrive with the detail file; until
+    // then the section says what boot knows and never reads as unexamined.
+    const text = flagEmblemText(entry, record.developer, taxonomy);
+    const quoted = typeof entry.statement === "string";
+    return {
+      state: "statement_found",
+      pending: !quoted,
+      heading: text.name,
+      sentence: text.sentence,
+      statement: quoted ? entry.statement : null,
+      domains: entry.domains.map(id => vocabularyName(taxonomy, "flag_domains", id)).join(" · "),
+      scope: vocabularyName(taxonomy, "flag_scopes", entry.scope),
+      ...checked,
+    };
   }
 
   // ADR 038: Atlas can review a release before models.dev lists it. Such a
@@ -2076,7 +2188,9 @@
     FINDER_DIRECTION_NAMES,
     FINDER_GOALS,
     FINDER_PRIORITIES,
+    FLAG_FAMILY,
     INACTIVE_STATUSES,
+    REVIEWED_FLAGS,
     SCOPE_URL_KEYS,
     SCOPE_URL_PARAMS,
     UNLISTED_MODEL_LABEL,
@@ -2085,6 +2199,7 @@
     buildLabIndex,
     cardBadgeGlossary,
     cardBadges,
+    cardFlags,
     collectionCategories,
     collectionCount,
     collectionEmblem,
@@ -2115,10 +2230,12 @@
     finderDirectionTotal,
     finderGoalEntries,
     finderGoalRecords,
+    flagEmblemText,
     holdsPhrase,
     labDistributionModes,
     labRelations,
     labsForRecord,
+    makerRiskEntry,
     markMonogramName,
     markRecordId,
     matchFinderGoal,
@@ -2152,6 +2269,7 @@
     releaseDate,
     releasesNewestFirst,
     newestDated,
+    riskStatementView,
     scopeFromURL,
     successorSystem,
     scopeURLParams,

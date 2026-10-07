@@ -2802,7 +2802,8 @@ function renderTaxonomy() {
     state.taxonomy.primary_roles.filter(item => item.family === family.id),
   ]);
   const glossary = AppCore.cardBadgeGlossary();
-  const badgeGroups = Object.entries(AppCore.BADGE_FAMILIES).map(([id, family]) => [
+  // Reviewed flags are not badges; they have their own Taxonomy group.
+  const badgeGroups = Object.entries(AppCore.BADGE_FAMILIES).filter(([id]) => id !== AppCore.FLAG_FAMILY).map(([id, family]) => [
     `Card badges · ${family.name}`,
     glossary.filter(entry => entry.family === id).map(entry => ({
       name: entry.name,

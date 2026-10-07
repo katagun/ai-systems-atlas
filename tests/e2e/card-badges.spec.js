@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
-const { cardBadgeGlossary, cardBadges, BADGE_FAMILIES } = require("../../web/app-core.js");
+const { cardBadgeGlossary, cardBadges, BADGE_FAMILIES, FLAG_FAMILY } = require("../../web/app-core.js");
 const { searchAll } = require("./helpers/landing");
 const { chooseFinderGoal } = require("./helpers/finder");
 const { filterControl, recordView, search, searchBox } = require("./helpers/results");
@@ -326,7 +326,8 @@ test("repainting the grid dismisses a tapped tooltip", async ({ browser }) => {
 test("Taxonomy lists every badge under its family with its emblem", async ({ page }) => {
   await page.goto("/?view=taxonomy");
   const glossary = cardBadgeGlossary();
-  for (const [id, family] of Object.entries(BADGE_FAMILIES)) {
+  // Reviewed flags are not badges; Taxonomy lists them in their own group.
+  for (const [id, family] of Object.entries(BADGE_FAMILIES).filter(([key]) => key !== FLAG_FAMILY)) {
     const group = page.locator(`#taxonomy-content [data-badge-family="${id}"]`);
     await expect(group.locator("h2")).toHaveText(`Card badges · ${family.name}`);
     await expect(group.locator(".taxonomy-lede")).toHaveText(family.meaning);
@@ -336,6 +337,7 @@ test("Taxonomy lists every badge under its family with its emblem", async ({ pag
     await expect(group.locator(".taxonomy-item svg.badge-emblem")).toHaveCount(expected.length);
   }
   await expect(page.locator("#taxonomy-content [data-badge-family] .taxonomy-item")).toHaveCount(glossary.length);
+  await expect(page.locator(`#taxonomy-content [data-badge-family="${FLAG_FAMILY}"]`)).toHaveCount(0);
 });
 
 test.describe("on a touch screen", () => {
