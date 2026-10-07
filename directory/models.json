@@ -33224,6 +33224,154 @@
       "verified_at": "2026-09-18"
     },
     {
+      "id": "model-prism-ml-ternary-bonsai-2-27b",
+      "source_id": null,
+      "name": "Ternary Bonsai 2 27B",
+      "developer": "Prism ML",
+      "url": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf",
+      "description": "Prism ML's Bonsai 2 27B, a ternary-weight (1.72 bits per weight) build of Alibaba's Qwen3.8-27B that fits in about 5.95 GB, keeps the 262,144-token context and image input, and ships as Apache-2.0 GGUF files that need Prism ML's llama.cpp fork.",
+      "model_type": "multimodal_language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Ternary Bonsai 2 27B",
+        "description": "Ternary-weight build of Qwen3.8-27B for on-device reasoning, tool calling, and image understanding with a 262K-token context window.",
+        "family": "bonsai",
+        "release_date": "2026-09-17",
+        "last_updated": "2026-09-25",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [
+          {
+            "label": "Announcement",
+            "url": "https://prismml.com/news/bonsai-2-27b"
+          },
+          {
+            "label": "Whitepaper",
+            "url": "https://github.com/PrismML-Eng/Bonsai-demo/blob/main/bonsai-2-27b-whitepaper.pdf"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file is the unmodified Apache License 2.0 text, the model card front matter declares apache-2.0, and NOTICE.txt states the software is copyright 2026-present Prism ML, Inc. under Apache 2.0, discloses that it is built from Qwen3.8-27B (Copyright 2026 Alibaba Cloud, Apache 2.0), and asks for attribution only as a courtesy ('would appreciate'), not as a condition. Both grants are permissive with no use restrictions, so the release is open source with both provenances recorded. The Prism ML llama.cpp and MLX forks that the weights need are separate repositories and are not covered by this review.",
+      "license_evidence": [
+        {
+          "kind": "web_terms",
+          "license_id": "Apache-2.0",
+          "scope": "Ternary-Bonsai-2-27B GGUF weights and mmproj files under the repository Apache License 2.0 file",
+          "url": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf/blob/b072e1d3b35a0a630cece372c2127528e0994386/LICENSE",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web_terms",
+          "license_id": "Apache-2.0",
+          "scope": "Prism ML copyright notice and Qwen3.8-27B Apache-2.0 upstream provenance in the repository NOTICE file",
+          "url": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf/blob/b072e1d3b35a0a630cece372c2127528e0994386/NOTICE.txt",
+          "verified_at": "2026-10-06"
+        }
+      ],
+      "access_boundary": "This record represents the prism-ml/Ternary-Bonsai-2-27B-gguf weight release announced 17 September 2026, at Hugging Face commit b072e1d3b35a0a630cece372c2127528e0994386 (last modified 2026-09-25): the PTQ1_0 and PQ2_0 ternary GGUF packings, the F16 reference GGUF, and the optional mmproj vision files. The earlier Ternary Bonsai 27B and Bonsai 27B releases, the Bonsai 8B, 4B, and 1.7B and Bonsai Image families, the MLX 2-bit companion repository, community derivatives and quantizations, the Qwen3.8-27B base model, and every hosted route for the weights, including OpenRouter's listing, are separate boundaries.",
+      "strengths": [
+        "Developer-published Apache-2.0 weights at about 5.95 GB for a 27B-class multimodal reasoning model, with an F16 reference file and Q8_0 and BF16 vision projectors in the same repository",
+        "A whitepaper, a model card with per-benchmark tables against FP16, UD-Q4_K_XL, and IQ2_XXS baselines, and a dated known-issues page give the release unusually specific first-party documentation",
+        "Keeps the base model's 262,144-token context and hybrid-attention layout, with a stated 47 tokens per second on an Apple M5 Max and about 130 on an RTX 5090"
+      ],
+      "tradeoffs": [
+        "The ternary PTQ1_0 and PQ2_0 formats load only in Prism ML's llama.cpp fork (CUDA, Metal, CPU); the model card says stock llama.cpp cannot load them, so portability depends on a vendor-maintained runtime",
+        "The developer's pages document local runtimes only: no first-party managed API was found, and the OpenRouter listing is a third-party route outside this record",
+        "Derived from Qwen3.8-27B with the architecture unchanged, so its release identity is a compression of another lab's model; the known-issues page lists runaway-reasoning, reasoning-effort, and AVX-512 crash problems with open or in-review status"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 6,
+        "serving_reach": 5,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 7.6
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Hugging Face repository and model card for the Bonsai 2 27B GGUF release",
+          "url": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "Apache License 2.0 file at the reviewed commit",
+          "url": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf/blob/b072e1d3b35a0a630cece372c2127528e0994386/LICENSE",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "NOTICE file naming Prism ML's copyright and the Qwen3.8-27B Apache-2.0 upstream",
+          "url": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf/blob/b072e1d3b35a0a630cece372c2127528e0994386/NOTICE.txt",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "Known-issues page: runtime requirements, workarounds, and fix status",
+          "url": "https://huggingface.co/prism-ml/Ternary-Bonsai-2-27B-gguf/blob/b072e1d3b35a0a630cece372c2127528e0994386/KNOWN_ISSUES.md",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "Official Prism ML announcement of Bonsai 2 27B",
+          "url": "https://prismml.com/news/bonsai-2-27b",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "Bonsai 2 27B whitepaper in the official Bonsai-demo repository",
+          "url": "https://github.com/PrismML-Eng/Bonsai-demo/blob/main/bonsai-2-27b-whitepaper.pdf",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "Qwen3.8-27B base model card carrying the Apache-2.0 declaration",
+          "url": "https://huggingface.co/Qwen/Qwen3.8-27B",
+          "verified_at": "2026-10-06"
+        }
+      ],
+      "metadata_verified_at": "2026-10-06",
+      "verified_at": "2026-10-06"
+    },
+    {
       "id": "model-alibaba-qwen2-5-coder-0-5b",
       "source_id": "alibaba/qwen2.5-coder-0.5b",
       "name": "Qwen2.5-Coder-0.5B",

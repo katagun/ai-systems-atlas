@@ -1,14 +1,42 @@
 {
   "version": "1.0",
-  "updated_at": "2026-10-01",
+  "updated_at": "2026-10-07",
   "source": {
     "name": "OpenRouter",
     "url": "https://openrouter.ai/api/v1/models",
     "terms_url": "https://openrouter.ai/terms",
-    "fetched_at": "2026-10-01",
-    "sha256": "de6df023af9ab624a1d99336446ff12cf0e58dab319d4eee40f3fa8b65ff5dba"
+    "fetched_at": "2026-10-07",
+    "sha256": "4c938477e92f9ac53aabf0e26f1c72bc9bbcb21dd36bc2aa11ee79be23dcc183"
   },
-  "listed_count": 464,
-  "eligible_count": 355,
-  "leads": []
+  "listed_count": 465,
+  "eligible_count": 358,
+  "leads": [
+    {
+      "openrouter_id": "google/gemini-nano-banana-2.1",
+      "canonical_slug": "google/gemini-nano-banana-2.1-20261006",
+      "name": "Google: Nano Banana 2.1",
+      "hugging_face_id": null,
+      "listed_at": "2026-10-06",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07"
+    },
+    {
+      "openrouter_id": "mistralai/mistral-large-4-0",
+      "canonical_slug": "mistralai/mistral-large-4-0-20261006",
+      "name": "Mistral: Mistral Large 4",
+      "hugging_face_id": null,
+      "listed_at": "2026-10-06",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07"
+    },
+    {
+      "openrouter_id": "nvidia/switchyard",
+      "canonical_slug": "nvidia/switchyard",
+      "name": "NVIDIA: Switchyard",
+      "hugging_face_id": null,
+      "listed_at": "2026-09-21",
+      "discovered_at": "2026-10-07",
+      "last_seen_at": "2026-10-07"
+    }
+  ]
 }

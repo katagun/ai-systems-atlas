@@ -508,12 +508,6 @@
       "decided_at": "2026-10-06"
     },
     {
-      "openrouter_id": "prism-ml/ternary-bonsai-2-27b",
-      "disposition": "held",
-      "reason": "Prism ML's Hugging Face card states the model is derived from Alibaba's Qwen3.8-27B (architecture unchanged) and compressed to ternary weights in GGUF form that needs Prism's own llama.cpp fork: a downstream quantization of another developer's model. docs/MODELS.md excludes quantizations unless the artifact has its own reviewed release boundary; this one has a whitepaper and a named release, so held (not excluded) pending that decision and lab admission. Also note the lead's Hugging Face ID is the -gguf repo, one packaging of the release.",
-      "decided_at": "2026-10-06"
-    },
-    {
       "openrouter_id": "rekaai/reka-edge",
       "disposition": "held",
       "reason": "Reka's Hugging Face card documents Reka Edge (2603) as a 7B multimodal vision-language model with text output, open weights under a Reka-authored Business Source License 1.1 (production use free only under $1M revenue; commercial licence otherwise), served on the Reka API as reka-edge-2603 (created 1773154800 in the model feed). A clean fixed release, but the lab is not admitted, so held. The lead's bare ID 'reka-edge' maps to the dated 2603 snapshot; the record would be that snapshot.",

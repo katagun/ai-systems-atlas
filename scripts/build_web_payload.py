@@ -179,6 +179,42 @@ BOOT_FIELDS = {
     ),
 }
 
+# List fields a card needs only part of, keyed by each item's status. Boot carries
+# the listed keys of each item; detail carries the whole field, because the field
+# is not in BOOT_FIELDS. ADR 042: a found statement's term, domains, determination,
+# and scope paint and explain the flag emblem; the quote, link, hash, and dates
+# live in the model's detail file, because boot is already over its size budget.
+BOOT_ITEM_FIELDS = {
+    "models": {
+        "flags": {
+            "statement_found": (
+                "kind",
+                "status",
+                "tier_term",
+                "domains",
+                "determination",
+                "scope",
+            ),
+            "no_statement_found": ("kind", "status"),
+        },
+    },
+}
+
+
+def project_boot_items(
+    items: list[dict], keys_by_status: dict[str, tuple[str, ...]]
+) -> list[dict]:
+    """Each item cut to the keys boot keeps for its status; kind and status otherwise."""
+    return [
+        {
+            key: item[key]
+            for key in keys_by_status.get(item.get("status"), ("kind", "status"))
+            if key in item
+        }
+        for item in items
+    ]
+
+
 # Exactly the fields each filter in web/app-core.js searches today. A system's
 # `retrieval_modes` carries trait ids such as `semantic_vector`; the browser's
 # tokenizer splits an underscore into a space, so the indexed words are the ones
@@ -407,6 +443,9 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
         entries = []
         for record in records:
             entry = {field: record[field] for field in boot_fields if field in record}
+            for field, keys_by_status in BOOT_ITEM_FIELDS.get(collection, {}).items():
+                if field in record:
+                    entry[field] = project_boot_items(record[field], keys_by_status)
             if collection == "models":
                 # Every model row, reviewed or imported, boots with only the card
                 # metadata; the full models.dev block (capabilities, limits, links,
