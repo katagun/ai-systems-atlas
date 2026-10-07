@@ -106,7 +106,7 @@ def record_prepared_base(path: Path, sha: str, from_ref: str) -> None:
     own bundle directory, so the two routines' records never collide. That does not make
     the record unreachable by a model with shell access to this checkout, which can reach
     `ROOT` the same way it reaches everything else the repository's git process can
-    reach; see "Guard threat model" in docs/OPERATIONS.md.
+    reach; see "Guard threat model" in docs/RUNBOOKS.md.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps({"sha": sha, "from_ref": from_ref}), encoding="utf-8")
@@ -176,7 +176,7 @@ def shell(command: list[str], cwd: Path | None = None) -> tuple[int, str]:
     # were empty, so the diff- and show-based guards see the real objects a pinned SHA
     # names even when a replace ref exists. This closes the cheapest way to blind those
     # guards; it does not by itself bound a model with shell access to this checkout — see
-    # "Guard threat model" in docs/OPERATIONS.md. Harmless for the non-git commands this
+    # "Guard threat model" in docs/RUNBOOKS.md. Harmless for the non-git commands this
     # helper also runs (the `uv run` / `ruff` quality checks): they never look at it.
     env = {**os.environ, "GIT_NO_REPLACE_OBJECTS": "1"}
     finished = subprocess.run(command, capture_output=True, text=True, cwd=cwd, env=env)
@@ -228,7 +228,7 @@ def install_prompt(
     `worktree_text` refuses one: the write would land somewhere other than the file
     `prepare` later compares against. Writing the file does not register a scheduled
     task; see the candidate-triage and attention-source install steps in
-    docs/OPERATIONS.md.
+    docs/RUNBOOKS.md.
     """
     if not installed_path.is_relative_to(boundary):
         raise OSError(
