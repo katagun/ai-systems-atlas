@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-10-03",
+  "verified_at": "2026-10-06",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -3813,7 +3813,61 @@
           "immutable_url": "https://api.github.com/repos/neuml/txtai/git/blobs/ca0a1be0119a00629ad2cb8b213180fd9ad0064a"
         }
       ]
+    },
+    {
+      "project_id": "aden-hive",
+      "repo": "aden-hive/hive",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository, including the core framework runtime, the tools package whose pyproject.toml declares Apache-2.0, the frontend, and the browser extension; no nested licence file exists in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/aden-hive/hive/blob/6193aea7eb064f7536dfedcbe9ff08ad954ac53b/LICENSE",
+          "blob_sha": "f72c3e53be0426cfe5a26b6369918ac0d12a7bb5",
+          "immutable_url": "https://api.github.com/repos/aden-hive/hive/git/blobs/f72c3e53be0426cfe5a26b6369918ac0d12a7bb5"
+        }
+      ]
+    },
+    {
+      "project_id": "ruoyi-ai",
+      "repo": "ageerle/ruoyi-ai",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository-wide source code of the backend monorepo, covering the chat, workflow, system, and generator modules",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/ageerle/ruoyi-ai/blob/ca6ef96200ae36f7aa3990406841c8ccf3c60192/LICENSE",
+          "blob_sha": "6d6598ffd45efe7b66257c0144483afe59755b82",
+          "immutable_url": "https://api.github.com/repos/ageerle/ruoyi-ai/git/blobs/6d6598ffd45efe7b66257c0144483afe59755b82"
+        },
+        {
+          "license_id": "LicenseRef-Anthropic-Commercial-Terms",
+          "scope": "The three bundled Anthropic skill folders under ruoyi-admin/src/main/resources/skills (docx, pdf, and xlsx), each carrying the identical LICENSE.txt shown here, which restricts copying, derivative works, and redistribution",
+          "kind": "git_blob",
+          "path": "ruoyi-admin/src/main/resources/skills/docx/LICENSE.txt",
+          "url": "https://github.com/ageerle/ruoyi-ai/blob/ca6ef96200ae36f7aa3990406841c8ccf3c60192/ruoyi-admin/src/main/resources/skills/docx/LICENSE.txt",
+          "blob_sha": "c55ab42224874608473643de0a85736b7fec0730",
+          "immutable_url": "https://api.github.com/repos/ageerle/ruoyi-ai/git/blobs/c55ab42224874608473643de0a85736b7fec0730"
+        }
+      ]
+    },
+    {
+      "project_id": "agentuniverse",
+      "repo": "agentuniverse-ai/agentUniverse",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository, including the agentuniverse, agentuniverse_connector, agentuniverse_extension, and agentuniverse_product packages that pyproject.toml declares as Apache Software License; no nested licence file exists in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/agentuniverse-ai/agentUniverse/blob/254ecd280f54c2d2de654bbe5373e9f947d2dedf/LICENSE",
+          "blob_sha": "078d1868c1cf8ba6f4be572fd95bf04ed752ac2c",
+          "immutable_url": "https://api.github.com/repos/agentuniverse-ai/agentUniverse/git/blobs/078d1868c1cf8ba6f4be572fd95bf04ed752ac2c"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-10-03"
+  "generated_at": "2026-10-06"
 }

@@ -3,68 +3,6 @@
   "updated_at": "2026-10-03",
   "candidates": [
     {
-      "repo": "aden-hive/hive",
-      "name": "hive",
-      "url": "https://github.com/aden-hive/hive",
-      "description": "Multi-Agent Harness for Production AI",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 11040,
-      "topics": [
-        "agent",
-        "agent-framework",
-        "agent-skills",
-        "anthropic",
-        "automation",
-        "autonomous-agents",
-        "claude",
-        "harness",
-        "harness-engineering",
-        "human-in-the-loop",
-        "openai",
-        "python",
-        "self-hosted",
-        "self-improving"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE is the \"Apache License\" text, \"Version 2.0, January 2004\", with the notice \"Copyright 2024 Aden\". The README describes \"The agent harness for production workloads — state management, failure recovery, observability, and human oversight so your agents actually run.\" and says \"OpenHive is a zero-setup, model-agnostic runtime for\" colonies in which a lead Queen spawns worker clones. Listed features include \"Crash-safe park/resume, cost enforcement, and out-of-band human-in-the-loop (Sentinel)\" and \"General Compute Use and Browser Use with Native Extension\". Installation is a quickstart script that opens a browser dashboard, and the README links a \"Self-Hosting Guide\" to \"Deploy Hive on your infrastructure\". The quickstart configures a default model \"including Hive LLM and OpenRouter\", and full documentation is hosted at adenhq.com. The bundle reports no cross-collection hits, and no same-product record was found by name. Boundary question: is the Apache-licensed self-hosted colony runtime the whole operational product, or do the hosted documentation and the Hive LLM provider option describe a vendor-operated offering that this licence does not cover?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/aden-hive/hive/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "2cda9484e54c0e82b0f5ea2b5ba372f5875ed260234718c94e70b622d59748de",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "f72c3e53be0426cfe5a26b6369918ac0d12a7bb5",
-            "immutable_url": "https://api.github.com/repos/aden-hive/hive/git/blobs/f72c3e53be0426cfe5a26b6369918ac0d12a7bb5"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/aden-hive/hive/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "f44141d105e5b13d7f69bd414f00e763c52bd9a05e5da9af829ac973f572209f",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "8696ab3d312731e2644d1646f6ef978d3b8b3203",
-            "immutable_url": "https://api.github.com/repos/aden-hive/hive/git/blobs/8696ab3d312731e2644d1646f6ef978d3b8b3203"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "AFK-surf/open-agent",
       "name": "open-agent",
       "url": "https://github.com/AFK-surf/open-agent",
@@ -91,9 +29,9 @@
         "editorial_score"
       ],
       "triage": {
-        "verdict": "review_ready",
+        "verdict": "held",
         "rule": "docs/CURATION.md inclusion gate condition 3",
-        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\" text; its appendix copyright line is the unfilled template \"Copyright [yyyy] [name of copyright owner]\", and the README separately states \"© 2025 Open-Agent Contributors.\" and \"Licensed under\" Apache 2.0. The README presents the project as an \"Open-source alternative to Claude Agent SDK, ChatGPT Agents, and Manus.\" and says it \"is an open Agentic AI you can use or modify. Chat with cutting-edge models while our multi-agent system completes your tasks.\" It invites readers to \"Play with it, deploy it, enhance it, or use it as the foundation for your next dedicated agent.\" The only documented run path is copying a config file, adding API keys, and running Docker Compose; the README describes no tools, execution boundaries, or recovery behaviour, and one Discord badge points at a placeholder invite. The bundle reports no cross-collection hits, and no same-product record was found by name. Boundary question: do the repository and hosted demo provide enough implementation evidence to assess the claimed multi-agent task completion, given that the README documents only deployment?",
+        "finding": "Human review re-fetched the pinned documents and the tree. The root LICENSE is the \"Apache License\" text, \"Version 2.0, January 2004\", while packages/backend/server/LICENSE is the GNU Affero General Public License, \"Version 3, 19 November 2007\", so the licence differs by component. The README says \"Open-source alternative to Claude Agent SDK, ChatGPT Agents, and Manus.\" and lists \"Multi-agent collaboration\" as a feature. The repository is one commit, \"Update README.md\" dated 2025-10-10, and the README's acknowledgements name AFFiNE as the project it builds upon. Its copilot plugin offers single-session tools: a browser-use tool that calls the hosted api.browser-use.com service, an E2B Python sandbox, Exa search, and a task-analysis and todo tool. No code that coordinates several agents was found, so the README claim has no implementation behind it in this tree. Boundary question: is this an agent product at all, or a document workspace whose chat assistant calls hosted tools?",
         "evidence": [
           {
             "label": "LICENSE",
@@ -114,118 +52,9 @@
             "immutable_url": "https://api.github.com/repos/AFK-surf/open-agent/git/blobs/004aa8c45a3e2bcdb67f09fe982c1722669d77c6"
           }
         ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "ageerle/ruoyi-ai",
-      "name": "ruoyi-ai",
-      "url": "https://github.com/ageerle/ruoyi-ai",
-      "description": "An enterprise AI development framework for building AI agents. It provides unified management of multi-provider LLMs, secure enterprise knowledge bases with high-precision retrieval, visual workflow orchestration and multi-agent coordination. Compatible with mainstream Agent Skill standards, it enables developers to efficiently build production-gra",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 5692,
-      "topics": [
-        "agent",
-        "ai",
-        "knowledge",
-        "mcp",
-        "rag"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE reads \"The MIT License (MIT)\" with \"Copyright (c) 2026 ruoyi-ai\". The README headline is \"Enterprise-Grade AI Assistant Platform\", described as \"An out-of-the-box full-stack AI platform supporting multi-agent collaboration, Supervisor mode orchestration, and multiple decision models, with advanced RAG technology and visual workflow orchestration capabilities\". Its feature table lists \"Local RAG + Vector DB (Milvus/Weaviate/Qdrant) + Document parsing\", \"MCP protocol integration, Skills capability + Extensible tool ecosystem\", and an \"Agent framework based on Langchain4j, Supervisor mode orchestration, supports multiple decision models, can flexibly combine tools and skills\". The README splits the product across separate backend, user frontend, admin panel, drama, copilot, and mini-app repositories, and its demo table lists a \"Commercial Edition\" with WeChat login beside the open deployment. The bundle reports no cross-collection hits, and no same-product record was found by name. Boundary question: which repositories and which edition does one record cover, given that the pinned MIT licence covers only this backend repository while the README names a separate Commercial Edition?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/ageerle/ruoyi-ai/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "00fcb99d17bf06a9ce9bd901cdb5cb2cb326fc4937ee13e458071f49cc2de233",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "6d6598ffd45efe7b66257c0144483afe59755b82",
-            "immutable_url": "https://api.github.com/repos/ageerle/ruoyi-ai/git/blobs/6d6598ffd45efe7b66257c0144483afe59755b82"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/ageerle/ruoyi-ai/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "cc2627c76c644a445e08996d002572dd34b58cbaa866193ae08713d28f8024d9",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "a1cff71b9b52646997f808cb7ab466aeb2a6c538",
-            "immutable_url": "https://api.github.com/repos/ageerle/ruoyi-ai/git/blobs/a1cff71b9b52646997f808cb7ab466aeb2a6c538"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
-      "repo": "agentuniverse-ai/agentUniverse",
-      "name": "agentUniverse",
-      "url": "https://github.com/agentuniverse-ai/agentUniverse",
-      "description": "agentUniverse is a LLM multi-agent framework that allows developers to easily build multi-agent applications. ",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "multi_agent_orchestrator",
-      "classification_confidence": 0.8,
-      "github_detected_license": "Apache-2.0",
-      "stars": 2354,
-      "topics": [
-        "agent",
-        "ai",
-        "ai-agents",
-        "autonomous",
-        "awesome",
-        "awesome-list",
-        "llm",
-        "multi-agent",
-        "python"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-09-13",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/CURATION.md inclusion gate",
-        "finding": "The LICENSE is the \"Apache License\" \"Version 2.0, January 2004\" text with \"Copyright 2024 Alipay\". The README states \"agentUniverse is a multi-agent framework based on large language models.\" and \"It provides flexible and easily extensible capabilities for building individual agents.\" It describes a PEER pattern that uses \"agents with different responsibilities—Plan, Execute, Express, and Review—to break down complex problems into manageable steps\", a DOE pattern, MCP server use and publishing, and OpenTelemetry-based observability. It installs with pip. Separately, \"agentUniverse provides a visual canvas platform for creating agentic workflow.\", installed as another package and \"jointly developed by\" difizen, and the README names a commercial assistant for financial professionals built on the framework. The bundle reports no cross-collection hits; its awesome-list class signal is not borne out, since the README is a framework README rather than a curated list. No same-product record was found by name. Boundary question: does the record cover only the pip-installed framework, leaving the jointly developed visual workflow platform and the commercial assistant outside its boundary?",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/agentuniverse-ai/agentUniverse/blob/master/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "735ada74b12d398cdca9d3fe8e1a9e142e41c156334454d00d023df3f18178f7",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "078d1868c1cf8ba6f4be572fd95bf04ed752ac2c",
-            "immutable_url": "https://api.github.com/repos/agentuniverse-ai/agentUniverse/git/blobs/078d1868c1cf8ba6f4be572fd95bf04ed752ac2c"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/agentuniverse-ai/agentUniverse/blob/master/README.md",
-            "kind": "git_blob",
-            "content_sha256": "cec937cc559ca2877aa49670a3f3a8398661a0f15f42fc568fe50ddd2ec123a0",
-            "fetched_at": "2026-09-15",
-            "blob_sha": "5fff7f4e2bbab8306b1ca9c84999072031d6f3ae",
-            "immutable_url": "https://api.github.com/repos/agentuniverse-ai/agentUniverse/git/blobs/5fff7f4e2bbab8306b1ca9c84999072031d6f3ae"
-          }
-        ],
-        "proposed_at": "2026-09-15",
-        "proposer": "candidate-triage"
+        "proposed_at": "2026-10-06",
+        "proposer": "human",
+        "held_by": "Held after human review on 2026-10-06 until two conditions are met: the repository shows commits after 2025-10-10 (it is a single squashed snapshot of an AFFiNE workspace fork), and its source implements the README's \"multi-agent framework\" claim so a reviewer can name the one outcome the product owns. Reopen when both hold; BACKLOG.md \"Now\" item 1 is the batch that carried it."
       }
     },
     {
