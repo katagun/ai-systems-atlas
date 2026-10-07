@@ -21477,6 +21477,1161 @@
       "github_detected_license": "Apache-2.0"
     },
     {
+      "id": "aden-hive",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Hive",
+      "repo": "aden-hive/hive",
+      "url": "https://github.com/aden-hive/hive",
+      "description": "Self-hosted Python runtime for colonies of agents in which a persistent Queen agent spawns worker clones of the same loop, coordinating through a shared SQLite tracker with crash-safe park and resume.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [
+        "stateful_agent_runtime"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "mistral",
+        "deepseek",
+        "moonshot_ai",
+        "openrouter",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "structured_query",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "Per-colony directory holding a SQLite tracker ledger, a file-backed task plan, session cursors, and scoped Markdown memory files under ~/.hive",
+      "deployment": [
+        "self_hosted",
+        "local_cli",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "persistent_state",
+        "workflows",
+        "mcp",
+        "browser_control",
+        "shell_execution"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 11090,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the open-source Hive repository: the core framework runtime, the aden_tools MCP tool package, the web dashboard, and the browser extension. The optional Hive LLM router at llm.open-hive.com and the hosted documentation at adenhq.com are vendor-operated services outside the Apache-2.0 licence reviewed here; the runtime also works with other model providers.",
+      "score": {
+        "task_reliability": 6.6,
+        "tool_use": 8.4,
+        "autonomy": 8.0,
+        "human_control": 7.4,
+        "observability_recovery": 7.4,
+        "data_sovereignty": 7.4,
+        "interoperability": 7.8,
+        "maturity": 5.8,
+        "overall": 7.32
+      },
+      "strengths": [
+        "One loop primitive serves as both the lead agent and every worker clone, so crash-safe park and resume, doom-loop detection, and judge-gated termination are inherited by every agent rather than wired per graph",
+        "A shared SQLite tracker plus a file-backed task plan gives the colony queryable state that survives a crash, and the Queen validates progress with SELECT queries rather than in-memory counters",
+        "Human escalation is out-of-band through an account-bound Slack or Telegram channel, so any agent can park for a person without a node in a graph"
+      ],
+      "weaknesses": [
+        "The core package is at version 0.7.1 and the repository was created in January 2026, so interfaces and the colony model are still moving",
+        "The cost-guard pipeline stage reviewed rejects a request only when an earlier stage supplies an estimated cost, so the README's budget-enforcement claim was not confirmed as an automatic spend cap",
+        "The quickstart offers the vendor's own Hive LLM router as a default provider choice, a hosted dependency that the repository licence does not cover"
+      ],
+      "why_it_matters": "A young but unusually complete open-source take on long-running multi-agent work, replacing hand-wired agent graphs with one self-cloning loop and durable shared state.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "ruoyi-ai",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "RuoYi AI",
+      "repo": "ageerle/ruoyi-ai",
+      "url": "https://github.com/ageerle/ruoyi-ai",
+      "description": "Self-hosted Spring Boot platform for building and running agent applications, with a supervisor agent over specialist sub-agents built on a Java agent library, a visual workflow designer, MCP tools, knowledge-base retrieval, and a containerised coding harness with approvals.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "deepseek",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "file_import",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "MySQL tables for chat sessions, agents, workflows, and knowledge bases with a vector database (Milvus, Weaviate, or Qdrant) for embeddings",
+      "deployment": [
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "container",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "workflows",
+        "mcp",
+        "persistent_state",
+        "code_editing",
+        "shell_execution"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "partial",
+      "licenses": [
+        "MIT",
+        "LicenseRef-Anthropic-Commercial-Terms"
+      ],
+      "source_model": "open_core",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 5735,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the backend monorepo only. The README separates the user frontend, admin panel, copilot, drama, and mini-app repositories and a hosted commercial edition, none of which this record reviews. The same codebase also ships a short-drama service and a code generator that are not part of the agent boundary.",
+      "score": {
+        "task_reliability": 5.6,
+        "tool_use": 7.0,
+        "autonomy": 6.4,
+        "human_control": 6.8,
+        "observability_recovery": 6.8,
+        "data_sovereignty": 7.4,
+        "interoperability": 7.2,
+        "maturity": 6.2,
+        "overall": 6.58
+      },
+      "strengths": [
+        "A coding harness ships separate approval, plan, journal, and recovery packages and a Docker command runtime, and source comments route coding skills through a policy engine and per-call approval",
+        "The agent chat mode builds a supervisor over specialist sub-agents with a Java agent library for search, SQL, charts, and skills, and a plain model-chat mode bypasses it, so the boundary between chat and agent behaviour is explicit",
+        "Self-hosted with published container images, a visual workflow designer, MCP tool support, and a pluggable vector store"
+      ],
+      "weaknesses": [
+        "The product sprawls across chat, workflows, knowledge bases, a coding harness, a short-drama generator, and a code generator, so no single agent loop is the documented centre",
+        "The repository bundles three Anthropic skill folders under terms that forbid copying, derivative works, and redistribution, which the MIT licence at the root does not override",
+        "The supervisor and its sub-agents are assembled inline inside one large chat facade class, which makes the agent path harder to audit, and the README lists only model, email, and manual-review workflow nodes"
+      ],
+      "why_it_matters": "A widely starred Chinese-ecosystem enterprise platform that pairs a conventional chat and knowledge stack with real multi-agent and guarded coding-agent code, useful as a Java-based counterpart to the Python builders.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "agentuniverse",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "agentUniverse",
+      "repo": "agentuniverse-ai/agentUniverse",
+      "url": "https://github.com/agentuniverse-ai/agentUniverse",
+      "description": "Python multi-agent framework from Ant Group whose core is a set of collaboration-pattern components, notably the Plan, Execute, Express, Review loop with configurable retries, plus tools, MCP, knowledge, memory, and a visual workflow platform.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "deepseek",
+        "moonshot_ai",
+        "local_runtime"
+      ],
+      "architectures": [
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "Application-defined YAML component configuration plus pluggable memory storage (in-memory, SQL, Chroma, or Qdrant) and knowledge stores",
+      "deployment": [
+        "library",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "workflows",
+        "persistent_state",
+        "mcp"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 2375,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the agentUniverse framework package and its bundled connector, extension, and product-platform packages. The visual workflow canvas is co-developed with the difizen project, and the Zhi Xiao Zhu financial assistant the README advertises is a separate commercial product built on the framework.",
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 7.2,
+        "autonomy": 7.0,
+        "human_control": 5.8,
+        "observability_recovery": 6.6,
+        "data_sovereignty": 8.0,
+        "interoperability": 7.6,
+        "maturity": 6.0,
+        "overall": 6.65
+      },
+      "strengths": [
+        "The Plan, Execute, Express, Review planner is implemented as a retry loop that can jump back to a named step, so iterative improvement on reviewer feedback is real code rather than a diagram",
+        "Component-per-YAML design with swappable planners, models, tools, knowledge, and memory storage lets patterns be reused as templates",
+        "Model, MCP, and OpenTelemetry-based tracing support are all present in the source tree, with local runtimes such as Ollama and vLLM as backends"
+      ],
+      "weaknesses": [
+        "The package is at version 0.0.19 and pins an old LangChain release, so it inherits a dependency generation the wider ecosystem has moved past",
+        "The planners and tools reviewed contain no human-approval or interruption step, so oversight of what an agent does rests on the application built on top",
+        "Most documented patterns and sample apps come from Ant Group's financial and legal examples, with limited independent adoption evidence"
+      ],
+      "why_it_matters": "One of the few enterprise-origin multi-agent frameworks that ships named collaboration patterns rather than only primitives, from the group behind Alipay's financial assistant.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "munder-difflin",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Munder Difflin",
+      "repo": "chaitanyagiri/munder-difflin",
+      "url": "https://github.com/chaitanyagiri/munder-difflin",
+      "description": "Desktop harness that runs terminal coding-agent CLIs as a coordinated office: each agent is a real pseudo-terminal process with markdown memory and a mailbox, an orchestrating agent routes messages between them through a git-backed hive, and a circuit breaker steers, constrains, then stops runaway agents.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "x_ai",
+        "moonshot_ai"
+      ],
+      "architectures": [
+        "plain_files",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "A local git repository of plain files holding each agent's memory, inbox and outbox, with a derived semantic recall index over the markdown memory",
+      "deployment": [
+        "desktop"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "persistent_state",
+        "shell_execution",
+        "code_editing"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 8526,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the open-source desktop application in the repository, which GitHub now serves under HarnessMD/munder-difflin and redirects from the chaitanyagiri name this record keeps. The README advertises a paid Pro tier, including a meeting-transcription feature, whose code was not found in the source tree, so those features and their terms are not reviewed here. The bundled pixel-art tilesets are licensed separately from the MIT source.",
+      "score": {
+        "task_reliability": 5.8,
+        "tool_use": 6.6,
+        "autonomy": 7.4,
+        "human_control": 7.2,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 7.8,
+        "interoperability": 7.2,
+        "maturity": 5.2,
+        "overall": 6.69
+      },
+      "strengths": [
+        "Each agent is the real vendor CLI in its own pseudo-terminal rather than a re-implementation, so the harness adds coordination without replacing what the CLI does",
+        "A documented circuit-breaker policy escalates from steering to constraining to stopping, with the hard stop off by default, because the wrapped CLI exposes no dollar ceiling of its own",
+        "Coordination state is plain files in a local git repository with a single committer, so a person can read, edit, and diff what the agents said to each other"
+      ],
+      "weaknesses": [
+        "The project is pre-release at version 0.5.3 and was created in May 2026, so interfaces and storage layouts are still changing",
+        "Human approvals are left to each wrapped CLI's own session, because the hive has no separate approval queue, so oversight differs by provider",
+        "A paid Pro tier is advertised in the README while the code for its features is absent from the repository, which leaves part of the product outside the reviewed licence"
+      ],
+      "why_it_matters": "A fast-growing open-source take on running a team of the coding CLIs people already pay for, with real message routing, shared memory, and runaway-cost guardrails rather than a dashboard over independent sessions.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "fastclaw",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "FastClaw",
+      "repo": "fastclaw-ai/fastclaw",
+      "url": "https://github.com/fastclaw-ai/fastclaw",
+      "description": "Go single-binary runtime that creates and runs many persistent agents, each with its own identity files, long-term memory, skills, scheduler, chat-channel bindings, and optional Docker or E2B sandbox, served through a dashboard and an OpenAI-compatible and ACP API.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "deepseek",
+        "mistral",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation",
+        "self_editing"
+      ],
+      "canonical_data": "A SQLite database, or Postgres, holding agent records, SOUL.md, IDENTITY.md and MEMORY.md files, sessions, users and API keys, plus skill folders on disk",
+      "deployment": [
+        "self_hosted",
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "persistent_state",
+        "shell_execution",
+        "code_editing",
+        "mcp",
+        "multi_agent"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 1354,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the open FastClaw runtime and its bundled dashboard. The README names ChatClaw as an application built on top of it, and a hosted multi-tenant service is reserved to the licensor, so neither is reviewed here. Two bundled skill-creator folders carry their own Apache-2.0 licence file and are not part of the licence recorded here.",
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 7.4,
+        "autonomy": 7.0,
+        "human_control": 6.8,
+        "observability_recovery": 6.2,
+        "data_sovereignty": 7.4,
+        "interoperability": 7.8,
+        "maturity": 5.2,
+        "overall": 6.66
+      },
+      "strengths": [
+        "Identity, memory, sessions, and configuration live in a database the operator controls, and the identity and memory files are editable from the dashboard",
+        "The sandbox is a hard boundary on hosted deploys and an opt-in tool on self-hosted installs, with Docker and E2B backends and workspace sync after each tool call",
+        "An OpenAI-compatible endpoint, Agent Communication Protocol routes, MCP, and a JSON-RPC plugin system make it embeddable in another product"
+      ],
+      "weaknesses": [
+        "The licence is Apache 2.0 with added conditions that forbid operating a multi-tenant service for unrelated organizations and removing the interface branding, so it is source-available rather than open source",
+        "The repository was created in March 2026 and the changelog already records breaking changes, so operators should expect upgrade work",
+        "On a self-hosted install the host shell is the default and the model opts into the sandbox per call, so isolation is not the default"
+      ],
+      "why_it_matters": "A compact Go runtime for operators who want many always-on, channel-connected agents with durable identity and memory without adopting a Python agent stack.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "metagpt",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "MetaGPT",
+      "repo": "FoundationAgents/MetaGPT",
+      "url": "https://github.com/FoundationAgents/MetaGPT",
+      "description": "Python multi-agent framework that stages a software company of product-manager, architect, project-manager, engineer, and QA roles exchanging structured documents under encoded SOPs, with a cost budget, plus a Data Interpreter role for data-analysis tasks.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "openrouter",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "A generated project repository of documents and code in a local workspace directory, plus in-process role memory and an optional document store",
+      "deployment": [
+        "library",
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "workflows",
+        "code_editing",
+        "shell_execution",
+        "research"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 70761,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the MetaGPT framework in this repository. The MGX hosted natural-language programming product the README advertises is a separate commercial service and is not reviewed here. One vendored mineflayer-collectblock folder under the Minecraft environment carries its own MIT licence file.",
+      "score": {
+        "task_reliability": 5.8,
+        "tool_use": 6.4,
+        "autonomy": 7.4,
+        "human_control": 5.6,
+        "observability_recovery": 5.8,
+        "data_sovereignty": 8.0,
+        "interoperability": 6.8,
+        "maturity": 7.2,
+        "overall": 6.46
+      },
+      "strengths": [
+        "Role, action, and environment classes implement the software-company SOP as code: a team runs for a bounded number of rounds, stops when every role is idle, and writes a project repository",
+        "A team-level investment budget feeds a cost manager with a maximum, giving a concrete spend limit rather than an advisory one",
+        "One of the most-starred multi-agent frameworks in the catalog, with a large unit-test tree and a published research lineage including AFlow and SPO"
+      ],
+      "weaknesses": [
+        "The last push to the default branch was in January 2026, and the README's newest news item predates it, so the open framework has been quiet while the company's attention moved to the MGX product",
+        "No Model Context Protocol support was found in the package, so tool integration relies on the framework's own action classes",
+        "Human involvement is by substituting a human provider for a role, and no approval gate in front of the run-code action was found in the roles reviewed"
+      ],
+      "why_it_matters": "The framework that popularised role-based software-company agents, still the reference point for SOP-driven multi-agent coordination and the baseline many newer orchestrators are compared against.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "phantom",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Phantom",
+      "repo": "ghostwright/phantom",
+      "url": "https://github.com/ghostwright/phantom",
+      "description": "Self-hosted always-on agent built on the Claude Agent SDK that runs on its own machine with Slack, web, email, and webhook channels, three-tier vector memory, a scheduler, runtime-created MCP tools, and a session-by-session self-evolution pipeline whose config changes pass judge gates and are versioned.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "z_ai",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "vector_index",
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "semantic_vector"
+      ],
+      "capture_modes": [
+        "conversation",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation",
+        "versioned",
+        "self_editing"
+      ],
+      "canonical_data": "SQLite for state and schedules, a Qdrant vector store for episodic, semantic and procedural memory, and versioned evolved configuration files",
+      "deployment": [
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "container",
+        "host"
+      ],
+      "agent_capabilities": [
+        "persistent_state",
+        "mcp",
+        "shell_execution",
+        "code_editing"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 1480,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the open-source Phantom runtime in this repository. Its agent loop is the Anthropic Claude Agent SDK, a separately licensed dependency that this licence does not cover; a second runtime shim can be selected by environment variable. The free managed Phantom and the wider Ghostwright products the README lists are vendor-operated services and are not reviewed here.",
+      "score": {
+        "task_reliability": 6.2,
+        "tool_use": 7.8,
+        "autonomy": 8.4,
+        "human_control": 5.6,
+        "observability_recovery": 6.8,
+        "data_sovereignty": 7.2,
+        "interoperability": 7.6,
+        "maturity": 6.0,
+        "overall": 6.83
+      },
+      "strengths": [
+        "Self-modification is gated: proposed config changes pass five validation gates with cross-model judges, a minority veto, stored versions, and rollback, which is more control than most self-improving agents describe",
+        "Memory is a real subsystem with episodic, semantic, and procedural stores over Qdrant plus consolidation and ranking code, and runtime-created MCP tools persist across restarts",
+        "Secrets are collected through encrypted forms rather than plain config, and the same instance is an MCP server other clients and other instances can call"
+      ],
+      "weaknesses": [
+        "The README advertises an agent that builds infrastructure without asking permission, so autonomy is the headline default rather than an approval-gated mode",
+        "The agent loop is the Anthropic Claude Agent SDK, so the open code sits on a separately licensed, provider-owned runtime, and the other backends reach it through Anthropic-compatible endpoints",
+        "The headline examples are the maintainers' own production instances with no independent verification, and the repository was created in March 2026"
+      ],
+      "why_it_matters": "A concrete, inspectable attempt at an always-on, self-improving agent with its own machine, whose evolution pipeline treats unattended self-modification as a safety problem to gate.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "holaos",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "holaOS",
+      "repo": "holaboss-ai/holaOS",
+      "url": "https://github.com/holaboss-ai/holaOS",
+      "description": "Electron desktop workspace and local runtime that runs Claude Code, Codex, or its own agent side by side with embedded apps, a signed-in browser, chat-channel and integration connectors, MCP, skills, scheduled automations, and one shared plain-file memory.",
+      "primary_role": "general_work_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "moonshot_ai",
+        "z_ai",
+        "openai_compatible"
+      ],
+      "architectures": [
+        "relational_db",
+        "plain_files",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "human_curated",
+        "consolidation"
+      ],
+      "canonical_data": "A local data database holding sessions and runtime state, plus workspace files and a Markdown memory tree with embeddings kept on the user's disk",
+      "deployment": [
+        "desktop",
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "persistent_state",
+        "mcp",
+        "browser_control",
+        "shell_execution",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 11449,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the open-source desktop app and runtime in this repository. The built-in default model account, the HolaHub recipe platform, and the enterprise tier with SSO and audit logs the README describes are vendor-operated and not reviewed here, and the integration connectors run through a third-party broker. The same shared memory could support a memory reading, but the documented outcome is delegated work across apps, so it is recorded as a work agent. Claude Code and Codex remain separately licensed host agents.",
+      "score": {
+        "task_reliability": 5.8,
+        "tool_use": 8.0,
+        "autonomy": 7.0,
+        "human_control": 7.4,
+        "observability_recovery": 6.4,
+        "data_sovereignty": 7.4,
+        "interoperability": 8.0,
+        "maturity": 5.2,
+        "overall": 6.84
+      },
+      "strengths": [
+        "Hosts three agents, Claude Code, Codex, and its own, over one runtime that shares memory, tools, skills, and apps, so a person can switch agents without rebuilding the setup",
+        "Memory is stored locally as plain files a person can read, edit, and delete, backed by a local state store, with embeddings for recall",
+        "A large TypeScript runtime with a unit-test tree beside each service, covering the API server, channel gateway, harness host, and cron worker"
+      ],
+      "weaknesses": [
+        "The licence is Apache 2.0 with added conditions that forbid offering it as a hosted service or embedding it in a product sold to third parties and protect the interface branding, so it is source-available rather than open source",
+        "The licence defines the protected frontend as a desktop directory that does not exist at that path in the tree, where the app lives under apps/desktop, leaving the scope of the branding condition ambiguous",
+        "The repository was created in March 2026, and the zero-setup path routes inference through the vendor's own account, with integrations run through a third-party broker, so the local-first claim depends on the bring-your-own-keys route"
+      ],
+      "why_it_matters": "A heavily starred attempt to make the agent a workspace rather than a chat, hosting the incumbent coding agents alongside embedded apps and one user-owned memory.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "artemis",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "ARTEMIS",
+      "repo": "google/artemis",
+      "url": "https://github.com/google/artemis",
+      "description": "Python agent that turns natural-language test and automation requests into actions on a real Android phone or emulator over ADB, with a fast single-model loop and a planner, operator, and verifier graph, exposed as a CLI, web console, MCP server, and SDK.",
+      "primary_role": "browser_computer_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "google",
+        "openai",
+        "anthropic",
+        "openrouter",
+        "local_runtime"
+      ],
+      "architectures": [
+        "event_log",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "screen",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "Per-task execution traces, screenshots, replay recordings and compressed step-history chunks written locally, plus a Markdown task plan in the planning profile",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "mcp",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 11062,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the Android automation agent and its MCP server in this repository, which the README positions for mobile testing as well as everyday tasks. The third_party folder holds portions of Minitap's mobile-use project under its own Apache-2.0 licence file. The advertised AndroidWorld result is the maintainers' own measurement and is not reviewed here.",
+      "score": {
+        "task_reliability": 6.8,
+        "tool_use": 7.2,
+        "autonomy": 8.0,
+        "human_control": 6.6,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 7.2,
+        "interoperability": 7.8,
+        "maturity": 5.0,
+        "overall": 7.02
+      },
+      "strengths": [
+        "Two execution profiles with different failure behaviour: a fast reactive loop that compresses history instead of capping turns, and a planner, operator, and verifier graph that checks a target against the live screen before acting and returns blocked actions for recovery",
+        "Telemetry, replay recording, and structured final reports make a run inspectable after the fact, and the on-device helper can be removed or declined",
+        "Reachable from coding assistants through an MCP server and from test suites through a typed Python SDK, so one agent serves interactive and CI use"
+      ],
+      "weaknesses": [
+        "The repository was created in August 2026 and its headline 99 percent AndroidWorld figure is a self-reported result with no independent reproduction",
+        "It installs an accessibility service on the target phone, a broad permission that the README discloses and lets the operator opt out of",
+        "Its reach is limited to Android devices, since iOS support is a roadmap item, and the traces and plans it keeps are run outputs rather than content a person edits to steer later runs"
+      ],
+      "why_it_matters": "A Google-hosted mobile computer-use agent that pairs an accessibility-tree plus vision grounding approach with a testing-oriented MCP surface, giving the thin browser and computer-use role a rare Android entry.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "gptme",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "gptme",
+      "repo": "gptme/gptme",
+      "url": "https://github.com/gptme/gptme",
+      "description": "Terminal-first agent that runs shell, Python, file-patching, browser, vision, and desktop tools locally against many model providers, with confirmation prompts, plugins, skills, lessons, hooks, a shared Markdown memory, MCP and ACP integration, and scaffolding for scheduled persistent agents.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [
+        "general_work_agent"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "x_ai",
+        "deepseek",
+        "openrouter",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "supersession",
+        "self_editing"
+      ],
+      "canonical_data": "Local conversation logs and a Markdown memory store shared across agent harnesses, plus git-tracked workspace files for scaffolded persistent agents",
+      "deployment": [
+        "local_cli",
+        "desktop",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "ide",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "multi_agent",
+        "persistent_state",
+        "mcp"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 4444,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the gptme agent, its server and web UI, desktop shell, and ACP package in this repository. The managed gptme.ai cloud service the README lists as in progress, the community gptme-contrib plugins, and the reference autonomous agents it links are separate and not reviewed here. The cross-harness memory store is one feature of the agent and does not make this a memory product.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 8.6,
+        "autonomy": 7.6,
+        "human_control": 8.0,
+        "observability_recovery": 7.2,
+        "data_sovereignty": 9.0,
+        "interoperability": 8.6,
+        "maturity": 8.0,
+        "overall": 7.9
+      },
+      "strengths": [
+        "A very large tool surface in source form, with shell, patching, browser, computer-use, sub-agent, tmux, MCP, and memory tools, plus per-call confirmation, a circuit breaker, checkpoints, and a sandbox module",
+        "Works both as an MCP client and an MCP server and as an ACP coding agent inside Zed and JetBrains, so other tools can embed it",
+        "One of the longest-running agent CLIs, with a large test tree, a published evaluation suite, and plain-file memory, lessons, and configuration a person can edit"
+      ],
+      "weaknesses": [
+        "Breadth is the cost: the same package spans a terminal agent, a server, a web UI, a desktop shell, scheduled-agent scaffolding, and an eval harness, so the boundary of what is maintained to the same standard is wide",
+        "The persistent autonomous-agent and multi-agent coordination story is mostly scaffolding and reference agents hosted in other repositories, which this review did not read",
+        "Pre-1.0 versioning at 0.34.0 after three years signals that interfaces still change"
+      ],
+      "why_it_matters": "An early, still-active, provider-agnostic terminal agent whose local-first design and plain-file memory make it a transparent alternative to the vendor-owned coding CLIs.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "deepcode",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "DeepCode",
+      "repo": "HKUDS/DeepCode",
+      "url": "https://github.com/HKUDS/DeepCode",
+      "description": "Local coding agent from the HKU Data Intelligence Lab with terminal, desktop, and web clients over one shared background service, goal-driven loops that verify against tests and builds, durable sessions, per-tool permissions with a command sandbox, parallel agents in isolated worktrees, and the original Paper2Code workflow.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "openrouter",
+        "openai",
+        "anthropic",
+        "deepseek",
+        "google",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "Locally stored sessions linked to their project, holding tool calls, permission decisions, goals, model configuration and verification evidence, plus project and personal skill and memory files",
+      "deployment": [
+        "local_cli",
+        "desktop"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT",
+        "Apache-2.0"
+      ],
+      "source_model": "mixed_open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 16681,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers the DeepCode coding agent as it stands in this repository, whose README now leads with an engineering agent and keeps Paper2Code, its original paper-to-code direction, as a dedicated workflow. Older descriptions and the arXiv paper describe the earlier multi-agent Paper2Code architecture. The bundled pinned skills carry their own Apache-2.0 licence files while the application is MIT.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 7.6,
+        "autonomy": 8.0,
+        "human_control": 8.4,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 8.6,
+        "interoperability": 7.8,
+        "maturity": 6.4,
+        "overall": 7.69
+      },
+      "strengths": [
+        "Execution is a stated product boundary: every project needs explicit trust, a tool call resumes exactly where an approval suspended it, and crash recovery settles incomplete turns without replaying side effects",
+        "Completion is judged against evidence the task selects, such as tests, builds, diagnostics, and diffs, and a failed check feeds the next repair rather than ending as success",
+        "Clients share one local service and session store, so a goal started in the terminal can be continued in the desktop app after a restart or a model switch"
+      ],
+      "weaknesses": [
+        "The README has been rewritten around a new engineering-agent architecture while the arXiv paper and older documentation describe a different Paper2Code design, so published results do not describe the current code",
+        "The Full access mode removes approval and filesystem sandbox boundaries once a person confirms it for a session",
+        "Much of the product is new relative to the repository's age, with the verification and loop claims resting on the maintainers' own documentation and tests"
+      ],
+      "why_it_matters": "A fast-growing academic-lab project that has been rebuilt from a paper-reproduction pipeline into a permissioned, verifying coding agent, giving a local-first option with an explicit evidence-based definition of done.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "openharness",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "OpenHarness",
+      "repo": "HKUDS/OpenHarness",
+      "url": "https://github.com/HKUDS/OpenHarness",
+      "description": "Open Python agent harness whose query, stream, tool-call loop sits behind permission modes, hooks, MCP, skills, memory, subagent coordination, and a Docker sandbox, with a terminal UI and ohmo, a personal agent that runs from chat channels with its own workspace, memory, and gateway.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [
+        "coding_agent"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "deepseek",
+        "moonshot_ai",
+        "z_ai",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "Markdown memory directories, saved sessions, and a per-user ohmo workspace on local disk, with settings in layered JSON files",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 15918,
+      "stars_verified_at": "2026-10-06",
+      "historical_stars": null,
+      "current_repo_note": "Covers both the OpenHarness harness and the ohmo personal agent built on it, which live in one repository and one package. The README's subscription bridges read the Claude Code and Codex credential files on the same machine, so use through them is governed by those vendors' own terms, which are not reviewed here.",
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 8.0,
+        "autonomy": 7.4,
+        "human_control": 7.8,
+        "observability_recovery": 6.2,
+        "data_sovereignty": 8.0,
+        "interoperability": 7.8,
+        "maturity": 5.0,
+        "overall": 6.98
+      },
+      "strengths": [
+        "A readable, documented implementation of the whole harness pattern, with the agent loop, permission modes, path and command rules, hooks, and a Docker sandbox as separate modules rather than one opaque binary",
+        "ohmo adds a real persistent-agent layer: a gateway with channel adapters for ten chat, messaging, and email services, a workspace, and session and memory storage",
+        "Edits preview a diff before they apply and a person can approve once or for the rest of the session"
+      ],
+      "weaknesses": [
+        "The package is at version 0.1.9, was created in April 2026, and its last push was in June 2026, so the harness is young and has been quiet for months",
+        "The tool names, slash commands, and CLAUDE.md handling mirror another vendor's agent CLI, so behaviour is shaped by that tool's conventions and the project positions itself for study and extension",
+        "Its easiest setup runs through the user's existing Claude Code or Codex subscription credentials, which ties day-to-day use to those vendors' terms"
+      ],
+      "why_it_matters": "A heavily starred open implementation that makes the structure of a production agent harness inspectable and extendable, with a persistent chat-channel agent built on the same core.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "github_detected_license": "MIT"
+    },
+    {
       "system_family": "agent_system",
       "score_profile": "agent",
       "repo": "paperclipai/paperclip",
@@ -21488,11 +22643,11 @@
       "verified_at": "2026-10-06",
       "current_repo_note": null,
       "historical_stars": null,
-      "stars": 98263,
+      "stars": 98274,
       "stars_verified_at": "2026-10-07",
-      "pushed_at": "2026-10-07T12:56:14Z",
-      "forks": 16611,
-      "open_issues": 6209,
+      "pushed_at": "2026-10-07T13:32:08Z",
+      "forks": 16614,
+      "open_issues": 6210,
       "metadata_verified_at": "2026-10-07",
       "github_detected_license": "MIT",
       "id": "paperclip",
@@ -21589,11 +22744,11 @@
       "verified_at": "2026-10-06",
       "current_repo_note": null,
       "historical_stars": null,
-      "stars": 5635,
+      "stars": 5644,
       "stars_verified_at": "2026-10-07",
       "pushed_at": "2026-10-07T12:06:55Z",
       "forks": 413,
-      "open_issues": 122,
+      "open_issues": 123,
       "metadata_verified_at": "2026-10-07",
       "github_detected_license": "Apache-2.0",
       "id": "openrig",
@@ -21688,9 +22843,9 @@
       "historical_stars": null,
       "stars": 12858,
       "stars_verified_at": "2026-10-07",
-      "pushed_at": "2026-10-07T12:48:43Z",
-      "forks": 1772,
-      "open_issues": 773,
+      "pushed_at": "2026-10-07T13:36:09Z",
+      "forks": 1773,
+      "open_issues": 777,
       "metadata_verified_at": "2026-10-07",
       "github_detected_license": "Apache-2.0",
       "id": "agent-orchestrator",
