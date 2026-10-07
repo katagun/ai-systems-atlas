@@ -4131,7 +4131,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "ASL-3",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "safeguard_standard",
+          "scope": "deployment",
+          "statement": "As with many previous models, we are treating Mythos 5 as CB-1 and applying ASL-3 protections to Fable 5, including blocking classifiers against CB-1 misuse.",
+          "url": "https://www.anthropic.com/claude-fable-5-mythos-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-fable-5-1",
@@ -4240,7 +4257,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "deployment",
+          "statement": "On chemical and biological risks, we judge that the model has CB-1 capabilities—meaning it could meaningfully help someone with a basic technical background synthesize a known weapon—but falls short of the CB-2 threshold for functionally replacing rare expert talent, which is the limiting factor in developing novel weapons. We hold this judgment with some uncertainty, and are deploying Claude Fable 5.1 with the same biological safeguards we deployed with Claude Fable 5.",
+          "url": "https://www.anthropic.com/claude-fable-5-1-mythos-5-1-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "low"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-haiku-4-5",
@@ -4343,7 +4377,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "ASL-2",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "safeguard_standard",
+          "scope": "weights",
+          "statement": "Our safety testing also showed that Claude Haiku 4.5 poses only limited risks in terms of the production of chemical, biological, radiological, and nuclear (CBRN) weapons. For that reason, we’ve released it under the AI Safety Level 2 (ASL-2) standard—compared to the more restrictive ASL-3 for Sonnet 4.5 and Opus 4.1.",
+          "url": "https://www.anthropic.com/news/claude-haiku-4-5",
+          "content_sha256": "a0c708ac879bc9a51a52d72cb37a310ffbbf582ec33c4074b5ca363028e2f139",
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-mythos-5",
@@ -4697,7 +4748,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "ASL-3",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "safeguard_standard",
+          "scope": "weights",
+          "statement": "In particular, Claude Opus 4.5 outperformed Claude Opus 4.1 and Claude Sonnet 4.5 models on both long-form virology tasks, as well as on several subtasks of the DNA synthesis screening evaluation, while achieving comparable performance on all other evaluations. As a result, we determined ASL-3 safeguards were appropriate.",
+          "url": "https://www.anthropic.com/claude-opus-4-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-opus-4-6",
@@ -4932,7 +5000,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "Autonomy threat model 1",
+          "domains": [
+            "autonomy"
+          ],
+          "determination": "determined",
+          "scope": "weights",
+          "statement": "Autonomy threat model 1 is applicable to Claude Opus 4.7, as it is to some of our previous AI models.",
+          "url": "https://www.anthropic.com/claude-opus-4-7-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-opus-4-8",
@@ -5413,7 +5498,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "ASL-3",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "safeguard_standard",
+          "scope": "weights",
+          "statement": "Claude Sonnet 4.5 is being released under our AI Safety Level 3 (ASL-3) protections, as per our framework that matches model capabilities with appropriate safeguards. These safeguards include filters called classifiers that aim to detect potentially dangerous inputs and outputs—in particular those related to chemical, biological, radiological, and nuclear (CBRN) weapons.",
+          "url": "https://www.anthropic.com/news/claude-sonnet-4-5",
+          "content_sha256": "0228e015950e56918ab2be787f04f55dc0515624f96e38a1b537dd78a71f3397",
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-sonnet-4-6",
@@ -5516,7 +5618,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-04",
-      "verified_at": "2026-09-04"
+      "verified_at": "2026-09-04",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "ASL-3",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "safeguard_standard",
+          "scope": "weights",
+          "statement": "Based on the results above, the Responsible Scaling Officer (RSO) determined the ASL-3 safeguards level to be appropriate for the CBRN domain for Claude Sonnet 4.6.",
+          "url": "https://www.anthropic.com/claude-sonnet-4-6-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-sonnet-5",
