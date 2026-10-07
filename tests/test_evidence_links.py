@@ -911,6 +911,177 @@ def cache_of(
     return {"version": "1.0", "updated_at": updated_at, "entries": entries}
 
 
+FLAG_URL = "https://www.example-lab.com/system-card"
+FLAG_BODY = b"<html><main>Fixture statement, version A.</main></html>"
+
+
+def flag_hash(body: bytes = FLAG_BODY) -> str:
+    content = check_evidence_links.terms_content(body, "text/html", FLAG_URL)
+    assert content is not None
+    return content.sha256
+
+
+def flag_target(
+    *, pinned: tuple[str, ...], reviewed_at: str = "2026-09-01"
+) -> check_evidence_links.LinkTarget:
+    reference = "models:model-alpha:flags:0"
+    return check_evidence_links.LinkTarget(
+        url=FLAG_URL,
+        kinds=("flag",),
+        references=(reference,),
+        review_dates=((reference, reviewed_at),),
+        monitor_terms=True,
+        pinned_sha256=pinned,
+    )
+
+
+class FlagEvidenceTests(unittest.TestCase):
+    """ADR 042: flag pages are drift-hashed, with the reviewer's pin as the baseline."""
+
+    def check(self, target, cache, body=FLAG_BODY, **options):
+        return check_evidence_links.check_targets(
+            [target],
+            cache,
+            lambda _target, _cached: response(body),
+            now=datetime(2026, 9, 5, tzinfo=UTC),
+            max_age=timedelta(0),
+            **options,
+        )
+
+    def test_flags_become_targets_by_status(self) -> None:
+        flags = [
+            {
+                "kind": "maker_risk_safeguards",
+                "status": "statement_found",
+                "url": "https://example.com/pinned",
+                "content_sha256": "b" * 64,
+                "verified_at": "2026-09-02",
+            },
+            {
+                "kind": "maker_risk_safeguards",
+                "status": "statement_found",
+                "url": "https://example.com/unpinnable",
+                "unpinnable": True,
+                "verified_at": "2026-09-02",
+            },
+        ]
+        other = {
+            "kind": "maker_risk_safeguards",
+            "status": "no_statement_found",
+            "url": "https://example.com/checked",
+            "verified_at": "2026-09-03",
+        }
+        models = [
+            {
+                "id": "model-a",
+                "url": "https://example.com/a",
+                "verified_at": "2026-09-04",
+                "evidence": [],
+                "license_evidence": [],
+                "flags": flags,
+            },
+            {
+                "id": "model-b",
+                "url": "https://example.com/b",
+                "verified_at": "2026-09-04",
+                "evidence": [],
+                "license_evidence": [],
+                "flags": [other],
+            },
+        ]
+        with tempfile.TemporaryDirectory() as temp_dir:
+            directory = Path(temp_dir)
+            documents = {
+                "projects.json": {"projects": []},
+                "license-evidence.json": {"entries": []},
+                "specifications.json": {"specifications": []},
+                "inference-services.json": {"services": []},
+                "local-runtimes.json": {"runtimes": []},
+                "models.json": {"models": models},
+                "packs.json": {"packs": []},
+                "labs.json": {"labs": []},
+                "robots.json": {"robots": []},
+            }
+            for filename, document in documents.items():
+                (directory / filename).write_text(
+                    json.dumps(document), encoding="utf-8"
+                )
+            by_url = {t.url: t for t in check_evidence_links.collect_targets(directory)}
+
+        pinned = by_url["https://example.com/pinned"]
+        self.assertEqual(("flag",), pinned.kinds)
+        self.assertTrue(pinned.monitor_terms)
+        self.assertEqual(("b" * 64,), pinned.pinned_sha256)
+        self.assertEqual(
+            (("models:model-a:flags:0", "2026-09-02"),), pinned.review_dates
+        )
+        self.assertFalse(by_url["https://example.com/unpinnable"].monitor_terms)
+        checked = by_url["https://example.com/checked"]
+        self.assertTrue(checked.monitor_terms)
+        self.assertEqual((), checked.pinned_sha256)
+        self.assertEqual(("models:model-b:flags:0",), checked.references)
+
+    def test_a_matching_pin_is_the_baseline_even_after_the_last_run(self) -> None:
+        cache = cache_of({}, updated_at="2026-09-03T00:00:00Z")
+        summary = self.check(flag_target(pinned=(flag_hash(),)), cache)
+        self.assertEqual([], summary.errors)
+        self.assertEqual([], summary.warnings)
+        self.assertEqual(flag_hash(), cache["entries"][FLAG_URL]["terms_sha256"])
+
+    def test_a_page_that_no_longer_matches_its_pin_fails_and_records_nothing(
+        self,
+    ) -> None:
+        cache = cache_of({}, updated_at="2026-08-31T00:00:00Z")
+        summary = self.check(
+            flag_target(pinned=("c" * 64,)), cache, establish_baselines=True
+        )
+        self.assertRegex(
+            summary.errors[0], r"^flag pin mismatch: https://www\.example-lab\.com"
+        )
+        self.assertNotIn("terms_sha256", cache["entries"][FLAG_URL])
+
+    def test_flag_drift_stays_open_until_a_review_pins_the_new_page(self) -> None:
+        cache = cache_of({}, updated_at="2026-09-03T00:00:00Z")
+        self.check(flag_target(pinned=(flag_hash(),)), cache)
+        changed = b"<html><main>Fixture statement, version B.</main></html>"
+
+        drift = self.check(flag_target(pinned=(flag_hash(),)), cache, body=changed)
+        self.assertRegex(drift.errors[0], r"^flag page drift requires review: ")
+        self.assertEqual(flag_hash(), cache["entries"][FLAG_URL]["terms_sha256"])
+
+        unpinned_review = self.check(
+            flag_target(pinned=(flag_hash(),), reviewed_at="2026-09-06"),
+            cache,
+            body=changed,
+        )
+        self.assertRegex(unpinned_review.errors[0], "flag page drift requires review")
+
+        pinned_review = self.check(
+            flag_target(pinned=(flag_hash(changed),), reviewed_at="2026-09-06"),
+            cache,
+            body=changed,
+        )
+        self.assertEqual([], pinned_review.errors)
+        self.assertEqual(1, pinned_review.terms_accepted)
+        self.assertEqual(flag_hash(changed), cache["entries"][FLAG_URL]["terms_sha256"])
+
+    def test_pin_hash_needs_two_equal_readable_fetches(self) -> None:
+        bodies = iter([FLAG_BODY, FLAG_BODY])
+        self.assertEqual(
+            flag_hash(),
+            check_evidence_links.pin_hash(FLAG_URL, lambda _t: response(next(bodies))),
+        )
+        changing = iter([FLAG_BODY, b"<html><main>Rebuilt 12:01</main></html>"])
+        self.assertIsNone(
+            check_evidence_links.pin_hash(FLAG_URL, lambda _t: response(next(changing)))
+        )
+        self.assertIsNone(
+            check_evidence_links.pin_hash(
+                FLAG_URL, lambda _t: response(b"<html></html>")
+            )
+        )
+
+
 class SharedCacheTests(unittest.TestCase):
     """One cache for every worktree, no silent baselines, and a fail-closed import."""
 

@@ -71,6 +71,7 @@ class _TargetBuilder:
     review_dates: dict[str, str | None] = field(default_factory=dict)
     monitor_terms: bool = False
     unpinnable: bool = False
+    pinned: set[str] = field(default_factory=set)
 
 
 @dataclass(frozen=True)
@@ -80,6 +81,7 @@ class LinkTarget:
     references: tuple[str, ...]
     review_dates: tuple[tuple[str, str | None], ...]
     monitor_terms: bool
+    pinned_sha256: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -140,6 +142,7 @@ def _add_target(
     reviewed_at: object = None,
     monitor_terms: bool = False,
     unpinnable: bool = False,
+    pinned_sha256: object = None,
 ) -> None:
     if not isinstance(url, str) or not url.startswith("https://"):
         return
@@ -152,6 +155,8 @@ def _add_target(
     )
     target.monitor_terms = target.monitor_terms or monitor_terms
     target.unpinnable = target.unpinnable or unpinnable
+    if isinstance(pinned_sha256, str):
+        target.pinned.add(pinned_sha256)
 
 
 def _add_evidence_items(
@@ -231,6 +236,35 @@ def _add_trust_targets(
                     reference=f"{reference}:{field_name}",
                     reviewed_at=response.get("verified_at"),
                 )
+
+
+def _add_flag_targets(
+    targets: dict[str, _TargetBuilder],
+    flags: Iterable[Any],
+    *,
+    record_id: str,
+) -> None:
+    """Reviewed-flag pages carry the fact the flag reports, so they are drift-hashed.
+
+    A statement_found entry pins its page by content_sha256, which is the baseline
+    the first observation must match. An unpinnable page is link-checked only, since
+    its hash never settles (ADR 037). A no_statement_found entry's checked page is
+    hashed like terms, so a statement appearing there raises a review. The checker
+    never edits a flag; see ADR 042.
+    """
+    for index, entry in enumerate(flags):
+        if not isinstance(entry, dict):
+            continue
+        _add_target(
+            targets,
+            entry.get("url"),
+            kind="flag",
+            reference=f"models:{record_id}:flags:{index}",
+            reviewed_at=entry.get("verified_at"),
+            monitor_terms=True,
+            unpinnable=entry.get("unpinnable") is True,
+            pinned_sha256=entry.get("content_sha256"),
+        )
 
 
 def collect_targets(directory: Path = DIRECTORY) -> list[LinkTarget]:
@@ -350,6 +384,8 @@ def collect_targets(directory: Path = DIRECTORY) -> list[LinkTarget]:
                 group="license",
                 record_reviewed_at=reviewed_at,
             )
+            if collection == "models" and isinstance(record.get("flags"), list):
+                _add_flag_targets(targets, record["flags"], record_id=record_id)
 
     # A lab carries no licence evidence; its channels are the pages a reader watches
     # for the lab's next release, so they are maintained links like any evidence.
@@ -430,6 +466,7 @@ def collect_targets(directory: Path = DIRECTORY) -> list[LinkTarget]:
             # hash can never settle, so it vetoes monitoring even when another
             # citation of the same URL would otherwise turn monitoring on.
             monitor_terms=item.monitor_terms and not item.unpinnable,
+            pinned_sha256=tuple(sorted(item.pinned)),
         )
         for item in sorted(targets.values(), key=lambda target: target.url)
     ]
@@ -974,6 +1011,12 @@ def _reviewed_since_last_run(
 
 
 def _missing_baseline_error(target: LinkTarget) -> str:
+    if target.pinned_sha256:
+        return (
+            f"flag pin mismatch: {target.url} ({_reference_label(target)}); the page no "
+            "longer hashes to the content_sha256 its reviewed flag pins, so the flag needs "
+            "review before any baseline is recorded"
+        )
     return (
         f"terms baseline missing: {target.url} ({_reference_label(target)}); no cached baseline "
         "covers a review made before the last check. Import the cache that checked it "
@@ -1152,7 +1195,29 @@ def _reference_label(target: LinkTarget) -> str:
 
 
 def _terms_drift_error(target: LinkTarget) -> str:
-    return f"terms drift requires review: {target.url} ({_reference_label(target)})"
+    subject = "flag page drift" if "flag" in target.kinds else "terms drift"
+    return f"{subject} requires review: {target.url} ({_reference_label(target)})"
+
+
+def _first_baseline(
+    target: LinkTarget, current_hash: str, *, reviewed_since: bool, establish: bool
+) -> str:
+    """How the first readable observation of a monitored page is treated.
+
+    A pinned flag page is its own review record: it becomes the baseline only when
+    it still hashes to the content_sha256 the reviewer pinned, and no request can
+    override a mismatch. Returns "silent", "requested", or "missing".
+    """
+    if target.pinned_sha256:
+        return "silent" if current_hash in target.pinned_sha256 else "missing"
+    if reviewed_since:
+        return "silent"
+    return "requested" if establish else "missing"
+
+
+def _matches_pin(target: LinkTarget, current_hash: str) -> bool:
+    """A review may accept a changed flag page only at the hash its flag now pins."""
+    return not target.pinned_sha256 or current_hash in target.pinned_sha256
 
 
 def _terms_review_advanced(target: LinkTarget, entry: Mapping[str, Any]) -> bool:
@@ -1323,8 +1388,19 @@ def check_targets(
                     f"terms content unavailable: {target.url} ({_reference_label(target)})"
                 )
             elif baseline_hash is None:
-                reviewed_since = _reviewed_since_last_run(review_dates, last_run)
-                if reviewed_since or establish_baselines:
+                decision = _first_baseline(
+                    target,
+                    current_hash,
+                    reviewed_since=_reviewed_since_last_run(review_dates, last_run),
+                    establish=establish_baselines,
+                )
+                if decision == "missing":
+                    # Terms reviewed before the last run should already have a baseline;
+                    # its absence means a lost, new, or partial cache, not a first sight.
+                    # A pinned flag page that no longer matches its pin lands here too.
+                    entry["terms_baseline_missing"] = now.date().isoformat()
+                    summary.errors.append(_missing_baseline_error(target))
+                else:
                     _store_terms(
                         entry, "terms", current_hash, current_text, current_scope
                     )
@@ -1332,18 +1408,13 @@ def check_targets(
                     _clear_observed(entry)
                     entry.pop("terms_baseline_missing", None)
                     summary.terms_bootstrapped += 1
-                    if not reviewed_since:
+                    if decision == "requested":
                         summary.warnings.append(
                             "terms baseline established by request: "
                             f"{target.url} ({_reference_label(target)})"
                         )
-                else:
-                    # Terms reviewed before the last run should already have a baseline;
-                    # its absence means a lost, new, or partial cache, not a first sight.
-                    entry["terms_baseline_missing"] = now.date().isoformat()
-                    summary.errors.append(_missing_baseline_error(target))
             elif current_hash != baseline_hash or entry.get("terms_drift_detected_at"):
-                if review_advanced:
+                if review_advanced and _matches_pin(target, current_hash):
                     _store_terms(
                         entry, "terms", current_hash, current_text, current_scope
                     )
@@ -1412,6 +1483,14 @@ def _clear_observed(entry: dict[str, Any]) -> None:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--pin",
+        metavar="URL",
+        help=(
+            "fetch URL twice and print the content_sha256 a reviewed flag pins, "
+            "or say it is unpinnable; uses no cache"
+        ),
+    )
     parser.add_argument(
         "--cache",
         type=Path,
@@ -1494,6 +1573,48 @@ def _run_import(cache_path: Path, sources: list[Path]) -> int:
     return 0
 
 
+def pin_hash(url: str, fetch: Callable[[LinkTarget], FetchResult]) -> str | None:
+    """The normalised hash a reviewed flag pins, or None when the page cannot be pinned.
+
+    The page is fetched twice with the monitor's own normalisation (ADR 037's rule):
+    two different hashes, or nothing readable, mean the flag cites it as unpinnable.
+    """
+    target = LinkTarget(
+        url=url,
+        kinds=("flag",),
+        references=("pin",),
+        review_dates=(),
+        monitor_terms=True,
+    )
+    hashes: set[str] = set()
+    for _ in range(2):
+        response = fetch(target)
+        content = terms_content(
+            response.body or b"", response.headers.get("content-type", ""), url
+        )
+        if content is None:
+            return None
+        hashes.add(content.sha256)
+    return hashes.pop() if len(hashes) == 1 else None
+
+
+def _run_pin(url: str) -> int:
+    token = os.environ.get("GITHUB_TOKEN")
+    try:
+        pinned = pin_hash(url, lambda target: fetch_target(target, {}, token=token))
+    except FetchFailure as exc:
+        print(f"error: {url}: {exc}", file=sys.stderr)
+        return 1
+    if pinned:
+        print(f"content_sha256: {pinned}")
+    else:
+        print(
+            "unpinnable: the page changed between two fetches or has no readable text; "
+            'cite it with "unpinnable": true'
+        )
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.max_age_hours < 0:
@@ -1502,6 +1623,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.workers < 1:
         print("error: --workers must be positive", file=sys.stderr)
         return 2
+    if args.pin:
+        return _run_pin(args.pin)
     cache_path = args.cache or default_cache_path()
     if args.show_drift:
         return _run_show_drift(cache_path)
