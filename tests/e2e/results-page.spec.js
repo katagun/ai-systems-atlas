@@ -242,7 +242,7 @@ test("each collection's score rule sits in its scope note under its result count
     ["labs", "each release keeps its own licence and score in Models"],
     ["specifications", "with no cross-purpose score"],
   ]) {
-    await expect(page.locator(`#${id}-directory-panel > .result-row + [data-scope-note="${id}"]`), id).toContainText(rule);
+    await expect(page.locator(`.collection-panel [data-scope-note="${id}"]`), id).toContainText(rule);
   }
   await expect(page.locator('[data-scope-note="models"] #models-kicker, [data-scope-note="labs"] #labs-kicker, [data-scope-note="specifications"] #specifications-kicker')).toHaveCount(3);
   await expect(page.locator("#models-kicker")).not.toBeEmpty();

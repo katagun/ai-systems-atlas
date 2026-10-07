@@ -506,15 +506,10 @@ class ValidationPolicyTests(unittest.TestCase):
             errors,
         )
 
-    def test_flag_cannot_postdate_its_record(self) -> None:
+    def test_a_flag_may_postdate_its_record(self) -> None:
+        # A backfilled flag is reviewed after the record; its date stands alone.
         errors = self.flag_errors([self.found(verified_at="2099-01-01")])
-        self.assertTrue(
-            any(
-                "verified_at must not be after the record verified_at" in e
-                for e in errors
-            ),
-            errors,
-        )
+        self.assertFalse(any("verified_at" in e for e in errors), errors)
 
     def test_one_entry_per_kind_and_a_non_empty_list(self) -> None:
         self.assertTrue(

@@ -284,6 +284,9 @@
       { key: "sourceModel", name: "Artifact licensing", values: fieldValues("source_model") },
       { key: "license", name: "License", values: fieldValues("licenses") },
       { key: "lab", name: "Lab", values: labValues },
+      // Atlas-reviewed or imported from models.dev: two states, of which the
+      // filter offers the reviewed one (#471, the door's Models entry).
+      { key: "reviewed", name: "Review", values: model => [model.review_status === "reviewed" ? "1" : "0"] },
     ],
     packs: [
       { key: "type", name: "Type", values: fieldValues("pack_type") },
@@ -357,9 +360,12 @@
       || recordMatch(query, searchFields("system", project, { index: filters.searchIndex, labelOf: filters.labelOf })) > 0);
   }
 
-  function compareProjects(sort) {
+  function compareProjects(sort, reviewDate = () => "") {
     if (sort === "stars") return (a, b) => (b.stars ?? -1) - (a.stars ?? -1);
     if (sort === "name") return (a, b) => a.name.localeCompare(b.name);
+    // Review dates are catalog metadata, newest first. A record with no date
+    // sorts last, then by name, so the order stays total.
+    if (sort === "reviewed") return (a, b) => (reviewDate(b) || "").localeCompare(reviewDate(a) || "") || a.name.localeCompare(b.name);
     return (a, b) => b.score.overall - a.score.overall || a.name.localeCompare(b.name);
   }
 
@@ -370,7 +376,7 @@
       projects.filter(project => matchesProjectFacets(project, filters)),
       query,
       project => searchFields("system", project, { index: filters.searchIndex, labelOf: filters.labelOf }),
-      compareProjects(filters.sort === "match" ? "name" : filters.sort),
+      compareProjects(filters.sort === "match" ? "name" : filters.sort, filters.reviewDate),
       byMatch,
     );
   }
@@ -1167,15 +1173,15 @@
   // and while a query is present a sort's default is Best match
   // (scopeURLParams).
   const SCOPE_URL_PARAMS = {
-    all: { q: "" },
-    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", retrieval: "", lab: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name", browseSort: "" },
-    inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", lab: "", sort: "score", browseSort: "" },
-    runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", lab: "", sort: "score", browseSort: "" },
-    packs: { q: "", type: "", host: "", install: "", license: "" },
-    robots: { q: "", formFactor: "", aiBasis: "", availability: "", status: "" },
-    models: { q: "", type: "", distribution: "", modality: "", sourceModel: "", license: "", lab: "", sort: "score", browseSort: "" },
-    labs: { q: "", type: "", headquarters: "", distribution: "" },
-    specifications: { q: "", type: "", scope: "", status: "", license: "", lab: "" },
+    all: { q: "", layout: "cards" },
+    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", retrieval: "", lab: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name", browseSort: "", layout: "cards" },
+    inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", lab: "", sort: "score", browseSort: "", layout: "cards" },
+    runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", lab: "", sort: "score", browseSort: "", layout: "cards" },
+    packs: { q: "", type: "", host: "", install: "", license: "", layout: "cards" },
+    robots: { q: "", formFactor: "", aiBasis: "", availability: "", status: "", layout: "cards" },
+    models: { q: "", type: "", distribution: "", modality: "", sourceModel: "", license: "", lab: "", reviewed: "", sort: "score", browseSort: "", layout: "cards" },
+    labs: { q: "", type: "", headquarters: "", distribution: "", layout: "cards" },
+    specifications: { q: "", type: "", scope: "", status: "", license: "", lab: "", layout: "cards" },
   };
   const SCOPE_URL_KEYS = [...new Set(Object.values(SCOPE_URL_PARAMS).flatMap(Object.keys)), "page"];
 

@@ -3105,7 +3105,6 @@ def validate_found_statement(
 def validate_model_flag(
     entry: Any,
     prefix: str,
-    record_verified_at: object,
     sites: set[str],
     tax: Taxonomy,
     errors: list[str],
@@ -3142,10 +3141,11 @@ def validate_model_flag(
         )
     if entry["research_confidence"] not in tax.enum_ids["research_confidence_levels"]:
         errors.append(f"{prefix}: unknown research_confidence")
+    # A flag's date stands alone: a flag reviewed after the record says nothing
+    # about the record's classification, prose, or score, so it never moves or
+    # waits on the record's verified_at (ADR 042).
     if not valid_date(entry["verified_at"]):
         errors.append(f"{prefix}: verified_at must be an ISO date")
-    elif valid_date(record_verified_at) and entry["verified_at"] > record_verified_at:
-        errors.append(f"{prefix}: verified_at must not be after the record verified_at")
     if status == "statement_found":
         validate_found_statement(entry, prefix, tax, errors)
     return kind
@@ -3171,7 +3171,6 @@ def validate_model_flags(
         kind = validate_model_flag(
             entry,
             f"{prefix}: flag {index}",
-            model.get("verified_at"),
             sites,
             tax,
             errors,

@@ -22,7 +22,7 @@ const FILTER_CONTROLS = {
   runtimes: { type: "#runtime-type-filter", accelerator: "#runtime-accelerator-filter", modelFormat: "#runtime-format-filter", apiStyle: "#runtime-api-filter", lab: "#runtime-lab-filter" },
   packs: { type: "#pack-type-filter", host: "#pack-host-filter", install: "#pack-install-filter", license: "#pack-license-filter" },
   robots: { formFactor: "#robot-form-factor-filter", aiBasis: "#robot-ai-basis-filter", availability: "#robot-availability-filter", status: "#robot-status-filter" },
-  models: { type: "#model-type-filter", distribution: "#model-distribution-filter", modality: "#model-modality-filter", sourceModel: "#model-source-filter", license: "#model-license-filter", lab: "#model-lab-filter" },
+  models: { type: "#model-type-filter", distribution: "#model-distribution-filter", modality: "#model-modality-filter", sourceModel: "#model-source-filter", license: "#model-license-filter", lab: "#model-lab-filter", reviewed: "#reviewed-filter" },
   labs: { type: "#lab-type-filter", headquarters: "#lab-country-filter", distribution: "#lab-distribution-filter" },
   specifications: { type: "#specification-type-filter", scope: "#specification-scope-filter", status: "#specification-status-filter", license: "#specification-license-filter", lab: "#specification-lab-filter" },
 };
@@ -31,9 +31,9 @@ const COLLECTIONS = ["all", "systems", "inference", "runtimes", "packs", "robots
 
 // Keyed by the `record=` URL's kinds.
 const RECORD_VIEWS = {
-  system: "#project-dialog", spec: "#specification-dialog", inference: "#inference-dialog",
-  runtime: "#runtime-dialog", pack: "#pack-dialog", robot: "#robot-dialog",
-  model: "#model-dialog", lab: "#lab-dialog",
+  system: "#record-dialog", spec: "#record-dialog", inference: "#record-dialog",
+  runtime: "#record-dialog", pack: "#record-dialog", robot: "#record-dialog",
+  model: "#record-dialog", lab: "#record-dialog",
 };
 
 function searchBox(page, scope) {
