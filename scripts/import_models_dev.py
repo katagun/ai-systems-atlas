@@ -48,6 +48,10 @@ MAX_SOURCE_RECORDS = 20_000
 MIN_PREVIOUS_RATIO = 0.80
 SOURCE_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._/-]*")
 PARTIAL_DATE = re.compile(r"\d{4}-\d{2}(?:-\d{2})?")
+# ADR 051 widened eligibility past text output. A robot action is not in this
+# set: no model_type names one, so an action-emitting policy stays a source
+# record rather than becoming a review candidate it can never be typed as.
+ELIGIBLE_OUTPUT_MODALITIES = {"text", "image", "video", "audio"}
 
 JsonGetter = Callable[[str, str | None], tuple[Any, bytes]]
 BytesGetter = Callable[[str, str | None], bytes]
@@ -320,7 +324,11 @@ def normalize_catalog(
                 "models.dev records require path-style ids and object values"
             )
         metadata = source_metadata(source_id, record)
-        if "text" not in metadata["modalities"]["output"]:
+        # ADR 051: eligibility is a statement about the artifact, not about one
+        # modality. A row is eligible when it produces any supported output
+        # modality, so an image, video, or audio generator now enters the queue
+        # and is reviewed or dispositioned like any other candidate.
+        if not set(metadata["modalities"]["output"]) & ELIGIBLE_OUTPUT_MODALITIES:
             continue
         eligible += 1
         record_id = stable_model_id(source_id)
@@ -510,9 +518,15 @@ def run(
         commit,
         observed_at=snapshot_date,
     )
-    write_json_atomic_all(
-        [(SOURCE_MODELS_PATH, source_document), (CANDIDATES_PATH, document)]
-    )
+    writes = [(SOURCE_MODELS_PATH, source_document), (CANDIDATES_PATH, document)]
+    # CR-09: models.json must name the snapshot's commit, and this importer is the
+    # only thing that moves the snapshot, so it moves that one envelope field too, in
+    # the same all-or-nothing write. Reviewed records are editorial and stay as read.
+    published_source = published.get("source")
+    if isinstance(published_source, dict) and published_source.get("commit") != commit:
+        published_source["commit"] = commit
+        writes.append((MODELS_PATH, published))
+    write_json_atomic_all(writes)
     return document
 
 

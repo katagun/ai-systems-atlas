@@ -1,6 +1,6 @@
 # Badge review — 2026-09-29
 
-Reviewed revision `0695dce5`. This is a product and implementation review, not an accepted taxonomy decision or a re-review of catalog records. The six follow-ups were implemented under [ADR 047](adr/047-badges-identify-record-facts-and-licensing-stays-scoped-text.md), with completed items removed from [BACKLOG.md](../BACKLOG.md); the current contract remains in [WEB.md](WEB.md#card-badges).
+Reviewed revision `0695dce5`. This is a product and implementation review, not an accepted taxonomy decision or a re-review of catalog records. The six follow-ups were implemented under [ADR 047](../adr/047-badges-identify-record-facts-and-licensing-stays-scoped-text.md), with completed items removed from [BACKLOG.md](../../BACKLOG.md); the current contract remains in [WEB.md](../WEB.md#card-badges).
 
 ## Recommendation
 
@@ -42,7 +42,7 @@ For example, Qwen Code, Ruflo, Vercel AI SDK, Warp, and OpenViking use multiple 
 
 ### B-01 — Tooltip cannot be hovered; keyboard explanation is indirect
 
-**Priority: P2, reproduced.** `initBadgeTooltip` in [app.js](../web/app.js) hides the tooltip when `pointerover` lands outside `.card-badge`. [styles.css](../web/styles.css) gives `.badge-tooltip` `pointer-events: none`. In Chromium, hovering OpenClaw's MCP badge showed the tooltip; moving the pointer into the tooltip's text hid it. This fails the hoverable behavior described by [WCAG 2.2 SC 1.4.13](https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html), particularly relevant to magnification users.
+**Priority: P2, reproduced.** `initBadgeTooltip` in [app.js](../../web/app.js) hides the tooltip when `pointerover` lands outside `.card-badge`. [styles.css](../../web/styles.css) gives `.badge-tooltip` `pointer-events: none`. In Chromium, hovering OpenClaw's MCP badge showed the tooltip; moving the pointer into the tooltip's text hid it. This fails the hoverable behavior described by [WCAG 2.2 SC 1.4.13](https://www.w3.org/WAI/WCAG22/Understanding/content-on-hover-or-focus.html), particularly relevant to magnification users.
 
 Screen readers do receive the definition through hidden text, and Escape, tap, outside-tap dismissal, detached-grid cleanup, and viewport clamping already have tests. Do not undo those strengths or add hundreds of tab stops by reflex. Provide a deliberate visible explanation path for sighted keyboard users, and keep the tooltip open across the trigger, the gap, and its own content. The current non-focusable emblems and pointer-only tooltip do not directly offer that path; the Taxonomy glossary is an indirect alternative. Amend the interaction contract and add behavior tests, rather than treating this as a cosmetic CSS change.
 
@@ -54,7 +54,7 @@ The existing `badges.length <= 6` published-record assertion checks an already-t
 
 ### B-03 — Model “Open source” reuses a software definition
 
-**Priority: P2, product/taxonomy decision.** `sourceModelName` reads the same `source_models` vocabulary for system and model cards, comparisons, and dialogs. The `open_source` definition in [taxonomy.json](../directory/taxonomy.json) refers to operational code under one OSI-approved license. The [model schema](DATA_MODEL.md#model-record) reviews artifact licenses and access boundaries, but has no explicit training-code/data-information openness assessment. The displayed conclusion therefore needs a clearly stated model-specific scope before it is amplified by an OSS emblem.
+**Priority: P2, product/taxonomy decision.** `sourceModelName` reads the same `source_models` vocabulary for system and model cards, comparisons, and dialogs. The `open_source` definition in [taxonomy.json](../../directory/taxonomy.json) refers to operational code under one OSI-approved license. The [model schema](../DATA_MODEL.md#model-record) reviews artifact licenses and access boundaries, but has no explicit training-code/data-information openness assessment. The displayed conclusion therefore needs a clearly stated model-specific scope before it is amplified by an OSS emblem.
 
 This is a presentation/definition gap, not a finding that the 104 reviewed model classifications are wrong. Decide the terminology and evidence bar, then handle any necessary record changes through human review. Imported metadata must remain attributed and must never earn a reviewed OSS badge automatically.
 

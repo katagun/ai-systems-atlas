@@ -3,6 +3,7 @@ const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { cardBadgeGlossary, cardBadges, BADGE_FAMILIES } = require("../../web/app-core.js");
 const { searchAll } = require("./helpers/landing");
+const { chooseFinderGoal } = require("./helpers/finder");
 const { filterControl, recordView, search, searchBox } = require("./helpers/results");
 
 // Expectations come from the same published files and resolver the page uses,
@@ -183,17 +184,15 @@ test("every card in every grid and the Finder shortlist leads with exactly one t
     }
   }
 
-  // A system shortlist (the first direction) and an inference shortlist.
-  for (const direction of ["", "inference_service"]) {
+  // A system shortlist and an inference shortlist. The Finder is one screen of
+  // goal tiles, so each is a single goal rather than a direction and a goal.
+  for (const [label, goal] of [["first", "personal_knowledge"], ["inference_service", "model_developer_api"]]) {
     await page.goto("/?view=finder");
-    const first = direction ? `#finder-content .finder-choice[data-finder-value="${direction}"]` : "#finder-content .finder-choice";
-    await page.locator(first).first().click();
-    for (let step = 0; step < 2; step += 1) await page.locator("#finder-content .finder-choice").first().click();
-    const shortlist = page.locator(".finder-result");
+    const shortlist = await chooseFinderGoal(page, goal);
     await expect(shortlist.first()).toBeVisible();
     const finderRows = await shortlist.evaluateAll(items => items.map(item => [...item.querySelectorAll(".card-badge")].map(badge => badge.dataset.family)));
     expect(finderRows.length).toBeGreaterThan(0);
-    for (const families of finderRows) expect(families[0], `${direction || "first"} shortlist leads with a type badge`).toBe("type");
+    for (const families of finderRows) expect(families[0], `${label} shortlist leads with a type badge`).toBe("type");
   }
 });
 
@@ -427,8 +426,7 @@ test("evidence review attention is consistent in Systems, All, Packs and Finder"
     }
   }
   await page.goto("/?view=finder");
-  for (let step = 0; step < 3; step += 1) await page.locator("#finder-content .finder-choice").first().click();
-  const results = page.locator(".finder-result");
+  const results = await chooseFinderGoal(page, "personal_knowledge");
   await expect(results.first()).toBeVisible();
   for (const result of await results.all()) await expect(result.locator(".review-badge")).toHaveText("Evidence review");
 });

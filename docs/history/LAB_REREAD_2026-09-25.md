@@ -6,7 +6,7 @@
 - **Batch 2, applied: headquarters and legal-entity fixes.**
   - Thinking Machines Lab and Vivgrid move to `us`.
   - Covers Ant Group, DeepSeek, Arcee AI, Aikido Security, Mistral AI, MiniMax, Writer, and Cohere.
-  - [`LABS.md`](LABS.md) now says that a self-description such as "a Chinese company" says where an organization is based.
+  - [`LABS.md`](../LABS.md) now says that a self-description such as "a Chinese company" says where an organization is based.
   - These records are re-dated to 2026-09-25.
 - **Batch 3, applied: labels, notes, and moved channels.**
   - Covers Anthropic, Mixedbread, the Swiss AI Initiative, Ornith AI, AI Singapore, Poolside, Amazon, Tencent, StepFun, TypeSafe AI, Upstage, Meta, Google, Xiaomi, and Motif Technologies, plus Microsoft's news channel.
@@ -183,7 +183,7 @@
    - Amazon's Nova 2 guide and framework PDF;
    - Tencent's Hy3 `LICENSE`.
 2. **Apply the corrections to `directory/labs.json`.** Set every evidence item, framework, and record `verified_at` to 2026-09-25. Then:
-   - update [`COVERAGE.md`](COVERAGE.md#labs), [`LABS.md`](LABS.md), [`BACKLOG.md`](../BACKLOG.md), and the lab test's ByteDance comment;
+   - update [`COVERAGE.md`](../COVERAGE.md#labs), [`LABS.md`](../LABS.md), [`BACKLOG.md`](../../BACKLOG.md), and the lab test's ByteDance comment;
    - regenerate the published files;
    - run the gate and the browser suite.
 3. **Follow-ups outside the lab records:**

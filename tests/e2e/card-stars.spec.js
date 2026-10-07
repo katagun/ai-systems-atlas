@@ -2,6 +2,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { allSearch, searchAll } = require("./helpers/landing");
+const { chooseFinderGoal } = require("./helpers/finder");
 const { search, searchBox } = require("./helpers/results");
 
 // Expectations come from the published files the page loads, and each fixture
@@ -180,17 +181,13 @@ test("specification cards show their star count beside the score note", async ({
 
 test("Finder shortlist cards show the star count of every starred record", async ({ page }) => {
   const paths = [
-    { direction: "local_runtime", goal: "personal_machine", attribute: "data-finder-runtime", records: runtimes },
-    { direction: "agent_system", goal: "coding", attribute: "data-finder-project", records: projects },
+    { goal: "personal_machine", attribute: "data-finder-runtime", records: runtimes },
+    { goal: "coding", attribute: "data-finder-project", records: projects },
   ];
   let starred = 0;
-  for (const { direction, goal, attribute, records } of paths) {
+  for (const { goal, attribute, records } of paths) {
     await page.goto("/?view=finder");
-    await page.locator(`[data-finder-choice][data-finder-value="${direction}"]`).click();
-    await page.locator(`[data-finder-choice][data-finder-value="${goal}"]`).click();
-    await page.locator('[data-finder-choice][data-finder-value="balanced"]').click();
-    const results = page.locator(".finder-results .finder-result");
-    await expect(results).toHaveCount(3);
+    const results = await chooseFinderGoal(page, goal);
     for (const card of await results.all()) {
       const record = byId(records, await card.locator(`[${attribute}]`).getAttribute(attribute));
       if (record.stars == null) {
@@ -210,9 +207,7 @@ test("Finder shortlist cards show the star count of every starred record", async
 test("a star count never splits from its star on a narrow Finder card", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 900 });
   await page.goto("/?view=finder");
-  await page.locator('[data-finder-choice][data-finder-value="agent_system"]').click();
-  await page.locator('[data-finder-choice][data-finder-value="coding"]').click();
-  await page.locator('[data-finder-choice][data-finder-value="balanced"]').click();
+  await chooseFinderGoal(page, "coding");
   const counts = page.locator(".finder-results .card-stars");
   await expect(counts.first()).toBeVisible();
   const split = [];

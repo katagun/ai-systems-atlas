@@ -9,13 +9,13 @@ test("the primary navigation is plain text with an underline rather than a fille
   await page.setViewportSize({ width: 1280, height: 700 });
   await page.goto("/");
 
-  expect(await styleOf(page, ".tabs", "borderTopLeftRadius")).toBe("0px");
-  expect(await styleOf(page, ".tabs", "borderTopWidth")).toBe("0px");
-  expect(await styleOf(page, ".tabs", "backgroundColor")).toBe("rgba(0, 0, 0, 0)");
-  expect(await styleOf(page, ".tab.is-active", "boxShadow")).toBe("none");
-  expect(await styleOf(page, ".tab.is-active", "backgroundColor")).toBe("rgba(0, 0, 0, 0)");
-  expect(await styleOf(page, ".tab.is-active", "borderBottomWidth")).toBe("2px");
-  expect(await styleOf(page, ".tab.is-active", "borderTopLeftRadius")).toBe("0px");
+  expect(await styleOf(page, ".site-header .tabs", "borderTopLeftRadius")).toBe("0px");
+  expect(await styleOf(page, ".site-header .tabs", "borderTopWidth")).toBe("0px");
+  expect(await styleOf(page, ".site-header .tabs", "backgroundColor")).toBe("rgba(0, 0, 0, 0)");
+  expect(await styleOf(page, ".site-header .tab.is-active", "boxShadow")).toBe("none");
+  expect(await styleOf(page, ".site-header .tab.is-active", "backgroundColor")).toBe("rgba(0, 0, 0, 0)");
+  expect(await styleOf(page, ".site-header .tab.is-active", "borderBottomWidth")).toBe("2px");
+  expect(await styleOf(page, ".site-header .tab.is-active", "borderTopLeftRadius")).toBe("0px");
 });
 
 for (const width of [390, 360, 320]) {

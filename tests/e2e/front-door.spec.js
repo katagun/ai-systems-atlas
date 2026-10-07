@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { allSearch, categoryEntry, collectionDot, collectionEntry, entryCount, familyEntry, openCollection, openView, pressedEntry, searchAll } = require("./helpers/landing");
+const { finderHandoff } = require("./helpers/finder");
 const counts = require("./helpers/catalog-counts");
 const { closeRecord, expectFilter, recordView, search, searchBox, setFilter, sortControl } = require("./helpers/results");
 
@@ -8,6 +9,7 @@ test("a bare URL opens the Elements front door with search and the role map abov
     await page.setViewportSize({ width, height });
     await page.goto("/");
     await expect(page.locator("#front-door")).toBeVisible();
+    await expect(page.locator("#directory-title")).toHaveText(`${counts.allDirectoryEntries.toLocaleString("en-US")} elements of AI`);
     await expect(page.locator(".collection-panel:not([hidden])")).toHaveCount(0);
     await expect(page).not.toHaveURL(/collection=/);
     const index = page.locator("#elements");
@@ -119,16 +121,26 @@ test("text typed on the front door replaces a query left in another collection",
 
 // Every lab's name also names its models, so the query is a word only a lab's
 // own record holds (AI Singapore's note names the Infocomm Media Development
-// Authority). The All list finds nothing; opening Labs from the results
-// carries the query in. The front door carries none (a clean start).
+// Authority). This used to be a dead end in Everything -- the All grid summed six
+// collections and omitted Labs, so the reader got an empty result and a pointer into
+// the Labs scope. Everything holds every collection now, so the lab is listed where
+// the search landed, and the pointer into Labs is what a narrower scope is for.
 /* global activateView, searchIndexes */
-test("a query only a lab answers follows the reader from the All results into Labs", async ({ page }) => {
+test("a query only a lab answers lists the lab in Everything, and opens Labs on request", async ({ page }) => {
   await page.goto("/");
   await searchAll(page, "Infocomm");
   await page.waitForFunction(() =>
-    ["systems", "inference", "runtimes", "models", "packs", "robots"].every(key => searchIndexes[key] !== undefined));
-  await expect(page.locator("#all-directory-grid .empty-search")).toBeVisible();
-  await expect(page.locator("#all-directory-grid .project-card")).toHaveCount(0);
+    ["systems", "inference", "runtimes", "models", "packs", "robots", "labs", "specifications"]
+      .every(key => searchIndexes[key] !== undefined));
+  await expect(page.locator("#all-directory-grid .empty-search")).toHaveCount(0);
+  const labCard = page.locator("#all-directory-grid .lab-card");
+  await expect(labCard).toHaveCount(1);
+  await expect(labCard).toContainText("AI Singapore");
+  await labCard.getByRole("button", { name: /^View details for / }).click();
+  await expect(recordView(page, "lab")).toContainText("AI Singapore");
+  await closeRecord(page, "lab");
+
+  // The narrower scope still answers, and carries the query with it.
   await openCollection(page, "labs");
   await expect(page.locator("#labs-directory-panel")).toBeVisible();
   await expect(searchBox(page, "labs")).toHaveValue("Infocomm");
@@ -206,7 +218,10 @@ test("a Finder job opens the Finder at its priority question", async ({ page }) 
   await expect(page.locator("#door-jobs button")).toHaveCount(5);
   await page.locator('#door-jobs [data-door-direction="agent_system"]').click();
   await expect(page.locator("#finder")).toHaveClass(/is-active/);
-  await expect(page.locator("#finder-content h2")).toHaveText("What matters most?");
+  // The Finder is one screen, so the job is chosen and its shortlist is what
+  // the pill leaves open — there is no standing question left to answer.
+  await expect(page.locator(".finder-result-heading h2")).toHaveText("Delegate general knowledge work");
+  await expect(page.locator("#finder-status")).toContainText("match, ranked for");
 });
 
 test("tiles carry the three most recently reviewed marks and no example ranking", async ({ page }) => {
@@ -306,10 +321,7 @@ test("a state dot marks a comparison in progress and Finder roles applied", asyn
   await page.locator("#comparison-clear").click();
   await expect(page.locator("#scope-strip .state-dot")).toHaveCount(0);
   await page.goto("/?view=finder");
-  for (const value of ["agent_system", "coding", "balanced"]) {
-    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-  }
-  await page.locator("[data-finder-directory]").click();
+  await finderHandoff(page, "coding");
   await expect(collectionDot(page, "systems")).toHaveClass(/is-finder/);
   await page.locator("#finder-roles-chip").click();
   await expect(page.locator("#scope-strip .state-dot")).toHaveCount(0);
@@ -613,10 +625,7 @@ test("a comparison in progress stays off the front door's URL and the Systems ti
 
 test("the Systems tile reopens a Finder role set its dot marks", async ({ page }) => {
   await page.goto("/?view=finder");
-  for (const value of ["agent_system", "coding", "balanced"]) {
-    await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-  }
-  await page.locator("[data-finder-directory]").click();
+  await finderHandoff(page, "coding");
   await expect(page.locator("#finder-roles-chip")).toBeVisible();
   const before = await page.locator("#result-count").textContent();
   await openView(page, "directory");
@@ -671,4 +680,42 @@ test("inside Systems on a phone the strip stays short and the family row fits on
     await expect(familyEntry(page, "agent_system")).toHaveAccessibleName(/^Agents \d/);
     await expect(familyEntry(page, "assistant_system")).toHaveAccessibleName(/^Assistants \d/);
   }
+});
+
+test("the catalog stage leads each face with one record and lists the rest newest first", async ({ page }) => {
+  await page.goto("/");
+  const elements = page.getByRole("tab", { name: "Elements" });
+  const models = page.getByRole("tab", { name: "Models" });
+  const systems = page.getByRole("tab", { name: "Systems" });
+  await expect(elements).toHaveAttribute("aria-selected", "true");
+  await expect(page.locator("#elements")).toBeVisible();
+
+  await models.click();
+  await expect(page.locator("#elements")).toBeHidden();
+  await expect(page.locator("#collection-index")).toBeVisible();
+  const modelName = (await page.locator("#stage-model .stage-name").textContent()).trim();
+  const modelRows = page.locator("#stage-model .stage-list-name");
+  await expect(modelRows).not.toHaveCount(0);
+  expect(await modelRows.allTextContents()).not.toContain(modelName);
+  const modelDates = await page.locator("#stage-model .stage-list time").allTextContents();
+  for (let i = 1; i < modelDates.length; i += 1) expect(modelDates[i] <= modelDates[i - 1]).toBeTruthy();
+  await page.locator("#stage-model .link-button").click();
+  await expect(page.locator("#model-dialog")).toBeVisible();
+  await page.locator("#model-dialog").getByRole("button", { name: "Close" }).click();
+
+  await systems.click();
+  await expect(page.locator("#stage-model")).toBeHidden();
+  const systemName = (await page.locator("#stage-system .stage-name").textContent()).trim();
+  const systemRows = page.locator("#stage-system .stage-list-name");
+  await expect(systemRows).not.toHaveCount(0);
+  expect(await systemRows.allTextContents()).not.toContain(systemName);
+  const systemDates = await page.locator("#stage-system .stage-list time").allTextContents();
+  for (let i = 1; i < systemDates.length; i += 1) expect(systemDates[i] <= systemDates[i - 1]).toBeTruthy();
+  await page.locator("#stage-system .stage-list button").first().click();
+  await expect(page.locator("#project-dialog")).toBeVisible();
+  await page.locator("#project-dialog").getByRole("button", { name: "Close" }).click();
+
+  await elements.click();
+  await expect(page.locator("#elements")).toBeVisible();
+  await expect(page.locator("#stage-system")).toBeHidden();
 });

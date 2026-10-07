@@ -1,3 +1,5 @@
+const fs = require("node:fs");
+const path = require("node:path");
 const { test, expect } = require("@playwright/test");
 const { collectionEntry, openCollection, openView, searchAll } = require("./helpers/landing");
 const { closeRecord, recordHeading, recordView, search } = require("./helpers/results");
@@ -55,6 +57,51 @@ test("no view overflows the page horizontally at 390px", async ({ page }) => {
   await page.locator('[data-model="model-alibaba-qwen2-5-coder-0-5b"]').click();
   const modelDialogOverflow = await recordView(page, "model").evaluate(dialog => dialog.scrollWidth - dialog.clientWidth);
   expect(modelDialogOverflow).toBeLessThanOrEqual(0);
+});
+
+// A dialog's horizontal overflow came from its longest unbreakable run: a trust note or
+// license scope quoting a URL, which set the min-content width of its cell, then of the
+// block, then of the `1fr` grid track. The record carrying the longest such run is the one
+// to check, and it moves as the catalog grows, so this reads the published payloads and
+// opens whichever record is currently worst rather than naming one that a data batch can
+// rename. Both halves of the fix are asserted here: no sideways scroll, and a label column
+// wide enough that a word is not broken across lines to achieve it.
+test("no record dialog overflows at 390px, and the worst one is the record with the longest unbreakable run", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const published = file => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "..", "web", file), "utf8"));
+  const collections = [
+    ["inference", "inference", published("app/inference.json").inference],
+    ["systems", "system", published("app/systems.json").systems],
+    ["runtimes", "runtime", published("app/runtimes.json").runtimes],
+    ["models", "model", published("app/models.json").models],
+    ["packs", "pack", published("app/packs.json").packs],
+    ["robots", "robot", published("app/robots.json").robots],
+  ];
+  // The longest run of characters a browser cannot break on: no space, hyphen, slash.
+  const longestRun = record => (JSON.stringify(record).match(/[^\s"]{16,}/g) || [])
+    .reduce((longest, run) => Math.max(longest, run.length), 0);
+
+  for (const [scope, kind, records] of collections) {
+    const worst = records.reduce((a, b) => (longestRun(b) > longestRun(a) ? b : a));
+    await page.goto(`/?collection=${scope}&record=${kind}:${worst.id}`);
+    await expect(recordView(page, kind), `${kind} ${worst.id} opens`).toBeVisible();
+    const dialog = recordView(page, kind);
+    expect(await dialog.evaluate(node => node.scrollWidth - node.clientWidth), `${kind} ${worst.id} scrolls sideways`).toBeLessThanOrEqual(0);
+    // The other half: removing the sideways scroll must not buy it by breaking words.
+    // The trust table's label column is the one that collapsed when the prose column
+    // became wrappable, so it is the one measured -- not the narrowest element, which is
+    // the score column holding a single digit by design.
+    const labels = await dialog.evaluate(node => [...node.querySelectorAll(".trust-table td:nth-child(1), .trust-table td:nth-child(2)")]
+      .map(el => {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        return Math.max(0, ...[...range.getClientRects()].map(rect => rect.width));
+      }));
+    for (const width of labels) {
+      expect(width, `${kind} ${worst.id} keeps its trust labels readable`).toBeGreaterThan(80);
+    }
+    await closeRecord(page, kind);
+  }
 });
 
 test("the page loads without third-party runtime requests", async ({ page, baseURL }) => {

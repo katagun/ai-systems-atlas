@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import re
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -16,6 +17,7 @@ author: Someone
 
 Body text.
 """
+REPO_ROOT = Path(__file__).resolve().parent.parent
 STYLESHEET = "body { margin: 0; }"
 
 
@@ -368,29 +370,52 @@ class HeaderTests(PostFixture):
                     f"{path} primary navigation diverges from web/index.html",
                 )
 
-    def test_pages_load_the_site_stylesheet_and_fonts_under_their_content_stamp(
+    def test_pages_carry_the_unstamped_placeholder_the_deploy_job_replaces(
         self,
     ) -> None:
-        """The same stamp build_asset_version.mjs gives index.html, so a cached
-        stylesheet from before a change can never be paired with a newer page."""
-        import hashlib
+        """ADR 050: a blog page carries the placeholder, never a content hash.
 
-        stamp = hashlib.sha256(STYLESHEET.encode("utf-8")).hexdigest()[:12]
-        pages = self.pages()
+        The hash used to be computed here, which meant an edit to any post rewrote
+        the stamp in all nine pages and two branches editing different posts
+        conflicted on nine files at once. The stamp now comes from the one
+        implementation in scripts/build_asset_version.mjs at deploy time, so this
+        module holds no hashing at all -- only the token, which
+        ``test_the_blog_placeholder_matches_the_deploy_stamper`` pins to that module.
+        """
         for path, root in (
             ("blog/index.html", "../"),
             ("blog/newer/index.html", "../../"),
         ):
             with self.subTest(path):
-                self.assertIn(
-                    f'<link rel="stylesheet" href="{root}styles.css?v={stamp}">',
-                    pages[path],
-                )
-                self.assertRegex(
-                    pages[path],
-                    rf'<link rel="stylesheet" href="{re.escape(root)}fonts\.css\?v=[0-9a-f]{{12}}">',
-                )
-                self.assertNotIn("<style>", pages[path])
+                for name in ("styles.css", "fonts.css"):
+                    self.assertIn(
+                        f'<link rel="stylesheet" href="{root}{name}'
+                        f'?v={build_blog.ASSET_VERSION_PLACEHOLDER}">',
+                        self.pages()[path],
+                    )
+                self.assertNotIn("<style>", self.pages()[path])
+
+    def test_the_blog_placeholder_matches_the_deploy_stamper(self) -> None:
+        """Two modules now name the token, and only one may compute a hash.
+
+        build_blog.py writes it and build_asset_version.mjs replaces it, so a
+        rename on one side that missed the other would ship a blog whose references
+        the deploy job silently never stamps -- stale stylesheets for every reader,
+        with the freshness check passing throughout because the committed file is
+        placeholder-only either way.
+        """
+        stamper = subprocess.run(
+            [
+                "node",
+                "-e",
+                "process.stdout.write(require('./scripts/build_asset_version.mjs').PLACEHOLDER)",
+            ],
+            capture_output=True,
+            text=True,
+            cwd=REPO_ROOT,
+            check=True,
+        )
+        self.assertEqual(stamper.stdout, build_blog.ASSET_VERSION_PLACEHOLDER)
 
     def test_a_missing_stylesheet_stops_the_build(self) -> None:
         root = self.root_with(

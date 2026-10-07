@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import html
 import tempfile
 import unittest
 from pathlib import Path
@@ -104,6 +105,23 @@ class SharePageTests(unittest.TestCase):
         self.assertIn("Agent system", page)
         self.assertIn("Coding agent", page)
         self.assertNotIn("score", page.lower().replace("score profile", ""))
+
+    def test_system_page_shows_the_product_boundary_note(self) -> None:
+        record = next(
+            item for item in self.catalog["projects"] if item.get("current_repo_note")
+        )
+        page = self.pages[share_page_path("system", record["id"])]
+        self.assertIn("<dt>Product boundary</dt>", page)
+        self.assertIn(html.escape(record["current_repo_note"]), page)
+        plain = next(
+            item
+            for item in self.catalog["projects"]
+            if not item.get("current_repo_note")
+        )
+        self.assertNotIn(
+            "Product boundary",
+            self.pages[share_page_path("system", plain["id"])],
+        )
 
     def test_pack_page_does_not_double_the_repository_link(self) -> None:
         page = self.pages["records/packs/claude-code-tresor/index.html"]

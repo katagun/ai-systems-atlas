@@ -21,9 +21,9 @@
   <meta property="og:url" content="https://peacefulcoexistance.com/">
   <title>peacefulcoexistance — AI systems directory</title>
   <link rel="canonical" href="https://peacefulcoexistance.com/">
-  <link rel="stylesheet" href="fonts.css?v=6c40d40cbfc8">
+  <link rel="stylesheet" href="fonts.css?v=BUILD">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=67ac95222db6">
+  <link rel="stylesheet" href="styles.css?v=BUILD">
 </head>
 <body class="atlas-app">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -77,7 +77,7 @@
   <main id="main">
     <section id="directory" class="view is-active" aria-labelledby="directory-title">
       <p class="eyebrow door-kicker" id="hero-kicker">Systems, source models, services, and runtimes</p>
-      <h1 id="directory-title" class="door-title" tabindex="-1">The elements of <span>AI systems.</span></h1>
+      <h1 id="directory-title" class="door-title" tabindex="-1"><bdi id="directory-count"></bdi> elements of <span>AI</span></h1>
       <div id="front-door" class="front-door">
         <div class="front-door-copy">
           <p class="hero-copy">Find your AI tools. Know their terms.<span class="desktop-explore-link"> <a href="?view=explore">Explore the data</a>.</span></p>
@@ -87,6 +87,12 @@
           <p class="door-jobs-label">Start from a job</p>
           <ul id="door-jobs" role="list"></ul>
         </nav>
+        <div class="tabs stage-tabs" role="tablist" aria-label="Catalog stage">
+          <button type="button" class="tab is-active" role="tab" data-stage-face="elements" aria-selected="true" aria-controls="stage-elements">Elements</button>
+          <button type="button" class="tab" role="tab" data-stage-face="model" aria-selected="false" aria-controls="stage-model">Models</button>
+          <button type="button" class="tab" role="tab" data-stage-face="system" aria-selected="false" aria-controls="stage-system">Systems</button>
+        </div>
+        <div id="stage-elements" data-stage-panel="elements" role="tabpanel">
         <section id="elements" class="elements" aria-labelledby="elements-title">
           <div class="elements-heading"><h2 id="elements-title">Find a system by its role</h2><p id="elements-count"></p></div>
           <nav id="element-family-tabs" class="element-family-tabs" aria-label="Elements families"></nav>
@@ -101,14 +107,17 @@
             <p class="element-sheet-links"><a id="element-browse" href="?collection=systems">Browse matching systems →</a><a id="element-detail" href="?collection=systems">Full record and evidence →</a></p>
             <p class="element-note">Local-first describes stored content, not necessarily local execution. These are reviewed catalog claims, not independent performance measurements.</p>
           </section>
-          <p class="element-note">Active systems grouped by role. Logo previews are alphabetical; symbols and positions imply no rank or periodic law.</p>
+          <p class="element-note">Active systems grouped by role. Organization marks preview the labs that build them; symbols and positions imply no rank or periodic law.</p>
         </section>
+        </div>
+        <div id="stage-model" data-stage-panel="model" role="tabpanel" hidden></div>
+        <div id="stage-system" data-stage-panel="system" role="tabpanel" hidden></div>
         <div class="elements-heading collection-index-heading"><h2>Browse every collection</h2><p>Models, services, runtimes, and other record types keep their own boundaries.</p></div>
         <nav id="collection-index" class="collection-index" aria-label="Collections"></nav>
       </div>
       <nav id="scope-strip" class="scope-strip" aria-label="Directory collections" hidden></nav>
       <div id="results-bar" class="results-bar" hidden>
-        <label class="search-field results-search"><span class="visually-hidden">Search</span><input id="results-search" type="search" placeholder="Search systems, models, services, runtimes, packs, and robots" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
+        <label class="search-field results-search"><span class="visually-hidden">Search</span><input id="results-search" type="search" placeholder="Search systems, models, services, runtimes, packs, robots, labs, and specifications" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
         <div class="results-sort">
           <label data-sort-scope="systems" hidden><span class="visually-hidden">Sort</span><select id="sort-filter"><option value="match" disabled>Best match</option><option value="score">Editorial score</option><option value="stars">GitHub stars</option><option value="name" selected>Name</option></select></label>
           <label data-sort-scope="inference" hidden><span class="visually-hidden">Sort</span><select id="inference-sort-filter"><option value="match" disabled>Best match</option><option value="score" selected>Service score</option><option value="name">Name</option></select></label>
@@ -134,7 +143,7 @@
             <div class="result-row"><p id="all-directory-result-count" aria-live="polite" tabindex="-1"></p></div>
             <p class="scope-note" data-scope-note="all">The whole directory in one list: A–Z, or best match first while you search. Scores stay hidden here, since a score only compares like with like. Choose a collection for its own filters, and its scores where it has them. <button data-open-tab="taxonomy">How comparisons work →</button></p>
             <div class="job-hint" data-job-hint="all" hidden></div>
-            <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems, model releases, inference services, local runtimes, agent packs, and robots"></section>
+            <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems, model releases, inference services, local runtimes, agent packs, robots, labs, and specifications"></section>
             <nav id="all-directory-pager" class="pager" aria-label="All-directory pagination"></nav>
           </div>
 
@@ -149,6 +158,7 @@
               <label><span>Deployment</span><select id="deployment-filter"><option value="">All deployments</option></select></label>
               <label><span>Interface</span><select id="agent-interface-filter"><option value="">All interfaces</option></select></label>
               <label><span>Capability</span><select id="capability-filter"><option value="">All capabilities</option></select></label>
+              <label><span>Retrieval</span><select id="retrieval-filter"><option value="">All retrieval modes</option></select></label>
               <label><span>Status</span><select id="status-filter"><option value="active">Active</option><option value="">All</option><option value="archived">Archived</option><option value="superseded">Superseded</option><option value="removed">Unavailable</option></select></label>
               <label><span>Local-first</span><select id="local-filter"><option value="">Any</option><option value="1">Yes</option><option value="0">No</option><option value="unknown">Not recorded</option></select></label>
               <label><span>Lab</span><select id="system-lab-filter"><option value="">All labs</option></select></label>
@@ -316,14 +326,11 @@
 
     <section id="finder" class="view" aria-labelledby="finder-title">
       <div class="section-heading finder-heading">
-        <p class="eyebrow">Three quick questions</p>
-        <h1 id="finder-title" tabindex="-1">What should the system help you do?</h1>
-        <p>Answer three questions to get up to three reviewed matches.</p>
+        <p class="eyebrow">Counted, ranked, reviewed</p>
+        <h1 id="finder-title" tabindex="-1">Find your fit</h1>
+        <p id="finder-status">Every job carries a count. Choose one to see its three strongest reviewed matches.</p>
       </div>
-      <section class="finder-shell" aria-label="Guided system finder">
-        <div id="finder-progress" class="finder-progress" aria-label="Finder progress"></div>
-        <div id="finder-content" class="finder-content" aria-live="polite"></div>
-      </section>
+      <div id="finder-content"></div>
     </section>
 
     <section id="taxonomy" class="view" aria-labelledby="taxonomy-title">
@@ -520,8 +527,8 @@
   </dialog>
 
   <footer><div class="footer-actions"><nav class="footer-nav" aria-label="Site map"><a href="./">Catalog</a><a href="?view=finder">Finder</a><a href="?view=explore">Explore</a><a href="?view=taxonomy">Concepts</a><a href="?view=api">Published data</a><a href="blog/">Blog</a></nav><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a></div><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>
-  <script type="application/json" id="data-versions">{"projects.json":"71d9917d5557","taxonomy.json":"9797c3c30ee1","license-evidence.json":"d6cbb911714a","specifications.json":"f6487c60eb84","inference-services.json":"3adcbc44ceca","local-runtimes.json":"c3d85a51fff7","models.json":"541ef5ef7c71","models-dev.json":"ec5e4b8a29fb","logos.json":"a0ce82f2ea60","exclusions.json":"ff05010648bd","app/systems.json":"fd038c59c916","app/inference.json":"b1f20c24671e","app/runtimes.json":"ef7c2001163c","app/specifications.json":"e62146fa677b","app/models.json":"5808a43cc56c","app/packs.json":"0907bc81836a","app/labs.json":"621781eaa733","app/robots.json":"3b07b04f8f7c","app/model-source-details.json":"c45f82ff3a3b","app/search/systems.json":"e2975e5aaa70","app/search/inference.json":"b26a8d12b53b","app/search/runtimes.json":"cd913303e59b","app/search/specifications.json":"077a4b537e9e","app/search/models.json":"a292e958eac7","app/search/packs.json":"f86bbf630c31","app/search/labs.json":"2a8a8278c714","app/search/robots.json":"f3ba0fcf79b2","app/detail":"4509213f7994"}</script>
-  <script src="app-core.js?v=8f463431e769" defer></script>
-  <script src="app.js?v=e12461b924ef" defer></script>
+  <script type="application/json" id="data-versions">{"projects.json":"BUILD","taxonomy.json":"BUILD","license-evidence.json":"BUILD","specifications.json":"BUILD","inference-services.json":"BUILD","local-runtimes.json":"BUILD","models.json":"BUILD","models-dev.json":"BUILD","logos.json":"BUILD","exclusions.json":"BUILD","app/systems.json":"BUILD","app/inference.json":"BUILD","app/runtimes.json":"BUILD","app/specifications.json":"BUILD","app/models.json":"BUILD","app/packs.json":"BUILD","app/labs.json":"BUILD","app/robots.json":"BUILD","app/model-source-details.json":"BUILD","app/search/systems.json":"BUILD","app/search/inference.json":"BUILD","app/search/runtimes.json":"BUILD","app/search/specifications.json":"BUILD","app/search/models.json":"BUILD","app/search/packs.json":"BUILD","app/search/labs.json":"BUILD","app/search/robots.json":"BUILD","app/detail":"BUILD"}</script>
+  <script src="app-core.js?v=BUILD" defer></script>
+  <script src="app.js?v=BUILD" defer></script>
 </body>
 </html>

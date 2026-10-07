@@ -70,6 +70,34 @@ test("following a successor link updates the record URL", async ({ page }) => {
   await expect(page).toHaveURL(/record=system%3Amicrosoft-agent-framework|record=system:microsoft-agent-framework/);
 });
 
+test("a system dialog shows its product boundary note and related records", async ({ page }) => {
+  await page.goto("/?record=system:autogen");
+
+  const view = recordView(page, "system");
+  await expect(view).toContainText("Product boundary");
+  await expect(view).toContainText("Related in");
+  const first = view.locator("[data-open-project]").first();
+  const name = await first.innerText();
+  await first.click();
+  await expect(recordHeading(page, "system")).toHaveText(name);
+  await expect(page).toHaveURL(/record=system%3A|record=system:/);
+});
+
+test("a successor record names its predecessor", async ({ page }) => {
+  await page.goto("/?record=system:microsoft-agent-framework");
+
+  const view = recordView(page, "system");
+  await expect(view).toContainText("Superseded predecessor");
+  await view.locator("[data-open-project]", { hasText: "AutoGen" }).click();
+  await expect(recordHeading(page, "system")).toHaveText("AutoGen");
+});
+
+test("a system dialog links more records from the same lab", async ({ page }) => {
+  await page.goto("/?record=system:autogen");
+
+  await expect(recordView(page, "system")).toContainText("More from Microsoft");
+});
+
 test("unknown, malformed, and inherited-property record URLs are discarded without errors", async ({ page }) => {
   const errors = [];
   page.on("pageerror", error => errors.push(error.message));

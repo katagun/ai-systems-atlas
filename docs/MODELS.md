@@ -20,7 +20,9 @@ A models.dev source record is not an Atlas editorial conclusion. It carries only
 
 The automated source snapshot preserves every record under models.dev's provider-independent `models/**/*.toml` tree, regardless of modality. This makes source coverage complete and lets readers discover image-, audio-, and video-output records without implying that Atlas has reviewed them.
 
-A release is eligible for the review queue and the scored Atlas collection when authoritative sources establish its identity and it generates text as an output modality. Text-only and multimodal language models qualify for review. Image-, audio-, or video-only generators remain source records but do not enter the language-model review queue because the comparison vocabulary is about language-model access and deployment.
+A release is eligible for the review queue and the scored Atlas collection when authoritative sources establish its identity and it is a model artifact with a documented output modality: text, image, video, or audio ([ADR 051](adr/051-generative-media-releases-join-the-reviewed-models-collection.md)). `model_types` names one type per output the release exists to produce, and validation requires the record's own output modalities to agree with its type: a language type requires `text`, `image_generation_model` requires `image`, `video_generation_model` requires `video`, and `audio_generation_model` requires `audio`.
+
+Two kinds of release stay out under that rule. An **action-emitting policy** is not eligible, whatever it takes as input, because no type names a model whose primary output is a robot action or a predicted trajectory; the robotics scope decision in [`COVERAGE.md`](COVERAGE.md) records why, and ADR 036's embodied boundary is the open question. A **judgment, embedding, or reranking model** is held as its own question in `BACKLOG.md`.
 
 License, public weights, parameter count, benchmark performance, popularity, and first-party API availability never decide inclusion. A proprietary API-only model can qualify just as an open-weight release can. Those facts affect classification and the access score after the identity and evidence gates pass.
 
@@ -34,7 +36,7 @@ models.dev is discovery metadata, not Atlas editorial authority. Run:
 uv run python scripts/import_models_dev.py
 ```
 
-The importer resolves the `anomalyco/models.dev` `dev` ref to a full Git SHA, downloads that commit's immutable repository archive, and reads only `models/**/*.toml`. It deliberately ignores provider-specific files under `providers/`, provider pricing, benchmarks, and endpoint inventories. Each run writes the complete source snapshot to `models-dev.json` and the text-output review queue to `model-candidates.json`; both record the commit, archive URL, archive SHA-256, and source count, while the queue also records its eligible count.
+The importer resolves the `anomalyco/models.dev` `dev` ref to a full Git SHA, downloads that commit's immutable repository archive, and reads only `models/**/*.toml`. It deliberately ignores provider-specific files under `providers/`, provider pricing, benchmarks, and endpoint inventories. Each run writes the complete source snapshot to `models-dev.json` and the review queue to `model-candidates.json`; both record the commit, archive URL, archive SHA-256, and source count, while the queue also records its eligible count.
 
 The import is fail-closed. It rejects an unexpected host, archive over 8 MiB, malformed paths or TOML, duplicate or colliding stable IDs, invalid field types, unsupported modalities, fewer than 100 or more than 20,000 source records, and an eligible-count drop greater than 20% from the previous successful snapshot. Parsing and normalization complete before either output is replaced.
 
@@ -54,6 +56,8 @@ Every source record is published in `models-dev.json`. Reviewed `source_id` valu
 ## OpenRouter cross-check
 
 models.dev has gaps, and finding one used to depend on a reviewer noticing it. The weekly refresh therefore compares OpenRouter's public model list with Atlas ([ADR 039](adr/039-openrouter-is-an-unpublished-cross-check-for-models-dev-gaps.md)). Its output, `directory/openrouter-model-leads.json`, lists text-output releases that OpenRouter routes and that no models.dev row or reviewed record represents. Neither that file nor `directory/openrouter-model-dispositions.json` is published.
+
+The cross-check still covers text-output routes only, which is narrower than the review queue since [ADR 051](adr/051-generative-media-releases-join-the-reviewed-models-collection.md) widened it. OpenRouter's public list is a language-model router catalogue, so an image or video generator has no route to appear on it, and a release models.dev omits is reached through the OpenRouter cross-check or by a reviewer's own sweep rather than by a second scraper.
 
 ```bash
 uv run python scripts/import_openrouter.py

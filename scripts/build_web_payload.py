@@ -149,7 +149,9 @@ BOOT_FIELDS = {
     ),
     # A lab card and every cross-link to a lab join through catalog_names and
     # systems (ADR 041), so both must be on the boot record; the join itself runs
-    # in the browser over boot records the page already holds.
+    # in the browser over boot records the page already holds. A card also paints
+    # its geography from boot, so research_locations rides with headquarters
+    # (ADR 052) rather than waiting for the detail payload.
     "labs": (
         "id",
         "name",
@@ -157,10 +159,12 @@ BOOT_FIELDS = {
         "description",
         "lab_type",
         "headquarters",
+        "research_locations",
         "parent_organization",
         "catalog_names",
         "systems",
         "admission_basis",
+        "display_order",
     ),
     "robots": (
         "id",
@@ -176,7 +180,10 @@ BOOT_FIELDS = {
     ),
 }
 
-# Exactly the fields each filter in web/app-core.js searches today.
+# Exactly the fields each filter in web/app-core.js searches today. A system's
+# `retrieval_modes` carries trait ids such as `semantic_vector`; the browser's
+# tokenizer splits an underscore into a space, so the indexed words are the ones
+# a reader types, and a trait hit weighs 3 rather than a name's 50.
 SEARCH_FIELDS = {
     "systems": (
         "id",
@@ -187,6 +194,7 @@ SEARCH_FIELDS = {
         "why_it_matters",
         "strengths",
         "weaknesses",
+        "retrieval_modes",
     ),
     "inference": (
         "id",
@@ -430,6 +438,13 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
                 "first": dates[0] if dates else None,
                 "last": dates[-1] if dates else None,
                 "missing": len(active) - len(dates),
+            }
+            # The boot record does not carry verified_at; the stage needs it
+            # to order active systems without loading every detail file.
+            envelope["review_dates"] = {
+                record["id"]: record["verified_at"]
+                for record in active
+                if record.get("verified_at")
             }
         if collection == "models":
             envelope.update(

@@ -7,6 +7,10 @@ for (const theme of ["light", "dark"]) {
     await page.emulateMedia({ colorScheme: theme });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
+    const familyTabs = page.locator("[data-element-family-tab]");
+    await expect(familyTabs).toHaveText(["Agents", "Memory", "Assistants"]);
+    await expect(familyTabs.first()).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator('.element-group[data-element-family="agent_system"]')).toBeVisible();
     for (const width of [320, 390, 767]) {
       await page.setViewportSize({ width, height: 844 });
       await expect(page.locator("#mobile-nav")).toBeInViewport();

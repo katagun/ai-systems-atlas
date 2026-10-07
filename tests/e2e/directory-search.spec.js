@@ -1,5 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const catalogCounts = require("./helpers/catalog-counts");
+const { chooseFinderGoal, finderHandoff } = require("./helpers/finder");
 const {
   collectionEntry,
   entryCount,
@@ -110,7 +111,8 @@ test("superseded systems leave the active view and link to their successor", asy
 
   await dialog.locator("[data-successor]").click();
   await expect(dialog.locator("h1")).toHaveText("Microsoft Agent Framework");
-  await expect(dialog.locator(".status-notice")).toHaveCount(0);
+  await expect(dialog.locator(".status-notice")).toHaveCount(1);
+  await expect(dialog.locator(".status-notice")).toContainText("Superseded predecessor");
 });
 
 test("taxonomy documents every local-runtime group and its score weights", async ({ page }) => {
@@ -213,9 +215,7 @@ test("the finder guides a local runtime path into the runtimes scope", async ({ 
   await page.goto("/");
 
   await page.getByRole("button", { name: "Find your fit", exact: true }).click();
-  await page.locator('[data-finder-choice][data-finder-value="local_runtime"]').click();
-  await page.locator('[data-finder-choice][data-finder-value="serve_workload"]').click();
-  await page.locator('[data-finder-choice][data-finder-value="hardware"]').click();
+  await chooseFinderGoal(page, "serve_workload", "hardware");
 
   await expect(page.locator(".finder-result h3").first()).toHaveText("vLLM");
   await expect(page.locator(".finder-result").first().locator(".card-mark svg")).toHaveCount(1);
@@ -229,14 +229,25 @@ test("the finder guides a local runtime path into the runtimes scope", async ({ 
 test("the unified directory distinguishes and opens systems and inference services", async ({ page }) => {
   await page.goto("/");
 
+  // "AI21 Studio" answers for two collections, and Everything holds both: the service
+  // and the organization that develops models behind it. The lab used to be reachable
+  // only by searching for the lab itself, because the All grid summed six collections
+  // and omitted Labs and Specifications.
   await searchAll(page, "AI21 Studio");
-  const serviceCard = page.locator("#all-directory-grid .project-card");
+  const serviceCard = page.locator("#all-directory-grid .inference-service-card");
+  const labCard = page.locator("#all-directory-grid .lab-card");
   await expect(serviceCard).toHaveCount(1);
+  await expect(labCard).toHaveCount(1);
   await expect(serviceCard.locator(".family-label")).toContainText("Inference service · Direct model API");
   await expect(serviceCard.locator(".score-ring")).toHaveCount(0);
   await serviceCard.getByRole("button", { name: /^View details for / }).click();
   await expect(recordView(page, "inference")).toContainText("Inference-service score");
   await closeRecord(page, "inference");
+
+  // And the same scope opens the lab's own dialog, which the grid had no handler for.
+  await labCard.getByRole("button", { name: /^View details for / }).click();
+  await expect(recordView(page, "lab")).toContainText("AI21 Labs");
+  await closeRecord(page, "lab");
 
   await searchAll(page, "Kilo Code");
   const systemCard = page.locator("#all-directory-grid .project-card");
@@ -253,7 +264,7 @@ test("the unified Directory remains usable at a narrow viewport", async ({ page 
   await expect(collectionEntry(page, "all")).toBeVisible();
   await expect(collectionEntry(page, "inference")).toBeVisible();
   await searchAll(page, "AI21 Studio");
-  await expect(page.locator("#all-directory-grid .project-card h2")).toHaveText("AI21 Studio");
+  await expect(page.locator("#all-directory-grid .project-card h2")).toHaveText(["AI21 Studio", "AI21 Labs"]);
   await openCollection(page, "inference");
   await expect(searchBox(page, "inference")).toBeVisible();
   await expect(page.locator("#inference-grid .score-ring").first()).toBeVisible();
@@ -485,12 +496,16 @@ test("Perplexity assistant, Computer, and API remain distinct directory records"
   await page.goto("/");
   await searchAll(page, "Perplexity");
 
-  const cards = page.locator("#all-directory-grid .project-card");
+  // Perplexity is also an organization in this catalog, so Everything lists a lab card
+  // beside the systems. The three systems still have to stay distinct from each other,
+  // so the distinctness check reads the cards that are not labs.
+  await expect(page.locator("#all-directory-grid .lab-card").filter({ has: page.getByRole("heading", { name: "Perplexity", exact: true }) })).toHaveCount(1);
+  const systemCards = page.locator("#all-directory-grid .project-card:not(.lab-card)");
   for (const name of ["Perplexity", "Perplexity Computer", "Perplexity API"]) {
-    await expect(cards.filter({ has: page.getByRole("heading", { name, exact: true }) })).toHaveCount(1);
+    await expect(systemCards.filter({ has: page.getByRole("heading", { name, exact: true }) })).toHaveCount(1);
   }
 
-  const assistantCard = cards.filter({ has: page.getByRole("heading", { name: "Perplexity", exact: true }) });
+  const assistantCard = systemCards.filter({ has: page.getByRole("heading", { name: "Perplexity", exact: true }) });
   await expect(assistantCard.locator(".family-label")).toContainText("System · Assistant system");
   await assistantCard.getByRole("button", { name: /^View details for / }).click();
   await expect(recordView(page, "system")).toContainText("Assistant-system score");
@@ -513,9 +528,7 @@ test("reviewed named agent additions are searchable", async ({ page }) => {
 test("finder offers assistant outcomes and preserves the selected role", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Find your fit", exact: true }).click();
-  await page.getByRole("button", { name: /I need an assistant/ }).click();
-  await page.getByRole("button", { name: /Use several models in one place/ }).click();
-  await page.getByRole("button", { name: /Model and data portability/ }).click();
+  await chooseFinderGoal(page, "model_choice", "portable");
 
   await expect(page.locator(".finder-results h3").filter({ hasText: /^T3 Chat$/ })).toHaveCount(1);
   await expect(page.locator(".finder-result").filter({ hasText: "T3 Chat" }).locator(".card-monogram")).toHaveText("T");
@@ -531,9 +544,7 @@ test("finder offers assistant outcomes and preserves the selected role", async (
 test("finder recommends inference services without crossing score profiles", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Find your fit", exact: true }).click();
-  await page.getByRole("button", { name: /I need an inference service/ }).click();
-  await page.getByRole("button", { name: /Route across models and providers/ }).click();
-  await page.getByRole("button", { name: /Traffic resilience/ }).click();
+  await chooseFinderGoal(page, "route_models", "resilience");
 
   await expect(page.locator(".finder-results .finder-result")).toHaveCount(3);
   await expect(page.locator(".finder-results .family-label").first()).toHaveText("Routing aggregator");
@@ -596,6 +607,43 @@ test("the capability filter reaches the agents that carry a capability", async (
   await page.reload();
   await expectFilter(page, "systems", "capability", "browser_control");
   await expect(names.filter({ hasText: /^Browser Use$/ })).toHaveCount(1);
+  await expect(names.filter({ hasText: /^Aider$/ })).toHaveCount(0);
+});
+
+test("the retrieval filter reaches the systems that carry a retrieval mode", async ({ page }) => {
+  await page.goto("/?collection=systems");
+
+  const names = page.locator("#project-grid .project-card h2");
+  await setFilter(page, "systems", "retrieval", "graph_traversal");
+
+  await expect(names.filter({ hasText: /^Cognee$/ })).toHaveCount(1);
+  await expect(names.filter({ hasText: /^Aider$/ })).toHaveCount(0);
+  await expect(page.locator("#filter-chips .filter-chip:visible")).toHaveCount(1);
+  await expect(page).toHaveURL(/retrieval=graph_traversal/);
+
+  // A second mode narrows further rather than widening: Cognee records graph
+  // traversal but not temporal retrieval.
+  await setFilter(page, "systems", "retrieval", "temporal");
+  await expect(names.filter({ hasText: /^Graphiti$/ })).toHaveCount(1);
+  await expect(names.filter({ hasText: /^Cognee$/ })).toHaveCount(0);
+
+  await page.reload();
+  await expectFilter(page, "systems", "retrieval", "temporal");
+  await expect(names.filter({ hasText: /^Graphiti$/ })).toHaveCount(1);
+
+  await clearFilters(page, "systems");
+  await expectFilter(page, "systems", "retrieval", "");
+  await expect(page.locator("#filter-chips .filter-chip:visible")).toHaveCount(0);
+});
+
+test("a search term reaches a system by the retrieval mode it carries", async ({ page }) => {
+  await page.goto("/?collection=systems");
+  await search(page, "temporal retrieval");
+
+  // Temporal retrieval is the narrowest mode in the published catalog, so its
+  // matches are one page; the words are the trait id the index holds.
+  const names = page.locator("#project-grid .project-card h2");
+  await expect(names.filter({ hasText: /^Graphiti$/ })).toHaveCount(1);
   await expect(names.filter({ hasText: /^Aider$/ })).toHaveCount(0);
 });
 
@@ -746,11 +794,7 @@ test("the Systems chip lists every active system after a Finder handoff", async 
   // Straight from the handoff, and by way of All, which keeps the family.
   for (const via of [[], ["All"]]) {
     await page.goto("/?view=finder");
-    for (const value of ["agent_system", "coding", "balanced"]) {
-      await page.locator(`[data-finder-choice][data-finder-value="${value}"]`).click();
-    }
-    await page.locator("[data-finder-directory]").click();
-    await expect(page.locator("#result-count")).toContainText("Finder match");
+    await finderHandoff(page, "coding");
     for (const name of via) await openCollection(page, name.toLowerCase());
     const systems = collectionEntry(page, "systems");
     const count = await entryCount(page, "systems");

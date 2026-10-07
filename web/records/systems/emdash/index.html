@@ -15,8 +15,8 @@
 <meta name="theme-color" content="#f7f9fc">
 <link rel="stylesheet" href="../../../fonts.css">
 <style>
-:root { color-scheme: light dark; --bg: #f7f9fc; --panel: #ffffff; --text: #16233a; --muted: #5b6b82; --line: #d8e0ea; --accent: #0f766e; }
-@media (prefers-color-scheme: dark) { :root { --bg: #0f141b; --panel: #171e28; --text: #e6ebf2; --muted: #9aa7b8; --line: #2a3441; --accent: #3fb8b0; } }
+:root { color-scheme: light dark; --bg: #f7f9fc; --panel: #ffffff; --text: #16233a; --muted: #5b6b82; --line: #d8e0ea; --accent: #2f6fad; }
+@media (prefers-color-scheme: dark) { :root { --bg: #0f141b; --panel: #171e28; --text: #e6ebf2; --muted: #9aa7b8; --line: #2a3441; --accent: #6ea8dd; } }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.6 "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif; }
 main { max-width: 44rem; margin: 3rem auto 2rem; padding: 0 1.25rem; }
@@ -42,7 +42,7 @@ footer { max-width: 44rem; margin: 0 auto 3rem; padding: 1rem 1.25rem 0; border-
 <p class="eyebrow">System · Agent systems · Coding-agent workflow / skill stack</p>
 <h1>emdash</h1>
 <p class="lead">The most adopted attempt to make parallel, isolated coding-agent runs a reviewable delivery process, and the only reviewed system driving many vendors&#x27; agents through one protocol contract instead of per-vendor glue.</p>
-<dl><dt>Source model</dt><dd>Open source</dd><dt>Licenses</dt><dd>Apache License 2.0</dd><dt>Deployment</dt><dd>Desktop application · Self-hosted service</dd><dt>Status</dt><dd>Active</dd></dl>
+<dl><dt>Source model</dt><dd>Open source</dd><dt>Licenses</dt><dd>Apache License 2.0</dd><dt>Deployment</dt><dd>Desktop application · Self-hosted service</dd><dt>Status</dt><dd>Active</dd><dt>Product boundary</dt><dd>The sweep proposed a coding-agent role, but no model client exists anywhere in the tree: it drives thirty-eight vendors&#x27; tools over one protocol contract. It is not the terminal-manager shape that excluded two earlier candidates, because its persisted schema carries workspaces, conversations, automation deployments, and pull-request state rather than a flat list of sessions, and it ships a scheduling runtime and a remote daemon of its own. Nothing hosts it, so the reserved add-on question is not reached.</dd></dl>
 <p class="actions"><a class="primary" href="../../../?record=system:emdash">Open in the directory →</a> <a href="https://github.com/generalaction/emdash" rel="noreferrer">Open repository ↗</a></p>
 <p class="note">Editorial ratings appear in the directory beside the profile they belong to and are never compared across collections.</p>
 </main>

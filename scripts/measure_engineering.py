@@ -277,7 +277,7 @@ def symbol_anchor(line: str) -> tuple[str, str] | None:
 
 
 def javascript_anchor_failures(text: str) -> list[str]:
-    """Every `name` (line) anchor in `text` whose symbol is gone from app.js.
+    """Every `name` (line) anchor in `text` whose symbol is gone from the web tree.
 
     Existence, not the line number. The numbers are stale on almost every merge
     — #382 verified seven anchors and #384 moved six of them minutes later — so
@@ -285,8 +285,18 @@ def javascript_anchor_failures(text: str) -> list[str]:
     check. Asserting that the symbol is still declared somewhere catches the
     failure that actually misleads: a reader sent to a line that no longer holds
     the thing, or a refactor that quietly deleted it.
+
+    Both shipped application scripts count. CR-18 moved the Finder and its ranking
+    helpers into `app-core.js`, and anchors that followed them resolved against
+    neither file while only `app.js` was searched: the `|| []` guards item cited
+    `web/app-core.js` line numbers roughly 500 lines out of date until 2026-09-30,
+    and nothing failed, because the file holding those symbols was never opened.
+    The union is coarse — a name declared in either file satisfies the anchor —
+    which is the right trade for a claim about a symbol still existing.
     """
-    declared = declared_names(ROOT / "web" / "app.js")
+    declared: set[str] = set()
+    for script in ("app.js", "app-core.js"):
+        declared |= declared_names(ROOT / "web" / script)
     failures: list[str] = []
     for number, line in enumerate(text.splitlines(), start=1):
         anchor = symbol_anchor(line)
@@ -295,7 +305,8 @@ def javascript_anchor_failures(text: str) -> list[str]:
         name = anchor[0]
         if name not in declared:
             failures.append(
-                f"BACKLOG.md:{number}: `{name}` is no longer declared in web/app.js"
+                f"BACKLOG.md:{number}: `{name}` is no longer declared in "
+                "web/app.js or web/app-core.js"
             )
     return failures
 

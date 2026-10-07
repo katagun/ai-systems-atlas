@@ -4,7 +4,7 @@
 
 ## Context
 
-The [badge review](../BADGE_REVIEW_2026-09-29.md) found a stale robot exception, inaccessible pointer travel to tooltip content, missing review-attention labels in mixed cards and Finder, and ambiguity between navigation symbols, record types, and licensing. The owner approved addressing all six findings while preserving reviewed classifications and the bot-head navigation mark for Agents and Agent packs.
+The [badge review](../history/BADGE_REVIEW_2026-09-29.md) found a stale robot exception, inaccessible pointer travel to tooltip content, missing review-attention labels in mixed cards and Finder, and ambiguity between navigation symbols, record types, and licensing. The owner approved addressing all six findings while preserving reviewed classifications and the bot-head navigation mark for Agents and Agent packs.
 
 ## Decision
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25",
+  "generated_at": "2026-10-03",
   "entries": [
     {
       "name": "A-MEM paper implementation",
@@ -554,6 +554,14 @@
       "verified_at": "2026-09-17"
     },
     {
+      "name": "OpenShell",
+      "repo": "NVIDIA/OpenShell",
+      "reason": "Apache-2.0 throughout, so licensing is not the ground: the tree root carries one LICENSE reading \"Copyright (c) 2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.\" above the Apache 2.0 text, pyproject.toml, sdk/typescript/package.json, and providers/README.md all declare the same SPDX identifier, and the generated THIRD-PARTY-NOTICES lists only permissive dependency licences (MIT, Apache-2.0, ISC, BSD, Unicode-3.0, Zlib, PSF-2.0, OpenSSL, CDLA-Permissive-2.0, 0BSD) with no copyleft component. What OpenShell owns is confinement around an agent somebody else runs, and its own architecture documentation says so: the compute driver's \"job is to build the boundary and prove it's in place. It never decides whether a request is allowed,\" and the quickstart's sandbox image is \"minimal Ubuntu with no agent installed,\" so the agent is a payload the operator supplies. The engineering is real and worth recording for anyone reading the entry -- Landlock confines filesystem access, seccomp user notification stages network operations, a trusted supervisor outside the boundary injects credentials only for requests bound to approved endpoints, and a formally verified policy prover blocks agent-proposed rules that would grant new credentialed reach before a human approves them. None of that is an Atlas outcome. Filesystem, syscall, and network confinement is the external_sandbox execution boundary the catalog already records as a trait on the system running inside it, and nothing here preserves durable knowledge, plans and acts through tools, or owns a conversational workspace; stateful_agent_runtime fails on the same ground, because the durable state the gateway keeps is the sandbox's lifecycle and credentials rather than an agent's. The precedents are consistent: gpty is excluded as the terminal an agent may drive, the Bedrock AgentCore SDK as the way an agent reaches a published platform, and Supabase and the observability platforms as adjacent infrastructure whose operator is the agent. NVIDIA is already a reviewed lab (lab-nvidia), and this record changes nothing there. The two skill trees are the project's own contributor workflow and its own product onboarding, SKILL.md and reference documents with no shipped program, and a repository appears in at most one collection, so this exclusion forecloses a pack record too. The class itself is not dismissed: BACKLOG.md carries a watch for an unscored agent-execution-substrate collection in the ADR 013/015 shape, and this is its first named case.",
+      "useful_lesson": "A vendor can ship a serious, formally verified, well-documented isolation layer and still be a building block, so ask what the software runs and what it decides rather than how much engineering stands behind it. Two first-party sentences answered the whole boundary question without reading the source tree: the project's own statement that the runtime never decides whether a request is allowed, and a default image with no agent in it.",
+      "excluded_at": "2026-10-03",
+      "verified_at": "2026-10-03"
+    },
+    {
       "name": "OpenSpiel",
       "repo": "google-deepmind/open_spiel",
       "reason": "DeepMind's own framework for reinforcement-learning research in games, actively maintained and shipping an AlphaZero re-implementation among its algorithms. It is a research library: a collection of game environments and search and learning algorithms exposed through Python and C++ APIs, with no runnable end-user system and no served interface. Its AlphaZero documentation disclaims the obvious misreading itself, stating that the code is not what produced the paper results and is not designed to scale to superhuman performance. `docs/TAXONOMY.md` reserves the agent framework role for software whose primary outcome is building or running tool-using agents; a games-research library that trains and evaluates policies is neither that nor a memory or assistant outcome.",
@@ -785,6 +793,47 @@
       "useful_lesson": "A dataset with a reference checkpoint is a research input; it enters no scored collection.",
       "excluded_at": "2026-09-28",
       "verified_at": "2026-09-28"
+    },
+    {
+      "name": "swarm",
+      "repo": "openai/swarm",
+      "reason": "The repository heads itself \"Swarm (experimental, educational)\" and the maintainer states Swarm \"is now replaced by the OpenAI Agents SDK, which is a production-ready evolution of Swarm\", recommending migration. It is a superseded predecessor, not an independent reviewable system; the successor is reviewed separately as openai-agents-js.",
+      "useful_lesson": "When the maintainer names a production-ready successor and recommends migration, review the successor once instead of listing both.",
+      "excluded_at": "2026-09-29",
+      "verified_at": "2026-09-29"
+    },
+    {
+      "name": "Agents",
+      "repo": "microsoft/Agents",
+      "reason": "The Microsoft 365 Agents SDK builds full-stack, multichannel delivery for Microsoft 365, Teams, Copilot Studio, and Webchat: its primary outcome is hosting and channel integration on Microsoft's platform rather than agent execution as the SDK's own product. It fails the provider-native SDK gate, which qualifies a provider SDK or harness only when agent execution, not platform or model API access, is its primary outcome.",
+      "useful_lesson": "Multichannel delivery SDKs whose runtime, state, and storage live on the vendor platform are platform integration, not agent-execution frameworks.",
+      "excluded_at": "2026-09-29",
+      "verified_at": "2026-09-29"
+    },
+    {
+      "name": "kimi-agent-sdk",
+      "repo": "MoonshotAI/kimi-agent-sdk",
+      "reason": "The Go, Node.js, and Python SDKs describe themselves as thin, language-native clients that expose the separately maintained Kimi CLI agent runtime, reusing its configuration, tools, skills, and MCP servers. They own no independent agent execution, so the reviewable boundary is the CLI runtime itself, queued separately as MoonshotAI/kimi-code.",
+      "useful_lesson": "Thin clients of a separately maintained agent runtime are pointers to that runtime, not second listings.",
+      "excluded_at": "2026-09-29",
+      "verified_at": "2026-09-29"
+    },
+    {
+      "name": "Company Research Agent",
+      "repo": "guy-hartstein/company-research-agent",
+      "reason": "A fixed linear LangGraph pipeline: grounding fans out to four single-pass analyzers, then collector, a deterministic 0.4 Tavily-score curator filter, enricher, briefing, and editor, with no conditional edges, re-querying, replanning, or failure and recovery behavior. The output is a PDF company briefing. It does not meet the research-agent bar of an iterative, tool-using workflow with domain-specific failure and recovery behavior.",
+      "useful_lesson": "A staged graph alone is not an agent loop: without edges back, re-querying on thin results, or repair behavior, a research pipeline is a report generator.",
+      "excluded_at": "2026-09-30",
+      "verified_at": "2026-09-30"
+    },
+    {
+      "name": "Embedchain",
+      "repo": "embedchain/embedchain",
+      "url": "https://embedchain.ai",
+      "reason": "The repository no longer exists as an independent project. embedchain/embedchain answers with an HTTP 301 redirect to mem0ai/mem0, the repository the Atlas already publishes as Mem0, and the Explodinggradients/embedchain path that carried the original 2023 framework answers 404. What answered under the Embedchain name is now Mem0's own repository, described as \"The Memory Layer for AI Agents\", so the framework the name refers to and the published record are one codebase rather than two systems, and a second record would restate a fact the Mem0 record already carries.",
+      "useful_lesson": "A project that is absorbed into another is not a new record: check whether the old repository URL redirects to a repository the catalog already publishes before queueing the name, because the redirect is the evidence and it is cheap to read.",
+      "excluded_at": "2026-10-03",
+      "verified_at": "2026-10-03"
     }
   ]
 }

@@ -5,47 +5,102 @@ Use this document for refreshes, queue review, synchronization, and incident rec
 ## Routine verification
 
 ```bash
-uv run python scripts/sync_web_data.py
-uv run python scripts/build_share_pages.py
+uv run python scripts/regenerate.py --check
 uv run ruff check scripts tests
 uv run python scripts/validate_directory.py
-uv run python -m unittest discover -s tests -v
-uv run python -m compileall scripts tests
-node --check web/app-core.js
-node --check web/app.js
+uv run python scripts/run_python_tests.py
 node --test tests/test_web.js
 npm run lint:js
 ```
 
-Synchronization and share-page generation are write operations; the remaining commands are verification.
+These commands verify the tree. Use `uv run python scripts/regenerate.py` to update generated files before checking them. Ruff and ESLint parse the source, so separate `compileall` and `node --check` steps are unnecessary.
 
 `ruff` is pinned in the `dev` dependency group and installed by `uv sync`. Its rule set is configured in `pyproject.toml`; `eslint.config.mjs` covers the browser bundle, the build scripts, and the test suites. Both run in `verify.yml`. Ruff enforces the `requires-python` floor, which matters because CI only ever runs one Python version.
 
 ## Pre-commit
 
-Install once per checkout with `pre-commit install`; the config's `default_install_hook_types` installs both the commit and the push hook. The whole `verify.yml` gate lives in `.pre-commit-config.yaml`. Every hook runs on `git commit` except the two slow suites, the unit tests under coverage and the browser e2e, which took 93 s and 206 s respectively in the 2026-09-28 CI run, and about 192 s and 3.8 min on this checkout, which carry `stages: [pre-push]` and run on `git push`, so a commit takes seconds and a push that would fail CI never leaves the checkout. Bypass one check with `SKIP=<hook-id>`, or all of them with `git commit --no-verify` or `git push --no-verify` (CI still gates the merge).
+Install once per checkout with `pre-commit install`; the config's `default_install_hook_types` installs both the commit and the push hook. `.pre-commit-config.yaml` keeps the complete local checks. Every hook runs on `git commit` except the unit suite under coverage and browser end-to-end tests, which carry `stages: [pre-push]` and run on `git push`. Browser tests run locally only: GitHub CI never installs Chromium or runs Playwright. Bypass one check with `SKIP=<hook-id>`; prefer that to `--no-verify`, which removes every local check, including checks GitHub does not run.
 
-CI is environment setup plus pre-commit, split across jobs so the fast hooks report in about a minute while the slow suites run beside them: one job runs `pre-commit run --all-files` (the commit-stage hooks), one runs the unit-suite hook, and two run the browser-suite hook with `ATLAS_E2E_SHARD` set to `1/2` and `2/2`. The gate job `verify` needs all of them and is the one required check. A failed browser job uploads its `test-results/` directory (trace, page snapshot, and error context per failed test) as a workflow artifact for seven days; download it and run `npx playwright show-trace <file>.zip` to see what Linux Chromium saw. Reproduce the whole gate locally with the second command below.
+GitHub's `verify` workflow always starts, and its final `verify` job remains the required check. Change detection selects which work is needed; the gate accepts a skipped job only when the change plan declared it unnecessary. Static verification always checks catalog validity, generated freshness, asset placeholders, fast Node behavior tests, and all lightweight content contracts. Ordinary lint receives changed filenames, including Python source changes. Tool or CI configuration changes and unrecognized inputs trigger whole-repository lint. Pre-commit environments are cached by operating system, architecture, Python version, hook configuration, and Python dependency inputs.
+
+The full Python regression suite and its coverage threshold run for Python file changes, dependency manifests and locks, tool or CI configuration changes, and unrecognized inputs. Documentation, catalog, and ordinary web or JavaScript edits keep the content assertions that read those files without running the entire Python suite. `scripts/ci_changes.py` owns this classification. `scripts/run_content_checks.py` selects the content assertions from the existing tests and runs all groups on every CI run; it runs without a coverage threshold because it is only a subset. To run the content checks directly, use `uv run python scripts/run_content_checks.py`; `--scope docs`, `--scope catalog`, `--scope web`, and `--scope workflows` select individual groups locally and may be combined.
+
+Pull requests compare their merge base with the reviewed tree. Main pushes include changes since the last successfully verified ancestor, so cancellation of an earlier run cannot hide its changes. If a safe baseline cannot be established, verification falls back to full lint and Python coverage. Scheduled and manually dispatched verification also run the full checks, including the full-history secret audit, with browser tests still local only.
+
+Run every local check, including browser tests, with:
 
 ```bash
 pre-commit install
 pre-commit run --all-files --hook-stage pre-push
 ```
 
-A test that fails without a change in what it tests is a bug with an owner, not a retry. The CI retry of one hides a flake that fails a third of the time and does nothing for one that fails more often, and a single green run is not evidence that a race is gone: on 2026-09-28 the badge-tooltip Escape test passed once on its pull request and then failed fourteen attempts in a row across every open pull request and `main`. Before merging a change to a hover, keyboard, or timing-sensitive browser test, run it repeatedly (`npx playwright test <spec> -g "<title>" --repeat-each=8`), and fix a flake at its cause in the page or the test's setup rather than with a longer wait.
+A test that fails without a change in what it tests is a bug with an owner, not a retry. A single green run is not evidence that a race is gone: on 2026-09-28 the badge-tooltip Escape test passed once on its pull request and then failed fourteen attempts in a row across every open pull request and `main`. Before merging a change to a hover, keyboard, or timing-sensitive browser test, run it locally and repeatedly (`npx playwright test <spec> -g "<title>" --repeat-each=8`), and fix a flake at its cause in the page or the test's setup rather than with a longer wait. Failed local runs retain traces in `test-results/`; inspect one with `npx playwright show-trace <file>.zip`.
 
 What runs, and where it is configured:
 
 - Generic hygiene from `pre-commit-hooks`: trailing whitespace, final newlines, LF endings, case conflicts, merge-conflict markers, YAML/JSON/TOML/XML syntax, private keys, no new submodules, no commits to `main`, and a 1000K ceiling on added files (the catalog JSON files peak at ~672K).
-- Secrets as one identical check on commit and in CI: a full-history `gitleaks git` scan (seconds at this repo size) rather than a staged-only scan, so the local gate and the `verify.yml` gate can never disagree. The checkout in `verify.yml` uses `fetch-depth: 0` so the history is there to scan. Known-safe fixtures are allowlisted in `.gitleaks.toml`, never inline.
+- Secrets use the pinned Gitleaks hook and `scripts/scan_secrets.py`: all fetched history locally, the relevant commit range on ordinary CI runs, and all fetched history on scheduled/manual runs, scanner configuration changes, or when no safe baseline is available. CI runs the hook separately from changed-file lint. Known-safe fixtures are allowlisted in `.gitleaks.toml`, never inline.
 - Python: `ruff check --fix` and `ruff format` (pinned to the `pyproject.toml` dev group), plus `bandit` at medium severity and above. Low bandit findings are git-subprocess plumbing noise; the five medium sites carry `# nosec` with their allowlist justification on the preceding lines. Never add a bare `# nosec` without that justification.
 - Complexity as ratchets, not targets: `C901` at 50 in `pyproject.toml` (today's maximum is 46 in `validate_hn_signals`) and the eslint `complexity` rule at 40 (today's maximum is 39 in `recommendationReasons`). Both fail any new function worse than the worst one already carried. Tighten them by refactoring, never with a `noqa` or an eslint-disable.
-- Test coverage as a ratchet: `uv run coverage run -m unittest discover -s tests` followed by `uv run coverage report`, which enforces `fail_under` in `pyproject.toml` (79 today across `scripts/`). The browser suite reports its own coverage with `node --test --experimental-test-coverage tests/test_web.js` (`web/app-core.js` sits near 100%). Raise the floor by adding tests, never by omitting files.
+- Test coverage as a ratchet: `uv run python scripts/run_python_tests.py` runs the full unit suite under coverage and enforces `fail_under` in `pyproject.toml`. The Node behavior suite reports its own coverage with `node --test --experimental-test-coverage tests/test_web.js`. Raise the floor by adding tests, never by omitting files. The full Python suite retains this threshold when it runs; content subsets do not use it.
 - JavaScript through the repo's own `eslint.config.mjs` (which already ignores generated trees), HTML through `htmlhint` (`.htmlhintrc`), stylesheets through `stylelint` (`.stylelintrc.json`), prose through `markdownlint-cli2` (`.markdownlint-cli2.jsonc`) with `--fix` so safe formatting applies on commit, workflows through `yamllint` (`.yamllint.yml`) and `zizmor` (suppressions with justification in `.github/zizmor.yml`), spelling through `codespell` (product names and house spellings in the hook's ignore list; real typos get fixed).
-- Project verification, same hooks locally and in CI: catalog validation, the unit suite under `coverage` with the `fail_under` gate, `compileall`, `node --check` on the browser bundle, the Node web behavior tests, every generated-file freshness check (logos, fonts, asset versions, share pages, app payloads, blog), and the Playwright end-to-end suite (needs `npx playwright install chromium` first; CI installs it, cached by lockfile hash, before the pre-commit step). The unit suite and the e2e suite are the two push-stage hooks; everything else runs on commit.
+- Project verification shares the catalog-validation, Node behavior, generated-freshness, and asset-placeholder commands locally and in CI. `scripts/regenerate.py --check` covers every generated tree in dependency order; `scripts/build_asset_version.mjs --check` separately checks the committed asset placeholders. The local push-stage hooks also run the full Python coverage suite and Playwright (install Chromium once with `npx playwright install chromium`). CI runs full Python coverage conditionally and never runs Playwright.
 - Generated and mirrored files are excluded from the content linters because their builders own them: `web/records/`, `web/app/`, `web/blog/`, `web/fonts/`, synced `web/*.json`, the sitemap, lockfiles, vendored dependencies, transient queues (`hn-signals.json`, `model-candidates.json`, `openrouter-model-leads.json`), and the upstream `models-dev.json` snapshot. The frozen `docs/superpowers/` planning archive is excluded from markdown linting for the same reason: reformatting history buys nothing.
 
+### One command for the generated trees
+
+`uv run python scripts/regenerate.py` regenerates every generated file under `web/`, in
+dependency order, in about a second. `--check` writes nothing, reports **every** stale tree
+rather than stopping at the first, and is the one freshness hook the verification runs. The
+list of generators lives in that script alone.
+
+It had to be consolidated. `AGENTS.md` carried a four-step regeneration sequence that named
+`sync_web_data.py`, `build_web_payload.py`, `build_share_pages.py`, and
+`build_asset_version.mjs`, and omitted `build_logos.mjs`, `build_fonts.mjs`, and
+`build_blog.py` — so following the documented steps after picking up main left three
+generated files stale, and the `freshness-logos` hook rejected the result in CI. A second copy of the generator list is a list that will
+drift, which is what the prose was.
+
+`build_logos.mjs` reads the synced `web/*.json` mirrors rather than `directory/`, so the order
+is a real constraint: a card-mark build before a sync invents or loses marks. `sync_web_data.py`
+gained a `--check` for this reason — it previously accepted the flag silently and wrote
+anyway, so a caller checking for staleness was editing the tree instead of reading it.
+
+### Picking up main
+
+`uv run python scripts/update_from_main.py` merges `origin/main` and regenerates, then reports
+what changed. It refuses on a dirty tree, never rebases, and never commits or pushes.
+
+**Merging rather than rebasing is deliberate.** A rebase replays the branch, and a replay that
+lands on regenerated files conflicts, so the recovery is resolve, regenerate, force-push. The
+force-push is the expensive part: `verify.yml` sets `cancel-in-progress: true`, so each one
+kills the verification run the push just started. On 2026-09-30 that discarded three five-minute
+runs while a branch was brought up to date, and the cost read as the work rather than as the
+merge strategy. A merge needs one push, cancels nothing, and produces one state to push instead
+of one per rebase. The merge commit never reaches main, which is squash-merged, so it costs
+this repository nothing but a non-linear branch history.
+
+### Skipping the browser suite without losing anything else
+
+`SKIP=e2e-browser-tests` skips only the local browser suite. `git push --no-verify`
+skips everything, including the staleness gate, and that is how `web/logos.json` reached CI
+on 2026-09-30 carrying a `simple-icons` version CI did not install: two pushes went out with
+the check that would have caught it bypassed. Nothing in pre-commit can survive `--no-verify`.
+
 There is deliberately no Prettier hook. Its defaults would reformat the hand-styled `web/app.js`, the compact catalog JSON the generators write with `indent=2`, and long-line prose docs — thousands of churn lines with no defect caught. `ruff format` owns Python, `eslint` owns JavaScript, and the generators own their output.
+
+Generators that read `node_modules` check the install before they generate. `scripts/build_logos.mjs` and `scripts/build_fonts.mjs` both call `assertPinnedInstall` from
+`scripts/install_pin.mjs`, which compares each package's installed version against
+`package-lock.json` and refuses to run when they differ, naming the versions and `npm ci`.
+The reason is that their output is committed and regenerated by CI: `web/logos.json` records
+the icon packages that produced it, and `web/fonts.css` names them in its first line, so an
+install that differs from the lock produces an artifact CI will reject however correct it looks
+locally. This happened on 2026-09-30 — `simple-icons` 16.32.0 installed against a 16.33.0 pin,
+both freshness hooks green locally, two consecutive CI rejections — and nothing in the
+repository compared the lockfile to the artifact. After changing a version in `package.json`, run
+`npm ci --ignore-scripts` before regenerating either file; the guard will say so if you forget.
+Any new generator that reads an installed package must call the same guard, and
+`tests/test_web.js` asserts the versions recorded in both artifacts equal the pinned ones.
 
 Bump a pinned hook version deliberately, one tool at a time, running `pre-commit run --all-files` and the full verification after each bump. Never run `pre-commit autoupdate` blindly across all hooks: a new codespell dictionary or a stricter default can turn a passing tree red for reasons unrelated to any change under review.
 
@@ -100,7 +155,7 @@ models.dev discovery is a separate fail-closed import:
 GITHUB_TOKEN=... uv run python scripts/import_models_dev.py
 ```
 
-It resolves the upstream ref, downloads the commit-pinned repository archive, reads only provider-independent model TOMLs, and normalizes the complete `directory/models-dev.json` source snapshot plus the text-output `directory/model-candidates.json` review queue only after all source, count, schema, and collision checks pass. Run `scripts/sync_web_data.py` afterward so the published snapshot reaches `web/`. The token is optional locally. The importer removes already reviewed `source_id` values from the queue, and also filters the `source_id` values dispositioned in `directory/model-dispositions.json` while keeping them in the eligible count, but never edits `directory/models.json`. See [`MODELS.md`](MODELS.md) and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
+It resolves the upstream ref, downloads the commit-pinned repository archive, reads only provider-independent model TOMLs, and normalizes the complete `directory/models-dev.json` source snapshot plus the text-output `directory/model-candidates.json` review queue only after all source, count, schema, and collision checks pass. Run `scripts/sync_web_data.py` afterward so the published snapshot reaches `web/`. The token is optional locally. The importer removes already reviewed `source_id` values from the queue, and also filters the `source_id` values dispositioned in `directory/model-dispositions.json` while keeping them in the eligible count. Its only edit to `directory/models.json` is the envelope `source.commit`, moved to the new snapshot's commit in the same all-or-nothing write, because validation requires the two to match; it never edits a reviewed record. See [`MODELS.md`](MODELS.md) and [ADR 027](adr/027-complete-models-dev-source-catalog-is-published.md).
 
 The OpenRouter cross-check runs next, against the snapshot the models.dev import just wrote:
 
@@ -225,7 +280,7 @@ without a newer review it opens terms drift, so a person decides which page is r
 ## Reading a cited page directly
 
 Quote a page only after reading it yourself. A search-engine extract is a lead, not a read: the
-2026-09-25 lab re-read ([`LAB_REREAD_2026-09-25.md`](LAB_REREAD_2026-09-25.md)) found labels no
+2026-09-25 lab re-read ([`LAB_REREAD_2026-09-25.md`](history/LAB_REREAD_2026-09-25.md)) found labels no
 page supported, and a filing cited as one company's annual report that was another's. Read each
 page as a browser shows it:
 
@@ -1018,7 +1073,16 @@ blocks the fetcher is not a defect to route around by weakening the fetch guards
 
 ## Asset versions
 
-`node scripts/build_asset_version.mjs --check` recomputes the `?v=` query string on every local asset `web/index.html` references (`fonts.css`, `styles.css`, `app-core.js`, `app.js`) from that file's content hash and fails when the committed page carries a different value, so a stylesheet or script change cannot ship under a version a browser has already cached. Regenerate with `node scripts/build_asset_version.mjs` after editing any of those files; `tests/test_web.js` enforces the same rule. The weekly refresh regenerates them too, because a catalog change moves the hash of any published file index.html references.
+`node scripts/build_asset_version.mjs --check` checks the opposite of what it used to. A committed page carries the
+placeholder `?v=BUILD` and never a content hash, so there is nothing to regenerate after editing a stylesheet or a
+script — that is the point, and it is why an asset change no longer produces a hash-only merge conflict. The hook
+fails when a deploy build was committed, when a referenced file no longer exists, or when a page dropped the token.
+The hashes are written once per deployment: `.github/workflows/deploy-pages.yml` runs
+`node scripts/build_asset_version.mjs` after checkout and then `--stamped`, which fails if any published reference is
+not a resolved hash, so a placeholder cannot ship. The `?v=` guarantee itself — that a changed asset is never served
+from a stale cache — is asserted against the stamper's output in `tests/test_web.js` rather than against a committed
+line. [ADR 050](adr/050-committed-pages-carry-an-asset-version-placeholder.md) records the decision and its costs; the
+deploy step is the only place a hash is written, so nothing in a refresh routine needs regenerating. index.html references.
 
 ## Logo coverage
 
@@ -1032,17 +1096,21 @@ A candidate hint is a review prompt, never an auto-mapping: confirm the icon dep
 
 ## GitHub Pages
 
-`.github/workflows/deploy-pages.yml` deploys only `web/`, and only after a push to `main` passes the complete `verify` workflow for that exact revision. It has no manual trigger, so nothing can publish a revision that skipped verification; the deployment workflow still runs its own local validation before publishing. To redeploy a revision without a new commit, re-run its push-triggered **Verify AI Systems Atlas** run (`gh run rerun <run-id>`): a re-run keeps the original push event and commit, so a successful re-run starts the deployment again. That path follows GitHub's documented re-run behavior and has not yet been exercised in this repository. In **Settings → Pages**, choose **GitHub Actions** as the source. Keep the `github-pages` environment and its default-branch deployment rule enabled; disable administrator bypass in the environment UI.
+`.github/workflows/deploy-pages.yml` deploys only `web/`, and only after a push to `main` passes the complete `verify` workflow for that exact revision. It has no manual trigger. The verified revision must still be the current default-branch head, so rerunning an older verification cannot roll back the site. Deployment compares the site and deployment inputs with the last successful `github-pages` deployment, looking past failed, canceled, or skipped runs; unchanged inputs skip publication. The first deployment runs normally, and an unavailable deployment history fails instead of guessing what is live.
+
+For changed inputs, the workflow checks out the verified SHA, stamps asset hashes, checks the stamps with `--stamped`, uploads `web/`, and deploys it. It does not reinstall Python or npm dependencies or repeat tests that verification already passed. Asset stamping uses Node's built-in modules. To retry a failed deployment without a new commit, re-run the current main revision's push-triggered **Verify AI Systems Atlas** run (`gh run rerun <run-id>`). A successful rerun triggers the deployment comparison again; an already published identical revision stays skipped.
+
+In **Settings → Pages**, choose **GitHub Actions** as the source. Keep the `github-pages` environment and its default-branch deployment rule enabled; disable administrator bypass in the environment UI.
 
 The site URL follows the repository owner and name. After a transfer or rename, update any explicit links or custom-domain configuration separately; the deployment workflow itself is owner-independent.
 
 ## Repository safeguards
 
-`.github/workflows/verify.yml` is the required CI check; its `verify` gate job is the one required context, so the jobs behind it can be split or resharded without touching protection. Classic `main` protection requires pull requests, a passing `verify` result, conversation resolution, and linear history; it blocks force-pushes and deletion. It does not require the branch to be up to date with `main`: with squash merges and linear history that setting only forced every other open pull request to rebase and re-run the seven-minute gate after each merge, which serialised a day's merges into an hour and gave every flake another roll. A pull request whose base moved is still merged as a squash onto current `main`, and the push-triggered `verify` run on `main` plus the deploy's own checks catch a semantic conflict between two green branches; when that happens, revert or fix forward on `main`. A complementary default-branch security ruleset makes high-or-higher CodeQL findings merge-blocking. Zero required approvals is intentional while the project has one maintainer; require an independent approval when a second maintainer is available.
+`.github/workflows/verify.yml` is the required CI check; its `verify` gate job is the one required context, so the jobs behind it can be reorganized without touching protection. The workflow has no path filter: it always reports a result, and unnecessary work is skipped inside the workflow. Classic `main` protection requires pull requests, a passing `verify` result, conversation resolution, and linear history; it blocks force-pushes and deletion. It does not require the branch to be up to date with `main`. A pull request whose base moved is still merged as a squash onto current `main`, and the push-triggered `verify` run checks that merged revision before deployment; if two green branches conflict semantically, revert or fix forward on `main`. A complementary default-branch security ruleset makes high-or-higher CodeQL findings merge-blocking. Zero required approvals is intentional while the project has one maintainer; require an independent approval when a second maintainer is available.
 
 `.github/CODEOWNERS` assigns every path to the maintainer. Ownership is advisory while required approvals are zero; enable **Require review from Code Owners** on `main` once a second maintainer exists.
 
-All actions are pinned to immutable commit SHAs, and repository settings enforce those pins while allowing only GitHub-owned actions plus `astral-sh/setup-uv`. The required verification job includes dependency review for pull requests. `.github/dependabot.yml` opens weekly pull requests for Actions and npm updates. Workflow tokens use least privilege, deployments are serialized, and verification jobs cancel superseded runs.
+All actions are pinned to immutable commit SHAs, and repository settings enforce those pins while allowing only GitHub-owned actions plus `astral-sh/setup-uv`. The required verification job includes dependency review for pull requests. `.github/dependabot.yml` opens weekly pull requests for Actions, npm, pre-commit, and uv updates. The pre-commit and uv entries cover the seven tool versions pinned outside `package.json`, one pull request per tool on staggered schedules, so each still arrives as its own reviewable change under the policy above rather than as one sweep. Workflow tokens use least privilege, deployments are serialized, and verification jobs cancel superseded runs.
 
 Secret scanning, push protection, Dependabot alerts and security updates, private vulnerability reporting, and CodeQL default setup are enabled. Secret validity checks and non-provider patterns remain disabled; enable them if the repository settings expose those controls later. See [`SECURITY.md`](../SECURITY.md) for reporting; do not put suspected vulnerabilities in public issues.
 

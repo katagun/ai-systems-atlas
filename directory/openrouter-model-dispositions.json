@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-28",
+  "updated_at": "2026-10-01",
   "terms_reviewed_at": "2026-09-24",
   "dispositions": [
     {
@@ -73,12 +73,6 @@
       "openrouter_id": "anthracite-org/magnum-v4-72b",
       "disposition": "held",
       "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
-      "decided_at": "2026-09-25"
-    },
-    {
-      "openrouter_id": "anthropic/claude-3-haiku",
-      "disposition": "excluded",
-      "reason": "Same release as the models.dev row anthropic/claude-3-haiku-20240307 (Claude Haiku 3), which model-dispositions.json excludes as a retired first-generation snapshot.",
       "decided_at": "2026-09-25"
     },
     {
@@ -308,6 +302,12 @@
       "disposition": "held",
       "reason": "Downstream fine-tune or merge of an open base model; held until reviewed for a release boundary of its own, which docs/MODELS.md requires before a fine-tune becomes a record.",
       "decided_at": "2026-09-25"
+    },
+    {
+      "openrouter_id": "unbiased/pareto-26.10-preview",
+      "disposition": "excluded",
+      "reason": "Same composite gateway service as the excluded unbiased/pareto route, which model-dispositions.json excludes because the release runs several frontier and open models per request and synthesizes their results rather than naming a single trained artifact. Unbiased's own technical-details page states that \"Multiple LLMs are engaged in parallel on every request, and their results are synthesized dynamically based on the task\", that the blend includes frontier and open models, and that \"Model composition can change\", and the model card prices a per-token rate for a model identifier rather than documenting a checkpoint. 26.10 Preview is the dated release of that same composite, so a gateway service is not a model release in this shape.",
+      "decided_at": "2026-10-01"
     },
     {
       "openrouter_id": "undi95/remm-slerp-l2-13b",

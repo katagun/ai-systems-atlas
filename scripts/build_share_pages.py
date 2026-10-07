@@ -113,13 +113,26 @@ def _lab_facts(
     facts = [
         ("Headquarters", taxonomy_name(taxonomy, "countries", record["headquarters"])),
     ]
+    if record.get("research_locations"):
+        # Where the work happens is a separate fact from where the entity is
+        # (ADR 052), so a share page prints it as one rather than folding it in.
+        facts.append(
+            (
+                "Work also happens in",
+                names(taxonomy, "countries", record["research_locations"]),
+            )
+        )
     if record.get("parent_organization"):
         facts.append(("Parent organization", record["parent_organization"]))
     facts += [
         ("Named in the catalog as", " · ".join(record["catalog_names"])),
         ("Reviewed model releases", str(len(relations["models"]))),
     ]
-    for label, key in (("Systems", "systems"), ("Inference services", "services")):
+    for label, key in (
+        ("Systems", "systems"),
+        ("Inference services", "services"),
+        ("Robots", "robots"),
+    ):
         if relations[key]:
             facts.append(
                 (label, " · ".join(sorted(item["name"] for item in relations[key])))
@@ -163,6 +176,8 @@ def _facts_for(
                     f'<a href="../{html.escape(successor["id"])}/">{html.escape(successor["name"])}</a>',
                 )
             )
+        if record.get("current_repo_note"):
+            facts.append(("Product boundary", record["current_repo_note"]))
         return (
             eyebrow,
             record["why_it_matters"],

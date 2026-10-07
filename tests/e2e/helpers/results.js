@@ -14,6 +14,7 @@ const FILTER_CONTROLS = {
   systems: {
     family: "#family-filter", role: "#role-filter", agent: "#agent-filter", architecture: "#architecture-filter",
     deployment: "#deployment-filter", agentInterface: "#agent-interface-filter", capability: "#capability-filter",
+    retrieval: "#retrieval-filter",
     sourceModel: "#source-model-filter", license: "#license-filter", status: "#status-filter", localOnly: "#local-filter",
     lab: "#system-lab-filter",
   },

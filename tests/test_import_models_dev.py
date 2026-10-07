@@ -109,12 +109,18 @@ class ModelsDevImportTests(unittest.TestCase):
         self.assertEqual(["acme/example"], list(catalog))
         self.assertEqual("acme/example", catalog["acme/example"]["id"])
 
-    def test_normalization_filters_non_text_outputs_and_preserves_unknowns(
+    def test_normalization_queues_generative_media_and_filters_the_rest(
         self,
     ) -> None:
+        # ADR 051 widened eligibility past text output, so an image row is a
+        # candidate now. A row with no modality this catalog can review stays a
+        # source record instead.
         catalog = {
             "acme/chat": model_record("acme/chat"),
             "acme/image": model_record("acme/image", output=["image"]),
+            "acme/video": model_record("acme/video", output=["video"]),
+            "acme/audio": model_record("acme/audio", output=["audio"]),
+            "acme/pdf": model_record("acme/pdf", output=["pdf"]),
         }
 
         candidates, eligible = normalize_catalog(
@@ -123,8 +129,11 @@ class ModelsDevImportTests(unittest.TestCase):
             minimum_records=1,
         )
 
-        self.assertEqual(1, eligible)
-        self.assertEqual(["acme/chat"], [item["source_id"] for item in candidates])
+        self.assertEqual(4, eligible)
+        self.assertEqual(
+            ["acme/audio", "acme/chat", "acme/image", "acme/video"],
+            [item["source_id"] for item in candidates],
+        )
         self.assertIsNone(candidates[0]["source_metadata"]["capabilities"]["reasoning"])
         self.assertIsNone(candidates[0]["source_metadata"]["limits"]["input"])
 
@@ -223,6 +232,68 @@ class ModelsDevImportTests(unittest.TestCase):
         self.assertEqual(101, document["eligible_record_count"])
 
         self.assertEqual(real_mtime, real_source_models_path.stat().st_mtime_ns)
+
+    def test_run_moves_the_reviewed_models_source_commit_to_the_new_snapshot(
+        self,
+    ) -> None:
+        # CR-09: validation requires models.json to carry the snapshot's commit, so
+        # the importer that moves the snapshot must move models.json with it, or
+        # every refresh that finds a new upstream commit fails validation. Only the
+        # envelope commit changes; reviewed records are never touched.
+        files = {
+            f"models/acme/filler-{index:03d}.toml": model_toml(f"filler-{index:03d}")
+            for index in range(100)
+        }
+        archive_bytes = archive_with(files)
+        reviewed = {"id": "model-acme-filler-000", "source_id": "acme/filler-000"}
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir)
+            models_path = tmp_path / "models.json"
+            models_path.write_text(
+                json.dumps(
+                    {
+                        "version": "1.0",
+                        "source": {"id": "models-dev", "commit": "0" * 40},
+                        "models": [reviewed],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with (
+                patch.object(import_models_dev, "MODELS_PATH", models_path),
+                patch.object(
+                    import_models_dev,
+                    "CANDIDATES_PATH",
+                    tmp_path / "model-candidates.json",
+                ),
+                patch.object(
+                    import_models_dev,
+                    "DISPOSITIONS_PATH",
+                    tmp_path / "model-dispositions.json",
+                ),
+                patch.object(
+                    import_models_dev,
+                    "SOURCE_MODELS_PATH",
+                    tmp_path / "models-dev.json",
+                ),
+            ):
+                import_models_dev.run(
+                    lambda url, token: ({"sha": COMMIT}, b""),
+                    lambda url, token: archive_bytes,
+                    observed_at="2026-09-29",
+                )
+
+            models = json.loads(models_path.read_text(encoding="utf-8"))
+            snapshot = json.loads(
+                (tmp_path / "models-dev.json").read_text(encoding="utf-8")
+            )
+
+        self.assertEqual(COMMIT, snapshot["source"]["commit"])
+        self.assertEqual(COMMIT, models["source"]["commit"])
+        self.assertEqual("models-dev", models["source"]["id"])
+        self.assertEqual([reviewed], models["models"])
 
     def test_source_snapshot_keeps_every_model_regardless_of_output_modality(
         self,
