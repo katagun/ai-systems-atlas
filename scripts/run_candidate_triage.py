@@ -363,7 +363,7 @@ def finish(*, run=shell, read=worktree_text, base_read=root_text) -> int:
         # command CHECKS runs (or something it shells out to) could rewrite QUEUE in that
         # window, and every guard above already ran against the version it read, not this
         # one. Re-reading right before `git add` and refusing on any difference closes that
-        # window deterministically; see "Guard threat model" in docs/OPERATIONS.md.
+        # window deterministically; see "Guard threat model" in docs/RUNBOOKS.md.
         try:
             just_before_add = read(QUEUE)
         except OSError as exc:

@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
-const { cardBadgeGlossary, cardBadges, BADGE_FAMILIES } = require("../../web/app-core.js");
+const { cardBadgeGlossary, cardBadges, BADGE_FAMILIES, FLAG_FAMILY } = require("../../web/app-core.js");
 const { searchAll } = require("./helpers/landing");
 const { chooseFinderGoal } = require("./helpers/finder");
 const { filterControl, recordView, search, searchBox } = require("./helpers/results");
@@ -108,16 +108,16 @@ test("a record shows the same badges in its collection grid and in All", async (
 
   await page.goto("/");
   await searchAll(page, openclaw.name);
-  await expect(page.locator('#all-directory-grid .project-card:has([data-project="openclaw"]) .card-badge'))
+  await expect(page.locator('#all-directory-grid .project-card:has([data-project="openclaw"]) .card-badge:not(.card-reviewed-flag)'))
     .toHaveText(namePatterns(cardBadges("system", openclaw)));
 
   await searchAll(page, ollama.name);
-  await expect(page.locator('#all-directory-grid .project-card:has([data-local-runtime="ollama"]) .card-badge'))
+  await expect(page.locator('#all-directory-grid .project-card:has([data-local-runtime="ollama"]) .card-badge:not(.card-reviewed-flag)'))
     .toHaveText(namePatterns(runtimeBadges));
 
   await page.goto("/?collection=runtimes");
   await search(page, ollama.name);
-  await expect(page.locator('#runtime-grid .project-card:has([data-local-runtime="ollama"]) .card-badge'))
+  await expect(page.locator('#runtime-grid .project-card:has([data-local-runtime="ollama"]) .card-badge:not(.card-reviewed-flag)'))
     .toHaveText(namePatterns(runtimeBadges));
 });
 
@@ -129,8 +129,8 @@ test("a reviewed-model card has no role pill and shows its distribution modes as
   await search(page, reviewedModel.name);
   const card = page.locator(`#model-grid .model-card:has([data-model="${reviewedModel.id}"])`);
   await expect(card.locator(".role-badge")).toHaveCount(0);
-  await expect(card.locator(".card-badge")).toHaveText(namePatterns(expected));
-  expect(await card.locator(".card-badge").evaluateAll(items => items.map(item => item.dataset.family))).toEqual(["type", "control"]);
+  await expect(card.locator(".card-badge:not(.card-reviewed-flag)")).toHaveText(namePatterns(expected));
+  expect(await card.locator(".card-badge:not(.card-reviewed-flag)").evaluateAll(items => items.map(item => item.dataset.family))).toEqual(["type", "control"]);
   const meta = card.locator(".card-source-meta");
   await expect(meta).toContainText("→");
   await expect(meta).toHaveAttribute("title", "From models.dev source metadata, not Atlas reviewed");
@@ -144,8 +144,8 @@ test("a reviewed-model card carrying every distribution mode shows its type and 
   await page.goto("/?collection=models");
   await search(page, allModesModel.name);
   const card = page.locator(`#model-grid .model-card:has([data-model="${allModesModel.id}"])`);
-  await expect(card.locator(".card-badge")).toHaveText(namePatterns(expected));
-  expect(await card.locator(".card-badge").evaluateAll(items => items.map(item => item.dataset.family))).toEqual(["type", "control", "platform", "platform"]);
+  await expect(card.locator(".card-badge:not(.card-reviewed-flag)")).toHaveText(namePatterns(expected));
+  expect(await card.locator(".card-badge:not(.card-reviewed-flag)").evaluateAll(items => items.map(item => item.dataset.family))).toEqual(["type", "control", "platform", "platform"]);
 });
 
 test("an imported models.dev card keeps its role pill and shows only its source-record badge", async ({ page }) => {
@@ -155,7 +155,7 @@ test("an imported models.dev card keeps its role pill and shows only its source-
   await search(page, importedModel.name);
   const card = page.locator(`#model-grid .model-card:has([data-model="${importedModel.id}"])`);
   await expect(card.locator(".role-badge")).toHaveText("Imported metadata · Not Atlas reviewed");
-  await expect(card.locator(".card-badge")).toHaveText(namePatterns(cardBadges("model", importedModel)));
+  await expect(card.locator(".card-badge:not(.card-reviewed-flag)")).toHaveText(namePatterns(cardBadges("model", importedModel)));
 });
 
 // Every grid, including the collections that had no trait badges, now leads
@@ -203,7 +203,7 @@ test("a reviewed-model card shows the same badges in the Models grid and in the 
   await searchAll(page, reviewedModel.name);
   const mixedCard = page.locator(`#all-directory-grid .project-card:has([data-model="${reviewedModel.id}"])`);
   await expect(mixedCard.locator(".role-badge")).toHaveCount(0);
-  await expect(mixedCard.locator(".card-badge")).toHaveText(namePatterns(expected));
+  await expect(mixedCard.locator(".card-badge:not(.card-reviewed-flag)")).toHaveText(namePatterns(expected));
 });
 
 for (const colorScheme of ["light", "dark"]) {
@@ -326,7 +326,8 @@ test("repainting the grid dismisses a tapped tooltip", async ({ browser }) => {
 test("Taxonomy lists every badge under its family with its emblem", async ({ page }) => {
   await page.goto("/?view=taxonomy");
   const glossary = cardBadgeGlossary();
-  for (const [id, family] of Object.entries(BADGE_FAMILIES)) {
+  // Reviewed flags are not badges; Taxonomy lists them in their own group.
+  for (const [id, family] of Object.entries(BADGE_FAMILIES).filter(([key]) => key !== FLAG_FAMILY)) {
     const group = page.locator(`#taxonomy-content [data-badge-family="${id}"]`);
     await expect(group.locator("h2")).toHaveText(`Card badges · ${family.name}`);
     await expect(group.locator(".taxonomy-lede")).toHaveText(family.meaning);
@@ -336,6 +337,7 @@ test("Taxonomy lists every badge under its family with its emblem", async ({ pag
     await expect(group.locator(".taxonomy-item svg.badge-emblem")).toHaveCount(expected.length);
   }
   await expect(page.locator("#taxonomy-content [data-badge-family] .taxonomy-item")).toHaveCount(glossary.length);
+  await expect(page.locator(`#taxonomy-content [data-badge-family="${FLAG_FAMILY}"]`)).toHaveCount(0);
 });
 
 test.describe("on a touch screen", () => {
