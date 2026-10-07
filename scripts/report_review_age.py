@@ -3,8 +3,9 @@
 
 Each record gets three ages, kept apart on purpose (ROADMAP.md; docs/DATA_MODEL.md):
 its own editorial ``verified_at``; the oldest human review date on its evidence,
-terms, and trust record; and the newest automated metadata timestamp. The report
-is read-only and never a gate: it changes no date, fetches nothing, and exits 0.
+terms, trust record, and reviewed flags; and the newest automated metadata
+timestamp. The report is read-only and never a gate: it changes no date, fetches
+nothing, and exits 0.
 """
 
 from __future__ import annotations

@@ -1340,7 +1340,7 @@ class FinishRefusesQueueDriftDuringChecksTests(unittest.TestCase):
     """The re-read-before-add guard: closes the deterministic form of the CHECKS-window
     bypass, where a command CHECKS runs (or something it shells out to) rewrites QUEUE
     after the field guard already read it and before `git add` stages it. See "Guard
-    threat model" in docs/OPERATIONS.md."""
+    threat model" in docs/RUNBOOKS.md."""
 
     def test_a_queue_rewritten_during_checks_is_refused(self) -> None:
         calls: list[list[str]] = []

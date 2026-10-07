@@ -35,7 +35,7 @@ BUNDLE = ".hn-signal-bundle/bundle.json"
 # ordinary file edit there. Keeping the record under ROOT — the primary checkout, still
 # git-ignored — closes that one route; it does not make the record unreachable by a model
 # with shell access to this checkout, which is a materially different and stronger
-# adversary. See "Guard threat model" in docs/OPERATIONS.md for what these guards do and
+# adversary. See "Guard threat model" in docs/RUNBOOKS.md for what these guards do and
 # do not bound; `prepare` writes this file and `finish` reads it with `root_text`, never
 # `worktree_text`.
 BASE_REF = ".hn-signal-bundle/base-ref.json"
@@ -168,7 +168,7 @@ def root_text(path: str) -> str:
     Used only for BASE_REF: reading it from ROOT rather than WORKTREE means an ordinary
     edit inside the model's own workspace cannot change what this file says. It does not
     mean the record is unreachable by a model with shell access to this checkout — see
-    "Guard threat model" in docs/OPERATIONS.md. `routine_guards.worktree_text` also
+    "Guard threat model" in docs/RUNBOOKS.md. `routine_guards.worktree_text` also
     refuses a symlink at `path` here, rather than following it into content this routine
     never wrote.
     """
@@ -630,7 +630,7 @@ def finish(
     # and every other verified one still commits. Decided in this process from the base
     # queue's url and digest, never from CHECKS output or the run's own copy; the field
     # guard, CHECKS, and the re-read before `git add` all run on the result. See "Review a
-    # signal batch" in docs/OPERATIONS.md.
+    # signal batch" in docs/RUNBOOKS.md.
     dropped, fetch_problems, after = drop_drifted_assessments(before, after, fetcher)
     if fetch_problems:
         for problem in fetch_problems:
@@ -682,7 +682,7 @@ def finish(
         # command CHECKS runs (or something it shells out to) could rewrite QUEUE in that
         # window, and every guard above already ran against the version it read, not this
         # one. Re-reading right before `git add` and refusing on any difference closes that
-        # window deterministically; see "Guard threat model" in docs/OPERATIONS.md.
+        # window deterministically; see "Guard threat model" in docs/RUNBOOKS.md.
         try:
             just_before_add = read(QUEUE)
         except OSError as exc:

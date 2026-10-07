@@ -58,7 +58,7 @@ repos:
   # also reformat ```python snippets inside Markdown (e.g. the frozen
   # docs/superpowers planning archive), which are historical records, not code.
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.16.9
+    rev: v0.16.10
     hooks:
       - id: ruff-check
         types_or: [python, pyi]
@@ -203,7 +203,14 @@ repos:
       - id: node-web-tests
         language: system
         name: node web behavior tests
-        entry: node --test --experimental-test-coverage tests/test_web.js
+        # Floors are the integer part of the figures measured on web/app-core.js on
+        # 2026-10-06 (99.40 lines, 91.69 branches, 98.03 functions). Raise them when
+        # coverage rises; never lower one to land a change (CR-15).
+        entry: >-
+          node --test --experimental-test-coverage
+          --test-coverage-include=web/app-core.js
+          --test-coverage-lines=99 --test-coverage-branches=91
+          --test-coverage-functions=98 tests/test_web.js
         always_run: true
         pass_filenames: false
 
