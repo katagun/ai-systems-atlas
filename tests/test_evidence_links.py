@@ -948,6 +948,26 @@ class FlagEvidenceTests(unittest.TestCase):
             **options,
         )
 
+    def collect(self, models, services=()):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            directory = Path(temp_dir)
+            documents = {
+                "projects.json": {"projects": []},
+                "license-evidence.json": {"entries": []},
+                "specifications.json": {"specifications": []},
+                "inference-services.json": {"services": list(services)},
+                "local-runtimes.json": {"runtimes": []},
+                "models.json": {"models": models},
+                "packs.json": {"packs": []},
+                "labs.json": {"labs": []},
+                "robots.json": {"robots": []},
+            }
+            for filename, document in documents.items():
+                (directory / filename).write_text(
+                    json.dumps(document), encoding="utf-8"
+                )
+            return check_evidence_links.collect_targets(directory)
+
     def test_flags_become_targets_by_status(self) -> None:
         flags = [
             {
@@ -989,24 +1009,7 @@ class FlagEvidenceTests(unittest.TestCase):
                 "flags": [other],
             },
         ]
-        with tempfile.TemporaryDirectory() as temp_dir:
-            directory = Path(temp_dir)
-            documents = {
-                "projects.json": {"projects": []},
-                "license-evidence.json": {"entries": []},
-                "specifications.json": {"specifications": []},
-                "inference-services.json": {"services": []},
-                "local-runtimes.json": {"runtimes": []},
-                "models.json": {"models": models},
-                "packs.json": {"packs": []},
-                "labs.json": {"labs": []},
-                "robots.json": {"robots": []},
-            }
-            for filename, document in documents.items():
-                (directory / filename).write_text(
-                    json.dumps(document), encoding="utf-8"
-                )
-            by_url = {t.url: t for t in check_evidence_links.collect_targets(directory)}
+        by_url = {t.url: t for t in self.collect(models)}
 
         pinned = by_url["https://example.com/pinned"]
         self.assertEqual(("flag",), pinned.kinds)
@@ -1020,6 +1023,42 @@ class FlagEvidenceTests(unittest.TestCase):
         self.assertTrue(checked.monitor_terms)
         self.assertEqual((), checked.pinned_sha256)
         self.assertEqual(("models:model-b:flags:0",), checked.references)
+
+    def test_an_unpinnable_flag_citation_vetoes_monitoring_of_a_shared_url(
+        self,
+    ) -> None:
+        shared = "https://example.com/shared"
+        model = {
+            "id": "model-a",
+            "url": "https://example.com/a",
+            "verified_at": "2026-09-04",
+            "evidence": [],
+            "license_evidence": [],
+            "flags": [
+                {
+                    "kind": "maker_risk_safeguards",
+                    "status": "statement_found",
+                    "url": shared,
+                    "unpinnable": True,
+                    "verified_at": "2026-09-02",
+                }
+            ],
+        }
+        service = {
+            "id": "service",
+            "url": "https://example.com/service",
+            "verified_at": "2026-09-04",
+            "terms": {
+                "kind": "web_terms",
+                "url": shared,
+                "verified_at": "2026-09-03",
+            },
+            "evidence": [],
+        }
+        by_url = {t.url: t for t in self.collect([model], [service])}
+
+        self.assertEqual(("flag", "terms"), by_url[shared].kinds)
+        self.assertIs(False, by_url[shared].monitor_terms)
 
     def test_a_matching_pin_is_the_baseline_even_after_the_last_run(self) -> None:
         cache = cache_of({}, updated_at="2026-09-03T00:00:00Z")
@@ -1039,6 +1078,18 @@ class FlagEvidenceTests(unittest.TestCase):
             summary.errors[0], r"^flag pin mismatch: https://www\.example-lab\.com"
         )
         self.assertNotIn("terms_sha256", cache["entries"][FLAG_URL])
+
+    def test_a_wrong_pin_fails_even_while_the_page_is_unchanged(self) -> None:
+        entry = {"terms_sha256": flag_hash(), "terms_text": "Fixture statement"}
+        cache = cache_of({FLAG_URL: dict(entry)}, updated_at="2026-09-03T00:00:00Z")
+        summary = self.check(flag_target(pinned=("c" * 64,)), cache)
+        self.assertRegex(
+            summary.errors[0], r"^flag pin mismatch: https://www\.example-lab\.com"
+        )
+        stored = cache["entries"][FLAG_URL]
+        self.assertEqual(flag_hash(), stored["terms_sha256"])
+        self.assertNotIn("terms_reviewed_at", stored)
+        self.assertNotIn("terms_drift_detected_at", stored)
 
     def test_flag_drift_stays_open_until_a_review_pins_the_new_page(self) -> None:
         cache = cache_of({}, updated_at="2026-09-03T00:00:00Z")

@@ -236,10 +236,13 @@ drift-hashed with the same normalisation as terms and fail as `flag page drift r
 review` when they change. A `statement_found` entry pins its page with `content_sha256`,
 and that pin is the baseline: the first observation must match it, whenever the flag
 was reviewed, and `--establish-baselines` cannot override a mismatch, which fails as
-`flag pin mismatch`. A review that changes the page's pin and advances the flag's
-`verified_at` accepts the new page only at the pinned hash. An `"unpinnable": true` entry
-is link-checked and never hashed. A `no_statement_found` entry's checked page is hashed
-like terms, so a statement appearing there raises a review. Drift never rewrites or
+`flag pin mismatch`; the pin is also checked on every run, not only when the page
+changes, so a wrong pin fails while the page is unchanged. A review that changes the
+page's pin and advances the flag's `verified_at` accepts the new page only at the pinned
+hash. An `"unpinnable": true` entry is link-checked and never hashed; that veto applies
+to every citation of the URL, so terms-drift monitoring also stops for another record
+citing the same page. A `no_statement_found` entry's checked page is hashed like terms,
+so a statement appearing there raises a review. Drift never rewrites or
 removes a flag; it fails the weekly verification and opens the `automation-failure`
 issue, which waits for a human, as license drift does under AGENTS.md rule 10. To pin a
 page while reviewing, run

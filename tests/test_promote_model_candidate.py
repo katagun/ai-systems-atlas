@@ -330,6 +330,9 @@ class PromoteModelCandidateTests(unittest.TestCase):
         self.assertEqual([], draft["source_metadata"]["modalities"]["output"])
         self.assertEqual([], draft["evidence"])
         self.assertEqual("review_required", draft["license_review_status"])
+        self.assertEqual(
+            build_draft(self.candidate, self.queue)["flags"], draft["flags"]
+        )
 
     def test_gap_draft_refuses_ids_models_dev_already_lists(self) -> None:
         with self.assertRaisesRegex(
@@ -548,6 +551,16 @@ class PromoteModelCandidateTests(unittest.TestCase):
             with self.subTest(bad=bad), self.assertRaises(PromotionError):
                 preflight_link(self.root, twin["id"], self.candidate["source_id"], bad)
 
+    def test_linking_is_exempt_from_the_maker_risk_flag(self) -> None:
+        """Linking re-links a published record; real records have no flags yet."""
+        twin = self.install_null_source_twin()
+        path = self.root / "directory" / "models.json"
+        models = json.loads(path.read_text())
+        next(m for m in models["models"] if m["id"] == twin["id"]).pop("flags")
+        write_json(path, models)
+
+        preflight_link(self.root, twin["id"], self.candidate["source_id"], "2026-09-20")
+
     def test_draft_scaffolds_a_blank_maker_risk_flag(self) -> None:
         draft = build_draft(self.candidate, self.queue)
 
@@ -565,10 +578,21 @@ class PromoteModelCandidateTests(unittest.TestCase):
         )
 
     def test_review_without_a_maker_risk_flag_is_rejected(self) -> None:
-        record = deepcopy(self.record)
-        del record["flags"]
-        with self.assertRaisesRegex(PromotionError, "maker_risk_safeguards"):
-            preflight_promotion(self.root, record)
+        blank = {**self.record["flags"][0], "status": ""}
+        other_kind = {**self.record["flags"][0], "kind": "something_else"}
+        for label, flags in (
+            ("missing", None),
+            ("blank scaffold", [blank]),
+            ("other kind", [other_kind]),
+        ):
+            with self.subTest(label):
+                record = deepcopy(self.record)
+                if flags is None:
+                    del record["flags"]
+                else:
+                    record["flags"] = flags
+                with self.assertRaisesRegex(PromotionError, "maker_risk_safeguards"):
+                    preflight_promotion(self.root, record)
 
     def test_gap_review_also_needs_the_maker_risk_flag(self) -> None:
         record = self.gap_record()

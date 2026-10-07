@@ -1435,6 +1435,10 @@ def check_targets(
                     )
                     summary.errors.append(_terms_drift_error(target))
                     summary.drift_details[target.url] = _entry_drift_diff(entry)
+            elif not _matches_pin(target, current_hash):
+                # An unchanged page can still be the wrong page: the pin is checked on
+                # every run, and nothing is recorded for a flag whose pin is wrong.
+                summary.errors.append(_missing_baseline_error(target))
             else:
                 entry["terms_reviewed_at"] = review_dates
                 # Entries from before stored text gain it once their hash is confirmed unchanged.

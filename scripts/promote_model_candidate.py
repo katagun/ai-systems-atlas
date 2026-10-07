@@ -246,8 +246,9 @@ def _valid_date(value: object) -> date | None:
 
 
 def _maker_risk_flag_error(record: dict[str, Any]) -> str | None:
-    """ADR 042: every new review, gap or linked, records the maker-risk flag
-    in an examined state before promotion."""
+    """ADR 042: every new listed or gap review records the maker-risk flag in an
+    examined state before promotion. Linking is exempt: it re-links an
+    already-published record, and real records carry no flags until the backfill."""
     flags = record.get("flags")
     if not isinstance(flags, list) or not any(
         isinstance(entry, dict)
