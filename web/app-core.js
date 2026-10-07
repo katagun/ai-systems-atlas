@@ -498,6 +498,14 @@
     return { labsOf, distributionsOf };
   }
 
+  // The labs a collection's Lab filter offers: those that join at least one
+  // of its records by buildLabMembership's joins, A–Z, never by size
+  // (ADR 041). A lab that joins none would only ever list nothing.
+  function joinedLabs(labs = [], records = [], labMembership) {
+    const ids = new Set(records.flatMap(record => labMembership?.labsOf.get(record) || []));
+    return labs.filter(lab => ids.has(lab.id)).sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   // Release dates are models.dev metadata (or Atlas-authored for a release it
   // does not list), partial as YYYY-MM or full as YYYY-MM-DD; both sort as text.
   function releaseDate(model) {
@@ -2312,6 +2320,7 @@
     finderGoalRecords,
     flagEmblemText,
     holdsPhrase,
+    joinedLabs,
     labDistributionModes,
     labRelations,
     labsForRecord,

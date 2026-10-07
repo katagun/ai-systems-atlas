@@ -117,7 +117,6 @@ async function bootstrap() {
   populateFilters();
   populateCollectionFilters();
   populateLabFilters();
-  populateModelLabFilter();
   populateRuntimeMatrixFilters();
   renderStats();
   renderFinder();
@@ -769,25 +768,16 @@ const COLLECTION_FILTERS = {
   },
 };
 
-// The Models view's Lab facet lists labs by name rather than a taxonomy group.
-function populateModelLabFilter() {
-  [...state.labs].sort((a, b) => a.name.localeCompare(b.name)).forEach(lab =>
-    $("#model-lab-filter").insertAdjacentHTML("beforeend", `<option value="${escapeHTML(lab.id)}">${escapeHTML(lab.name)}</option>`));
-}
-
 // Each collection's Lab filter lists, A–Z, the labs that join at least one of
-// its records (buildLabMembership), never by size (ADR 041). Models lists
-// every lab, as it did.
+// its records, Models included (ruling R-T3-7, AppCore.joinedLabs).
 function populateLabFilters() {
-  const joined = records => {
-    const ids = new Set(records.flatMap(record => state.labMembership.labsOf.get(record) || []));
-    return [...state.labs].filter(lab => ids.has(lab.id)).sort((a, b) => a.name.localeCompare(b.name));
-  };
   for (const [selector, records] of [
     ["#system-lab-filter", state.projects], ["#inference-lab-filter", state.inferenceServices],
-    ["#runtime-lab-filter", state.localRuntimes], ["#specification-lab-filter", state.specifications],
+    ["#runtime-lab-filter", state.localRuntimes], ["#model-lab-filter", state.models],
+    ["#specification-lab-filter", state.specifications],
   ]) {
-    joined(records).forEach(lab => $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(lab.id)}">${escapeHTML(lab.name)}</option>`));
+    AppCore.joinedLabs(state.labs, records, state.labMembership).forEach(lab =>
+      $(selector).insertAdjacentHTML("beforeend", `<option value="${escapeHTML(lab.id)}">${escapeHTML(lab.name)}</option>`));
   }
 }
 

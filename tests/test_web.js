@@ -4,7 +4,7 @@ const { relative, sep } = require("node:path");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FILTER_GROUPS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, buildLabMembership, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterGroupCounts, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesFilterGroups, matchesProject, mergePackScopeEntries, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FILTER_GROUPS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, buildLabMembership, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterGroupCounts, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, joinedLabs, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesFilterGroups, matchesProject, mergePackScopeEntries, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -3356,5 +3356,30 @@ test("every reviewed flag is a taxonomy flag kind of the same name, allowed on m
     assert.equal(kind.name, flag.name);
     assert.deepEqual(kind.collections, ["models"]);
     assert.equal(flag.family, FLAG_FAMILY);
+  }
+});
+
+// Ruling R-T3-7: each collection's Lab filter lists the labs that join at
+// least one of its records, Models included, A–Z and never by size (ADR 041).
+// The join is checked against labRelations, the rule each lab's record uses.
+test("on the real catalog, every collection's Lab filter lists, A–Z, exactly the labs that join its records", () => {
+  const read = name => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "web", "app", `${name}.json`), "utf8"))[name];
+  const payloads = {
+    projects: read("systems"), services: read("inference"), runtimes: read("runtimes"), models: read("models"),
+    packs: read("packs"), robots: read("robots"), labs: read("labs"), specifications: read("specifications"),
+  };
+  const labMembership = buildLabMembership(payloads.labs, payloads);
+  const joins = {
+    systems: [payloads.projects, relations => relations.systems],
+    inference: [payloads.services, relations => relations.services],
+    runtimes: [payloads.runtimes, relations => relations.runtimes],
+    models: [payloads.models, relations => [...relations.models, ...relations.sourceRows]],
+    specifications: [payloads.specifications, relations => relations.specifications],
+  };
+  for (const [collection, [records, joined]] of Object.entries(joins)) {
+    const listed = joinedLabs(payloads.labs, records, labMembership);
+    const joining = payloads.labs.filter(lab => joined(labRelations(lab, payloads)).length > 0);
+    assert.deepEqual(listed.map(lab => lab.id).sort(), joining.map(lab => lab.id).sort(), `${collection} lists exactly the labs that join its records`);
+    assert.deepEqual(listed.map(lab => lab.name), listed.map(lab => lab.name).sort((a, b) => a.localeCompare(b)), `${collection} lists its labs A–Z`);
   }
 });
