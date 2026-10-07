@@ -2406,12 +2406,39 @@ function writeFinderURL({ push = false } = {}) {
   writeURL(url, { push });
 }
 
+// A chosen goal paints its priority row and shortlist below every goal tile,
+// 2,500 px down a phone's page, so the choice would show nothing without a
+// scroll. This brings the row, the first thing the choice adds, to 12 px under
+// the sticky header (headerClearance), unless its top is already on screen below
+// the header. A phone's fixed bottom bar covers the last of the viewport, so the
+// screen ends where the bar begins. It runs once per choice, where the choice is
+// made: never from renderFinder, so neither a priority nor the shortlist
+// replacing its placeholder scrolls. Focus stays where it is.
+// `fromTop` is for a Finder that was just opened: activateView has started a
+// smooth scroll to the top, so the row is judged from a scroll position of 0,
+// where the page is heading, and an explicit scroll supersedes the one in flight.
+// The scroll is instant, as revealDirectoryResults is: it never animates, so it
+// honours prefers-reduced-motion by construction. A short page may stop short
+// of the target, as a shortlist still reading its scores can; the row then rests
+// lower, still in view.
+function revealFinderPriorities({ fromTop = false } = {}) {
+  const row = $(".finder-priorities");
+  if (!row || !$("#finder").classList.contains("is-active")) return;
+  const offset = row.getBoundingClientRect().top + window.scrollY;
+  const top = offset - (fromTop ? 0 : window.scrollY);
+  const bar = $("#mobile-nav");
+  const screenBottom = bar && getComputedStyle(bar).display !== "none" ? bar.getBoundingClientRect().top : window.innerHeight;
+  if (top >= stickyHeight() && top < screenBottom) return;
+  window.scrollTo({ top: offset - headerClearance(), behavior: "instant" });
+}
+
 // The job is already chosen, so the screen opens with its shortlist rather
 // than with a question standing between the reader and it.
 function openFinderAt(direction, goal) {
   chooseFinderGoal(goal, direction);
   writeFinderURL();
   activateView("finder");
+  revealFinderPriorities({ fromTop: true });
 }
 
 function finderPriorityFor(direction, priority) {
@@ -2465,8 +2492,10 @@ function renderFinderStatus() {
 
 // The three answers, on the Finder's own keys. A goal the tables no longer
 // offer, or one whose direction contradicts the `direction` beside it, leaves
-// the URL as any value a control cannot take, and leaves the tiles.
-function restoreFinderFromURL(params) {
+// the URL as any value a control cannot take, and leaves the tiles. `reveal` is
+// the page loading on a link that names a job, which opens like any other
+// Finder with a job set; Back and Forward leave the scroll to the browser.
+function restoreFinderFromURL(params, { reveal = false } = {}) {
   const goal = params.get("job") || "";
   if (!goal) {
     // Only a Finder URL with no job clears the screen. The tab and the
@@ -2490,6 +2519,7 @@ function restoreFinderFromURL(params) {
   }
   state.finder = { direction: entry.direction, goal: entry.id, priority: finderPriorityFor(entry.direction, params.get("prefer") || "") };
   renderFinder();
+  if (reveal) revealFinderPriorities({ fromTop: true });
 }
 
 function renderFinder() {
@@ -2518,7 +2548,7 @@ function renderJobHint(scope, term) {
   const goal = term.trim() ? AppCore.matchFinderGoal(finderGoalEntries(), term) : null;
   hint.hidden = !goal;
   hint.innerHTML = goal
-    ? `<span>Looks like a job: <strong>${escapeHTML(goal.label)}</strong>. The Finder can shortlist from ${goal.eligible} reviewed ${goal.eligible === 1 ? "record" : "records"}.</span><button type="button" class="link-button" data-finder-goal="${escapeHTML(`${goal.direction}:${goal.id}`)}">Open shortlist →</button>`
+    ? `<span>Looks like a job: <strong>${escapeHTML(goal.label)}</strong>. The Finder can shortlist from ${goal.eligible} reviewed ${goal.eligible === 1 ? "record" : "records"}.</span><button type="button" class="link-button" data-open-finder-goal="${escapeHTML(`${goal.direction}:${goal.id}`)}">Open shortlist →</button>`
     : "";
 }
 
@@ -3690,7 +3720,7 @@ function restoreFromURL({ boot = false } = {}) {
     if (onDoor) showFrontDoor({ updateURL: false });
     else if (scope && !comparisonRestored) setDirectoryCollection(scope, { updateURL: false });
     activateView(view);
-    restoreFinderFromURL(params);
+    restoreFinderFromURL(params, { reveal: boot });
     // The one restored query, or its absence, reaches every collection's
     // sort, so a sort chosen during a query the URL no longer holds ends too.
     if (scope) syncMatchSorts();
@@ -4275,7 +4305,10 @@ function bindEvents() {
   $("#finder-content").addEventListener("click", event => {
     const goalButton = event.target.closest("[data-finder-goal]");
     if (goalButton) {
-      if (chooseFinderGoal(goalButton.dataset.finderGoal, goalButton.dataset.finderDir)) writeFinderURL({ push: true });
+      if (chooseFinderGoal(goalButton.dataset.finderGoal, goalButton.dataset.finderDir)) {
+        writeFinderURL({ push: true });
+        revealFinderPriorities();
+      }
       return;
     }
     const priorityButton = event.target.closest("[data-finder-priority]");
@@ -4341,9 +4374,13 @@ function bindEvents() {
       input.focus();
       return;
     }
-    const goal = event.target.closest("[data-finder-goal]");
+    // Only the search banner's button, whose value is `direction:id`. A Finder
+    // tile carries a bare goal id on `data-finder-goal` and is answered by the
+    // Finder's own handler; reading that attribute here as well ran
+    // openFinderAt on every tile click, which asks the page for its top.
+    const goal = event.target.closest("[data-open-finder-goal]");
     if (goal) {
-      const [direction, id] = goal.dataset.finderGoal.split(":");
+      const [direction, id] = goal.dataset.openFinderGoal.split(":");
       openFinderAt(direction, id);
       return;
     }
