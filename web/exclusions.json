@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03",
+  "generated_at": "2026-10-06",
   "entries": [
     {
       "name": "A-MEM paper implementation",
@@ -834,6 +834,22 @@
       "useful_lesson": "A project that is absorbed into another is not a new record: check whether the old repository URL redirects to a repository the catalog already publishes before queueing the name, because the redirect is the evidence and it is cheap to read.",
       "excluded_at": "2026-10-03",
       "verified_at": "2026-10-03"
+    },
+    {
+      "name": "Agent of Empires",
+      "repo": "agent-of-empires/agent-of-empires",
+      "reason": "MIT licensed. The README describes a session manager for AI coding agents, and its docs say the core is sessions, tmux and worktrees. Its persisted extras are per-session conveniences: a queued-prompt list, a pending first turn, wakeups, and automatic resume after a provider rate limit. The schema has no task, run, order, assignment or inter-agent message entity, and no budget or policy engine. The plugin API's turn-send reaches only a session the calling plugin created, so every message originates with a person or a plugin rather than another agent. It makes no provider calls, and for tmux sessions agent state is read from screen text through per-agent rules with hooks as a supplement; only the optional structured view takes state from protocol events. That is the pattern of the earlier terminal-owning exclusions, with a protocol view added.",
+      "useful_lesson": "Per-session queues and auto-resume are lifecycle machinery. Ask whether one agent's state can cause work to be assigned to another before counting scheduling as orchestration.",
+      "excluded_at": "2026-10-06",
+      "verified_at": "2026-10-06"
+    },
+    {
+      "name": "Superset",
+      "repo": "superset-sh/superset",
+      "reason": "Source-available under the Elastic License 2.0 and judged a close call. The desktop app is a workspace, terminal, worktree and pull request interface that launches other vendors' CLIs and learns their state from hooks it installs; its own docs say it never touches model traffic. Its host database holds terminal sessions, agent bindings, workspaces and pull requests. Tasks, device commands and scheduled automations exist in the cloud schema and are tied to a hosted account, and automations are a paid feature. The multi-agent coordination its docs describe is a skill that a third-party coordinator agent follows through the command line, so the planning and delegation logic is in that agent's prompt and not in Superset's code.",
+      "useful_lesson": "When the docs say a skill lets one agent coordinate workers, find where the coordinating logic runs. If it runs in the vendor agent, the surface is the control layer and not the orchestrator.",
+      "excluded_at": "2026-10-06",
+      "verified_at": "2026-10-06"
     }
   ]
 }

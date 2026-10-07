@@ -37,6 +37,8 @@ Agent-system roles are general work agent, coding agent, research agent, browser
 
 General work agents accept broad end-user outcomes and carry out multi-step knowledge work across files, web sources, applications, or schedules. This is distinct from a general assistant's primarily conversational workspace, a computer-use agent's interaction specialization, and a developer runtime or framework. Named modes are separate records only when authoritative evidence establishes a distinct product workflow or execution boundary; see [ADR 011](adr/011-delegated-work-agents-are-agent-systems.md).
 
+A meta-harness — software that runs or supervises other vendors' coding-agent harnesses — is a multi-agent orchestrator when it owns task, run, message, budget, or policy state of its own, and is outside the catalog when it only owns the terminals of the agents it starts. The test and its precedents are in [Curation](CURATION.md).
+
 Agent projects also record:
 
 - interfaces: terminal, IDE, web app, API / SDK, or library;

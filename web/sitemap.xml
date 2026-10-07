@@ -506,6 +506,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/adalflow/</loc><lastmod>2026-09-13</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/affine/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/agent-memory/</loc><lastmod>2026-09-27</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/agent-orchestrator/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/agenticseek/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/agentmemory/</loc><lastmod>2026-08-31</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/agno/</loc><lastmod>2026-08-25</lastmod></url>
@@ -636,6 +637,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/nerve/</loc><lastmod>2026-09-12</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/nia/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/notabase/</loc><lastmod>2026-09-12</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/ntm/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/obsidian-llm-wiki/</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/obsidian-second-brain/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/oh-my-claudecode/</loc><lastmod>2026-09-01</lastmod></url>
@@ -661,10 +663,12 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/openhuman/</loc><lastmod>2026-09-11</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openinterpreter/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openrecall/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/openrig/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openviking/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/orca/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/ozbrain/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/paper2agent/</loc><lastmod>2026-09-18</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/paperclip/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/perplexity-computer/</loc><lastmod>2026-08-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/perplexity/</loc><lastmod>2026-08-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/pgvector/</loc><lastmod>2026-10-03</lastmod></url>

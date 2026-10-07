@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03",
+  "generated_at": "2026-10-06",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -20347,6 +20347,410 @@
         "workflows",
         "mcp"
       ]
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "repo": "paperclipai/paperclip",
+      "primary_role": "multi_agent_orchestrator",
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "current_repo_note": null,
+      "historical_stars": null,
+      "stars": 98114,
+      "stars_verified_at": "2026-10-06",
+      "pushed_at": "2026-10-07T03:25:11Z",
+      "forks": 16583,
+      "open_issues": 6191,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "MIT",
+      "id": "paperclip",
+      "name": "Paperclip",
+      "url": "https://github.com/paperclipai/paperclip",
+      "description": "Self-hosted control plane that runs a company of agents on top of a dozen vendors' coding-agent harnesses, with an org chart, atomic task checkout, recurring routines, approvals, and hard-stop budgets kept in an embedded Postgres database.",
+      "secondary_roles": [
+        "stateful_agent_runtime"
+      ],
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "x_ai",
+        "moonshot_ai"
+      ],
+      "architectures": [
+        "relational_db",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "structured_query"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "scheduled",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "tasks, runs, wakeup requests, approvals, budget policies, cost events, routines, goals, and pipelines in a Postgres database the server embeds by default, plus per-run execution workspaces on the host",
+      "deployment": [
+        "self_hosted",
+        "local_cli"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "score": {
+        "task_reliability": 6.8,
+        "tool_use": 8.0,
+        "autonomy": 8.0,
+        "human_control": 8.6,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 8.2,
+        "interoperability": 9.0,
+        "maturity": 5.8,
+        "overall": 7.74
+      },
+      "strengths": [
+        "The orchestration state is real and persisted: the schema holds tasks, heartbeat runs, a queued wakeup table with coalescing, approvals, routines with cron, webhook and API triggers, and pipelines, and the server reads them back to decide what each agent does next",
+        "Spend is a first-class control rather than a dashboard: scoped budget policies carry warning thresholds and a hard stop, backed by recorded cost events, and the README says plainly that in-flight work can delay a stop",
+        "The adapter set is broad and symmetric, with separate packages for Claude Code, Codex, Gemini CLI, Cursor, OpenCode, Pi, Grok, Kimi, Hermes and two gateway protocols, plus a plugin loader for outside adapters"
+      ],
+      "weaknesses": [
+        "The repository is under eight months old and carries 2,801 open issues and 3,389 open pull requests, with calendar-versioned releases every few days",
+        "The README labels agent chat, chat and email connectors, and pipelines experimental, and the roadmap calls its own list directional rather than promised",
+        "It does not run an agent loop of its own: its adapters start installed vendor CLIs, so reliability and cost accounting depend on what those tools report",
+        "Hosted use is a waitlist; the LICENSE names Paperclip AI while the README footer names Paperclip Labs, Inc"
+      ],
+      "why_it_matters": "The clearest example of a control plane that treats competing vendors' coding agents as employees, with a ledger, a budget, and an approval path in place of a terminal multiplexer."
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "repo": "mvschwarz/openrig",
+      "primary_role": "multi_agent_orchestrator",
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "current_repo_note": null,
+      "historical_stars": null,
+      "stars": 5541,
+      "stars_verified_at": "2026-10-06",
+      "pushed_at": "2026-10-07T03:07:42Z",
+      "forks": 403,
+      "open_issues": 115,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "Apache-2.0",
+      "id": "openrig",
+      "name": "OpenRig",
+      "url": "https://github.com/mvschwarz/openrig",
+      "description": "Local daemon, command line, terminal interface and MCP server that boots YAML-defined teams of Claude Code, Codex and Pi sessions in tmux, then tracks owned work in a queue with closure rules, workflow instances, and a watchdog that wakes stalled seats.",
+      "secondary_roles": [
+        "stateful_agent_runtime"
+      ],
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai"
+      ],
+      "architectures": [
+        "relational_db",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "structured_query"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "rig topology, queue items and their transitions, workflow instances, inbox and outbox entries, chat messages, snapshots, and watchdog jobs in a SQLite database under the operator's home directory",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "score": {
+        "task_reliability": 6.2,
+        "tool_use": 7.2,
+        "autonomy": 7.0,
+        "human_control": 7.4,
+        "observability_recovery": 8.4,
+        "data_sovereignty": 8.6,
+        "interoperability": 7.0,
+        "maturity": 5.0,
+        "overall": 7.06
+      },
+      "strengths": [
+        "Work is owned state rather than a terminal list: queue items carry a status machine with closure reasons, handoff and escalation chains, and a guard that rejects completion without a closure reason",
+        "Recovery is designed in, with periodic snapshots, restore by name after a reboot, an event log, and a watchdog scheduler whose policies remind or wake a seat when an expected artifact does not appear",
+        "It runs entirely on the operator's machine, with no model-vendor dependency and no account, and its daemon dependencies are a short list of ordinary libraries"
+      ],
+      "weaknesses": [
+        "Its own README describes the product as managing the team the agents form, not the agents, which is how a session manager describes itself; the queue, workflow and watchdog code is what places it above that line",
+        "The workflow runtime's header describes the continue step as a read-only inspector in its first version, so automatic advance was not confirmed from the source",
+        "Setup writes provider hooks and workspace trust records and edits the tmux configuration, and agents run as the user with no sandbox",
+        "It is a single-maintainer project created in April 2026 at pre-1.0 version numbers, supports only the latest published package for security fixes, and has no native Windows support"
+      ],
+      "why_it_matters": "Shows what separates a team-of-agents runtime from a tmux wrapper: durable queues with closure obligations, workflow state, and a watchdog, all of it local."
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "repo": "OrchestratorInc/agent-orchestrator",
+      "primary_role": "multi_agent_orchestrator",
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "current_repo_note": "One repository that changed hands within eight months: it began under ComposioHQ, passed through a personal account and Untrivial-ai, and now sits under the OrchestratorInc organisation; the same repository id resolves under all four names, and the README's own links still use the Untrivial-ai name. The hosted cloud web app is a private submodule that is not in the public tree.",
+      "historical_stars": null,
+      "stars": 12852,
+      "stars_verified_at": "2026-10-06",
+      "pushed_at": "2026-10-07T02:42:10Z",
+      "forks": 1769,
+      "open_issues": 775,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "Apache-2.0",
+      "id": "agent-orchestrator",
+      "name": "Agent Orchestrator",
+      "url": "https://github.com/OrchestratorInc/agent-orchestrator",
+      "description": "Desktop app and loopback daemon that gives each coding task its own worktree and agent from about forty harness adapters, then routes pull request, CI and review feedback back to the owning session, with a project-level orchestrator agent that spawns and redirects workers.",
+      "secondary_roles": [
+        "coding_agent_workflow"
+      ],
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "x_ai",
+        "moonshot_ai",
+        "deepseek"
+      ],
+      "architectures": [
+        "relational_db",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "structured_query"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "conversation",
+        "scheduled",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "sessions, worktrees, pull request and check state, conversations, worker status reports, scheduled automations and their runs, and review runs in a local SQLite database, plus per-session git worktrees on the host",
+      "deployment": [
+        "desktop",
+        "mobile",
+        "local_cli",
+        "cloud_optional"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": false,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "score": {
+        "task_reliability": 7.2,
+        "tool_use": 8.0,
+        "autonomy": 7.8,
+        "human_control": 7.4,
+        "observability_recovery": 8.2,
+        "data_sovereignty": 7.0,
+        "interoperability": 9.0,
+        "maturity": 5.8,
+        "overall": 7.52
+      },
+      "strengths": [
+        "Supervision is closed-loop and lives in AO's own code: an observer watches pull requests, CI and review threads, a lifecycle manager decides what is actionable, and the message goes back to the session that owns the branch, with the last nudge signature persisted to avoid repeats",
+        "A persistent orchestrator session is separate from worker sessions in the schema, and workers report checkpoint, needs-input, stuck or done through a delivery outbox with acknowledgement",
+        "Adapters cover about forty harnesses and several ACP chat drivers, and the scheduler stores recurrence rules with leased, retried runs"
+      ],
+      "weaknesses": [
+        "The root licence is Apache-2.0 and was only added on 2026-06-27, while the frontend and command-line packages declare MIT in their manifests without a licence file of their own",
+        "No spend cap or budget policy was found; usage is tracked but nothing enforces a limit",
+        "The hosted web app is a private submodule, the terms URL under the new domain returned 404, and the README says the renderer sends anonymous usage events to PostHog",
+        "Eight months of history show 188 numbered schema migrations, repeated renumbering fixes, and four owner names, so card claims will drift quickly"
+      ],
+      "why_it_matters": "The most developed answer yet to the question of who keeps a fleet of pull requests moving: an orchestrator that watches CI and review state itself and pushes the feedback back to the agent that owns it."
+    },
+    {
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "repo": "Dicklesworthstone/ntm",
+      "primary_role": "multi_agent_orchestrator",
+      "agent_relation": "agent_runtime",
+      "status": "active",
+      "license_review_status": "verified",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-06",
+      "current_repo_note": "The licence was plain MIT when added on 2026-01-21 and was changed on 2026-02-21 to MIT with a rider that grants no rights to OpenAI, Anthropic, their affiliates, or anyone acting for them.",
+      "historical_stars": null,
+      "stars": 453,
+      "stars_verified_at": "2026-10-06",
+      "pushed_at": "2026-10-07T02:39:44Z",
+      "forks": 70,
+      "open_issues": 1,
+      "metadata_verified_at": "2026-10-06",
+      "github_detected_license": "NOASSERTION",
+      "id": "ntm",
+      "name": "NTM (Named Tmux Manager)",
+      "url": "https://github.com/Dicklesworthstone/ntm",
+      "description": "Go binary that turns tmux into a local control plane for Claude Code, Codex, Gemini, Oh My Pi and Grok Build panes, with a persisted assignment store, a scoring coordinator, destructive-command policy with approvals, pipelines, and REST and WebSocket interfaces.",
+      "secondary_roles": [
+        "coding_agent_workflow"
+      ],
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "x_ai"
+      ],
+      "architectures": [
+        "relational_db",
+        "plain_files",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "structured_query"
+      ],
+      "capture_modes": [
+        "coding_session",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "assignments with claim, reservation and dispatch state, runtime work and coordination counters, send operations and routing state in a local SQLite database, plus a versioned JSON assignment store and a command-policy file in the project",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk",
+        "ide"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "LicenseRef-MIT-OpenAI-Anthropic-Rider"
+      ],
+      "source_model": "source_available",
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 7.6,
+        "autonomy": 7.4,
+        "human_control": 8.0,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 7.6,
+        "interoperability": 6.6,
+        "maturity": 5.0,
+        "overall": 6.99
+      },
+      "strengths": [
+        "Assignments are persisted before each external step with claim, file-reservation and dispatch states, and the code recovers lost or stranded dispatches, which is orchestration state a terminal manager does not keep",
+        "Safety is a policy layer: a project policy file blocks or requires approval for destructive command patterns, with an approval engine behind it",
+        "A coordinator scores which agent should take which unit of work, weighing critical path, file overlap and token budgets, and exposes the same surface to scripts through robot-mode JSON commands"
+      ],
+      "weaknesses": [
+        "The licence is MIT with a rider that names OpenAI and Anthropic as restricted parties, bars anyone acting for them, defines use to include executing and testing, and ends all permissions on breach; it is not an open-source licence",
+        "Agent state is read from tmux screen text with per-agent patterns, and the README calls the tool intentionally tmux-centric",
+        "Inter-agent mail and the task graph depend on separate tools the author also publishes, and the README says advanced workflows degrade when they are absent",
+        "A 59.8 MB compiled Linux binary is committed to the repository, the cost table is dated May 2025, and the repository has a single maintainer"
+      ],
+      "why_it_matters": "Shows how far a tmux-centred tool can go before it becomes orchestration: persisted assignments, policy, and a scoring coordinator, under a licence that singles out two model vendors."
     }
   ],
   "verified_at": "2026-09-28"

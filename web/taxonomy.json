@@ -1958,6 +1958,11 @@
       "id": "Unlicense",
       "name": "The Unlicense",
       "kind": "open_source"
+    },
+    {
+      "id": "LicenseRef-MIT-OpenAI-Anthropic-Rider",
+      "name": "MIT License with OpenAI/Anthropic Rider",
+      "kind": "restricted"
     }
   ],
   "source_models": [
