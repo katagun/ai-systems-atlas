@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-03",
+  "generated_at": "2026-10-06",
   "entries": [
     {
       "name": "A-MEM paper implementation",
@@ -834,6 +834,33 @@
       "useful_lesson": "A project that is absorbed into another is not a new record: check whether the old repository URL redirects to a repository the catalog already publishes before queueing the name, because the redirect is the evidence and it is cheap to read.",
       "excluded_at": "2026-10-03",
       "verified_at": "2026-10-03"
+    },
+    {
+      "name": "wigolo",
+      "repo": "KnockOutEZ/wigolo",
+      "url": "https://wigolo.app",
+      "reason": "The AGPL-3.0 README calls wigolo \"a focused web layer for your agents\", an MCP, REST, and SDK surface for search, fetch, crawl, extract, cache, find-similar, research, and an agent tool, and compares itself with Firecrawl, Exa, and Tavily. Its job is to be a web-access tool that other agents call. The one tool that gathers sources for itself, src/agent/pipeline.ts, runs a single plan, a single execution of that plan, and a single synthesis, with defaults of three pages and sixty seconds, and hands retry and broadening to the caller as a warning; the model is optional and used for synthesis only. A fixed plan-fetch-synthesize pass with no replanning is not the iterative research loop the research-agent bar requires, and retrieval for other agents to call is not planning and acting as its own primary outcome. Licensing is not the ground.",
+      "useful_lesson": "A web-access server that other agents call is the tool, not the agent: check whether its research or agent tool re-plans from what it finds before treating the product as a research system.",
+      "excluded_at": "2026-10-06",
+      "verified_at": "2026-10-06"
+    },
+    {
+      "name": "Latitude",
+      "repo": "latitude-dev/latitude-llm",
+      "url": "https://latitude.so",
+      "reason": "The MIT repository describes itself as \"Open-source observability for AI agents\", and its README sets out the product as \"Latitude finds where your agent fails and gets it fixed\" through telemetry traces, grouped failure signals, a fix step where \"Latitude dispatches your coding agents (Claude Code, Cursor) with the full context, sample traces, and a deep link\", and replay against failing traces. Tracing and evaluating other people's agents is the product, and the fix is carried out by an external coding agent it dispatches, which is the disposition already recorded for LangSmith, AgentOps, and PandaProbe. The SDKs are tracing clients, which the scope rules keep outside the scored catalog. Licensing is not the ground.",
+      "useful_lesson": "When the repair step is delegated to a separate coding agent, the observability product still owns tracing, not the acting; review the agent that acts.",
+      "excluded_at": "2026-10-06",
+      "verified_at": "2026-10-06"
+    },
+    {
+      "name": "cmux",
+      "repo": "manaflow-ai/cmux",
+      "url": "https://cmux.com",
+      "reason": "The README describes \"A Ghostty-based macOS terminal with vertical tabs and notifications for AI coding agents\" and says plainly \"cmux is a primitive, not a solution\", adding that \"cmux is a terminal, so any agent that runs in a terminal works out of the box\". It owns terminal panes, notifications, an embedded browser, session restore, and a CLI and socket API that agents drive; the README documents no model calls, task state, or tool loop of its own, so the agents are other products running inside it. That is the same disposition as the terminal workspace managers already excluded, herdr and claude-squad. Licensing is not the ground, though the root LICENSE now reads GPL-3.0-or-later with BUSL-1.1 server directories and differs from the blob pinned at triage.",
+      "useful_lesson": "A terminal that hosts coding agents is the workspace, not the agent, however many agent features its notifications and resume hooks add; the same call applies to the next terminal multiplexer.",
+      "excluded_at": "2026-10-06",
+      "verified_at": "2026-10-06"
     }
   ]
 }

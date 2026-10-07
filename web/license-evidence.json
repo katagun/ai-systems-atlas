@@ -3815,6 +3815,213 @@
       ]
     },
     {
+      "project_id": "cuawright",
+      "repo": "microsoft/CUAWright",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Browser runtime and the rest of the repository outside the imported desktop runtime; the NOTICE file states this scope",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/microsoft/CUAWright/blob/main/LICENSE",
+          "blob_sha": "9e841e7a26e4eb057b24511e7b92d42b257a80e5",
+          "immutable_url": "https://api.github.com/repos/microsoft/CUAWright/git/blobs/9e841e7a26e4eb057b24511e7b92d42b257a80e5"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "The imported OSWorld desktop runtime under cuawright.desktop, per the NOTICE file",
+          "kind": "git_blob",
+          "path": "licenses/OSWorld-runtime-APACHE-2.0.txt",
+          "url": "https://github.com/microsoft/CUAWright/blob/main/licenses/OSWorld-runtime-APACHE-2.0.txt",
+          "blob_sha": "60d0edcb164e63027fda49865712d5bcde225195",
+          "immutable_url": "https://api.github.com/repos/microsoft/CUAWright/git/blobs/60d0edcb164e63027fda49865712d5bcde225195"
+        }
+      ]
+    },
+    {
+      "project_id": "mindsearch",
+      "repo": "InternLM/MindSearch",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository; the only license file in the tree, and the README points to it",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/InternLM/MindSearch/blob/main/LICENSE",
+          "blob_sha": "d78fe384132bd63552fac705aa14e29abb26c072",
+          "immutable_url": "https://api.github.com/repos/InternLM/MindSearch/git/blobs/d78fe384132bd63552fac705aa14e29abb26c072"
+        }
+      ]
+    },
+    {
+      "project_id": "kaibanjs",
+      "repo": "kaiban-ai/KaibanJS",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository; the only license file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/kaiban-ai/KaibanJS/blob/main/LICENSE",
+          "blob_sha": "6719452ed3dd2af48f85ff460f49057d4d5c5e30",
+          "immutable_url": "https://api.github.com/repos/kaiban-ai/KaibanJS/git/blobs/6719452ed3dd2af48f85ff460f49057d4d5c5e30"
+        }
+      ]
+    },
+    {
+      "project_id": "shannon",
+      "repo": "Kocoro-lab/Shannon",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository; the only license file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Kocoro-lab/Shannon/blob/main/LICENSE",
+          "blob_sha": "524237b55185166ed5fb17d3e51adf2256295184",
+          "immutable_url": "https://api.github.com/repos/Kocoro-lab/Shannon/git/blobs/524237b55185166ed5fb17d3e51adf2256295184"
+        }
+      ]
+    },
+    {
+      "project_id": "magnitude",
+      "repo": "magnitudedev/browser-agent",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository; the only license file in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/magnitudedev/browser-agent/blob/main/LICENSE",
+          "blob_sha": "81533bf96905d70ff865124ed40135360c3728c7",
+          "immutable_url": "https://api.github.com/repos/magnitudedev/browser-agent/git/blobs/81533bf96905d70ff865124ed40135360c3728c7"
+        }
+      ]
+    },
+    {
+      "project_id": "go-micro",
+      "repo": "micro/go-micro",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository; the nested website LICENSE is the same blob and carries identical terms",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/micro/go-micro/blob/master/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/micro/go-micro/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "trellis",
+      "repo": "mindfold-ai/Trellis",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "Whole repository; the file is the plain AGPL-3.0 text, and the CLI package manifest declares AGPL-3.0-only",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/mindfold-ai/Trellis/blob/main/LICENSE",
+          "blob_sha": "0c97efd25b5974b974ed9a8a18207bc4f55bb338",
+          "immutable_url": "https://api.github.com/repos/mindfold-ai/Trellis/git/blobs/0c97efd25b5974b974ed9a8a18207bc4f55bb338"
+        }
+      ]
+    },
+    {
+      "project_id": "mobile-use",
+      "repo": "minitap-ai/mobile-use",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository; the NOTICE file adds an attribution request that it says is not a legal requirement",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/minitap-ai/mobile-use/blob/main/LICENSE",
+          "blob_sha": "055b75aaf55b25e2ea67bba85792fea95ec2062b",
+          "immutable_url": "https://api.github.com/repos/minitap-ai/mobile-use/git/blobs/055b75aaf55b25e2ea67bba85792fea95ec2062b"
+        }
+      ]
+    },
+    {
+      "project_id": "n8n",
+      "repo": "n8n-io/n8n",
+      "items": [
+        {
+          "license_id": "LicenseRef-n8n-Sustainable-Use-1.0",
+          "scope": "Everything outside files with .ee in the name or directory, and outside third-party components, which keep their own licenses; the packages/@n8n/cli copy is the same blob",
+          "kind": "git_blob",
+          "path": "LICENSE.md",
+          "url": "https://github.com/n8n-io/n8n/blob/master/LICENSE.md",
+          "blob_sha": "f85f59baa906530c26cee26e0c9ddd6bd5f86dbd",
+          "immutable_url": "https://api.github.com/repos/n8n-io/n8n/git/blobs/f85f59baa906530c26cee26e0c9ddd6bd5f86dbd"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Source files with .ee in their filename or .ee in their directory name, usable in production only with an n8n Enterprise license",
+          "kind": "git_blob",
+          "path": "LICENSE_EE.md",
+          "url": "https://github.com/n8n-io/n8n/blob/master/LICENSE_EE.md",
+          "blob_sha": "b47966a6c05809c90723aa4beaf47cbbd34fac1b",
+          "immutable_url": "https://api.github.com/repos/n8n-io/n8n/git/blobs/b47966a6c05809c90723aa4beaf47cbbd34fac1b"
+        }
+      ]
+    },
+    {
+      "project_id": "nanoclaw",
+      "repo": "nanocoai/nanoclaw",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository code; gateway-compat/onecli-summary carries a separate Apache-2.0 copy for a compatibility test harness around OneCLI, which is not part of the runtime",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/nanocoai/nanoclaw/blob/main/LICENSE",
+          "blob_sha": "e5b4bee92ed2127744cea681fa103521298e3b9a",
+          "immutable_url": "https://api.github.com/repos/nanocoai/nanoclaw/git/blobs/e5b4bee92ed2127744cea681fa103521298e3b9a"
+        }
+      ]
+    },
+    {
+      "project_id": "open-deep-research",
+      "repo": "nickscamara/open-deep-research",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository as a derivative of the Vercel AI chatbot template; the file is the short Apache-2.0 notice (Copyright 2024 Vercel, Inc.) without the full license text",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/nickscamara/open-deep-research/blob/main/LICENSE",
+          "blob_sha": "695ee2d6a04b691b3f3aa1c4e76e7c4b3a931042",
+          "immutable_url": "https://api.github.com/repos/nickscamara/open-deep-research/git/blobs/695ee2d6a04b691b3f3aa1c4e76e7c4b3a931042"
+        }
+      ]
+    },
+    {
+      "project_id": "onecli",
+      "repo": "onecli/onecli",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository except the three paths enumerated in LICENSE-ENTERPRISE",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/onecli/onecli/blob/main/LICENSE",
+          "blob_sha": "3107be43cc3f09623ed3651bc677cdb44bbf5efe",
+          "immutable_url": "https://api.github.com/repos/onecli/onecli/git/blobs/3107be43cc3f09623ed3651bc677cdb44bbf5efe"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "apps/web/src/ee/, packages/api/src/ee/, and apps/gateway/crates/ee/, free for development, testing, and evaluation, with a subscription needed for production",
+          "kind": "git_blob",
+          "path": "LICENSE-ENTERPRISE",
+          "url": "https://github.com/onecli/onecli/blob/main/LICENSE-ENTERPRISE",
+          "blob_sha": "a6394e35d38b3dbd6362a77c89a40608f37a3162",
+          "immutable_url": "https://api.github.com/repos/onecli/onecli/git/blobs/a6394e35d38b3dbd6362a77c89a40608f37a3162"
+        }
+      ]
+    },
+    {
       "project_id": "aden-hive",
       "repo": "aden-hive/hive",
       "items": [

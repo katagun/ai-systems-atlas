@@ -115,7 +115,7 @@ uv run python scripts/report_review_age.py --json --as-of 2026-09-14
 The report reads `directory/` and prints one row per reviewed record, oldest editorial date first. It changes no date, fetches nothing, and always exits 0: it is a prompt for human re-review, never a gate.
 
 - **reviewed** is the age of the record's own `verified_at`.
-- **oldest evidence** is the oldest human review date attached to the record — any nested `verified_at` in its evidence, license evidence, terms, or trust record, plus a system's dated items in `license-evidence.json` — and names where that date sits. `none` means the record has no dated evidence; pinned blob evidence carries no review date.
+- **oldest evidence** is the oldest human review date attached to the record — any nested `verified_at` in its evidence, license evidence, terms, trust record, or reviewed flags, plus a system's dated items in `license-evidence.json` — and names where that date sits. `none` means the record has no dated evidence; pinned blob evidence carries no review date.
 - **metadata** is the newest automated timestamp, `metadata_verified_at` or `stars_verified_at`, or `none` for records without GitHub metadata. It says how fresh the live numbers are, not how fresh the review is.
 
 `pushed_at` is left out because it measures upstream activity, not Atlas review. `--older-than DAYS` keeps records whose review or oldest evidence is more than `DAYS` old; `--collection` accepts `systems`, `inference`, `runtimes`, `models`, `specifications`, `packs`, or `labs` and may repeat. A lab's oldest evidence includes the date its safety framework was read.
@@ -229,6 +229,33 @@ entry's acceptance gate. The rest holds: the Atlas cannot accept a change to a p
 not steward, and a finding's pinned `content_sha256` is a review-time record compared to
 nothing here. See
 [ADR 029](adr/029-trust-records-are-unscored-and-never-first-hand.md).
+
+Reviewed-flag pages — the `url` of every `flags` entry on a reviewed model — are
+first-party pages that carry the fact the flag exists to report, so they are
+drift-hashed with the same normalisation as terms and fail as `flag page drift requires
+review` when they change. A `statement_found` entry pins its page with `content_sha256`,
+and that pin is the baseline: the first observation must match it, whenever the flag
+was reviewed, and `--establish-baselines` cannot override a mismatch, which fails as
+`flag pin mismatch`; the pin is also checked on every fetch of the page, not only when
+it changes, so a wrong pin fails while the page is unchanged. A review that changes the
+page's pin and advances the flag's `verified_at` accepts the new page only at the pinned
+hash. Every flag citing a page must carry the page's current pin: when several
+`statement_found` entries cite one page, each pin must equal its current hash, so a
+drifted page keeps failing until every flag citing it is re-reviewed and re-pinned. An
+`"unpinnable": true` entry is link-checked and never hashed; that veto applies
+to every citation of the URL, so terms-drift monitoring also stops for another record
+citing the same page, and validation refuses a page that one `statement_found` entry
+cites as unpinnable and another pins. A `no_statement_found` entry's checked page is
+hashed like terms, so a statement appearing there raises a review; it must therefore be
+a page that pins, such as the system card or model page, and a page `--pin` reports as
+unpinnable is not a valid checked page for that status. Drift never rewrites or
+removes a flag; it fails the weekly verification and opens the `automation-failure`
+issue, which waits for a human, as license drift does under AGENTS.md rule 10. To pin a
+page while reviewing, run
+`uv run python scripts/check_evidence_links.py --pin URL`: it fetches the page twice
+with this normalisation, uses no cache, and prints either the `content_sha256` to record
+or `unpinnable`. See
+[ADR 042](adr/042-reviewed-flags-record-a-makers-risk-statement.md).
 
 Robots carry terms in place of licences, and the page that names a model is the fact the
 record exists to report, so the checker hashes both. A robot's record `url` is checked as a
