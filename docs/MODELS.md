@@ -109,10 +109,7 @@ Use the guarded promotion command to scaffold and apply that review:
 uv run python scripts/promote_model_candidate.py init PROVIDER/MODEL --output model-review.json
 uv run python scripts/promote_model_candidate.py check model-review.json
 uv run python scripts/promote_model_candidate.py apply model-review.json
-uv run python scripts/sync_web_data.py
-uv run python scripts/build_web_payload.py
-uv run python scripts/build_share_pages.py
-node scripts/build_asset_version.mjs
+uv run python scripts/regenerate.py
 ```
 
 `init` copies only the candidate ID, attributed `source_metadata`, and exact commit-pinned models.dev evidence URL. It deliberately leaves all human-owned classifications, license conclusions, prose, scores, evidence dates, and review dates incomplete. It also scaffolds one blank `maker_risk_safeguards` flag entry, which fails validation until it is completed in an examined state. Complete the draft from authoritative sources before running `check`.
