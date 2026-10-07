@@ -338,10 +338,16 @@
     }));
   }
 
+  // Systems' constraints that no rail group holds: the family, which the
+  // strip's second row chooses, and the Finder's role set. The results and
+  // the rail's counts both read this, as they read the groups.
+  function matchesFamilyAndRoles(project, { family = "", roles = [] } = {}) {
+    const set = roles || [];
+    return (!family || project.system_family === family) && (!set.length || set.includes(project.primary_role));
+  }
+
   function matchesProjectFacets(project, filters) {
-    const roles = filters.roles || [];
-    return (!filters.family || project.system_family === filters.family) &&
-      (!roles.length || roles.includes(project.primary_role)) &&
+    return matchesFamilyAndRoles(project, filters) &&
       matchesFilterGroups(project, filters, FILTER_GROUPS.systems, { labs: filters.labMembership });
   }
 
@@ -2327,6 +2333,7 @@
     markMonogramName,
     markRecordId,
     matchFinderGoal,
+    matchesFamilyAndRoles,
     matchesFilterGroups,
     modelCardDeveloperLabel,
     matchesProject,

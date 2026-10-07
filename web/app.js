@@ -441,12 +441,10 @@ function resetCollection(scope) {
   clearQuery();
   RESULT_VIEWS[scope].render();
   // Systems' defaults can change the family, which the strip's second row
-  // and the rail's roles show, so both rebuild; elsewhere only the counts
-  // move.
-  if (scope === "systems") {
-    renderScopeStrip();
-    renderFilterRail();
-  } else syncScopeStrip();
+  // shows, so it rebuilds; elsewhere only the counts move. The rail follows
+  // the family on its own (syncFilterRail).
+  if (scope === "systems") renderScopeStrip();
+  else syncScopeStrip();
 }
 
 // Every search index, loaded once a query is present: the strip counts the
@@ -1220,17 +1218,19 @@ function syncScopeStrip() {
 // drawn from the hidden select that holds each one's value (ruling R-P3-1).
 // Its values are the select's options, in their order, with "Any" first;
 // each counts what choosing it would list, given the query and every other
-// choice. It is rebuilt when the collection changes and updated in place
-// otherwise, so focus stays on the radio a reader is moving through.
+// choice. It is built for one collection and, in Systems, one family, which
+// decides the roles on offer: syncFilterRail builds it once when either
+// changes, and otherwise updates it in place, so focus stays on the radio a
+// reader is moving through.
 const FILTER_SHOWN = 8;
 const expandedGroups = new Set();
-let railScope = null;
+let railBuiltFor = null;
+const railFor = () => (state.directoryCollection === "systems" ? `systems:${$("#family-filter").value}` : state.directoryCollection);
 
-// Every record a collection holds, before any filter or query.
-const collectionRecords = scope => ({
-  systems: state.projects, inference: state.inferenceServices, runtimes: state.localRuntimes, models: state.models,
-  packs: state.packs, robots: state.robots, labs: state.labs, specifications: state.specifications,
-}[scope] || []);
+// Every record a collection holds, before any filter or query: its boot
+// payload, which collectionPayloads names by kind rather than collection.
+const PAYLOAD_KEYS = { systems: "projects", inference: "services" };
+const collectionRecords = scope => collectionPayloads()[PAYLOAD_KEYS[scope] ?? scope] || [];
 
 // What the rail counts: the collection's records the query matches, and in
 // Systems those in the family and, unless `finderRoles` is false, the
@@ -1240,10 +1240,8 @@ function railRecords(scope, { finderRoles = true } = {}) {
   const matched = searching ? currentMatches() : null;
   const inQuery = record => !matched || matched.has(record);
   if (scope === "systems") {
-    const family = $("#family-filter").value;
-    const roles = finderRoles ? state.directoryRoles || [] : [];
-    return state.projects.filter(project => (!family || project.system_family === family)
-      && (!roles.length || roles.includes(project.primary_role)) && inQuery(project));
+    const outsideGroups = { family: $("#family-filter").value, roles: finderRoles ? state.directoryRoles : null };
+    return state.projects.filter(project => AppCore.matchesFamilyAndRoles(project, outsideGroups) && inQuery(project));
   }
   // Pack facets narrow packs alone (ADR 035), so their counts are packs.
   return collectionRecords(scope).filter(inQuery);
@@ -1262,10 +1260,10 @@ function railGroups(scope) {
   });
 }
 
-function filterGroupsMarkup(scope, prefix) {
+function filterGroupsMarkup(scope, prefix, groups = railGroups(scope)) {
   const values = readScopeControls(scope);
   const note = scope === "packs" ? '<p class="filter-note">Counts are packs; installed systems follow the search only.</p>' : "";
-  return note + railGroups(scope).map(group => {
+  return note + groups.map(group => {
     const select = $(SCOPE_CONTROLS[scope][group.key]);
     const chosen = values[group.key] ?? "";
     const options = [...select.options].filter(option => option.value !== "");
@@ -1277,24 +1275,27 @@ function filterGroupsMarkup(scope, prefix) {
   }).join("");
 }
 
-// All has no filters, so it shows no rail and no Filters button.
+// A collection with no group to show, as All, which has none, gets no rail
+// and no Filters button, rather than an empty column or sheet.
 function renderFilterRail() {
   const scope = state.directoryCollection;
-  railScope = scope;
-  const hasGroups = AppCore.FILTER_GROUPS[scope].length > 0;
+  railBuiltFor = railFor();
+  const groups = railGroups(scope);
+  const hasGroups = groups.length > 0;
   $("#filter-rail").hidden = !hasGroups;
   $("#filters-button").hidden = !hasGroups;
   $("#results-frame").classList.toggle("has-rail", hasGroups);
-  $("#filter-rail .filter-groups").innerHTML = hasGroups ? filterGroupsMarkup(scope, "rail") : "";
-  if ($("#filter-sheet").open) $("#filter-sheet .filter-groups").innerHTML = filterGroupsMarkup(scope, "sheet");
+  $("#filter-rail .filter-groups").innerHTML = hasGroups ? filterGroupsMarkup(scope, "rail", groups) : "";
+  if ($("#filter-sheet").open) $("#filter-sheet .filter-groups").innerHTML = filterGroupsMarkup(scope, "sheet", groups);
   syncFilterRail();
 }
 
-// Counts, disabled states, checked radios, the chips, and the Filters
-// button's count, in place.
+// Counts, disabled states, checked radios, the chips, the Filters button's
+// count, and an open sheet's "Show N results", in place; every repaint of
+// the collection ends here.
 function syncFilterRail() {
   const scope = state.directoryCollection;
-  if (railScope !== scope) return renderFilterRail();
+  if (railBuiltFor !== railFor()) return renderFilterRail();
   const values = readScopeControls(scope);
   const groups = AppCore.FILTER_GROUPS[scope];
   const ctx = { labs: state.labMembership };
@@ -1317,6 +1318,7 @@ function syncFilterRail() {
     }
   }
   renderFilterChips(scope, values);
+  if ($("#filter-sheet").open) syncFilterSheetButton();
 }
 
 // Every non-default choice as a removable chip, then Clear filters, which
@@ -1501,7 +1503,6 @@ function setDirectoryCollection(collection, { updateURL = true, carryQuery = upd
     if (name !== selected) $(view.grid).innerHTML = "";
   }
   RESULT_VIEWS[selected].render();
-  renderFilterRail();
   if (updateURL) writeDirectoryURL();
   syncBadgeLegend();
 }
@@ -1993,7 +1994,6 @@ function renderAllDirectoryEntries() {
   renderPager("all", paged);
   if (activeScope() === "all") writeScopeURL();
   syncFilterRail();
-  if ($("#filter-sheet").open) syncFilterSheetButton();
 }
 
 function filteredProjects(term) {
@@ -2266,7 +2266,6 @@ function renderCollection(name) {
   renderPager(collection.pageKey, paged);
   if (activeScope() === name) writeScopeURL();
   syncFilterRail();
-  if ($("#filter-sheet").open) syncFilterSheetButton();
 }
 
 const renderProjects = () => renderCollection("systems");
@@ -2483,7 +2482,6 @@ function renderPacks() {
   renderPager("packs", paged);
   if (activeScope() === "packs") writeScopeURL();
   syncFilterRail();
-  if ($("#filter-sheet").open) syncFilterSheetButton();
 }
 
 // Repaint whatever a search index could have widened. A search box may have a
@@ -2787,7 +2785,6 @@ function clearScopeFacets(scope, { focus = true } = {}) {
   if (!$(RESULT_VIEWS[scope].panel).hidden) {
     if (familyChanged) renderScopeStrip();
     RESULT_VIEWS[scope].render();
-    if (familyChanged) renderFilterRail();
   }
   if (focus) $("#results-search").focus();
 }
@@ -4449,7 +4446,6 @@ function bindEvents() {
     renderProjects();
     syncBadgeLegend();
     renderScopeStrip();
-    renderFilterRail();
   });
   $("#role-filter").addEventListener("input", () => { state.directoryRoles = null; state.directoryRolesLabel = null; state.page.systems = 1; renderProjects(); });
   ["#source-model-filter", "#license-filter", "#agent-filter", "#architecture-filter", "#deployment-filter", "#agent-interface-filter", "#capability-filter", "#retrieval-filter", "#status-filter", "#sort-filter", "#local-filter", "#system-lab-filter"].forEach(selector => $(selector).addEventListener("input", () => { state.page.systems = 1; renderProjects(); }));
@@ -4468,9 +4464,15 @@ function bindEvents() {
     container.addEventListener("click", event => {
       const more = event.target.closest("[data-filter-more]");
       if (!more) return;
+      const group = `#${container.id} [data-filter-group="${more.dataset.filterMore}"] input`;
+      const shown = new Set($$(group).map(input => input.value));
       expandedGroups.add(`${state.directoryCollection}:${more.dataset.filterMore}`);
       renderFilterRail();
-      $(`#${container.id} [data-filter-group="${more.dataset.filterMore}"] input`)?.focus();
+      // Focus goes to the first value the group did not show before, so a
+      // keyboard reader need not arrow past the eight already read, or to
+      // the checked one if every new value lists nothing.
+      const inputs = $$(group);
+      (inputs.find(input => !shown.has(input.value) && !input.disabled) || inputs.find(input => input.checked))?.focus();
     });
   }
   // A chip and Clear filters each take themselves off the row, so focus

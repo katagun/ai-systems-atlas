@@ -4,9 +4,9 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { test, expect } = require("@playwright/test");
-const { collectionEntry, familyEntry, openCollection, pressedEntry, searchAll } = require("./helpers/landing");
+const { collectionEntry, familyEntry, openCollection, openFamily, pressedEntry, searchAll } = require("./helpers/landing");
 const { chooseFinderGoal, finderHandoff } = require("./helpers/finder");
-const { clearControl, clearFilters, closeRecord, expectFilter, recordView, search, searchBox, setFilter, settled, sortControl } = require("./helpers/results");
+const { clearControl, clearFilters, closeRecord, expectFilter, filterControl, recordView, search, searchBox, setFilter, settled, sortControl } = require("./helpers/results");
 
 // A word no record holds, written into one collection's search index so a
 // test controls exactly which collection answers it.
@@ -342,19 +342,33 @@ test("Agent packs count packs only and say so, with no Lab filter", async ({ pag
 test("the Lab filter narrows inference services to one lab's, and a reload keeps it", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?collection=inference");
-  const labs = page.locator('#filter-rail [data-filter-group="lab"] input:not([value=""])');
-  const value = await labs.first().getAttribute("value");
+  const option = page.locator('#filter-rail [data-filter-group="lab"] .filter-option').filter({ has: page.locator('input:not([value=""])') }).first();
+  const value = await option.locator("input").getAttribute("value");
+  const count = Number(await option.locator(".filter-count").textContent());
+  const total = Number((await page.locator("#inference-result-count").textContent()).match(/^\d+/)[0]);
+  expect(count, "one lab's services are fewer than all of them").toBeLessThan(total);
   await setFilter(page, "inference", "lab", value);
   await expect(page).toHaveURL(new RegExp(`lab=${value}`));
+  await expect(page.locator("#inference-result-count")).toHaveText(new RegExp(`^${count} services?\\b`));
+  const names = await page.evaluate(id => state.labs.find(lab => lab.id === id).catalog_names, value);
+  for (const operator of await page.locator("#inference-grid .project-card .repo").allTextContents()) expect(names, "every listed service is the lab's").toContain(operator.trim());
   await page.reload();
   await expectFilter(page, "inference", "lab", value);
 });
 
+// The rule is read from the page's own records, so the day a robot that is
+// not active is published, Status shows and this still holds (review M2).
 test("a group with one value in use hides until it has two", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?collection=robots");
-  await expect(page.locator('#filter-rail [data-filter-group="formFactor"]')).toBeVisible();
-  await expect(page.locator('#filter-rail [data-filter-group="status"]'), "every robot is active").toHaveCount(0);
+  await expect(page.locator("#robot-grid .project-card").first()).toBeVisible();
+  const inUse = await page.evaluate(() => ({
+    formFactor: new Set(state.robots.map(robot => robot.form_factor)).size,
+    status: new Set(state.robots.map(robot => robot.status)).size,
+  }));
+  for (const [key, values] of Object.entries(inUse)) {
+    await expect(page.locator(`#filter-rail [data-filter-group="${key}"]`), `${key}: ${values} in use`).toHaveCount(values >= 2 ? 1 : 0);
+  }
 });
 
 // Choosing a role replaces the Finder's role set, so a role outside the set
@@ -605,4 +619,113 @@ test("a keyboard reader can skip the rail to the results", async ({ page }) => {
     await page.keyboard.press("Tab");
     expect(await page.evaluate(selector => Boolean(document.activeElement?.closest(selector)), next), `${collection}: the next Tab lands past the rail`).toBe(true);
   }
+});
+
+// Each innerHTML write to the rail's groups is one mutation record, so this
+// counts builds: one per collection switch and one per family change, never
+// a second straight after (review M3).
+test("the rail is built once per collection switch and once per family change", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=inference");
+  await expect(page.locator('#filter-rail [data-filter-group="type"]')).toBeVisible();
+  const builds = async action => {
+    await page.evaluate(() => {
+      window.railBuilds = 0;
+      window.railWatch?.disconnect();
+      window.railWatch = new MutationObserver(records => { window.railBuilds += records.length; });
+      window.railWatch.observe(document.querySelector("#filter-rail .filter-groups"), { childList: true });
+    });
+    await action();
+    await settled(page);
+    return page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => resolve(window.railBuilds))));
+  };
+  expect(await builds(() => openCollection(page, "systems")), "a collection switch").toBe(1);
+  expect(await builds(() => openFamily(page, "agent_system")), "a family change").toBe(1);
+});
+
+// A collection whose every group has one value in use offers no choice, so
+// it gets neither an empty rail column nor an empty sheet (review M6).
+test("a collection with no group of two values gets no rail and no Filters button", async ({ page }) => {
+  const payload = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "..", "web", "app", "robots.json"), "utf8"));
+  const [first] = payload.robots;
+  const alike = payload.robots.map(robot => ({ ...robot, form_factor: first.form_factor, ai_basis: [first.ai_basis[0]], availability: first.availability, status: first.status }));
+  await page.route(/\/app\/robots\.json/, route => route.fulfill({ json: { ...payload, robots: alike } }));
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=robots");
+  await expect(page.locator("#robot-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#filter-rail")).toHaveAttribute("hidden", "");
+  await expect(page.locator("#results-frame")).not.toHaveClass(/\bhas-rail\b/);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("#filters-button")).toBeHidden();
+});
+
+// A group of more than eight values shows eight and "Show all N", which
+// reveals the rest and moves focus to the first value it revealed, so a
+// keyboard reader need not arrow past the eight already read (review M9).
+test("Show all N appears after eight values and focuses the first value it reveals", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=systems");
+  const values = page.locator('#filter-rail [data-filter-group="license"] input:not([value=""])');
+  await expect(values).toHaveCount(8);
+  const total = await filterControl(page, "systems", "license").locator('option:not([value=""])').count();
+  expect(total).toBeGreaterThan(8);
+  const shown = await values.evaluateAll(inputs => inputs.map(input => input.value));
+  await page.locator('#filter-rail [data-filter-group="license"]').getByRole("button", { name: `Show all ${total}` }).click();
+  await expect(values).toHaveCount(total);
+  const focused = await page.evaluate(() => ({ value: document.activeElement?.value, group: document.activeElement?.closest("[data-filter-group]")?.dataset.filterGroup }));
+  expect(focused.group).toBe("license");
+  expect(focused.value, "focus is on a value, not Any").not.toBe("");
+  expect(shown, "and on one the group did not show before").not.toContain(focused.value);
+});
+
+// Pack facets narrow packs alone (ADR 035), so the rail counts packs, not the
+// installed systems the grid lists beside them, though many share a licence.
+test("Agent packs' rail counts packs only, not the installed systems beside them", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=packs");
+  const more = page.locator('#filter-rail [data-filter-group="license"]').getByRole("button", { name: /^Show all \d+$/ });
+  if (await more.isVisible()) await more.click();
+  const options = page.locator('#filter-rail [data-filter-group="license"] .filter-option').filter({ has: page.locator('input:not([value=""])') });
+  const shown = await options.evaluateAll(labels => labels.map(label => [label.querySelector("input").value, Number(label.querySelector(".filter-count").textContent)]));
+  const expected = await page.evaluate(values => values.map(value => ({
+    packs: state.packs.filter(pack => (pack.licenses || []).includes(value)).length,
+    systems: state.projects.filter(project => (project.deployment || []).includes("host_pack") && (project.licenses || []).includes(value)).length,
+  })), shown.map(([value]) => value));
+  expect(shown.map(([, count]) => count)).toEqual(expected.map(item => item.packs));
+  expect(expected.some(item => item.systems > 0), "an installed system shares a pack licence, so counting them would show").toBe(true);
+  const [value, count] = shown[0];
+  await setFilter(page, "packs", "license", value);
+  await expect(page.locator("#pack-result-count")).toHaveText(new RegExp(`^${count} packs? · `));
+});
+
+// The Lab group lists its labs A–Z, never by size (ADR 041).
+test("the Lab group lists its labs A–Z", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=systems");
+  const group = page.locator('#filter-rail [data-filter-group="lab"]');
+  await group.getByRole("button", { name: /^Show all \d+$/ }).click();
+  const names = await group.locator('.filter-option:has(input:not([value=""])) > span:not(.filter-count)').allTextContents();
+  expect(names.length).toBeGreaterThan(8);
+  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+});
+
+// A value that lists nothing beside the other choices shows 0 and cannot be
+// chosen (Phase 3 spec, section 3).
+test("a value that lists nothing shows 0 and cannot be chosen", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?collection=inference");
+  await page.locator('#filter-rail [data-filter-group="type"] input').nth(1).check();
+  const empty = page.locator("#filter-rail .filter-option").filter({ has: page.locator(".filter-count", { hasText: /^0$/ }) });
+  await expect(empty.first()).toBeVisible();
+  for (const option of await empty.all()) await expect(option.locator("input")).toBeDisabled();
+});
+
+test("Escape closes the phone sheet and returns focus to the Filters button", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?collection=inference");
+  await page.locator("#filters-button").click();
+  await expect(page.locator("#filter-sheet")).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.locator("#filter-sheet")).toBeHidden();
+  await expect(page.locator("#filters-button")).toBeFocused();
 });
