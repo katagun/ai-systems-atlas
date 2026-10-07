@@ -1,5 +1,7 @@
 # Reviewed Flags Implementation Plan
 
+> **Point-in-time record:** superseded by [ADR 042](../../adr/042-reviewed-flags-record-a-makers-risk-statement.md) (drafted here as ADR 039) and the shipped code, which override it where they differ: the flag sits second in the badge row, directly after the type badge; the web core is `AppCore`; the card emblem class is `.card-reviewed-flag`; generated files come from `scripts/regenerate.py`; and no branch stamps assets ([ADR 050](../../adr/050-committed-pages-carry-an-asset-version-placeholder.md)).
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Give reviewed models an optional `flags` field that records a developer's own risk-threshold statement (`maker_risk_safeguards`) in three states, validate it, keep its evidence current, and show it on cards, in the legend, in Taxonomy, in the model dialog, and on share pages, without ever issuing an Atlas risk verdict.

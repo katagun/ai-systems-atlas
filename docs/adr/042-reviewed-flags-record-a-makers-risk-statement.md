@@ -65,7 +65,7 @@ The structured field needs the argument ADR 029 made for its tri-state. [`docs/D
 
 A flag's page is first-party and carries the fact the flag exists to report, so it is drift-monitored, as [ADR 037](037-robots-are-unscored-records-of-what-a-vendor-documents.md) chose for its AI-basis pages "because they carry the fact the record exists to report". ADR 029 declined hashing for the opposite reason: its findings are third-party papers, and "the Atlas cannot accept a change to a page it does not steward". A developer's system card is the steward's own artifact, like a terms page.
 
-Flag URLs join the normalised content hashing that `scripts/check_evidence_links.py` runs on `web_terms` evidence. A page that changes between two fetches, or a PDF the normaliser cannot read stably, is cited with `"unpinnable": true` as ADR 037 allows, and stays link-checked. Drift fails the evidence check and opens an incident, as terms drift does; the record itself is never edited. It never rewrites or removes the flag, the rule [AGENTS.md](../../AGENTS.md) rule 10 sets for license drift.
+Flag URLs join the normalised content hashing that `scripts/check_evidence_links.py` runs on `web_terms` evidence. When a `statement_found` entry's page changes between two fetches, or is a PDF the normaliser cannot read stably, the entry cites it with `"unpinnable": true` as ADR 037 allows, and the page stays link-checked. A `no_statement_found` entry must cite a page that pins, such as the system card or model page, or another first-party page the reviewer checked: its hashed page is what raises a review when a statement appears, so a page that does not pin is not a valid checked page for that status. Drift fails the evidence check and opens an incident, as terms drift does; the record itself is never edited. It never rewrites or removes the flag, the rule [AGENTS.md](../../AGENTS.md) rule 10 sets for license drift.
 
 The model line-update checklist in [`docs/MODELS.md`](../MODELS.md) gains flags beside license text, distribution paths, and scores, and `scripts/report_review_age.py` reads each flag's `verified_at` among the nested dates it reports.
 
@@ -102,7 +102,7 @@ The boot payload carries each flag's `kind` and `status`, plus a found statement
 - The published models endpoint changes shape by that optional field, deliberately, under [ADR 026](026-app-payloads-are-a-projection-of-the-published-endpoints.md); the agent reference documents it.
 - `scripts/validate_directory.py` validates flags; `scripts/check_evidence_links.py` hashes flag pages; `scripts/report_review_age.py` reads flag dates; `scripts/build_web_payload.py` adds the flag's boot fields.
 - [AGENTS.md](../../AGENTS.md) rule 8, [`docs/MODELS.md`](../MODELS.md) (review workflow and line updates), [`docs/DATA_MODEL.md`](../DATA_MODEL.md), and [`docs/WEB.md`](../WEB.md) are amended when this record is implemented.
-- All 303 reviewed models start unexamined, and the site says so on each of them until its batch lands.
+- Every reviewed model starts unexamined, and the site says so on each of them until its batch lands.
 - Implementation and backfill follow in separate changes. This record changes no data.
 
 ## Alternatives considered

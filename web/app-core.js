@@ -2238,7 +2238,6 @@
     labDistributionModes,
     labRelations,
     labsForRecord,
-    makerRiskEntry,
     markMonogramName,
     markRecordId,
     matchFinderGoal,

@@ -1205,19 +1205,23 @@ def _first_baseline(
     """How the first readable observation of a monitored page is treated.
 
     A pinned flag page is its own review record: it becomes the baseline only when
-    it still hashes to the content_sha256 the reviewer pinned, and no request can
+    it still hashes to the content_sha256 every citing flag pins, and no request can
     override a mismatch. Returns "silent", "requested", or "missing".
     """
     if target.pinned_sha256:
-        return "silent" if current_hash in target.pinned_sha256 else "missing"
+        return "silent" if _matches_pin(target, current_hash) else "missing"
     if reviewed_since:
         return "silent"
     return "requested" if establish else "missing"
 
 
 def _matches_pin(target: LinkTarget, current_hash: str) -> bool:
-    """A review may accept a changed flag page only at the hash its flag now pins."""
-    return not target.pinned_sha256 or current_hash in target.pinned_sha256
+    """A flag page is accepted only when every flag citing it pins its current hash.
+
+    Each flag was verified against the page it pinned, so one stale pin among
+    several keeps a drifted page failing until that flag is re-reviewed too.
+    """
+    return not target.pinned_sha256 or target.pinned_sha256 == (current_hash,)
 
 
 def _terms_review_advanced(target: LinkTarget, entry: Mapping[str, Any]) -> bool:
@@ -1614,7 +1618,8 @@ def _run_pin(url: str) -> int:
     else:
         print(
             "unpinnable: the page changed between two fetches or has no readable text; "
-            'cite it with "unpinnable": true'
+            'a statement_found flag cites it with "unpinnable": true, and a '
+            "no_statement_found flag must cite a page that pins"
         )
     return 0
 

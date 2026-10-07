@@ -16,6 +16,7 @@ from scripts.build_share_pages import (
     FLAG_NOT_EXAMINED_TEXT,
     SITE_URL,
     build_pages,
+    flag_sentence,
     load_catalog,
     preview_description,
     share_page_path,
@@ -422,7 +423,7 @@ class SharePageTests(unittest.TestCase):
             "and biological or chemical capability, as a precaution. The statement covers "
             "the model itself. This is the developer's own statement, not an Atlas risk rating."
         )
-        self.assertIn("<strong>“Fixture Level 3” · Precautionary</strong>", page)
+        self.assertIn("<h3>“Fixture Level 3” · Precautionary</h3>", page)
         self.assertIn(
             f"<blockquote>{html.escape(FLAG_FOUND['statement'])}</blockquote>", page
         )
@@ -449,7 +450,7 @@ class SharePageTests(unittest.TestCase):
             "safeguards on a release channel. This is the developer's own statement, not "
             "an Atlas risk rating."
         )
-        self.assertIn("<strong>“Fixture Level 3” · Threshold reached</strong>", page)
+        self.assertIn("<h3>“Fixture Level 3” · Threshold reached</h3>", page)
         self.assertIn(html.escape(sentence), page)
 
     def test_no_statement_reads_as_absence_not_safety(self) -> None:
@@ -466,8 +467,33 @@ class SharePageTests(unittest.TestCase):
     def test_risk_statement_words_match_the_app(self) -> None:
         """The share page and the dialog must say the same fixed sentences."""
         core = (ROOT / "web" / "app-core.js").read_text(encoding="utf-8")
+        app = (ROOT / "web" / "app.js").read_text(encoding="utf-8")
         for text in (FLAG_DISCLAIMER, FLAG_NO_STATEMENT_TEXT, FLAG_NOT_EXAMINED_TEXT):
             self.assertIn(f'"{text}"', core)
+        # flagSentence's claim templates and scope lead, in both builders.
+        taxonomy = self.catalog["taxonomy"]
+        precaution = flag_sentence(FLAG_FOUND, "Fixture Lab", taxonomy)
+        reached = flag_sentence(
+            dict(FLAG_FOUND, determination="determined"), "Fixture Lab", taxonomy
+        )
+        for template, sentence in (
+            ("names this release against “", precaution),
+            ("states that this release reached “", reached),
+            (" capability, as a precaution.", precaution),
+            (" The statement covers ", precaution),
+        ):
+            with self.subTest(template=template):
+                self.assertIn(template, sentence)
+                self.assertIn(template, core)
+        # The source link's two labels, as the dialog writes them.
+        for entry, label in (
+            (FLAG_FOUND, "Read the developer's statement"),
+            (FLAG_NONE, "Page the reviewer checked"),
+        ):
+            with self.subTest(label=label):
+                page = self.page_with_flag(entry)[1]
+                self.assertIn(f"{html.escape(label)} ↗</a>", page)
+                self.assertIn(f'"{label}"', app)
 
     def test_sitemap_lists_the_root_and_every_page(self) -> None:
         """The sitemap covers the root, every share page, and every blog page.

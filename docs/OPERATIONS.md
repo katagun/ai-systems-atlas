@@ -239,10 +239,16 @@ was reviewed, and `--establish-baselines` cannot override a mismatch, which fail
 `flag pin mismatch`; the pin is also checked on every fetch of the page, not only when
 it changes, so a wrong pin fails while the page is unchanged. A review that changes the
 page's pin and advances the flag's `verified_at` accepts the new page only at the pinned
-hash. An `"unpinnable": true` entry is link-checked and never hashed; that veto applies
+hash. Every flag citing a page must carry the page's current pin: when several
+`statement_found` entries cite one page, each pin must equal its current hash, so a
+drifted page keeps failing until every flag citing it is re-reviewed and re-pinned. An
+`"unpinnable": true` entry is link-checked and never hashed; that veto applies
 to every citation of the URL, so terms-drift monitoring also stops for another record
-citing the same page. A `no_statement_found` entry's checked page is hashed like terms,
-so a statement appearing there raises a review. Drift never rewrites or
+citing the same page, and validation refuses a page that one `statement_found` entry
+cites as unpinnable and another pins. A `no_statement_found` entry's checked page is
+hashed like terms, so a statement appearing there raises a review; it must therefore be
+a page that pins, such as the system card or model page, and a page `--pin` reports as
+unpinnable is not a valid checked page for that status. Drift never rewrites or
 removes a flag; it fails the weekly verification and opens the `automation-failure`
 issue, which waits for a human, as license drift does under AGENTS.md rule 10. To pin a
 page while reviewing, run

@@ -2846,7 +2846,7 @@ function renderTaxonomy() {
       emblem: Object.hasOwn(AppCore.REVIEWED_FLAGS, kind.id) ? AppCore.badgeEmblem(kind.id) : "",
       family: AppCore.FLAG_FAMILY,
     })), { lede: AppCore.BADGE_FAMILIES[AppCore.FLAG_FAMILY].meaning, reviewedFlags: true }],
-    ["Reviewed flag states", [...(state.taxonomy.flag_statuses || []), { name: "Not examined", definition: "No entry exists yet for this release. Its record says “Not yet examined.”" }]],
+    ["Reviewed flag states", [...(state.taxonomy.flag_statuses || []), { name: "Not examined", definition: "Nobody has checked this release's developer pages yet. Its record says “Not yet examined.”" }]],
     ["Risk areas", state.taxonomy.flag_domains || []],
     ["What the developer states", state.taxonomy.flag_determinations || []],
     ["What a statement covers", state.taxonomy.flag_scopes || []],

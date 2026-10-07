@@ -5,11 +5,11 @@ const { cardBadges, flagEmblemText, badgeLegend } = require("../../web/app-core.
 const { searchAll } = require("./helpers/landing");
 const { recordHeading, recordView, search } = require("./helpers/results");
 
-// No published model carries a flag until the ADR 042 backfill lands, so these
-// tests serve one, shaped as the payload builder shapes it: boot carries each
-// entry's kind and status plus a found statement's term, domains,
-// determination, and scope; the model's detail file carries the whole entry.
-// The fixture quotes no real developer.
+// These tests serve their own flags rather than rely on a model's published
+// ones, shaped as the payload builder shapes them: boot carries each entry's
+// kind and status plus a found statement's term, domains, determination, and
+// scope; the model's detail file carries the whole entry. The fixture quotes no
+// real developer.
 const WEB_DIR = path.join(__dirname, "..", "..", "web");
 const read = file => JSON.parse(fs.readFileSync(path.join(WEB_DIR, file), "utf8"));
 const taxonomy = read("taxonomy.json");
@@ -38,21 +38,30 @@ const BOOT_KEYS = {
 };
 const bootEntry = entry => Object.fromEntries(BOOT_KEYS[entry.status].map(key => [key, entry[key]]));
 
+// Each served record carries exactly the given entry, and UNEXAMINED always
+// carries none (null), so the tests hold once the backfill flags real records.
+const withFlags = (record, entry) => {
+  const rest = { ...record };
+  delete rest.flags;
+  return entry ? { ...rest, flags: [entry] } : rest;
+};
+
 async function serveFlags(page, entries, { detail = true } = {}) {
+  const served = { [UNEXAMINED.id]: null, ...entries };
   await page.route("**/app/models.json*", async route => {
     const response = await route.fetch();
     const payload = await response.json();
-    const models = payload.models.map(model => entries[model.id]
-      ? { ...model, flags: [bootEntry(entries[model.id])] }
+    const models = payload.models.map(model => Object.hasOwn(served, model.id)
+      ? withFlags(model, served[model.id] && bootEntry(served[model.id]))
       : model);
     await route.fulfill({ response, json: { ...payload, models } });
   });
-  for (const [id, entry] of Object.entries(entries)) {
+  for (const [id, entry] of Object.entries(served)) {
     await page.route(`**/app/detail/model/${id}.json*`, async route => {
-      if (!detail) return route.abort();
+      if (!detail && entry) return route.abort();
       const response = await route.fetch();
       const body = await response.json();
-      await route.fulfill({ response, json: { ...body, flags: [entry] } });
+      await route.fulfill({ response, json: withFlags(body, entry) });
     });
   }
 }
@@ -188,6 +197,7 @@ test("Taxonomy lists reviewed flags in their own group with the emblem", async (
     await expect(page.locator("#taxonomy-content h2", { hasText: heading })).toHaveCount(1);
   }
   await expect(page.locator("#taxonomy-content")).toContainText("Not examined");
+  await expect(page.locator("#taxonomy-content")).toContainText("Nobody has checked this release's developer pages yet.");
   await expect(page.locator(`#taxonomy-content [data-badge-family] ${FLAG}, #taxonomy-content [data-badge-family] [data-family="flags"]`)).toHaveCount(0);
 });
 

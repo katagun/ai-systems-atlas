@@ -50,6 +50,8 @@ COLLECTION_LABELS = {
 
 # ADR 042: a reviewed model's share page carries the dialog's "Risk statements"
 # section in the same words (web/app-core.js flagSentence and riskStatementView).
+# The kind's source of truth is MAKER_RISK_FLAG in scripts/validate_directory.py,
+# which this generator does not import.
 MAKER_RISK_FLAG = "maker_risk_safeguards"
 FLAG_DISCLAIMER = "This is the developer's own statement, not an Atlas risk rating."
 FLAG_NO_STATEMENT_TEXT = (
@@ -60,6 +62,7 @@ FLAG_NOT_EXAMINED_TEXT = "Not yet examined."
 RISK_STYLE = """
 .risk-statements { margin: 0 0 1.5rem; }
 .risk-statements h2 { margin: 0 0 .5rem; font: 600 1.15rem/1.3 "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif; }
+.risk-statements h3 { margin: 0 0 .5rem; font-size: 1rem; font-weight: 600; }
 .risk-statements p { margin: 0 0 .5rem; }
 .risk-statements blockquote { margin: 0 0 .75rem; padding: .1rem 0 .1rem 1rem; border-left: 3px solid var(--line); }
 .risk-statements dl { margin: 0 0 .75rem; }
@@ -170,7 +173,7 @@ def _found_statement_html(entry: dict, developer: str, taxonomy: dict) -> str:
     scope = taxonomy_name(taxonomy, "flag_scopes", entry["scope"])
     sentence = flag_sentence(entry, developer, taxonomy)
     return (
-        f"<p><strong>“{html.escape(entry['tier_term'])}” · {html.escape(determination)}</strong></p>"
+        f"<h3>“{html.escape(entry['tier_term'])}” · {html.escape(determination)}</h3>"
         f"<blockquote>{html.escape(entry['statement'])}</blockquote>"
         f"<dl><dt>Risk areas</dt><dd>{html.escape(domains)}</dd>"
         f"<dt>Covers</dt><dd>{html.escape(scope)}</dd></dl>"

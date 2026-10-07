@@ -567,8 +567,28 @@ SHARED_PUBLISHER_HOSTS = frozenset(
         "storage.googleapis.com",
     }
 )
+# Hosts whose subdomains belong to different publishers: a site there is the full
+# subdomain, so other-org.github.io is not acme.github.io.
+SUBDOMAIN_PUBLISHER_HOSTS = frozenset({"github.io"})
 # Second-level labels under a two-letter country code (example.co.uk, example.com.cn).
 SECOND_LEVEL_LABELS = frozenset({"ac", "co", "com", "edu", "gov", "net", "org"})
+# ADR 042 requires a "first-party URL" for a flag: a page the developer publishes.
+# These sites never are, even when a record cites them: the models.dev repository
+# (attributed source metadata), OpenRouter (unpublished leads), licence hosts, and
+# arXiv (papers, which ADR 029 treats as third-party findings).
+NON_FIRST_PARTY_FLAG_SITES = frozenset(
+    {
+        "github.com/anomalyco",
+        "openrouter.ai",
+        "opensource.org",
+        "apache.org",
+        "spdx.org",
+        "creativecommons.org",
+        "choosealicense.com",
+        "gnu.org",
+        "arxiv.org",
+    }
+)
 
 # ADR 051: a type states what the release is for, so the record's own output
 # modalities have to agree with it. The two language types keep the text
@@ -3014,7 +3034,8 @@ def publisher_site(url: object) -> str | None:
     """The site a URL belongs to, for the first-party check on reviewed flags.
 
     A host minus a leading www., reduced to its registrable part, or host/owner on a
-    host many publishers share. None for anything that is not a public HTTPS URL.
+    host many publishers share, or the full subdomain on a host whose subdomains
+    belong to different publishers. None for anything that is not a public HTTPS URL.
     """
     host = https_url_host(url)
     if host is None:
@@ -3027,8 +3048,10 @@ def publisher_site(url: object) -> str | None:
     keep = (
         3
         if len(labels) >= 3
-        and len(labels[-1]) == 2
-        and labels[-2] in SECOND_LEVEL_LABELS
+        and (
+            ".".join(labels[-2:]) in SUBDOMAIN_PUBLISHER_HOSTS
+            or (len(labels[-1]) == 2 and labels[-2] in SECOND_LEVEL_LABELS)
+        )
         else 2
     )
     return ".".join(labels[-keep:])
@@ -3037,19 +3060,20 @@ def publisher_site(url: object) -> str | None:
 def record_publisher_sites(model: dict[str, Any]) -> set[str]:
     """Sites a reviewed model already cites: its url, evidence, and license evidence.
 
-    The models.dev repository is never one: it is attributed source metadata, and
-    models.dev text never establishes a flag (ADR 042, AGENTS.md rule 11).
+    No site in NON_FIRST_PARTY_FLAG_SITES is ever one. The models.dev repository
+    among them is attributed source metadata, and models.dev text never establishes
+    a flag (ADR 042, AGENTS.md rule 11).
     """
     urls: list[object] = [model.get("url")]
     for field in ("evidence", "license_evidence"):
         items = model.get(field)
         if isinstance(items, list):
             urls += [item.get("url") for item in items if isinstance(item, dict)]
-    models_dev = publisher_site(MODELS_DEV_REPO)
     return {
         site
         for url in urls
-        if (site := publisher_site(url)) is not None and site != models_dev
+        if (site := publisher_site(url)) is not None
+        and site not in NON_FIRST_PARTY_FLAG_SITES
     }
 
 
@@ -3156,6 +3180,30 @@ def validate_model_flags(
             errors.append(f"{prefix}: flag kind {kind} appears more than once")
         elif isinstance(kind, str):
             seen.add(kind)
+
+
+def validate_shared_flag_pages(models: list[Any], errors: list[str]) -> None:
+    """A page cited by several found statements is either pinned or unpinnable.
+
+    The evidence check stops hashing a URL once any citation marks it unpinnable, so
+    one unpinnable citation would silently turn off every other flag's pin there.
+    """
+    pinned: dict[str, str] = {}
+    unpinnable: dict[str, str] = {}
+    for model in models:
+        flags = model.get("flags") if isinstance(model, dict) else None
+        for entry in flags if isinstance(flags, list) else []:
+            if not isinstance(entry, dict) or entry.get("status") != "statement_found":
+                continue
+            side = unpinnable if entry.get("unpinnable") is True else pinned
+            side.setdefault(str(entry.get("url")), str(model.get("id")))
+    for url in sorted(pinned.keys() & unpinnable.keys()):
+        errors.append(
+            f"models.json: flag page {url} is both pinned and unpinnable: model "
+            f"{unpinnable[url]} cites it with unpinnable: true and model {pinned[url]} "
+            "pins it with content_sha256; re-run --pin and give every flag citing it "
+            "the same treatment"
+        )
 
 
 def stable_model_id(source_id: str) -> str:
@@ -3323,6 +3371,7 @@ def validate_models(
         for field in ("metadata_verified_at", "verified_at"):
             if not valid_date(model.get(field)):
                 errors.append(f"{prefix}: {field} must be an ISO date")
+    validate_shared_flag_pages(models_value, errors)
     return models_value
 
 

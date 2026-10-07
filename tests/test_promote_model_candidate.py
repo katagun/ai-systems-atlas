@@ -552,7 +552,7 @@ class PromoteModelCandidateTests(unittest.TestCase):
                 preflight_link(self.root, twin["id"], self.candidate["source_id"], bad)
 
     def test_linking_is_exempt_from_the_maker_risk_flag(self) -> None:
-        """Linking re-links a published record; real records have no flags yet."""
+        """Linking re-links an already-published record, which may predate ADR 042."""
         twin = self.install_null_source_twin()
         path = self.root / "directory" / "models.json"
         models = json.loads(path.read_text())

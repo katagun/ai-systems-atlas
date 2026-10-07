@@ -339,24 +339,33 @@ class ValidationPolicyTests(unittest.TestCase):
         "research_confidence": "medium",
     }
 
-    def catalog_with_flags(self, flags, mutate_taxonomy=None) -> list[str]:
-        """Validate the real catalog with the first reviewed model carrying `flags`."""
+    def catalog_with_flags(
+        self, flags, mutate_taxonomy=None, *, cited=(), second_flags=None
+    ) -> list[str]:
+        """Validate the real catalog with the first reviewed model carrying `flags`.
+
+        `cited` adds further evidence URLs to that model; `second_flags` gives the
+        second reviewed model flags too, citing the same fixture lab site.
+        """
         temporary, root = self.temporary_catalog()
         self.addCleanup(temporary.cleanup)
         path = root / "directory" / "models.json"
         document = json.loads(path.read_text(encoding="utf-8"))
-        model = document["models"][0]
-        model["url"] = self.FLAG_SITE_URL
-        model["evidence"].append(
-            {
-                "kind": "web",
-                "label": "Fixture weights page",
-                "url": self.FLAG_HF_URL,
-                "verified_at": model["verified_at"],
-            }
-        )
-        model["verified_at"] = max(model["verified_at"], "2026-09-01")
-        model["flags"] = json.loads(json.dumps(flags))
+        assignments = [(document["models"][0], flags)]
+        if second_flags is not None:
+            assignments.append((document["models"][1], second_flags))
+        for model, model_flags in assignments:
+            for url in (self.FLAG_HF_URL, self.FLAG_SITE_URL, *cited):
+                model["evidence"].append(
+                    {
+                        "kind": "web",
+                        "label": "Fixture page",
+                        "url": url,
+                        "verified_at": model["verified_at"],
+                    }
+                )
+            model["verified_at"] = max(model["verified_at"], "2026-09-01")
+            model["flags"] = json.loads(json.dumps(model_flags))
         self.write_json(path, document)
         self.write_json(root / "web" / "models.json", document)
         if mutate_taxonomy is not None:
@@ -367,10 +376,10 @@ class ValidationPolicyTests(unittest.TestCase):
             self.write_json(root / "web" / "taxonomy.json", taxonomy)
         return validate(root)
 
-    def flag_errors(self, flags, mutate_taxonomy=None) -> list[str]:
+    def flag_errors(self, flags, mutate_taxonomy=None, **options) -> list[str]:
         return [
             error
-            for error in self.catalog_with_flags(flags, mutate_taxonomy)
+            for error in self.catalog_with_flags(flags, mutate_taxonomy, **options)
             if "flag" in error
         ]
 
@@ -439,6 +448,63 @@ class ValidationPolicyTests(unittest.TestCase):
                     not any("first-party page" in e for e in errors),
                     errors,
                 )
+
+    def test_flag_url_is_never_on_a_host_that_is_not_first_party(self) -> None:
+        for url in (
+            "https://openrouter.ai/example-lab/alpha",
+            "https://opensource.org/license/mit",
+            "https://www.apache.org/licenses/LICENSE-2.0",
+            "https://spdx.org/licenses/MIT.html",
+            "https://creativecommons.org/licenses/by/4.0/",
+            "https://choosealicense.com/licenses/mit/",
+            "https://www.gnu.org/licenses/gpl-3.0.html",
+            "https://arxiv.org/abs/2601.00001",
+        ):
+            with self.subTest(url=url):
+                errors = self.flag_errors([self.found(url=url)], cited=(url,))
+                self.assertTrue(any("first-party page" in e for e in errors), errors)
+
+    def test_a_github_io_flag_site_is_its_own_subdomain(self) -> None:
+        cited = ("https://example-lab.github.io/alpha/",)
+        for url, accepted in (
+            ("https://example-lab.github.io/alpha/system-card", True),
+            ("https://other-org.github.io/alpha/system-card", False),
+        ):
+            with self.subTest(url=url):
+                errors = self.flag_errors([self.found(url=url)], cited=cited)
+                self.assertEqual(
+                    accepted, not any("first-party page" in e for e in errors), errors
+                )
+
+    def test_a_shared_flag_page_is_either_pinned_or_unpinnable(self) -> None:
+        unpinnable = self.found(unpinnable=True)
+        del unpinnable["content_sha256"]
+        errors = self.flag_errors([self.found()], second_flags=[unpinnable])
+        mixed = [e for e in errors if "both pinned and unpinnable" in e]
+        self.assertEqual(1, len(mixed), errors)
+        models = json.loads(
+            (ROOT / "directory" / "models.json").read_text(encoding="utf-8")
+        )["models"]
+        for model in models[:2]:
+            self.assertIn(model["id"], mixed[0])
+
+        self.assertEqual(
+            [], self.flag_errors([self.found()], second_flags=[self.found()])
+        )
+
+    def test_flag_statuses_must_be_exactly_the_two_examined_states(self) -> None:
+        def one_status(taxonomy: dict) -> None:
+            taxonomy["flag_statuses"] = taxonomy["flag_statuses"][:1]
+
+        errors = self.catalog_with_flags([], one_status)
+        self.assertTrue(
+            any(
+                "flag_statuses must be exactly ['no_statement_found', "
+                "'statement_found']" in e
+                for e in errors
+            ),
+            errors,
+        )
 
     def test_flag_cannot_postdate_its_record(self) -> None:
         errors = self.flag_errors([self.found(verified_at="2099-01-01")])
