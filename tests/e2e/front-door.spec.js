@@ -785,3 +785,26 @@ test("Models and Systems open the reviewed lists, newest first", async ({ page }
   await expect(page.locator("#elements")).toBeVisible();
   await expect(page.locator("#front-door")).toBeVisible();
 });
+
+test("a list Compare label stays inside its button", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/?family=agent_system&role=research_agent&layout=list&collection=systems");
+  const button = page.locator("#project-grid .compare-toggle").first();
+  await button.scrollIntoViewIfNeeded();
+  const fits = async () => button.evaluate(element => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const rects = [...range.getClientRects()];
+    const box = element.getBoundingClientRect();
+    return rects.length === 1 && rects[0].left >= box.left - 1 && rects[0].right <= box.right + 1;
+  });
+  await expect(button).toHaveText("Compare");
+  expect(await fits()).toBe(true);
+  await button.click();
+  await expect(button).toHaveText("Selected");
+  expect(await fits()).toBe(true);
+  await expect(page.locator("#project-grid .badge-help")).toHaveCount(0);
+  await page.locator('[data-set-layout="cards"]').click();
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#project-grid .badge-help")).toHaveCount(0);
+});
