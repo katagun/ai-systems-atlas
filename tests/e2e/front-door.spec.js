@@ -721,7 +721,8 @@ test("inside Systems on a phone the strip stays short and the family row fits on
   }
 });
 
-test("Models and Systems open the reviewed lists, newest first", async ({ page }) => {
+test("Models, Systems, Labs, and Robots open as cards, newest first where a date sort exists", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/");
   const elements = page.getByRole("tab", { name: "Elements" });
   await expect(elements).toHaveAttribute("aria-selected", "true");
@@ -730,9 +731,13 @@ test("Models and Systems open the reviewed lists, newest first", async ({ page }
   await page.getByRole("button", { name: "Models", exact: true }).click();
   await expect(page.locator("#models-directory-panel")).toBeVisible();
   await expect(page.locator("#front-door")).toBeHidden();
+  await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#model-grid.is-list")).toHaveCount(0);
   await expect(page).toHaveURL(/collection=models/);
   await expect(page).toHaveURL(/reviewed=1/);
   await expect(page).toHaveURL(/sort=release/);
+  await expect(page).not.toHaveURL(/layout=list/);
+  await page.locator('[data-set-layout="list"]').click();
   await expect(page).toHaveURL(/layout=list/);
   const reviews = await page.locator("#model-grid tbody tr td:nth-child(5)").allTextContents();
   expect(reviews.length).toBeGreaterThan(0);
@@ -757,9 +762,12 @@ test("Models and Systems open the reviewed lists, newest first", async ({ page }
   await page.goto("/");
   await page.getByRole("button", { name: "Systems", exact: true }).click();
   await expect(page.locator("#systems-directory-panel")).toBeVisible();
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#project-grid.is-list")).toHaveCount(0);
   await expect(page).toHaveURL(/collection=systems/);
   await expect(page).toHaveURL(/sort=reviewed/);
-  await expect(page).toHaveURL(/layout=list/);
+  await expect(page).not.toHaveURL(/layout=list/);
+  await page.locator('[data-set-layout="list"]').click();
   const reviewed = await page.locator("#project-grid tbody tr td:nth-child(6)").allTextContents();
   expect(reviewed.length).toBeGreaterThan(0);
   previous = null;
@@ -784,4 +792,46 @@ test("Models and Systems open the reviewed lists, newest first", async ({ page }
   await page.goBack();
   await expect(page.locator("#elements")).toBeVisible();
   await expect(page.locator("#front-door")).toBeVisible();
+
+  await page.getByRole("button", { name: "Labs", exact: true }).click();
+  await expect(page.locator("#lab-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#lab-grid.is-list")).toHaveCount(0);
+  await expect(page).toHaveURL(/collection=labs/);
+  await expect(page).not.toHaveURL(/layout=list/);
+
+  await page.goto("/");
+  await page.getByRole("button", { name: "Robots", exact: true }).click();
+  await expect(page.locator("#robot-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#robot-grid.is-list")).toHaveCount(0);
+  await expect(page).toHaveURL(/collection=robots/);
+  await expect(page).not.toHaveURL(/layout=list/);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?collection=models&layout=list&sort=release&reviewed=1");
+  await expect(page.locator(".layout-toggle")).toBeHidden();
+  await expect(page.locator("#model-grid.is-list")).toHaveCount(0);
+  await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
+});
+
+test("a list Compare label stays inside its button", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/?family=agent_system&role=research_agent&layout=list&collection=systems");
+  const button = page.locator("#project-grid .compare-toggle").first();
+  await button.scrollIntoViewIfNeeded();
+  const fits = async () => button.evaluate(element => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const rects = [...range.getClientRects()];
+    const box = element.getBoundingClientRect();
+    return rects.length === 1 && rects[0].left >= box.left - 1 && rects[0].right <= box.right + 1;
+  });
+  await expect(button).toHaveText("Compare");
+  expect(await fits()).toBe(true);
+  await button.click();
+  await expect(button).toHaveText("Selected");
+  expect(await fits()).toBe(true);
+  await expect(page.locator("#project-grid .badge-help")).toHaveCount(0);
+  await page.locator('[data-set-layout="cards"]').click();
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#project-grid .badge-help")).toHaveCount(0);
 });

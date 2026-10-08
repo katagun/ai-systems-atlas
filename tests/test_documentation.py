@@ -33,6 +33,7 @@ MARKDOWN_LINK = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
 CODE_FENCE = re.compile(r"```.*?```", re.DOTALL)
 GENERATED_DIRECTORIES = {
     ".git",
+    ".claude",
     ".superpowers",
     ".venv",
     "node_modules",
