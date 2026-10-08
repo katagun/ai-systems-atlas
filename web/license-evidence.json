@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-10-06",
+  "verified_at": "2026-10-07",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -4276,6 +4276,108 @@
           "url": "https://github.com/Dicklesworthstone/ntm/blob/6ecedcc0f0759dfc7603da087c7a4a6a2a42de58/LICENSE",
           "blob_sha": "3d414da6ff83defe084707be6030866e8a7fb794",
           "immutable_url": "https://api.github.com/repos/Dicklesworthstone/ntm/git/blobs/3d414da6ff83defe084707be6030866e8a7fb794"
+        }
+      ]
+    },
+    {
+      "project_id": "nagaagent",
+      "repo": "RTGS2017/NagaAgent",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "Repository root LICENSE: the open-source grant for the whole repository except the vendored OpenClaw tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/RTGS2017/NagaAgent/blob/c2caa9079b9eb48129f550c43a5485231d404d3b/LICENSE",
+          "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+          "immutable_url": "https://api.github.com/repos/RTGS2017/NagaAgent/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Alternative proprietary licence for closed-source use of the same software; no right is granted without the licensor's prior written consent",
+          "kind": "git_blob",
+          "path": "LICENSE-CLOSED-SOURCE",
+          "url": "https://github.com/RTGS2017/NagaAgent/blob/c2caa9079b9eb48129f550c43a5485231d404d3b/LICENSE-CLOSED-SOURCE",
+          "blob_sha": "baff9818c59056fe2d6d9eac657bbc5225546cab",
+          "immutable_url": "https://api.github.com/repos/RTGS2017/NagaAgent/git/blobs/baff9818c59056fe2d6d9eac657bbc5225546cab"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "vendor/openclaw only: the vendored OpenClaw source tree, copyright Peter Steinberger",
+          "kind": "git_blob",
+          "path": "vendor/openclaw/LICENSE",
+          "url": "https://github.com/RTGS2017/NagaAgent/blob/c2caa9079b9eb48129f550c43a5485231d404d3b/vendor/openclaw/LICENSE",
+          "blob_sha": "f7b526698bb7ed2d26d96c49f2f32234c88f69bc",
+          "immutable_url": "https://api.github.com/repos/RTGS2017/NagaAgent/git/blobs/f7b526698bb7ed2d26d96c49f2f32234c88f69bc"
+        }
+      ]
+    },
+    {
+      "project_id": "agentic-flow",
+      "repo": "ruvnet/agentic-flow",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Root package manifest of the repository, declaring the licence field as MIT; the repository root has no LICENSE file",
+          "kind": "git_blob",
+          "path": "package.json",
+          "url": "https://github.com/ruvnet/agentic-flow/blob/e993605b8389b85e85c5d10db8814befdfd3b540/package.json",
+          "blob_sha": "3d811210e1f5cf95f70b30ab6c00bb2d6894f6d0",
+          "immutable_url": "https://api.github.com/repos/ruvnet/agentic-flow/git/blobs/3d811210e1f5cf95f70b30ab6c00bb2d6894f6d0"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "agentic-flow/ package manifest (version 2.1.3, the package whose source holds the hooks, workers and intelligence store), declaring the licence field as MIT",
+          "kind": "git_blob",
+          "path": "agentic-flow/package.json",
+          "url": "https://github.com/ruvnet/agentic-flow/blob/e993605b8389b85e85c5d10db8814befdfd3b540/agentic-flow/package.json",
+          "blob_sha": "0080942539e76e7f2653146a454cb8ad249c89f5",
+          "immutable_url": "https://api.github.com/repos/ruvnet/agentic-flow/git/blobs/0080942539e76e7f2653146a454cb8ad249c89f5"
+        }
+      ]
+    },
+    {
+      "project_id": "botsharp",
+      "repo": "SciSharp/BotSharp",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository: the single root LICENSE file; no nested licence files or per-project licence overrides were found",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/SciSharp/BotSharp/blob/515198347b9aedb7aca006c02069179532d963df/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/SciSharp/BotSharp/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "roma",
+      "repo": "sentient-agi/ROMA",
+      "items": [
+        {
+          "license_id": "LicenseRef-Unclear",
+          "scope": "No licence file exists in the repository and none ever has; the pyproject declares no licence, and the platform reports none. The readme's License section is the only artifact asserting terms, in one sentence naming Apache 2.0 and linking a file that is not served",
+          "kind": "git_blob",
+          "path": "README.md",
+          "url": "https://github.com/sentient-agi/ROMA/blob/a6e3bb4f9e0694375fa627fa4b8bf8cae50592a6/README.md",
+          "blob_sha": "035ae6fc8e197c42545bad1748016861f6269e7a",
+          "immutable_url": "https://api.github.com/repos/sentient-agi/ROMA/git/blobs/035ae6fc8e197c42545bad1748016861f6269e7a"
+        }
+      ]
+    },
+    {
+      "project_id": "tradingagents-astock",
+      "repo": "simonlin1212/TradingAgents-astock",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository: the single root LICENSE file; the NOTICE file states the project is a fork of TauricResearch/TradingAgents, itself Apache-2.0, and lists the fork's modifications; no nested licence files",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/simonlin1212/TradingAgents-astock/blob/7fc142e5a622a16dcfce8c2544c771fc251f5dce/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/simonlin1212/TradingAgents-astock/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
         }
       ]
     }

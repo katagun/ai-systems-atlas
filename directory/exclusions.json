@@ -877,6 +877,14 @@
       "useful_lesson": "When the docs say a skill lets one agent coordinate workers, find where the coordinating logic runs. If it runs in the vendor agent, the surface is the control layer and not the orchestrator.",
       "excluded_at": "2026-10-06",
       "verified_at": "2026-10-06"
+    },
+    {
+      "name": "Learn Claude Code",
+      "repo": "shareAI-lab/learn-claude-code",
+      "reason": "MIT licensed. The README names the repository a course: \"This is a 0-to-1 harness engineering course.\" It is seventeen numbered lesson folders (s01 to s17), each a standalone code.py with a chapter README, plus a legacy set of twelve lesson scripts and a Next.js site that presents them. The install path is pip install -r requirements.txt, which lists three libraries, and there is no package manifest, release or service, so nothing here is adopted as a harness; the closing line says \"This is not \\\"copy the source code.\\\"\" The README also states that s17 is \"a mechanism example, not another cumulative runtime\", and only s15 reassembles the earlier lessons into one loop, as a lesson. The lessons are accurate teaching material about permission checks, hooks, task graphs and goal loops, and a very large star count reflects its audience rather than an operational boundary. The curation rules keep courses and teaching material as research inputs rather than operational systems.",
+      "useful_lesson": "A course can contain every mechanism a harness has, and runnable code for each, without being one: the README's own noun, the absence of a package or release, and a closing instruction to rebuild rather than reuse decide the gate, not star count or the quality of the lessons.",
+      "excluded_at": "2026-10-07",
+      "verified_at": "2026-10-07"
     }
   ]
 }
