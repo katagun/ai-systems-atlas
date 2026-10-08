@@ -1455,20 +1455,17 @@ function modelModalityRoute(model) {
 // ride in visually hidden text for screen readers and in data attributes for
 // the pointer tooltip. Badges are never controls and take no tab stop. A
 // reviewed-model card's flag (ADR 042) sits directly after its type badge,
-// outside the badge cap, and "Badge meanings" lists every emblem in the row's
-// order.
+// outside the badge cap. The legend and Taxonomy hold the names; a record
+// does not repeat them.
 function badgeRow(badges, flags = [], record) {
   if (!badges.length && !flags.length) return "";
   const lead = badges[0]?.family === "type" ? 1 : 0;
-  const entries = [...badges.slice(0, lead).map(badgeItem), ...flags.map(flag => flagItem(flag, record)), ...badges.slice(lead).map(badgeItem)];
-  return `<div class="badge-group"><ul class="card-badges" role="list">${entries.map(entry => entry.emblem).join("")}</ul><details class="badge-help"><summary>Badge meanings</summary><dl>${entries.map(entry => entry.meaning).join("")}</dl></details></div>`;
+  const emblems = [...badges.slice(0, lead).map(badgeItem), ...flags.map(flag => flagItem(flag, record)), ...badges.slice(lead).map(badgeItem)];
+  return `<div class="badge-group"><ul class="card-badges" role="list">${emblems.join("")}</ul></div>`;
 }
 
 function badgeItem(badge) {
-  return {
-    emblem: `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`,
-    meaning: `<dt>${escapeHTML(badge.name)}</dt><dd>${escapeHTML(badge.definition)}</dd>`,
-  };
+  return `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`;
 }
 
 // A flag's hidden text is its family name and tooltip sentence, the "name:
@@ -1478,10 +1475,7 @@ function badgeItem(badge) {
 // class is not `card-flag`: that names a card's geography circles.
 function flagItem(flag, record) {
   const text = AppCore.flagEmblemText(flag.entry, record.developer, state.taxonomy);
-  return {
-    emblem: `<li class="card-badge card-reviewed-flag" data-badge="${escapeHTML(flag.id)}" data-family="${escapeHTML(flag.family)}" data-flag-record="${escapeHTML(record.id)}" data-name="${escapeHTML(text.name)}" data-definition="${escapeHTML(text.sentence)}">${AppCore.badgeEmblem(flag.id)}<span class="visually-hidden">${escapeHTML(flag.name)}: ${escapeHTML(text.sentence)}</span></li>`,
-    meaning: `<dt>${escapeHTML(`${flag.name} · ${text.name}`)}</dt><dd>${escapeHTML(text.sentence)}</dd>`,
-  };
+  return `<li class="card-badge card-reviewed-flag" data-badge="${escapeHTML(flag.id)}" data-family="${escapeHTML(flag.family)}" data-flag-record="${escapeHTML(record.id)}" data-name="${escapeHTML(text.name)}" data-definition="${escapeHTML(text.sentence)}">${AppCore.badgeEmblem(flag.id)}<span class="visually-hidden">${escapeHTML(flag.name)}: ${escapeHTML(text.sentence)}</span></li>`;
 }
 
 // The one control that opens a card's record. Its hidden text names the
@@ -1873,12 +1867,12 @@ function listName(attribute, record, extra = "") {
 }
 
 function listCompare(kind, record, on) {
-  if (!on) return "<td></td>";
-  return `<td><button class="compare-toggle" data-compare-kind="${kind}" data-compare-id="${escapeHTML(record.id)}" aria-label="Add ${escapeHTML(record.name)} to comparison" aria-pressed="false">Compare</button></td>`;
+  if (!on) return `<td class="compare-cell"></td>`;
+  return `<td class="compare-cell"><button class="compare-toggle" data-compare-kind="${kind}" data-compare-id="${escapeHTML(record.id)}" aria-label="Add ${escapeHTML(record.name)} to comparison" aria-pressed="false">Compare</button></td>`;
 }
 
 function resultsTable(headers, rows) {
-  return `<table class="results-table"><thead><tr>${headers.map(header => `<th scope="col">${escapeHTML(header)}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table>`;
+  return `<table class="results-table"><thead><tr>${headers.map(header => `<th scope="col"${header === "Compare" ? ` class="compare-cell"` : ""}>${escapeHTML(header)}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table>`;
 }
 
 const wantsList = () => $("#layout-filter").value === "list";
