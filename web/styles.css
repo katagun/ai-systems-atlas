@@ -625,22 +625,35 @@ h1 {
 .family-entry strong { font: 700 .62rem var(--font-mono); color: var(--cyan); }
 .family-entry.is-active { border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 14%, transparent); color: var(--cyan); }
 .collection-panel[hidden] { display: none; }
-/* The results bar: one search for every collection and the collection's
-   Sort (Phase 3 spec, section 1). Above 1000 px it sticks under the strip. */
-.results-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin: 0 0 .75rem; padding: .5rem 0; background: var(--header-bg); }
+/* The results bar: one search for every collection, and on a wide window the
+   collection's Sort beside it. It sticks under the strip at every width.
+   At 1000 px and below, Sort and the filters live in #filters-drawer, closed
+   until Filters is pressed, so the first screen is the search and the cards. */
+.results-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin: 0 0 .75rem; padding: .5rem 0; position: sticky; top: calc(var(--header-height, 88px) + var(--strip-height, 0px)); z-index: 8; background: var(--header-bg); backdrop-filter: blur(20px) saturate(140%); }
 .results-bar[hidden] { display: none; }
-.results-bar .results-search { flex: 1 1 18rem; }
+.results-bar .results-search { flex: 1 1 18rem; min-width: 0; }
 .results-sort label { display: flex; align-items: center; gap: .45rem; }
 .results-sort label[hidden] { display: none; }
+.filters-toggle { display: none; flex: none; align-items: center; min-height: 42px; padding: .4rem .75rem; border: 1px solid var(--line-strong); border-radius: var(--radius-control); background: transparent; color: var(--text); font: 600 .78rem var(--font-body); white-space: nowrap; cursor: pointer; }
+.filters-toggle[hidden] { display: none; }
+.filters-toggle[aria-expanded="true"] { border-color: var(--cyan); color: var(--cyan); }
+.filters-drawer { display: block; }
+#directory:not(.is-results) .filters-drawer { display: none; }
 .layout-toggle { display: inline-flex; border: 1px solid var(--line-strong); border-radius: var(--radius-control); }
 .layout-toggle button { min-height: 34px; padding: .35rem .7rem; border: 0; background: transparent; color: var(--muted); font: 600 .78rem var(--font-body); cursor: pointer; }
 .layout-toggle button + button { border-left: 1px solid var(--line); }
 .layout-toggle button[aria-pressed="true"] { background: var(--text); color: var(--on-ink); }
+@media (max-width: 1000px) {
+  .results-bar { flex-wrap: nowrap; }
+  .results-bar .results-search { flex: 1 1 auto; }
+  .filters-toggle { display: inline-flex; }
+  .results-bar .results-sort { display: none; }
+  .filters-drawer .results-sort { display: block; max-width: 18rem; margin-top: .75rem; }
+  .filters-drawer .results-sort:has(label[hidden]) { display: none; }
+  #directory.is-results:not(.is-filters-open) .filters-drawer { display: none; }
+}
 @media (max-width: 767px) {
   .layout-toggle { display: none; }
-}
-@media (min-width: 1001px) {
-  .results-bar { position: sticky; top: calc(var(--header-height, 88px) + var(--strip-height, 0px)); z-index: 8; backdrop-filter: blur(20px) saturate(140%); }
 }
 /* The score rule under each result count, with the collection's facts. */
 .scope-note { margin: 0 0 .75rem; color: var(--muted); font-size: .78rem; }
@@ -719,6 +732,7 @@ input:focus, select:focus {
 .result-row {
   min-height: 66px;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: .55rem;
@@ -1688,7 +1702,9 @@ footer #data-date, footer .footer-meta {
 /* The row's flex justify-content space-between would otherwise center the
    count between the chip and Clear filters; pulling the count's own margin
    keeps it beside the chip and pushes Clear filters to the row's far edge. */
-#result-count { margin-right: auto; }
+.result-count { margin-right: auto; }
+.filter-chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+.filter-chips:empty { display: none; }
 /* Glues the removal glyph to the chip's last word so a narrow chip never
    wraps the × onto a line by itself. */
 .filter-chip > span[aria-hidden="true"] { white-space: nowrap; }
@@ -1696,7 +1712,7 @@ footer #data-date, footer .footer-meta {
 /* The query's result count, beside the input, so typing shows its effect
    without scrolling. The live count in the result row stays the announced one. */
 .search-field { position: relative; }
-.search-field input { padding-right: 6.5rem; }
+.search-field:has(.search-count:not(:empty)) input { padding-right: 6.5rem; }
 .search-count {
   position: absolute;
   right: .8rem;

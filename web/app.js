@@ -540,6 +540,51 @@ function syncResultsBar(scope) {
   syncLayoutButtons();
 }
 
+// Constraints that differ from the collection's defaults. Sort counts only
+// when the reader chose one; Best match is the search's own order, so it
+// never becomes a chip. Query and layout are not filters.
+const FILTER_CHROME_SKIP = new Set(["q", "sort", "layout", "browseSort"]);
+function activeFilterChips(scope) {
+  const controls = SCOPE_CONTROLS[scope] || {};
+  const defaults = AppCore.SCOPE_URL_PARAMS[scope] || {};
+  const chips = [];
+  for (const [key, selector] of Object.entries(controls)) {
+    if (FILTER_CHROME_SKIP.has(key)) continue;
+    const select = $(selector);
+    if (!select || String(select.value) === String(defaults[key] ?? "")) continue;
+    const label = select.closest("label")?.querySelector("span")?.textContent?.trim() || key;
+    chips.push({ key, label, text: select.selectedOptions[0]?.textContent?.trim() || select.value });
+  }
+  const sortLabel = $("#sort-label");
+  if (sortLabel && !sortLabel.hidden && defaults.sort !== undefined) {
+    const select = $("#sort-filter");
+    if (select.value && select.value !== String(defaults.sort) && select.value !== "match") {
+      chips.push({ key: "sort", label: "Sort", text: select.selectedOptions[0]?.textContent?.trim() || select.value });
+    }
+  }
+  return chips;
+}
+
+// The narrow Filters control names how many constraints are on, and the
+// result row shows each one as a removable chip, so closing the drawer
+// never hides why the list is narrowed.
+function syncFilterChrome() {
+  const scope = state.directoryCollection;
+  const chips = activeFilterChips(scope);
+  const host = $("#filter-chips");
+  if (host) {
+    host.innerHTML = chips.map(chip =>
+      `<button type="button" class="filter-chip" data-clear-filter="${escapeHTML(chip.key)}">${escapeHTML(chip.label)}: ${escapeHTML(chip.text)}<span aria-hidden="true"> ×</span><span class="visually-hidden">, remove</span></button>`
+    ).join("");
+  }
+  const toggle = $("#filters-toggle");
+  if (!toggle) return;
+  const controls = SCOPE_CONTROLS[scope] || {};
+  const hasFilters = Object.keys(controls).some(key => !FILTER_CHROME_SKIP.has(key));
+  toggle.hidden = !(hasFilters || AppCore.SCOPE_URL_PARAMS[scope]?.sort);
+  toggle.textContent = chips.length ? `Filters · ${chips.length}` : "Filters";
+}
+
 // "12 results" beside a search box while it holds a query.
 function setSearchCount(scope, count) {
   const selector = SCOPE_CONTROLS[scope]?.q;
@@ -964,6 +1009,7 @@ let elementGroups = [];
 const MOBILE_ELEMENT_FAMILIES = ["agent_system", "memory_system", "assistant_system"];
 let mobileElementFamily = MOBILE_ELEMENT_FAMILIES[0];
 const mobileLayout = window.matchMedia("(max-width: 767px)");
+const compactResults = window.matchMedia("(max-width: 1000px)");
 
 // A role tile previews the organizations that build its systems, so every mark
 // on it is a company logo. A lab with no mark contributes nothing rather than a
@@ -1324,7 +1370,7 @@ function jumpToDirectoryFamily(family, { layout = null } = {}) {
 // One panel wears the active collection's historical ids, so the filters,
 // the count, the grid, and the pager keep the selectors the page already uses.
 const RESULT_SURFACE = {
-  all: { panel: "all-directory-panel", grid: "all-directory-grid", pager: "all-directory-pager", count: "all-directory-result-count", clear: "reset-all-directory", clearLabel: "Clear search", gridClass: "project-grid", gridLabel: "Reviewed systems, model releases, inference services, local runtimes, agent packs, robots, labs, and specifications", pagerLabel: "All-directory pagination" },
+  all: { panel: "all-directory-panel", grid: "all-directory-grid", pager: "all-directory-pager", count: "all-directory-result-count", clear: "reset-all-directory", clearLabel: "Clear filters", gridClass: "project-grid", gridLabel: "Reviewed systems, model releases, inference services, local runtimes, agent packs, robots, labs, and specifications", pagerLabel: "All-directory pagination" },
   systems: { panel: "systems-directory-panel", grid: "project-grid", pager: "project-pager", count: "result-count", clear: "reset-filters", clearLabel: "Clear filters", gridClass: "project-grid", gridLabel: "Reviewed systems", pagerLabel: "Systems pagination", countTab: true },
   inference: { panel: "inference-directory-panel", grid: "inference-grid", pager: "inference-pager", count: "inference-result-count", clear: "reset-inference-filters", clearLabel: "Clear filters", gridClass: "project-grid inference-grid", gridLabel: "Reviewed inference services", pagerLabel: "Inference services pagination", countTab: true },
   runtimes: { panel: "runtimes-directory-panel", grid: "runtime-grid", pager: "runtime-pager", count: "runtime-result-count", clear: "reset-runtime-filters", clearLabel: "Clear filters", gridClass: "project-grid inference-grid", gridLabel: "Reviewed local runtimes", pagerLabel: "Local runtimes pagination", countTab: true },
@@ -1332,7 +1378,7 @@ const RESULT_SURFACE = {
   robots: { panel: "robots-directory-panel", grid: "robot-grid", pager: "robot-pager", count: "robot-result-count", clear: "reset-robot-filters", clearLabel: "Clear filters", gridClass: "project-grid inference-grid", gridLabel: "Reviewed robots", pagerLabel: "Robots pagination" },
   models: { panel: "models-directory-panel", grid: "model-grid", pager: "model-pager", count: "model-result-count", clear: "reset-model-filters", clearLabel: "Clear filters", gridClass: "project-grid inference-grid", gridLabel: "models.dev source records and Atlas-reviewed model releases", pagerLabel: "Models pagination" },
   labs: { panel: "labs-directory-panel", grid: "lab-grid", pager: "lab-pager", count: "lab-result-count", clear: "reset-lab-filters", clearLabel: "Clear filters", gridClass: "project-grid inference-grid", gridLabel: "Labs", pagerLabel: "Labs pagination" },
-  specifications: { panel: "specifications-directory-panel", grid: "specification-grid", pager: "specification-pager", count: "specification-result-count", clear: "reset-specification-filters", clearLabel: "Clear", gridClass: "project-grid specification-grid", gridLabel: "Reviewed specifications", pagerLabel: "Specifications pagination" },
+  specifications: { panel: "specifications-directory-panel", grid: "specification-grid", pager: "specification-pager", count: "specification-result-count", clear: "reset-specification-filters", clearLabel: "Clear filters", gridClass: "project-grid specification-grid", gridLabel: "Reviewed specifications", pagerLabel: "Specifications pagination" },
 };
 
 function wearResults(scope) {
@@ -1970,6 +2016,7 @@ function renderAllDirectoryEntries() {
   hideDetachedBadgeTooltip();
   renderPager("all", paged);
   if (activeScope() === "all") writeScopeURL();
+  syncFilterChrome();
 }
 
 function filteredProjects(term) {
@@ -2198,6 +2245,7 @@ const COLLECTIONS = {
 function renderCollection(name) {
   const collection = COLLECTIONS[name];
   const context = collection.context();
+  syncFilterChrome();
   const records = collection.records(currentQuery());
   const noun = collection.noun[records.length === 1 ? 0 : 1];
   $(collection.resultCount).textContent = `${records.length} ${noun}${context.suffix}`;
@@ -2460,6 +2508,7 @@ function renderPacks() {
   hideDetachedBadgeTooltip();
   renderPager("packs", paged);
   if (activeScope() === "packs") writeScopeURL();
+  syncFilterChrome();
 }
 
 // Repaint whatever a search index could have widened. A search box may have a
@@ -2485,8 +2534,8 @@ function bindComparisonButtons(root) {
 const finderDetailAwaited = new Set();
 
 // How much sticks to the top of the viewport: the header, and in results
-// the strip and, above 1000 px, the results bar. Each counts only while it
-// is sticky; a hidden one measures no height.
+// the strip and the results bar. Each counts only while it is sticky; a
+// hidden one measures no height.
 function stickyHeight() {
   const sticky = element => element && !element.hidden && getComputedStyle(element).position === "sticky" ? element.getBoundingClientRect().height : 0;
   return sticky($(".site-header")) + sticky($("#scope-strip")) + sticky($("#results-bar"));
@@ -4233,7 +4282,8 @@ function initDocsMenu() {
 // Mobile navigation uses existing views and search state; no parallel catalog.
 function syncMobileNavigation() {
   const view = $(".view.is-active")?.id;
-  const active = view === "directory" ? (state.directoryStage === "door" ? "home" : "search")
+  const active = view === "directory"
+    ? (state.directoryStage === "door" ? "home" : state.directoryCollection === "all" ? "search" : "")
     : view === "finder" || view === "explore" ? view : "more";
   $$("[data-mobile-nav]").forEach(button => {
     if (button.dataset.mobileNav === active) button.setAttribute("aria-current", "page");
@@ -4241,14 +4291,36 @@ function syncMobileNavigation() {
   });
 }
 
+// Puts the results search under the sticky header and strip, then focuses it.
+function focusResultsSearch() {
+  const bar = $("#results-bar");
+  const stuck = getComputedStyle(bar).position === "sticky" ? bar.getBoundingClientRect().height : 0;
+  const top = bar.getBoundingClientRect().top + window.scrollY - (stickyHeight() - stuck);
+  window.scrollTo({ top: Math.max(0, top), behavior: "instant" });
+  $("#results-search").focus({ preventScroll: true });
+}
+
 function openMobileSearch() {
   const onDirectory = $("#directory").classList.contains("is-active");
-  if ((!onDirectory && state.directoryStage !== "door") || (state.directoryStage === "results" && state.directoryCollection !== "all")) {
+  if (onDirectory && state.directoryStage === "results") {
+    focusResultsSearch();
+    return;
+  }
+  if (!onDirectory && state.directoryStage !== "door") {
     try { window.history.pushState(null, "", window.location.href); } catch {}
   }
   openCollection("all");
   activateView("directory");
   $("#results-search").focus();
+}
+
+// On a narrow window Sort sits in the filter drawer. On a wide one it sits
+// in the bar, ahead of Cards | List.
+function placeSort() {
+  const sort = $(".results-sort");
+  if (!sort) return;
+  if (compactResults.matches) $("#filters-drawer").prepend(sort);
+  else $(".layout-toggle").before(sort);
 }
 
 function initMobileNavigation() {
@@ -4269,6 +4341,11 @@ function initMobileNavigation() {
     else if (toolsFocused && mobileLayout.matches) $('[data-mobile-nav="more"]').focus();
   }
   syncLayout();
+  placeSort();
+  compactResults.addEventListener("change", () => {
+    placeSort();
+    syncStickyClearance();
+  });
   mobileLayout.addEventListener("change", () => {
     syncLayout();
     syncLayoutButtons();
@@ -4456,6 +4533,22 @@ function bindEvents() {
     $("#layout-filter").dispatchEvent(new Event("input", { bubbles: true }));
   }));
   $(".results-clear").addEventListener("click", () => resetCollection(state.directoryCollection));
+  $("#filters-toggle").addEventListener("click", () => {
+    const open = !$("#directory").classList.contains("is-filters-open");
+    $("#directory").classList.toggle("is-filters-open", open);
+    $("#filters-toggle").setAttribute("aria-expanded", String(open));
+  });
+  $("#filter-chips").addEventListener("click", event => {
+    const chip = event.target.closest("[data-clear-filter]");
+    if (!chip) return;
+    const scope = state.directoryCollection;
+    const key = chip.dataset.clearFilter;
+    const selector = SCOPE_CONTROLS[scope]?.[key];
+    if (!selector) return;
+    $(selector).value = String(AppCore.SCOPE_URL_PARAMS[scope][key] ?? "");
+    $(selector).dispatchEvent(new Event("input", { bubbles: true }));
+    $(".result-count")?.focus({ preventScroll: true });
+  });
   $("#finder-roles-chip").addEventListener("click", () => {
     state.directoryRoles = null;
     state.directoryRolesLabel = null;
