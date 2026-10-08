@@ -41,7 +41,7 @@ A found statement stores:
 
 - `tier_term`: the developer's own term, verbatim, such as a framework level or a safeguard level.
 - `domains`: one or more of `cyber`, `bio_chem`, `autonomy`, the domains the statement names.
-- `determination`: `determined` when the developer states the threshold was reached; `precautionary` when it states it could not rule the threshold out, or deployed safeguards as a precaution.
+- `determination`: `determined` when the developer states the threshold was reached; `precautionary` when it states it could not rule the threshold out, or deployed safeguards as a precaution; `safeguard_standard` when it states only the safeguard standard it deployed the release under, such as "released under the ASL-2 standard" or "ASL-3 safeguards were appropriate", without saying whether a threshold was reached. The third value was added on 2026-10-07, before the first backfill batch closed, because a developer's most common statement names a safeguard standard and neither of the other two values describes it without inference.
 - `scope`: `weights` when the statement is about the model; `deployment` when it is about safeguards on a release channel.
 - `statement`: the sentence or sentences quoted verbatim.
 

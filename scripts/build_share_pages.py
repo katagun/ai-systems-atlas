@@ -141,10 +141,12 @@ def flag_sentence(entry: dict, developer: str, taxonomy: dict) -> str:
             for item in entry["domains"]
         ]
     )
-    if entry["determination"] == "determined":
-        claim = f"{developer} states that this release reached “{entry['tier_term']}” in {domains} capability."
-    else:
-        claim = f"{developer} names this release against “{entry['tier_term']}” in {domains} capability, as a precaution."
+    term = entry["tier_term"]
+    claim = {
+        "determined": f"{developer} states that this release reached “{term}” in {domains} capability.",
+        "precautionary": f"{developer} names this release against “{term}” in {domains} capability, as a precaution.",
+        "safeguard_standard": f"{developer} states that this release ships under the “{term}” safeguard standard for {domains} capability.",
+    }[entry["determination"]]
     scope = taxonomy_name(taxonomy, "flag_scopes", entry["scope"])
     return f"{claim} The statement covers {scope[:1].lower()}{scope[1:]}. {FLAG_DISCLAIMER}"
 

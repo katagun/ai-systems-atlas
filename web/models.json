@@ -4994,7 +4994,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "ASL-3",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "safeguard_standard",
+          "scope": "deployment",
+          "statement": "As with many previous models, we are treating Mythos 5 as CB-1 and applying ASL-3 protections to Fable 5, including blocking classifiers against CB-1 misuse.",
+          "url": "https://www.anthropic.com/claude-fable-5-mythos-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-fable-5-1",
@@ -5103,7 +5120,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "CB-1",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "deployment",
+          "statement": "On chemical and biological risks, we judge that the model has CB-1 capabilities—meaning it could meaningfully help someone with a basic technical background synthesize a known weapon—but falls short of the CB-2 threshold for functionally replacing rare expert talent, which is the limiting factor in developing novel weapons. We hold this judgment with some uncertainty, and are deploying Claude Fable 5.1 with the same biological safeguards we deployed with Claude Fable 5.",
+          "url": "https://www.anthropic.com/claude-fable-5-1-mythos-5-1-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "low"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-haiku-4-5",
@@ -5206,7 +5240,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "ASL-2",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "safeguard_standard",
+          "scope": "weights",
+          "statement": "Our safety testing also showed that Claude Haiku 4.5 poses only limited risks in terms of the production of chemical, biological, radiological, and nuclear (CBRN) weapons. For that reason, we’ve released it under the AI Safety Level 2 (ASL-2) standard—compared to the more restrictive ASL-3 for Sonnet 4.5 and Opus 4.1.",
+          "url": "https://www.anthropic.com/news/claude-haiku-4-5",
+          "content_sha256": "a0c708ac879bc9a51a52d72cb37a310ffbbf582ec33c4074b5ca363028e2f139",
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-mythos-5",
@@ -5560,7 +5611,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "ASL-3",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "safeguard_standard",
+          "scope": "weights",
+          "statement": "In particular, Claude Opus 4.5 outperformed Claude Opus 4.1 and Claude Sonnet 4.5 models on both long-form virology tasks, as well as on several subtasks of the DNA synthesis screening evaluation, while achieving comparable performance on all other evaluations. As a result, we determined ASL-3 safeguards were appropriate.",
+          "url": "https://www.anthropic.com/claude-opus-4-5-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-opus-4-6",
@@ -5795,7 +5863,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "Autonomy threat model 1",
+          "domains": [
+            "autonomy"
+          ],
+          "determination": "determined",
+          "scope": "weights",
+          "statement": "Autonomy threat model 1 is applicable to Claude Opus 4.7, as it is to some of our previous AI models.",
+          "url": "https://www.anthropic.com/claude-opus-4-7-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-opus-4-8",
@@ -6276,7 +6361,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "ASL-3",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "safeguard_standard",
+          "scope": "weights",
+          "statement": "Claude Sonnet 4.5 is being released under our AI Safety Level 3 (ASL-3) protections, as per our framework that matches model capabilities with appropriate safeguards. These safeguards include filters called classifiers that aim to detect potentially dangerous inputs and outputs—in particular those related to chemical, biological, radiological, and nuclear (CBRN) weapons.",
+          "url": "https://www.anthropic.com/news/claude-sonnet-4-5",
+          "content_sha256": "0228e015950e56918ab2be787f04f55dc0515624f96e38a1b537dd78a71f3397",
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-sonnet-4-6",
@@ -6379,7 +6481,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-04",
-      "verified_at": "2026-09-04"
+      "verified_at": "2026-09-04",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "ASL-3",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "safeguard_standard",
+          "scope": "weights",
+          "statement": "Based on the results above, the Responsible Scaling Officer (RSO) determined the ASL-3 safeguards level to be appropriate for the CBRN domain for Claude Sonnet 4.6.",
+          "url": "https://www.anthropic.com/claude-sonnet-4-6-system-card",
+          "unpinnable": true,
+          "verified_at": "2026-10-07",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-anthropic-claude-sonnet-5",
@@ -33821,6 +33940,114 @@
       ],
       "metadata_verified_at": "2026-09-11",
       "verified_at": "2026-09-11"
+    },
+    {
+      "id": "model-reflection-beam",
+      "source_id": null,
+      "name": "Beam",
+      "developer": "Reflection AI",
+      "url": "https://reflection.ai/blog/introducing-beam",
+      "description": "Reflection AI's first model: a text-only, 501-billion-parameter sparse Mixture-of-Experts model (23 billion active) for coding, reasoning, and agentic work, announced October 5, 2026 in limited early access with Apache 2.0 weights promised later in October.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Beam",
+        "description": "Sparse Mixture-of-Experts text model with 501 billion total and 23 billion active parameters for coding, reasoning, and agentic workloads",
+        "family": "beam",
+        "release_date": "2026-10-05",
+        "last_updated": "2026-10-05",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": null,
+        "reported_license": null,
+        "links": [
+          {
+            "label": "Announcement",
+            "url": "https://reflection.ai/blog/introducing-beam"
+          }
+        ],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Proprietary"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "At review time no weights are published and no weights license text exists: the announcement says the weights will be released under an Apache 2.0 license later this month, and early access is limited to a waitlisted group on terms the announcement does not publish. The release is classified proprietary today. Re-review when the weights and their license text ship.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Proprietary",
+          "scope": "Limited early access to Beam through a waitlist; no weights or weights license published as of the review date, and the announced Apache 2.0 license is a stated intention only",
+          "kind": "web_terms",
+          "url": "https://reflection.ai/blog/introducing-beam",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "access_boundary": "This record represents Beam as announced on 2026-10-05: the early version made available to a select, waitlisted group of users, not a generally available API or published weights. The weights, technical report, model card, and developer artifacts promised for later in October 2026, the distribution partners and open-source integrations promised at launch, the later models in the series, and downstream quantizations remain separate boundaries. The announcement says Beam is undergoing final red-teaming and evaluations, and gives 256K tokens as the maximum context length during reinforcement learning and 1M tokens as the effective context length after midtraining.",
+      "strengths": [
+        "First-party announcement published on release day with architecture, training-data and compute figures, a benchmark table naming its comparison models and the method of its efficiency comparison",
+        "Reflection commits to releasing weights under Apache 2.0 together with documentation and a full stack for running, evaluating, and fine-tuning the model"
+      ],
+      "tradeoffs": [
+        "Early access only: no weights, license text, model card, technical report, or third-party hosting exist yet, so artifact availability and portability rest on a promise",
+        "The announcement says final red-teaming and evaluations are still under way, and it publishes no model identifier, API model page, or pricing"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 3,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 1,
+        "lifecycle_transparency": 4,
+        "documentation_provenance": 6,
+        "overall": 2.7
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Official Beam announcement: architecture, early-access status, and the Apache 2.0 weights commitment",
+          "url": "https://reflection.ai/blog/introducing-beam",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Reflection Open Safety Framework page: framework text that names no model",
+          "url": "https://reflection.ai/safety",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://reflection.ai/blog/introducing-beam",
+          "verified_at": "2026-10-07",
+          "research_confidence": "medium"
+        }
+      ],
+      "metadata_verified_at": "2026-10-07",
+      "verified_at": "2026-10-07"
     },
     {
       "id": "model-sakana-sakana-namazu-v1-0",
