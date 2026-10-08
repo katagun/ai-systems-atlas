@@ -363,6 +363,11 @@
       "id": "precautionary",
       "name": "Precautionary",
       "definition": "The developer states it could not rule the threshold out, or deployed safeguards as a precaution."
+    },
+    {
+      "id": "safeguard_standard",
+      "name": "Safeguard standard",
+      "definition": "The developer states the safeguard standard it deployed the release under, without saying whether the release reached a threshold or that one could not be ruled out."
     }
   ],
   "flag_scopes": [
