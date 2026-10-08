@@ -106,6 +106,7 @@
       <nav id="scope-strip" class="scope-strip" aria-label="Directory collections" hidden></nav>
       <div id="results-bar" class="results-bar" hidden>
         <label class="search-field results-search"><span class="visually-hidden">Search</span><input id="results-search" type="search" placeholder="Search systems, models, services, runtimes, packs, robots, labs, and specifications" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
+        <button id="filters-button" class="ghost-button filters-button" type="button" aria-haspopup="dialog" aria-controls="filter-sheet">Filters <span class="filters-count"></span></button>
         <div class="results-sort">
           <label id="sort-label" hidden><span class="visually-hidden">Sort</span><select id="sort-filter"></select></label>
         </div>
@@ -114,7 +115,6 @@
           <button type="button" data-set-layout="list" aria-pressed="false">List</button>
           <select id="layout-filter" class="visually-hidden" tabindex="-1" aria-hidden="true"><option value="cards" selected>Cards</option><option value="list">List</option></select>
         </div>
-        <button id="filters-button" class="ghost-button filters-button" type="button" aria-haspopup="dialog" aria-controls="filter-sheet">Filters <span class="filters-count"></span></button>
       </div>
 
       <div id="results-frame" class="results-frame">

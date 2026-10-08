@@ -639,6 +639,13 @@ h1 {
 @media (min-width: 1001px) {
   .results-bar { position: sticky; top: calc(var(--header-height, 88px) + var(--strip-height, 0px)); z-index: 8; backdrop-filter: blur(20px) saturate(140%); }
 }
+/* At 1000 px and below the Filters button joins the bar beside the search
+   box, which gives it room, so the Sort and Cards | List keep their own row
+   whole and the bar stays two rows on a phone. Below them, a third row
+   would push every result 56 px down. */
+@media (max-width: 1000px) {
+  .results-bar .results-search { flex-basis: 12rem; }
+}
 /* The score rule under each result count, with the collection's facts. */
 .scope-note { margin: 0 0 .75rem; color: var(--muted); font-size: .78rem; }
 .scope-note-facts { color: var(--text); font-weight: 600; }
