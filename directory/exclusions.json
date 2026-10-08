@@ -877,6 +877,22 @@
       "useful_lesson": "When the docs say a skill lets one agent coordinate workers, find where the coordinating logic runs. If it runs in the vendor agent, the surface is the control layer and not the orchestrator.",
       "excluded_at": "2026-10-06",
       "verified_at": "2026-10-06"
+    },
+    {
+      "name": "DataClaw",
+      "repo": "peteromallet/dataclaw",
+      "reason": "The MIT-licensed README describes a tool that \"parses session logs, redacts secrets and PII, and uploads the result as a ready-to-use dataset\" to Hugging Face, with parsers for Claude Code, Codex, Cursor, Gemini, and other agents' session files and a Mac menu-bar app that bundles the same command line. The product's output is a public dataset of other agents' conversations, and the project calls itself \"a performance art project\". The code is deterministic parsing, regex and entropy redaction, an optional token-classification privacy filter, and a Hugging Face upload that refuses to push until a confirm step records attestations; its AGENTS.md tells the host agent to \"FOLLOW\" the printed next_steps, so the host agent walks a fixed checklist and DataClaw has no loop of its own that plans or chooses tools. Its only state is a settings and export-stage record that sequences one export, so it fits neither a memory role nor a role that turns a coding agent into a software-delivery workflow, and what it produces is a dataset, which the scope clause treats as a research input rather than an operational system.",
+      "useful_lesson": "A command line that an agent is told to run does not become an agent system by calling itself an agent harness. Look for the loop or the state the product reads back; a checklist with a confirm gate and a dataset as output is a utility.",
+      "excluded_at": "2026-10-07",
+      "verified_at": "2026-10-07"
+    },
+    {
+      "name": "RagaAI Catalyst",
+      "repo": "raga-ai-hub/RagaAI-Catalyst",
+      "reason": "The Apache-2.0 README opens \"RagaAI Catalyst is a comprehensive platform designed to enhance the management and optimization of LLM projects\", listing project, dataset, evaluation, trace, prompt, synthetic-data, and guardrail management, and requires access and secret keys for the hosted backend (the SDK's default base URL is catalyst.raga.ai) before \"any operations below\". The package is a Python client whose tracers decorate agents written in other frameworks and upload spans through presigned URLs, alongside evaluation, red-teaming, and guardrail calls; it runs no agent loop of its own, so the candidate's orchestration proposal does not hold. Tracing and evaluating other systems is the product, the same disposition already recorded for LangSmith, AgentOps, and PandaProbe.",
+      "useful_lesson": "A star count in the tens of thousands and an agent-heavy README vocabulary do not move an observability client across the boundary; the question is whether the repository's own code plans and acts, and here it only records and scores other systems' runs.",
+      "excluded_at": "2026-10-07",
+      "verified_at": "2026-10-07"
     }
   ]
 }

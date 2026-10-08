@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-10-06",
+  "verified_at": "2026-10-07",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -4276,6 +4276,75 @@
           "url": "https://github.com/Dicklesworthstone/ntm/blob/6ecedcc0f0759dfc7603da087c7a4a6a2a42de58/LICENSE",
           "blob_sha": "3d414da6ff83defe084707be6030866e8a7fb794",
           "immutable_url": "https://api.github.com/repos/Dicklesworthstone/ntm/git/blobs/3d414da6ff83defe084707be6030866e8a7fb794"
+        }
+      ]
+    },
+    {
+      "project_id": "openhands-software-agent-sdk",
+      "repo": "OpenHands/software-agent-sdk",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository root LICENSE (Copyright 2026 OpenHands contributors) covering the openhands-sdk, openhands-tools, openhands-workspace, and openhands-agent-server Python packages",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/OpenHands/software-agent-sdk/blob/69e26889401fe69157fff536e6a69049e6644cb3/LICENSE",
+          "blob_sha": "b0bd86a6335a564bd3766666bebbf014fd6a8013",
+          "immutable_url": "https://api.github.com/repos/OpenHands/software-agent-sdk/git/blobs/b0bd86a6335a564bd3766666bebbf014fd6a8013"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "clients/typescript browser-compatible TypeScript client, which carries its own MIT licence file (Copyright 2025 OpenHands)",
+          "kind": "git_blob",
+          "path": "clients/typescript/LICENSE",
+          "url": "https://github.com/OpenHands/software-agent-sdk/blob/69e26889401fe69157fff536e6a69049e6644cb3/clients/typescript/LICENSE",
+          "blob_sha": "5660de1611aa57a91f9794ecb6750fd30c3f5834",
+          "immutable_url": "https://api.github.com/repos/OpenHands/software-agent-sdk/git/blobs/5660de1611aa57a91f9794ecb6750fd30c3f5834"
+        }
+      ]
+    },
+    {
+      "project_id": "agents-deep-research",
+      "repo": "qx-labs/agents-deep-research",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository: the deep_researcher Python package, examples, and tests; the repository has a single root LICENSE file and no nested licence files",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/qx-labs/agents-deep-research/blob/5e7f4b2321b20bf04c72a405688ab9980887c603/LICENSE",
+          "blob_sha": "b577fd256cdfff6a47427360fbe0c6dfa9263bfa",
+          "immutable_url": "https://api.github.com/repos/qx-labs/agents-deep-research/git/blobs/b577fd256cdfff6a47427360fbe0c6dfa9263bfa"
+        }
+      ]
+    },
+    {
+      "project_id": "boop-agent",
+      "repo": "raroque/boop-agent",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository root LICENSE (Copyright 2026 Chris Raroque) for the server, Convex functions, debug dashboard, and Electron shell; the tree has no other licence file, and the generated Codex app-server protocol typings under server/runtimes/codex-app-server-protocol and the Convex helper skills under .agents/skills carry no licence file of their own",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/raroque/boop-agent/blob/31979130b1371acd9defbea115279a06c63c1fb4/LICENSE",
+          "blob_sha": "70b4ed88b088e5c4e422e37e00612361b10f90b5",
+          "immutable_url": "https://api.github.com/repos/raroque/boop-agent/git/blobs/70b4ed88b088e5c4e422e37e00612361b10f90b5"
+        }
+      ]
+    },
+    {
+      "project_id": "desloppify",
+      "repo": "peteromallet/desloppify",
+      "items": [
+        {
+          "license_id": "LicenseRef-OSNL-0.2",
+          "scope": "Repository root LICENSE, the Open Source Native License version 0.2 dated March 24, 2026 (Copyright 2025-2026 Peter O'Malley), declared in pyproject.toml as OSNL-0.2 for the desloppify package; the tree has no other licence file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/peteromallet/desloppify/blob/3a7735d531a96b6a226bfbdc9fd662b14195f857/LICENSE",
+          "blob_sha": "987b565c592e400322a3f6f240563476b019f338",
+          "immutable_url": "https://api.github.com/repos/peteromallet/desloppify/git/blobs/987b565c592e400322a3f6f240563476b019f338"
         }
       ]
     }
