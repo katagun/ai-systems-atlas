@@ -51,6 +51,44 @@ test("Labs lists every lab by name and filters by type, headquarters, and releas
   expect(headings.sort()).toEqual([...catalogCounts.labsMatching("Hangzhou")].sort());
 });
 
+// The pill under a lab's name lists how its reviewed releases are distributed. A lab
+// admitted on a reviewed robot, a reviewed system, or its own frontier statement
+// (ADR 044, 048, 053) has no release, so its card used to show an empty grey pill.
+test("a lab card shows its distribution pill only when its lab has reviewed releases to describe", async ({ page }) => {
+  await page.goto("/?collection=labs");
+  // One page of 96 lists every lab, as the first test does.
+  await page.locator('#lab-pager select[aria-label="Results per page"]').selectOption("96");
+  await expect(page.locator("#lab-grid .lab-card h2")).toHaveText(catalogCounts.labNames());
+
+  const emptyPills = await page.locator("#lab-grid .lab-card").evaluateAll(cards => cards
+    .filter(card => card.querySelector(".role-badge")?.textContent.trim() === "")
+    .map(card => card.querySelector("h2").textContent));
+  expect(emptyPills, "no card carries an empty pill").toEqual([]);
+
+  // 1X Technologies is admitted on a reviewed robot and has no release to describe.
+  const oneX = page.locator('#lab-grid .lab-card:has([data-lab="lab-one-x-technologies"])');
+  await expect(oneX.locator("h2")).toHaveText("1X Technologies");
+  await expect(oneX.locator(".role-badge")).toHaveCount(0);
+  // Alibaba's reviewed releases still name their distribution.
+  const alibaba = page.locator('#lab-grid .lab-card:has([data-lab="lab-alibaba"])');
+  await expect(alibaba.locator(".role-badge")).toHaveText(/\S/);
+});
+
+// A lab is listed on any of four admission bases (taxonomy.json lab_admission_bases),
+// so its note names all of them and its grid is named for the collection, not for
+// the first basis.
+test("the Labs note and grid describe every way a lab is admitted", async ({ page }) => {
+  await page.goto("/?collection=labs");
+  const note = page.locator('[data-scope-note="labs"]');
+  await expect(note).toContainText(
+    "A lab is listed once the Atlas has reviewed a model release, a system, or a robot it made, or once it says on its own pages that it is building frontier models.",
+  );
+  await expect(note).not.toContainText("a release it developed");
+  // The rest of the note stands.
+  await expect(note).toContainText("Releases keeps a lab with at least one reviewed release distributed that way");
+  await expect(page.locator("#lab-grid")).toHaveAttribute("aria-label", "Labs");
+});
+
 test("a lab dialog joins the records that name the lab and browses its releases in Models", async ({ page }) => {
   await page.goto("/?collection=labs");
   await page.locator('#lab-grid .card-open[data-lab="lab-anthropic"]').click();
@@ -152,6 +190,10 @@ test("a lab joined to systems but to no release says so instead of listing nothi
   await expect(dialog).toContainText("Named in the catalog as:");
 
   // The card names systems inline and counts the joins it does not list in tags.
+  // Search for it rather than counting on its place in the A-Z list: the grid
+  // pages 24 labs at a time, and every lab admitted ahead of "Hugging Face"
+  // moves its card toward the second page.
+  await page.goto("/?collection=labs&q=Hugging%20Face");
   const card = page.locator('#lab-grid .lab-card:has([data-lab="lab-hugging-face"])');
   await expect(card.locator('.lab-related-label:text-matches("Systems it builds")')).toHaveText("Systems it builds · 2");
   await expect(card.locator(".tags span")).toHaveText(["2 inference services", "1 local runtime"]);
@@ -163,7 +205,7 @@ test("a model dialog links to the lab that developed the release", async ({ page
 
   await recordView(page, "model").locator('[data-open-lab="lab-deepseek"]').click();
   await expect(recordHeading(page, "lab")).toHaveText("DeepSeek");
-  await expect(recordView(page, "model")).toBeHidden();
+  await expect(recordView(page, "lab")).toBeVisible();
   await expect(page).toHaveURL(/record=lab(%3A|:)lab-deepseek/);
 });
 

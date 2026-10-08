@@ -313,6 +313,246 @@ class ValidationPolicyTests(unittest.TestCase):
 
         self.assertEqual([], self.catalog_with_trust(mutate))
 
+    # ADR 042: a reviewed flag records a developer's own risk-threshold statement.
+    # The fixture points the first reviewed model at a lab site it cites, so the
+    # first-party rule has something to check against.
+    FLAG_SITE_URL: ClassVar[str] = "https://www.example-lab.com/models/alpha"
+    FLAG_HF_URL: ClassVar[str] = "https://huggingface.co/example-lab/alpha"
+    SAMPLE_FLAG_FOUND: ClassVar[dict] = {
+        "kind": "maker_risk_safeguards",
+        "status": "statement_found",
+        "tier_term": "Fixture Level 3",
+        "domains": ["cyber", "bio_chem"],
+        "determination": "precautionary",
+        "scope": "weights",
+        "statement": "A fixture sentence standing in for a developer's verbatim words.",
+        "url": "https://www.example-lab.com/safety/system-card",
+        "content_sha256": "a" * 64,
+        "verified_at": "2026-09-01",
+        "research_confidence": "high",
+    }
+    SAMPLE_FLAG_NONE: ClassVar[dict] = {
+        "kind": "maker_risk_safeguards",
+        "status": "no_statement_found",
+        "url": "https://www.example-lab.com/safety",
+        "verified_at": "2026-09-01",
+        "research_confidence": "medium",
+    }
+
+    def catalog_with_flags(
+        self, flags, mutate_taxonomy=None, *, cited=(), second_flags=None
+    ) -> list[str]:
+        """Validate the real catalog with the first reviewed model carrying `flags`.
+
+        `cited` adds further evidence URLs to that model; `second_flags` gives the
+        second reviewed model flags too, citing the same fixture lab site.
+        """
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "models.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        assignments = [(document["models"][0], flags)]
+        if second_flags is not None:
+            assignments.append((document["models"][1], second_flags))
+        for model, model_flags in assignments:
+            for url in (self.FLAG_HF_URL, self.FLAG_SITE_URL, *cited):
+                model["evidence"].append(
+                    {
+                        "kind": "web",
+                        "label": "Fixture page",
+                        "url": url,
+                        "verified_at": model["verified_at"],
+                    }
+                )
+            model["verified_at"] = max(model["verified_at"], "2026-09-01")
+            model["flags"] = json.loads(json.dumps(model_flags))
+        self.write_json(path, document)
+        self.write_json(root / "web" / "models.json", document)
+        if mutate_taxonomy is not None:
+            taxonomy_path = root / "directory" / "taxonomy.json"
+            taxonomy = json.loads(taxonomy_path.read_text(encoding="utf-8"))
+            mutate_taxonomy(taxonomy)
+            self.write_json(taxonomy_path, taxonomy)
+            self.write_json(root / "web" / "taxonomy.json", taxonomy)
+        return validate(root)
+
+    def flag_errors(self, flags, mutate_taxonomy=None, **options) -> list[str]:
+        return [
+            error
+            for error in self.catalog_with_flags(flags, mutate_taxonomy, **options)
+            if "flag" in error
+        ]
+
+    def found(self, **changes) -> dict:
+        entry = json.loads(json.dumps(self.SAMPLE_FLAG_FOUND))
+        entry.update(changes)
+        return entry
+
+    def test_each_valid_flag_shape_passes_validation(self) -> None:
+        unpinnable = self.found(unpinnable=True)
+        del unpinnable["content_sha256"]
+        for flags in ([self.found()], [unpinnable], [dict(self.SAMPLE_FLAG_NONE)]):
+            with self.subTest(status=flags[0]["status"]):
+                self.assertEqual([], self.catalog_with_flags(flags))
+
+    def test_flag_shapes_are_exact(self) -> None:
+        both = self.found(unpinnable=True)
+        extra_none = dict(self.SAMPLE_FLAG_NONE, tier_term="Fixture Level 3")
+        for label, entry in (
+            ("extra field", self.found(note="Atlas prose")),
+            ("hash and unpinnable", both),
+            ("none with a found field", extra_none),
+        ):
+            with self.subTest(label):
+                errors = self.flag_errors([entry])
+                self.assertTrue(
+                    any("fields differ from the" in error for error in errors), errors
+                )
+
+    def test_unpinnable_must_be_true(self) -> None:
+        entry = self.found(unpinnable=False)
+        del entry["content_sha256"]
+        self.assertTrue(
+            any("unpinnable must be true" in e for e in self.flag_errors([entry]))
+        )
+
+    def test_flag_values_come_from_the_taxonomy(self) -> None:
+        for field, value, needle in (
+            ("status", "clean", "unknown flag status 'clean'"),
+            ("domains", ["weapons"], "unknown domains ['weapons']"),
+            ("domains", [], "domains must be a non-empty list"),
+            ("determination", "likely", "unknown determination 'likely'"),
+            ("scope", "family", "unknown scope 'family'"),
+            ("research_confidence", "certain", "unknown research_confidence"),
+            ("content_sha256", "abc", "content_sha256 must be"),
+            ("tier_term", " ", "tier_term must be a non-empty string"),
+            ("kind", "atlas_risk_rating", "unknown flag kind 'atlas_risk_rating'"),
+        ):
+            with self.subTest(field=field):
+                errors = self.flag_errors([self.found(**{field: value})])
+                self.assertTrue(any(needle in e for e in errors), errors)
+
+    def test_flag_url_must_be_on_a_site_the_record_cites(self) -> None:
+        for url, accepted in (
+            ("https://assets.example-lab.com/card.pdf", True),
+            ("https://huggingface.co/example-lab/alpha/blob/main/README.md", True),
+            ("https://huggingface.co/other-org/alpha", False),
+            ("https://example.org/review-of-alpha", False),
+            ("https://github.com/anomalyco/models.dev/blob/x/models/a.toml", False),
+            ("http://www.example-lab.com/safety", False),
+        ):
+            with self.subTest(url=url):
+                errors = self.flag_errors([self.found(url=url)])
+                self.assertEqual(
+                    accepted,
+                    not any("first-party page" in e for e in errors),
+                    errors,
+                )
+
+    def test_flag_url_is_never_on_a_host_that_is_not_first_party(self) -> None:
+        for url in (
+            "https://openrouter.ai/example-lab/alpha",
+            "https://opensource.org/license/mit",
+            "https://www.apache.org/licenses/LICENSE-2.0",
+            "https://spdx.org/licenses/MIT.html",
+            "https://creativecommons.org/licenses/by/4.0/",
+            "https://choosealicense.com/licenses/mit/",
+            "https://www.gnu.org/licenses/gpl-3.0.html",
+            "https://arxiv.org/abs/2601.00001",
+        ):
+            with self.subTest(url=url):
+                errors = self.flag_errors([self.found(url=url)], cited=(url,))
+                self.assertTrue(any("first-party page" in e for e in errors), errors)
+
+    def test_a_github_io_flag_site_is_its_own_subdomain(self) -> None:
+        cited = ("https://example-lab.github.io/alpha/",)
+        for url, accepted in (
+            ("https://example-lab.github.io/alpha/system-card", True),
+            ("https://other-org.github.io/alpha/system-card", False),
+        ):
+            with self.subTest(url=url):
+                errors = self.flag_errors([self.found(url=url)], cited=cited)
+                self.assertEqual(
+                    accepted, not any("first-party page" in e for e in errors), errors
+                )
+
+    def test_a_shared_flag_page_is_either_pinned_or_unpinnable(self) -> None:
+        unpinnable = self.found(unpinnable=True)
+        del unpinnable["content_sha256"]
+        errors = self.flag_errors([self.found()], second_flags=[unpinnable])
+        mixed = [e for e in errors if "both pinned and unpinnable" in e]
+        self.assertEqual(1, len(mixed), errors)
+        models = json.loads(
+            (ROOT / "directory" / "models.json").read_text(encoding="utf-8")
+        )["models"]
+        for model in models[:2]:
+            self.assertIn(model["id"], mixed[0])
+
+        self.assertEqual(
+            [], self.flag_errors([self.found()], second_flags=[self.found()])
+        )
+
+    def test_flag_statuses_must_be_exactly_the_two_examined_states(self) -> None:
+        def one_status(taxonomy: dict) -> None:
+            taxonomy["flag_statuses"] = taxonomy["flag_statuses"][:1]
+
+        errors = self.catalog_with_flags([], one_status)
+        self.assertTrue(
+            any(
+                "flag_statuses must be exactly ['no_statement_found', "
+                "'statement_found']" in e
+                for e in errors
+            ),
+            errors,
+        )
+
+    def test_a_flag_may_postdate_its_record(self) -> None:
+        # A backfilled flag is reviewed after the record; its date stands alone.
+        errors = self.flag_errors([self.found(verified_at="2099-01-01")])
+        self.assertFalse(any("verified_at" in e for e in errors), errors)
+
+    def test_one_entry_per_kind_and_a_non_empty_list(self) -> None:
+        self.assertTrue(
+            any(
+                "maker_risk_safeguards appears more than once" in e
+                for e in self.flag_errors([self.found(), dict(self.SAMPLE_FLAG_NONE)])
+            )
+        )
+        self.assertTrue(
+            any("flags must be a non-empty list" in e for e in self.flag_errors([]))
+        )
+
+    def test_a_kind_appears_only_in_its_allowed_collections(self) -> None:
+        def packs_only(taxonomy: dict) -> None:
+            taxonomy["flag_kinds"][0]["collections"] = ["packs"]
+
+        errors = self.flag_errors([self.found()], packs_only)
+        self.assertTrue(
+            any("is not allowed on reviewed models" in e for e in errors), errors
+        )
+
+    def test_flag_kinds_name_known_collections(self) -> None:
+        def unknown(taxonomy: dict) -> None:
+            taxonomy["flag_kinds"][0]["collections"] = ["robots"]
+
+        errors = self.catalog_with_flags([], unknown)
+        self.assertTrue(
+            any("names unknown collections ['robots']" in e for e in errors), errors
+        )
+
+    def test_imported_models_dev_rows_never_carry_flags(self) -> None:
+        temporary, root = self.temporary_catalog()
+        self.addCleanup(temporary.cleanup)
+        path = root / "directory" / "models-dev.json"
+        document = json.loads(path.read_text(encoding="utf-8"))
+        document["models"][0]["flags"] = [dict(self.SAMPLE_FLAG_NONE)]
+        self.write_json(path, document)
+        self.write_json(root / "web" / "models-dev.json", document)
+        errors = validate(root)
+        self.assertTrue(
+            any("never carries a flag" in error for error in errors), errors
+        )
+
     def catalog_with_runtime(self, mutate=None) -> list[str]:
         """Validate a temporary catalog holding one synthetic local runtime."""
         temporary, root = self.temporary_catalog()

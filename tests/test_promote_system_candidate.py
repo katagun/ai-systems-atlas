@@ -175,6 +175,14 @@ class PromoteSystemCandidateTests(unittest.TestCase):
         self.assertIsNone(item["license_id"])
         self.assertIsNone(item["scope"])
 
+    def test_draft_scaffolds_the_agent_system_fields_as_empty_lists(self) -> None:
+        # The LeRobot and OM1 reviews added all three by hand before `check`
+        # accepted an agent-system draft. The family is the reviewer's choice, so
+        # the scaffold carries them for every draft, empty and unclassified.
+        draft = build_draft(self.candidate)
+        for field in ("agent_interfaces", "execution_boundaries", "agent_capabilities"):
+            self.assertEqual([], draft[field], field)
+
     def test_draft_creation_refuses_to_overwrite_work(self) -> None:
         path = self.root / "review.json"
         path.write_text("keep me", encoding="utf-8")

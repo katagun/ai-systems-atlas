@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "updated_at": "2026-10-01",
+  "updated_at": "2026-10-06",
   "terms_reviewed_at": "2026-09-24",
   "dispositions": [
     {
@@ -338,6 +338,228 @@
       "disposition": "held",
       "reason": "OpenRouter lists it as a high-speed variant of the reviewed GLM-5.3 (zhipuai/glm-5.3), but no Z.ai source names it: docs.z.ai, docs.bigmodel.cn, Z.ai's pricing page, and its Hugging Face organization have no GLM-5.3-Prime as of 2026-09-28. Held until first-party documentation establishes its identity; if it proves a speed tier like GLM-5.3-FlashX, exclude it the same way.",
       "decided_at": "2026-09-28"
+    },
+    {
+      "openrouter_id": "openai/gpt-6.1-sol-pro",
+      "disposition": "excluded",
+      "reason": "A route name, not a release: OpenAI has no gpt-6.1-sol-pro model page (404) and documents pro as a reasoning.mode on the base model, so it duplicates reviewed record model-openai-gpt-6-1-sol.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "openai/gpt-3.5-turbo-instruct",
+      "disposition": "excluded",
+      "reason": "Retired: OpenAI's deprecations page lists a 2026-09-28 shutdown with gpt-5.6-terra as the replacement, so nothing serves it. Distinct from reviewed model-openai-gpt-3-5-turbo.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "sakana/fugu-max",
+      "disposition": "excluded",
+      "reason": "An orchestration tier, not a fixed model: Sakana's own page says Fugu Max orchestrates a pool of models, and its console lists fugu-max as an alias for fugu-max-v1.0. Same shape as the excluded sakana/fugu and sakana/fugu-ultra in model-dispositions.json.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "sakana/fugu-ultra-v2",
+      "disposition": "excluded",
+      "reason": "fugu-ultra-v2.0 is the console's versioned name for the Fugu Ultra orchestration tier, already excluded as sakana/fugu-ultra in model-dispositions.json; there is no distinct trained artifact to pin.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "meta/muse-spark-1.3-contributor",
+      "disposition": "excluded",
+      "reason": "Meta's Model API docs list the Contributor option as a pricing and data-use tier of the same Muse Spark 1.3 version (same modalities and context, lower price for permission to train on prompts), not a separate release. Same release as reviewed record model-meta-muse-spark-1-3.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "meta/muse-spark-1.2-contributor",
+      "disposition": "excluded",
+      "reason": "Meta's Model API docs list the Contributor option as a pricing and data-use tier of the same Muse Spark 1.2 version (same modalities and context, lower price for permission to train on prompts), not a separate release. Same release as reviewed record model-meta-muse-spark-1-2.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "mistralai/mistral-large",
+      "disposition": "excluded",
+      "reason": "An unversioned route name, not a release: Mistral's docs define the dated release as Large 1.0 (mistral-large-2402), retired 2025-06-16. mistral-large-latest is already excluded in model-dispositions.json.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "mistralai/mistral-saba",
+      "disposition": "held",
+      "reason": "Mistral's docs list Saba (mistral-saba-2502, Premier, API-only) as retired on 2025-09-30. It has a fixed identity but no weights, model card, or current access path, so no distribution mode can be asserted. Held as a policy question about recording retired API-only releases.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "openai/gpt-audio-mini",
+      "disposition": "held",
+      "reason": "Output is audio+text (eligible by type), but the gpt-audio-mini name has moved between snapshots: the page lists snapshots 2025-10-06 and 2025-12-15 with the name now on 2025-12-15, and the deprecations page shows the 2025-10-06 snapshot already shut down on July 23, 2026. A rotating alias with no first-party release date for the current snapshot; name removal Jan 20, 2027. Could be reviewed later as snapshot gpt-audio-mini-2025-12-15 if a first-party date is found.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "inclusionai/ling-3.0-flash-sante",
+      "disposition": "held",
+      "reason": "No first-party artifact found. The HF repo inclusionAI/Ling-3.0-flash-Sante returns 401 'Invalid username or password' on raw README and on the API, the HF API search of the inclusionAI org for 'Ling-3.0' lists 26 repos without a Sante one, and the inclusionAI org page lists no Sante. Only aggregator listings (web search) describe it. Hold until a model card or weight repository is published.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "typesafe/jev-router",
+      "disposition": "held",
+      "reason": "Not found in first-party docs. Fetched docs.typesafe.ai, docs.typesafe.ai/models and typesafe.ai in full: the models page lists jev-1.13.0, jev-1.13, jev-latest and jev-preview only; no jev-router string appears (the only 'router' hits are Next.js internals). Whether it is a model or a routing endpoint is therefore undocumented; per record boundary a router/endpoint is not a release. Hold; if TypeSafe documents it as a release, review against model-typesafe-jev-1-13-0.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "dots-studio/dots-3-note-preview",
+      "disposition": "held",
+      "reason": "No first-party source found. Only aggregator listings surfaced in web search (OpenRouter, directory sites); no Dots Studio website, model card, licence or HF repo located, and the OpenRouter lead has hugging_face_id null. 'dots' in this catalog is openai-dots, a product record in projects.json (OpenAI Codex/ChatGPT dots), which has no evidence of relation to 'Dots Studio'; Dots Studio is not in labs.json. Lab admission would also be needed (docs/LABS.md). Preview lifecycle too.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "microsoft/wizardlm-2-8x22b",
+      "disposition": "held",
+      "reason": "Fetched huggingface.co/microsoft/WizardLM-2-8x22B and huggingface.co/WizardLMTeam/WizardLM-2-8x22B: both return 404 (HF API for microsoft/WizardLM-2-8x22B returned 401 'not found'). The only first-party-adjacent source reachable is the WizardLM team's project page (wizardlm.github.io/WizardLM2), which dates the release Apr 15 2024 and states Apache 2.0 but links no retrievable weights; github.com/nlpxucan/WizardLM readme text does not mention WizardLM-2. Weights, licence file and authoritative release page cannot be fetched, so nothing can be evidenced; also Microsoft-lab attribution of the artifact is unconfirmed. Not published under a Microsoft page I could open. HOLD (page gone), not EXCLUDE.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "baidu/ernie-4.5-vl-424b-a47b",
+      "disposition": "held",
+      "reason": "Release is eligible (fixed open-weight release by Baidu, Apache-2.0 LICENSE file fetched) but Baidu is not in directory/labs.json (no catalog_names entry; also no ernie/baidu string in models-dev.json, queue, or dispositions), so lab admission under docs/LABS.md comes first.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "inception/mercury-2",
+      "disposition": "held",
+      "reason": "Fixed named release with a first-party launch post and API docs, but Inception is not in directory/labs.json; lab admission first. Its own models page now lists Mercury 2.5 as the current model and says Mercury 2 'remain[s] supported for existing customers', so Mercury 2 is a superseded line member and may be better excluded as a retired snapshot of a line once Mercury 2.5 is reviewed. No weights or model licence are published.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "inception/mercury-2.5",
+      "disposition": "held",
+      "reason": "Fixed named release with a dated first-party announcement (8 Sep 2026) and API docs, but Inception is not in directory/labs.json; lab admission first. Docs define the dateless API ID mercury-2.5 and say nothing about pinning versus a moving alias, and no weights or model licence are published (API-only; ToU covers the service).",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "kwaipilot/kat-coder-pro-v2.5",
+      "disposition": "held",
+      "reason": "Neither Kuaishou nor Kwaipilot is in directory/labs.json. Separately, no first-party model page for the Pro release was found: StreamLake's homepage lists it as a 'Proprietary Foundation Model' and its integration guide gives the API ID kat-coder-pro-v2.5, but https://www.streamlake.ai/product/kat-coder (the URL the Kwaipilot HF org links) returned 404 and the StreamLake terms do not name the model. The open-weight KAT-Coder-V2.5-Dev is a different release (Qwen3.6-35B-A3B fine-tune).",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "inference-net/schematron-v2-small",
+      "disposition": "held",
+      "reason": "Inference.net (Inference R&D, Inc.) is not in directory/labs.json. First-party model page documents an API-only extraction model (125K context, 4K output) but says nothing about its base model, release date, weights, or licence, and the V2 Hugging Face repo the lead names (inference-net/schematron-v2-llama-3.2-3b) is a 404 while the org page lists only the earlier Schematron-3B/8B. Whether V2 is a fine-tune of Llama 3.2 3B (as the v1 card is) rests on the lead alone.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "inference-net/schematron-v2-turbo",
+      "disposition": "held",
+      "reason": "Same as schematron-v2-small: Inference.net is not in directory/labs.json, and the first-party page documents an API-only 3B extraction model (125K context, 8K output) without base model, release date, weights, or licence. The lead's HF id inference-net/schematron-v2-granite-4.0-h-micro is a 404 and the org page lists no V2 repo.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "morph/morph-v3-fast",
+      "disposition": "held",
+      "reason": "Morph (AutoInfra, Inc.) is not in directory/labs.json. Morph's docs describe morph-v3-fast as a Fast Apply tier (a code-merge model; Morph says 7B for Fast Apply) with a dateless API ID and no release date, version/pinning statement, weights, base model, or licence, so a fixed release identity is not established first-party.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "morph/morph-v3-large",
+      "disposition": "held",
+      "reason": "Morph (AutoInfra, Inc.) is not in directory/labs.json. Morph's docs describe morph-v3-large as a Fast Apply tier (a code-merge model; Morph says 7B for Fast Apply) with a dateless API ID and no release date, version/pinning statement, weights, base model, or licence, so a fixed release identity is not established first-party.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "nex-agi/nex-n2.5-mini",
+      "disposition": "held",
+      "reason": "Nex-AGI is not in directory/labs.json. Its own site states the base: 'Base · Qwen3.5-35B-A3B-Base', i.e. a downstream post-train of another developer's open model, the same shape as the held aion-labs/aion-2.0; docs/MODELS.md needs a release boundary of its own for a fine-tune. The HF repo has an apache-2.0 header but no LICENSE file (raw LICENSE 404).",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "nex-agi/nex-n2.5-pro",
+      "disposition": "held",
+      "reason": "Nex-AGI is not in directory/labs.json. Its own site states the base: 'Base · Qwen3.5-397B-A17B', a downstream post-train of another developer's open model (same shape as held aion-labs/aion-2.0); a release boundary of its own is required for a fine-tune. The HF repo has an apache-2.0 header but no LICENSE file (raw LICENSE 404).",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "nousresearch/hermes-3-llama-3.1-405b",
+      "disposition": "held",
+      "reason": "Nous Research's own model card describes Hermes 3 405B as a full-parameter finetune of Meta's Llama-3.1 405B (Llama 3 licence, weights on Hugging Face). That is a downstream fine-tune of another developer's model; docs/MODELS.md requires a release boundary of its own, which a named release with a technical report arguably supplies, but the lab is also not admitted. Held for lab admission and a fine-tune boundary decision, same shape as aion-labs/aion-2.0.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "nousresearch/hermes-3-llama-3.1-70b",
+      "disposition": "held",
+      "reason": "Same release family as the 405B: Nous's model card lists base_model meta-llama/Meta-Llama-3.1-70B with the finetune tag and Llama 3 licence; the developer's Hermes 3 page says the series was made by fine-tuning Llama 3.1. Downstream fine-tune plus unadmitted lab, so held.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "nousresearch/hermes-4-405b",
+      "disposition": "held",
+      "reason": "Nous's model card describes Hermes 4 405B as a hybrid-mode reasoning model based on Llama-3.1-405B (Hugging Face model tree: base model meta-llama/Llama-3.1-405B, 'Finetuned'; Llama 3 licence). Downstream post-trained model of another developer's base; lab not admitted. Held for admission and a boundary decision.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "perceptron/perceptron-mk1",
+      "disposition": "held",
+      "reason": "Perceptron's own Mk1 model card documents a fixed, named closed-source vision-language model (model ID perceptron-mk1, text output, 32K context, pricing) and its Mk1.5 release notes still support it via an explicit opt-in; it is superseded but not retired. The release is eligible in shape, but the lab is not in labs.json, so held for lab admission. Not an alias: it has its own model page and a successor with a separate ID.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "perceptron/perceptron-mk1.5",
+      "disposition": "held",
+      "reason": "Perceptron's Mk1.5 model card and release notes (2026-09-25) document a fixed named release (ID perceptron-mk1.5, text/image/video/audio in, text out, 36,864-token context, pricing, function calling). Eligible in shape; lab not in labs.json, so held for admission. The card does not itself state a licence or that weights are closed; only the homepage's weights-by-commercial-licence line speaks to that.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "rekaai/reka-edge",
+      "disposition": "held",
+      "reason": "Reka's Hugging Face card documents Reka Edge (2603) as a 7B multimodal vision-language model with text output, open weights under a Reka-authored Business Source License 1.1 (production use free only under $1M revenue; commercial licence otherwise), served on the Reka API as reka-edge-2603 (created 1773154800 in the model feed). A clean fixed release, but the lab is not admitted, so held. The lead's bare ID 'reka-edge' maps to the dated 2603 snapshot; the record would be that snapshot.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "rekaai/reka-flash-3",
+      "disposition": "held",
+      "reason": "Reka's Hugging Face card documents Reka Flash 3 as a 21B general-purpose reasoning model 'trained from scratch' with Apache 2.0 weights, and the Reka API model table still lists reka-flash-3 (64k, text). Eligible in shape and the strongest identity of the group, but the lab is not in labs.json, so held for admission.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "relace/relace-apply-3",
+      "disposition": "held",
+      "reason": "Relace's API reference documents relace-apply-3 as the single current apply model (all earlier versions deprecated), a hosted code-merge model; Relace's own blog says its apply models are SFT/LoRA fine-tunes of unnamed 3-8B open-source coding models. So the base model and its licence are undisclosed, no weights are published, and the lab is not admitted. Held: eligible shape (named version) but identity of the underlying model is not documented.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "relace/relace-search",
+      "disposition": "held",
+      "reason": "Relace's docs describe relace-search as the model behind Fast Agentic Search, served only through Relace's API with a fixed tool schema. They give no version, release date, base model, weights or licence for it: the ID is an evergreen name with no documented snapshot (the lead's dated OpenRouter slug is a lead only and not evidence). Held for a release boundary and lab admission.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "qwen/qwen3-vl-30b-a3b-instruct",
+      "disposition": "held",
+      "reason": "Same blocker as the held qwen3-vl-235b-a22b records (directory/model-dispositions.json, 2026-09-16). I fetched https://huggingface.co/Qwen/Qwen3-VL-30B-A3B-Instruct/raw/main/LICENSE and got 'Entry not found'; the HF API file list for the repo has no LICENSE or NOTICE file; the model card carries only the 'license: apache-2.0' front-matter badge; the QwenLM/Qwen3-VL GitHub LICENSE is Apache-2.0 text whose appendix is still the unfilled template ('Copyright [yyyy] [name of copyright owner]') and names no weights. No weight-scope licence document, so license evidence cannot be pinned. Revisit if Qwen adds a LICENSE file to the repo.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "qwen/qwen3-vl-30b-a3b-thinking",
+      "disposition": "held",
+      "reason": "Same blocker as the held qwen3-vl-235b-a22b records (directory/model-dispositions.json, 2026-09-16). I fetched https://huggingface.co/Qwen/Qwen3-VL-30B-A3B-Thinking/raw/main/LICENSE and got 'Entry not found'; the HF API file list for the repo has no LICENSE or NOTICE file; the model card carries only the 'license: apache-2.0' front-matter badge; the QwenLM/Qwen3-VL GitHub LICENSE is Apache-2.0 text whose appendix is still the unfilled template ('Copyright [yyyy] [name of copyright owner]') and names no weights. No weight-scope licence document, so license evidence cannot be pinned. Revisit if Qwen adds a LICENSE file to the repo.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "qwen/qwen3-vl-32b-instruct",
+      "disposition": "held",
+      "reason": "Same blocker as the held qwen3-vl-235b-a22b records (directory/model-dispositions.json, 2026-09-16). I fetched https://huggingface.co/Qwen/Qwen3-VL-32B-Instruct/raw/main/LICENSE and got 'Entry not found'; the HF API file list for the repo has no LICENSE or NOTICE file; the model card carries only the 'license: apache-2.0' front-matter badge; the QwenLM/Qwen3-VL GitHub LICENSE is Apache-2.0 text whose appendix is still the unfilled template ('Copyright [yyyy] [name of copyright owner]') and names no weights. No weight-scope licence document, so license evidence cannot be pinned. Revisit if Qwen adds a LICENSE file to the repo.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "qwen/qwen3-vl-8b-instruct",
+      "disposition": "held",
+      "reason": "Same blocker as the held qwen3-vl-235b-a22b records (directory/model-dispositions.json, 2026-09-16). I fetched https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct/raw/main/LICENSE and got 'Entry not found'; the HF API file list for the repo has no LICENSE or NOTICE file; the model card carries only the 'license: apache-2.0' front-matter badge; the QwenLM/Qwen3-VL GitHub LICENSE is Apache-2.0 text whose appendix is still the unfilled template ('Copyright [yyyy] [name of copyright owner]') and names no weights. No weight-scope licence document, so license evidence cannot be pinned. Revisit if Qwen adds a LICENSE file to the repo.",
+      "decided_at": "2026-10-06"
+    },
+    {
+      "openrouter_id": "qwen/qwen3-vl-8b-thinking",
+      "disposition": "held",
+      "reason": "Same blocker as the held qwen3-vl-235b-a22b records (directory/model-dispositions.json, 2026-09-16). I fetched https://huggingface.co/Qwen/Qwen3-VL-8B-Thinking/raw/main/LICENSE and got 'Entry not found'; the HF API file list for the repo has no LICENSE or NOTICE file; the model card carries only the 'license: apache-2.0' front-matter badge; the QwenLM/Qwen3-VL GitHub LICENSE is Apache-2.0 text whose appendix is still the unfilled template ('Copyright [yyyy] [name of copyright owner]') and names no weights. No weight-scope licence document, so license evidence cannot be pinned. Revisit if Qwen adds a LICENSE file to the repo.",
+      "decided_at": "2026-10-06"
     }
   ]
 }

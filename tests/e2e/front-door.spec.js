@@ -20,6 +20,33 @@ test("a bare URL opens the Elements front door with search and the role map abov
   }
 });
 
+// The headline carries the count, so the line above it names the kinds and no
+// number: the reader used to see "878 systems, …" and then "878 elements of AI".
+// Until the boot payloads land the headline has no count to show, and reads
+// "The elements of AI" rather than " elements of AI".
+test("the headline reads The elements of AI until its count arrives, and the kicker above it never holds a number", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  let release;
+  const held = new Promise(resolve => { release = resolve; });
+  await page.route(/\/app\/systems\.json/, async route => {
+    await held;
+    await route.continue();
+  });
+  await page.goto("/");
+  const kicker = page.locator("#hero-kicker");
+  await expect(page.locator("#directory-title")).toHaveText("The elements of AI");
+  await expect(kicker).toBeVisible();
+  // Everything lists labs and specifications as well (#404), so the line names them.
+  await expect(kicker).toContainText("labs");
+  await expect(kicker).toContainText("specifications");
+  await expect(kicker).not.toContainText(/\d/);
+
+  release();
+  await expect(page.locator("#directory-title")).toHaveText(`${counts.allDirectoryEntries.toLocaleString("en-US")} elements of AI`);
+  await expect(kicker).toContainText("labs");
+  await expect(kicker).not.toContainText(/\d/);
+});
+
 test("every tile counts what its collection lists, with the Models and packs splits", async ({ page }) => {
   await page.goto("/");
   const expected = {
@@ -66,6 +93,18 @@ test("the Everything tile is the A–Z list, and the Models, Labs, and Specifica
     await expect(page.locator(`#${id}-directory-panel`)).toBeVisible();
     await expect(page).toHaveURL(new RegExp(`collection=${id}`));
   }
+});
+
+// Everything lists labs and specifications as well as the six kinds the box used
+// to name (#404), so its hint names all eight, as the markup's own hint does.
+test("the Everything search box names every kind it searches", async ({ page }) => {
+  const hint = "Search systems, models, services, runtimes, packs, robots, labs, and specifications";
+  await page.goto("/");
+  await openCollection(page, "all");
+  await expect(page.locator("#all-directory-panel")).toBeVisible();
+  await expect(searchBox(page)).toHaveAttribute("placeholder", hint);
+  await page.goto("/?collection=all");
+  await expect(searchBox(page)).toHaveAttribute("placeholder", hint);
 });
 
 test("a category link opens the scope narrowed to it", async ({ page }) => {
@@ -355,7 +394,7 @@ test("a focused strip entry keeps its focus while the grid repaints", async ({ p
 // results too: a switch into results from another view lands focus on it.
 test("a switch into Directory results focuses its heading", async ({ page }) => {
   await page.goto("/?collection=systems");
-  await page.locator("#systems-directory-panel [data-open-tab=taxonomy]").click();
+  await page.locator("#systems-directory-panel [data-scope-note=systems] [data-open-tab=taxonomy]").click();
   await expect(page.locator("#taxonomy")).toHaveClass(/is-active/);
   await expect(page.locator("#taxonomy-title")).toBeFocused();
   // The Catalog tab returns to the front door by design; the switch that
@@ -682,75 +721,117 @@ test("inside Systems on a phone the strip stays short and the family row fits on
   }
 });
 
-async function expectStageDates(page, face) {
-  const featured = (await page.locator(`#stage-${face} .stage-name`).textContent()).trim();
-  const names = page.locator(`#stage-${face} .stage-cards .stage-list-name`);
-  await expect(names).not.toHaveCount(0);
-  expect(await names.allTextContents()).not.toContain(featured);
-  const dates = await page.locator(`#stage-${face} .stage-cards time`).allTextContents();
-  for (let i = 1; i < dates.length; i += 1) expect(dates[i] <= dates[i - 1]).toBeTruthy();
-}
-
-test("the catalog stage leads each face with one record and shows the rest as cards", async ({ page }) => {
+test("Models, Systems, Labs, and Robots open as cards, newest first where a date sort exists", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/");
   const elements = page.getByRole("tab", { name: "Elements" });
-  const models = page.getByRole("tab", { name: "Models" });
-  const systems = page.getByRole("tab", { name: "Systems" });
-  const labs = page.getByRole("tab", { name: "Labs" });
-  const robots = page.getByRole("tab", { name: "Robots" });
   await expect(elements).toHaveAttribute("aria-selected", "true");
   await expect(page.locator("#elements")).toBeVisible();
-  await expect(page.locator(".stage-layout:visible")).toHaveCount(0);
 
-  await models.click();
-  await expect(page.locator("#elements")).toBeHidden();
-  await expect(page.locator("#collection-index")).toBeVisible();
-  await expect(page.locator("#stage-model .stage-layout [data-stage-layout='cards']")).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("#stage-model .stage-list")).toHaveCount(0);
-  await expectStageDates(page, "model");
-  await page.locator("#stage-model .link-button").click();
-  await expect(page.locator("#model-dialog")).toBeVisible();
-  await page.locator("#model-dialog").getByRole("button", { name: "Close" }).click();
+  await page.getByRole("button", { name: "Models", exact: true }).click();
+  await expect(page.locator("#models-directory-panel")).toBeVisible();
+  await expect(page.locator("#front-door")).toBeHidden();
+  await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#model-grid.is-list")).toHaveCount(0);
+  await expect(page).toHaveURL(/collection=models/);
+  await expect(page).toHaveURL(/reviewed=1/);
+  await expect(page).toHaveURL(/sort=release/);
+  await expect(page).not.toHaveURL(/layout=list/);
+  await page.locator('[data-set-layout="list"]').click();
+  await expect(page).toHaveURL(/layout=list/);
+  const reviews = await page.locator("#model-grid tbody tr td:nth-child(5)").allTextContents();
+  expect(reviews.length).toBeGreaterThan(0);
+  expect(reviews.every(review => review.trim() === "Atlas reviewed")).toBe(true);
+  const released = await page.locator("#model-grid tbody tr td:nth-child(4)").allTextContents();
+  let previous = null;
+  for (const value of released) {
+    const date = value.trim();
+    if (!date) {
+      previous = "";
+      continue;
+    }
+    expect(previous, "an undated release sorts last").not.toBe("");
+    if (previous) expect(date <= previous).toBe(true);
+    previous = date;
+  }
+  await page.locator("#model-grid tbody .link-button").first().click();
+  await expect(page.locator("#record-dialog")).toBeVisible();
+  await page.locator("#record-dialog").getByRole("button", { name: "Close" }).click();
+  await expect(page.locator("#record-dialog")).toBeHidden();
 
-  await page.locator("#stage-model .stage-layout [data-stage-layout='list']").click();
-  await expect(page.locator("#stage-model .stage-cards")).toHaveCount(0);
-  await expect(page.locator("#stage-model .stage-list")).toBeVisible();
-  const listedDates = await page.locator("#stage-model .stage-list time").allTextContents();
-  for (let i = 1; i < listedDates.length; i += 1) expect(listedDates[i] <= listedDates[i - 1]).toBeTruthy();
+  await page.goto("/");
+  await page.getByRole("button", { name: "Systems", exact: true }).click();
+  await expect(page.locator("#systems-directory-panel")).toBeVisible();
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#project-grid.is-list")).toHaveCount(0);
+  await expect(page).toHaveURL(/collection=systems/);
+  await expect(page).toHaveURL(/sort=reviewed/);
+  await expect(page).not.toHaveURL(/layout=list/);
+  await page.locator('[data-set-layout="list"]').click();
+  const reviewed = await page.locator("#project-grid tbody tr td:nth-child(6)").allTextContents();
+  expect(reviewed.length).toBeGreaterThan(0);
+  previous = null;
+  for (const value of reviewed) {
+    const date = value.trim();
+    if (!date || date === "Not recorded") {
+      previous = "";
+      continue;
+    }
+    expect(previous, "a dated system sorts ahead of an undated one").not.toBe("");
+    if (previous) expect(date <= previous).toBe(true);
+    previous = date;
+  }
+  await page.locator("#project-grid tbody .link-button").first().click();
+  await expect(page.locator("#record-dialog")).toBeVisible();
+  await page.locator("#record-dialog").getByRole("button", { name: "Close" }).click();
+  await expect(page.locator("#record-dialog")).toBeHidden();
+  // Opening the record pushed an entry, and closing it replaces that entry,
+  // so the first Back stays on the list and the next returns to the door.
+  await page.goBack();
+  await expect(page).toHaveURL(/sort=reviewed/);
+  await page.goBack();
+  await expect(page.locator("#elements")).toBeVisible();
+  await expect(page.locator("#front-door")).toBeVisible();
 
-  await systems.click();
-  await expect(page.locator("#stage-model")).toBeHidden();
-  await expect(page.locator("#stage-system .stage-layout [data-stage-layout='list']")).toHaveAttribute("aria-pressed", "true");
-  await page.locator("#stage-system .stage-list button").first().click();
-  await expect(page.locator("#project-dialog")).toBeVisible();
-  await page.locator("#project-dialog").getByRole("button", { name: "Close" }).click();
-  await page.locator("#stage-system .stage-layout [data-stage-layout='cards']").click();
-  await expectStageDates(page, "system");
+  await page.getByRole("button", { name: "Labs", exact: true }).click();
+  await expect(page.locator("#lab-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#lab-grid.is-list")).toHaveCount(0);
+  await expect(page).toHaveURL(/collection=labs/);
+  await expect(page).not.toHaveURL(/layout=list/);
 
-  await labs.click();
-  await expect(page.locator("#stage-system")).toBeHidden();
-  await expectStageDates(page, "lab");
-  await page.locator("#stage-lab .stage-cards button").first().click();
-  await expect(page.locator("#lab-dialog")).toBeVisible();
-  await page.locator("#lab-dialog").getByRole("button", { name: "Close" }).click();
-
-  await robots.click();
-  await expect(page.locator("#stage-lab")).toBeHidden();
-  await expectStageDates(page, "robot");
-  await page.locator("#stage-robot .stage-cards button").first().click();
-  await expect(page.locator("#robot-dialog")).toBeVisible();
-  await page.locator("#robot-dialog").getByRole("button", { name: "Close" }).click();
+  await page.goto("/");
+  await page.getByRole("button", { name: "Robots", exact: true }).click();
+  await expect(page.locator("#robot-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#robot-grid.is-list")).toHaveCount(0);
+  await expect(page).toHaveURL(/collection=robots/);
+  await expect(page).not.toHaveURL(/layout=list/);
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.locator("#stage-robot .stage-layout")).toHaveCount(0);
-  await expect(page.locator("#stage-robot .stage-list")).toHaveCount(0);
-  await expect(page.locator("#stage-robot .stage-cards")).toBeVisible();
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-  expect(overflow).toBeLessThanOrEqual(1);
+  await page.goto("/?collection=models&layout=list&sort=release&reviewed=1");
+  await expect(page.locator(".layout-toggle")).toBeHidden();
+  await expect(page.locator("#model-grid.is-list")).toHaveCount(0);
+  await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
+});
 
-  await elements.click();
-  await expect(page.locator("#elements")).toBeVisible();
-  await expect(page.locator("#stage-robot")).toBeHidden();
-  await expect(page.locator(".stage-layout")).toHaveCount(0);
+test("a list Compare label stays inside its button", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto("/?family=agent_system&role=research_agent&layout=list&collection=systems");
+  const button = page.locator("#project-grid .compare-toggle").first();
+  await button.scrollIntoViewIfNeeded();
+  const fits = async () => button.evaluate(element => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const rects = [...range.getClientRects()];
+    const box = element.getBoundingClientRect();
+    return rects.length === 1 && rects[0].left >= box.left - 1 && rects[0].right <= box.right + 1;
+  });
+  await expect(button).toHaveText("Compare");
+  expect(await fits()).toBe(true);
+  await button.click();
+  await expect(button).toHaveText("Selected");
+  expect(await fits()).toBe(true);
+  await expect(page.locator("#project-grid .badge-help")).toHaveCount(0);
+  await page.locator('[data-set-layout="cards"]').click();
+  await expect(page.locator("#project-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#project-grid .badge-help")).toHaveCount(0);
 });

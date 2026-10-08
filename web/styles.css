@@ -532,37 +532,6 @@ h1 {
 .door-job:hover { border-color: var(--cyan); color: var(--cyan); }
 .stage-tabs { align-self: stretch; width: 100%; border-bottom: 1px solid var(--line); }
 .stage-tabs .tab { font-size: .95rem; }
-[data-stage-panel][hidden] { display: none; }
-.stage-feature { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1rem 1.25rem; align-items: start; padding-top: 1.1rem; border-top: 2px solid var(--cyan); }
-.stage-feature.is-system { border-top-color: var(--coral); }
-.stage-feature .eyebrow { margin-bottom: .35rem; }
-.stage-feature .card-mark { width: 52px; height: 52px; font-size: 1.35rem; }
-.stage-name { margin: 0; font: 600 clamp(1.8rem, 3vw, 2.5rem) var(--font-display); letter-spacing: -.04em; line-height: 1.05; }
-.stage-meta { margin: .4rem 0 0; color: var(--muted); font: .78rem var(--font-mono); }
-.stage-description { max-width: 68ch; margin: .75rem 0 0; color: var(--muted); font-size: 1.05rem; line-height: 1.55; }
-.stage-list-label { margin: 1.35rem 0 .15rem; color: var(--muted); font: 500 .68rem var(--font-mono); letter-spacing: .12em; text-transform: uppercase; }
-.stage-list { list-style: none; margin: 0; padding: 0; }
-.stage-list button { display: grid; width: 100%; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) auto; gap: .75rem; align-items: baseline; padding: .7rem 0; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: none; color: var(--text); text-align: left; cursor: pointer; }
-.stage-list button:hover { color: var(--cyan); }
-.stage-list-name { font: 600 1rem var(--font-display); letter-spacing: -.02em; }
-.stage-list-meta { color: var(--muted); font-size: .85rem; }
-.stage-list time { color: var(--muted); font: .75rem var(--font-mono); }
-.stage-feature.is-lab { border-top-color: var(--slate-ink); }
-.stage-feature.is-robot { border-top-color: var(--violet); }
-.stage-rest-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .4rem 1rem; margin-top: 1.35rem; }
-.stage-rest-heading .stage-list-label { margin: 0; }
-.stage-layout { display: flex; align-items: center; gap: 1rem; }
-.stage-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: .75rem; list-style: none; margin: .75rem 0 0; padding: 0; }
-.stage-card { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .75rem; width: 100%; min-height: 4.6rem; padding: .8rem .9rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); color: var(--text); text-align: left; cursor: pointer; }
-.stage-card:hover { border-color: var(--cyan); }
-.stage-card-copy { display: grid; gap: .12rem; min-width: 0; }
-.stage-card .stage-list-name,
-.stage-card .stage-list-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.stage-card time { color: var(--muted); font: .72rem var(--font-mono); }
-@media (max-width: 720px) {
-  .stage-list button { grid-template-columns: minmax(0, 1fr) auto; }
-  .stage-list .stage-list-meta { display: none; }
-}
 /* Elements is a taxonomy map, not a ranking or a claim of physical periodicity. */
 .elements { margin-block: .5rem 1rem; }
 .elements-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .5rem 1rem; margin-bottom: 1rem; }
@@ -601,19 +570,6 @@ h1 {
   .element-more-mobile { display: inline; }
 }
 .element-note { margin-block: 1rem 0; color: var(--muted); font: .75rem/1.6 var(--font-body); max-width: 95ch; }
-.element-sheet { grid-column: 1 / -1; margin-block: 1.5rem; padding: 1.5rem; background: var(--panel); border: 1px solid var(--line); border-top: 3px solid var(--text); border-radius: var(--radius); }
-.element-sheet[hidden] { display: none; }
-.element-sheet-heading { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; align-items: start; }
-.element-sheet h3 { margin: 0; font: 600 1.5rem var(--font-display); }
-.element-sheet h4 { margin-block: 1.5rem .5rem; font: 600 1.4rem var(--font-display); }
-.element-record-label { display: grid; gap: .4rem; max-width: 32rem; font-size: .8rem; }
-.element-record-label select { width: 100%; min-width: 0; }
-#element-load-status { font-size: .8rem; color: var(--muted); }
-.element-properties { width: 100%; border-collapse: collapse; table-layout: fixed; font-size: .85rem; }
-.element-properties caption { text-align: left; color: var(--muted); font: .75rem var(--font-mono); padding-block: 1rem .7rem; }
-.element-properties th, .element-properties td { padding: .7rem .5rem; text-align: left; vertical-align: top; overflow-wrap: anywhere; border-top: 1px solid var(--line); }
-.element-properties th { width: 30%; padding-left: 0; font-weight: 500; color: var(--muted); }
-.element-sheet-links { display: flex; flex-wrap: wrap; gap: 1rem; font-size: .85rem; }
 .collection-index-heading { margin-top: .25rem; }
 @media (max-width: 1000px) {
   .element-groups { grid-template-columns: 1fr 1.2fr .7fr; gap: .8rem; }
@@ -624,8 +580,6 @@ h1 {
   .element-groups { grid-template-columns: 1fr; gap: 1.3rem; }
   .element-tiles, .element-group[data-element-family="assistant_system"] .element-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .element-tile { min-height: 116px; padding: .6rem; }
-  .element-sheet { margin-block: 0; padding: 1rem; }
-  .element-properties th { width: 38%; }
   .element-name { font-size: .75rem; }
 }
 .collection-index { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .7rem; }
@@ -678,6 +632,13 @@ h1 {
 .results-bar .results-search { flex: 1 1 18rem; }
 .results-sort label { display: flex; align-items: center; gap: .45rem; }
 .results-sort label[hidden] { display: none; }
+.layout-toggle { display: inline-flex; border: 1px solid var(--line-strong); border-radius: var(--radius-control); }
+.layout-toggle button { min-height: 34px; padding: .35rem .7rem; border: 0; background: transparent; color: var(--muted); font: 600 .78rem var(--font-body); cursor: pointer; }
+.layout-toggle button + button { border-left: 1px solid var(--line); }
+.layout-toggle button[aria-pressed="true"] { background: var(--text); color: var(--on-ink); }
+@media (max-width: 767px) {
+  .layout-toggle { display: none; }
+}
 @media (min-width: 1001px) {
   .results-bar { position: sticky; top: calc(var(--header-height, 88px) + var(--strip-height, 0px)); z-index: 8; backdrop-filter: blur(20px) saturate(140%); }
 }
@@ -796,6 +757,15 @@ input:focus, select:focus {
 .pager-nav .ghost-button:disabled:hover { border-color: var(--line-strong); color: var(--muted); }
 
 .project-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.15rem; }
+.project-grid.is-list { display: block; }
+.results-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+.results-table th, .results-table td { padding: .65rem .5rem; text-align: left; vertical-align: top; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
+.results-table thead th { border-top: 0; color: var(--muted); font: 600 .62rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+.results-table .link-button { font: 600 .95rem var(--font-display); letter-spacing: -.02em; }
+.results-table .card-badges { margin-top: .35rem; }
+/* The table wraps anywhere so a long license can shrink. That also breaks
+   "Compare" inside a squeezed last column, so this column keeps its label. */
+.results-table .compare-cell { width: 1%; white-space: nowrap; overflow-wrap: normal; }
 .project-card {
   min-height: 340px;
   padding: 1.4rem;
@@ -998,12 +968,6 @@ input:focus, select:focus {
   padding: 1rem 0 0;
   list-style: none;
 }
-.badge-help { width: fit-content; max-width: 100%; margin-top: .3rem; font-size: .75rem; color: var(--muted); }
-.badge-help summary { cursor: pointer; width: fit-content; }
-.badge-help summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
-.badge-help dl { margin: .5rem 0 0; }
-.badge-help dt { color: var(--text); font-weight: 600; }
-.badge-help dd { margin: 0 0 .5rem; }
 .card-badge {
   display: inline-flex;
   cursor: help;
@@ -1012,6 +976,7 @@ input:focus, select:focus {
 [data-family="control"] { color: var(--cyan); }
 [data-family="capability"] { color: var(--violet); }
 [data-family="platform"] { color: var(--amber); }
+[data-family="flags"] { color: var(--danger); }
 .badge-emblem {
   display: block;
   width: 1.7rem;
@@ -1153,13 +1118,11 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
   z-index: 1;
 }
 .project-card .card-badges,
-.project-card .badge-help,
 .project-card .compare-toggle,
 .project-card .card-source-meta,
 .project-card .license-badge,
 .project-card .lab-related,
 .finder-result .card-badges,
-.finder-result .badge-help,
 .finder-result .license-badge {
   position: relative;
   z-index: 2;
@@ -1170,14 +1133,21 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
   outline-offset: 2px;
 }
 .card-actions { display: flex; align-items: center; gap: .8rem; }
-.card-footer .compare-toggle {
+.card-footer .compare-toggle,
+.results-table .compare-toggle {
   padding: .3rem .5rem;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-chip);
+  background: transparent;
   color: var(--muted);
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
 }
-.card-footer .compare-toggle:hover { border-color: var(--cyan); color: var(--cyan); }
-.card-footer .compare-toggle.is-selected {
+.card-footer .compare-toggle:hover,
+.results-table .compare-toggle:hover { border-color: var(--cyan); color: var(--cyan); }
+.card-footer .compare-toggle.is-selected,
+.results-table .compare-toggle.is-selected {
   border-color: var(--cyan);
   background: var(--sage-soft);
   color: var(--cyan);
@@ -1461,6 +1431,7 @@ dialog h1 { overflow-wrap: break-word; }
    content wraps. The same reason `.lab-channel-link` below carries this already. */
 .detail-block, .detail-block p, .detail-block li, .detail-block td, .detail-block h3, .detail-block h4 { overflow-wrap: anywhere; }
 .detail-block h4 { margin: 1rem 0 .4rem; color: var(--text); font-size: .92rem; font-weight: 600; }
+.detail-block .risk-quote { margin: .6rem 0; padding: .1rem 0 .1rem .9rem; border-left: 3px solid var(--line-strong); color: var(--text); }
 .evidence-date { margin-left: .35rem; color: var(--muted); font: .7rem var(--font-mono); }
 /* Lab cards name a few joined records inline; the row layout matches the dialog
    release list so names and dates do not run together when markup has no space
@@ -1803,7 +1774,6 @@ footer #data-date, footer .footer-meta {
   .atlas-app .element-symbol { font-size: 1.5rem; }
   .atlas-app .element-name { font-size: .7rem; }
   .atlas-app .element-note { font-size: .7rem; line-height: 1.45; margin-top: .65rem; }
-  .atlas-app .element-sheet { margin-block: .5rem; padding: 1rem; }
   .atlas-app .collection-index-heading { margin: .5rem 0 0; }
   .atlas-app .collection-index-heading p { display: none; }
   .atlas-app .collection-index { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }

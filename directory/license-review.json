@@ -1,5 +1,17 @@
 {
   "version": "1.0",
-  "updated_at": "2026-09-29",
-  "entries": []
+  "updated_at": "2026-10-07",
+  "entries": [
+    {
+      "project_id": "quivr",
+      "repo": "QuivrHQ/quivr",
+      "expected_licenses": [
+        "Apache-2.0"
+      ],
+      "detected_license": "MIT",
+      "reason": "GitHub detects MIT; reviewed evidence records Apache-2.0.",
+      "detected_at": "2026-10-07",
+      "status": "open"
+    }
+  ]
 }

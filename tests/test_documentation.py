@@ -110,6 +110,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/COVERAGE.md",
             "docs/DATA_MODEL.md",
             "docs/OPERATIONS.md",
+            "docs/RUNBOOKS.md",
             "docs/INFERENCE_SERVICES.md",
             "docs/LOCAL_RUNTIMES.md",
             "docs/SPECIFICATIONS.md",
@@ -154,6 +155,7 @@ class DocumentationTests(unittest.TestCase):
             "docs/adr/038-reviewed-models-may-precede-their-models-dev-source-row.md",
             "docs/adr/040-search-orders-by-match-never-by-score.md",
             "docs/adr/041-labs-are-unscored-records-of-who-develops-the-catalogs-models.md",
+            "docs/adr/042-reviewed-flags-record-a-makers-risk-statement.md",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
