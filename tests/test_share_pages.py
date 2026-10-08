@@ -476,9 +476,16 @@ class SharePageTests(unittest.TestCase):
         reached = flag_sentence(
             dict(FLAG_FOUND, determination="determined"), "Fixture Lab", taxonomy
         )
+        standard = flag_sentence(
+            dict(FLAG_FOUND, determination="safeguard_standard"),
+            "Fixture Lab",
+            taxonomy,
+        )
         for template, sentence in (
             ("names this release against “", precaution),
             ("states that this release reached “", reached),
+            ("states that this release ships under the “", standard),
+            ("” safeguard standard for ", standard),
             (" capability, as a precaution.", precaution),
             (" The statement covers ", precaution),
         ):

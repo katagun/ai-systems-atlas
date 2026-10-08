@@ -3191,6 +3191,9 @@ test("the flag tooltip prints the developer's term and determination and ends wi
   assert.equal(determined.name, "“Fixture Level 3” · Threshold reached");
   assert.equal(determined.sentence, `Example Lab states that this release reached “Fixture Level 3” in cyber, biological or chemical, and autonomy capability. The statement covers safeguards on a release channel. ${DISCLAIMER}`);
   assert.equal(flagEmblemText({ ...FLAG_FOUND, domains: ["autonomy"] }, "Example Lab", taxonomy).sentence.split(" capability")[0], "Example Lab names this release against “Fixture Level 3” in autonomy");
+  const standard = flagEmblemText({ ...FLAG_FOUND, determination: "safeguard_standard", tier_term: "ASL-2", domains: ["bio_chem"] }, "Example Lab", taxonomy);
+  assert.equal(standard.name, "“ASL-2” · Safeguard standard");
+  assert.equal(standard.sentence, `Example Lab states that this release ships under the “ASL-2” safeguard standard for biological or chemical capability. The statement covers the model itself. ${DISCLAIMER}`);
 });
 
 test("the boot entry alone gives the full tooltip and hidden text, with no detail fetch", () => {
