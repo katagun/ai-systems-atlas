@@ -108,6 +108,7 @@
       <nav id="scope-strip" class="scope-strip" aria-label="Directory collections" hidden></nav>
       <div id="results-bar" class="results-bar" hidden>
         <label class="search-field results-search"><span class="visually-hidden">Search</span><input id="results-search" type="search" placeholder="Search systems, models, services, runtimes, packs, robots, labs, and specifications" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
+        <button type="button" id="filters-toggle" class="filters-toggle" hidden aria-expanded="false" aria-controls="filters-drawer">Filters</button>
         <div class="results-sort">
           <label id="sort-label" hidden><span class="visually-hidden">Sort</span><select id="sort-filter"></select></label>
         </div>
@@ -118,7 +119,7 @@
         </div>
       </div>
 
-      <div id="all-directory-panel" class="collection-panel" hidden>
+      <div id="filters-drawer" class="filters-drawer">
         <div data-filters="systems" hidden>
         <section class="control-panel" id="directory-controls" aria-label="System filters">
           <label><span>Family</span><select id="family-filter"><option value="">All families</option></select></label>
@@ -198,7 +199,9 @@
           <label><span>License</span><select id="specification-license-filter"><option value="">All licenses</option></select></label>
         </section>
         </div>
-        <div class="result-row"><button id="finder-roles-chip" class="filter-chip" type="button" hidden></button><p id="all-directory-result-count" class="result-count" aria-live="polite" tabindex="-1"></p><button id="reset-all-directory" class="ghost-button results-clear">Clear search</button></div>
+      </div>
+      <div id="all-directory-panel" class="collection-panel" hidden>
+        <div class="result-row"><div id="filter-chips" class="filter-chips"></div><button id="finder-roles-chip" class="filter-chip" type="button" hidden></button><p id="all-directory-result-count" class="result-count" aria-live="polite" tabindex="-1"></p><button id="reset-all-directory" class="ghost-button results-clear">Clear filters</button></div>
         <p class="scope-note" data-scope-note="all">The whole directory in one list: A–Z, or best match first while you search. Scores stay hidden here, since a score only compares like with like. Choose a collection for its own filters, and its scores where it has them. <button data-open-tab="taxonomy">How comparisons work →</button></p>
         <p class="scope-note" data-scope-note="systems" hidden>Choose one family to compare editorial scores. All-family browsing is unscored. <button data-open-tab="taxonomy">How comparisons work →</button></p>
         <p class="scope-note" data-scope-note="inference" hidden>Scores compare stable service operations across types. Filter for workload fit before treating overall as a shortlist. <button data-open-tab="taxonomy">How scoring works →</button></p>
