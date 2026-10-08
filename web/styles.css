@@ -636,6 +636,9 @@ h1 {
 .layout-toggle button { min-height: 34px; padding: .35rem .7rem; border: 0; background: transparent; color: var(--muted); font: 600 .78rem var(--font-body); cursor: pointer; }
 .layout-toggle button + button { border-left: 1px solid var(--line); }
 .layout-toggle button[aria-pressed="true"] { background: var(--text); color: var(--on-ink); }
+@media (max-width: 767px) {
+  .layout-toggle { display: none; }
+}
 @media (min-width: 1001px) {
   .results-bar { position: sticky; top: calc(var(--header-height, 88px) + var(--strip-height, 0px)); z-index: 8; backdrop-filter: blur(20px) saturate(140%); }
 }
@@ -1541,6 +1544,7 @@ footer #data-date, footer .footer-meta {
   .theme-toggle, .github-link { width: 32px; height: 36px; }
   .brand small { display: none; }
   .tabs { flex-wrap: nowrap; justify-content: center; gap: .5rem; min-width: 0; }
+  .stage-tabs { flex-wrap: wrap; justify-content: flex-start; row-gap: .1rem; column-gap: .85rem; }
   .tab, .tab-link { flex: 0 0 auto; display: inline-flex; align-items: center; min-height: 36px; padding: .3rem 0; font-size: .72rem; white-space: nowrap; }
   /* A button-anchored popup would hang off the viewport on a phone, where
      the Docs entry sits far from the right edge: the menu becomes a sheet

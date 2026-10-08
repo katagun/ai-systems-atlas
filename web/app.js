@@ -1053,11 +1053,12 @@ function openRole(roleId) {
   $("#result-count")?.focus({ preventScroll: true });
 }
 
-// Models and Systems on the front door are entry points into the same results
-// surface: Atlas-reviewed models by release date, and active systems by review
-// date. Both open as a list.
+// Models, Systems, Labs, and Robots on the front door are entry points into the
+// same results surface. Models are Atlas-reviewed releases by release date, and
+// systems are active records by review date. Each opens as cards.
 function openNewest(kind) {
-  const scope = kind === "model" ? "models" : "systems";
+  const scope = { model: "models", system: "systems", lab: "labs", robot: "robots" }[kind];
+  if (!scope) return;
   if (state.directoryCollection !== scope) rememberCollectionControls(state.directoryCollection);
   leaveFrontDoor();
   wearResults(scope);
@@ -1067,21 +1068,19 @@ function openNewest(kind) {
     $("#reviewed-filter").value = "1";
     $("#sort-filter").value = "release";
     sortValue.models = "release";
-    $("#layout-filter").value = "list";
-    layoutValue.models = "list";
     state.page.models = 1;
-  } else {
+  } else if (kind === "system") {
     $("#status-filter").value = "active";
     $("#family-filter").value = "";
     populateRoleFilter();
     ensureSortOptions("systems");
     $("#sort-filter").value = "reviewed";
     sortValue.systems = "reviewed";
-    $("#layout-filter").value = "list";
-    layoutValue.systems = "list";
     updateScoreSortAvailability();
     state.page.systems = 1;
-  }
+  } else state.page[scope] = 1;
+  $("#layout-filter").value = "cards";
+  layoutValue[scope] = "cards";
   syncLayoutButtons();
   setDirectoryCollection(scope, { preserveControls: true });
   $(".result-count")?.focus({ preventScroll: true });
@@ -1875,7 +1874,9 @@ function resultsTable(headers, rows) {
   return `<table class="results-table"><thead><tr>${headers.map(header => `<th scope="col"${header === "Compare" ? ` class="compare-cell"` : ""}>${escapeHTML(header)}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table>`;
 }
 
-const wantsList = () => $("#layout-filter").value === "list";
+// Below 768px the list is a wide table that does not fit, so a phone renders
+// cards only and the layout control is hidden.
+const wantsList = () => !mobileLayout.matches && $("#layout-filter").value === "list";
 
 function bindResultRows(grid) {
   $$("tbody tr", grid).forEach(row => {
@@ -4268,7 +4269,11 @@ function initMobileNavigation() {
     else if (toolsFocused && mobileLayout.matches) $('[data-mobile-nav="more"]').focus();
   }
   syncLayout();
-  mobileLayout.addEventListener("change", syncLayout);
+  mobileLayout.addEventListener("change", () => {
+    syncLayout();
+    syncLayoutButtons();
+    if (state.directoryStage === "results") RESULT_VIEWS[state.directoryCollection]?.render();
+  });
   $("#element-family-tabs").addEventListener("click", event => {
     const button = event.target.closest("[data-element-family-tab]");
     if (!button) return;
