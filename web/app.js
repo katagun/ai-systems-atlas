@@ -19,7 +19,7 @@ const state = {
   labIndex: null,
   reviewedModelCount: 0, modelSourceCount: 0,
   licenses: new Map(), logos: { icons: {}, records: {} }, logosLoaded: false,
-  directoryCollection: "all", directoryStage: "door", recent: {}, directoryRoles: null, directoryRolesLabel: null, badgeLegendPreference: null,
+  directoryCollection: "all", directoryStage: "door", stageLayout: "cards", recent: {}, directoryRoles: null, directoryRolesLabel: null, badgeLegendPreference: null,
   comparison: { kind: null, profile: null, ids: [], limitReached: false },
   finder: { direction: "", goal: "", priority: "balanced" },
   pageSize: readStoredPageSize(),
@@ -104,8 +104,10 @@ async function bootstrap() {
   state.taxonomy = taxonomy;
   state.packs = packs.packs;
   state.labs = labs.labs;
+  state.labReviewDates = labs.review_dates || {};
   state.labIndex = AppCore.buildLabIndex(state.labs, state.models);
   state.robots = robots.robots;
+  state.robotReviewDates = robots.review_dates || {};
   state.recent = { systems: systems.recent || [], inference: inference.recent || [], runtimes: runtimes.recent || [], specifications: specifications.recent || [], models: models.recent || [], packs: packs.recent || [], labs: labs.recent || [], robots: robots.recent || [] };
   const dataDate = [systems.generated_at, specifications.verified_at, inference.verified_at, runtimes.verified_at, models.verified_at, models.source_updated_at, packs.verified_at, labs.verified_at, robots.verified_at]
     .filter(Boolean)
@@ -1041,42 +1043,95 @@ async function loadElementRecord() {
 // The front door's Finder jobs: the first goal of each direction, opened at
 // the Finder's priority question with that direction and goal answered
 // (openFinderAt, which the job hint under a search already uses).
-function stageDate(kind, record) {
-  return kind === "model" ? AppCore.releaseDate(record) : state.systemReviewDates[record.id];
+// Below 768px the page is the mobile layout. The stage list is a three-column
+// row that does not fit there, so a phone renders cards only and offers no list.
+function stageShowsListOption() {
+  return !window.matchMedia("(max-width: 767px)").matches;
 }
 
-function stageMeta(kind, record) {
-  return kind === "model" ? record.developer || "" : roleName(record.primary_role);
+function stageLayoutIsCards() {
+  return !stageShowsListOption() || state.stageLayout !== "list";
 }
 
-function stageRecords(kind) {
-  if (kind === "model") return AppCore.newestDated(state.models.filter(model => model.review_status !== "imported"), AppCore.releaseDate);
-  return AppCore.newestDated(state.projects.filter(project => state.systemReviewDates[project.id]), project => state.systemReviewDates[project.id]);
-}
+// Dated records only, newest first. A model uses its release date. A system,
+// lab, or robot uses its review date, which rides the boot envelope.
+const STAGE_FACES = {
+  model: {
+    noun: "model",
+    plural: "models",
+    date: record => AppCore.releaseDate(record),
+    records: () => AppCore.newestDated(state.models.filter(model => model.review_status !== "imported"), AppCore.releaseDate),
+    meta: record => record.developer || "",
+    where: record => record.developer || "",
+    when: date => `released ${date}`,
+  },
+  system: {
+    noun: "system",
+    plural: "systems",
+    date: record => state.systemReviewDates[record.id],
+    records: () => AppCore.newestDated(state.projects.filter(project => state.systemReviewDates[project.id]), project => state.systemReviewDates[project.id]),
+    meta: record => roleName(record.primary_role),
+    where: record => `${familyName(record.system_family)} · ${roleName(record.primary_role)}`,
+    when: date => `reviewed ${date}`,
+  },
+  lab: {
+    noun: "lab",
+    plural: "labs",
+    date: record => state.labReviewDates[record.id],
+    records: () => AppCore.newestDated(state.labs.filter(lab => state.labReviewDates[lab.id]), lab => state.labReviewDates[lab.id]),
+    meta: record => taxonomyName("lab_types", record.lab_type),
+    where: record => `${taxonomyName("lab_types", record.lab_type)} · ${taxonomyName("countries", record.headquarters)}`,
+    when: date => `reviewed ${date}`,
+  },
+  robot: {
+    noun: "robot",
+    plural: "robots",
+    date: record => state.robotReviewDates[record.id],
+    records: () => AppCore.newestDated(state.robots.filter(robot => state.robotReviewDates[robot.id]), robot => state.robotReviewDates[robot.id]),
+    meta: record => taxonomyName("robot_form_factors", record.form_factor),
+    where: record => `${taxonomyName("robot_form_factors", record.form_factor)} · ${record.manufacturer}`,
+    when: date => `reviewed ${date}`,
+  },
+};
 
-function renderStageFace(kind, records) {
+function renderStageFace(kind) {
+  const face = STAGE_FACES[kind];
   const root = $(`#stage-${kind}`);
+  const records = face.records();
   const featured = records[0];
   if (!featured) {
     root.replaceChildren();
     return;
   }
-  const date = record => stageDate(kind, record);
-  const row = record => `<li><button type="button" data-stage-record="${kind}" data-stage-id="${escapeHTML(record.id)}"><span class="stage-list-name">${escapeHTML(record.name)}</span><span class="stage-list-meta">${escapeHTML(stageMeta(kind, record))}</span><time datetime="${escapeHTML(date(record))}">${escapeHTML(date(record))}</time></button></li>`;
-  const when = kind === "model" ? `released ${date(featured)}` : `reviewed ${date(featured)}`;
-  const where = kind === "model" ? featured.developer || "" : `${familyName(featured.system_family)} · ${roleName(featured.primary_role)}`;
+  const date = face.date;
+  const row = record => `<li><button type="button" data-stage-record="${kind}" data-stage-id="${escapeHTML(record.id)}"><span class="stage-list-name">${escapeHTML(record.name)}</span><span class="stage-list-meta">${escapeHTML(face.meta(record))}</span><time datetime="${escapeHTML(date(record))}">${escapeHTML(date(record))}</time></button></li>`;
+  // The card keeps the mark beside the same three facts the list row prints.
+  const cardItem = record => `<li><button type="button" class="stage-card" data-stage-record="${kind}" data-stage-id="${escapeHTML(record.id)}">${cardMark(record, kind)}<span class="stage-card-copy"><span class="stage-list-name">${escapeHTML(record.name)}</span><span class="stage-list-meta">${escapeHTML(face.meta(record))}</span><time datetime="${escapeHTML(date(record))}">${escapeHTML(date(record))}</time></span></button></li>`;
   const rest = records.slice(1);
-  root.innerHTML = `<article class="stage-feature${kind === "system" ? " is-system" : ""}">${cardMark(featured, kind)}<div>
-      <p class="eyebrow">Latest reviewed ${kind}</p>
+  const cards = stageLayoutIsCards();
+  const layout = stageShowsListOption()
+    ? `<div class="stage-layout" role="group" aria-label="Layout"><button type="button" class="tab${cards ? " is-active" : ""}" data-stage-layout="cards" aria-pressed="${String(cards)}">Cards</button><button type="button" class="tab${cards ? "" : " is-active"}" data-stage-layout="list" aria-pressed="${String(!cards)}">List</button></div>`
+    : "";
+  const restMarkup = rest.length
+    ? `<div class="stage-rest-heading"><p class="stage-list-label">More ${face.plural}, newest first</p>${layout}</div>${cards ? `<ol class="stage-cards">${rest.map(cardItem).join("")}</ol>` : `<ol class="stage-list">${rest.map(row).join("")}</ol>`}`
+    : "";
+  root.innerHTML = `<article class="stage-feature${kind === "model" ? "" : ` is-${kind}`}">${cardMark(featured, kind)}<div>
+      <p class="eyebrow">Latest reviewed ${face.noun}</p>
       <h2 class="stage-name">${escapeHTML(featured.name)}</h2>
-      <p class="stage-meta">${escapeHTML(`${where} · ${when}`)}</p>
+      <p class="stage-meta">${escapeHTML(`${face.where(featured)} · ${face.when(date(featured))}`)}</p>
       <p class="stage-description">${escapeHTML(featured.description || "")}</p>
-      <p><button type="button" class="link-button" data-stage-record="${kind}" data-stage-id="${escapeHTML(featured.id)}">Open this ${kind}</button></p>
-    </div></article>${rest.length ? `<p class="stage-list-label">More ${kind}s, newest first</p><ol class="stage-list">${rest.map(row).join("")}</ol>` : ""}`;
+      <p><button type="button" class="link-button" data-stage-record="${kind}" data-stage-id="${escapeHTML(featured.id)}">Open this ${face.noun}</button></p>
+    </div></article>${restMarkup}`;
 }
 
 function renderStage() {
-  for (const kind of ["model", "system"]) renderStageFace(kind, stageRecords(kind));
+  for (const kind of Object.keys(STAGE_FACES)) renderStageFace(kind);
+}
+
+function setStageLayout(layout) {
+  if (!stageShowsListOption() || (layout !== "cards" && layout !== "list") || layout === state.stageLayout) return;
+  state.stageLayout = layout;
+  renderStage();
 }
 
 function showStage(face) {
@@ -4112,10 +4167,14 @@ function bindEvents() {
   $("#front-door").addEventListener("click", event => {
     const face = event.target.closest("[data-stage-face]");
     if (face) showStage(face.dataset.stageFace);
+    const layout = event.target.closest("[data-stage-layout]");
+    if (layout) setStageLayout(layout.dataset.stageLayout);
     const record = event.target.closest("[data-stage-record]");
     if (!record) return;
-    (record.dataset.stageRecord === "model" ? openModel : openProject)(record.dataset.stageId);
+    const openStageRecord = { model: openModel, system: openProject, lab: openLab, robot: openRobot }[record.dataset.stageRecord];
+    if (openStageRecord) openStageRecord(record.dataset.stageId);
   });
+  window.matchMedia("(max-width: 767px)").addEventListener("change", () => renderStage());
   $("#element-groups").addEventListener("click", event => {
     const button = event.target.closest("[data-element]");
     if (button) selectElement(button.dataset.element, "", { focus: true });

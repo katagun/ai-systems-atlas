@@ -682,40 +682,75 @@ test("inside Systems on a phone the strip stays short and the family row fits on
   }
 });
 
-test("the catalog stage leads each face with one record and lists the rest newest first", async ({ page }) => {
+async function expectStageDates(page, face) {
+  const featured = (await page.locator(`#stage-${face} .stage-name`).textContent()).trim();
+  const names = page.locator(`#stage-${face} .stage-cards .stage-list-name`);
+  await expect(names).not.toHaveCount(0);
+  expect(await names.allTextContents()).not.toContain(featured);
+  const dates = await page.locator(`#stage-${face} .stage-cards time`).allTextContents();
+  for (let i = 1; i < dates.length; i += 1) expect(dates[i] <= dates[i - 1]).toBeTruthy();
+}
+
+test("the catalog stage leads each face with one record and shows the rest as cards", async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/");
   const elements = page.getByRole("tab", { name: "Elements" });
   const models = page.getByRole("tab", { name: "Models" });
   const systems = page.getByRole("tab", { name: "Systems" });
+  const labs = page.getByRole("tab", { name: "Labs" });
+  const robots = page.getByRole("tab", { name: "Robots" });
   await expect(elements).toHaveAttribute("aria-selected", "true");
   await expect(page.locator("#elements")).toBeVisible();
+  await expect(page.locator(".stage-layout:visible")).toHaveCount(0);
 
   await models.click();
   await expect(page.locator("#elements")).toBeHidden();
   await expect(page.locator("#collection-index")).toBeVisible();
-  const modelName = (await page.locator("#stage-model .stage-name").textContent()).trim();
-  const modelRows = page.locator("#stage-model .stage-list-name");
-  await expect(modelRows).not.toHaveCount(0);
-  expect(await modelRows.allTextContents()).not.toContain(modelName);
-  const modelDates = await page.locator("#stage-model .stage-list time").allTextContents();
-  for (let i = 1; i < modelDates.length; i += 1) expect(modelDates[i] <= modelDates[i - 1]).toBeTruthy();
+  await expect(page.locator("#stage-model .stage-layout [data-stage-layout='cards']")).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#stage-model .stage-list")).toHaveCount(0);
+  await expectStageDates(page, "model");
   await page.locator("#stage-model .link-button").click();
   await expect(page.locator("#model-dialog")).toBeVisible();
   await page.locator("#model-dialog").getByRole("button", { name: "Close" }).click();
 
+  await page.locator("#stage-model .stage-layout [data-stage-layout='list']").click();
+  await expect(page.locator("#stage-model .stage-cards")).toHaveCount(0);
+  await expect(page.locator("#stage-model .stage-list")).toBeVisible();
+  const listedDates = await page.locator("#stage-model .stage-list time").allTextContents();
+  for (let i = 1; i < listedDates.length; i += 1) expect(listedDates[i] <= listedDates[i - 1]).toBeTruthy();
+
   await systems.click();
   await expect(page.locator("#stage-model")).toBeHidden();
-  const systemName = (await page.locator("#stage-system .stage-name").textContent()).trim();
-  const systemRows = page.locator("#stage-system .stage-list-name");
-  await expect(systemRows).not.toHaveCount(0);
-  expect(await systemRows.allTextContents()).not.toContain(systemName);
-  const systemDates = await page.locator("#stage-system .stage-list time").allTextContents();
-  for (let i = 1; i < systemDates.length; i += 1) expect(systemDates[i] <= systemDates[i - 1]).toBeTruthy();
+  await expect(page.locator("#stage-system .stage-layout [data-stage-layout='list']")).toHaveAttribute("aria-pressed", "true");
   await page.locator("#stage-system .stage-list button").first().click();
   await expect(page.locator("#project-dialog")).toBeVisible();
   await page.locator("#project-dialog").getByRole("button", { name: "Close" }).click();
+  await page.locator("#stage-system .stage-layout [data-stage-layout='cards']").click();
+  await expectStageDates(page, "system");
+
+  await labs.click();
+  await expect(page.locator("#stage-system")).toBeHidden();
+  await expectStageDates(page, "lab");
+  await page.locator("#stage-lab .stage-cards button").first().click();
+  await expect(page.locator("#lab-dialog")).toBeVisible();
+  await page.locator("#lab-dialog").getByRole("button", { name: "Close" }).click();
+
+  await robots.click();
+  await expect(page.locator("#stage-lab")).toBeHidden();
+  await expectStageDates(page, "robot");
+  await page.locator("#stage-robot .stage-cards button").first().click();
+  await expect(page.locator("#robot-dialog")).toBeVisible();
+  await page.locator("#robot-dialog").getByRole("button", { name: "Close" }).click();
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator("#stage-robot .stage-layout")).toHaveCount(0);
+  await expect(page.locator("#stage-robot .stage-list")).toHaveCount(0);
+  await expect(page.locator("#stage-robot .stage-cards")).toBeVisible();
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  expect(overflow).toBeLessThanOrEqual(1);
 
   await elements.click();
   await expect(page.locator("#elements")).toBeVisible();
-  await expect(page.locator("#stage-system")).toBeHidden();
+  await expect(page.locator("#stage-robot")).toBeHidden();
+  await expect(page.locator(".stage-layout")).toHaveCount(0);
 });

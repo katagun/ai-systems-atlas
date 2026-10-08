@@ -547,9 +547,21 @@ h1 {
 .stage-list-name { font: 600 1rem var(--font-display); letter-spacing: -.02em; }
 .stage-list-meta { color: var(--muted); font-size: .85rem; }
 .stage-list time { color: var(--muted); font: .75rem var(--font-mono); }
+.stage-feature.is-lab { border-top-color: var(--slate-ink); }
+.stage-feature.is-robot { border-top-color: var(--violet); }
+.stage-rest-heading { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .4rem 1rem; margin-top: 1.35rem; }
+.stage-rest-heading .stage-list-label { margin: 0; }
+.stage-layout { display: flex; align-items: center; gap: 1rem; }
+.stage-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: .75rem; list-style: none; margin: .75rem 0 0; padding: 0; }
+.stage-card { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .75rem; width: 100%; min-height: 4.6rem; padding: .8rem .9rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); color: var(--text); text-align: left; cursor: pointer; }
+.stage-card:hover { border-color: var(--cyan); }
+.stage-card-copy { display: grid; gap: .12rem; min-width: 0; }
+.stage-card .stage-list-name,
+.stage-card .stage-list-meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.stage-card time { color: var(--muted); font: .72rem var(--font-mono); }
 @media (max-width: 720px) {
   .stage-list button { grid-template-columns: minmax(0, 1fr) auto; }
-  .stage-list-meta { display: none; }
+  .stage-list .stage-list-meta { display: none; }
 }
 /* Elements is a taxonomy map, not a ranking or a claim of physical periodicity. */
 .elements { margin-block: .5rem 1rem; }
@@ -1561,6 +1573,7 @@ footer #data-date, footer .footer-meta {
   .theme-toggle, .github-link { width: 32px; height: 36px; }
   .brand small { display: none; }
   .tabs { flex-wrap: nowrap; justify-content: center; gap: .5rem; min-width: 0; }
+  .stage-tabs { flex-wrap: wrap; justify-content: flex-start; row-gap: .1rem; column-gap: .85rem; }
   .tab, .tab-link { flex: 0 0 auto; display: inline-flex; align-items: center; min-height: 36px; padding: .3rem 0; font-size: .72rem; white-space: nowrap; }
   /* A button-anchored popup would hang off the viewport on a phone, where
      the Docs entry sits far from the right edge: the menu becomes a sheet

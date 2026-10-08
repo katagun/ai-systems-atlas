@@ -392,6 +392,23 @@ def recent_record_ids(records: list[dict], limit: int = RECENT_LIMIT) -> list[st
     return [record["id"] for record in newest_first[:limit]]
 
 
+def review_date_index(
+    records: list[dict], *, active_only: bool = False
+) -> dict[str, str]:
+    """Review dates for the front-door stage.
+
+    The boot record does not carry ``verified_at``. The stage orders by it
+    without loading every detail file. Systems and robots include active
+    records only; a lab has no status, so every dated lab is included.
+    """
+    return {
+        record["id"]: record["verified_at"]
+        for record in records
+        if record.get("verified_at")
+        and (not active_only or record.get("status") == "active")
+    }
+
+
 def dumps(payload) -> str:
     """Payloads are machine-read, so they are written minified with a trailing newline."""
     return json.dumps(payload, separators=(",", ":"), sort_keys=False) + "\n"
@@ -439,13 +456,10 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
                 "last": dates[-1] if dates else None,
                 "missing": len(active) - len(dates),
             }
-            # The boot record does not carry verified_at; the stage needs it
-            # to order active systems without loading every detail file.
-            envelope["review_dates"] = {
-                record["id"]: record["verified_at"]
-                for record in active
-                if record.get("verified_at")
-            }
+        if collection in {"systems", "labs", "robots"}:
+            envelope["review_dates"] = review_date_index(
+                records, active_only=collection != "labs"
+            )
         if collection == "models":
             envelope.update(
                 {
