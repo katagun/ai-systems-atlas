@@ -102,8 +102,8 @@ test("a goal's count matches the records the shortlist is drawn from", async ({ 
   // and the candidate set come from one predicate, so they cannot drift apart;
   // this is the reader-visible half of that. The number moves with each
   // coding-agent or coding-workflow record the catalog publishes.
-  await expect(page.locator("#finder-status")).toContainText("Write and maintain software: 51 active records match");
-  await expect(page.locator(".finder-result-heading")).toContainText("3 of 51 active records");
+  await expect(page.locator("#finder-status")).toContainText("Write and maintain software: 57 active records match");
+  await expect(page.locator(".finder-result-heading")).toContainText("3 of 57 active records");
 });
 
 test("choosing a job presses its tile and writes the URL", async ({ page }) => {
@@ -477,6 +477,10 @@ test("priority row: a front-door job button, clicked from a scrolled page, opens
 test("priority row: the search banner's Open shortlist opens the Finder with it in view on a phone", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
+  // Boot payloads arrive after load. Reading goals before they land caches an
+  // empty list, and a later search then has nothing eligible to shortlist.
+  // Phones hide the other families, so the first tile can be attached and hidden.
+  await page.locator("[data-element]").first().waitFor({ state: "attached" });
   // Any Finder goal with records to shortlist, asked for by its own label.
   const goal = await page.evaluate(() => finderGoalEntries().find(entry => entry.eligible).label);
   await searchAll(page, goal);

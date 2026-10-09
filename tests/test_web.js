@@ -3168,6 +3168,8 @@ test("only a found statement on a reviewed model paints a flag, and a flag is no
   assert.deepEqual(cardFlags("model", flagModel([FLAG_FOUND])).map(flag => [flag.id, flag.family]), [["maker_risk_safeguards", "flags"]]);
   assert.equal(cardFlags("model", flagModel([FLAG_FOUND_BOOT])).length, 1, "the boot entry is enough to paint");
   assert.deepEqual(cardFlags("model", flagModel([FLAG_NONE])), []);
+  // A rule-out is a statement, but the card never carries a warning mark for it.
+  assert.deepEqual(cardFlags("model", flagModel([{ ...FLAG_FOUND, determination: "below_threshold" }])), []);
   assert.deepEqual(cardFlags("model", flagModel()), []);
   assert.deepEqual(cardFlags("model", { ...flagModel([FLAG_FOUND]), review_status: "imported" }), []);
   assert.deepEqual(cardFlags("system", { system_family: "agent_system", flags: [FLAG_FOUND] }), []);
@@ -3191,6 +3193,12 @@ test("the flag tooltip prints the developer's term and determination and ends wi
   assert.equal(determined.name, "“Fixture Level 3” · Threshold reached");
   assert.equal(determined.sentence, `Example Lab states that this release reached “Fixture Level 3” in cyber, biological or chemical, and autonomy capability. The statement covers safeguards on a release channel. ${DISCLAIMER}`);
   assert.equal(flagEmblemText({ ...FLAG_FOUND, domains: ["autonomy"] }, "Example Lab", taxonomy).sentence.split(" capability")[0], "Example Lab names this release against “Fixture Level 3” in autonomy");
+  const standard = flagEmblemText({ ...FLAG_FOUND, determination: "safeguard_standard", tier_term: "ASL-2", domains: ["bio_chem"] }, "Example Lab", taxonomy);
+  assert.equal(standard.name, "“ASL-2” · Safeguard standard");
+  const ruledOut = flagEmblemText({ ...FLAG_FOUND, determination: "below_threshold", tier_term: "High", domains: ["bio_chem", "cyber"] }, "Example Lab", taxonomy);
+  assert.equal(ruledOut.name, "“High” · Below threshold");
+  assert.equal(ruledOut.sentence, `Example Lab states that this release did not reach “High” in biological or chemical and cyber capability. The statement covers the model itself. ${DISCLAIMER}`);
+  assert.equal(standard.sentence, `Example Lab states that this release ships under the “ASL-2” safeguard standard for biological or chemical capability. The statement covers the model itself. ${DISCLAIMER}`);
 });
 
 test("the boot entry alone gives the full tooltip and hidden text, with no detail fetch", () => {

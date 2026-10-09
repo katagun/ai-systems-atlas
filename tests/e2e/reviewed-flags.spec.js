@@ -114,10 +114,7 @@ test("a found statement sits second in a reviewed-model card's emblem row, after
   await expect(card.locator(`${FLAG} svg.badge-emblem`)).toHaveCount(1);
   await expect(card.locator(FLAG)).not.toHaveAttribute("tabindex");
   await expect(card.locator(FLAG)).toHaveAttribute("data-flag-record", FLAGGED.id);
-  // Badge meanings lists the emblems in the row's order, the flag second.
-  const [type, ...rest] = badges;
-  await expect(card.locator(".badge-help dt")).toHaveText([type.name, `Maker risk statement · ${flagName}`, ...rest.map(badge => badge.name)]);
-  await expect(card.locator(".badge-help dd")).toHaveText([type.definition, expected.sentence, ...rest.map(badge => badge.definition)]);
+  await expect(card.locator(".badge-help")).toHaveCount(0);
 });
 
 test("hovering the flag shows the family, the developer's term, and the sentence", async ({ page }) => {
@@ -219,6 +216,19 @@ test.describe("on a touch screen", () => {
 // The dialog's Risk statements section (ADR 042) in each of its three states,
 // plus the found statement still waiting on its detail file.
 const riskSection = (page, state) => recordView(page, "model").locator(state ? `section[data-risk="${state}"]` : "section[data-risk]");
+
+test("a rule-out paints no card emblem but is quoted in the dialog", async ({ page }) => {
+  const RULED_OUT = { ...FOUND, determination: "below_threshold", tier_term: "Fixture Level 3" };
+  await serveFlags(page, { [FLAGGED.id]: RULED_OUT });
+  await showModel(page, FLAGGED);
+  await expect(modelCard(page, FLAGGED).locator(".card-badges")).toHaveCount(1);
+  await expect(modelCard(page, FLAGGED).locator(FLAG)).toHaveCount(0);
+  await page.goto(`/?record=model:${FLAGGED.id}`);
+  const section = riskSection(page, "statement_found");
+  await expect(section.locator("h4")).toHaveText("“Fixture Level 3” · Below threshold");
+  await expect(section.locator("blockquote")).toHaveText(RULED_OUT.statement);
+  await expect(section).toContainText(flagEmblemText(RULED_OUT, FLAGGED.developer, taxonomy).sentence);
+});
 
 test("a found statement is quoted in the dialog with its link, date, confidence, and scope", async ({ page }) => {
   await serveFlags(page, { [FLAGGED.id]: FOUND });

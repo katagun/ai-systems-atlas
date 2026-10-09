@@ -363,6 +363,16 @@
       "id": "precautionary",
       "name": "Precautionary",
       "definition": "The developer states it could not rule the threshold out, or deployed safeguards as a precaution."
+    },
+    {
+      "id": "safeguard_standard",
+      "name": "Safeguard standard",
+      "definition": "The developer states the safeguard standard it deployed the release under, without saying whether the release reached a threshold or that one could not be ruled out."
+    },
+    {
+      "id": "below_threshold",
+      "name": "Below threshold",
+      "definition": "The developer states the release did not reach the threshold. The statement is shown with the record, and the card carries no emblem for it."
     }
   ],
   "flag_scopes": [
@@ -1916,6 +1926,11 @@
       "id": "LicenseRef-OpenMDW-1.1",
       "name": "OpenMDW License Agreement 1.1",
       "kind": "open_source"
+    },
+    {
+      "id": "LicenseRef-OSNL-0.2",
+      "name": "Open Source Native License 0.2",
+      "kind": "restricted"
     },
     {
       "id": "LicenseRef-Proprietary",

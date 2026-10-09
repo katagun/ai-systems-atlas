@@ -525,6 +525,7 @@
   <url><loc>https://peacefulcoexistance.com/records/models/model-zhipuai-glm-5v-turbo/</loc><lastmod>2026-09-18</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/models/model-zhipuai-glm-image/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/packs/agent-toolkit/</loc><lastmod>2026-09-17</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/packs/agentic-project-management/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/packs/ai-berkshire/</loc><lastmod>2026-09-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/packs/buildwithclaude/</loc><lastmod>2026-09-16</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/packs/claude-code-tresor/</loc><lastmod>2026-09-16</lastmod></url>
@@ -575,10 +576,13 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/adalflow/</loc><lastmod>2026-09-13</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/aden-hive/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/affine/</loc><lastmod>2026-09-01</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/agency-swarm/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/agent-memory/</loc><lastmod>2026-09-27</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/agent-orchestrator/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/agentic-flow/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/agenticseek/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/agentmemory/</loc><lastmod>2026-08-31</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/agents-deep-research/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/agentuniverse/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/agno/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/aider/</loc><lastmod>2026-08-23</lastmod></url>
@@ -595,7 +599,9 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/basic-memory/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/bedrock-agentcore/</loc><lastmod>2026-08-30</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/beeai-framework/</loc><lastmod>2026-09-02</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/boop-agent/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/botpress-cloud/</loc><lastmod>2026-08-31</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/botsharp/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/browser-use/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/camel/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/chatgpt/</loc><lastmod>2026-08-26</lastmod></url>
@@ -624,14 +630,17 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/cursor/</loc><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/darwin-godel-machine/</loc><lastmod>2026-09-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/db-gpt/</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/deep-research-agent/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/deepagents/</loc><lastmod>2026-09-13</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/deepcode/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/deepseek-harness/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/deepseek/</loc><lastmod>2026-08-26</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/deer-flow/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/dendron/</loc><lastmod>2026-09-02</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/desloppify/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/devin-desktop/</loc><lastmod>2026-09-14</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/devin/</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/devspace/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/dexter/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/dify/</loc><lastmod>2026-08-31</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/docsgpt/</loc><lastmod>2026-09-02</lastmod></url>
@@ -660,6 +669,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/gptme/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/graphiti/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/grok-bot/</loc><lastmod>2026-09-01</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/grok-build/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/grok-cli/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/grok/</loc><lastmod>2026-08-26</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/gstack/</loc><lastmod>2026-09-20</lastmod></url>
@@ -685,6 +695,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/letta-code/</loc><lastmod>2026-09-13</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/librechat/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/llamaindex/</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/llmstack/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/logseq/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/lurnby/</loc><lastmod>2026-09-13</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/magentic-ui/</loc><lastmod>2026-09-02</lastmod></url>
@@ -716,6 +727,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/munder-difflin/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/muse-code/</loc><lastmod>2026-08-30</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/n8n/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/nagaagent/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/nanobot/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/nanobrowser/</loc><lastmod>2026-09-12</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/nanoclaw/</loc><lastmod>2026-10-06</lastmod></url>
@@ -739,6 +751,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/open-grok/</loc><lastmod>2026-08-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/open-notebook/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/open-swe/</loc><lastmod>2026-09-02</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/openagent/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openai-agents-api/</loc><lastmod>2026-09-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openai-agents-js/</loc><lastmod>2026-09-29</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openai-agents-sdk/</loc><lastmod>2026-08-25</lastmod></url>
@@ -747,6 +760,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/opencode/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/opencursor/</loc><lastmod>2026-09-12</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openevolve/</loc><lastmod>2026-09-12</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/openhands-software-agent-sdk/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openhands/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openharness/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openhuman/</loc><lastmod>2026-09-11</lastmod></url>
@@ -762,6 +776,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/perplexity/</loc><lastmod>2026-08-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/pgvector/</loc><lastmod>2026-10-03</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/phantom/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/pi-desktop/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/pi/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/plandex/</loc><lastmod>2026-09-12</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/pool/</loc><lastmod>2026-09-02</lastmod></url>
@@ -773,12 +788,14 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/projectmem/</loc><lastmod>2026-09-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/pydantic-ai/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/qdrant/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/qm/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/quivr/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/qwen-code/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/ragflow/</loc><lastmod>2026-10-03</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/reasonix/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/reor/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/replit-agent/</loc><lastmod>2026-08-28</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/roma/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/roo-code/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/ruflo/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/ruoyi-ai/</loc><lastmod>2026-10-06</lastmod></url>
@@ -796,6 +813,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/slite/</loc><lastmod>2026-08-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/smart-second-brain/</loc><lastmod>2026-09-12</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/smolagents/</loc><lastmod>2026-09-14</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/solace-agent-mesh/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/sqlbot/</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/stagewise/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/strands-agents-sdk/</loc><lastmod>2026-08-29</lastmod></url>
@@ -808,9 +826,13 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/t3-chat/</loc><lastmod>2026-08-26</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/taskweaver/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/tencentdb-agent-memory/</loc><lastmod>2026-09-28</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/tradingagents-astock/</loc><lastmod>2026-10-07</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/tradingagents/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/trellis/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/trilium/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/trueforge/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/txtai/</loc><lastmod>2026-10-03</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/unreal-agent/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/vane/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/vanna/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/venice-ai/</loc><lastmod>2026-08-28</lastmod></url>

@@ -1857,7 +1857,9 @@
   function cardFlags(kind, record) {
     if (kind !== "model" || record.review_status !== "reviewed") return [];
     const entry = makerRiskEntry(record);
-    if (!entry || entry.status !== "statement_found") return [];
+    // A rule-out ("does not reach High") is shown in the record's Risk statements
+    // section, never as a card emblem: a warning mark would say the opposite.
+    if (!entry || entry.status !== "statement_found" || entry.determination === "below_threshold") return [];
     return [{ id: MAKER_RISK_FLAG, name: REVIEWED_FLAGS[MAKER_RISK_FLAG].name, family: FLAG_FAMILY, entry }];
   }
 
@@ -1876,9 +1878,13 @@
   // (ADR 042), so the emblem's words never wait for the detail file.
   function flagSentence(entry, developer, taxonomy) {
     const domains = joinPlain(entry.domains.map(id => vocabularyName(taxonomy, "flag_domains", id).toLowerCase()));
-    const claim = entry.determination === "determined"
-      ? `${developer} states that this release reached “${entry.tier_term}” in ${domains} capability.`
-      : `${developer} names this release against “${entry.tier_term}” in ${domains} capability, as a precaution.`;
+    const claims = {
+      determined: `${developer} states that this release reached “${entry.tier_term}” in ${domains} capability.`,
+      precautionary: `${developer} names this release against “${entry.tier_term}” in ${domains} capability, as a precaution.`,
+      safeguard_standard: `${developer} states that this release ships under the “${entry.tier_term}” safeguard standard for ${domains} capability.`,
+      below_threshold: `${developer} states that this release did not reach “${entry.tier_term}” in ${domains} capability.`,
+    };
+    const claim = claims[entry.determination];
     const scope = vocabularyName(taxonomy, "flag_scopes", entry.scope);
     return `${claim} The statement covers ${scope.charAt(0).toLowerCase()}${scope.slice(1)}. ${FLAG_DISCLAIMER}`;
   }
