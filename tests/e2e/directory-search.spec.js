@@ -357,7 +357,7 @@ test("assistant systems filter, score, and open without agent-only fields", asyn
   ]);
 
   await setFilter(page, "systems", "role", "multi_model_chat_client");
-  await expect(page.locator("#project-grid .project-card h2")).toHaveText(["Jan", "LibreChat", "T3 Chat", "Venice.ai"]);
+  await expect(page.locator("#project-grid .project-card h2")).toHaveText(["Jan", "LibreChat", "NagaAgent", "T3 Chat", "Venice.ai"]);
   await page.locator('#project-grid button[data-project="t3-chat"]').click();
   await expect(recordView(page, "system")).toContainText("Assistant-system score");
   await expect(recordView(page, "system")).toContainText("Context & continuity");
