@@ -893,6 +893,14 @@
       "useful_lesson": "A course can contain every mechanism a harness has, and runnable code for each, without being one: the README's own noun, the absence of a package or release, and a closing instruction to rebuild rather than reuse decide the gate, not star count or the quality of the lessons.",
       "excluded_at": "2026-10-07",
       "verified_at": "2026-10-07"
+    },
+    {
+      "name": "SuperDoc",
+      "repo": "superdoc/docx-editor",
+      "reason": "AGPL-3.0 with a separate commercial licence, which is not the ground. The README opens \"The document engine for DOCX files.\" and offers the same Document API for browser editing and for \"server-side automation and agent workflows\". The agent path is a tool surface for someone else's loop: the agents overview says \"The model decides what to do. SuperDoc provides the tools that read and change the document.\" and \"You do not need to write an agent loop or choose a model provider in SuperDoc.\" The build-an-agent page has the integrator write the loop, with the toolkit supplying tool definitions, a prompt and a dispatcher. Most of what the README advertises is also not in this tree: the Node.js SDK, Python SDK, CLI and MCP server it links are separate packages, and packages/ holds only the editor, layout, document-API and font packages. The engine that edits the DOCX is a separately published proprietary package: packages/superdoc/NOTICE says the npm tarball \"does not contain the engine implementation or its license files\", and the page it points to is titled \"SuperDoc DOCX Engine Proprietary License\". What remains reviewable is a browser document editor, which fails the agent family boundary in docs/CURATION.md (\"Frameworks qualify when building or running tool-using agents is a primary outcome\") whether or not the proprietary engine were counted.",
+      "useful_lesson": "A file-format or editor engine that ships an agent toolkit is a tool surface for the integrator's agent loop. Ask who runs the loop before counting the toolkit as an agent system, and check where the code that does the work lives before reading a licence file as covering it.",
+      "excluded_at": "2026-10-07",
+      "verified_at": "2026-10-07"
     }
   ]
 }

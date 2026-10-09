@@ -23,17 +23,17 @@ Every count below is generated, not transcribed. `uv run python scripts/validate
 <!-- catalog-counts: regenerate with `uv run python scripts/validate_directory.py --counts` -->
 
 ```text
-systems: 267
-  agent_system 183, assistant_system 18, memory_system 66
-  active-choice 255 (archived 9, superseded 3)
+systems: 273
+  agent_system 188, assistant_system 19, memory_system 66
+  active-choice 260 (archived 10, superseded 3)
 specifications: 22
 inference_services: 60
 local_runtimes: 17
 model_releases: 373
 models_dev_source_records: 448
 model_candidates: 10
-system_candidates: 94
-exclusions: 111
+system_candidates: 87
+exclusions: 112
 packs: 9
 labs: 64 covering 373 releases
 robots: 16

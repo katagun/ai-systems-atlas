@@ -628,6 +628,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/cursor/</loc><lastmod>2026-09-03</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/darwin-godel-machine/</loc><lastmod>2026-09-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/db-gpt/</loc><lastmod>2026-08-25</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/deep-research-agent/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/deepagents/</loc><lastmod>2026-09-13</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/deepcode/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/deepseek-harness/</loc><lastmod>2026-08-25</lastmod></url>
@@ -747,6 +748,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/open-grok/</loc><lastmod>2026-08-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/open-notebook/</loc><lastmod>2026-08-23</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/open-swe/</loc><lastmod>2026-09-02</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/openagent/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openai-agents-api/</loc><lastmod>2026-09-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openai-agents-js/</loc><lastmod>2026-09-29</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/openai-agents-sdk/</loc><lastmod>2026-08-25</lastmod></url>
@@ -807,6 +809,7 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/slite/</loc><lastmod>2026-08-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/smart-second-brain/</loc><lastmod>2026-09-12</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/smolagents/</loc><lastmod>2026-09-14</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/solace-agent-mesh/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/sqlbot/</loc><lastmod>2026-09-30</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/stagewise/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/strands-agents-sdk/</loc><lastmod>2026-08-29</lastmod></url>
@@ -820,9 +823,12 @@
   <url><loc>https://peacefulcoexistance.com/records/systems/taskweaver/</loc><lastmod>2026-09-02</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/tencentdb-agent-memory/</loc><lastmod>2026-09-28</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/tradingagents-astock/</loc><lastmod>2026-10-07</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/tradingagents/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/trellis/</loc><lastmod>2026-10-06</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/trilium/</loc><lastmod>2026-08-23</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/trueforge/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/txtai/</loc><lastmod>2026-10-03</lastmod></url>
+  <url><loc>https://peacefulcoexistance.com/records/systems/unreal-agent/</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/vane/</loc><lastmod>2026-09-01</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/vanna/</loc><lastmod>2026-08-25</lastmod></url>
   <url><loc>https://peacefulcoexistance.com/records/systems/venice-ai/</loc><lastmod>2026-08-28</lastmod></url>
