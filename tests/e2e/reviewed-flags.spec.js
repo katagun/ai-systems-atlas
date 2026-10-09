@@ -217,6 +217,19 @@ test.describe("on a touch screen", () => {
 // plus the found statement still waiting on its detail file.
 const riskSection = (page, state) => recordView(page, "model").locator(state ? `section[data-risk="${state}"]` : "section[data-risk]");
 
+test("a rule-out paints no card emblem but is quoted in the dialog", async ({ page }) => {
+  const RULED_OUT = { ...FOUND, determination: "below_threshold", tier_term: "Fixture Level 3" };
+  await serveFlags(page, { [FLAGGED.id]: RULED_OUT });
+  await showModel(page, FLAGGED);
+  await expect(modelCard(page, FLAGGED).locator(".card-badges")).toHaveCount(1);
+  await expect(modelCard(page, FLAGGED).locator(FLAG)).toHaveCount(0);
+  await page.goto(`/?record=model:${FLAGGED.id}`);
+  const section = riskSection(page, "statement_found");
+  await expect(section.locator("h4")).toHaveText("“Fixture Level 3” · Below threshold");
+  await expect(section.locator("blockquote")).toHaveText(RULED_OUT.statement);
+  await expect(section).toContainText(flagEmblemText(RULED_OUT, FLAGGED.developer, taxonomy).sentence);
+});
+
 test("a found statement is quoted in the dialog with its link, date, confidence, and scope", async ({ page }) => {
   await serveFlags(page, { [FLAGGED.id]: FOUND });
   await page.goto(`/?record=model:${FLAGGED.id}`);

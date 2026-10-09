@@ -4280,6 +4280,207 @@
       ]
     },
     {
+      "project_id": "llmstack",
+      "repo": "trypromptly/LLMStack",
+      "items": [
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Whole repository except vendored third-party components, which keep their own licences: a custom source-available text (the licensor is named as Maker Dojo, Inc; pyproject.toml declares ELv2) that grants use, copying, distribution and derivative works but bars providing the software to third parties as a hosted or managed service and bars circumventing its licence-key functionality",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/trypromptly/LLMStack/blob/main/LICENSE",
+          "blob_sha": "a1992f9f31f78d5dfa9e14e08cc15214b7a3018f",
+          "immutable_url": "https://api.github.com/repos/trypromptly/LLMStack/git/blobs/a1992f9f31f78d5dfa9e14e08cc15214b7a3018f"
+        }
+      ]
+    },
+    {
+      "project_id": "pi-desktop",
+      "repo": "vastsa/PI-Desktop",
+      "items": [
+        {
+          "license_id": "LGPL-3.0",
+          "scope": "Whole repository except the bundled pi.file-manager plugin directory, which carries its own file; the root file is the GNU Lesser General Public License version 3 (the Rust workspace manifest declares LGPL-3.0-or-later)",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/vastsa/PI-Desktop/blob/main/LICENSE",
+          "blob_sha": "0a041280bd00a9d068f503b8ee7ce35214bd24a1",
+          "immutable_url": "https://api.github.com/repos/vastsa/PI-Desktop/git/blobs/0a041280bd00a9d068f503b8ee7ce35214bd24a1"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "Only apps/desktop/resources/plugins/pi.file-manager/, a vendored copy of a third-party file-manager plugin released by Tioit-Wang under MIT",
+          "kind": "git_blob",
+          "path": "apps/desktop/resources/plugins/pi.file-manager/LICENSE",
+          "url": "https://github.com/vastsa/PI-Desktop/blob/main/apps/desktop/resources/plugins/pi.file-manager/LICENSE",
+          "blob_sha": "05cd7fbca357f42c2b9f101345b09920d022766e",
+          "immutable_url": "https://api.github.com/repos/vastsa/PI-Desktop/git/blobs/05cd7fbca357f42c2b9f101345b09920d022766e"
+        }
+      ]
+    },
+    {
+      "project_id": "agency-swarm",
+      "repo": "VRSEN/agency-swarm",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository; no nested or path-scoped licence file exists in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/VRSEN/agency-swarm/blob/main/LICENSE",
+          "blob_sha": "6caf2627c18934ece601d7f8e139e82a5eb8dde7",
+          "immutable_url": "https://api.github.com/repos/VRSEN/agency-swarm/git/blobs/6caf2627c18934ece601d7f8e139e82a5eb8dde7"
+        }
+      ]
+    },
+    {
+      "project_id": "devspace",
+      "repo": "Waishnav/devspace",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository; no nested or path-scoped licence file exists in the tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/Waishnav/devspace/blob/main/LICENSE",
+          "blob_sha": "27f7c57aab9107b53a1bef752d4cac035704d0dc",
+          "immutable_url": "https://api.github.com/repos/Waishnav/devspace/git/blobs/27f7c57aab9107b53a1bef752d4cac035704d0dc"
+        }
+      ]
+    },
+    {
+      "project_id": "grok-build",
+      "repo": "xai-org/grok-build",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "First-party code in the repository under Apache License 2.0 (copyright SpaceXAI); vendored third_party crates and ported tool code keep their own licences, listed in THIRD-PARTY-NOTICES, third_party/NOTICE, and crates/codegen/xai-grok-tools/THIRD_PARTY_NOTICES.md; the released binary's and the hosted models' terms are not covered by this file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/xai-org/grok-build/blob/main/LICENSE",
+          "blob_sha": "90b1793cf8eb2d6444863591e8405ecc707dc62d",
+          "immutable_url": "https://api.github.com/repos/xai-org/grok-build/git/blobs/90b1793cf8eb2d6444863591e8405ecc707dc62d"
+        }
+      ]
+    },
+    {
+      "project_id": "qm",
+      "repo": "yc-software/qm",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository except third-party material that carries its own notice; the same MIT text is also served as cli/LICENSE; skills-seed/taste-skill/LICENSE is a separate MIT file for that bundled skill (copyright Leonxlnx) and src/deploy/vendor/LICENSE reproduces MIT notices for vendored front-end packages",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/yc-software/qm/blob/main/LICENSE",
+          "blob_sha": "1bb48c345739f58481c3770d4fafdf702d1523e0",
+          "immutable_url": "https://api.github.com/repos/yc-software/qm/git/blobs/1bb48c345739f58481c3770d4fafdf702d1523e0"
+        }
+      ]
+    },
+    {
+      "project_id": "nagaagent",
+      "repo": "RTGS2017/NagaAgent",
+      "items": [
+        {
+          "license_id": "AGPL-3.0",
+          "scope": "Repository root LICENSE: the open-source grant for the whole repository except the vendored OpenClaw tree",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/RTGS2017/NagaAgent/blob/c2caa9079b9eb48129f550c43a5485231d404d3b/LICENSE",
+          "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+          "immutable_url": "https://api.github.com/repos/RTGS2017/NagaAgent/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52"
+        },
+        {
+          "license_id": "LicenseRef-Commercial",
+          "scope": "Alternative proprietary licence for closed-source use of the same software; no right is granted without the licensor's prior written consent",
+          "kind": "git_blob",
+          "path": "LICENSE-CLOSED-SOURCE",
+          "url": "https://github.com/RTGS2017/NagaAgent/blob/c2caa9079b9eb48129f550c43a5485231d404d3b/LICENSE-CLOSED-SOURCE",
+          "blob_sha": "baff9818c59056fe2d6d9eac657bbc5225546cab",
+          "immutable_url": "https://api.github.com/repos/RTGS2017/NagaAgent/git/blobs/baff9818c59056fe2d6d9eac657bbc5225546cab"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "vendor/openclaw only: the vendored OpenClaw source tree, copyright Peter Steinberger",
+          "kind": "git_blob",
+          "path": "vendor/openclaw/LICENSE",
+          "url": "https://github.com/RTGS2017/NagaAgent/blob/c2caa9079b9eb48129f550c43a5485231d404d3b/vendor/openclaw/LICENSE",
+          "blob_sha": "f7b526698bb7ed2d26d96c49f2f32234c88f69bc",
+          "immutable_url": "https://api.github.com/repos/RTGS2017/NagaAgent/git/blobs/f7b526698bb7ed2d26d96c49f2f32234c88f69bc"
+        }
+      ]
+    },
+    {
+      "project_id": "agentic-flow",
+      "repo": "ruvnet/agentic-flow",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Root package manifest of the repository, declaring the licence field as MIT; the repository root has no LICENSE file",
+          "kind": "git_blob",
+          "path": "package.json",
+          "url": "https://github.com/ruvnet/agentic-flow/blob/e993605b8389b85e85c5d10db8814befdfd3b540/package.json",
+          "blob_sha": "3d811210e1f5cf95f70b30ab6c00bb2d6894f6d0",
+          "immutable_url": "https://api.github.com/repos/ruvnet/agentic-flow/git/blobs/3d811210e1f5cf95f70b30ab6c00bb2d6894f6d0"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "agentic-flow/ package manifest (version 2.1.3, the package whose source holds the hooks, workers and intelligence store), declaring the licence field as MIT",
+          "kind": "git_blob",
+          "path": "agentic-flow/package.json",
+          "url": "https://github.com/ruvnet/agentic-flow/blob/e993605b8389b85e85c5d10db8814befdfd3b540/agentic-flow/package.json",
+          "blob_sha": "0080942539e76e7f2653146a454cb8ad249c89f5",
+          "immutable_url": "https://api.github.com/repos/ruvnet/agentic-flow/git/blobs/0080942539e76e7f2653146a454cb8ad249c89f5"
+        }
+      ]
+    },
+    {
+      "project_id": "botsharp",
+      "repo": "SciSharp/BotSharp",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository: the single root LICENSE file; no nested licence files or per-project licence overrides were found",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/SciSharp/BotSharp/blob/515198347b9aedb7aca006c02069179532d963df/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/SciSharp/BotSharp/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "roma",
+      "repo": "sentient-agi/ROMA",
+      "items": [
+        {
+          "license_id": "LicenseRef-Unclear",
+          "scope": "No licence file exists in the repository and none ever has; the pyproject declares no licence, and the platform reports none. The readme's License section is the only artifact asserting terms, in one sentence naming Apache 2.0 and linking a file that is not served",
+          "kind": "git_blob",
+          "path": "README.md",
+          "url": "https://github.com/sentient-agi/ROMA/blob/a6e3bb4f9e0694375fa627fa4b8bf8cae50592a6/README.md",
+          "blob_sha": "035ae6fc8e197c42545bad1748016861f6269e7a",
+          "immutable_url": "https://api.github.com/repos/sentient-agi/ROMA/git/blobs/035ae6fc8e197c42545bad1748016861f6269e7a"
+        }
+      ]
+    },
+    {
+      "project_id": "tradingagents-astock",
+      "repo": "simonlin1212/TradingAgents-astock",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository: the single root LICENSE file; the NOTICE file states the project is a fork of TauricResearch/TradingAgents, itself Apache-2.0, and lists the fork's modifications; no nested licence files",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/simonlin1212/TradingAgents-astock/blob/7fc142e5a622a16dcfce8c2544c771fc251f5dce/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/simonlin1212/TradingAgents-astock/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
       "project_id": "tradingagents",
       "repo": "TauricResearch/TradingAgents",
       "items": [
