@@ -477,6 +477,10 @@ test("priority row: a front-door job button, clicked from a scrolled page, opens
 test("priority row: the search banner's Open shortlist opens the Finder with it in view on a phone", async ({ page }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/");
+  // Boot payloads arrive after load. Reading goals before they land caches an
+  // empty list, and a later search then has nothing eligible to shortlist.
+  // Phones hide the other families, so the first tile can be attached and hidden.
+  await page.locator("[data-element]").first().waitFor({ state: "attached" });
   // Any Finder goal with records to shortlist, asked for by its own label.
   const goal = await page.evaluate(() => finderGoalEntries().find(entry => entry.eligible).label);
   await searchAll(page, goal);

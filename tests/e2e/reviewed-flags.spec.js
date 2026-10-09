@@ -114,10 +114,7 @@ test("a found statement sits second in a reviewed-model card's emblem row, after
   await expect(card.locator(`${FLAG} svg.badge-emblem`)).toHaveCount(1);
   await expect(card.locator(FLAG)).not.toHaveAttribute("tabindex");
   await expect(card.locator(FLAG)).toHaveAttribute("data-flag-record", FLAGGED.id);
-  // Badge meanings lists the emblems in the row's order, the flag second.
-  const [type, ...rest] = badges;
-  await expect(card.locator(".badge-help dt")).toHaveText([type.name, `Maker risk statement · ${flagName}`, ...rest.map(badge => badge.name)]);
-  await expect(card.locator(".badge-help dd")).toHaveText([type.definition, expected.sentence, ...rest.map(badge => badge.definition)]);
+  await expect(card.locator(".badge-help")).toHaveCount(0);
 });
 
 test("hovering the flag shows the family, the developer's term, and the sentence", async ({ page }) => {

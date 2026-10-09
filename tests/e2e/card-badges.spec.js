@@ -355,7 +355,7 @@ test.describe("on a touch screen", () => {
 });
 
 for (const width of [320, 1440]) {
-  test(`badge explanations support slow pointer travel and keyboard disclosure at ${width}px`, async ({ page }) => {
+  test(`badge explanations support slow pointer travel at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto(`/?collection=systems&q=${encodeURIComponent(openclaw.name)}`);
     await page.waitForFunction(() => searchIndexes.systems !== undefined);
@@ -379,15 +379,8 @@ for (const width of [320, 1440]) {
     await expect(tooltip).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(tooltip).toBeHidden();
-    const help = card.locator(".badge-help");
-    await help.locator("summary").focus();
-    await page.keyboard.press("Enter");
-    await expect(help).toHaveAttribute("open", "");
-    await expect(help.locator("dt")).toHaveText(cardBadges("system", openclaw).map(badge => badge.name));
-    await expect(help.locator("dd")).toHaveText(cardBadges("system", openclaw).map(badge => badge.definition));
+    await expect(card.locator(".badge-help")).toHaveCount(0);
     await expect(recordView(page)).toHaveCount(0);
-    await page.keyboard.press("Enter");
-    await expect(help).not.toHaveAttribute("open");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 }
