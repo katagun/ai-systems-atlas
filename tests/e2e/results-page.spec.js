@@ -595,8 +595,8 @@ test("in Systems a chosen family keeps the result row's Clear reading Clear filt
 // The rail sits before the results, one tab stop per group, so its first
 // stop skips it (review I5): a button, which leaves the URL alone, that hands
 // focus to the result count, after which Tab moves on into the results. It
-// is the first stop after the results bar, whose search, Sort, and Cards |
-// List (#471) come first. In
+// is the first stop after the results bar's last control, so the bar's
+// search, Sort, and Cards | List (#471) come first. In
 // Systems the scope note's own button comes before the grid; Specifications'
 // note has none, so there the next stop is in the grid.
 test("a keyboard reader can skip the rail to the results", async ({ page }) => {
@@ -607,17 +607,16 @@ test("a keyboard reader can skip the rail to the results", async ({ page }) => {
   ]) {
     await page.goto(`/?collection=${collection}`);
     await expect(page.locator("#filter-rail .filter-group").first()).toBeVisible();
-    await searchBox(page).focus();
-    const before = [];
-    let reached = false;
-    for (let press = 0; press < 8 && !reached; press += 1) {
-      await page.keyboard.press("Tab");
-      const stop = await page.evaluate(() => ({ skip: document.activeElement?.textContent === "Skip to results", inBar: Boolean(document.activeElement?.closest("#results-bar")), name: document.activeElement?.textContent.trim() || document.activeElement?.id }));
-      reached = stop.skip;
-      if (!reached) before.push(stop);
-    }
-    expect(reached, `${collection}: Tab reaches Skip to results`).toBe(true);
-    expect(before.filter(stop => !stop.inBar).map(stop => stop.name), `${collection}: only the results bar comes before it`).toEqual([]);
+    // The bar's last control that takes a Tab, then one Tab: the skip.
+    const last = await page.evaluate(() => {
+      const controls = [...document.querySelectorAll("#results-bar input, #results-bar select, #results-bar button")]
+        .filter(control => control.getClientRects().length && control.tabIndex >= 0 && !control.disabled);
+      controls.at(-1).dataset.lastBarControl = "";
+      return controls.at(-1).textContent.trim() || controls.at(-1).id;
+    });
+    await page.locator("[data-last-bar-control]").focus();
+    await page.keyboard.press("Tab");
+    expect(await page.evaluate(() => document.activeElement?.textContent), `${collection}: the first Tab stop after the bar's last control, ${last}, is the skip`).toBe("Skip to results");
     await expect(page.locator("#filter-rail").getByRole("button", { name: "Skip to results" })).toBeVisible();
     await page.keyboard.press("Enter");
     await expect(page.locator(count)).toBeFocused();
