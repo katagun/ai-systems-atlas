@@ -27087,7 +27087,24 @@
         }
       ],
       "metadata_verified_at": "2026-10-06",
-      "verified_at": "2026-10-06"
+      "verified_at": "2026-10-06",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "The results indicate that neither GPT-Image-2.5-Sunburst nor GPT-Image-2.5-Flare cross the Bio High threshold or the Cyber High threshold. We, regardless and as done in GPT-Images 2.0, take a precautionary approach and apply mitigations appropriate for a model treated as High capability in the biological-risk domain.",
+          "url": "https://deploymentsafety.openai.com/chatgpt-images-2-5/",
+          "content_sha256": "4707244c63d42d903e09d7a0afb42e8f9c52e6fc2da07537e49d7263df057081",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-image-2-5-sunburst",
@@ -27207,7 +27224,24 @@
         }
       ],
       "metadata_verified_at": "2026-10-06",
-      "verified_at": "2026-10-06"
+      "verified_at": "2026-10-06",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "The results indicate that neither GPT-Image-2.5-Sunburst nor GPT-Image-2.5-Flare cross the Bio High threshold or the Cyber High threshold. We, regardless and as done in GPT-Images 2.0, take a precautionary approach and apply mitigations appropriate for a model treated as High capability in the biological-risk domain.",
+          "url": "https://deploymentsafety.openai.com/chatgpt-images-2-5/",
+          "content_sha256": "4707244c63d42d903e09d7a0afb42e8f9c52e6fc2da07537e49d7263df057081",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-oss-20b",
@@ -27312,7 +27346,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://cdn.openai.com/pdf/419b6906-9da6-406c-a19d-1bb078ac7637/oai_gpt-oss_model_card.pdf",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-oss-safeguard-120b",
@@ -27417,7 +27460,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://cdn.openai.com/pdf/08b7dee4-8bc6-4955-a219-7793fb69090c/Technical_report__Research_Preview_of_gpt_oss_safeguard.pdf",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-oss-safeguard-20b",
@@ -27522,7 +27574,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://cdn.openai.com/pdf/08b7dee4-8bc6-4955-a219-7793fb69090c/Technical_report__Research_Preview_of_gpt_oss_safeguard.pdf",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-3-5-turbo",
@@ -27622,7 +27683,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "verified_at": "2026-09-22",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/gpt-3.5-turbo",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-4",
@@ -27722,7 +27792,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "verified_at": "2026-09-22",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/gpt-4",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-4-turbo",
@@ -27823,7 +27902,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "verified_at": "2026-09-22",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/gpt-4-turbo",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-4-1",
@@ -27919,7 +28007,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-04",
-      "verified_at": "2026-09-04"
+      "verified_at": "2026-09-04",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/gpt-4.1",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-4-1-mini",
@@ -28027,7 +28124,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-4-1-nano",
@@ -28128,7 +28234,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/gpt-4.1-nano",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-4o",
@@ -28230,7 +28345,26 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "medium risk",
+          "domains": [
+            "cyber",
+            "bio_chem",
+            "autonomy"
+          ],
+          "determination": "below_threshold",
+          "scope": "weights",
+          "statement": "After reviewing the results from the Preparedness evaluations, the Safety Advisory Group recommended classifying GPT‑4o before mitigations as borderline medium risk for persuasion, and low risk in all others.",
+          "url": "https://openai.com/index/gpt-4o-system-card/",
+          "content_sha256": "3e61d3a34570bc2f3e9d76e68bb708347f3096c4b3fc925983040fa34cb35be6",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-4o-mini",
@@ -28332,7 +28466,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/gpt-4o-mini",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5",
@@ -28433,7 +28576,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High capability",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "Similarly to ChatGPT agent, we have decided to treat gpt-5-thinking as High capability in the Biological and Chemical domain under our Preparedness Framework, activating the associated safeguards. While we do not have definitive evidence that this model could meaningfully help a novice to create severe biological harm–our defined threshold for High capability–we have chosen to take a precautionary approach.",
+          "url": "https://deploymentsafety.openai.com/gpt-5",
+          "content_sha256": "e574578cbb11f0c71ea9513498af1474fc9b5718b9465ed0f89bf1a88bc62e76",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-mini",
@@ -28541,7 +28701,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://deploymentsafety.openai.com/gpt-5",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-nano",
@@ -28649,7 +28818,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://deploymentsafety.openai.com/gpt-5",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-pro",
@@ -28757,7 +28935,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://deploymentsafety.openai.com/gpt-5",
+          "verified_at": "2026-10-09",
+          "research_confidence": "low"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-codex",
@@ -28864,7 +29051,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High risk",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "Like GPT-5, we are treating GPT-5-Codex as High risk in the Biological and Chemical domain.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-codex",
+          "content_sha256": "e67de04524efe37e6653c19b8719a3d2e81a1a73a08dfad9aa8e4e99da0d02c1",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-1",
@@ -28972,7 +29176,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High risk",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "As we did for GPT-5 at launch, we are continuing to treat GPT-5.1 as High risk in the Biological and Chemical domain, and continuing to apply the corresponding safeguards.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-1",
+          "content_sha256": "93d130bcf1ae05d14a7dcaa9d202a724caa7d4f20f409cc909163f2a824ddaf1",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-1-codex",
@@ -29079,7 +29300,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.1-codex",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-1-codex-max",
@@ -29186,7 +29416,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High risk",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "We are treating GPT-5.1-Codex-Max as High risk in the Biological and Chemical domain.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-1-codex-max",
+          "content_sha256": "b8ac2c39fdabfae17d453a71296d7d3ae659f40de1415cb030377cf859fcb548",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-1-codex-mini",
@@ -29293,7 +29540,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/gpt-5.1-codex-mini",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-2",
@@ -29401,7 +29657,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High capability",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "We are treating this launch as High capability in the Biological and Chemical domain, activating the associated Preparedness safeguards. We do not have definitive evidence that these models could meaningfully help a novice to create severe biological harm, our defined threshold for High capability, and these models remain on the cusp of being able to reach this capability.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-2",
+          "content_sha256": "f5c80ab6cc54aaac1dabbdc5a9f67d8c20678c027420f315e848ff8cfac876b1",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-2-codex",
@@ -29509,7 +29782,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "As we did for other models in the GPT-5 series, we are treating GPT-5.2-Codex as High risk in the Biological and Chemical domain, and continuing to apply the corresponding safeguards.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-2-codex",
+          "content_sha256": "aa89d91c3671bfd5b892e56d0fd43f50f4a2f88cf0cc7482653ec6c94a6b6851",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-2-pro",
@@ -29610,7 +29900,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://deploymentsafety.openai.com/gpt-5-2",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-3-codex",
@@ -29718,7 +30017,25 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High",
+          "domains": [
+            "cyber",
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "As discussed in more detail below, this is the first launch we are treating as High capability in Cybersecurity. Thus, we consider the safeguards associated with High cybersecurity capability to be a necessary precaution. We are also treating GPT-5.3-Codex as High risk in the Biological and Chemical domain, and applying the same safeguards as for our other deployments of models that reach this designation.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-3-codex",
+          "content_sha256": "02b9fa09a776a73fd234a46cd53134cd0a69f5eda0a429ab1b0eb3d3391b5fd9",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-4",
@@ -29827,7 +30144,25 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High capability",
+          "domains": [
+            "bio_chem",
+            "cyber"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "As we did for gpt-5.2-thinking before it, we are continuing to treat gpt-5.4-thinking as High capability in the Biological and Chemical domain. We have applied the corresponding safeguards for this model as described in the GPT-5 system card. As we did for gpt-5.3-codex, we are treating gpt-5.4-thinking as High capability in the Cybersecurity domain, and applied safeguards as described in the Safeguard section below.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-4-thinking",
+          "content_sha256": "4b35355dfe6f143b53c8d6127467a7c125b23468a5849707caf5eb744ae9657f",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-4-mini",
@@ -29935,7 +30270,26 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High capability",
+          "domains": [
+            "bio_chem",
+            "cyber",
+            "autonomy"
+          ],
+          "determination": "below_threshold",
+          "scope": "weights",
+          "statement": "Based on our Preparedness evaluations, we have determined that GPT-5.4 mini as below High capability across biochemical, cybersecurity, and AI-self improvement domains.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-4-thinking",
+          "content_sha256": "4b35355dfe6f143b53c8d6127467a7c125b23468a5849707caf5eb744ae9657f",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-4-nano",
@@ -30043,7 +30397,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://deploymentsafety.openai.com/gpt-5-4-thinking",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-4-pro",
@@ -30151,7 +30514,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://deploymentsafety.openai.com/gpt-5-4-thinking",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-5",
@@ -30272,7 +30644,25 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High capability",
+          "domains": [
+            "bio_chem",
+            "cyber"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "As we did for GPT-5.4 Thinking before it, we are continuing to treat GPT-5.5 as High capability in the Biological and Chemical domain. We have applied the corresponding safeguards for this model as described in the GPT-5 system card. As we did for GPT-5.3-Codex and GPT-5.4-thinking, we are treating GPT-5.5 as High capability in the Cybersecurity domain, but below Critical.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-5",
+          "content_sha256": "3bbb721e756b622ebf2e96f4883a65d187d75fb2b08178334621b30adf42e059",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-5-instant",
@@ -30393,7 +30783,25 @@
         }
       ],
       "metadata_verified_at": "2026-09-12",
-      "verified_at": "2026-09-12"
+      "verified_at": "2026-09-12",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High Capability",
+          "domains": [
+            "bio_chem",
+            "cyber"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "GPT-5.5 Instant is our first Instant model to be treated as High Capability in the Biological and Chemical domain, as well as in the Cybersecurity domain. As such, we have applied biological and chemical, and cybersecurity, safeguards to this deployment.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-5-instant",
+          "content_sha256": "2bf8c3dc34ade91c869350ba8540800f16079ec5abceddb6cf206bb81077d849",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-5-pro",
@@ -30507,7 +30915,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-12",
-      "verified_at": "2026-09-12"
+      "verified_at": "2026-09-12",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://deploymentsafety.openai.com/gpt-5-5",
+          "verified_at": "2026-10-09",
+          "research_confidence": "low"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-6-luna",
@@ -30628,7 +31045,25 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High",
+          "domains": [
+            "cyber",
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "Under our Preparedness Framework, we are treating Sol, Terra and Luna as High capability in both Cybersecurity and Biological and Chemical risk.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-6/",
+          "content_sha256": "dd387153d747da76982a6da6a8aeafa03d491aa8abe5d6f4bd25745d3a68bcfa",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-6-sol",
@@ -30749,7 +31184,25 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High",
+          "domains": [
+            "cyber",
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "Under our Preparedness Framework, we are treating Sol, Terra and Luna as High capability in both Cybersecurity and Biological and Chemical risk.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-6/",
+          "content_sha256": "dd387153d747da76982a6da6a8aeafa03d491aa8abe5d6f4bd25745d3a68bcfa",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-5-6-terra",
@@ -30870,7 +31323,25 @@
         }
       ],
       "metadata_verified_at": "2026-09-16",
-      "verified_at": "2026-09-16"
+      "verified_at": "2026-09-16",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High",
+          "domains": [
+            "cyber",
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "Under our Preparedness Framework, we are treating Sol, Terra and Luna as High capability in both Cybersecurity and Biological and Chemical risk.",
+          "url": "https://deploymentsafety.openai.com/gpt-5-6/",
+          "content_sha256": "dd387153d747da76982a6da6a8aeafa03d491aa8abe5d6f4bd25745d3a68bcfa",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-6-astra",
@@ -30991,7 +31462,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "Critical",
+          "domains": [
+            "cyber"
+          ],
+          "determination": "determined",
+          "scope": "weights",
+          "statement": "Today, we are releasing GPT-6 Astra, the most capable model we have ever broadly deployed. Astra is our first model to reach the Critical level of cybersecurity capability under our Preparedness Framework.",
+          "url": "https://deploymentsafety.openai.com/gpt-6-astra/",
+          "content_sha256": "8f13bca387cc4990574bb106556d3a678b7c17cc6c8df0aa4e83df36a4367a82",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-6-luna",
@@ -31124,7 +31612,25 @@
         }
       ],
       "metadata_verified_at": "2026-10-06",
-      "verified_at": "2026-10-06"
+      "verified_at": "2026-10-06",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High",
+          "domains": [
+            "cyber",
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "Under our Preparedness Framework, we are treating GPT-6 Sol and GPT-6 Luna as High capability in both Cybersecurity and Biological and Chemical domains.",
+          "url": "https://deploymentsafety.openai.com/gpt-6-astra/",
+          "content_sha256": "8f13bca387cc4990574bb106556d3a678b7c17cc6c8df0aa4e83df36a4367a82",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-6-sol",
@@ -31257,7 +31763,25 @@
         }
       ],
       "metadata_verified_at": "2026-10-06",
-      "verified_at": "2026-10-06"
+      "verified_at": "2026-10-06",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High",
+          "domains": [
+            "cyber",
+            "bio_chem"
+          ],
+          "determination": "precautionary",
+          "scope": "weights",
+          "statement": "Under our Preparedness Framework, we are treating GPT-6 Sol and GPT-6 Luna as High capability in both Cybersecurity and Biological and Chemical domains.",
+          "url": "https://deploymentsafety.openai.com/gpt-6-astra/",
+          "content_sha256": "8f13bca387cc4990574bb106556d3a678b7c17cc6c8df0aa4e83df36a4367a82",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-6-1-sol",
@@ -31390,7 +31914,24 @@
         }
       ],
       "metadata_verified_at": "2026-10-06",
-      "verified_at": "2026-10-06"
+      "verified_at": "2026-10-06",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "Critical",
+          "domains": [
+            "cyber"
+          ],
+          "determination": "determined",
+          "scope": "weights",
+          "statement": "We determined that GPT-6.1 Sol reaches the Critical threshold for cybersecurity capabilities under the Preparedness Framework.",
+          "url": "https://deploymentsafety.openai.com/gpt-6-1-sol/",
+          "content_sha256": "42e6a60e8b4a21ed8242f8c472b8e401bdc6623ee37a92df4ba1bd1fedcf47f5",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-audio",
@@ -31499,7 +32040,16 @@
         }
       ],
       "metadata_verified_at": "2026-10-06",
-      "verified_at": "2026-10-06"
+      "verified_at": "2026-10-06",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/gpt-audio",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-image-2",
@@ -31613,7 +32163,16 @@
         }
       ],
       "metadata_verified_at": "2026-10-06",
-      "verified_at": "2026-10-06"
+      "verified_at": "2026-10-06",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://deploymentsafety.openai.com/chatgpt-images-2-0/",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-oss-120b",
@@ -31718,7 +32277,26 @@
         }
       ],
       "metadata_verified_at": "2026-09-11",
-      "verified_at": "2026-09-11"
+      "verified_at": "2026-09-11",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High capability",
+          "domains": [
+            "bio_chem",
+            "cyber",
+            "autonomy"
+          ],
+          "determination": "below_threshold",
+          "scope": "weights",
+          "statement": "We ran scalable capability evaluations on gpt-oss-120b, and confirmed that the default model does not reach our indicative thresholds for High capability in any of the three Tracked Categories of our Preparedness Framework (Biological and Chemical capability, Cyber capability, and AI Self-Improvement).",
+          "url": "https://deploymentsafety.openai.com/gpt-oss/",
+          "content_sha256": "229bcad586c82893d0834b40ec74ef91def2506efbc30045d70fd41a200da1fc",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-realtime-2-1",
@@ -31827,7 +32405,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/gpt-realtime-2.1",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-gpt-realtime-whisper",
@@ -31933,7 +32520,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-18",
-      "verified_at": "2026-09-18"
+      "verified_at": "2026-09-18",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/gpt-realtime-whisper",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-o1",
@@ -32035,7 +32631,24 @@
         }
       ],
       "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "verified_at": "2026-09-22",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "medium",
+          "domains": [
+            "bio_chem"
+          ],
+          "determination": "determined",
+          "scope": "weights",
+          "statement": "Our evaluations found that o1 can help experts with the operational planning of reproducing a known biological threat, which meets our medium risk threshold.",
+          "url": "https://cdn.openai.com/o1-system-card-20241205.pdf",
+          "content_sha256": "3ba7bdbe69e022f6be0527edbfe18ac1becdea48d5be9891ab764ff336c8a033",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-o1-pro",
@@ -32136,7 +32749,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "verified_at": "2026-09-22",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/o1-pro",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-o3",
@@ -32238,7 +32860,26 @@
         }
       ],
       "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "verified_at": "2026-09-22",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High",
+          "domains": [
+            "bio_chem",
+            "cyber",
+            "autonomy"
+          ],
+          "determination": "below_threshold",
+          "scope": "weights",
+          "statement": "OpenAI’s Safety Advisory Group (SAG) reviewed the results of our Preparedness evaluations and determined that OpenAI o3 and o4-mini do not reach the High threshold in any of our three Tracked Categories: Biological and Chemical Capability, Cybersecurity, and AI Self-improvement.",
+          "url": "https://deploymentsafety.openai.com/o3/",
+          "content_sha256": "72f5606c7115141dee7736f09a853fa5fb4cda2b5315ad9ca1c43a5ca4310bc6",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-o3-mini",
@@ -32338,7 +32979,25 @@
         }
       ],
       "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "verified_at": "2026-09-22",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "Medium",
+          "domains": [
+            "bio_chem",
+            "autonomy"
+          ],
+          "determination": "determined",
+          "scope": "weights",
+          "statement": "Under the Preparedness Framework, OpenAI’s Safety Advisory Group (SAG) recommended classifying the OpenAI o3-mini (Pre-Mitigation) model as Medium risk overall. It scores Medium risk for Persuasion, CBRN (chemical, biological, radiological, nuclear), and Model Autonomy, and Low risk for Cybersecurity.",
+          "url": "https://cdn.openai.com/o3-mini-system-card-feb10.pdf",
+          "content_sha256": "420c260d935429e38a31044b287378802218b6edcc5de72b66cca9346b0197fa",
+          "verified_at": "2026-10-09",
+          "research_confidence": "high"
+        }
+      ]
     },
     {
       "id": "model-openai-o3-pro",
@@ -32439,7 +33098,16 @@
         }
       ],
       "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "verified_at": "2026-09-22",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://developers.openai.com/api/docs/models/o3-pro",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openai-o4-mini",
@@ -32540,7 +33208,26 @@
         }
       ],
       "metadata_verified_at": "2026-09-22",
-      "verified_at": "2026-09-22"
+      "verified_at": "2026-09-22",
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "statement_found",
+          "tier_term": "High",
+          "domains": [
+            "bio_chem",
+            "cyber",
+            "autonomy"
+          ],
+          "determination": "below_threshold",
+          "scope": "weights",
+          "statement": "OpenAI’s Safety Advisory Group (SAG) reviewed the results of our Preparedness evaluations and determined that OpenAI o3 and o4-mini do not reach the High threshold in any of our three Tracked Categories: Biological and Chemical Capability, Cybersecurity, and AI Self-improvement.",
+          "url": "https://deploymentsafety.openai.com/o3/",
+          "content_sha256": "72f5606c7115141dee7736f09a853fa5fb4cda2b5315ad9ca1c43a5ca4310bc6",
+          "verified_at": "2026-10-09",
+          "research_confidence": "medium"
+        }
+      ]
     },
     {
       "id": "model-openbmb-minicpm5-1b",

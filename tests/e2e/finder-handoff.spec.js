@@ -98,12 +98,12 @@ test("a goal's count matches the records the shortlist is drawn from", async ({ 
   await page.goto("/?view=finder");
   await shortlist(page);
 
-  // "52 active records match" for a goal drawn from two roles. The tile count
+  // "51 active records match" for a goal drawn from two roles. The tile count
   // and the candidate set come from one predicate, so they cannot drift apart;
   // this is the reader-visible half of that. The number moves with each
   // coding-agent or coding-workflow record the catalog publishes.
-  await expect(page.locator("#finder-status")).toContainText("Write and maintain software: 52 active records match");
-  await expect(page.locator(".finder-result-heading")).toContainText("3 of 52 active records");
+  await expect(page.locator("#finder-status")).toContainText("Write and maintain software: 57 active records match");
+  await expect(page.locator(".finder-result-heading")).toContainText("3 of 57 active records");
 });
 
 test("choosing a job presses its tile and writes the URL", async ({ page }) => {
