@@ -877,6 +877,14 @@
       "useful_lesson": "When the docs say a skill lets one agent coordinate workers, find where the coordinating logic runs. If it runs in the vendor agent, the surface is the control layer and not the orchestrator.",
       "excluded_at": "2026-10-06",
       "verified_at": "2026-10-06"
+    },
+    {
+      "name": "ADHD",
+      "repo": "UditAkhourii/adhd",
+      "reason": "MIT, actively maintained, and widely adopted, but it fails the agent-system boundary. The npm package and skill implement a fixed pipeline of one-shot model calls through the Claude Agent SDK: src/llm.ts creates each call with an empty tool list (its comment: 'No tools — divergence is pure generation'), src/engine.ts fans out parallel branches under cognitive frames, scores and clusters the ideas with a second call, and returns a ranked report. Nothing plans through tools, acts on a project, or keeps durable state between runs, so it is a reasoning technique and prompt pipeline rather than a system that plans and acts through tools. The skill document is instruction text a host reads, which the pack prongs treat as outside the scored catalog, and the only shipped code carries out text generation, which is neither owned state nor enforced work. The adopters list and benchmark results are the maintainer's own claims.",
+      "useful_lesson": "A repository that fans out model calls with the tool list set to empty is a prompting method however many branches it runs; look for the tool, the state it writes, or the action it takes before treating the fan-out as orchestration.",
+      "excluded_at": "2026-10-07",
+      "verified_at": "2026-10-07"
     }
   ]
 }

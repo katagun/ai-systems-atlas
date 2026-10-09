@@ -3448,7 +3448,8 @@
       ],
       "systems": [
         "grok",
-        "grok-bot"
+        "grok-bot",
+        "grok-build"
       ],
       "channels": [
         {

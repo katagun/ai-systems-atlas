@@ -102,8 +102,8 @@ test("a goal's count matches the records the shortlist is drawn from", async ({ 
   // and the candidate set come from one predicate, so they cannot drift apart;
   // this is the reader-visible half of that. The number moves with each
   // coding-agent or coding-workflow record the catalog publishes.
-  await expect(page.locator("#finder-status")).toContainText("Write and maintain software: 51 active records match");
-  await expect(page.locator(".finder-result-heading")).toContainText("3 of 51 active records");
+  await expect(page.locator("#finder-status")).toContainText("Write and maintain software: 54 active records match");
+  await expect(page.locator(".finder-result-heading")).toContainText("3 of 54 active records");
 });
 
 test("choosing a job presses its tile and writes the URL", async ({ page }) => {
