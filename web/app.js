@@ -1290,9 +1290,9 @@ function syncScopeStrip() {
 // live height is a custom property the stylesheet reads; the strip's is
 // another, which the results bar sticks under above 1000 px. The sticky
 // height is a third, html's scroll-padding-top, so focus moving through a
-// grid stops below the header, the strip, and the bar rather than under
-// them. The strip's height changes with the family row, so every strip
-// render re-measures.
+// grid stops below the header, the strip, the bar, and the result row
+// rather than under them. The strip's height changes with the family row,
+// so every strip render re-measures.
 function syncStickyClearance() {
   const header = $(".site-header");
   if (!header) return;
@@ -1301,7 +1301,12 @@ function syncStickyClearance() {
   document.documentElement.style.setProperty("--strip-height", `${strip && !strip.hidden ? strip.getBoundingClientRect().height : 0}px`);
   const bar = $("#results-bar");
   document.documentElement.style.setProperty("--results-bar-height", `${bar && !bar.hidden ? bar.getBoundingClientRect().height : 0}px`);
-  document.documentElement.style.setProperty("--sticky-clearance", `${stickyHeight()}px`);
+  // The result row sticks under the bar, so a focused card or list row has to
+  // clear it too. It is not part of stickyHeight: that row is the top of the
+  // results panel, and counting it would scroll the panel down by its own height.
+  const row = $(".result-row");
+  const rowHeight = row && !row.hidden && getComputedStyle(row).position === "sticky" ? row.getBoundingClientRect().height : 0;
+  document.documentElement.style.setProperty("--sticky-clearance", `${stickyHeight() + rowHeight}px`);
 }
 
 // The one way a tile or a strip entry opens a collection. A facet narrows
@@ -2547,7 +2552,7 @@ const finderDetailAwaited = new Set();
 // hidden one measures no height.
 function stickyHeight() {
   const sticky = element => element && !element.hidden && getComputedStyle(element).position === "sticky" ? element.getBoundingClientRect().height : 0;
-  return sticky($(".site-header")) + sticky($("#scope-strip")) + sticky($("#results-bar")) + sticky($(".result-row"));
+  return sticky($(".site-header")) + sticky($("#scope-strip")) + sticky($("#results-bar"));
 }
 
 // The sticky height plus the reading margin a scroll correction leaves beneath
