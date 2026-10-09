@@ -736,6 +736,11 @@ input:focus, select:focus {
   align-items: center;
   justify-content: space-between;
   gap: .55rem;
+  position: sticky;
+  top: calc(var(--header-height, 88px) + var(--strip-height, 0px) + var(--results-bar-height, 0px));
+  z-index: 7;
+  background: var(--header-bg);
+  backdrop-filter: blur(20px) saturate(140%);
   color: var(--muted);
   font-size: .86rem;
 }
@@ -771,15 +776,22 @@ input:focus, select:focus {
 .pager-nav .ghost-button:disabled:hover { border-color: var(--line-strong); color: var(--muted); }
 
 .project-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.15rem; }
-.project-grid.is-list { display: block; }
+.project-grid.is-list { display: block; overflow-x: auto; }
 .results-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
-.results-table th, .results-table td { padding: .65rem .5rem; text-align: left; vertical-align: top; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
-.results-table thead th { border-top: 0; color: var(--muted); font: 600 .62rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+/* Break long words only once a column is already too narrow. `anywhere` on every
+   cell let Score, Local-first, and review dates shrink to a few characters while
+   Deployment and Licenses kept the width. */
+.results-table th, .results-table td { padding: .65rem .5rem; text-align: left; vertical-align: top; border-top: 1px solid var(--line); overflow-wrap: break-word; }
+.results-table thead th { border-top: 0; white-space: nowrap; overflow-wrap: normal; color: var(--muted); font: 600 .62rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
 .results-table .link-button { font: 600 .95rem var(--font-display); letter-spacing: -.02em; }
 .results-table .card-badges { margin-top: .35rem; }
-/* The table wraps anywhere so a long license can shrink. That also breaks
-   "Compare" inside a squeezed last column, so this column keeps its label. */
+.results-table .name-cell { min-width: 12rem; }
+.results-table .role-cell { min-width: 9.5rem; }
+/* Shrink-to-fit: a 1% width with nowrap sizes the column to its text, so a date,
+   a score, or "No GitHub metrics" cannot be broken to feed a wider prose column. */
+.results-table .fit-cell,
 .results-table .compare-cell { width: 1%; white-space: nowrap; overflow-wrap: normal; }
+.results-table .token-cell { overflow-wrap: anywhere; }
 .project-card {
   min-height: 340px;
   padding: 1.4rem;

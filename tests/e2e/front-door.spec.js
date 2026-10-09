@@ -816,6 +816,31 @@ test("Models, Systems, Labs, and Robots open as cards, newest first where a date
 test("a list Compare label stays inside its button", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto("/?family=agent_system&role=research_agent&layout=list&collection=systems");
+  const singleLine = locator => locator.evaluate(element => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    return range.getClientRects().length === 1;
+  });
+  const headers = page.locator("#project-grid thead th");
+  for (const [index, label] of [[4, "Local-first"], [6, "Score"]]) {
+    await expect(headers.nth(index)).toHaveText(label);
+    expect(await singleLine(headers.nth(index)), label).toBe(true);
+  }
+  const first = page.locator("#project-grid tbody tr").first();
+  expect(await singleLine(first.locator("td").nth(0)), "role").toBe(true);
+  expect(await singleLine(first.locator("td").nth(4)), "review date").toBe(true);
+  expect(await singleLine(page.locator("#project-grid tbody tr").filter({ hasText: "Kosmos" }).locator("td").nth(6)), "stars").toBe(true);
+  expect(await singleLine(page.locator("#project-grid tbody tr").filter({ hasText: "Open Deep Research" }).locator(".link-button")), "name").toBe(true);
+  await expect(page.locator('[data-scope-note="systems"] [data-family-score="ready"]')).toBeVisible();
+  await expect(page.locator('[data-scope-note="systems"] [data-family-score="needed"]')).toBeHidden();
+  await page.evaluate(() => window.scrollTo({ top: 700, behavior: "instant" }));
+  const [barBottom, rowTop] = await page.evaluate(() => [
+    document.querySelector("#results-bar").getBoundingClientRect().bottom,
+    document.querySelector(".result-row").getBoundingClientRect().top,
+  ]);
+  expect(Math.abs(rowTop - barBottom), `count row ${rowTop}, bar bottom ${barBottom}`).toBeLessThan(1);
+  await expect(page.locator("#result-count")).toContainText("8 projects");
+  await expect(page.locator("#filter-chips")).toContainText("Role: Research agent");
   const button = page.locator("#project-grid .compare-toggle").first();
   await button.scrollIntoViewIfNeeded();
   const fits = async () => button.evaluate(element => {
