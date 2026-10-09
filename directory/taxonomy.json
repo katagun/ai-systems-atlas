@@ -368,6 +368,11 @@
       "id": "safeguard_standard",
       "name": "Safeguard standard",
       "definition": "The developer states the safeguard standard it deployed the release under, without saying whether the release reached a threshold or that one could not be ruled out."
+    },
+    {
+      "id": "below_threshold",
+      "name": "Below threshold",
+      "definition": "The developer states the release did not reach the threshold. The statement is shown with the record, and the card carries no emblem for it."
     }
   ],
   "flag_scopes": [
