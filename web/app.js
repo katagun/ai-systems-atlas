@@ -540,6 +540,51 @@ function syncResultsBar(scope) {
   syncLayoutButtons();
 }
 
+// Constraints that differ from the collection's defaults. Sort counts only
+// when the reader chose one; Best match is the search's own order, so it
+// never becomes a chip. Query and layout are not filters.
+const FILTER_CHROME_SKIP = new Set(["q", "sort", "layout", "browseSort"]);
+function activeFilterChips(scope) {
+  const controls = SCOPE_CONTROLS[scope] || {};
+  const defaults = AppCore.SCOPE_URL_PARAMS[scope] || {};
+  const chips = [];
+  for (const [key, selector] of Object.entries(controls)) {
+    if (FILTER_CHROME_SKIP.has(key)) continue;
+    const select = $(selector);
+    if (!select || String(select.value) === String(defaults[key] ?? "")) continue;
+    const label = select.closest("label")?.querySelector("span")?.textContent?.trim() || key;
+    chips.push({ key, label, text: select.selectedOptions[0]?.textContent?.trim() || select.value });
+  }
+  const sortLabel = $("#sort-label");
+  if (sortLabel && !sortLabel.hidden && defaults.sort !== undefined) {
+    const select = $("#sort-filter");
+    if (select.value && select.value !== String(defaults.sort) && select.value !== "match") {
+      chips.push({ key: "sort", label: "Sort", text: select.selectedOptions[0]?.textContent?.trim() || select.value });
+    }
+  }
+  return chips;
+}
+
+// The narrow Filters control names how many constraints are on, and the
+// result row shows each one as a removable chip, so closing the drawer
+// never hides why the list is narrowed.
+function syncFilterChrome() {
+  const scope = state.directoryCollection;
+  const chips = activeFilterChips(scope);
+  const host = $("#filter-chips");
+  if (host) {
+    host.innerHTML = chips.map(chip =>
+      `<button type="button" class="filter-chip" data-clear-filter="${escapeHTML(chip.key)}">${escapeHTML(chip.label)}: ${escapeHTML(chip.text)}<span aria-hidden="true"> ×</span><span class="visually-hidden">, remove</span></button>`
+    ).join("");
+  }
+  const toggle = $("#filters-toggle");
+  if (!toggle) return;
+  const controls = SCOPE_CONTROLS[scope] || {};
+  const hasFilters = Object.keys(controls).some(key => !FILTER_CHROME_SKIP.has(key));
+  toggle.hidden = !(hasFilters || AppCore.SCOPE_URL_PARAMS[scope]?.sort);
+  toggle.textContent = chips.length ? `Filters · ${chips.length}` : "Filters";
+}
+
 // "12 results" beside a search box while it holds a query.
 function setSearchCount(scope, count) {
   const selector = SCOPE_CONTROLS[scope]?.q;
@@ -964,6 +1009,7 @@ let elementGroups = [];
 const MOBILE_ELEMENT_FAMILIES = ["agent_system", "memory_system", "assistant_system"];
 let mobileElementFamily = MOBILE_ELEMENT_FAMILIES[0];
 const mobileLayout = window.matchMedia("(max-width: 767px)");
+const compactResults = window.matchMedia("(max-width: 1000px)");
 
 // A role tile previews the organizations that build its systems, so every mark
 // on it is a company logo. A lab with no mark contributes nothing rather than a
@@ -1053,11 +1099,12 @@ function openRole(roleId) {
   $("#result-count")?.focus({ preventScroll: true });
 }
 
-// Models and Systems on the front door are entry points into the same results
-// surface: Atlas-reviewed models by release date, and active systems by review
-// date. Both open as a list.
+// Models, Systems, Labs, and Robots on the front door are entry points into the
+// same results surface. Models are Atlas-reviewed releases by release date, and
+// systems are active records by review date. Each opens as cards.
 function openNewest(kind) {
-  const scope = kind === "model" ? "models" : "systems";
+  const scope = { model: "models", system: "systems", lab: "labs", robot: "robots" }[kind];
+  if (!scope) return;
   if (state.directoryCollection !== scope) rememberCollectionControls(state.directoryCollection);
   leaveFrontDoor();
   wearResults(scope);
@@ -1067,21 +1114,19 @@ function openNewest(kind) {
     $("#reviewed-filter").value = "1";
     $("#sort-filter").value = "release";
     sortValue.models = "release";
-    $("#layout-filter").value = "list";
-    layoutValue.models = "list";
     state.page.models = 1;
-  } else {
+  } else if (kind === "system") {
     $("#status-filter").value = "active";
     $("#family-filter").value = "";
     populateRoleFilter();
     ensureSortOptions("systems");
     $("#sort-filter").value = "reviewed";
     sortValue.systems = "reviewed";
-    $("#layout-filter").value = "list";
-    layoutValue.systems = "list";
     updateScoreSortAvailability();
     state.page.systems = 1;
-  }
+  } else state.page[scope] = 1;
+  $("#layout-filter").value = "cards";
+  layoutValue[scope] = "cards";
   syncLayoutButtons();
   setDirectoryCollection(scope, { preserveControls: true });
   $(".result-count")?.focus({ preventScroll: true });
@@ -1245,16 +1290,23 @@ function syncScopeStrip() {
 // live height is a custom property the stylesheet reads; the strip's is
 // another, which the results bar sticks under above 1000 px. The sticky
 // height is a third, html's scroll-padding-top, so focus moving through a
-// grid stops below the header, the strip, and the bar rather than under
-// them. The strip's height changes with the family row, so every strip
-// render re-measures.
+// grid stops below the header, the strip, the bar, and the result row
+// rather than under them. The strip's height changes with the family row,
+// so every strip render re-measures.
 function syncStickyClearance() {
   const header = $(".site-header");
   if (!header) return;
   document.documentElement.style.setProperty("--header-height", `${header.getBoundingClientRect().height}px`);
   const strip = $("#scope-strip");
   document.documentElement.style.setProperty("--strip-height", `${strip && !strip.hidden ? strip.getBoundingClientRect().height : 0}px`);
-  document.documentElement.style.setProperty("--sticky-clearance", `${stickyHeight()}px`);
+  const bar = $("#results-bar");
+  document.documentElement.style.setProperty("--results-bar-height", `${bar && !bar.hidden ? bar.getBoundingClientRect().height : 0}px`);
+  // The result row sticks under the bar, so a focused card or list row has to
+  // clear it too. It is not part of stickyHeight: that row is the top of the
+  // results panel, and counting it would scroll the panel down by its own height.
+  const row = $(".result-row");
+  const rowHeight = row && !row.hidden && getComputedStyle(row).position === "sticky" ? row.getBoundingClientRect().height : 0;
+  document.documentElement.style.setProperty("--sticky-clearance", `${stickyHeight() + rowHeight}px`);
 }
 
 // The one way a tile or a strip entry opens a collection. A facet narrows
@@ -1325,7 +1377,7 @@ function jumpToDirectoryFamily(family, { layout = null } = {}) {
 // One panel wears the active collection's historical ids, so the filters,
 // the count, the grid, and the pager keep the selectors the page already uses.
 const RESULT_SURFACE = {
-  all: { panel: "all-directory-panel", grid: "all-directory-grid", pager: "all-directory-pager", count: "all-directory-result-count", clear: "reset-all-directory", clearLabel: "Clear search", gridClass: "project-grid", gridLabel: "Reviewed systems, model releases, inference services, local runtimes, agent packs, robots, labs, and specifications", pagerLabel: "All-directory pagination" },
+  all: { panel: "all-directory-panel", grid: "all-directory-grid", pager: "all-directory-pager", count: "all-directory-result-count", clear: "reset-all-directory", clearLabel: "Clear filters", gridClass: "project-grid", gridLabel: "Reviewed systems, model releases, inference services, local runtimes, agent packs, robots, labs, and specifications", pagerLabel: "All-directory pagination" },
   systems: { panel: "systems-directory-panel", grid: "project-grid", pager: "project-pager", count: "result-count", clear: "reset-filters", clearLabel: "Clear filters", gridClass: "project-grid", gridLabel: "Reviewed systems", pagerLabel: "Systems pagination", countTab: true },
   inference: { panel: "inference-directory-panel", grid: "inference-grid", pager: "inference-pager", count: "inference-result-count", clear: "reset-inference-filters", clearLabel: "Clear filters", gridClass: "project-grid inference-grid", gridLabel: "Reviewed inference services", pagerLabel: "Inference services pagination", countTab: true },
   runtimes: { panel: "runtimes-directory-panel", grid: "runtime-grid", pager: "runtime-pager", count: "runtime-result-count", clear: "reset-runtime-filters", clearLabel: "Clear filters", gridClass: "project-grid inference-grid", gridLabel: "Reviewed local runtimes", pagerLabel: "Local runtimes pagination", countTab: true },
@@ -1333,7 +1385,7 @@ const RESULT_SURFACE = {
   robots: { panel: "robots-directory-panel", grid: "robot-grid", pager: "robot-pager", count: "robot-result-count", clear: "reset-robot-filters", clearLabel: "Clear filters", gridClass: "project-grid inference-grid", gridLabel: "Reviewed robots", pagerLabel: "Robots pagination" },
   models: { panel: "models-directory-panel", grid: "model-grid", pager: "model-pager", count: "model-result-count", clear: "reset-model-filters", clearLabel: "Clear filters", gridClass: "project-grid inference-grid", gridLabel: "models.dev source records and Atlas-reviewed model releases", pagerLabel: "Models pagination" },
   labs: { panel: "labs-directory-panel", grid: "lab-grid", pager: "lab-pager", count: "lab-result-count", clear: "reset-lab-filters", clearLabel: "Clear filters", gridClass: "project-grid inference-grid", gridLabel: "Labs", pagerLabel: "Labs pagination" },
-  specifications: { panel: "specifications-directory-panel", grid: "specification-grid", pager: "specification-pager", count: "specification-result-count", clear: "reset-specification-filters", clearLabel: "Clear", gridClass: "project-grid specification-grid", gridLabel: "Reviewed specifications", pagerLabel: "Specifications pagination" },
+  specifications: { panel: "specifications-directory-panel", grid: "specification-grid", pager: "specification-pager", count: "specification-result-count", clear: "reset-specification-filters", clearLabel: "Clear filters", gridClass: "project-grid specification-grid", gridLabel: "Reviewed specifications", pagerLabel: "Specifications pagination" },
 };
 
 function wearResults(scope) {
@@ -1455,20 +1507,17 @@ function modelModalityRoute(model) {
 // ride in visually hidden text for screen readers and in data attributes for
 // the pointer tooltip. Badges are never controls and take no tab stop. A
 // reviewed-model card's flag (ADR 042) sits directly after its type badge,
-// outside the badge cap, and "Badge meanings" lists every emblem in the row's
-// order.
+// outside the badge cap. The legend and Taxonomy hold the names; a record
+// does not repeat them.
 function badgeRow(badges, flags = [], record) {
   if (!badges.length && !flags.length) return "";
   const lead = badges[0]?.family === "type" ? 1 : 0;
-  const entries = [...badges.slice(0, lead).map(badgeItem), ...flags.map(flag => flagItem(flag, record)), ...badges.slice(lead).map(badgeItem)];
-  return `<div class="badge-group"><ul class="card-badges" role="list">${entries.map(entry => entry.emblem).join("")}</ul><details class="badge-help"><summary>Badge meanings</summary><dl>${entries.map(entry => entry.meaning).join("")}</dl></details></div>`;
+  const emblems = [...badges.slice(0, lead).map(badgeItem), ...flags.map(flag => flagItem(flag, record)), ...badges.slice(lead).map(badgeItem)];
+  return `<div class="badge-group"><ul class="card-badges" role="list">${emblems.join("")}</ul></div>`;
 }
 
 function badgeItem(badge) {
-  return {
-    emblem: `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`,
-    meaning: `<dt>${escapeHTML(badge.name)}</dt><dd>${escapeHTML(badge.definition)}</dd>`,
-  };
+  return `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`;
 }
 
 // A flag's hidden text is its family name and tooltip sentence, the "name:
@@ -1478,10 +1527,7 @@ function badgeItem(badge) {
 // class is not `card-flag`: that names a card's geography circles.
 function flagItem(flag, record) {
   const text = AppCore.flagEmblemText(flag.entry, record.developer, state.taxonomy);
-  return {
-    emblem: `<li class="card-badge card-reviewed-flag" data-badge="${escapeHTML(flag.id)}" data-family="${escapeHTML(flag.family)}" data-flag-record="${escapeHTML(record.id)}" data-name="${escapeHTML(text.name)}" data-definition="${escapeHTML(text.sentence)}">${AppCore.badgeEmblem(flag.id)}<span class="visually-hidden">${escapeHTML(flag.name)}: ${escapeHTML(text.sentence)}</span></li>`,
-    meaning: `<dt>${escapeHTML(`${flag.name} · ${text.name}`)}</dt><dd>${escapeHTML(text.sentence)}</dd>`,
-  };
+  return `<li class="card-badge card-reviewed-flag" data-badge="${escapeHTML(flag.id)}" data-family="${escapeHTML(flag.family)}" data-flag-record="${escapeHTML(record.id)}" data-name="${escapeHTML(text.name)}" data-definition="${escapeHTML(text.sentence)}">${AppCore.badgeEmblem(flag.id)}<span class="visually-hidden">${escapeHTML(flag.name)}: ${escapeHTML(text.sentence)}</span></li>`;
 }
 
 // The one control that opens a card's record. Its hidden text names the
@@ -1864,24 +1910,31 @@ function reviewedModelCard(model, { mixed = false } = {}) {
 
 const mixedSystemCard = record => systemCard(record, { mixed: true });
 
-function tableCell(value) {
-  return `<td>${escapeHTML(value ?? "")}</td>`;
+function tableCell(value, kind = "") {
+  return `<td${kind ? ` class="${kind}-cell"` : ""}>${escapeHTML(value ?? "")}</td>`;
 }
 
 function listName(attribute, record, extra = "") {
-  return `<th scope="row"><button type="button" class="link-button" ${attribute}="${escapeHTML(record.id)}">${escapeHTML(record.name)}</button>${extra}</th>`;
+  return `<th scope="row" class="name-cell"><button type="button" class="link-button" ${attribute}="${escapeHTML(record.id)}">${escapeHTML(record.name)}</button>${extra}</th>`;
 }
 
 function listCompare(kind, record, on) {
-  if (!on) return "<td></td>";
-  return `<td><button class="compare-toggle" data-compare-kind="${kind}" data-compare-id="${escapeHTML(record.id)}" aria-label="Add ${escapeHTML(record.name)} to comparison" aria-pressed="false">Compare</button></td>`;
+  if (!on) return `<td class="compare-cell"></td>`;
+  return `<td class="compare-cell"><button class="compare-toggle" data-compare-kind="${kind}" data-compare-id="${escapeHTML(record.id)}" aria-label="Add ${escapeHTML(record.name)} to comparison" aria-pressed="false">Compare</button></td>`;
 }
+
+const FIT_HEADERS = new Set(["Local-first", "Reviewed", "Score", "Stars", "Compare", "Released", "Review", "Newest release"]);
 
 function resultsTable(headers, rows) {
-  return `<table class="results-table"><thead><tr>${headers.map(header => `<th scope="col">${escapeHTML(header)}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table>`;
+  return `<table class="results-table"><thead><tr>${headers.map(header => {
+    const classes = [header === "Compare" ? "compare-cell" : "", FIT_HEADERS.has(header) ? "fit-cell" : ""].filter(Boolean).join(" ");
+    return `<th scope="col"${classes ? ` class="${classes}"` : ""}>${escapeHTML(header)}</th>`;
+  }).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table>`;
 }
 
-const wantsList = () => $("#layout-filter").value === "list";
+// Below 768px the list is a wide table that does not fit, so a phone renders
+// cards only and the layout control is hidden.
+const wantsList = () => !mobileLayout.matches && $("#layout-filter").value === "list";
 
 function bindResultRows(grid) {
   $$("tbody tr", grid).forEach(row => {
@@ -1903,7 +1956,8 @@ function systemListRow(project, context) {
   const licenses = [sourceModelName(project.source_model), ...(project.licenses || [])].filter(Boolean).join(", ");
   const deploy = (project.deployment || []).map(value => taxonomyName("deployment_modes", value)).join(", ");
   const stars = project.stars == null ? (context.mixed ? "" : "No GitHub metrics") : compactNumber(project.stars);
-  return `<tr>${listName("data-project", project, badgeRow(AppCore.cardBadges("system", project)))}${tableCell(roleName(project.primary_role))}${tableCell(deploy)}${tableCell(licenses)}${tableCell(project.local_first === true ? "Yes" : project.local_first === false ? "No" : "Not recorded")}${tableCell(state.systemReviewDates[project.id] || "Not recorded")}${tableCell(showScore ? String(project.score.overall) : "")}${tableCell(stars)}${context.comparable ? listCompare("system", project, showScore) : ""}</tr>`;
+  const local = project.local_first === true ? "Yes" : project.local_first === false ? "No" : "Not recorded";
+  return `<tr>${listName("data-project", project, badgeRow(AppCore.cardBadges("system", project)))}${tableCell(roleName(project.primary_role), "role")}${tableCell(deploy)}${tableCell(licenses, "token")}${tableCell(local, "fit")}${tableCell(state.systemReviewDates[project.id] || "Not recorded", "fit")}${tableCell(showScore ? String(project.score.overall) : "", "fit")}${tableCell(stars, "fit")}${context.comparable ? listCompare("system", project, showScore) : ""}</tr>`;
 }
 
 function renderAllDirectoryEntries() {
@@ -1975,6 +2029,7 @@ function renderAllDirectoryEntries() {
   hideDetachedBadgeTooltip();
   renderPager("all", paged);
   if (activeScope() === "all") writeScopeURL();
+  syncFilterChrome();
 }
 
 function filteredProjects(term) {
@@ -2024,6 +2079,7 @@ const COLLECTIONS = {
       const suffix = family
         ? ` · ${scoreProfileName(selectedProfile?.id)}${finderContext}`
         : " · Scores hidden across families";
+      for (const node of $$("[data-family-score]")) node.hidden = (node.dataset.familyScore === "ready") !== Boolean(family);
       const chip = $("#finder-roles-chip");
       chip.hidden = !state.directoryRolesLabel;
       chip.innerHTML = state.directoryRolesLabel
@@ -2089,7 +2145,7 @@ const COLLECTIONS = {
     listHeaders: () => ["Name", "Type", "Headquarters", "Newest release"],
     listRow: lab => {
       const releases = AppCore.releasesNewestFirst(labRelationsFor(lab).models);
-      return `<tr>${listName("data-lab", lab, badgeRow(AppCore.cardBadges("lab", lab)))}${tableCell(taxonomyName("lab_types", lab.lab_type))}${tableCell(taxonomyName("countries", lab.headquarters))}${tableCell(AppCore.releaseDate(releases[0] || {}))}</tr>`;
+      return `<tr>${listName("data-lab", lab, badgeRow(AppCore.cardBadges("lab", lab)))}${tableCell(taxonomyName("lab_types", lab.lab_type))}${tableCell(taxonomyName("countries", lab.headquarters))}${tableCell(AppCore.releaseDate(releases[0] || {}), "fit")}</tr>`;
     },
   },
   inference: {
@@ -2116,7 +2172,7 @@ const COLLECTIONS = {
     }),
     card: service => inferenceCard(service),
     listHeaders: () => ["Name", "Operator", "Type", "API", "Score", "Compare"],
-    listRow: service => `<tr>${listName("data-inference-service", service, badgeRow(AppCore.cardBadges("inference", service)))}${tableCell(service.operator)}${tableCell(taxonomyName("inference_service_types", service.service_type))}${tableCell(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(", "))}${tableCell(String(service.score.overall))}${listCompare("inference", service, true)}</tr>`,
+    listRow: service => `<tr>${listName("data-inference-service", service, badgeRow(AppCore.cardBadges("inference", service)))}${tableCell(service.operator)}${tableCell(taxonomyName("inference_service_types", service.service_type))}${tableCell(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(", "), "token")}${tableCell(String(service.score.overall), "fit")}${listCompare("inference", service, true)}</tr>`,
   },
   runtimes: {
     grid: "#runtime-grid",
@@ -2142,7 +2198,7 @@ const COLLECTIONS = {
     }),
     card: runtime => runtimeCard(runtime),
     listHeaders: () => ["Name", "Maintainer", "Type", "Formats", "Score", "Compare"],
-    listRow: runtime => `<tr>${listName("data-local-runtime", runtime, badgeRow(AppCore.cardBadges("runtime", runtime)))}${tableCell(runtime.maintainer)}${tableCell(taxonomyName("local_runtime_types", runtime.runtime_type))}${tableCell(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(", "))}${tableCell(String(runtime.score.overall))}${listCompare("runtime", runtime, true)}</tr>`,
+    listRow: runtime => `<tr>${listName("data-local-runtime", runtime, badgeRow(AppCore.cardBadges("runtime", runtime)))}${tableCell(runtime.maintainer)}${tableCell(taxonomyName("local_runtime_types", runtime.runtime_type))}${tableCell(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(", "), "token")}${tableCell(String(runtime.score.overall), "fit")}${listCompare("runtime", runtime, true)}</tr>`,
   },
   models: {
     grid: "#model-grid",
@@ -2173,7 +2229,7 @@ const COLLECTIONS = {
     listHeaders: () => ["Name", "Developer", "Type", "Released", "Review", "Score", "Compare"],
     listRow: model => {
       const reviewed = isReviewedModel(model);
-      return `<tr>${listName("data-model", model, badgeRow(AppCore.cardBadges("model", model), reviewed ? AppCore.cardFlags("model", model) : [], model))}${tableCell(reviewed ? model.developer : AppCore.modelCardDeveloperLabel(model, state.labIndex))}${tableCell(taxonomyName("model_types", model.model_type))}${tableCell(AppCore.releaseDate(model))}${tableCell(reviewed ? "Atlas reviewed" : "Source record")}${tableCell(reviewed ? String(model.score.overall) : "")}${listCompare("model", model, reviewed)}</tr>`;
+      return `<tr>${listName("data-model", model, badgeRow(AppCore.cardBadges("model", model), reviewed ? AppCore.cardFlags("model", model) : [], model))}${tableCell(reviewed ? model.developer : AppCore.modelCardDeveloperLabel(model, state.labIndex))}${tableCell(taxonomyName("model_types", model.model_type))}${tableCell(AppCore.releaseDate(model), "fit")}${tableCell(reviewed ? "Atlas reviewed" : "Source record", "fit")}${tableCell(reviewed ? String(model.score.overall) : "", "fit")}${listCompare("model", model, reviewed)}</tr>`;
     },
   },
   robots: {
@@ -2203,6 +2259,7 @@ const COLLECTIONS = {
 function renderCollection(name) {
   const collection = COLLECTIONS[name];
   const context = collection.context();
+  syncFilterChrome();
   const records = collection.records(currentQuery());
   const noun = collection.noun[records.length === 1 ? 0 : 1];
   $(collection.resultCount).textContent = `${records.length} ${noun}${context.suffix}`;
@@ -2465,6 +2522,7 @@ function renderPacks() {
   hideDetachedBadgeTooltip();
   renderPager("packs", paged);
   if (activeScope() === "packs") writeScopeURL();
+  syncFilterChrome();
 }
 
 // Repaint whatever a search index could have widened. A search box may have a
@@ -2490,8 +2548,8 @@ function bindComparisonButtons(root) {
 const finderDetailAwaited = new Set();
 
 // How much sticks to the top of the viewport: the header, and in results
-// the strip and, above 1000 px, the results bar. Each counts only while it
-// is sticky; a hidden one measures no height.
+// the strip and the results bar. Each counts only while it is sticky; a
+// hidden one measures no height.
 function stickyHeight() {
   const sticky = element => element && !element.hidden && getComputedStyle(element).position === "sticky" ? element.getBoundingClientRect().height : 0;
   return sticky($(".site-header")) + sticky($("#scope-strip")) + sticky($("#results-bar"));
@@ -4238,7 +4296,8 @@ function initDocsMenu() {
 // Mobile navigation uses existing views and search state; no parallel catalog.
 function syncMobileNavigation() {
   const view = $(".view.is-active")?.id;
-  const active = view === "directory" ? (state.directoryStage === "door" ? "home" : "search")
+  const active = view === "directory"
+    ? (state.directoryStage === "door" ? "home" : state.directoryCollection === "all" ? "search" : "")
     : view === "finder" || view === "explore" ? view : "more";
   $$("[data-mobile-nav]").forEach(button => {
     if (button.dataset.mobileNav === active) button.setAttribute("aria-current", "page");
@@ -4246,14 +4305,36 @@ function syncMobileNavigation() {
   });
 }
 
+// Puts the results search under the sticky header and strip, then focuses it.
+function focusResultsSearch() {
+  const bar = $("#results-bar");
+  const stuck = getComputedStyle(bar).position === "sticky" ? bar.getBoundingClientRect().height : 0;
+  const top = bar.getBoundingClientRect().top + window.scrollY - (stickyHeight() - stuck);
+  window.scrollTo({ top: Math.max(0, top), behavior: "instant" });
+  $("#results-search").focus({ preventScroll: true });
+}
+
 function openMobileSearch() {
   const onDirectory = $("#directory").classList.contains("is-active");
-  if ((!onDirectory && state.directoryStage !== "door") || (state.directoryStage === "results" && state.directoryCollection !== "all")) {
+  if (onDirectory && state.directoryStage === "results") {
+    focusResultsSearch();
+    return;
+  }
+  if (!onDirectory && state.directoryStage !== "door") {
     try { window.history.pushState(null, "", window.location.href); } catch {}
   }
   openCollection("all");
   activateView("directory");
   $("#results-search").focus();
+}
+
+// On a narrow window Sort sits in the filter drawer. On a wide one it sits
+// in the bar, ahead of Cards | List.
+function placeSort() {
+  const sort = $(".results-sort");
+  if (!sort) return;
+  if (compactResults.matches) $("#filters-drawer").prepend(sort);
+  else $(".layout-toggle").before(sort);
 }
 
 function initMobileNavigation() {
@@ -4274,7 +4355,16 @@ function initMobileNavigation() {
     else if (toolsFocused && mobileLayout.matches) $('[data-mobile-nav="more"]').focus();
   }
   syncLayout();
-  mobileLayout.addEventListener("change", syncLayout);
+  placeSort();
+  compactResults.addEventListener("change", () => {
+    placeSort();
+    syncStickyClearance();
+  });
+  mobileLayout.addEventListener("change", () => {
+    syncLayout();
+    syncLayoutButtons();
+    if (state.directoryStage === "results") RESULT_VIEWS[state.directoryCollection]?.render();
+  });
   $("#element-family-tabs").addEventListener("click", event => {
     const button = event.target.closest("[data-element-family-tab]");
     if (!button) return;
@@ -4457,6 +4547,22 @@ function bindEvents() {
     $("#layout-filter").dispatchEvent(new Event("input", { bubbles: true }));
   }));
   $(".results-clear").addEventListener("click", () => resetCollection(state.directoryCollection));
+  $("#filters-toggle").addEventListener("click", () => {
+    const open = !$("#directory").classList.contains("is-filters-open");
+    $("#directory").classList.toggle("is-filters-open", open);
+    $("#filters-toggle").setAttribute("aria-expanded", String(open));
+  });
+  $("#filter-chips").addEventListener("click", event => {
+    const chip = event.target.closest("[data-clear-filter]");
+    if (!chip) return;
+    const scope = state.directoryCollection;
+    const key = chip.dataset.clearFilter;
+    const selector = SCOPE_CONTROLS[scope]?.[key];
+    if (!selector) return;
+    $(selector).value = String(AppCore.SCOPE_URL_PARAMS[scope][key] ?? "");
+    $(selector).dispatchEvent(new Event("input", { bubbles: true }));
+    $(".result-count")?.focus({ preventScroll: true });
+  });
   $("#finder-roles-chip").addEventListener("click", () => {
     state.directoryRoles = null;
     state.directoryRolesLabel = null;

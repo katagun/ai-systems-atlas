@@ -32,7 +32,7 @@ local_runtimes: 17
 model_releases: 373
 models_dev_source_records: 448
 model_candidates: 10
-system_candidates: 101
+system_candidates: 102
 exclusions: 111
 packs: 8
 labs: 64 covering 373 releases

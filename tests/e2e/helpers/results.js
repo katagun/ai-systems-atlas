@@ -60,12 +60,17 @@ function filterControl(page, scope, key) {
   return page.locator(FILTER_CONTROLS[scope][key]);
 }
 
-// Systems folds most of its filters under "More filters": open it first. The
-// shell is the one that holds the control, not whichever shell shows: straight
-// after page.goto the whole panel is still hidden, and a control that is not
-// visible yet must not read as one that is folded away.
+// Systems folds most of its filters under "More filters": open it first. On a
+// narrow window every filter sits in the closed Filters drawer: open that
+// before the shell. The shell is the one that holds the control, not whichever
+// shell shows: straight after page.goto the whole panel is still hidden, and a
+// control that is not visible yet must not read as one that is folded away.
 async function setFilter(page, scope, key, value) {
   const control = filterControl(page, scope, key);
+  if (!(await control.isVisible())) {
+    const toggle = page.locator("#filters-toggle");
+    if (await toggle.isVisible()) await toggle.click();
+  }
   const shell = page.locator(".advanced-filter-shell").filter({ has: control });
   if (await shell.count() && !(await shell.evaluate(details => details.open))) await shell.locator("summary").click();
   await control.selectOption(value);
