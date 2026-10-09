@@ -1928,6 +1928,11 @@
       "kind": "open_source"
     },
     {
+      "id": "LicenseRef-OSNL-0.2",
+      "name": "Open Source Native License 0.2",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-Proprietary",
       "name": "Proprietary",
       "kind": "proprietary"

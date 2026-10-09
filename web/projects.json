@@ -24623,6 +24623,352 @@
       "forks": 493,
       "open_issues": 97,
       "metadata_verified_at": "2026-10-07"
+    },
+    {
+      "id": "openhands-software-agent-sdk",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "OpenHands Software Agent SDK",
+      "repo": "OpenHands/software-agent-sdk",
+      "url": "https://github.com/OpenHands/software-agent-sdk",
+      "description": "Python, TypeScript, and REST SDK for building coding agents, with an Agent Server that runs conversations in local, Docker, Kubernetes, or cloud workspaces.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "event_log",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "agent_interfaces": [
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "remote_cloud"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "multi_agent",
+        "persistent_state",
+        "mcp"
+      ],
+      "canonical_data": "per-conversation base state and an append-only event log under a persistence directory, plus skills and secrets supplied by the application",
+      "deployment": [
+        "library",
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 1208,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 7.6,
+        "tool_use": 8.6,
+        "autonomy": 8.4,
+        "human_control": 8.2,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 8.0,
+        "interoperability": 8.6,
+        "maturity": 7.0,
+        "overall": 8.03
+      },
+      "strengths": [
+        "Conversation state and an event log persist to a directory and resume, so a long run survives a restart",
+        "Pluggable confirmation policies (always, never, or by assessed risk) and hooks that can block an action before it runs",
+        "One agent loop is exposed as a Python library, a TypeScript client, and a REST Agent Server over local, Docker, Kubernetes, Apptainer, and cloud workspaces"
+      ],
+      "weaknesses": [
+        "The repository was created in August 2025 and ships frequent minor releases, so interfaces are still moving",
+        "The README's SWE-bench badge is the maintainers' own reported result, not an independent measurement",
+        "Scheduling, webhooks, and run history live in a separate automation repository, and the OpenHands CLI and Cloud product are separate records or outside this one"
+      ],
+      "why_it_matters": "Separates the embeddable engine behind OpenHands from the OpenHands application, giving developers a permissively licensed coding-agent loop with persistence, confirmation, and sandbox choices they can embed.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "agents-deep-research",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Agentic Deep Research",
+      "repo": "qx-labs/agents-deep-research",
+      "url": "https://github.com/qx-labs/agents-deep-research",
+      "description": "Python package and CLI that runs an iterative multi-agent web research loop, or a planner plus parallel section researchers, to produce a cited long-form report.",
+      "primary_role": "research_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "research",
+        "multi_agent"
+      ],
+      "canonical_data": "per-run in-memory iteration history (gaps, tool calls, findings, thoughts) and the generated Markdown report; no durable store",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 793,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 5.8,
+        "tool_use": 6.4,
+        "autonomy": 7.6,
+        "human_control": 4.8,
+        "observability_recovery": 5.2,
+        "data_sovereignty": 7.2,
+        "interoperability": 6.6,
+        "maturity": 4.8,
+        "overall": 5.95
+      },
+      "strengths": [
+        "Loop of knowledge-gap check, tool selection, parallel tool agents, and observations is bounded by explicit iteration and time limits",
+        "A planner drafts a section outline and runs concurrent iterative researchers per section, with a proofreader merging the result",
+        "Model providers are configured per role (reasoning, main, fast) and include hosted APIs and local models"
+      ],
+      "weaknesses": [
+        "Research state lives in memory for one run, with no checkpointing or resume if a long parallel run fails",
+        "It does not ask clarifying questions or gate steps on a person, so the only human control is the up-front limits",
+        "The README's own TODO list still carries unchecked items for search providers, caching, a PDF parser, and local-file retrieval, and the last commit is dated December 2025"
+      ],
+      "why_it_matters": "A small, readable reference implementation of the gap-driven deep-research loop on the OpenAI Agents SDK, usable with non-OpenAI models.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "Apache-2.0",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "deepseek",
+        "openrouter",
+        "perplexity",
+        "openai_compatible",
+        "local_runtime"
+      ]
+    },
+    {
+      "id": "boop-agent",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Boop",
+      "repo": "raroque/boop-agent",
+      "url": "https://github.com/raroque/boop-agent",
+      "description": "Self-hosted iMessage personal agent on the Claude Agent SDK or Codex runtime: a dispatcher spawns per-task sub-agents with tiered memory, automations, draft-before-send, and Composio integrations.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "vector_index",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "self_editing",
+        "decay",
+        "consolidation",
+        "supersession"
+      ],
+      "agent_interfaces": [
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "browser_control",
+        "multi_agent",
+        "persistent_state",
+        "mcp"
+      ],
+      "canonical_data": "Convex tables for messages, tiered memory records with embeddings, execution agents and their logs, automations and runs, drafts, usage, and settings",
+      "deployment": [
+        "self_hosted",
+        "desktop"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 1371,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 7.8,
+        "autonomy": 7.6,
+        "human_control": 6.6,
+        "observability_recovery": 7.2,
+        "data_sovereignty": 5.4,
+        "interoperability": 6.8,
+        "maturity": 4.8,
+        "overall": 6.54
+      },
+      "strengths": [
+        "The dispatcher is denied web, shell, and file tools, so real work happens only in scoped sub-agents that load just the integrations named at spawn",
+        "Memory has tiers, decay, a daily propose-and-judge consolidation pass, and an embedding index, with every write and sub-agent step logged to a debug dashboard",
+        "A heartbeat fails stuck sub-agents and the dashboard can cancel or retry them"
+      ],
+      "weaknesses": [
+        "The README calls it a starting point and a template rather than a finished product, and warns that it is not optimised for cost or security",
+        "Sub-agents run with bypassPermissions, and draft-before-send is enforced by the system prompt and tool routing rather than by a hard gate on the underlying send tools",
+        "The agent loop runs on the Claude Agent SDK or the Codex app-server under the user's own subscription terms, and memory, messaging, and integrations depend on the hosted Convex, Sendblue, and Composio services",
+        "The latest commit is from July 2026 and the package version is 0.2.0"
+      ],
+      "why_it_matters": "A readable end-to-end example of a messaging-first personal agent that separates a tool-less dispatcher from scoped workers and keeps long-lived memory, schedules, and approvals in one store.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "MIT",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai"
+      ]
+    },
+    {
+      "id": "desloppify",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Desloppify",
+      "repo": "peteromallet/desloppify",
+      "url": "https://github.com/peteromallet/desloppify",
+      "description": "Python CLI that scans a codebase with mechanical detectors and LLM review, keeps a persistent scored plan and execution queue, and drives a coding agent through a scan, triage, fix, and rescan loop.",
+      "primary_role": "coding_agent_workflow",
+      "secondary_roles": [],
+      "agent_relation": "coding_workflow",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "structured_query"
+      ],
+      "capture_modes": [
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
+      "canonical_data": "JSON scan state with a backup copy and a living plan of clusters, queue order, and dispositions under a .desloppify directory in the scanned project",
+      "deployment": [
+        "local_cli",
+        "host_pack"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "LicenseRef-OSNL-0.2"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 3166,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 6.8,
+        "tool_use": 7.8,
+        "autonomy": 7.0,
+        "human_control": 7.2,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 8.2,
+        "interoperability": 7.6,
+        "maturity": 6.4,
+        "overall": 7.34
+      },
+      "strengths": [
+        "Only items explicitly queued appear in the execution queue, and resolving or skipping work needs an explicit action rather than a quiet scan",
+        "Mechanical detectors across 29 languages and a scoring design meant to resist gaming, where wontfix items widen the gap between the lenient and strict scores",
+        "Scan state is written atomically with a backup and a recovery path, so progress carries across sessions"
+      ],
+      "weaknesses": [
+        "Licensed under the custom Open Source Native License 0.2: internal use is free, but shipping it inside a product by a company that is not open source falls into paid tiers",
+        "Three quarters of the score comes from LLM review of subjective dimensions, so results vary with the reviewing model and the README's claim that a score above 98 matches a beautiful codebase is the author's own",
+        "The agent does the fixing through the host's own tools; Desloppify supplies the queue, scoring, and instructions rather than an agent loop of its own",
+        "The most recent commit is from May 2026"
+      ],
+      "why_it_matters": "Shows a host-installed workflow that earns its place through owned state and a gated queue, giving coding agents a measurable, resumable code-health loop instead of one-shot cleanup prompts.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "NOASSERTION"
     }
   ],
   "verified_at": "2026-09-28"
