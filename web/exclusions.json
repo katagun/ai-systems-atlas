@@ -879,6 +879,14 @@
       "verified_at": "2026-10-06"
     },
     {
+      "name": "ADHD",
+      "repo": "UditAkhourii/adhd",
+      "reason": "MIT, actively maintained, and widely adopted, but it fails the agent-system boundary. The npm package and skill implement a fixed pipeline of one-shot model calls through the Claude Agent SDK: src/llm.ts creates each call with an empty tool list (its comment: 'No tools — divergence is pure generation'), src/engine.ts fans out parallel branches under cognitive frames, scores and clusters the ideas with a second call, and returns a ranked report. Nothing plans through tools, acts on a project, or keeps durable state between runs, so it is a reasoning technique and prompt pipeline rather than a system that plans and acts through tools. The skill document is instruction text a host reads, which the pack prongs treat as outside the scored catalog, and the only shipped code carries out text generation, which is neither owned state nor enforced work. The adopters list and benchmark results are the maintainer's own claims.",
+      "useful_lesson": "A repository that fans out model calls with the tool list set to empty is a prompting method however many branches it runs; look for the tool, the state it writes, or the action it takes before treating the fan-out as orchestration.",
+      "excluded_at": "2026-10-07",
+      "verified_at": "2026-10-07"
+    },
+    {
       "name": "Learn Claude Code",
       "repo": "shareAI-lab/learn-claude-code",
       "reason": "MIT licensed. The README names the repository a course: \"This is a 0-to-1 harness engineering course.\" It is seventeen numbered lesson folders (s01 to s17), each a standalone code.py with a chapter README, plus a legacy set of twelve lesson scripts and a Next.js site that presents them. The install path is pip install -r requirements.txt, which lists three libraries, and there is no package manifest, release or service, so nothing here is adopted as a harness; the closing line says \"This is not \\\"copy the source code.\\\"\" The README also states that s17 is \"a mechanism example, not another cumulative runtime\", and only s15 reassembles the earlier lessons into one loop, as a lesson. The lessons are accurate teaching material about permission checks, hooks, task graphs and goal loops, and a very large star count reflects its audience rather than an operational boundary. The curation rules keep courses and teaching material as research inputs rather than operational systems.",
