@@ -426,6 +426,22 @@ def recent_record_ids(records: list[dict], limit: int = RECENT_LIMIT) -> list[st
     return [record["id"] for record in newest_first[:limit]]
 
 
+def review_date_index(
+    records: list[dict], *, active_only: bool = False
+) -> dict[str, str]:
+    """Review dates for the systems list.
+
+    The boot record does not carry ``verified_at``. The systems list orders
+    active records by it without loading every detail file.
+    """
+    return {
+        record["id"]: record["verified_at"]
+        for record in records
+        if record.get("verified_at")
+        and (not active_only or record.get("status") == "active")
+    }
+
+
 def dumps(payload) -> str:
     """Payloads are machine-read, so they are written minified with a trailing newline."""
     return json.dumps(payload, separators=(",", ":"), sort_keys=False) + "\n"
@@ -481,13 +497,8 @@ def build_payloads(catalog: dict[str, dict]) -> dict[str, str]:
                 "last": dates[-1] if dates else None,
                 "missing": len(active) - len(dates),
             }
-            # The boot record does not carry verified_at; the stage needs it
-            # to order active systems without loading every detail file.
-            envelope["review_dates"] = {
-                record["id"]: record["verified_at"]
-                for record in active
-                if record.get("verified_at")
-            }
+        if collection == "systems":
+            envelope["review_dates"] = review_date_index(records, active_only=True)
         if collection == "models":
             envelope.update(
                 {
