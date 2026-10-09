@@ -890,3 +890,20 @@ test("opened from the keyboard, the phone sheet focuses the first group's chosen
   const value = (await first.locator(".filter-option:has(input:checked) > span").first().textContent()).trim();
   await expect(chosen).toHaveAccessibleName(value);
 });
+
+// Cards | List is one setting for the whole results page (ADR 054), not a
+// filter, so Clear leaves it as the reader chose it (ruling R-T3-12). Models
+// clears through its own controls, Systems through its defaults.
+test("Clear keeps the reader's list layout", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  for (const url of ["/?collection=models&layout=list&q=claude&sort=release", "/?collection=systems&layout=list&q=memory"]) {
+    await page.goto(url);
+    await expect(page.locator(".collection-panel .project-grid.is-list")).toBeVisible();
+    await clearFilters(page);
+    await expect(searchBox(page)).toHaveValue("");
+    await expect(page.locator("#layout-filter"), url).toHaveValue("list");
+    await expect(page.locator('[data-set-layout="list"]')).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator(".collection-panel .project-grid.is-list")).toBeVisible();
+    await expect(page).toHaveURL(/layout=list/);
+  }
+});

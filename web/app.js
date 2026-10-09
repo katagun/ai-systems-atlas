@@ -471,17 +471,17 @@ function clearQuery() {
 
 // Clear filters, in every collection: the collection's own controls return
 // to their defaults, and the query, which every collection shares, clears
-// everywhere (front-door spec, Phase 1).
+// everywhere (front-door spec, Phase 1). Cards | List is one setting for the
+// whole results page, not a filter (ADR 054), so Clear keeps it (ruling
+// R-T3-12), as clearScopeFacets does.
 function resetCollection(scope) {
   if (scope === "systems") applyDirectoryDefaults();
   else {
     ensureSortOptions(scope);
     for (const [key, selector] of Object.entries(SCOPE_CONTROLS[scope])) {
-      if (key !== "q") $(selector).value = AppCore.SCOPE_URL_PARAMS[scope][key] ?? "";
+      if (key !== "q" && key !== "layout") $(selector).value = AppCore.SCOPE_URL_PARAMS[scope][key] ?? "";
     }
     sortValue[scope] = AppCore.SCOPE_URL_PARAMS[scope].sort || "";
-    layoutValue[scope] = "cards";
-    syncLayoutButtons();
   }
   clearQuery();
   RESULT_VIEWS[scope].render();
@@ -876,9 +876,6 @@ function applyDirectoryDefaults() {
   ensureSortOptions("systems");
   $("#sort-filter").value = defaults.sort;
   sortValue.systems = defaults.sort;
-  $("#layout-filter").value = "cards";
-  layoutValue.systems = "cards";
-  syncLayoutButtons();
   $("#local-filter").value = defaults.localOnly ? "1" : "";
   $("#system-lab-filter").value = "";
   updateScoreSortAvailability();
