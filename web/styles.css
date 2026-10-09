@@ -625,19 +625,21 @@ h1 {
 .family-entry strong { font: 700 .62rem var(--font-mono); color: var(--cyan); }
 .family-entry.is-active { border-color: var(--cyan); background: color-mix(in srgb, var(--cyan) 14%, transparent); color: var(--cyan); }
 .collection-panel[hidden] { display: none; }
-/* The results bar: one search for every collection and the collection's
-   Sort (Phase 3 spec, section 1). Above 1000 px it sticks under the strip. */
-.results-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin: 0 0 .75rem; padding: .5rem 0; background: var(--header-bg); }
+/* The results bar: one search for every collection, the collection's Sort,
+   and Cards | List. It sticks under the strip at every width (PR 478). The
+   filters are the rail above 1000 px and the Filters button's sheet below
+   it (ruling R-T3-13), so the bar holds no drawer. */
+.results-bar { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; margin: 0 0 .75rem; padding: .5rem 0; position: sticky; top: calc(var(--header-height, 88px) + var(--strip-height, 0px)); z-index: 8; background: var(--header-bg); backdrop-filter: blur(20px) saturate(140%); }
 .results-bar[hidden] { display: none; }
-.results-bar .results-search { flex: 1 1 18rem; }
+.results-bar .results-search { flex: 1 1 18rem; min-width: 0; }
 .results-sort label { display: flex; align-items: center; gap: .45rem; }
 .results-sort label[hidden] { display: none; }
 .layout-toggle { display: inline-flex; border: 1px solid var(--line-strong); border-radius: var(--radius-control); }
 .layout-toggle button { min-height: 34px; padding: .35rem .7rem; border: 0; background: transparent; color: var(--muted); font: 600 .78rem var(--font-body); cursor: pointer; }
 .layout-toggle button + button { border-left: 1px solid var(--line); }
 .layout-toggle button[aria-pressed="true"] { background: var(--text); color: var(--on-ink); }
-@media (min-width: 1001px) {
-  .results-bar { position: sticky; top: calc(var(--header-height, 88px) + var(--strip-height, 0px)); z-index: 8; backdrop-filter: blur(20px) saturate(140%); }
+@media (max-width: 767px) {
+  .layout-toggle { display: none; }
 }
 /* At 1000 px and below the Filters button joins the bar beside the search
    box, which gives it room, so the Sort and Cards | List keep their own row
@@ -670,7 +672,7 @@ h1 {
 #results-frame[hidden] { display: none; }
 @media (min-width: 1001px) {
   .results-frame.has-rail { display: grid; grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr); gap: 1.5rem; align-items: start; }
-  .filter-rail { position: sticky; top: calc(var(--sticky-clearance, 0px) + .5rem); max-height: calc(100vh - max(var(--sticky-clearance, 0px) + .5rem, var(--frame-top, 0px)) - var(--bottom-clearance, 0px) - 1rem); overflow-y: auto; margin-left: -8px; padding: 0 .25rem 0 8px; scroll-padding-block: 8px; }
+  .filter-rail { position: sticky; top: calc(var(--chrome-height, 0px) + .5rem); max-height: calc(100vh - max(var(--chrome-height, 0px) + .5rem, var(--frame-top, 0px)) - var(--bottom-clearance, 0px) - 1rem); overflow-y: auto; margin-left: -8px; padding: 0 .25rem 0 8px; scroll-padding-block: 8px; }
   .filters-button { display: none; }
 }
 @media (max-width: 1000px) {
@@ -692,7 +694,10 @@ h1 {
 .filter-option:has(input:disabled) { color: var(--faint); cursor: default; }
 .filter-more { font-size: .78rem; }
 .filter-note { margin: 0 0 .75rem; color: var(--muted); font-size: .72rem; }
-.filter-chips { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin: 0 0 .25rem; }
+/* The chips row sticks under the results bar, and the result row under it
+   (PR 479), so the active constraints and the count stay in view while the
+   results scroll (ruling R-T3-13). */
+.filter-chips { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin: 0; padding: .25rem 0; position: sticky; top: calc(var(--header-height, 88px) + var(--strip-height, 0px) + var(--results-bar-height, 0px)); z-index: 7; background: var(--header-bg); }
 .filter-chips[hidden] { display: none; }
 .filter-chip-list { display: contents; }
 .filter-chip { padding: .25rem .6rem; border: 1px solid var(--line); border-radius: var(--radius-pill); background: var(--glass-weak); color: var(--text); font-size: .78rem; cursor: pointer; }
@@ -757,6 +762,11 @@ input:focus, select:focus {
   align-items: center;
   justify-content: space-between;
   gap: .55rem;
+  position: sticky;
+  top: calc(var(--header-height, 88px) + var(--strip-height, 0px) + var(--results-bar-height, 0px) + var(--chips-height, 0px));
+  z-index: 7;
+  background: var(--header-bg);
+  backdrop-filter: blur(20px) saturate(140%);
   color: var(--muted);
   font-size: .86rem;
 }
@@ -792,12 +802,22 @@ input:focus, select:focus {
 .pager-nav .ghost-button:disabled:hover { border-color: var(--line-strong); color: var(--muted); }
 
 .project-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.15rem; }
-.project-grid.is-list { display: block; }
+.project-grid.is-list { display: block; overflow-x: auto; }
 .results-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
-.results-table th, .results-table td { padding: .65rem .5rem; text-align: left; vertical-align: top; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
-.results-table thead th { border-top: 0; color: var(--muted); font: 600 .62rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
+/* Break long words only once a column is already too narrow. `anywhere` on every
+   cell let Score, Local-first, and review dates shrink to a few characters while
+   Deployment and Licenses kept the width. */
+.results-table th, .results-table td { padding: .65rem .5rem; text-align: left; vertical-align: top; border-top: 1px solid var(--line); overflow-wrap: break-word; }
+.results-table thead th { border-top: 0; white-space: nowrap; overflow-wrap: normal; color: var(--muted); font: 600 .62rem var(--font-mono); letter-spacing: .08em; text-transform: uppercase; }
 .results-table .link-button { font: 600 .95rem var(--font-display); letter-spacing: -.02em; }
 .results-table .card-badges { margin-top: .35rem; }
+.results-table .name-cell { min-width: 12rem; }
+.results-table .role-cell { min-width: 9.5rem; }
+/* Shrink-to-fit: a 1% width with nowrap sizes the column to its text, so a date,
+   a score, or "No GitHub metrics" cannot be broken to feed a wider prose column. */
+.results-table .fit-cell,
+.results-table .compare-cell { width: 1%; white-space: nowrap; overflow-wrap: normal; }
+.results-table .token-cell { overflow-wrap: anywhere; }
 .project-card {
   min-height: 340px;
   padding: 1.4rem;
@@ -1000,12 +1020,6 @@ input:focus, select:focus {
   padding: 1rem 0 0;
   list-style: none;
 }
-.badge-help { width: fit-content; max-width: 100%; margin-top: .3rem; font-size: .75rem; color: var(--muted); }
-.badge-help summary { cursor: pointer; width: fit-content; }
-.badge-help summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
-.badge-help dl { margin: .5rem 0 0; }
-.badge-help dt { color: var(--text); font-weight: 600; }
-.badge-help dd { margin: 0 0 .5rem; }
 .card-badge {
   display: inline-flex;
   cursor: help;
@@ -1156,13 +1170,11 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
   z-index: 1;
 }
 .project-card .card-badges,
-.project-card .badge-help,
 .project-card .compare-toggle,
 .project-card .card-source-meta,
 .project-card .license-badge,
 .project-card .lab-related,
 .finder-result .card-badges,
-.finder-result .badge-help,
 .finder-result .license-badge {
   position: relative;
   z-index: 2;
@@ -1173,14 +1185,21 @@ body.has-badge-legend footer { margin-bottom: var(--legend-h); }
   outline-offset: 2px;
 }
 .card-actions { display: flex; align-items: center; gap: .8rem; }
-.card-footer .compare-toggle {
+.card-footer .compare-toggle,
+.results-table .compare-toggle {
   padding: .3rem .5rem;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-chip);
+  background: transparent;
   color: var(--muted);
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
 }
-.card-footer .compare-toggle:hover { border-color: var(--cyan); color: var(--cyan); }
-.card-footer .compare-toggle.is-selected {
+.card-footer .compare-toggle:hover,
+.results-table .compare-toggle:hover { border-color: var(--cyan); color: var(--cyan); }
+.card-footer .compare-toggle.is-selected,
+.results-table .compare-toggle.is-selected {
   border-color: var(--cyan);
   background: var(--sage-soft);
   color: var(--cyan);
@@ -1571,6 +1590,7 @@ footer #data-date, footer .footer-meta {
   .theme-toggle, .github-link { width: 32px; height: 36px; }
   .brand small { display: none; }
   .tabs { flex-wrap: nowrap; justify-content: center; gap: .5rem; min-width: 0; }
+  .stage-tabs { flex-wrap: wrap; justify-content: flex-start; row-gap: .1rem; column-gap: .85rem; }
   .tab, .tab-link { flex: 0 0 auto; display: inline-flex; align-items: center; min-height: 36px; padding: .3rem 0; font-size: .72rem; white-space: nowrap; }
   /* A button-anchored popup would hang off the viewport on a phone, where
      the Docs entry sits far from the right edge: the menu becomes a sheet
@@ -1701,7 +1721,7 @@ footer #data-date, footer .footer-meta {
 /* The query's result count, beside the input, so typing shows its effect
    without scrolling. The live count in the result row stays the announced one. */
 .search-field { position: relative; }
-.search-field input { padding-right: 6.5rem; }
+.search-field:has(.search-count:not(:empty)) input { padding-right: 6.5rem; }
 .search-count {
   position: absolute;
   right: .8rem;

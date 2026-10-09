@@ -23034,6 +23034,555 @@
         "A 59.8 MB compiled Linux binary is committed to the repository, the cost table is dated May 2025, and the repository has a single maintainer"
       ],
       "why_it_matters": "Shows how far a tmux-centred tool can go before it becomes orchestration: persisted assignments, policy, and a scoring coordinator, under a licence that singles out two model vendors."
+    },
+    {
+      "id": "llmstack",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "LLMStack",
+      "repo": "trypromptly/LLMStack",
+      "url": "https://github.com/trypromptly/LLMStack",
+      "description": "Self-hostable no-code builder for generative AI agents, chained-model workflows, and chatbots, with a tool-calling agent app type, a data store, and an HTTP API.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google"
+      ],
+      "architectures": [
+        "relational_db",
+        "hybrid"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research",
+        "persistent_state",
+        "workflows"
+      ],
+      "canonical_data": "app definitions, processor run entries, vectorized user data, and chat session data in a relational database",
+      "deployment": [
+        "self_hosted",
+        "local_cli"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 2308,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "Covers the open LLMStack repository, not the hosted Promptly cloud offering the README also advertises.",
+      "score": {
+        "task_reliability": 5.4,
+        "tool_use": 6.4,
+        "autonomy": 5.6,
+        "human_control": 4.8,
+        "observability_recovery": 5.6,
+        "data_sovereignty": 6.4,
+        "interoperability": 6.0,
+        "maturity": 4.8,
+        "overall": 5.59
+      },
+      "strengths": [
+        "The agent app type runs a bounded tool-calling loop (a configurable maximum of steps, ten by default) over the processors an app declares, and feeds tool errors back to the model as tool results",
+        "A no-code builder, an HTTP API, and Slack and Discord triggers expose the same app definition, so a non-programmer can publish an agent to several surfaces",
+        "Multi-tenant organizations, a bundled vector store, and a pip-installable single-command start make a self-hosted trial short"
+      ],
+      "weaknesses": [
+        "The licence is a custom source-available text that bars offering the software as a hosted or managed service and forbids circumventing its licence-key functionality, so it is not open source",
+        "The agent app type's model list is an enumeration of OpenAI models and its provider field is read-only, while other providers appear only as chain processors",
+        "The last commit and the last release (v0.2.6) are from late 2024, so current model and tool-protocol support is unreviewed and probably behind",
+        "The README documents a default admin account with a published password and the agent loop reviewed has no per-tool approval step"
+      ],
+      "why_it_matters": "Shows what a no-code agent builder with its own run history and tenancy looks like, and how a source-available licence restricts hosting it as a service.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "NOASSERTION"
+    },
+    {
+      "id": "pi-desktop",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "PI-Desktop",
+      "repo": "vastsa/PI-Desktop",
+      "url": "https://github.com/vastsa/PI-Desktop",
+      "description": "Local-first desktop coding-agent workspace with persistent sessions, Agent, Plan, and Goal modes, a permission layer, subagents and worker sessions, and a plugin system, built on the pi agent engine.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "versioned"
+      ],
+      "agent_interfaces": [
+        "ide",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "canonical_data": "projects, sessions, plans, plugin registry, settings, and an audit log in a local SQLite database, with keychain-held credentials",
+      "deployment": [
+        "desktop"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "LGPL-3.0",
+        "MIT"
+      ],
+      "source_model": "mixed_open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 6471,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 6.8,
+        "tool_use": 8.0,
+        "autonomy": 7.6,
+        "human_control": 8.6,
+        "observability_recovery": 7.8,
+        "data_sovereignty": 8.6,
+        "interoperability": 7.8,
+        "maturity": 5.6,
+        "overall": 7.59
+      },
+      "strengths": [
+        "A Rust host core evaluates a permission request for each risky tool call and records allow-once, allow-session, or deny, with audit records written in the same transaction as security-relevant state changes",
+        "Plan is a durable session state with an approval record and an atomic transition to execution, rather than a prompt convention",
+        "Sessions, worker sessions, and subagent transcripts stay inspectable, and local sessions from Claude Code, Codex, OpenCode, and Pi can be imported"
+      ],
+      "weaknesses": [
+        "The README marks the 0.17.x line as Early Preview, and the Agent Engine is the separate pi packages, so loop behaviour depends on an external project at pinned versions",
+        "Tools execute on the host under workspace path enforcement and the permission layer; the reviewed documentation describes no operating-system sandbox",
+        "Plugins can add tools, background services, and MCP servers, which widens what a session can reach beyond the core's own review",
+        "Licensing is mixed: the root is LGPL-3.0 while a bundled file-manager plugin carries a separate MIT file"
+      ],
+      "why_it_matters": "A fast-moving, openly licensed desktop product that treats the coding-agent session, its permissions, and its plugins as one persistent workspace.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "LGPL-3.0"
+    },
+    {
+      "id": "agency-swarm",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Agency Swarm",
+      "repo": "VRSEN/agency-swarm",
+      "url": "https://github.com/VRSEN/agency-swarm",
+      "description": "Python framework that extends the OpenAI Agents SDK with role-defined agents, directional communication flows, thread persistence callbacks, a terminal and web demo, and FastAPI and MCP integrations.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "x_ai",
+        "openrouter"
+      ],
+      "architectures": [
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "agent_interfaces": [
+        "library",
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "canonical_data": "application-defined agency, agent, and conversation-thread state saved through caller-supplied load and save callbacks",
+      "deployment": [
+        "library",
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 4590,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "Records the v1.x SDK-based framework; the README's migration guide separates it from the earlier v0.x line. It extends, and does not replace, the OpenAI Agents SDK recorded separately.",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 8.0,
+        "autonomy": 7.4,
+        "human_control": 7.0,
+        "observability_recovery": 7.4,
+        "data_sovereignty": 7.6,
+        "interoperability": 8.0,
+        "maturity": 7.6,
+        "overall": 7.44
+      },
+      "strengths": [
+        "Agents talk through a dedicated send-message tool governed by explicit directional communication flows declared on the Agency, so who may delegate to whom is code rather than prompt text",
+        "Persistence is a pair of caller-supplied callbacks, so conversation threads can live in any store without a bundled database",
+        "Releases are frequent (v1.12.0 in the package manifest) and the README reports 92 percent test coverage"
+      ],
+      "weaknesses": [
+        "It is built on the OpenAI Agents SDK, so loop semantics, tracing, and tool format follow that dependency, and other providers arrive through an optional LiteLLM router",
+        "The v1 line is a rewrite of the v0.x framework, so older tutorials and agents need migration",
+        "Agent behaviour rests on prompt-defined roles and the chosen model; the reviewed source adds no sandbox or human-approval layer of its own beyond the SDK guardrail hooks",
+        "The README directs readers to the maintainer's paid agent-building service"
+      ],
+      "why_it_matters": "A widely used example of declaring multi-agent structure as directional flows over a provider SDK, rather than as free-form handoffs.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "devspace",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "DevSpace",
+      "repo": "Waishnav/devspace",
+      "url": "https://github.com/Waishnav/devspace",
+      "description": "Self-hosted MCP server that gives ChatGPT and other MCP clients file, search, patch, shell, git-worktree, and review tools over approved local project folders, plus a local daemon that delegates work to other coding agents.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "relational_db",
+        "git_versioned"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp"
+      ],
+      "canonical_data": "a local SQLite database of workspace sessions, OAuth grants, and logical subagent records, plus the project working trees and git review history",
+      "deployment": [
+        "local_cli",
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 5208,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "Covers the DevSpace server, CLI, and local-agent daemon. The connected chat client and the agents it delegates to are separate products with their own terms.",
+      "score": {
+        "task_reliability": 6.0,
+        "tool_use": 7.8,
+        "autonomy": 6.6,
+        "human_control": 6.8,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 8.0,
+        "interoperability": 7.8,
+        "maturity": 4.8,
+        "overall": 6.79
+      },
+      "strengths": [
+        "A filesystem root allowlist, OAuth approval with an owner password, and Host-header allowlisting bound which folders a connected client may open",
+        "Review checkpoints record a Git-backed review reference for each change, so a diff can be reopened later with a command-line call",
+        "A local daemon keeps logical subagent records durable, reconciles stale running records to error after a restart, and returns typed error codes with a retryable flag"
+      ],
+      "weaknesses": [
+        "The reasoning model is whichever MCP client is connected, so task reliability and autonomy belong largely to that host rather than to DevSpace",
+        "Its own security document says shell commands run as local commands and can do what the user account can do; worktrees are a workflow boundary, not a security boundary",
+        "Public use needs a user-managed tunnel, and the tunnel URL is not treated as a secret",
+        "The repository was created in June 2026, so operating history is short"
+      ],
+      "why_it_matters": "Shows a coding harness delivered as a protocol endpoint, with the agent loop supplied by a chat host and the tools, state, and delegation supplied locally.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "MIT"
+    },
+    {
+      "id": "grok-build",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Grok Build",
+      "repo": "xai-org/grok-build",
+      "url": "https://github.com/xai-org/grok-build",
+      "description": "SpaceXAI's terminal coding agent: a full-screen TUI over a Rust agent runtime with file, shell, search, web, MCP, skills, plugins, hooks, subagents, plan mode, saved sessions, headless and ACP modes, and an optional OS sandbox.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "x_ai",
+        "openai",
+        "anthropic",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "event_log",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword",
+        "agentic"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "versioned"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "canonical_data": "session transcripts, rewind points, task lists, configuration, and hooks under ~/.grok, plus the working tree",
+      "deployment": [
+        "local_cli"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 27261,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "Covers the open-source Grok Build CLI, TUI, and agent runtime. Grok the assistant, Grok Bot, the xAI API, and the community fork Open Grok are separate records.",
+      "score": {
+        "task_reliability": 7.8,
+        "tool_use": 8.6,
+        "autonomy": 8.2,
+        "human_control": 8.6,
+        "observability_recovery": 8.0,
+        "data_sovereignty": 6.8,
+        "interoperability": 8.6,
+        "maturity": 7.0,
+        "overall": 7.99
+      },
+      "strengths": [
+        "Permission modes with allow, ask, and deny rules and hooks sit beside an optional Landlock and Seatbelt sandbox with named profiles and kernel-enforced deny lists",
+        "Sessions persist to disk with rewind points and can be resumed or compacted, and subagents run as child sessions with their own context",
+        "Interactive, headless, and Agent Client Protocol modes, MCP, skills, plugins, and custom model endpoints in three API styles make it embeddable"
+      ],
+      "weaknesses": [
+        "The public tree is a periodic sync from a private monorepo recorded in SOURCE_REV, and external contributions are not accepted",
+        "Default models are hosted by SpaceXAI and sign-in is through a vendor account, so data leaves the machine unless a custom endpoint is configured; terms for the released binary and account were not reviewable here",
+        "Sandboxing is off by default, and on macOS the profiles do not restrict child-process network access",
+        "Several tool implementations are ports of OpenAI Codex and OpenCode code, listed in third-party notices"
+      ],
+      "why_it_matters": "A lab-published coding agent whose runtime, permission layer, and sandbox are open to inspection, in a field where most vendor agents are closed.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "qm",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "QM",
+      "repo": "yc-software/qm",
+      "url": "https://github.com/yc-software/qm",
+      "description": "Self-deployed multiplayer agent harness for Slack and the web: a headless core with per-person and per-room scopes, Postgres session tape and memory, durable sandboxes, scheduled work, shared skills, and a choice of Pi, OpenCode, Codex, or Claude Code as the loop.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [
+        "general_work_agent"
+      ],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "relational_db",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "scheduled",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "container",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "canonical_data": "a Postgres session tape, scope-owned memory, files, skills, and cron records, with sandbox disks treated as disposable",
+      "deployment": [
+        "self_hosted"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 15361,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "Covers the open QM core, CLI, and plugins. The third-party hosted version the README mentions is a separate offering.",
+      "score": {
+        "task_reliability": 6.8,
+        "tool_use": 7.8,
+        "autonomy": 8.0,
+        "human_control": 7.8,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 8.2,
+        "interoperability": 7.6,
+        "maturity": 5.6,
+        "overall": 7.4
+      },
+      "strengths": [
+        "Identity, scope, grants, and delivery are meant to be enforced by the core rather than trusted to the model or the sandbox, with each person and room holding separate memory, files, crons, and a durable sandbox",
+        "An organization picks a strict, auto, or dangerous tool-approval posture that narrower scopes can only tighten, and a predeclared command policy denies destructive commands in every posture",
+        "Work is driven from a central write-ahead session tape and run queue, so turns are meant to survive interruption, and the harness and model are swappable"
+      ],
+      "weaknesses": [
+        "Its own security policy calls it early, experimental software and says it is not a hardened public or multi-tenant service boundary",
+        "Contributions are accepted only as human-written proposal text, so the maintainers implement all code changes",
+        "Content screening is off by default, and the dangerous posture removes tool approval gates",
+        "Deployment needs a cloud account, Postgres, and sandbox provider setup rather than a single install"
+      ],
+      "why_it_matters": "An open implementation of an agent runtime designed for a whole company, where per-scope isolation and explicit grants replace one assistant per person.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "MIT"
     }
   ],
   "verified_at": "2026-09-28"

@@ -3448,7 +3448,8 @@
       ],
       "systems": [
         "grok",
-        "grok-bot"
+        "grok-bot",
+        "grok-build"
       ],
       "channels": [
         {
@@ -3597,6 +3598,62 @@
       "verified_at": "2026-09-25",
       "admission_basis": "reviewed_release",
       "display_order": 140
+    },
+    {
+      "id": "lab-reflection-ai",
+      "name": "Reflection AI",
+      "url": "https://reflection.ai/",
+      "description": "The American company that builds open-weight frontier models, whose first, Beam, was announced on October 5, 2026 with Apache 2.0 weights promised later that month.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "Reflection AI, Inc. offers its site from 300 Kent Ave in Brooklyn, New York, under New York law, and publishes the Open Safety Framework under that name. One name, Reflection AI, covers the organization and its model, Beam. Its careers page invites applicants to New York, San Francisco, London, and Washington D.C., so London is recorded as a second place the team works. It has no GitHub or Hugging Face organization linked from its own pages, so neither is listed as a channel; Beam's weights are promised but unpublished.",
+      "catalog_names": [
+        "Reflection AI"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://reflection.ai/blog"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms of Service: the site is offered by Reflection AI, Inc., located at 300 Kent Ave, Brooklyn, New York, and governed by New York law",
+          "url": "https://reflection.ai/terms-of-service",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "About page: an organization building open-weight models, research, and software for enterprises, governments, and sovereign entities",
+          "url": "https://reflection.ai/about",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: team roles in New York, San Francisco, London, and Washington D.C.",
+          "url": "https://reflection.ai/careers",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Beam announcement: Reflection's first open-weight model",
+          "url": "https://reflection.ai/blog/introducing-beam",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07",
+      "admission_basis": "reviewed_release",
+      "display_order": 750,
+      "research_locations": [
+        "gb"
+      ],
+      "safety_framework": {
+        "title": "Open Safety Framework",
+        "url": "https://reflection.ai/safety",
+        "verified_at": "2026-10-07"
+      }
     }
   ],
   "updated_at": "2026-10-07"

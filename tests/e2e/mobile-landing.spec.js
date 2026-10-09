@@ -1,6 +1,6 @@
 const { test, expect } = require("@playwright/test");
 const { openCollection, openView, searchAll } = require("./helpers/landing");
-const { searchBox, settled } = require("./helpers/results");
+const { clearControl, searchBox } = require("./helpers/results");
 
 for (const theme of ["light", "dark"]) {
   test(`mobile Elements families, compact collections and dock fit in ${theme}`, async ({ page }) => {
@@ -58,10 +58,11 @@ test("mobile navigation restores a role list through history and handles More fo
   await page.locator("#record-dialog .dialog-close").click();
   await expect(page).not.toHaveURL(/record=/);
   await page.locator('[data-mobile-nav="search"]').click();
-  await searchBox(page, "all").fill("Ollama");
-  await settled(page);
-  await expect(searchBox(page, "all")).toBeFocused();
-  await expect(page).toHaveURL(/q=Ollama/);
+  await expect(page.locator("#results-search")).toBeFocused();
+  await expect(page).toHaveURL(/role=coding_agent/);
+  await expect(page.locator('[data-mobile-nav="search"]')).not.toHaveAttribute("aria-current", "page");
+  await page.locator('[data-mobile-nav="explore"]').click();
+  await expect(page).toHaveURL(/view=explore/);
   await page.goBack();
   await expect(page).toHaveURL(/role=coding_agent/);
   await expect(page.locator("#project-grid")).toContainText("Aider");
@@ -116,4 +117,39 @@ test("the dock steps aside for a keyboard-sized viewport change while searching"
     window.visualViewport.dispatchEvent(new Event("resize"));
   });
   await expect(page.locator("#mobile-nav")).toBeVisible();
+});
+
+// #478's phone behaviour, on Task 3's controls (ruling R-T3-13): the
+// filters stay in the closed sheet, the Filters button counts what is set,
+// each constraint is a chip, and the Sort stays visible in the bar, so the
+// first card is above the dock and nothing hides why the list is narrowed.
+test("a phone keeps filters closed, shows them as chips, and searches the collection on screen", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/?reviewed=1&sort=release&collection=models");
+  await expect(page.locator("#model-grid .project-card").first()).toBeVisible();
+  await expect(page.locator("#filters-button .filters-count")).toHaveText("1");
+  await expect(page.locator("#filter-sheet")).not.toHaveAttribute("open", "");
+  await expect(page.locator("#model-type-filter")).toBeHidden();
+  await expect(page.locator("#filter-chips")).toContainText("Review: Atlas reviewed");
+  await expect(page.locator("#sort-filter")).toBeVisible();
+  await expect(page.locator("#sort-filter")).toHaveValue("release");
+  await expect(clearControl(page)).toHaveText("Clear filters");
+  const dock = await page.locator("#mobile-nav").boundingBox();
+  const card = await page.locator("#model-grid .project-card").first().boundingBox();
+  expect(card.y).toBeLessThan(dock.y);
+  const padding = await page.locator("#results-search").evaluate(el => parseFloat(getComputedStyle(el).paddingRight));
+  expect(padding).toBeLessThan(40);
+  await page.locator("#filter-chips [data-chip-key='reviewed']").click();
+  await expect(page).not.toHaveURL(/reviewed=/);
+  await expect(page.locator("#filters-button .filters-count")).toHaveText("");
+  await page.locator('[data-mobile-nav="search"]').click();
+  await expect(page.locator("#results-search")).toBeFocused();
+  await expect(page).toHaveURL(/collection=models/);
+  await page.locator('[data-mobile-nav="home"]').click();
+  await expect(page.locator("#front-door")).toBeVisible();
+  await page.locator('[data-mobile-nav="search"]').click();
+  await expect(page).toHaveURL(/collection=all/);
+  await expect(page.locator("#results-search")).toBeFocused();
+  await expect(page.locator('[data-mobile-nav="search"]')).toHaveAttribute("aria-current", "page");
+  await expect(page.locator("#filters-button")).toBeHidden();
 });

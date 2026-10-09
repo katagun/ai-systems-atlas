@@ -41,7 +41,7 @@ A found statement stores:
 
 - `tier_term`: the developer's own term, verbatim, such as a framework level or a safeguard level.
 - `domains`: one or more of `cyber`, `bio_chem`, `autonomy`, the domains the statement names.
-- `determination`: `determined` when the developer states the threshold was reached; `precautionary` when it states it could not rule the threshold out, or deployed safeguards as a precaution.
+- `determination`: `determined` when the developer states the threshold was reached; `precautionary` when it states it could not rule the threshold out, or deployed safeguards as a precaution; `safeguard_standard` when it states only the safeguard standard it deployed the release under, such as "released under the ASL-2 standard" or "ASL-3 safeguards were appropriate", without saying whether a threshold was reached. The third value was added on 2026-10-07, before the first backfill batch closed, because a developer's most common statement names a safeguard standard and neither of the other two values describes it without inference.
 - `scope`: `weights` when the statement is about the model; `deployment` when it is about safeguards on a release channel.
 - `statement`: the sentence or sentences quoted verbatim.
 
@@ -86,7 +86,7 @@ When a developer revises or withdraws a statement, the entry is updated in place
 
 ### What the site shows
 
-A `flags` family joins the badge registry, using the reserved triangle frame, an exclamation glyph, and the `--danger` token. It is defined in both palettes, unused by any other component, and distinct from every card accent. A `statement_found` flag renders second in the card's badge row, directly after the card's type badge, outside the badge cap, and is listed in the card's "Badge meanings" disclosure ([ADR 047](047-badges-identify-record-facts-and-licensing-stays-scoped-text.md)). Its tooltip gives the family ("Maker risk statement"), `tier_term` and `determination`, and a sentence naming the developer, the domains, and the scope, ending "This is the developer's own statement, not an Atlas risk rating." The visually hidden text is the family name followed by that sentence.
+A `flags` family joins the badge registry, using the reserved triangle frame, an exclamation glyph, and the `--danger` token. It is defined in both palettes, unused by any other component, and distinct from every card accent. A `statement_found` flag renders second in the card's badge row, directly after the card's type badge, outside the badge cap ([ADR 047](047-badges-identify-record-facts-and-licensing-stays-scoped-text.md)). Its tooltip gives the family ("Maker risk statement"), `tier_term` and `determination`, and a sentence naming the developer, the domains, and the scope, ending "This is the developer's own statement, not an Atlas risk rating." The visually hidden text is the family name followed by that sentence.
 
 Every reviewed-model dialog, and its share page, gains a "Risk statements" section showing the entry in any of the three states. A found statement is quoted with its link, date, confidence, and scope in plain words. `no_statement_found` reads "The developer publishes no risk-threshold statement for this release. Absence is not evidence of safety." Not examined reads "Not yet examined." Imported models show nothing.
 

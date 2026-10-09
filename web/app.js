@@ -956,6 +956,7 @@ let elementGroups = [];
 const MOBILE_ELEMENT_FAMILIES = ["agent_system", "memory_system", "assistant_system"];
 let mobileElementFamily = MOBILE_ELEMENT_FAMILIES[0];
 const mobileLayout = window.matchMedia("(max-width: 767px)");
+const compactResults = window.matchMedia("(max-width: 1000px)");
 
 // A role tile previews the organizations that build its systems, so every mark
 // on it is a company logo. A lab with no mark contributes nothing rather than a
@@ -1045,11 +1046,12 @@ function openRole(roleId) {
   $("#result-count")?.focus({ preventScroll: true });
 }
 
-// Models and Systems on the front door are entry points into the same results
-// surface: Atlas-reviewed models by release date, and active systems by review
-// date. Both open as a list.
+// Models, Systems, Labs, and Robots on the front door are entry points into the
+// same results surface. Models are Atlas-reviewed releases by release date, and
+// systems are active records by review date. Each opens as cards.
 function openNewest(kind) {
-  const scope = kind === "model" ? "models" : "systems";
+  const scope = { model: "models", system: "systems", lab: "labs", robot: "robots" }[kind];
+  if (!scope) return;
   if (state.directoryCollection !== scope) rememberCollectionControls(state.directoryCollection);
   leaveFrontDoor();
   wearResults(scope);
@@ -1059,21 +1061,19 @@ function openNewest(kind) {
     $("#reviewed-filter").value = "1";
     $("#sort-filter").value = "release";
     sortValue.models = "release";
-    $("#layout-filter").value = "list";
-    layoutValue.models = "list";
     state.page.models = 1;
-  } else {
+  } else if (kind === "system") {
     $("#status-filter").value = "active";
     $("#family-filter").value = "";
     populateRoleFilter();
     ensureSortOptions("systems");
     $("#sort-filter").value = "reviewed";
     sortValue.systems = "reviewed";
-    $("#layout-filter").value = "list";
-    layoutValue.systems = "list";
     updateScoreSortAvailability();
     state.page.systems = 1;
-  }
+  } else state.page[scope] = 1;
+  $("#layout-filter").value = "cards";
+  layoutValue[scope] = "cards";
   syncLayoutButtons();
   setDirectoryCollection(scope, { preserveControls: true });
   $(".result-count")?.focus({ preventScroll: true });
@@ -1422,16 +1422,27 @@ function syncFilterSheetButton({ announce = true } = {}) {
 // live height is a custom property the stylesheet reads; the strip's is
 // another, which the results bar sticks under above 1000 px. The sticky
 // height is a third, html's scroll-padding-top, so focus moving through a
-// grid stops below the header, the strip, and the bar rather than under
-// them. The strip's height changes with the family row, so every strip
-// render re-measures.
+// grid stops below the header, the strip, the bar, and the result row
+// rather than under them. The strip's height changes with the family row,
+// so every strip render re-measures.
 function syncStickyClearance() {
   const header = $(".site-header");
   if (!header) return;
   document.documentElement.style.setProperty("--header-height", `${header.getBoundingClientRect().height}px`);
   const strip = $("#scope-strip");
   document.documentElement.style.setProperty("--strip-height", `${strip && !strip.hidden ? strip.getBoundingClientRect().height : 0}px`);
-  document.documentElement.style.setProperty("--sticky-clearance", `${stickyHeight()}px`);
+  const bar = $("#results-bar");
+  document.documentElement.style.setProperty("--results-bar-height", `${bar && !bar.hidden ? bar.getBoundingClientRect().height : 0}px`);
+  // The header, the strip, and the bar: the rail sticks under these.
+  document.documentElement.style.setProperty("--chrome-height", `${stickyHeight()}px`);
+  // The chips row sticks under the bar, and the result row under the chips
+  // (#479, ruling R-T3-13), so a focused card or list row has to clear both
+  // too. Neither is part of stickyHeight: they are the top of the results,
+  // and counting them would scroll the results down by their own height.
+  const stuck = element => element && !element.hidden && element.getClientRects().length && getComputedStyle(element).position === "sticky" ? element.getBoundingClientRect().height : 0;
+  const chipsHeight = stuck($("#filter-chips"));
+  document.documentElement.style.setProperty("--chips-height", `${chipsHeight}px`);
+  document.documentElement.style.setProperty("--sticky-clearance", `${stickyHeight() + chipsHeight + stuck($(".collection-panel:not([hidden]) .result-row"))}px`);
   // Where the results frame starts on the page, and so the rail's top until
   // the page scrolls it up to its sticky place: its lowest, which its
   // height is fitted under (styles.css).
@@ -1653,20 +1664,17 @@ function modelModalityRoute(model) {
 // ride in visually hidden text for screen readers and in data attributes for
 // the pointer tooltip. Badges are never controls and take no tab stop. A
 // reviewed-model card's flag (ADR 042) sits directly after its type badge,
-// outside the badge cap, and "Badge meanings" lists every emblem in the row's
-// order.
+// outside the badge cap. The legend and Taxonomy hold the names; a record
+// does not repeat them.
 function badgeRow(badges, flags = [], record) {
   if (!badges.length && !flags.length) return "";
   const lead = badges[0]?.family === "type" ? 1 : 0;
-  const entries = [...badges.slice(0, lead).map(badgeItem), ...flags.map(flag => flagItem(flag, record)), ...badges.slice(lead).map(badgeItem)];
-  return `<div class="badge-group"><ul class="card-badges" role="list">${entries.map(entry => entry.emblem).join("")}</ul><details class="badge-help"><summary>Badge meanings</summary><dl>${entries.map(entry => entry.meaning).join("")}</dl></details></div>`;
+  const emblems = [...badges.slice(0, lead).map(badgeItem), ...flags.map(flag => flagItem(flag, record)), ...badges.slice(lead).map(badgeItem)];
+  return `<div class="badge-group"><ul class="card-badges" role="list">${emblems.join("")}</ul></div>`;
 }
 
 function badgeItem(badge) {
-  return {
-    emblem: `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`,
-    meaning: `<dt>${escapeHTML(badge.name)}</dt><dd>${escapeHTML(badge.definition)}</dd>`,
-  };
+  return `<li class="card-badge" data-badge="${escapeHTML(badge.id)}" data-family="${escapeHTML(badge.family)}" data-name="${escapeHTML(badge.name)}" data-definition="${escapeHTML(badge.definition)}">${AppCore.badgeEmblem(badge.id)}<span class="visually-hidden">${escapeHTML(badge.name)}: ${escapeHTML(badge.definition)}</span></li>`;
 }
 
 // A flag's hidden text is its family name and tooltip sentence, the "name:
@@ -1676,10 +1684,7 @@ function badgeItem(badge) {
 // class is not `card-flag`: that names a card's geography circles.
 function flagItem(flag, record) {
   const text = AppCore.flagEmblemText(flag.entry, record.developer, state.taxonomy);
-  return {
-    emblem: `<li class="card-badge card-reviewed-flag" data-badge="${escapeHTML(flag.id)}" data-family="${escapeHTML(flag.family)}" data-flag-record="${escapeHTML(record.id)}" data-name="${escapeHTML(text.name)}" data-definition="${escapeHTML(text.sentence)}">${AppCore.badgeEmblem(flag.id)}<span class="visually-hidden">${escapeHTML(flag.name)}: ${escapeHTML(text.sentence)}</span></li>`,
-    meaning: `<dt>${escapeHTML(`${flag.name} · ${text.name}`)}</dt><dd>${escapeHTML(text.sentence)}</dd>`,
-  };
+  return `<li class="card-badge card-reviewed-flag" data-badge="${escapeHTML(flag.id)}" data-family="${escapeHTML(flag.family)}" data-flag-record="${escapeHTML(record.id)}" data-name="${escapeHTML(text.name)}" data-definition="${escapeHTML(text.sentence)}">${AppCore.badgeEmblem(flag.id)}<span class="visually-hidden">${escapeHTML(flag.name)}: ${escapeHTML(text.sentence)}</span></li>`;
 }
 
 // The one control that opens a card's record. Its hidden text names the
@@ -2062,24 +2067,31 @@ function reviewedModelCard(model, { mixed = false } = {}) {
 
 const mixedSystemCard = record => systemCard(record, { mixed: true });
 
-function tableCell(value) {
-  return `<td>${escapeHTML(value ?? "")}</td>`;
+function tableCell(value, kind = "") {
+  return `<td${kind ? ` class="${kind}-cell"` : ""}>${escapeHTML(value ?? "")}</td>`;
 }
 
 function listName(attribute, record, extra = "") {
-  return `<th scope="row"><button type="button" class="link-button" ${attribute}="${escapeHTML(record.id)}">${escapeHTML(record.name)}</button>${extra}</th>`;
+  return `<th scope="row" class="name-cell"><button type="button" class="link-button" ${attribute}="${escapeHTML(record.id)}">${escapeHTML(record.name)}</button>${extra}</th>`;
 }
 
 function listCompare(kind, record, on) {
-  if (!on) return "<td></td>";
-  return `<td><button class="compare-toggle" data-compare-kind="${kind}" data-compare-id="${escapeHTML(record.id)}" aria-label="Add ${escapeHTML(record.name)} to comparison" aria-pressed="false">Compare</button></td>`;
+  if (!on) return `<td class="compare-cell"></td>`;
+  return `<td class="compare-cell"><button class="compare-toggle" data-compare-kind="${kind}" data-compare-id="${escapeHTML(record.id)}" aria-label="Add ${escapeHTML(record.name)} to comparison" aria-pressed="false">Compare</button></td>`;
 }
+
+const FIT_HEADERS = new Set(["Local-first", "Reviewed", "Score", "Stars", "Compare", "Released", "Review", "Newest release"]);
 
 function resultsTable(headers, rows) {
-  return `<table class="results-table"><thead><tr>${headers.map(header => `<th scope="col">${escapeHTML(header)}</th>`).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table>`;
+  return `<table class="results-table"><thead><tr>${headers.map(header => {
+    const classes = [header === "Compare" ? "compare-cell" : "", FIT_HEADERS.has(header) ? "fit-cell" : ""].filter(Boolean).join(" ");
+    return `<th scope="col"${classes ? ` class="${classes}"` : ""}>${escapeHTML(header)}</th>`;
+  }).join("")}</tr></thead><tbody>${rows.join("")}</tbody></table>`;
 }
 
-const wantsList = () => $("#layout-filter").value === "list";
+// Below 768px the list is a wide table that does not fit, so a phone renders
+// cards only and the layout control is hidden.
+const wantsList = () => !mobileLayout.matches && $("#layout-filter").value === "list";
 
 function bindResultRows(grid) {
   $$("tbody tr", grid).forEach(row => {
@@ -2101,7 +2113,8 @@ function systemListRow(project, context) {
   const licenses = [sourceModelName(project.source_model), ...(project.licenses || [])].filter(Boolean).join(", ");
   const deploy = (project.deployment || []).map(value => taxonomyName("deployment_modes", value)).join(", ");
   const stars = project.stars == null ? (context.mixed ? "" : "No GitHub metrics") : compactNumber(project.stars);
-  return `<tr>${listName("data-project", project, badgeRow(AppCore.cardBadges("system", project)))}${tableCell(roleName(project.primary_role))}${tableCell(deploy)}${tableCell(licenses)}${tableCell(project.local_first === true ? "Yes" : project.local_first === false ? "No" : "Not recorded")}${tableCell(state.systemReviewDates[project.id] || "Not recorded")}${tableCell(showScore ? String(project.score.overall) : "")}${tableCell(stars)}${context.comparable ? listCompare("system", project, showScore) : ""}</tr>`;
+  const local = project.local_first === true ? "Yes" : project.local_first === false ? "No" : "Not recorded";
+  return `<tr>${listName("data-project", project, badgeRow(AppCore.cardBadges("system", project)))}${tableCell(roleName(project.primary_role), "role")}${tableCell(deploy)}${tableCell(licenses, "token")}${tableCell(local, "fit")}${tableCell(state.systemReviewDates[project.id] || "Not recorded", "fit")}${tableCell(showScore ? String(project.score.overall) : "", "fit")}${tableCell(stars, "fit")}${context.comparable ? listCompare("system", project, showScore) : ""}</tr>`;
 }
 
 function renderAllDirectoryEntries() {
@@ -2225,6 +2238,7 @@ const COLLECTIONS = {
       const suffix = family
         ? ` · ${scoreProfileName(selectedProfile?.id)}${finderContext}`
         : " · Scores hidden across families";
+      for (const node of $$("[data-family-score]")) node.hidden = (node.dataset.familyScore === "ready") !== Boolean(family);
       const chip = $("#finder-roles-chip");
       chip.hidden = !state.directoryRolesLabel;
       chip.innerHTML = state.directoryRolesLabel
@@ -2292,7 +2306,7 @@ const COLLECTIONS = {
     listHeaders: () => ["Name", "Type", "Headquarters", "Newest release"],
     listRow: lab => {
       const releases = AppCore.releasesNewestFirst(labRelationsFor(lab).models);
-      return `<tr>${listName("data-lab", lab, badgeRow(AppCore.cardBadges("lab", lab)))}${tableCell(taxonomyName("lab_types", lab.lab_type))}${tableCell(taxonomyName("countries", lab.headquarters))}${tableCell(AppCore.releaseDate(releases[0] || {}))}</tr>`;
+      return `<tr>${listName("data-lab", lab, badgeRow(AppCore.cardBadges("lab", lab)))}${tableCell(taxonomyName("lab_types", lab.lab_type))}${tableCell(taxonomyName("countries", lab.headquarters))}${tableCell(AppCore.releaseDate(releases[0] || {}), "fit")}</tr>`;
     },
   },
   inference: {
@@ -2321,7 +2335,7 @@ const COLLECTIONS = {
     }),
     card: service => inferenceCard(service),
     listHeaders: () => ["Name", "Operator", "Type", "API", "Score", "Compare"],
-    listRow: service => `<tr>${listName("data-inference-service", service, badgeRow(AppCore.cardBadges("inference", service)))}${tableCell(service.operator)}${tableCell(taxonomyName("inference_service_types", service.service_type))}${tableCell(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(", "))}${tableCell(String(service.score.overall))}${listCompare("inference", service, true)}</tr>`,
+    listRow: service => `<tr>${listName("data-inference-service", service, badgeRow(AppCore.cardBadges("inference", service)))}${tableCell(service.operator)}${tableCell(taxonomyName("inference_service_types", service.service_type))}${tableCell(service.api_styles.map(item => taxonomyName("inference_api_styles", item)).join(", "), "token")}${tableCell(String(service.score.overall), "fit")}${listCompare("inference", service, true)}</tr>`,
   },
   runtimes: {
     grid: "#runtime-grid",
@@ -2349,7 +2363,7 @@ const COLLECTIONS = {
     }),
     card: runtime => runtimeCard(runtime),
     listHeaders: () => ["Name", "Maintainer", "Type", "Formats", "Score", "Compare"],
-    listRow: runtime => `<tr>${listName("data-local-runtime", runtime, badgeRow(AppCore.cardBadges("runtime", runtime)))}${tableCell(runtime.maintainer)}${tableCell(taxonomyName("local_runtime_types", runtime.runtime_type))}${tableCell(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(", "))}${tableCell(String(runtime.score.overall))}${listCompare("runtime", runtime, true)}</tr>`,
+    listRow: runtime => `<tr>${listName("data-local-runtime", runtime, badgeRow(AppCore.cardBadges("runtime", runtime)))}${tableCell(runtime.maintainer)}${tableCell(taxonomyName("local_runtime_types", runtime.runtime_type))}${tableCell(runtime.model_formats.map(item => taxonomyName("runtime_model_formats", item)).join(", "), "token")}${tableCell(String(runtime.score.overall), "fit")}${listCompare("runtime", runtime, true)}</tr>`,
   },
   models: {
     grid: "#model-grid",
@@ -2381,7 +2395,7 @@ const COLLECTIONS = {
     listHeaders: () => ["Name", "Developer", "Type", "Released", "Review", "Score", "Compare"],
     listRow: model => {
       const reviewed = isReviewedModel(model);
-      return `<tr>${listName("data-model", model, badgeRow(AppCore.cardBadges("model", model), reviewed ? AppCore.cardFlags("model", model) : [], model))}${tableCell(reviewed ? model.developer : AppCore.modelCardDeveloperLabel(model, state.labIndex))}${tableCell(taxonomyName("model_types", model.model_type))}${tableCell(AppCore.releaseDate(model))}${tableCell(reviewed ? "Atlas reviewed" : "Source record")}${tableCell(reviewed ? String(model.score.overall) : "")}${listCompare("model", model, reviewed)}</tr>`;
+      return `<tr>${listName("data-model", model, badgeRow(AppCore.cardBadges("model", model), reviewed ? AppCore.cardFlags("model", model) : [], model))}${tableCell(reviewed ? model.developer : AppCore.modelCardDeveloperLabel(model, state.labIndex))}${tableCell(taxonomyName("model_types", model.model_type))}${tableCell(AppCore.releaseDate(model), "fit")}${tableCell(reviewed ? "Atlas reviewed" : "Source record", "fit")}${tableCell(reviewed ? String(model.score.overall) : "", "fit")}${listCompare("model", model, reviewed)}</tr>`;
     },
   },
   robots: {
@@ -2694,8 +2708,8 @@ function bindComparisonButtons(root) {
 const finderDetailAwaited = new Set();
 
 // How much sticks to the top of the viewport: the header, and in results
-// the strip and, above 1000 px, the results bar. Each counts only while it
-// is sticky; a hidden one measures no height.
+// the strip and the results bar. Each counts only while it is sticky; a
+// hidden one measures no height.
 function stickyHeight() {
   const sticky = element => element && !element.hidden && getComputedStyle(element).position === "sticky" ? element.getBoundingClientRect().height : 0;
   return sticky($(".site-header")) + sticky($("#scope-strip")) + sticky($("#results-bar"));
@@ -4457,7 +4471,8 @@ function initDocsMenu() {
 // Mobile navigation uses existing views and search state; no parallel catalog.
 function syncMobileNavigation() {
   const view = $(".view.is-active")?.id;
-  const active = view === "directory" ? (state.directoryStage === "door" ? "home" : "search")
+  const active = view === "directory"
+    ? (state.directoryStage === "door" ? "home" : state.directoryCollection === "all" ? "search" : "")
     : view === "finder" || view === "explore" ? view : "more";
   $$("[data-mobile-nav]").forEach(button => {
     if (button.dataset.mobileNav === active) button.setAttribute("aria-current", "page");
@@ -4465,9 +4480,22 @@ function syncMobileNavigation() {
   });
 }
 
+// Puts the results search under the sticky header and strip, then focuses it.
+function focusResultsSearch() {
+  const bar = $("#results-bar");
+  const stuck = getComputedStyle(bar).position === "sticky" ? bar.getBoundingClientRect().height : 0;
+  const top = bar.getBoundingClientRect().top + window.scrollY - (stickyHeight() - stuck);
+  window.scrollTo({ top: Math.max(0, top), behavior: "instant" });
+  $("#results-search").focus({ preventScroll: true });
+}
+
 function openMobileSearch() {
   const onDirectory = $("#directory").classList.contains("is-active");
-  if ((!onDirectory && state.directoryStage !== "door") || (state.directoryStage === "results" && state.directoryCollection !== "all")) {
+  if (onDirectory && state.directoryStage === "results") {
+    focusResultsSearch();
+    return;
+  }
+  if (!onDirectory && state.directoryStage !== "door") {
     try { window.history.pushState(null, "", window.location.href); } catch {}
   }
   openCollection("all");
@@ -4493,7 +4521,14 @@ function initMobileNavigation() {
     else if (toolsFocused && mobileLayout.matches) $('[data-mobile-nav="more"]').focus();
   }
   syncLayout();
-  mobileLayout.addEventListener("change", syncLayout);
+  // The bar wraps differently either side of 1000 px, so the sticky
+  // clearances are measured again there.
+  compactResults.addEventListener("change", syncStickyClearance);
+  mobileLayout.addEventListener("change", () => {
+    syncLayout();
+    syncLayoutButtons();
+    if (state.directoryStage === "results") RESULT_VIEWS[state.directoryCollection]?.render();
+  });
   $("#element-family-tabs").addEventListener("click", event => {
     const button = event.target.closest("[data-element-family-tab]");
     if (!button) return;
@@ -4545,6 +4580,10 @@ function bindEvents() {
   syncStickyClearance();
   window.addEventListener("resize", syncStickyClearance);
   // Each overlay changes size as it opens, closes, or wraps its text.
+  // The chips row and the result row stick under the bar, and each changes
+  // height as chips come and go, so the sticky offsets follow them.
+  const stickyRows = new ResizeObserver(() => syncStickyClearance());
+  ["#filter-chips", ".collection-panel .result-row"].forEach(selector => stickyRows.observe($(selector)));
   const bottomOverlays = new ResizeObserver(syncBottomClearance);
   BOTTOM_OVERLAYS.forEach(selector => bottomOverlays.observe($(selector)));
   window.addEventListener("resize", syncBottomClearance);
