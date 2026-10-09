@@ -23034,6 +23034,584 @@
         "A 59.8 MB compiled Linux binary is committed to the repository, the cost table is dated May 2025, and the repository has a single maintainer"
       ],
       "why_it_matters": "Shows how far a tmux-centred tool can go before it becomes orchestration: persisted assignments, policy, and a scoring coordinator, under a licence that singles out two model vendors."
+    },
+    {
+      "id": "tradingagents",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "TradingAgents",
+      "repo": "TauricResearch/TradingAgents",
+      "url": "https://github.com/TauricResearch/TradingAgents",
+      "description": "Role-structured financial research pipeline in which analyst, bull and bear researcher, trader and risk roles read market, news, sentiment and filing data for a ticker and date and return a rated decision with saved reports.",
+      "primary_role": "research_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "agentic",
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "upsert_rewrite"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container"
+      ],
+      "agent_capabilities": [
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
+      "canonical_data": "an append-only Markdown memory log of decisions with realised returns and reflections, per-ticker SQLite checkpoints, and a saved report tree for each run",
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 110135,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "README drift since triage on 2026-09-24 (blob 82ca5e2 to 38cc4f3) is release news for 0.5.2 and 0.6.0, a parallel-analysts sentence, a Docker data-volume paragraph, headless-run instructions and a logo path; the Apache-2.0 licence blob 261eeb9 is unchanged and no scope statement moved.",
+      "score": {
+        "task_reliability": 6.4,
+        "tool_use": 7.0,
+        "autonomy": 6.8,
+        "human_control": 5.4,
+        "observability_recovery": 7.2,
+        "data_sovereignty": 6.8,
+        "interoperability": 6.2,
+        "maturity": 7.2,
+        "overall": 6.57
+      },
+      "strengths": [
+        "Loops are bounded in code: the bull and bear debate and the three-way risk debate stop after a configured number of turns, and an analyst is told to write its report after 20 tool rounds by default, so a model that keeps calling tools cannot run the graph into its recursion limit",
+        "Dated runs are guarded against look-ahead: SEC EDGAR statements are served as first filed, statements Yahoo cannot date are withheld for a past date, and a backtest command scores decisions on realised alpha against a regional benchmark",
+        "Each completed decision is appended to a Markdown memory log that later runs settle with the realised return and a reflection, and per-ticker SQLite checkpoints let an interrupted run resume"
+      ],
+      "weaknesses": [
+        "The README says the Portfolio Manager's approved order is \"sent to the simulated exchange and executed\", but a search of the package finds no order, broker or simulated-exchange code, so the loop ends at a rated recommendation",
+        "Its own README tells readers to treat the framework as \"a research scaffold for studying multi-agent analysis, not as a strategy with a fixed, replicable return\" and says two runs of the same ticker and date can differ",
+        "Still pre-1.0 and fast-moving: the 0.5.1 release moved import paths and the 0.6.0 notes say checkpoints from 0.5.2 are not resumed"
+      ],
+      "why_it_matters": "A heavily adopted open example of a vertical research agent that implements debate structure, point-in-time data access and outcome settlement as code paths rather than prompt advice.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "Apache-2.0",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "x_ai",
+        "deepseek",
+        "mistral",
+        "moonshot_ai",
+        "nvidia",
+        "z_ai",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "pushed_at": "2026-10-03T21:30:10Z",
+      "forks": 21178,
+      "open_issues": 93,
+      "metadata_verified_at": "2026-10-07"
+    },
+    {
+      "id": "deep-research-agent",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "DeepResearchAgent",
+      "repo": "SkyworkAI/DeepResearchAgent",
+      "url": "https://github.com/SkyworkAI/DeepResearchAgent",
+      "description": "Python framework that composes agents, tools, environments, memory systems and prompt optimizers from MMEngine-style configs, with a tool-calling agent, a planner and a message bus as its runnable parts.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files",
+        "event_log"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "consolidation"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "canonical_data": "per-session working directories holding agent logs, trace records, plan files and JSON memory summaries, plus a component version registry saved to JSON",
+      "deployment": [
+        "library",
+        "local_cli"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "limited",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 3555,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "The GitHub description still calls it a hierarchical multi-agent system for deep research, but the README now calls it \"a self-evolution protocol and runtime\" and the default tool-calling config leaves the deep_researcher tool commented out. Vendored LightRAG sources carry no licence file in the tree, and two SIL Open Font License notices sit beside fonts in an optional visualizer asset folder; neither changes the root MIT grant.",
+      "score": {
+        "task_reliability": 4.6,
+        "tool_use": 6.8,
+        "autonomy": 6.0,
+        "human_control": 3.8,
+        "observability_recovery": 5.4,
+        "data_sovereignty": 6.2,
+        "interoperability": 5.8,
+        "maturity": 3.8,
+        "overall": 5.21
+      },
+      "strengths": [
+        "One registry-and-config pattern covers agents, tools, environments, memory systems and optimizers, and the shipped configs wire a planner and tool-calling sub-agents together over a message bus",
+        "A reflection, TextGrad, GRPO and Reinforce++ optimizer set lets an agent's prompts be revised from recorded trajectories, with a tracer and a component version manager kept alongside",
+        "The tool-calling agent runs a bounded step loop (50 steps in the shipped config) over bash, Python, file, web, todo and skill-generator tools plus an MCP importer"
+      ],
+      "weaknesses": [
+        "The README's protocol claims are not backed by code: the names RSPL and SEPL appear only in the two README files, and the version manager registers, deprecates and archives versions but has no rollback function despite the stated \"auditable lineage and rollback\"",
+        "The bash tool starts commands with a shell subprocess on the host with only a 30-second timeout, and the tool-calling agent contains no approval or confirmation step",
+        "Dormant since 2026-05-04 with two tags, one documented run command and a project homepage that returns 404, so adoption evidence is thin for a repository with thousands of stars"
+      ],
+      "why_it_matters": "A readable example of an agent stack that couples tool-calling agents with trajectory-driven prompt optimization, and a caution that its README describes more protocol than the code implements.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "MIT",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "openrouter"
+      ],
+      "pushed_at": "2026-05-04T09:15:39Z",
+      "forks": 454,
+      "open_issues": 12,
+      "metadata_verified_at": "2026-10-07"
+    },
+    {
+      "id": "solace-agent-mesh",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Solace Agent Mesh",
+      "repo": "SolaceLabs/solace-agent-mesh",
+      "url": "https://github.com/SolaceLabs/solace-agent-mesh",
+      "description": "Event-driven Python framework that hosts Google ADK agents on Solace messaging, with an orchestrator that delegates tasks to peer agents over the A2A protocol; its maintainer has deprecated this Python version.",
+      "primary_role": "multi_agent_orchestrator",
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "connectors"
+      ],
+      "memory_lifecycle": [
+        "consolidation"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "api_sdk"
+      ],
+      "execution_boundaries": [
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "canonical_data": "SQL-backed session history (SQLite by default), versioned file artifacts, and agent cards and task messages carried on the Solace event broker",
+      "deployment": [
+        "self_hosted",
+        "local_cli"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "archived",
+      "stars": 4916,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "The README opens with \"Solace Agent Mesh in Python is now deprecated\" and says it \"won't receive new features, bug fixes or security updates\"; the repository is archived on GitHub and the last release is 1.28.8 on 2026-08-28. The maintainer points to a rewritten Solace Agent Mesh and a desktop edition that the Atlas does not publish, so there is no superseded_by target.",
+      "score": {
+        "task_reliability": 6.2,
+        "tool_use": 7.2,
+        "autonomy": 6.8,
+        "human_control": 4.8,
+        "observability_recovery": 6.2,
+        "data_sovereignty": 6.6,
+        "interoperability": 8.0,
+        "maturity": 4.4,
+        "overall": 6.21
+      },
+      "strengths": [
+        "Agents discover and delegate to each other as A2A peers over the broker, and a DAG executor runs prescriptive workflows with agent, switch, loop and map nodes",
+        "The model layer goes through LiteLLM, so OpenAI, Azure, Vertex, Bedrock, Anthropic and any OpenAI-compatible endpoint are documented configurations, and the same agents are reachable through REST, web chat and Slack gateways",
+        "Sessions persist to SQL by default and artifacts are versioned files, so long conversations survive restarts and large outputs stay out of the model context"
+      ],
+      "weaknesses": [
+        "The maintainer has stopped the project: the Python version gets no features, fixes or security updates, and its replacement is a separate product the repository does not contain",
+        "Running it needs a Solace event broker (an in-memory broker only in a development mode), and the repository documentation presents SSO, RBAC and the visual agent builder as features of a separate Enterprise edition",
+        "The only confirmation step found in the built-in tools is the confirm_delete flag on artifact deletion, so approval of other tool calls is left to the operator's design"
+      ],
+      "why_it_matters": "A production-minded reference for brokered, A2A-based multi-agent systems, now useful mainly as a record of that design and as a migration source for the rewritten product.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "Apache-2.0",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "openai_compatible"
+      ],
+      "pushed_at": "2026-09-13T22:09:15Z",
+      "forks": 276,
+      "open_issues": 100,
+      "metadata_verified_at": "2026-10-07"
+    },
+    {
+      "id": "openagent",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "OpenAgent",
+      "repo": "the-open-agent/openagent",
+      "url": "https://github.com/the-open-agent/openagent",
+      "description": "Self-hostable multi-user chat platform in Go that routes dozens of model providers through one workspace, with knowledge-base retrieval, MCP tools, browser, shell and Office tools, workflows and an admin console.",
+      "primary_role": "multi_model_chat_client",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "architectures": [
+        "relational_db",
+        "vector_index"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "human_curated",
+        "append_only"
+      ],
+      "agent_interfaces": [],
+      "execution_boundaries": [],
+      "agent_capabilities": [],
+      "canonical_data": "conversations, messages, stores (chat applications), vector-indexed knowledge, tool and policy records, and usage and audit logs in the operator's MySQL or SQLite database",
+      "deployment": [
+        "self_hosted",
+        "cloud_optional"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 5691,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "The default configuration still names its database casibase, and sign-in goes through a Casdoor SDK. The 54 bundled skills under skills/ carry no licence files of their own; the root Apache-2.0 file is the only licence in the tree.",
+      "score": {
+        "task_reliability": 5.6,
+        "context_continuity": 7.0,
+        "tools_integrations": 8.0,
+        "human_control": 4.8,
+        "data_governance": 6.6,
+        "interoperability": 7.6,
+        "usability_access": 7.8,
+        "maturity": 6.0,
+        "overall": 6.55
+      },
+      "strengths": [
+        "One workspace fronts many providers and per-conversation model choice, with per-store knowledge bases, embeddings and file ingestion, plus MCP, browser, shell and Office tools exposed to the model",
+        "Ships as a single binary with a native Windows build and falls back to SQLite when MySQL is absent, with a read-only demo and a resettable playground to try first",
+        "Operators get usage and cost analytics, request logs, audit records and owner-scoped multi-tenancy, and the README lists OIDC, OAuth2, LDAP and SAML sign-in through its auth layer"
+      ],
+      "weaknesses": [
+        "A tool-permission engine and a ToolPolicy table with allow, ask and deny rules exist, but a search of the Go sources finds no call that checks them when a tool runs, so the rules appear to be stored without being enforced",
+        "The tool-calling loop continues while the model keeps requesting tools, with no round limit in the loop code",
+        "A fast release train (v2.95.1 days after v2.94.x) and a replaced front end, with the previous Ant Design interface kept only for reference, mean the product surface is still moving"
+      ],
+      "why_it_matters": "A broadly featured open alternative to hosted multi-model chat products that also bundles agent tools and administration, useful as a comparison point for LibreChat-style deployments.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "Apache-2.0",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "mistral",
+        "deepseek",
+        "moonshot_ai",
+        "x_ai",
+        "openrouter",
+        "local_runtime"
+      ],
+      "pushed_at": "2026-10-07T13:59:30Z",
+      "forks": 667,
+      "open_issues": 51,
+      "metadata_verified_at": "2026-10-07"
+    },
+    {
+      "id": "unreal-agent",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Unreal Agent",
+      "repo": "TREE-Ind/Unreal-Agent",
+      "url": "https://github.com/TREE-Ind/Unreal-Agent",
+      "description": "Unreal Engine 5.6 editor plugin whose dockable chat tab drives an OpenAI Responses-API agent that inspects the level, runs Python editor scripts, edits Blueprint graphs and checks its work with screenshots.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "human_curated"
+      ],
+      "agent_interfaces": [
+        "ide"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "browser_control",
+        "research",
+        "mcp"
+      ],
+      "canonical_data": "the open Unreal project and level itself, plus plugin settings in the editor's project configuration; chat history lives in the editor session",
+      "deployment": [
+        "ide_extension",
+        "desktop"
+      ],
+      "local_first": false,
+      "human_editable": true,
+      "provenance": "limited",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 238,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "The GitHub description (\"A collection of Unreal Engine 5 Editor Utility widgets powered by GPT3/4\") predates the current UnrealGPT plugin; the README, plugin descriptor and commits describe the plugin. The bundled Geist and Geist Mono font files ship without a licence file in the plugin.",
+      "score": {
+        "task_reliability": 5.0,
+        "tool_use": 7.4,
+        "autonomy": 6.2,
+        "human_control": 4.6,
+        "observability_recovery": 5.6,
+        "data_sovereignty": 3.6,
+        "interoperability": 5.2,
+        "maturity": 3.8,
+        "overall": 5.23
+      },
+      "strengths": [
+        "Purpose-built editor tools go beyond a bare script runner: atomic actor tools with Undo, native Blueprint query, node, pin and compile tools, a scene query, viewport screenshots and an editor log reader",
+        "The instructions tell the agent to verify its own changes with scene queries and screenshots, and a clarify tool lets it stop and ask the user before acting on an ambiguous request",
+        "An MCP client over stdio and HTTP, a tool-iteration cap (100 by default) and a Python execution timeout (90 seconds) bound what an unattended run can do"
+      ],
+      "weaknesses": [
+        "python_execute runs arbitrary Python inside the editor process and the only confirmation mechanism found is the clarify question, so there is no approval step before a script changes the project",
+        "Scene summaries, screenshots, attached assets and microphone audio are sent to a remote model endpoint, the built-in file and web search tools are OpenAI-only, and the plugin can read a local Codex auth.json for credentials",
+        "Windows-only, marked experimental in the plugin descriptor, with no releases published; the computer-use tool is stubbed out and disabled"
+      ],
+      "why_it_matters": "A concrete example of an in-editor agent for a game engine, showing how a domain-specific tool layer plus self-verification can replace a generic code-execution tool.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "Apache-2.0",
+      "provider_relationship": "provider_native",
+      "model_backends": [
+        "openai"
+      ],
+      "pushed_at": "2026-06-18T20:25:34Z",
+      "forks": 42,
+      "open_issues": 3,
+      "metadata_verified_at": "2026-10-07"
+    },
+    {
+      "id": "trueforge",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "TrueForge",
+      "repo": "truefoundry/trueforge",
+      "url": "https://github.com/truefoundry/trueforge",
+      "description": "TypeScript agent harness that runs the model, MCP tool, skill, sandbox, approval and subagent loop on a server with persistent sessions and schedules, exposed through a chat UI, an HTTP API with SDKs, and an embeddable UI.",
+      "primary_role": "stateful_agent_runtime",
+      "secondary_roles": [
+        "agent_framework_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "relational_db",
+        "event_log",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "scheduled"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "agent_interfaces": [
+        "web_app",
+        "api_sdk",
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "external_sandbox",
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "canonical_data": "agents, sessions, turns and their event streams, schedules and provider settings in SQLite (local mode) or Postgres with Redis (hosted mode)",
+      "deployment": [
+        "self_hosted",
+        "local_cli",
+        "library"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT",
+        "Apache-2.0"
+      ],
+      "source_model": "mixed_open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 6078,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "Repository created 2026-07-23, so the 0.177 version line reflects rapid changeset-driven releases rather than a long history. The benchmark in the docs compares TrueForge with two other harnesses on 14 tasks and is run by its maintainer.",
+      "score": {
+        "task_reliability": 6.4,
+        "tool_use": 8.0,
+        "autonomy": 7.4,
+        "human_control": 7.2,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 6.8,
+        "interoperability": 8.2,
+        "maturity": 6.0,
+        "overall": 7.08
+      },
+      "strengths": [
+        "Sandbox-as-tool keeps the agent loop and credentials on the server while code, file and shell work runs in an isolated environment created only when an agent needs one, so a sandbox crash does not lose conversation state",
+        "Human checkpoints are built into the thread runtime: a tool call marked as requiring approval pauses the turn until the user allows or denies it, by default for MCP tools labelled write or destructive, and an ask-user-questions tool pauses for input",
+        "Sessions record turns, tool calls, subagents, tokens and timing, saved agents can run on a cron schedule, and everything is reachable through a documented HTTP API with TypeScript and Python SDKs"
+      ],
+      "weaknesses": [
+        "Daytona is the only sandbox provider supported today, so code execution depends on a third-party service, and the roadmap lists local sandbox execution as future work",
+        "Approval relies on MCP servers labelling tools: the docs warn that \"Many servers skip labels, so those tools run without asking\", and approve-once is still on the roadmap",
+        "Local mode has no login by default and the README says to keep it on localhost; shared use requires the hosted mode with Postgres and Redis"
+      ],
+      "why_it_matters": "A young but unusually complete open agent harness whose approval, sandbox and session model are documented and tested, a useful counterpart to hosted managed-agent runtimes.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "MIT",
+      "provider_relationship": "provider_agnostic",
+      "model_backends": [
+        "openai",
+        "anthropic",
+        "google",
+        "z_ai",
+        "openai_compatible"
+      ],
+      "pushed_at": "2026-10-07T22:52:17Z",
+      "forks": 493,
+      "open_issues": 97,
+      "metadata_verified_at": "2026-10-07"
     }
   ],
   "verified_at": "2026-09-28"

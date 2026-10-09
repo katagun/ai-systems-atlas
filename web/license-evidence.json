@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-10-06",
+  "verified_at": "2026-10-07",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -4276,6 +4276,114 @@
           "url": "https://github.com/Dicklesworthstone/ntm/blob/6ecedcc0f0759dfc7603da087c7a4a6a2a42de58/LICENSE",
           "blob_sha": "3d414da6ff83defe084707be6030866e8a7fb794",
           "immutable_url": "https://api.github.com/repos/Dicklesworthstone/ntm/git/blobs/3d414da6ff83defe084707be6030866e8a7fb794"
+        }
+      ]
+    },
+    {
+      "project_id": "tradingagents",
+      "repo": "TauricResearch/TradingAgents",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository: the only licence file in the tree is the root Apache License 2.0 text, and pyproject.toml declares no separate licence field",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/TauricResearch/TradingAgents/blob/1394a3f72aa4393e1a98f51b382434c4b4c2d972/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/TauricResearch/TradingAgents/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "deep-research-agent",
+      "repo": "SkyworkAI/DeepResearchAgent",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository: root MIT licence naming AgentOrchestra as copyright holder; no other code licence file exists, and the only nested licence files are two font notices under the optional LightRAG visualizer assets",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/SkyworkAI/DeepResearchAgent/blob/5e3c95d14266f8c4aa6a5deae1fe165c7cd1b87b/LICENSE",
+          "blob_sha": "4f7f3dc7fc66624c346a141fc9486076b5b9db8b",
+          "immutable_url": "https://api.github.com/repos/SkyworkAI/DeepResearchAgent/git/blobs/4f7f3dc7fc66624c346a141fc9486076b5b9db8b"
+        }
+      ]
+    },
+    {
+      "project_id": "solace-agent-mesh",
+      "repo": "SolaceLabs/solace-agent-mesh",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository: the root Apache License 2.0 file, which pyproject.toml names as the package licence; THIRD_PARTY_LICENSES holds only a notice about LibreOffice, installed separately in an optional Docker build",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/SolaceLabs/solace-agent-mesh/blob/f71e744842a66331a7dbb33e5fba8319dc892d12/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/SolaceLabs/solace-agent-mesh/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "openagent",
+      "repo": "the-open-agent/openagent",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository: the root Apache License 2.0 file, matched by Apache headers in the Go sources; no nested licence files, including under the bundled skills",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/the-open-agent/openagent/blob/3d7c429f689fb6ca7e606569ec06cfb4362c757c/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/the-open-agent/openagent/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "unreal-agent",
+      "repo": "TREE-Ind/Unreal-Agent",
+      "items": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Whole repository: the root Apache License 2.0 file; the bundled Geist fonts under Content/Fonts carry no licence file",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/TREE-Ind/Unreal-Agent/blob/4fdc15ca0f647a7ff0edb2e1b7ada7e328901f7b/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/TREE-Ind/Unreal-Agent/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+        }
+      ]
+    },
+    {
+      "project_id": "trueforge",
+      "repo": "truefoundry/trueforge",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository root and every workspace package that does not carry its own licence file, including the server, core runtime, SDK and chat UI package manifests, all declared MIT",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/truefoundry/trueforge/blob/8c24138f77cfe52eab82359c056349f86d3aecc5/LICENSE",
+          "blob_sha": "d1e5f37a53f34551fe40eb8fe67c7a9d23e216bb",
+          "immutable_url": "https://api.github.com/repos/truefoundry/trueforge/git/blobs/d1e5f37a53f34551fe40eb8fe67c7a9d23e216bb"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "The embeddable UI package, with its own copy of the MIT licence and a NOTICE listing third-party dependencies",
+          "kind": "git_blob",
+          "path": "packages/trueforge-ui/LICENSE",
+          "url": "https://github.com/truefoundry/trueforge/blob/8c24138f77cfe52eab82359c056349f86d3aecc5/packages/trueforge-ui/LICENSE",
+          "blob_sha": "d1e5f37a53f34551fe40eb8fe67c7a9d23e216bb",
+          "immutable_url": "https://api.github.com/repos/truefoundry/trueforge/git/blobs/d1e5f37a53f34551fe40eb8fe67c7a9d23e216bb"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "The assistant-ui runtime adapter package, whose manifest and licence file are Apache-2.0 rather than the repository's MIT",
+          "kind": "git_blob",
+          "path": "packages/assistant-ui-runtime/LICENSE",
+          "url": "https://github.com/truefoundry/trueforge/blob/8c24138f77cfe52eab82359c056349f86d3aecc5/packages/assistant-ui-runtime/LICENSE",
+          "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+          "immutable_url": "https://api.github.com/repos/truefoundry/trueforge/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
         }
       ]
     }
