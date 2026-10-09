@@ -23583,6 +23583,468 @@
       "research_confidence": "medium",
       "verified_at": "2026-10-07",
       "github_detected_license": "MIT"
+    },
+    {
+      "id": "nagaagent",
+      "system_family": "assistant_system",
+      "score_profile": "assistant",
+      "name": "NagaAgent",
+      "repo": "RTGS2017/NagaAgent",
+      "url": "https://github.com/RTGS2017/NagaAgent",
+      "description": "Desktop companion assistant with a Live2D character, streaming chat with tool calls, a graph-based long-term memory, MCP tool agents, and an embedded OpenClaw runtime for delegated computer tasks.",
+      "primary_role": "multi_model_chat_client",
+      "secondary_roles": [],
+      "agent_relation": "agent_enabled_ui",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "openai_compatible",
+        "anthropic",
+        "deepseek",
+        "local_runtime"
+      ],
+      "architectures": [
+        "graph_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "graph_traversal",
+        "keyword"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "upsert_rewrite",
+        "consolidation"
+      ],
+      "agent_interfaces": [],
+      "execution_boundaries": [],
+      "agent_capabilities": [],
+      "canonical_data": "chat sessions and compressed summaries as session files, extracted knowledge triples as a local JSON file mirrored into an optional Neo4j graph or a hosted memory service, and settings in a local config file",
+      "deployment": [
+        "desktop",
+        "self_hosted"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "partial",
+      "licenses": [
+        "AGPL-3.0",
+        "MIT",
+        "LicenseRef-Commercial"
+      ],
+      "source_model": "open_core",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 1543,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": null,
+      "score": {
+        "task_reliability": 5.0,
+        "context_continuity": 7.2,
+        "tools_integrations": 7.4,
+        "human_control": 4.8,
+        "data_governance": 5.4,
+        "interoperability": 6.6,
+        "usability_access": 6.4,
+        "maturity": 5.6,
+        "overall": 5.98
+      },
+      "strengths": [
+        "Long conversations are compressed into a six-part persisted summary that carries facts, preferences, decisions and open to-dos into later sessions, and extracted knowledge triples are mirrored to a local file as well as to an optional graph database",
+        "Tools are reached through pluggable MCP agents discovered from manifests plus an embedded OpenClaw gateway, and tool calls are parsed from text so any OpenAI-compatible provider works, with an Anthropic-format switch",
+        "A dated changelog shows frequent releases across Windows, macOS and Linux packaging, with the OpenClaw runtime bundled into the installer"
+      ],
+      "weaknesses": [
+        "The code is under AGPL-3.0 with a separate proprietary licence required in writing for closed-source use, a vendored OpenClaw tree is MIT, and the default login path routes model calls and search through the maintainer's hosted gateway",
+        "No approval or confirmation step was found in the tool loop, so tool and OpenClaw computer-control calls run without a human gate beyond the round limit",
+        "A telemetry queue with an optional upload path ships in the backend, and the test directory holds three test files against a very large codebase",
+        "Documentation is Chinese-first, and the product centres on an anime companion persona, which narrows it as a general-purpose workspace"
+      ],
+      "why_it_matters": "A rare open desktop assistant that combines a persistent character, graph memory, MCP tools and an embedded delegated-computer runtime in one installable app, under a dual copyleft and proprietary licence.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "AGPL-3.0"
+    },
+    {
+      "id": "agentic-flow",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "Agentic-Flow",
+      "repo": "ruvnet/agentic-flow",
+      "url": "https://github.com/ruvnet/agentic-flow",
+      "description": "Node package that installs self-learning hooks, agent definitions, slash commands and background workers into a Claude Code project, routing tasks to named agents from a local SQLite store of past trajectories and exposing the same functions as an MCP server and a TypeScript library.",
+      "primary_role": "coding_agent_workflow",
+      "secondary_roles": [],
+      "agent_relation": "coding_workflow",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "google",
+        "openrouter",
+        "local_runtime"
+      ],
+      "architectures": [
+        "relational_db",
+        "vector_index",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "structured_query"
+      ],
+      "capture_modes": [
+        "coding_session"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "consolidation"
+      ],
+      "canonical_data": "routing records, task trajectories and learned patterns with embeddings in a local SQLite database, plus a generated .claude folder of settings, agent definitions and commands in the project",
+      "deployment": [
+        "local_cli",
+        "library",
+        "host_pack"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "partial",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 816,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "The repository root has no licence file although the readme links to one; the MIT grant is recorded in the root and package manifests, and several nested packages and example folders carry their own MIT texts under other copyright names.",
+      "score": {
+        "task_reliability": 3.8,
+        "tool_use": 6.4,
+        "autonomy": 5.2,
+        "human_control": 4.4,
+        "observability_recovery": 5.0,
+        "data_sovereignty": 6.8,
+        "interoperability": 6.4,
+        "maturity": 4.2,
+        "overall": 5.11
+      },
+      "strengths": [
+        "Routing, edit and command outcomes are written to a local SQLite store of trajectories, patterns and routings that later hook calls read back to suggest an agent, which is state a prompt kit does not keep",
+        "One command writes a Claude Code settings file with pre-edit, post-edit and pre-command hooks plus agent definitions and slash commands, and the same functions are exposed as MCP tools and a TypeScript API",
+        "Background workers are dispatched from keywords in prompts and deposit findings into memory, under a resource governor"
+      ],
+      "weaknesses": [
+        "The repository root has no licence file although the readme says to see one; the MIT grant rests on package manifests and nested per-package texts under different copyright names",
+        "The pre-command risk hook computes blocked and approved flags but the command always exits zero, so it advises rather than denies",
+        "The orchestration runtime keeps run status in memory and delegates to an external command, while the readme's headline figures for speed-ups, quality gains and agent counts are the author's own and were not reproduced",
+        "The repository mixes a v2 package with an older root manifest, committed tarballs and database files, and a submodule pointer, which makes the shipped surface hard to delimit"
+      ],
+      "why_it_matters": "A widely starred attempt to turn Claude Code into a self-routing multi-agent setup through hooks and a learning store, useful as a case study in how much of such a stack is state and how much is claim.",
+      "research_confidence": "low",
+      "verified_at": "2026-10-07",
+      "github_detected_license": null
+    },
+    {
+      "id": "botsharp",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "BotSharp",
+      "repo": "SciSharp/BotSharp",
+      "url": "https://github.com/SciSharp/BotSharp",
+      "description": ".NET framework for building agent applications, with a plugin kernel, a routing agent that hands conversations between task agents, planners, persisted conversation state, MCP integration, evaluation hooks, and REST and WebSocket endpoints.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "deepseek",
+        "google",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "vector_index",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "semantic_vector",
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation",
+        "file_import"
+      ],
+      "memory_lifecycle": [
+        "append_only",
+        "human_curated"
+      ],
+      "canonical_data": "agent profiles, conversations, dialog logs and conversation state in a file repository by default or MongoDB through a plugin, with knowledge collections in a vector database such as Qdrant",
+      "deployment": [
+        "self_hosted",
+        "library"
+      ],
+      "agent_interfaces": [
+        "api_sdk",
+        "library",
+        "web_app"
+      ],
+      "execution_boundaries": [
+        "framework_defined"
+      ],
+      "agent_capabilities": [
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows",
+        "shell_execution"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 3111,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "The admin interface the quick start points to lives in a separate repository, BotSharp-UI, and is not part of this record.",
+      "score": {
+        "task_reliability": 5.8,
+        "tool_use": 7.0,
+        "autonomy": 6.0,
+        "human_control": 5.8,
+        "observability_recovery": 6.2,
+        "data_sovereignty": 7.2,
+        "interoperability": 7.6,
+        "maturity": 7.0,
+        "overall": 6.46
+      },
+      "strengths": [
+        "A routing agent runs an instruction loop that picks the next task agent, saves conversation state, appends every dialog to a store and emits hooks, so handoff between agents is code with persisted state rather than a prompt convention",
+        "Nearly everything is a plugin behind an abstraction: dozens of model, storage, channel and tool plugins, MCP tool execution, and an agent testing and evaluation hook set",
+        "Apache-2.0 across a single licence file, with a file-based default store that needs no database to start"
+      ],
+      "weaknesses": [
+        "The readme still advertises model versions from 2024 and 2025 and a roadmap in which browser and computer use are unchecked, so its capability list lags the plugin directory",
+        "The admin interface is a separate repository, so a running system needs two projects and the quick start sends the reader out of this one",
+        "Agent behaviour depends on the prompts and planner each application defines, and no cross-application task success figures are published"
+      ],
+      "why_it_matters": "A long-lived, permissively licensed .NET option for teams that want agent routing, planning and conversation state inside an existing enterprise stack rather than in a Python framework.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "Apache-2.0"
+    },
+    {
+      "id": "roma",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "ROMA",
+      "repo": "sentient-agi/ROMA",
+      "url": "https://github.com/sentient-agi/ROMA",
+      "description": "Python framework on DSPy that solves a task by recursively deciding whether it is atomic, planning subtasks into a dependency graph, executing them with tool-using agents and aggregating the results, with checkpoints, execution-scoped storage, a REST API, a CLI and a terminal visualiser.",
+      "primary_role": "agent_framework_sdk",
+      "secondary_roles": [
+        "multi_agent_orchestrator"
+      ],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "relational_db",
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "structured_query"
+      ],
+      "capture_modes": [
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "per-execution task graphs, checkpoints, task and model-call traces in PostgreSQL when persistence is enabled, with execution-scoped folders of artifacts and large tool responses as Parquet files on disk or S3-compatible storage",
+      "deployment": [
+        "library",
+        "local_cli",
+        "self_hosted"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host",
+        "container",
+        "external_sandbox"
+      ],
+      "agent_capabilities": [
+        "shell_execution",
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "mcp",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "LicenseRef-Unclear"
+      ],
+      "source_model": "unclear",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 5179,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "No licence file has ever existed in this repository and the package manifest declares none; the readme's closing section says Apache 2.0 and links a LICENSE file that is not served, so that sentence is the only artifact asserting terms. The last commit was on 2026-02-16.",
+      "score": {
+        "task_reliability": 5.6,
+        "tool_use": 6.8,
+        "autonomy": 7.0,
+        "human_control": 4.4,
+        "observability_recovery": 7.4,
+        "data_sovereignty": 6.6,
+        "interoperability": 6.4,
+        "maturity": 4.4,
+        "overall": 6.0
+      },
+      "strengths": [
+        "The recursion is machinery rather than prose: an engine builds a task dependency graph, runs ready subtasks in parallel, and a checkpoint manager snapshots the graph so a run can be resumed or partly recovered",
+        "Database tables record executions, checkpoints, task traces, model calls, tool invocations and circuit-breaker state, so a run can be inspected after the fact",
+        "Atomizer, planner, executor, aggregator and verifier are separate configurable modules, with MCP toolkits, a web search toolkit, a terminal toolkit over tmux and an E2B sandbox toolkit"
+      ],
+      "weaknesses": [
+        "No licence file exists and the manifest declares none, so redistribution terms rest on one readme sentence",
+        "The package is version 0.1.0 and labelled beta in its own title, and the last commit was in February 2026",
+        "No approval or confirmation step was found around the terminal and code-execution toolkits, so human control is limited to configuration and stopping a run",
+        "The benchmark results in the readme are images of the maintainers' own search configuration, not reproducible figures in the repository"
+      ],
+      "why_it_matters": "A clear reference for recursive plan-and-aggregate agent execution with a real task graph, checkpoints and traces, held back by the absence of any licence grant.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": null
+    },
+    {
+      "id": "tradingagents-astock",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "TradingAgents-Astock",
+      "repo": "simonlin1212/TradingAgents-astock",
+      "url": "https://github.com/simonlin1212/TradingAgents-astock",
+      "description": "A-share investment research pipeline forked from TauricResearch/TradingAgents: seven tool-using analysts, bull and bear debate, a trader and a three-way risk debate produce a rated decision report, with free mainland-China data sources, a Streamlit interface, resumable runs and a decision-performance report.",
+      "primary_role": "research_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "deepseek",
+        "x_ai",
+        "z_ai",
+        "openrouter",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "architectures": [
+        "plain_files",
+        "relational_db"
+      ],
+      "retrieval_modes": [
+        "recency_rules"
+      ],
+      "capture_modes": [
+        "manual"
+      ],
+      "memory_lifecycle": [
+        "append_only"
+      ],
+      "canonical_data": "an append-only markdown decision log of past ratings with later returns and reflections, per-ticker SQLite checkpoint databases for resumable runs, saved report folders and a Streamlit history, all under a user home directory",
+      "deployment": [
+        "local_cli",
+        "self_hosted",
+        "library"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "web_app",
+        "library"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "research",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "moderate",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 3639,
+      "stars_verified_at": "2026-10-07",
+      "historical_stars": null,
+      "current_repo_note": "A fork of TauricResearch/TradingAgents, whose own licence file and NOTICE it keeps, recorded in its change log against an upstream commit of 4 May 2026. It earns its own record under ADR 020 because its interfaces, data layer, analyst set and canonical data differ: it adds a Streamlit interface, PDF export, mainland-China data vendors, three market-specific analysts and a decision-performance report.",
+      "score": {
+        "task_reliability": 5.4,
+        "tool_use": 6.4,
+        "autonomy": 6.8,
+        "human_control": 5.4,
+        "observability_recovery": 7.0,
+        "data_sovereignty": 6.2,
+        "interoperability": 6.6,
+        "maturity": 6.0,
+        "overall": 6.12
+      },
+      "strengths": [
+        "Runs are resumable: a per-ticker SQLite checkpoint keyed by ticker and date lets an interrupted analysis continue, and the decision log stores each rating so a later run fills in the realised return and alpha against the CSI 300",
+        "A quality gate checks each analyst report for minimum length and failure phrases before the debate starts, so a tool failure does not silently feed the decision",
+        "Its own performance command reports direction accuracy from the stored decisions and warns in the output when fewer than twenty are settled that the ratios are noise"
+      ],
+      "weaknesses": [
+        "The accuracy of its ratings is unvalidated; the readme frames the project as research and teaching and disclaims investment advice, and the performance report is explicitly not a backtest",
+        "Market data comes from unofficial public endpoints of financial sites and a TCP quote server, and the readme describes anti-ban handling for one of them, so the data layer can break without notice",
+        "It is a fork whose architecture is the upstream project's; the A-share specialisation is a prompt, data and rules layer maintained by one person",
+        "The default path sends every analysis through 30 to 50 calls to a hosted model, so running it costs API money or a subscription unless a local model is configured"
+      ],
+      "why_it_matters": "Shows what happens when a popular multi-agent research pipeline is localised to a different market: the debate structure stays, while the data vendors, trading rules and reporting layer have to be rebuilt.",
+      "research_confidence": "medium",
+      "verified_at": "2026-10-07",
+      "github_detected_license": "Apache-2.0"
     }
   ],
   "verified_at": "2026-09-28"
