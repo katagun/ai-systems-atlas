@@ -3019,6 +3019,206 @@
         "proposed_at": "2026-10-07",
         "proposer": "robots batch 4 review"
       }
+    },
+    {
+      "repo": null,
+      "name": "Agility Digit 5",
+      "url": "https://agilityrobotics.com/solutions/digit-5",
+      "description": "Agility Robotics' fifth-generation humanoid for logistics work, described on the maker's Digit 5 solutions page.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "humanoid",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-10",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — condition 3 AI basis",
+        "rule": "docs/ROBOTS.md inclusion boundary condition 3 and Classification",
+        "finding": "Read on 2026-10-10. Conditions 1, 2 and 4 are met on the Digit 5 solutions page, which names the product, describes a humanoid built for facility workflows, and states hardware figures including a 23 kg (50 lb) payload, a 2.2 m reach, and 20 hours of work per 24-hour shift on fast charging. Condition 3 is unmet on what was read. The page claims 'Our physical AI stack will enable Digit to continuously expand its autonomous workflows' and describes Digit working 'autonomously anywhere in your facility', which are autonomy claims, not a named learned model or policy and not a documented route for running the reader's own: the page's only API, ROS and developer hits are leadership biographies. The page ends in a 'Talk to our team' enterprise contact route. Re-review if Agility names a learned model for Digit 5 or documents a model interface.",
+        "evidence": [
+          {
+            "label": "Digit 5 solutions page",
+            "url": "https://agilityrobotics.com/solutions/digit-5",
+            "kind": "web",
+            "content_sha256": "f5b2ca5f84368db3b0e52415c35fc070ae0ef5bf6cc99f3b70bce65474695153",
+            "fetched_at": "2026-10-10"
+          }
+        ],
+        "proposed_at": "2026-10-10",
+        "proposer": "robots batch 5 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "Boston Dynamics electric Atlas",
+      "url": "https://bostondynamics.com/products/atlas/",
+      "description": "Boston Dynamics' electric humanoid for industrial work, described on the maker's Atlas product page.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "humanoid",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-10",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — conditions 3 and 5",
+        "rule": "docs/ROBOTS.md inclusion boundary conditions 3, 4 and 5",
+        "finding": "Read on 2026-10-10. Conditions 1, 2 and 4 are met on the Atlas product page, which names the electric Atlas, describes a humanoid for industrial workspaces, and states 56 degrees of freedom, a 2.3 m reach, continuous range of motion, and autonomous battery swapping at a charging station. Condition 3 is unmet on what was read. The page claims 'unmatched strength and intelligent autonomy' and says 'when one Atlas learns a new skill, that task can be easily deployed across your entire Atlas fleet', which describe fleet learning, not a named learned model or policy and not a documented route for running the reader's own: its 'Train' step is 'Coordinate on-the-job training and application specific skills' with Boston Dynamics, a deployment engagement, and Orbit is described as an enterprise data and metrics platform, not a model interface. Condition 5 is unmet as a stated route: the page says Boston Dynamics 'will be engaging with select customers' and offers a 'Start the Conversation' contact, with no price, order path, or availability statement. Re-review if Boston Dynamics names a learned model for Atlas, documents a model interface, or states how Atlas can be obtained.",
+        "evidence": [
+          {
+            "label": "Atlas product page",
+            "url": "https://bostondynamics.com/products/atlas/",
+            "kind": "web",
+            "content_sha256": "0585edcb01515968edac50911657302f865047fad6feb8dc9da94784fa3906e0",
+            "fetched_at": "2026-10-10"
+          }
+        ],
+        "proposed_at": "2026-10-10",
+        "proposer": "robots batch 5 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "ANYbotics ANYmal",
+      "url": "https://www.anybotics.com/robotics/anymal/",
+      "description": "ANYbotics' quadruped inspection robot, described on the maker's ANYmal product page.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "quadruped",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-10",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — condition 3 AI basis",
+        "rule": "docs/ROBOTS.md inclusion boundary condition 3 and Classification",
+        "finding": "Read on 2026-10-10 through a fetch service, because the page returns HTTP 403 to the repository's own fetcher including its browser-header fallback; the hash below identifies the captured page text, and a repository-fetcher recheck will fail until the wall lifts, which is itself the signal to re-read. Conditions 1, 2 and 4 are met on the page, which names ANYmal, describes a quadruped for industrial inspection, and states an IP67 rating, integrated visual and thermal cameras, LiDAR, an additional 10 kg payload, and autonomous docking to recharge. Condition 5 reads as an enterprise contact route ('Let's Talk', 'Talk with an expert', contact-sales pages). Condition 3 is unmet on what was read. The page claims 'AI-based mobility and autonomy' and 'smart capabilities' for autonomous data collection, which are autonomy claims, not a named learned model or policy and not a documented route for running the reader's own: no SDK, API, developer program, or policy interface appears on the page. Re-review if ANYbotics names a learned model for ANYmal or documents a model interface, preferably from a fetch the repository's own checker can reproduce.",
+        "evidence": [
+          {
+            "label": "ANYmal product page, captured through a fetch service while the repository fetcher is walled out",
+            "url": "https://www.anybotics.com/robotics/anymal/",
+            "kind": "web",
+            "content_sha256": "0ba974aa9ce98e8294380d7d03f198e07320e8f1480bd851ebf501d6883101f7",
+            "fetched_at": "2026-10-10"
+          }
+        ],
+        "proposed_at": "2026-10-10",
+        "proposer": "robots batch 5 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "Sanctuary Phoenix",
+      "url": "https://sanctuary.ai/news/sanctuary-ai-unveils-phoenix-a-humanoid-general-purpose-robot-designed-for-work/",
+      "description": "Sanctuary AI's Phoenix general-purpose humanoid, described in the maker's unveiling announcement as powered by its Carbon AI control system.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "humanoid",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-10",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — conditions 3, 4 and 5",
+        "rule": "docs/ROBOTS.md inclusion boundary conditions 3, 4 and 5",
+        "finding": "Read on 2026-10-10. The maker's announcement is 'Powered by Carbon, its pioneering AI control system', says Sanctuary's approach 'Uses Deep Learning & Reinforcement Learning' with 'photo-realistic and physics-realistic world simulations for robot training', and says it can 'train dexterous policies for our unique, high-performance hydraulic hands'. That names more AI basis than the 2026-09-29 screen saw, but this is a news announcement, not a product page: it states no hardware figures for Phoenix, no availability route, and no developer interface, and it does not establish Carbon as a learned model driving the robot rather than a control stack label, so condition 3 stays open alongside 4 and 5. Re-review on a Sanctuary product page for Phoenix that states its hardware, how it can be obtained, and what its named AI basis controls.",
+        "evidence": [
+          {
+            "label": "Phoenix unveiling announcement",
+            "url": "https://sanctuary.ai/news/sanctuary-ai-unveils-phoenix-a-humanoid-general-purpose-robot-designed-for-work/",
+            "kind": "web",
+            "content_sha256": "17ae23438a2f611d36d820678b844996238766708f89a3474ee4dad323d8254d",
+            "fetched_at": "2026-10-10"
+          }
+        ],
+        "proposed_at": "2026-10-10",
+        "proposer": "robots batch 5 review"
+      }
+    },
+    {
+      "repo": null,
+      "name": "1X EVE",
+      "url": "https://www.1x.tech/eve",
+      "description": "1X Technologies' wheeled EVE android; the maker's page is a stub with a newsletter signup and no product detail.",
+      "proposed_system_family": null,
+      "proposed_primary_role": null,
+      "classification_confidence": 0.2,
+      "github_detected_license": null,
+      "stars": null,
+      "topics": [
+        "humanoid",
+        "official-product"
+      ],
+      "status": "provisional",
+      "discovered_at": "2026-10-10",
+      "review_required": [
+        "licensing",
+        "classification",
+        "traits",
+        "editorial_score"
+      ],
+      "triage": {
+        "verdict": "held",
+        "held_by": "robot collection review — conditions 3, 4 and 5",
+        "rule": "docs/ROBOTS.md inclusion boundary conditions 3, 4 and 5",
+        "finding": "Read on 2026-10-10. The whole visible text of the maker's EVE page is the heading 'Eve Industrial' plus a newsletter signup authorizing 1X to send product updates. It names no learned model or policy (condition 3), states no hardware (condition 4), and states no availability (condition 5). The 1X homepage links only NEO and the robot fleet, so EVE has no product page; NEO is a different product and outside this lead. Re-review if 1X publishes a product page for EVE that states its hardware, how it can be obtained and what AI it documents.",
+        "evidence": [
+          {
+            "label": "EVE page",
+            "url": "https://www.1x.tech/eve",
+            "kind": "web",
+            "content_sha256": "bf636f70fe3439b9add737aac28439ad6b21cff50e782c2b6d51fd555d91ec87",
+            "fetched_at": "2026-10-10"
+          }
+        ],
+        "proposed_at": "2026-10-10",
+        "proposer": "robots batch 5 review"
+      }
     }
   ]
 }

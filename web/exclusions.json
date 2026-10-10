@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-07",
+  "generated_at": "2026-10-10",
   "entries": [
     {
       "name": "A-MEM paper implementation",
@@ -917,6 +917,30 @@
       "useful_lesson": "A star count in the tens of thousands and an agent-heavy README vocabulary do not move an observability client across the boundary; the question is whether the repository's own code plans and acts, and here it only records and scores other systems' runs.",
       "excluded_at": "2026-10-07",
       "verified_at": "2026-10-07"
+    },
+    {
+      "name": "SO-101",
+      "repo": null,
+      "reason": "The SO-101 is an open-hardware manipulator kit with no single manufacturer: community designs built and sold by many vendors. The Robots gate requires an identifiable product from one named manufacturer, so no maker page can ever satisfy the gate for it; it is excluded rather than held.",
+      "useful_lesson": "A robot kit with no single manufacturer fails the Robots gate's first condition no matter how widely it is sold; record it as an exclusion rather than holding it for a maker page that cannot exist.",
+      "excluded_at": "2026-10-10",
+      "verified_at": "2026-10-10"
+    },
+    {
+      "name": "LeKiwi",
+      "repo": null,
+      "reason": "LeKiwi is an open-hardware robot kit with no single manufacturer: community designs built and sold by many vendors. The Robots gate requires an identifiable product from one named manufacturer, so no maker page can ever satisfy the gate for it; it is excluded rather than held.",
+      "useful_lesson": "A robot kit with no single manufacturer fails the Robots gate's first condition no matter how widely it is sold; record it as an exclusion rather than holding it for a maker page that cannot exist.",
+      "excluded_at": "2026-10-10",
+      "verified_at": "2026-10-10"
+    },
+    {
+      "name": "HopeJR",
+      "repo": null,
+      "reason": "HopeJR is an open-hardware robot kit with no single manufacturer: community designs built and sold by many vendors. The Robots gate requires an identifiable product from one named manufacturer, so no maker page can ever satisfy the gate for it; it is excluded rather than held.",
+      "useful_lesson": "A robot kit with no single manufacturer fails the Robots gate's first condition no matter how widely it is sold; record it as an exclusion rather than holding it for a maker page that cannot exist.",
+      "excluded_at": "2026-10-10",
+      "verified_at": "2026-10-10"
     }
   ]
 }
