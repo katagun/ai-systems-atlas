@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-07",
+  "generated_at": "2026-10-10",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -21644,7 +21644,7 @@
       "stars": 5735,
       "stars_verified_at": "2026-10-06",
       "historical_stars": null,
-      "current_repo_note": "Covers the backend monorepo only. The README separates the user frontend, admin panel, copilot, drama, and mini-app repositories and a hosted commercial edition, none of which this record reviews. The same codebase also ships a short-drama service and a code generator that are not part of the agent boundary.",
+      "current_repo_note": "Covers the backend monorepo only. The README separates the user frontend, admin panel, copilot, drama, and mini-app repositories and a hosted commercial edition, none of which this record reviews. The same codebase also ships a short-drama service and a code generator that are not part of the agent boundary. README re-read 2026-10-10: the MIT licence blob is unchanged and no scope statement moved.",
       "score": {
         "task_reliability": 5.6,
         "tool_use": 7.0,
@@ -22504,7 +22504,7 @@
       "stars": 16681,
       "stars_verified_at": "2026-10-06",
       "historical_stars": null,
-      "current_repo_note": "Covers the DeepCode coding agent as it stands in this repository, whose README now leads with an engineering agent and keeps Paper2Code, its original paper-to-code direction, as a dedicated workflow. Older descriptions and the arXiv paper describe the earlier multi-agent Paper2Code architecture. The bundled pinned skills carry their own Apache-2.0 licence files while the application is MIT.",
+      "current_repo_note": "Covers the DeepCode coding agent as it stands in this repository, whose README now leads with an engineering agent and keeps Paper2Code, its original paper-to-code direction, as a dedicated workflow. Older descriptions and the arXiv paper describe the earlier multi-agent Paper2Code architecture. The bundled pinned skills carry their own Apache-2.0 licence files while the application is MIT. README re-read 2026-10-10: the MIT licence blob is unchanged and no scope statement moved.",
       "score": {
         "task_reliability": 7.0,
         "tool_use": 7.6,
@@ -24969,6 +24969,249 @@
       "research_confidence": "medium",
       "verified_at": "2026-10-07",
       "github_detected_license": "NOASSERTION"
+    },
+    {
+      "agent_capabilities": [
+        "research",
+        "shell_execution",
+        "multi_agent",
+        "persistent_state",
+        "workflows"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "canonical_data": "a file workspace per engagement holding scope.yaml, stage state, findings, an evidence-hash index, report.md, aggregated-report.json, and validation-summary.json",
+      "capture_modes": [
+        "connectors"
+      ],
+      "current_repo_note": "Reviewed at HEAD c7fb938 (2026-10-09); the LICENSE and README blobs are identical to the triage pins. The record reflects the five-state verdict taxonomy (LIKELY added since triage) and the --backend pi execution path.",
+      "deployment": [
+        "local_cli"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "description": "Standalone CLI that runs authorized penetration tests through a deterministic recon, test, and report pipeline with scope-enforced read-only tools and separated finder and validator sessions.",
+      "github_detected_license": "Apache-2.0",
+      "historical_stars": null,
+      "human_editable": true,
+      "id": "cain-agent",
+      "license_review_status": "verified",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "local_first": true,
+      "memory_lifecycle": [
+        "append_only",
+        "upsert_rewrite"
+      ],
+      "name": "Cain",
+      "primary_role": "research_agent",
+      "provenance": "moderate",
+      "repo": "cdxiaodong/cain-agent",
+      "research_confidence": "medium",
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "score": {
+        "autonomy": 6.6,
+        "data_sovereignty": 6.2,
+        "human_control": 7.4,
+        "interoperability": 5.6,
+        "maturity": 5.2,
+        "observability_recovery": 7.0,
+        "overall": 6.45,
+        "task_reliability": 5.8,
+        "tool_use": 7.4
+      },
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "source_model": "open_source",
+      "stars": 961,
+      "stars_verified_at": "2026-10-10",
+      "status": "active",
+      "strengths": [
+        "Stage transitions are hard-coded recon to test to report in a crash-resumable file workspace, so the agent chooses paths and analyses but cannot reorder the engagement",
+        "Scope is enforced by configuration: the target is written into scope.yaml and a PreToolUse hook blocks any tool call outside it on every execution channel",
+        "Discovery and validation run in separate agent sessions that never share context, with majority-confirm consensus over a five-state verdict taxonomy",
+        "The 46 built-in security tools are read-only in code, with a dangerous-flag blacklist rejecting write, exploit, and persistence operations before execution"
+      ],
+      "system_family": "agent_system",
+      "url": "https://github.com/cdxiaodong/cain-agent",
+      "verified_at": "2026-10-10",
+      "weaknesses": [
+        "Strictly an authorized-use offensive-security tool: the tree ships a live AWS IAM privilege-escalation runbook and 68 skill-guided attack playbooks, and the catalog carries it only with that disclaimer",
+        "Safety is guardrail-based, so a permissive scope.yaml or modified guards widen what the agent may touch; evidence plaintext is never persisted, hashes only, which limits independent audit",
+        "Cloud-module checks run against real accounts with user-supplied credentials, and findings inherit the limits of the executing model",
+        "The verdict taxonomy and execution backends churned within weeks of review: four-state to five-state verdicts and a second pi execution backend"
+      ],
+      "why_it_matters": "A reference for scope-enforced authorized pentesting agents: a deterministic pipeline, configuration-enforced scope, and separated discovery and validation sessions over a read-only toolchain."
+    },
+    {
+      "agent_capabilities": [
+        "multi_agent",
+        "persistent_state"
+      ],
+      "agent_interfaces": [
+        "terminal",
+        "api_sdk"
+      ],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "relational_db",
+        "plain_files"
+      ],
+      "canonical_data": "a SQLite fact graph per project holding facts, intents, hints, claims, heartbeats, and reason leases, served by the dispatcher API",
+      "capture_modes": [
+        "manual",
+        "file_import"
+      ],
+      "current_repo_note": null,
+      "deployment": [
+        "self_hosted",
+        "local_cli"
+      ],
+      "execution_boundaries": [
+        "container",
+        "host"
+      ],
+      "description": "General-purpose state-space search engine whose dispatcher schedules CLI agent workers through Bootstrap, Reason, and Explore tasks over a shared SQLite fact graph, validated first on autonomous penetration testing.",
+      "github_detected_license": "AGPL-3.0",
+      "historical_stars": null,
+      "human_editable": true,
+      "id": "cairn",
+      "license_review_status": "verified",
+      "licenses": [
+        "AGPL-3.0"
+      ],
+      "local_first": true,
+      "memory_lifecycle": [
+        "append_only",
+        "upsert_rewrite"
+      ],
+      "name": "Cairn",
+      "primary_role": "agent_framework_sdk",
+      "provenance": "moderate",
+      "repo": "oritera/Cairn",
+      "research_confidence": "medium",
+      "retrieval_modes": [
+        "structured_query",
+        "agentic"
+      ],
+      "score": {
+        "autonomy": 7.4,
+        "data_sovereignty": 6.4,
+        "human_control": 6.2,
+        "interoperability": 6.0,
+        "maturity": 5.4,
+        "observability_recovery": 6.8,
+        "overall": 6.28,
+        "task_reliability": 5.6,
+        "tool_use": 6.8
+      },
+      "score_profile": "agent",
+      "secondary_roles": [],
+      "source_model": "open_source",
+      "stars": 3492,
+      "stars_verified_at": "2026-10-10",
+      "status": "active",
+      "strengths": [
+        "The dispatcher owns scheduling and persistence beyond worker sessions: projects, the fact and intent graph, claims, heartbeats, and reason leases live in SQLite and are read back for every scheduling decision",
+        "Workers have no fixed roles; Bootstrap, Reason, and Explore tasks are generated at runtime from the graph state and coordinated stigmergically through the shared board",
+        "Supervision is explicit: per-task timeouts, worker health checks, heartbeat leases, and a two-phase conclude fallback that releases intents on failure",
+        "Container-per-project execution by default with a documented local mode, and three worker backends behind one adapter registry"
+      ],
+      "system_family": "agent_system",
+      "url": "https://github.com/oritera/Cairn",
+      "verified_at": "2026-10-10",
+      "weaknesses": [
+        "Intended only for environments with explicit authorization to operate: the shipped worker image is a Kali container for CTF work and workers are invoked with permissions bypassed, and the catalog carries it only with that disclaimer",
+        "The only validation presented is one self-reported AI pentesting competition result with postmortem links; no non-pentest domain validation exists despite the general-purpose claim",
+        "Local mode runs workers with the user's permissions and no sandbox, which the example configuration itself warns about",
+        "The README glosses the licence as AGPLv3 for personal and educational use with a commercial-license offer, which the AGPL text alone does not say; no commercial terms document was reviewed"
+      ],
+      "why_it_matters": "A stigmergic multi-worker agent engine: a shared fact board with runtime-generated tasks instead of fixed roles, validated first on autonomous penetration testing."
+    },
+    {
+      "agent_capabilities": [],
+      "agent_interfaces": [],
+      "agent_relation": "external_memory",
+      "architectures": [
+        "vector_index",
+        "full_text"
+      ],
+      "canonical_data": "a paper directory with a Tantivy full-text index, chunk embeddings, and a searchable archive of prior answers under PQA_HOME",
+      "capture_modes": [
+        "file_import",
+        "connectors"
+      ],
+      "current_repo_note": null,
+      "deployment": [
+        "local_cli",
+        "library"
+      ],
+      "description": "High-accuracy retrieval-augmented generation over scientific documents with citations: a persistent local paper index queried through an agentic search, gather-evidence, and answer loop, exposed as a library and a pqa CLI.",
+      "github_detected_license": "Apache-2.0",
+      "historical_stars": null,
+      "human_editable": true,
+      "id": "paper-qa",
+      "license_review_status": "verified",
+      "licenses": [
+        "Apache-2.0",
+        "AGPL-3.0"
+      ],
+      "local_first": true,
+      "memory_lifecycle": [
+        "append_only",
+        "upsert_rewrite"
+      ],
+      "name": "PaperQA",
+      "primary_role": "ai_knowledge_app",
+      "provenance": "strong",
+      "repo": "Future-House/paper-qa",
+      "research_confidence": "medium",
+      "retrieval_modes": [
+        "semantic_vector",
+        "keyword",
+        "hybrid",
+        "agentic"
+      ],
+      "score": {
+        "data_sovereignty": 7.4,
+        "interoperability": 7.0,
+        "maturity": 8.2,
+        "memory_intelligence": 7.8,
+        "operational_simplicity": 6.6,
+        "overall": 7.38,
+        "second_brain_fit": 7.2
+      },
+      "score_profile": "memory",
+      "secondary_roles": [],
+      "source_model": "mixed_open_source",
+      "stars": 9343,
+      "stars_verified_at": "2026-10-10",
+      "status": "active",
+      "strengths": [
+        "The evidence pipeline ranks chunks, has an LLM summarize each in context, re-scores, and answers with in-text citations, so claims trace to source passages",
+        "The Tantivy index, embeddings, and prior answers persist under PQA_HOME, so a queried directory skips indexing and chunking on later runs",
+        "Three invocation modes cover the automation spectrum: the default ToolSelector agent, a fixed-path fake agent, and a manual Docs path the README documents as performance-neutral",
+        "Provider surface is broad behind one settings object: LiteLLM models, Ollama and llamafile servers, and local sentence-transformer embeddings"
+      ],
+      "system_family": "memory_system",
+      "url": "https://github.com/Future-House/paper-qa",
+      "verified_at": "2026-10-10",
+      "weaknesses": [
+        "Defaults send document text to OpenAI models and metadata to four web APIs, and the README warns that 7B-class local models perform poorly",
+        "CalVer releases carry no backwards-compatibility guarantees, and stored index pickles already broke between major versions",
+        "The opt-in pymupdf reader extra is AGPL-3.0, and the zotero extra pulls it in as well, which complicates redistribution of those configurations",
+        "The hosted Edison Scientific and FutureHouse literature agents are separate products outside this record, which covers only the self-hosted library and CLI"
+      ],
+      "why_it_matters": "High-accuracy cited question-answering over the scientific literature with a persistent local corpus index and an agentic evidence loop."
     }
   ],
   "verified_at": "2026-09-28"
