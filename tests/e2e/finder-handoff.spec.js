@@ -1,5 +1,5 @@
 const { test, expect } = require("@playwright/test");
-const { collectionDot, openCollection, openView } = require("./helpers/landing");
+const { collectionDot, openCollection, openView, searchAll } = require("./helpers/landing");
 const { closeRecord, recordView } = require("./helpers/results");
 
 // Reads where an element sits once the page stops scrolling. It first waits
@@ -30,9 +30,28 @@ const settle = (page, selector) => page.locator(selector).evaluate(async element
   };
 });
 
-// Walks to a coding-agent shortlist under balanced fit. The one-screen layout
-// needs no scroll correction to keep a choice reachable — choosing a job
-// repaints only the shortlist below the tiles — so this is a plain click.
+// The priority row is the first thing a chosen job adds, and it sits below all
+// the goal tiles: on a phone the shortlist starts more than 2,500 px down the
+// page, so a choice that left the page where it was looked like nothing had
+// happened. "In view" is its top below the sticky header and above the bottom of
+// the viewport, or above the phone's fixed bottom bar where there is one; the
+// exact 12 px the page aims for is not asserted, because a shortlist still
+// reading its scores can leave a desktop page too short to scroll that far.
+async function expectPriorityRowInView(page, label) {
+  const { top, headerBottom } = await settle(page, ".finder-priorities");
+  const bottom = await page.evaluate(() => {
+    const bar = document.querySelector("#mobile-nav");
+    return getComputedStyle(bar).display === "none" ? window.innerHeight : bar.getBoundingClientRect().top;
+  });
+  expect(top, `${label}: the row clears the sticky header`).toBeGreaterThanOrEqual(headerBottom - 1);
+  expect(top, `${label}: the row starts above the bottom of the screen`).toBeLessThan(bottom);
+}
+
+// Walks to a coding-agent shortlist under balanced fit with a plain click on the
+// job's tile. Choosing a job repaints only what sits below the tiles, so the
+// page scrolls the priority row into view for the reader (the "priority row"
+// tests at the end of this file assert that), and a spec needs no scroll of its
+// own to reach the shortlist.
 const shortlist = async (page, goal = "coding") => {
   await page.locator(`[data-finder-goal="${goal}"]`).click();
   await expect(page.locator(".finder-result")).toHaveCount(3);
@@ -65,16 +84,26 @@ test("every goal is listed at once with a count, and the tallest column clears t
   for (const count of counts) expect(Number(count)).toBeGreaterThan(0);
 });
 
+// The records figure is the total the five directions hold, not a floor: "over
+// 293 active records" read as "more than 293".
+test("the status line counts the jobs and the records they span before a job is chosen", async ({ page }) => {
+  await page.goto("/?view=finder");
+  await expect(page.locator("#finder-status")).toHaveText(
+    /^\d+ jobs in 5 directions, across \d+ active records\. Choose one to see its three strongest reviewed matches\.$/,
+  );
+});
+
 test("a goal's count matches the records the shortlist is drawn from", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?view=finder");
   await shortlist(page);
 
-  // "48 active records match" for a goal whose two roles hold 38 and 10. The
-  // tile count and the candidate set come from one predicate, so they cannot
-  // drift apart; this is the reader-visible half of that.
-  await expect(page.locator("#finder-status")).toContainText("Write and maintain software: 48 active records match");
-  await expect(page.locator(".finder-result-heading")).toContainText("3 of 48 active records");
+  // "51 active records match" for a goal drawn from two roles. The tile count
+  // and the candidate set come from one predicate, so they cannot drift apart;
+  // this is the reader-visible half of that. The number moves with each
+  // coding-agent or coding-workflow record the catalog publishes.
+  await expect(page.locator("#finder-status")).toContainText("Write and maintain software: 57 active records match");
+  await expect(page.locator(".finder-result-heading")).toContainText("3 of 57 active records");
 });
 
 test("choosing a job presses its tile and writes the URL", async ({ page }) => {
@@ -300,4 +329,183 @@ test("Back after closing a record keeps the Finder's role set", async ({ page })
   await expect(page.locator("#result-count")).toContainText("Finder match");
   await expect(page.locator("#result-count")).toHaveText(before);
   await expect(collectionDot(page, "systems")).toHaveClass(/is-finder/);
+});
+
+// The priority row. Choosing a job paints it, and the shortlist under it, below
+// every goal tile, so the page scrolls it into view once per choice: on a click or
+// keyboard choice, and when the Finder opens with a job already set.
+
+test("priority row: choosing a job brings it into view, and choosing a priority does not scroll", async ({ page }) => {
+  for (const [width, height] of [[375, 812], [1440, 900]]) {
+    await page.setViewportSize({ width, height });
+    await page.goto("/?view=finder");
+    await shortlist(page);
+    await expectPriorityRowInView(page, `${width} px, after choosing a job`);
+
+    // A priority re-ranks the shortlist in place: the page asks for no scroll,
+    // and the row stays where the reader sees it. scrollY itself is another
+    // matter on a phone. Its status line above the tiles gains a line when the
+    // ranking names a longer priority (the wide layout reserves two), and
+    // Chromium's scroll anchoring then moves scrollY by that line to keep the
+    // row still, so the row is what is held still there and scrollY at 1440.
+    await page.evaluate(() => {
+      window.scrollRequests = 0;
+      for (const method of ["scrollTo", "scroll", "scrollBy"]) {
+        const request = window[method].bind(window);
+        window[method] = (...args) => { window.scrollRequests += 1; return request(...args); };
+      }
+    });
+    const place = () => page.evaluate(() => ({ scrollY: window.scrollY, rowTop: document.querySelector(".finder-priorities").getBoundingClientRect().top }));
+    const before = await place();
+    expect(before.scrollY, `${width} px: the page did scroll to the row`).toBeGreaterThan(0);
+    await page.locator('[data-finder-priority="developer"]').click();
+    await expect(page).toHaveURL(/prefer=developer/);
+    await expect(page.locator('[data-finder-priority="developer"]')).toHaveAttribute("aria-checked", "true");
+    const after = await place();
+    expect(await page.evaluate(() => window.scrollRequests), `${width} px: a priority asks for no scroll`).toBe(0);
+    expect(Math.abs(after.rowTop - before.rowTop), `${width} px: the row stays where it was`).toBeLessThanOrEqual(1);
+    if (width > 720) expect(after.scrollY, `${width} px: a priority leaves scrollY unchanged`).toBe(before.scrollY);
+  }
+});
+
+test("priority row: a row already on screen below the header does not move the page", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1400 });
+  await page.goto("/?view=finder");
+  await shortlist(page);
+  expect(await page.evaluate(() => window.scrollY)).toBe(0);
+  await expectPriorityRowInView(page, "tall desktop");
+});
+
+// The shortlist first paints a placeholder and paints again when the reviewed
+// scores arrive. The second paint leaves the page where the first put it.
+test("priority row: the shortlist replacing its placeholder does not scroll the page again", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  let release;
+  const held = new Promise(resolve => { release = resolve; });
+  await page.route(/\/app\/detail\/system\//, async route => {
+    await held;
+    await route.continue();
+  });
+  await page.goto("/?view=finder");
+  await page.locator('[data-finder-goal="coding"]').click();
+  await expect(page.getByRole("heading", { name: "Reading the reviewed scores…" })).toBeVisible();
+  await expectPriorityRowInView(page, "while the scores load");
+  const before = await page.evaluate(() => window.scrollY);
+  expect(before, "the page scrolled to the row at the choice").toBeGreaterThan(0);
+
+  release();
+  await expect(page.locator(".finder-result")).toHaveCount(3);
+  expect(await page.evaluate(() => window.scrollY), "the scores landing does not scroll").toBe(before);
+});
+
+// A goal tile carried the attribute the "Open shortlist →" banner's handler
+// reads, so a tile click also ran openFinderAt, which asks the page for its top.
+// From the last tile on a phone that sent the reader 1,700 px up, away from the
+// shortlist their click had just chosen.
+test("priority row: choosing a job from the last tile on a phone does not throw the page to the top", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/?view=finder");
+  const last = page.locator(".finder-goal").last();
+  await last.scrollIntoViewIfNeeded();
+  const start = await page.evaluate(() => window.scrollY);
+  expect(start, "the last tile sits far down the page").toBeGreaterThan(1000);
+  // Everything from here on is recorded: how far up the page ever gets, and
+  // every scroll the page itself asks for. The first is what the reader sees. The
+  // second catches a request for the top that a later scroll to the row would
+  // hide, since an explicit scroll cancels the glide it interrupts.
+  await page.evaluate(() => {
+    window.lowestScroll = window.scrollY;
+    window.addEventListener("scroll", () => { window.lowestScroll = Math.min(window.lowestScroll, window.scrollY); });
+    window.scrollCalls = [];
+    const request = window.scrollTo.bind(window);
+    window.scrollTo = (...args) => { window.scrollCalls.push(args); return request(...args); };
+  });
+  await last.click();
+  // The last job has fewer than three matches, so the shortlist is awaited by
+  // its first card rather than a count.
+  await expect(page.locator(".finder-result").first()).toBeVisible();
+  await settle(page, ".finder-priorities");
+  const scrollCalls = await page.evaluate(() => window.scrollCalls);
+  expect(scrollCalls.filter(([options]) => options?.top === 0), "a tile click never asks the page for its top").toEqual([]);
+  // A line more or less in the status text above the tiles moves scrollY by that
+  // line (scroll anchoring); a glide to the top is 1,700 px.
+  expect(await page.evaluate(() => window.lowestScroll), "the page never went back up").toBeGreaterThanOrEqual(start - 100);
+  await expectPriorityRowInView(page, "from the last tile");
+});
+
+// A phone's bottom bar is fixed over the last 64 px of the screen, so a row whose
+// top sits behind it is inside the viewport and still out of the reader's sight.
+test("priority row: a row that would land behind the phone's bottom bar is scrolled clear of it", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/?view=finder");
+  await shortlist(page);
+  // Park the page with the row 32 px above the bottom edge of the screen, then
+  // choose another job from a tile that is on screen. Left where it is, the new
+  // row would sit under the bar.
+  const offset = await page.locator(".finder-priorities").evaluate(row => row.getBoundingClientRect().top + window.scrollY);
+  await page.evaluate(top => window.scrollTo({ top, behavior: "instant" }), offset - 780);
+  const barTop = await page.locator("#mobile-nav").evaluate(bar => bar.getBoundingClientRect().top);
+  expect(barTop, "the parked row is behind the bar").toBeLessThan(780 - 26);
+  await page.locator(".finder-goal").nth(-3).click();
+  await expect(page.locator(".finder-result").first()).toBeVisible();
+  await expectPriorityRowInView(page, "from behind the bottom bar");
+});
+
+test("priority row: a Finder link that names a job opens with it in view on a phone", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  // `direction` only makes a link legible; the job alone restores both.
+  for (const query of ["view=finder&direction=agent_system&job=coding&prefer=balanced", "view=finder&job=coding"]) {
+    await page.goto(`/?${query}`);
+    await expect(page.locator(".finder-result")).toHaveCount(3);
+    // Web fonts swap in after boot and can move the row a few pixels.
+    await page.evaluate(() => document.fonts.ready);
+    await expectPriorityRowInView(page, query);
+  }
+});
+
+test("priority row: a front-door job button, clicked from a scrolled page, opens the Finder with it in view", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.evaluate(() => window.scrollTo({ top: 300, behavior: "instant" }));
+  await page.locator('#door-jobs [data-door-direction="agent_system"]').click();
+  await expect(page.locator("#finder")).toHaveClass(/is-active/);
+  await expect(page.locator(".finder-result")).toHaveCount(3);
+  await expectPriorityRowInView(page, "front-door job");
+});
+
+/* global finderGoalEntries */
+test("priority row: the search banner's Open shortlist opens the Finder with it in view on a phone", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/");
+  // Boot payloads arrive after load. Reading goals before they land caches an
+  // empty list, and a later search then has nothing eligible to shortlist.
+  // Phones hide the other families, so the first tile can be attached and hidden.
+  await page.locator("[data-element]").first().waitFor({ state: "attached" });
+  // Any Finder goal with records to shortlist, asked for by its own label.
+  const goal = await page.evaluate(() => finderGoalEntries().find(entry => entry.eligible).label);
+  await searchAll(page, goal);
+  const hint = page.locator('[data-job-hint="all"]');
+  await expect(hint).toContainText("Looks like a job:");
+  await hint.getByRole("button", { name: /Open shortlist/ }).click();
+  await expect(page.locator("#finder")).toHaveClass(/is-active/);
+  await expect(page.locator(".finder-result")).toHaveCount(3);
+  await expectPriorityRowInView(page, "search banner");
+});
+
+// Both scrolls are instant, as the Directory's own handoff is, so reduced
+// motion has nothing to switch off. Measured at once, with no wait for the page
+// to settle: an animated scroll would still be on its way.
+test("priority row: with reduced motion the row is in place the moment a job is chosen", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/?view=finder");
+  await page.locator('[data-finder-goal="coding"]').click();
+  // The row is looked up when measuring: the shortlist repaints as its scores
+  // land, and a handle taken before that would point at a detached copy.
+  const { top, headerBottom } = await page.evaluate(() => ({
+    top: document.querySelector(".finder-priorities").getBoundingClientRect().top,
+    headerBottom: document.querySelector(".site-header").getBoundingClientRect().bottom,
+  }));
+  expect(top).toBeGreaterThanOrEqual(headerBottom - 1);
+  expect(top).toBeLessThan(812);
 });

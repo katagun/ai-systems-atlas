@@ -187,12 +187,12 @@ test("an index that lands after typing repaints once, however many keystrokes it
   expect(await page.evaluate(() => window.gridPaints), "the held index repaints the grid once").toBe(1);
 });
 
-test("the results bar sticks under the strip above 1000 px and scrolls with the page on phones", async ({ page }) => {
+test("the results bar sticks under the strip at every width", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("/?collection=systems");
   await expect(page.locator("#results-bar")).toHaveCSS("position", "sticky");
   await page.setViewportSize({ width: 390, height: 844 });
-  await expect(page.locator("#results-bar")).toHaveCSS("position", "static");
+  await expect(page.locator("#results-bar")).toHaveCSS("position", "sticky");
 });
 
 // The bar sticks at the strip's measured height, which the webfonts can
@@ -241,7 +241,7 @@ test("each collection's score rule sits in its scope note under its result count
     ["labs", "each release keeps its own licence and score in Models"],
     ["specifications", "with no cross-purpose score"],
   ]) {
-    await expect(page.locator(`#${id}-directory-panel > .result-row + [data-scope-note="${id}"]`), id).toContainText(rule);
+    await expect(page.locator(`.collection-panel [data-scope-note="${id}"]`), id).toContainText(rule);
   }
   await expect(page.locator('[data-scope-note="models"] #models-kicker, [data-scope-note="labs"] #labs-kicker, [data-scope-note="specifications"] #specifications-kicker')).toHaveCount(3);
   await expect(page.locator("#models-kicker")).not.toBeEmpty();

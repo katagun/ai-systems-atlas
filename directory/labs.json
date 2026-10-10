@@ -1,56 +1,7 @@
 {
   "version": "1.0",
-  "verified_at": "2026-10-03",
+  "verified_at": "2026-10-07",
   "labs": [
-    {
-      "id": "lab-one-x-technologies",
-      "name": "1X Technologies",
-      "url": "https://www.1x.tech/",
-      "description": "The Palo Alto company that develops the NEO home robot and Redwood, the world model it plans with, having shipped EVE industrial humanoids before it.",
-      "lab_type": "ai_company",
-      "headquarters": "us",
-      "admission_basis": "reviewed_robot",
-      "organization_note": "The organization's own about page says it is \"an AI and robotics company based in Palo Alto, California\", which is the headquarters statement the record uses; the same page records that it was founded in 2014 as Halodi Robotics by Bernt Øyvind Børnich, so the company is Norwegian-founded and American-based, and the record says so rather than choosing a country for the origin, because `headquarters` is where the organization says it is based and nothing here is a claim about where it began. It is an AI company because the AI is the product: its own site separates an \"AI\" section from the robots, names Redwood as its world model, and describes NEO as its flagship product, so the organization develops both the robot and the model that runs it. It is recorded on the robot rather than a release because the catalog reviews no Redwood release, and Redwood is documented as a world model that plans actions rather than as a language release, which is outside the Models collection on the ground the robotics scope records. The reviewed robot is NEO, the home robot the record covers, not the earlier EVE industrial line, which the about page describes as deployed in customer factories from 2022. No parent organization is recorded: the pages read name no holding or controlling entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted. The organization's own about page says it is based in Palo Alto, California, and names no other base for its research or engineering work. The Norwegian origin it records there is where the company began, not where the work happens, so the review records nothing beyond the headquarters.",
-      "catalog_names": [
-        "1X Technologies"
-      ],
-      "systems": [
-        "neo"
-      ],
-      "channels": [
-        {
-          "kind": "news",
-          "url": "https://www.1x.tech/stories"
-        },
-        {
-          "kind": "github",
-          "url": "https://github.com/1X-Technologies"
-        }
-      ],
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "About page: an AI and robotics company based in Palo Alto, California, founded in 2014 as Halodi Robotics, with the 2022 EVE factory deployments and the NEO home robot timeline; about page: \"an AI and robotics company based in Palo Alto, California\"",
-          "url": "https://www.1x.tech/about",
-          "verified_at": "2026-10-03"
-        },
-        {
-          "kind": "web",
-          "label": "NEO product page, the reviewed robot record neo",
-          "url": "https://www.1x.tech/neo",
-          "verified_at": "2026-10-03"
-        },
-        {
-          "kind": "web",
-          "label": "Redwood AI world model page: the organization's own world model for its robots",
-          "url": "https://www.1x.tech/discover/redwood-ai-world-model",
-          "verified_at": "2026-10-03"
-        }
-      ],
-      "verified_at": "2026-10-03",
-      "display_order": 640,
-      "research_locations": []
-    },
     {
       "id": "lab-agibot",
       "name": "AgiBot",
@@ -750,6 +701,66 @@
       "display_order": 600
     },
     {
+      "id": "lab-booster-robotics",
+      "name": "Booster Robotics",
+      "url": "https://www.booster.tech/",
+      "description": "The company that develops the Booster T1, K1 and T2 humanoid development platforms and publishes the reinforcement-learning, deployment and SDK repositories that run on them.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The Chinese About Us page says 北京加速进化科技有限公司成立 in June 2023 and the Chinese privacy policy names 北京加速进化科技有限公司 as the controller of personal information on the site, while the English pages name Booster Robotics Technology Co., Ltd, so this is one entity and the record names no parent. No page read states a headquarters in words or gives a postal address: the English privacy policy says it has \"deployed servers in China, Singapore and other regions\" and gives only \"the place where our company is located\" as the venue for a complaint to a court, and the About Us page names investors with Beijing and Shenzhen in their names, which is not a statement of where the company is based. The record takes China from the controller's registered name, whose leading 北京 is its registration locality, and records no city. It is recorded on the reviewed robot booster-t1 rather than on a release because the catalog reviews no model release of its own: Booster publishes policy-training and deployment code, not a model release. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "catalog_names": [
+        "Booster Robotics"
+      ],
+      "systems": [
+        "booster-t1"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.booster.tech/news"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/BoosterRobotics"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "About Us page: Booster Robotics Technology Co., Ltd. established in June 2023",
+          "url": "https://www.booster.tech/about-us",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Chinese About Us page: 北京加速进化科技有限公司成立 in June 2023",
+          "url": "https://www.booster.tech/cn/about-us",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Chinese privacy policy: 北京加速进化科技有限公司 as the controller of personal information on the site",
+          "url": "https://www.booster.tech/cn/service",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Service Terms & Policies page, whose privacy policy names Booster Robotics Technology Co., Ltd as controller and servers in China, Singapore and other regions",
+          "url": "https://www.booster.tech/service",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Booster T1 product page, the reviewed robot record booster-t1",
+          "url": "https://www.booster.tech/booster-t1/",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07",
+      "display_order": 680
+    },
+    {
       "id": "lab-boston-dynamics",
       "name": "Boston Dynamics",
       "url": "https://bostondynamics.com/",
@@ -892,65 +903,6 @@
       "display_order": 110
     },
     {
-      "id": "lab-cohere",
-      "name": "Cohere",
-      "url": "https://cohere.com/",
-      "description": "The AI company that develops the Command and North models for enterprise use and, through its research lab Cohere Labs, the Aya models.",
-      "lab_type": "ai_company",
-      "headquarters": "ca",
-      "organization_note": "Cohere Inc., with its principal place of business in Toronto, develops the Command models and operates the Cohere API; Cohere Labs, its research lab, publishes the Aya and North releases under the CohereLabs organization. The catalog names the developer Cohere or Cohere Labs release by release, so both names belong to this record. Its careers page describes \"a globally dispersed company that supports a remote work culture\" and names the offices it lists: Toronto, where the organization is headquartered, and San Francisco, New York, London, Paris, and Seoul. The record keeps the United States, the United Kingdom, and France, the three countries a reader most likely meets besides Canada; New York is the same country as San Francisco and Seoul is a fourth, left here rather than in a capped list.",
-      "catalog_names": [
-        "Cohere",
-        "Cohere Labs"
-      ],
-      "systems": [],
-      "channels": [
-        {
-          "kind": "model_catalog",
-          "url": "https://docs.cohere.com/docs/models"
-        },
-        {
-          "kind": "release_notes",
-          "url": "https://docs.cohere.com/v2/changelog"
-        },
-        {
-          "kind": "news",
-          "url": "https://cohere.com/blog"
-        },
-        {
-          "kind": "hugging_face",
-          "url": "https://huggingface.co/CohereLabs"
-        }
-      ],
-      "safety_framework": {
-        "title": "The Cohere Secure AI Frontier Model Framework (V1.0)",
-        "url": "https://cohere.com/security/the-cohere-secure-ai-frontier-model-framework-february-2025.pdf",
-        "verified_at": "2026-09-25"
-      },
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "SaaS agreement giving Cohere Inc.'s principal place of business at 171 John Street, Toronto",
-          "url": "https://cohere.com/saas-agreement",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Careers page: a globally dispersed company supporting a remote work culture, listing offices in Toronto, San Francisco, New York, London, Paris, and Seoul",
-          "url": "https://cohere.com/careers",
-          "verified_at": "2026-10-03"
-        }
-      ],
-      "verified_at": "2026-10-03",
-      "admission_basis": "reviewed_release",
-      "display_order": 150,
-      "research_locations": [
-        "us",
-        "gb",
-        "fr"
-      ]
-    },
-    {
       "id": "lab-cognition-ai",
       "name": "Cognition AI",
       "url": "https://cognition.com/",
@@ -1024,6 +976,113 @@
       "display_order": 270
     },
     {
+      "id": "lab-cohere",
+      "name": "Cohere",
+      "url": "https://cohere.com/",
+      "description": "The AI company that develops the Command and North models for enterprise use and, through its research lab Cohere Labs, the Aya models.",
+      "lab_type": "ai_company",
+      "headquarters": "ca",
+      "organization_note": "Cohere Inc., with its principal place of business in Toronto, develops the Command models and operates the Cohere API; Cohere Labs, its research lab, publishes the Aya and North releases under the CohereLabs organization. The catalog names the developer Cohere or Cohere Labs release by release, so both names belong to this record. Its careers page describes \"a globally dispersed company that supports a remote work culture\" and names the offices it lists: Toronto, where the organization is headquartered, and San Francisco, New York, London, Paris, and Seoul. The record keeps the United States, the United Kingdom, and France, the three countries a reader most likely meets besides Canada; New York is the same country as San Francisco and Seoul is a fourth, left here rather than in a capped list.",
+      "catalog_names": [
+        "Cohere",
+        "Cohere Labs"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.cohere.com/docs/models"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.cohere.com/v2/changelog"
+        },
+        {
+          "kind": "news",
+          "url": "https://cohere.com/blog"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/CohereLabs"
+        }
+      ],
+      "safety_framework": {
+        "title": "The Cohere Secure AI Frontier Model Framework (V1.0)",
+        "url": "https://cohere.com/security/the-cohere-secure-ai-frontier-model-framework-february-2025.pdf",
+        "verified_at": "2026-09-25"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "SaaS agreement giving Cohere Inc.'s principal place of business at 171 John Street, Toronto",
+          "url": "https://cohere.com/saas-agreement",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: a globally dispersed company supporting a remote work culture, listing offices in Toronto, San Francisco, New York, London, Paris, and Seoul",
+          "url": "https://cohere.com/careers",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "admission_basis": "reviewed_release",
+      "display_order": 150,
+      "research_locations": [
+        "us",
+        "gb",
+        "fr"
+      ]
+    },
+    {
+      "id": "lab-deep-robotics",
+      "name": "DEEP Robotics",
+      "url": "https://www.deeprobotics.cn/en",
+      "description": "The Hangzhou company that develops the Lite3, X30 and Lynx quadruped robots and humanoid and joint products, and publishes the training and deployment repositories for them.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The English site's footer is \"©2017-2026 杭州云深处科技有限公司 浙ICP备18014177号-1 浙公网安备：33010602009611\", naming a company registered with a Hangzhou-named entity and carrying Zhejiang internet-content and public-security filings, and its company page says it is \"a high-tech enterprise with a global focus\" whose honors include a Zhejiang Province research and development center and a Hangzhou unicorn listing, which is why the headquarters is China. No page read gives a postal address or states a headquarters in words, so the record rests on the registered entity and those filings and records no city. It is recorded on the reviewed robot deep-robotics-lite3 rather than on a release because the catalog reviews no model release of its own. No parent organization is recorded: the pages read name no holding entity. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "catalog_names": [
+        "DEEP Robotics"
+      ],
+      "systems": [
+        "deep-robotics-lite3"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.deeprobotics.cn/en/index/news.html"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/DeepRoboticsLab"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Company page and footer: 杭州云深处科技有限公司, Zhejiang ICP and public-security filings, and the Zhejiang and Hangzhou honors",
+          "url": "https://www.deeprobotics.cn/en/index/company.html",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Lite3 product page, the reviewed robot record deep-robotics-lite3",
+          "url": "https://www.deeprobotics.cn/en/index/product1.html",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Purchase page naming DEEP Robotics' sales, media and education contacts",
+          "url": "https://www.deeprobotics.cn/en/index/buy.html",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07",
+      "display_order": 690
+    },
+    {
       "id": "lab-deepseek",
       "name": "DeepSeek",
       "url": "https://www.deepseek.com/",
@@ -1073,6 +1132,50 @@
       "verified_at": "2026-09-25",
       "admission_basis": "reviewed_release",
       "display_order": 120
+    },
+    {
+      "id": "lab-engineered-arts",
+      "name": "Engineered Arts",
+      "url": "https://engineeredarts.com/",
+      "description": "The Falmouth company that designs and builds the Ameca social humanoid robots and the Tritium software suite that runs them.",
+      "lab_type": "ai_company",
+      "headquarters": "gb",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The Terms of Service, last updated August 2025, give Engineered Arts Limited at E1-E3 Church View Business Park, Bickland Water Road, Falmouth, TR11 4FZ, United Kingdom, with a VAT and a registration number, and say the terms are governed by the laws of the United Kingdom, so the headquarters is the United Kingdom on the entity's address rather than on the governing-law clause. The home page describes it as a company that \"designs and builds embodied AI social humanoids along with an integrated robot management software suite\". It is an AI company rather than a hardware vendor that buys its intelligence because its pages say every Ameca runs on its Tritium software suite, which includes the Tritium AI service. It is recorded on the reviewed robot engineered-arts-ameca rather than on a release because the catalog reviews no model release of its own: Tritium AI integrates third-party services, which are not releases of Engineered Arts. No parent organization is recorded. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "catalog_names": [
+        "Engineered Arts"
+      ],
+      "systems": [
+        "engineered-arts-ameca"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://engineeredarts.com/news"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms of Service: Engineered Arts Limited, Falmouth, United Kingdom, last updated August 2025",
+          "url": "https://engineeredarts.com/terms",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Home page: designs and builds embodied AI social humanoids and an integrated robot management software suite",
+          "url": "https://engineeredarts.com/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Ameca product page, the reviewed robot record engineered-arts-ameca",
+          "url": "https://engineeredarts.com/robots/ameca",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07",
+      "display_order": 700
     },
     {
       "id": "lab-figure-ai",
@@ -1130,6 +1233,56 @@
       "research_locations": []
     },
     {
+      "id": "lab-galbot",
+      "name": "Galbot",
+      "url": "https://www.galbot.com/",
+      "description": "The Beijing company that develops the Galbot G1 wheeled humanoid and the AstraBrain embodied models its pages describe.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The Chinese privacy policy names the data controller as 北京银河通用机器人股份有限公司 with an address at 北京市海淀区海淀大街3号1幢14层1401, in Haidian District, Beijing, and the English Terms of Use say the term Galbot refers collectively to Beijing Galbot Co., Ltd. and its subsidiaries and affiliates worldwide, so this is one organization and the headquarters is China on the entity's address rather than on the governing-law clause. Its about page says the company was founded in 2023 and is a general-purpose robotics company built around an embodied large model. It is an AI company because its about page describes it as a general-purpose robotics company built around an embodied large model, AstraBrain, rather than a hardware vendor that buys its intelligence. It is recorded on the reviewed robot galbot-g1 rather than on a release because the catalog reviews no model release of its own: AstraBrain is a vendor-named policy that acts on a robot, which the robotics scope keeps out of the Models collection, and the record says so rather than implying the organization publishes no model. No parent organization is recorded. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "catalog_names": [
+        "Galbot"
+      ],
+      "systems": [
+        "galbot-g1"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.galbot.com/news/"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Privacy policy: 北京银河通用机器人股份有限公司 at 北京市海淀区海淀大街3号1幢14层1401",
+          "url": "https://www.galbot.com/privacy/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Terms of Use: Galbot refers to Beijing Galbot Co., Ltd. and its subsidiaries and affiliates worldwide",
+          "url": "https://www.galbot.com/terms/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "About page: founded in 2023, a general-purpose robotics company built around the AstraBrain embodied model",
+          "url": "https://www.galbot.com/about/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "G1 product page, the reviewed robot record galbot-g1",
+          "url": "https://www.galbot.com/g1/",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07",
+      "display_order": 710
+    },
+    {
       "id": "lab-google",
       "name": "Google",
       "url": "https://deepmind.google/",
@@ -1153,7 +1306,8 @@
         "antigravity",
         "antigravity-sdk",
         "gemini-enterprise-agent-platform",
-        "genkit"
+        "genkit",
+        "artemis"
       ],
       "channels": [
         {
@@ -1512,6 +1666,60 @@
       ]
     },
     {
+      "id": "lab-limx-dynamics",
+      "name": "LimX Dynamics",
+      "url": "https://www.limxdynamics.com/en",
+      "description": "The Shenzhen company that develops the LimX Oli, Luna and TRON series of humanoid and biped robots and publishes the training, deployment and agent repositories for them.",
+      "lab_type": "ai_company",
+      "headquarters": "cn",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The Chinese about page's milestones say \"逐际动力 LimX Dynamics 正式成立，全球总部位于中国深圳\", that LimX Dynamics was officially founded with its global headquarters in Shenzhen, China, and the English about page's milestones say it \"was founded in Shenzhen\". The after-sales policy names LimX Dynamics Technology Co.,Ltd. as the seller, so this is one organization and the record names no parent. It is recorded on the reviewed robot limx-tron-1 rather than on a release because the catalog reviews no model release of its own: its pages describe the LimX COSA humanoid brain system and the FluxVLA Engine, a VLA engineering platform, none of which is a model release in the Models collection. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "catalog_names": [
+        "LimX Dynamics"
+      ],
+      "systems": [
+        "limx-tron-1"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.limxdynamics.com/en/news"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/limxdynamics"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Chinese about page: officially founded, with the global headquarters in Shenzhen, China",
+          "url": "https://www.limxdynamics.com/zh/about",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "English about page: LimX Dynamics founded in Shenzhen, the TRON series and the open-source infrastructure for embodied AI model training and deployment",
+          "url": "https://www.limxdynamics.com/en/about",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Terms & Policies page: the after-sales policy for products sold by LimX Dynamics Technology Co.,Ltd.",
+          "url": "https://www.limxdynamics.com/en/policy",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "TRON 1 overview page, the reviewed robot record limx-tron-1",
+          "url": "https://www.limxdynamics.com/en/products/tron1",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07",
+      "display_order": 720
+    },
+    {
       "id": "lab-liquid-ai",
       "name": "Liquid AI",
       "url": "https://www.liquid.ai/",
@@ -1721,7 +1929,8 @@
         "semantic-kernel",
         "autogen",
         "magentic-ui",
-        "taskweaver"
+        "taskweaver",
+        "cuawright"
       ],
       "channels": [
         {
@@ -2065,6 +2274,55 @@
       "display_order": 90
     },
     {
+      "id": "lab-one-x-technologies",
+      "name": "1X Technologies",
+      "url": "https://www.1x.tech/",
+      "description": "The Palo Alto company that develops the NEO home robot and Redwood, the world model it plans with, having shipped EVE industrial humanoids before it.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The organization's own about page says it is \"an AI and robotics company based in Palo Alto, California\", which is the headquarters statement the record uses; the same page records that it was founded in 2014 as Halodi Robotics by Bernt Øyvind Børnich, so the company is Norwegian-founded and American-based, and the record says so rather than choosing a country for the origin, because `headquarters` is where the organization says it is based and nothing here is a claim about where it began. It is an AI company because the AI is the product: its own site separates an \"AI\" section from the robots, names Redwood as its world model, and describes NEO as its flagship product, so the organization develops both the robot and the model that runs it. It is recorded on the robot rather than a release because the catalog reviews no Redwood release, and Redwood is documented as a world model that plans actions rather than as a language release, which is outside the Models collection on the ground the robotics scope records. The reviewed robot is NEO, the home robot the record covers, not the earlier EVE industrial line, which the about page describes as deployed in customer factories from 2022. No parent organization is recorded: the pages read name no holding or controlling entity. Its site names no frontier-safety, responsible-scaling, or preparedness framework, so the field is omitted. The organization's own about page says it is based in Palo Alto, California, and names no other base for its research or engineering work. The Norwegian origin it records there is where the company began, not where the work happens, so the review records nothing beyond the headquarters.",
+      "catalog_names": [
+        "1X Technologies"
+      ],
+      "systems": [
+        "neo"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.1x.tech/stories"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/1X-Technologies"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "About page: an AI and robotics company based in Palo Alto, California, founded in 2014 as Halodi Robotics, with the 2022 EVE factory deployments and the NEO home robot timeline; about page: \"an AI and robotics company based in Palo Alto, California\"",
+          "url": "https://www.1x.tech/about",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "NEO product page, the reviewed robot record neo",
+          "url": "https://www.1x.tech/neo",
+          "verified_at": "2026-10-03"
+        },
+        {
+          "kind": "web",
+          "label": "Redwood AI world model page: the organization's own world model for its robots",
+          "url": "https://www.1x.tech/discover/redwood-ai-world-model",
+          "verified_at": "2026-10-03"
+        }
+      ],
+      "verified_at": "2026-10-03",
+      "display_order": 640,
+      "research_locations": []
+    },
+    {
       "id": "lab-openai",
       "name": "OpenAI",
       "url": "https://openai.com/",
@@ -2267,6 +2525,54 @@
       "display_order": 160
     },
     {
+      "id": "lab-pollen-robotics",
+      "name": "Pollen Robotics",
+      "url": "https://pollen-robotics.com/",
+      "description": "The Bordeaux company that develops the Reachy Mini desktop robot and the Reachy 2 humanoid and publishes the SDKs and reference apps for them as open source.",
+      "lab_type": "ai_company",
+      "headquarters": "fr",
+      "admission_basis": "reviewed_robot",
+      "organization_note": "The legal notice names the site publisher as Pollen Robotics SAS at 2 Place Jean Jaurès, 33000 Bordeaux, France, and the about page says \"Pollen Robotics is based in the beautiful city of Bordeaux, South-West of France\" and that it was founded in 2016 by former Inria researchers, so the headquarters is France. It is recorded on the reviewed robot reachy-mini rather than on a release because the catalog reviews no model release of its own: the voice model its Reachy Mini page says powers the robot's built-in conversation is not named. No parent organization is recorded: neither the legal notice, the about page nor the terms of sale name one. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "catalog_names": [
+        "Pollen Robotics"
+      ],
+      "systems": [
+        "reachy-mini"
+      ],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://pollen-robotics.com/reachy-mini/blog/"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/pollen-robotics"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Legal notice: Pollen Robotics SAS, 2 Place Jean Jaurès, 33000 Bordeaux, France",
+          "url": "https://pollen-robotics.com/legal-notice/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "About page: based in Bordeaux, founded in 2016 by former Inria researchers",
+          "url": "https://pollen-robotics.com/about-us/",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Reachy Mini product page, the reviewed robot record reachy-mini",
+          "url": "https://pollen-robotics.com/reachy-mini/",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07",
+      "display_order": 730
+    },
+    {
       "id": "lab-poolside",
       "name": "Poolside",
       "url": "https://poolside.ai/",
@@ -2321,6 +2627,89 @@
       "verified_at": "2026-09-25",
       "admission_basis": "reviewed_release",
       "display_order": 170
+    },
+    {
+      "id": "lab-prism-ml",
+      "name": "Prism ML",
+      "url": "https://prismml.com/",
+      "description": "The AI company, built on research at Caltech, that develops the Bonsai family of ternary and one-bit compressed models for on-device and single-GPU deployment and publishes their weights on Hugging Face.",
+      "lab_type": "ai_company",
+      "headquarters": "none_listed",
+      "organization_note": "Prism ML, Inc., the entity named by the terms and conditions and the privacy policy on prismml.com (both effective 18 February 2026), develops and publishes the Bonsai models and states no governing law or address: the terms resolve disputes 'in accordance with applicable law' and the privacy policy lists only an email contact, so no single headquarters is recorded. Its careers page lists all four engineering roles as 'Pasadena or San Francisco', which is recorded as research_locations rather than as a headquarters, and its home page says it builds on 'breakthrough research at Caltech' without describing a parent. The about page names Babak Hassibi as co-founder and CEO. The PrismML-Eng GitHub organization, linked from the Hugging Face organization card, holds the Bonsai-demo repository and forks of llama.cpp, MLX, and SGLang that the Bonsai weights need, and the prism-ml Hugging Face organization publishes the weights. The catalog names the lab 'Prism ML' as the model card's citation and Hugging Face organization do; the website's wordmark and page titles spell it PrismML.",
+      "catalog_names": [
+        "Prism ML"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://prismml.com/news"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/PrismML-Eng"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/prism-ml"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms and conditions, effective 18 February 2026: the Services are operated by Prism ML, Inc., disputes resolved under 'applicable law', and no address given",
+          "url": "https://prismml.com/terms",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy policy, effective 18 February 2026: Prism ML, Inc. with an email contact and no postal address",
+          "url": "https://prismml.com/privacy",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "About page: PrismML's mission of multiplying intelligence without increasing model size, and its leadership team",
+          "url": "https://prismml.com/about",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "Home page: PrismML is 'Utilizing breakthrough research at Caltech' to push intelligence density",
+          "url": "https://prismml.com/",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: four engineering roles, each in Pasadena or San Francisco",
+          "url": "https://prismml.com/careers",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "News index and the Bonsai 2 27B announcement dated 17 September 2026",
+          "url": "https://prismml.com/news",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "prism-ml Hugging Face organization card linking prismml.com and the PrismML-Eng GitHub organization",
+          "url": "https://huggingface.co/prism-ml",
+          "verified_at": "2026-10-06"
+        },
+        {
+          "kind": "web",
+          "label": "PrismML-Eng GitHub organization: Bonsai-demo and the llama.cpp, MLX, and SGLang forks the weights need",
+          "url": "https://github.com/PrismML-Eng",
+          "verified_at": "2026-10-06"
+        }
+      ],
+      "verified_at": "2026-10-06",
+      "admission_basis": "reviewed_release",
+      "display_order": 740,
+      "research_locations": [
+        "us"
+      ]
     },
     {
       "id": "lab-safe-superintelligence",
@@ -2446,66 +2835,6 @@
       "verified_at": "2026-09-28",
       "admission_basis": "reviewed_release",
       "display_order": 250
-    },
-    {
-      "id": "lab-xai",
-      "name": "SpaceXAI (xAI)",
-      "url": "https://x.ai/",
-      "description": "The AI company, formerly xAI, that develops the Grok models and builds Grok, Grok Bot, and the xAI API on them.",
-      "lab_type": "ai_company",
-      "headquarters": "us",
-      "parent_organization": "SpaceX (Space Exploration Technologies Corp.)",
-      "organization_note": "SpaceX completed its acquisition of xAI on 2 February 2026, making it a wholly owned subsidiary, and xAI now calls itself SpaceXAI; its policies name SpaceXAI LLC. The catalog names the developer xAI or SpaceXAI (xAI) release by release and names the API operator xAI, so both names belong to this record.",
-      "catalog_names": [
-        "xAI",
-        "SpaceXAI (xAI)"
-      ],
-      "systems": [
-        "grok",
-        "grok-bot"
-      ],
-      "channels": [
-        {
-          "kind": "model_catalog",
-          "url": "https://docs.x.ai/developers/models"
-        },
-        {
-          "kind": "release_notes",
-          "url": "https://docs.x.ai/developers/release-notes"
-        },
-        {
-          "kind": "news",
-          "url": "https://x.ai/news"
-        }
-      ],
-      "safety_framework": {
-        "title": "xAI Frontier Artificial Intelligence Framework (effective 30 June 2026)",
-        "url": "https://media.x.ai/v1/website/xai-frontier-artificial-intelligence-framework-30-june-2026-99c40684.pdf",
-        "verified_at": "2026-09-25"
-      },
-      "evidence": [
-        {
-          "kind": "web",
-          "label": "SpaceX Form S-1: the xAI merger closed on 2 February 2026, making xAI a wholly owned subsidiary",
-          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "SpaceX Form S-1 Exhibit 21.1: list of significant subsidiaries, including X.AI LLC (Nevada)",
-          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/exhibit211-sx1.htm",
-          "verified_at": "2026-09-25"
-        },
-        {
-          "kind": "web",
-          "label": "Privacy policy naming SpaceXAI LLC",
-          "url": "https://x.ai/legal/privacy-policy",
-          "verified_at": "2026-09-25"
-        }
-      ],
-      "verified_at": "2026-09-25",
-      "admission_basis": "reviewed_release",
-      "display_order": 60
     },
     {
       "id": "lab-stanford-nlp",
@@ -3105,6 +3434,67 @@
       ]
     },
     {
+      "id": "lab-xai",
+      "name": "SpaceXAI (xAI)",
+      "url": "https://x.ai/",
+      "description": "The AI company, formerly xAI, that develops the Grok models and builds Grok, Grok Bot, and the xAI API on them.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "parent_organization": "SpaceX (Space Exploration Technologies Corp.)",
+      "organization_note": "SpaceX completed its acquisition of xAI on 2 February 2026, making it a wholly owned subsidiary, and xAI now calls itself SpaceXAI; its policies name SpaceXAI LLC. The catalog names the developer xAI or SpaceXAI (xAI) release by release and names the API operator xAI, so both names belong to this record.",
+      "catalog_names": [
+        "xAI",
+        "SpaceXAI (xAI)"
+      ],
+      "systems": [
+        "grok",
+        "grok-bot",
+        "grok-build"
+      ],
+      "channels": [
+        {
+          "kind": "model_catalog",
+          "url": "https://docs.x.ai/developers/models"
+        },
+        {
+          "kind": "release_notes",
+          "url": "https://docs.x.ai/developers/release-notes"
+        },
+        {
+          "kind": "news",
+          "url": "https://x.ai/news"
+        }
+      ],
+      "safety_framework": {
+        "title": "xAI Frontier Artificial Intelligence Framework (effective 30 June 2026)",
+        "url": "https://media.x.ai/v1/website/xai-frontier-artificial-intelligence-framework-30-june-2026-99c40684.pdf",
+        "verified_at": "2026-09-25"
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "SpaceX Form S-1: the xAI merger closed on 2 February 2026, making xAI a wholly owned subsidiary",
+          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/spaceexplorationtechnologi.htm",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "SpaceX Form S-1 Exhibit 21.1: list of significant subsidiaries, including X.AI LLC (Nevada)",
+          "url": "https://www.sec.gov/Archives/edgar/data/1181412/000162828026036936/exhibit211-sx1.htm",
+          "verified_at": "2026-09-25"
+        },
+        {
+          "kind": "web",
+          "label": "Privacy policy naming SpaceXAI LLC",
+          "url": "https://x.ai/legal/privacy-policy",
+          "verified_at": "2026-09-25"
+        }
+      ],
+      "verified_at": "2026-09-25",
+      "admission_basis": "reviewed_release",
+      "display_order": 60
+    },
+    {
       "id": "lab-xiaomi",
       "name": "Xiaomi",
       "url": "https://www.mi.com/global/",
@@ -3208,7 +3598,63 @@
       "verified_at": "2026-09-25",
       "admission_basis": "reviewed_release",
       "display_order": 140
+    },
+    {
+      "id": "lab-reflection-ai",
+      "name": "Reflection AI",
+      "url": "https://reflection.ai/",
+      "description": "The American company that builds open-weight frontier models, whose first, Beam, was announced on October 5, 2026 with Apache 2.0 weights promised later that month.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "organization_note": "Reflection AI, Inc. offers its site from 300 Kent Ave in Brooklyn, New York, under New York law, and publishes the Open Safety Framework under that name. One name, Reflection AI, covers the organization and its model, Beam. Its careers page invites applicants to New York, San Francisco, London, and Washington D.C., so London is recorded as a second place the team works. It has no GitHub or Hugging Face organization linked from its own pages, so neither is listed as a channel; Beam's weights are promised but unpublished.",
+      "catalog_names": [
+        "Reflection AI"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://reflection.ai/blog"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Terms of Service: the site is offered by Reflection AI, Inc., located at 300 Kent Ave, Brooklyn, New York, and governed by New York law",
+          "url": "https://reflection.ai/terms-of-service",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "About page: an organization building open-weight models, research, and software for enterprises, governments, and sovereign entities",
+          "url": "https://reflection.ai/about",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Careers page: team roles in New York, San Francisco, London, and Washington D.C.",
+          "url": "https://reflection.ai/careers",
+          "verified_at": "2026-10-07"
+        },
+        {
+          "kind": "web",
+          "label": "Beam announcement: Reflection's first open-weight model",
+          "url": "https://reflection.ai/blog/introducing-beam",
+          "verified_at": "2026-10-07"
+        }
+      ],
+      "verified_at": "2026-10-07",
+      "admission_basis": "reviewed_release",
+      "display_order": 750,
+      "research_locations": [
+        "gb"
+      ],
+      "safety_framework": {
+        "title": "Open Safety Framework",
+        "url": "https://reflection.ai/safety",
+        "verified_at": "2026-10-07"
+      }
     }
   ],
-  "updated_at": "2026-09-29"
+  "updated_at": "2026-10-07"
 }

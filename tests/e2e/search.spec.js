@@ -468,7 +468,14 @@ test("an intent query offers the Finder job and opens its shortlist step", async
   await searchAll(page, "run models locally");
   const hint = page.locator('[data-job-hint="all"]');
   await expect(hint).toContainText("Run models on my own computer");
-  await hint.getByRole("button", { name: /Open shortlist/ }).click();
+  // The banner's button names its goal as `direction:id` on an attribute of its
+  // own. A Finder tile carries `data-finder-goal` with a bare id, and the two
+  // are answered by different handlers: sharing one attribute made every tile
+  // click run the banner's handler as well.
+  const open = hint.getByRole("button", { name: /Open shortlist/ });
+  await expect(open).toHaveAttribute("data-open-finder-goal", /^[a-z_]+:[a-z_]+$/);
+  await expect(open).not.toHaveAttribute("data-finder-goal");
+  await open.click();
   await expect(page.locator("#finder")).toHaveClass(/is-active/);
   await expect(page.locator(".finder-result-heading h2")).toHaveText("Run models on my own computer");
 });

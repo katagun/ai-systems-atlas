@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import html
 import tempfile
 import unittest
@@ -10,14 +11,43 @@ from scripts import build_share_pages
 from scripts.build_blog import blog_sitemap_entries
 from scripts.build_share_pages import (
     COLLECTION_LABELS,
+    FLAG_DISCLAIMER,
+    FLAG_NO_STATEMENT_TEXT,
+    FLAG_NOT_EXAMINED_TEXT,
     SITE_URL,
     build_pages,
+    flag_sentence,
     load_catalog,
     preview_description,
     share_page_path,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+# ADR 042: a reviewed model's share page carries the dialog's Risk
+# statements section. No published model has a flag until the backfill, so
+# these fixtures quote no real developer.
+FLAG_FOUND = {
+    "kind": "maker_risk_safeguards",
+    "status": "statement_found",
+    "tier_term": "Fixture Level 3",
+    "domains": ["cyber", "bio_chem"],
+    "determination": "precautionary",
+    "scope": "weights",
+    "statement": "A fixture sentence standing in for a developer's verbatim words.",
+    "url": "https://www.example-lab.com/system-card",
+    "content_sha256": "a" * 64,
+    "verified_at": "2026-09-01",
+    "research_confidence": "high",
+}
+FLAG_NONE = {
+    "kind": "maker_risk_safeguards",
+    "status": "no_statement_found",
+    "url": "https://www.example-lab.com/safety",
+    "verified_at": "2026-09-01",
+    "research_confidence": "medium",
+}
 
 
 class SharePageTests(unittest.TestCase):
@@ -367,6 +397,114 @@ class SharePageTests(unittest.TestCase):
                 0
             ],
         )
+
+    def page_with_flag(self, entry: dict) -> tuple[dict, str]:
+        catalog = copy.deepcopy(self.catalog)
+        model = catalog["models"][0]
+        model["flags"] = [dict(entry)]
+        return model, build_pages(catalog)[f"records/models/{model['id']}/index.html"]
+
+    def test_every_reviewed_model_page_has_a_risk_statements_section(self) -> None:
+        for model in self.catalog["models"]:
+            page = self.pages[f"records/models/{model['id']}/index.html"]
+            self.assertIn('<h2 id="risk-statements">Risk statements</h2>', page)
+            if "flags" not in model:
+                self.assertIn("<p>Not yet examined.</p>", page)
+        self.assertNotIn(
+            "Risk statements", self.pages["records/systems/kilo-code/index.html"]
+        )
+
+    def test_a_found_statement_is_quoted_with_its_link_date_confidence_and_scope(
+        self,
+    ) -> None:
+        model, page = self.page_with_flag(FLAG_FOUND)
+        sentence = (
+            f"{model['developer']} names this release against “Fixture Level 3” in cyber "
+            "and biological or chemical capability, as a precaution. The statement covers "
+            "the model itself. This is the developer's own statement, not an Atlas risk rating."
+        )
+        self.assertIn("<h3>“Fixture Level 3” · Precautionary</h3>", page)
+        self.assertIn(
+            f"<blockquote>{html.escape(FLAG_FOUND['statement'])}</blockquote>", page
+        )
+        self.assertIn(
+            "<dt>Risk areas</dt><dd>Cyber · Biological or chemical</dd>", page
+        )
+        self.assertIn("<dt>Covers</dt><dd>The model itself</dd>", page)
+        self.assertIn(f'href="{FLAG_FOUND["url"]}"', page)
+        self.assertIn("2026-09-01 · Research confidence: High", page)
+        self.assertIn(html.escape(sentence), page)
+        self.assertNotRegex(page.lower(), "high risk|dangerous")
+
+    def test_a_determined_statement_names_every_domain_and_its_scope(self) -> None:
+        entry = dict(
+            FLAG_FOUND,
+            determination="determined",
+            domains=["cyber", "bio_chem", "autonomy"],
+            scope="deployment",
+        )
+        model, page = self.page_with_flag(entry)
+        sentence = (
+            f"{model['developer']} states that this release reached “Fixture Level 3” in "
+            "cyber, biological or chemical, and autonomy capability. The statement covers "
+            "safeguards on a release channel. This is the developer's own statement, not "
+            "an Atlas risk rating."
+        )
+        self.assertIn("<h3>“Fixture Level 3” · Threshold reached</h3>", page)
+        self.assertIn(html.escape(sentence), page)
+
+    def test_no_statement_reads_as_absence_not_safety(self) -> None:
+        _, page = self.page_with_flag(FLAG_NONE)
+        self.assertIn(
+            "<p>The developer publishes no risk-threshold statement for this release. "
+            "Absence is not evidence of safety.</p>",
+            page,
+        )
+        self.assertIn(f'href="{FLAG_NONE["url"]}"', page)
+        self.assertIn("Research confidence: Medium", page)
+        self.assertNotIn("<blockquote>", page)
+
+    def test_risk_statement_words_match_the_app(self) -> None:
+        """The share page and the dialog must say the same fixed sentences."""
+        core = (ROOT / "web" / "app-core.js").read_text(encoding="utf-8")
+        app = (ROOT / "web" / "app.js").read_text(encoding="utf-8")
+        for text in (FLAG_DISCLAIMER, FLAG_NO_STATEMENT_TEXT, FLAG_NOT_EXAMINED_TEXT):
+            self.assertIn(f'"{text}"', core)
+        # flagSentence's claim templates and scope lead, in both builders.
+        taxonomy = self.catalog["taxonomy"]
+        precaution = flag_sentence(FLAG_FOUND, "Fixture Lab", taxonomy)
+        reached = flag_sentence(
+            dict(FLAG_FOUND, determination="determined"), "Fixture Lab", taxonomy
+        )
+        ruled_out = flag_sentence(
+            dict(FLAG_FOUND, determination="below_threshold"), "Fixture Lab", taxonomy
+        )
+        standard = flag_sentence(
+            dict(FLAG_FOUND, determination="safeguard_standard"),
+            "Fixture Lab",
+            taxonomy,
+        )
+        for template, sentence in (
+            ("names this release against “", precaution),
+            ("states that this release reached “", reached),
+            ("states that this release ships under the “", standard),
+            ("states that this release did not reach “", ruled_out),
+            ("” safeguard standard for ", standard),
+            (" capability, as a precaution.", precaution),
+            (" The statement covers ", precaution),
+        ):
+            with self.subTest(template=template):
+                self.assertIn(template, sentence)
+                self.assertIn(template, core)
+        # The source link's two labels, as the dialog writes them.
+        for entry, label in (
+            (FLAG_FOUND, "Read the developer's statement"),
+            (FLAG_NONE, "Page the reviewer checked"),
+        ):
+            with self.subTest(label=label):
+                page = self.page_with_flag(entry)[1]
+                self.assertIn(f"{html.escape(label)} ↗</a>", page)
+                self.assertIn(f'"{label}"', app)
 
     def test_sitemap_lists_the_root_and_every_page(self) -> None:
         """The sitemap covers the root, every share page, and every blog page.
