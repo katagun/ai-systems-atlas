@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-10-07",
+  "verified_at": "2026-10-10",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -4656,7 +4656,61 @@
           "immutable_url": "https://api.github.com/repos/peteromallet/desloppify/git/blobs/987b565c592e400322a3f6f240563476b019f338"
         }
       ]
+    },
+    {
+      "project_id": "cain-agent",
+      "repo": "cdxiaodong/cain-agent",
+      "items": [
+        {
+          "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+          "immutable_url": "https://api.github.com/repos/cdxiaodong/cain-agent/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7",
+          "kind": "git_blob",
+          "license_id": "Apache-2.0",
+          "path": "LICENSE",
+          "scope": "Whole repository: the single LICENSE file; no NOTICE file and no component-level license scopes.",
+          "url": "https://github.com/cdxiaodong/cain-agent/blob/c7fb93878c70/LICENSE"
+        }
+      ]
+    },
+    {
+      "project_id": "cairn",
+      "repo": "oritera/Cairn",
+      "items": [
+        {
+          "blob_sha": "0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+          "immutable_url": "https://api.github.com/repos/oritera/Cairn/git/blobs/0ad25db4bd1d86c452db3f9602ccdbe172438f52",
+          "kind": "git_blob",
+          "license_id": "AGPL-3.0",
+          "path": "LICENSE",
+          "scope": "Whole repository under AGPL-3.0; the README additionally offers a separate commercial license on request, for which no terms document exists in the tree.",
+          "url": "https://github.com/oritera/Cairn/blob/8e7e0ea67552/LICENSE"
+        }
+      ]
+    },
+    {
+      "project_id": "paper-qa",
+      "repo": "Future-House/paper-qa",
+      "items": [
+        {
+          "blob_sha": "7d89c6e2d7dea1388df7efe33222068cdd784f8b",
+          "immutable_url": "https://api.github.com/repos/Future-House/paper-qa/git/blobs/7d89c6e2d7dea1388df7efe33222068cdd784f8b",
+          "kind": "git_blob",
+          "license_id": "Apache-2.0",
+          "path": "LICENSE",
+          "scope": "Whole repository except the opt-in reader extras, which carry their own licences; the default pip install pulls only the Apache-2.0 pypdf reader.",
+          "url": "https://github.com/Future-House/paper-qa/blob/57e89f7223b0/LICENSE"
+        },
+        {
+          "blob_sha": "dba13ed2ddf783ee8118c6a581dbf75305f816a3",
+          "immutable_url": "https://api.github.com/repos/Future-House/paper-qa/git/blobs/dba13ed2ddf783ee8118c6a581dbf75305f816a3",
+          "kind": "git_blob",
+          "license_id": "AGPL-3.0",
+          "path": "packages/paper-qa-pymupdf/LICENSE",
+          "scope": "The paper-qa-pymupdf reader package only, reached solely through the opt-in pymupdf or zotero install extras; never pulled by the default install.",
+          "url": "https://github.com/Future-House/paper-qa/blob/57e89f7223b0/packages/paper-qa-pymupdf/LICENSE"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-10-07"
+  "generated_at": "2026-10-10"
 }
