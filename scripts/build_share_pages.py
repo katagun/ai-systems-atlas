@@ -146,6 +146,7 @@ def flag_sentence(entry: dict, developer: str, taxonomy: dict) -> str:
         "determined": f"{developer} states that this release reached “{term}” in {domains} capability.",
         "precautionary": f"{developer} names this release against “{term}” in {domains} capability, as a precaution.",
         "safeguard_standard": f"{developer} states that this release ships under the “{term}” safeguard standard for {domains} capability.",
+        "below_threshold": f"{developer} states that this release did not reach “{term}” in {domains} capability.",
     }[entry["determination"]]
     scope = taxonomy_name(taxonomy, "flag_scopes", entry["scope"])
     return f"{claim} The statement covers {scope[:1].lower()}{scope[1:]}. {FLAG_DISCLAIMER}"

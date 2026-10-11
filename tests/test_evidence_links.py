@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 import os
@@ -41,10 +42,18 @@ def response(
 
 
 class _Response:
-    def __init__(self, body: bytes = b"ok", *, status: int = 200) -> None:
+    def __init__(
+        self,
+        body: bytes = b"ok",
+        *,
+        status: int = 200,
+        headers: dict[str, str] | None = None,
+    ) -> None:
         self.body = body
         self.status = status
         self.headers = {"Content-Type": "text/plain", "ETag": '"new"'}
+        if headers:
+            self.headers.update(headers)
 
     def __enter__(self) -> _Response:
         return self
@@ -565,6 +574,24 @@ class EvidenceLinkTests(unittest.TestCase):
         )
         self.assertEqual("bytes=0-0", opener.requests[1].get_header("Range"))
         self.assertEqual('"old"', opener.requests[0].get_header("If-none-match"))
+
+    def test_gzip_encoded_body_is_hashed_as_text(self) -> None:
+        # www.limxdynamics.com sends gzip bytes regardless of request headers,
+        # which the fetcher used to store as opaque bytes instead of page text.
+        html = b"<html><main>TRON 1 product page.</main></html>"
+        opener = _Opener(
+            [_Response(gzip.compress(html), headers={"Content-Encoding": "gzip"})]
+        )
+
+        result = check_evidence_links.fetch_target(
+            target(terms=True),
+            {},
+            token=None,
+            opener=opener,
+            sleeper=lambda _delay: None,
+        )
+
+        self.assertEqual(html, result.body)
 
     def test_terms_entry_missing_its_text_fetches_a_full_body(self) -> None:
         # A 304 carries no body, so an entry without the text behind its hash would never gain it.

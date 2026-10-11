@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-09-20",
+  "verified_at": "2026-10-07",
   "packs": [
     {
       "id": "agent-toolkit",
@@ -55,6 +55,75 @@
       ],
       "verified_at": "2026-09-17",
       "stars": 2532,
+      "stars_verified_at": "2026-10-07"
+    },
+    {
+      "id": "agentic-project-management",
+      "name": "Agentic Project Management",
+      "short_name": "APM",
+      "steward": "sdi2200262 (CobuterMan)",
+      "repo": "sdi2200262/agentic-project-management",
+      "url": "https://github.com/sdi2200262/agentic-project-management",
+      "description": "A process kit of slash-command, guide, skill and artifact-template documents that split a project across Planner, Manager and Worker conversations in a coding assistant, installed into a workspace by an npm command-line tool.",
+      "pack_type": "process_kit",
+      "hosts": [
+        "claude_code",
+        "codex",
+        "cursor",
+        "github_copilot",
+        "opencode"
+      ],
+      "packaging_formats": [
+        "agent-skills"
+      ],
+      "install_mechanism": "copy_files",
+      "installs": "Per host, apm init unpacks that host's release bundle into the workspace: nine numbered command documents (apm-1-initiate-planner to apm-9-recover), six procedure guides, one subagent definition (apm-archive-explorer), one SKILL.md skill directory (apm-communication, with a bus-integration guide) and the project artifact templates (spec, plan, tracker and a memory index) from the templates/ tree, which holds 27 files in all. The build configuration targets six hosts, GitHub Copilot, Claude Code, Antigravity, Cursor, OpenCode and Codex, placing commands, skills, guides and agents under each host's own directory (for Claude Code, .claude/commands, .claude/skills, .claude/apm-guides and .claude/agents). Antigravity is not a value in the pack_hosts group, so it is not recorded. Two standalone skills, apm-assist and apm-customization, sit under skills/ and are installed by a separate procedure in skills/README.md.",
+      "distribution_machinery": "The agentic-pm package (src/, version 1.0.1) provides the apm command: init, custom, update, add, remove, status and archive, which download a release bundle from GitHub, extract it into the workspace, record .apm/metadata.json and archive finished sessions under .apm/archives. build/ turns templates/ into one zip per host for each release. None of it runs inside a host session.",
+      "not_a_system": "Owns no state it reads back and does no enforced work: everything a host receives is Markdown that the assistant reads and acts on with its own tools, including the spec, plan, tracker and memory files and the file-based message bus, which the agents maintain by following the documents. The only shipped code is the installer and archiver the user runs outside the host, and the README says the user relays every message between the agent conversations.",
+      "status": "active",
+      "licenses": [
+        "MPL-2.0"
+      ],
+      "license_note": "The root LICENSE is the Mozilla Public License 2.0 under a header that scopes it to versions 0.4.0 and later and says earlier versions (0.3.x and before) remain under MIT; the reviewed tree is version 1.0.1.",
+      "license_evidence": [
+        {
+          "license_id": "MPL-2.0",
+          "scope": "Whole repository from version 0.4.0 onward, per the header of the root LICENSE; versions 0.3.x and earlier were MIT",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/sdi2200262/agentic-project-management/blob/096fa79b9dade66cad0634ef572687bdee1be1c3/LICENSE",
+          "blob_sha": "052a876ac5434072c0287218222eb0acc22a7a2f",
+          "immutable_url": "https://api.github.com/repos/sdi2200262/agentic-project-management/git/blobs/052a876ac5434072c0287218222eb0acc22a7a2f"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "git_blob",
+          "label": "README install and host documentation",
+          "path": "README.md",
+          "url": "https://github.com/sdi2200262/agentic-project-management/blob/096fa79b9dade66cad0634ef572687bdee1be1c3/README.md",
+          "blob_sha": "3e4898ac0d921b4231831cd5df4530aec8db250c",
+          "immutable_url": "https://api.github.com/repos/sdi2200262/agentic-project-management/git/blobs/3e4898ac0d921b4231831cd5df4530aec8db250c"
+        },
+        {
+          "kind": "git_blob",
+          "label": "Per-host build configuration",
+          "path": "build/build-config.json",
+          "url": "https://github.com/sdi2200262/agentic-project-management/blob/096fa79b9dade66cad0634ef572687bdee1be1c3/build/build-config.json",
+          "blob_sha": "6af69431a526f04c8bc44cda1d959fb94234b15f",
+          "immutable_url": "https://api.github.com/repos/sdi2200262/agentic-project-management/git/blobs/6af69431a526f04c8bc44cda1d959fb94234b15f"
+        },
+        {
+          "kind": "git_blob",
+          "label": "Install command",
+          "path": "src/commands/init.js",
+          "url": "https://github.com/sdi2200262/agentic-project-management/blob/096fa79b9dade66cad0634ef572687bdee1be1c3/src/commands/init.js",
+          "blob_sha": "cb85776aa88472fe882b748589d60ba1bde54e73",
+          "immutable_url": "https://api.github.com/repos/sdi2200262/agentic-project-management/git/blobs/cb85776aa88472fe882b748589d60ba1bde54e73"
+        }
+      ],
+      "verified_at": "2026-10-07",
+      "stars": 2422,
       "stars_verified_at": "2026-10-07"
     },
     {

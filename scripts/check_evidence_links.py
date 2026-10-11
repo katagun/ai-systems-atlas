@@ -17,6 +17,7 @@ import argparse
 import contextlib
 import difflib
 import fcntl
+import gzip
 import hashlib
 import json
 import os
@@ -746,6 +747,25 @@ def _headers(value: Mapping[str, str] | Message) -> dict[str, str]:
     return {key.lower(): str(item) for key, item in value.items()}
 
 
+def _decode_body(body: bytes, headers: Mapping[str, str]) -> bytes:
+    """Decode a transport-compressed body before hashing.
+
+    Some hosts (observed on www.limxdynamics.com) send gzip bytes regardless
+    of request headers, and urllib does not decode them. Hashing the raw
+    bytes would pin the compression rather than the page text, so decode here
+    and keep the undecodable bytes as they arrived.
+    """
+    encodings = {
+        part.strip().lower() for part in headers.get("content-encoding", "").split(",")
+    }
+    if "gzip" in encodings:
+        try:
+            return gzip.decompress(body)
+        except (OSError, EOFError):
+            return body
+    return body
+
+
 def _rate_limit_delay(headers: Mapping[str, str], attempt: int) -> float:
     retry_after = headers.get("retry-after")
     if retry_after:
@@ -796,7 +816,9 @@ def _browser_fallback_fetch(
             response_headers = _headers(response.headers)
             body = None
             if monitor_terms:
-                body = response.read(MAX_TERMS_BYTES + 1)
+                body = _decode_body(
+                    response.read(MAX_TERMS_BYTES + 1), response_headers
+                )
                 if len(body) > MAX_TERMS_BYTES:
                     return None
             else:
@@ -868,7 +890,9 @@ def fetch_target(
                     response_headers = _headers(response.headers)
                     body = None
                     if target.monitor_terms:
-                        body = response.read(MAX_TERMS_BYTES + 1)
+                        body = _decode_body(
+                            response.read(MAX_TERMS_BYTES + 1), response_headers
+                        )
                         if len(body) > MAX_TERMS_BYTES:
                             raise OversizeBody(
                                 f"terms response exceeds {MAX_TERMS_BYTES} bytes"

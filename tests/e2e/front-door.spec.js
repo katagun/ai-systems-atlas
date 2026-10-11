@@ -844,7 +844,7 @@ test("a list Compare label stays inside its button", async ({ page }) => {
   ]);
   expect(Math.abs(chipsTop - barBottom), `chips row ${chipsTop}, bar bottom ${barBottom}`).toBeLessThan(1);
   expect(Math.abs(rowTop - chipsBottom), `count row ${rowTop}, chips bottom ${chipsBottom}`).toBeLessThan(1);
-  await expect(page.locator("#result-count")).toContainText("8 projects");
+  await expect(page.locator("#result-count")).toContainText("12 projects");
   await expect(page.locator("#filter-chips")).toContainText("Role: Research agent");
   const button = page.locator("#project-grid .compare-toggle").first();
   await button.scrollIntoViewIfNeeded();
