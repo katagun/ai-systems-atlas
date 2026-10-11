@@ -42,6 +42,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # per interpreter.
 STEPS: list[tuple[str, list[str]]] = [
     ("sync catalog mirrors", ["uv", "run", "python", "scripts/sync_web_data.py"]),
+    ("analysis exports", ["uv", "run", "python", "scripts/build_analysis_exports.py"]),
     ("app payloads", ["uv", "run", "python", "scripts/build_web_payload.py"]),
     ("share pages", ["uv", "run", "python", "scripts/build_share_pages.py"]),
     ("card marks", ["node", "scripts/build_logos.mjs"]),

@@ -1,0 +1,969 @@
+collection,record_id,record_kind,name,type_value,status,source_id,verified_at
+inference,abliteration-ai,reviewed,abliteration.ai,direct_model_api,,,2026-09-01
+inference,ai21-studio,reviewed,AI21 Studio,direct_model_api,,,2026-08-28
+inference,aiml-api,reviewed,AI/ML API,routing_aggregator,,,2026-08-31
+inference,alibaba-cloud-model-studio,reviewed,Alibaba Cloud Model Studio,cloud_model_platform,,,2026-08-28
+inference,amazon-bedrock,reviewed,Amazon Bedrock,cloud_model_platform,,,2026-09-12
+inference,anthropic-api,reviewed,Anthropic API,direct_model_api,,,2026-08-28
+inference,azure-ai-foundry-models,reviewed,Microsoft Foundry Models,cloud_model_platform,,,2026-09-12
+inference,baidu-qianfan-modelbuilder,reviewed,Baidu Qianfan ModelBuilder,cloud_model_platform,,,2026-08-28
+inference,baseten,reviewed,Baseten,managed_inference_host,,,2026-09-15
+inference,byteplus-modelark,reviewed,BytePlus ModelArk,cloud_model_platform,,,2026-08-28
+inference,cerebras-inference,reviewed,Cerebras Inference,managed_inference_host,,,2026-08-28
+inference,chutes,reviewed,Chutes,managed_inference_host,,,2026-08-31
+inference,cloudflare-ai-gateway,reviewed,Cloudflare AI Gateway,routing_aggregator,,,2026-08-31
+inference,cloudflare-workers-ai,reviewed,Cloudflare Workers AI,cloud_model_platform,,,2026-08-28
+inference,cohere-api,reviewed,Cohere API,direct_model_api,,,2026-09-15
+inference,databricks-foundation-model-apis,reviewed,Databricks Foundation Model APIs,cloud_model_platform,,,2026-08-28
+inference,deepinfra,reviewed,DeepInfra,managed_inference_host,,,2026-09-12
+inference,deepseek-api,reviewed,DeepSeek API,direct_model_api,,,2026-09-12
+inference,eden-ai,reviewed,Eden AI,routing_aggregator,,,2026-08-31
+inference,fireworks-ai,reviewed,Fireworks AI,managed_inference_host,,,2026-09-12
+inference,google-gemini-api,reviewed,Gemini API,direct_model_api,,,2026-08-28
+inference,groqcloud,reviewed,GroqCloud,managed_inference_host,,,2026-08-28
+inference,hugging-face-inference-endpoints,reviewed,Hugging Face Inference Endpoints,managed_inference_host,,,2026-08-28
+inference,hugging-face-inference-providers,reviewed,Hugging Face Inference Providers,routing_aggregator,,,2026-08-28
+inference,ibm-watsonx-ai,reviewed,IBM watsonx.ai Runtime,cloud_model_platform,,,2026-08-28
+inference,martian,reviewed,Martian Gateway,routing_aggregator,,,2026-08-31
+inference,meta-model-api,reviewed,Meta Model API,direct_model_api,,,2026-08-30
+inference,minimax-open-platform,reviewed,MiniMax Open Platform,direct_model_api,,,2026-08-28
+inference,mistral-ai-studio,reviewed,Mistral AI Studio,direct_model_api,,,2026-09-12
+inference,moonshot-ai-open-platform,reviewed,Moonshot AI Open Platform,direct_model_api,,,2026-09-15
+inference,nano-gpt,reviewed,Nano-GPT,routing_aggregator,,,2026-08-31
+inference,nebius-token-factory,reviewed,Nebius Token Factory,managed_inference_host,,,2026-08-29
+inference,nvidia-api-catalog,reviewed,NVIDIA API Catalog,managed_inference_host,,,2026-08-28
+inference,oci-generative-ai,reviewed,OCI Generative AI,cloud_model_platform,,,2026-08-28
+inference,ollama-cloud,reviewed,Ollama Cloud,managed_inference_host,,,2026-08-29
+inference,openai-api,reviewed,OpenAI API,direct_model_api,,,2026-09-12
+inference,openrouter,reviewed,OpenRouter,routing_aggregator,,,2026-09-12
+inference,orcarouter,reviewed,OrcaRouter,routing_aggregator,,,2026-09-18
+inference,perplexity-api,reviewed,Perplexity API,direct_model_api,,,2026-08-28
+inference,poolside-api,reviewed,Poolside API,direct_model_api,,,2026-09-02
+inference,qiniu-ai-inference,reviewed,Qiniu AI Large-Model Inference,routing_aggregator,,,2026-08-31
+inference,replicate,reviewed,Replicate,managed_inference_host,,,2026-09-12
+inference,requesty,reviewed,Requesty,routing_aggregator,,,2026-08-31
+inference,sakana-fugu,reviewed,Sakana Fugu,direct_model_api,,,2026-09-28
+inference,sambanova-cloud,reviewed,SambaNova Cloud,managed_inference_host,,,2026-08-28
+inference,siliconflow-cn,reviewed,SiliconFlow (mainland China),managed_inference_host,,,2026-08-31
+inference,siliconflow-international,reviewed,SiliconFlow (international),managed_inference_host,,,2026-08-31
+inference,stability-ai-developer-platform,reviewed,Stability AI Developer Platform,direct_model_api,,,2026-08-28
+inference,stepfun-open-platform,reviewed,StepFun Open Platform (mainland China),direct_model_api,,,2026-08-31
+inference,stepfun-open-platform-global,reviewed,StepFun Open Platform (international),direct_model_api,,,2026-08-31
+inference,tencent-cloud-tokenhub,reviewed,Tencent Cloud TokenHub,cloud_model_platform,,,2026-08-28
+inference,together-ai,reviewed,Together AI,managed_inference_host,,,2026-08-28
+inference,trustedrouter,reviewed,TrustedRouter,routing_aggregator,,,2026-08-31
+inference,venice-api,reviewed,Venice API,routing_aggregator,,,2026-08-28
+inference,vercel-ai-gateway,reviewed,Vercel AI Gateway,routing_aggregator,,,2026-08-31
+inference,vertex-ai-generative-ai,reviewed,Gemini Enterprise Agent Platform Generative AI,cloud_model_platform,,,2026-09-12
+inference,volcengine-ark,reviewed,Volcengine Ark,cloud_model_platform,,,2026-08-31
+inference,xai-api,reviewed,xAI API,direct_model_api,,,2026-08-28
+inference,zai-model-api,reviewed,Z.ai Model API,direct_model_api,,,2026-08-28
+inference,zhipu-bigmodel,reviewed,Zhipu AI Open Platform,direct_model_api,,,2026-08-31
+labs,lab-agibot,reviewed,AgiBot,ai_company,,,2026-10-03
+labs,lab-ai-singapore,reviewed,AI Singapore,public_research,,,2026-09-25
+labs,lab-ai21-labs,reviewed,AI21 Labs,ai_company,,,2026-09-25
+labs,lab-aikido-security,reviewed,Aikido Security,technology_company,,,2026-09-25
+labs,lab-aleph-alpha,reviewed,Aleph Alpha,ai_company,,,2026-10-03
+labs,lab-alibaba,reviewed,Alibaba,technology_company,,,2026-09-25
+labs,lab-amazon,reviewed,Amazon,technology_company,,,2026-10-03
+labs,lab-ant-group,reviewed,Ant Group,technology_company,,,2026-09-25
+labs,lab-anthropic,reviewed,Anthropic,ai_company,,,2026-10-03
+labs,lab-apodex-ai,reviewed,Apodex AI,ai_company,,,2026-10-01
+labs,lab-arcee-ai,reviewed,Arcee AI,ai_company,,,2026-09-25
+labs,lab-black-forest-labs,reviewed,Black Forest Labs,ai_company,,,2026-10-01
+labs,lab-booster-robotics,reviewed,Booster Robotics,ai_company,,,2026-10-07
+labs,lab-boston-dynamics,reviewed,Boston Dynamics,technology_company,,,2026-10-03
+labs,lab-bytedance,reviewed,ByteDance,technology_company,,,2026-09-25
+labs,lab-cognition-ai,reviewed,Cognition AI,ai_company,,,2026-10-03
+labs,lab-cohere,reviewed,Cohere,ai_company,,,2026-10-03
+labs,lab-deep-robotics,reviewed,DEEP Robotics,ai_company,,,2026-10-07
+labs,lab-deepseek,reviewed,DeepSeek,ai_company,,,2026-09-25
+labs,lab-engineered-arts,reviewed,Engineered Arts,ai_company,,,2026-10-07
+labs,lab-figure-ai,reviewed,Figure AI,ai_company,,,2026-10-03
+labs,lab-galbot,reviewed,Galbot,ai_company,,,2026-10-07
+labs,lab-google,reviewed,Google,technology_company,,,2026-10-03
+labs,lab-hello-robot,reviewed,Hello Robot,ai_company,,,2026-10-03
+labs,lab-higgsfield-ai,reviewed,Higgsfield AI,ai_company,,,2026-10-03
+labs,lab-hugging-face,reviewed,Hugging Face,technology_company,,,2026-09-29
+labs,lab-ibm,reviewed,IBM,technology_company,,,2026-10-03
+labs,lab-limx-dynamics,reviewed,LimX Dynamics,ai_company,,,2026-10-07
+labs,lab-liquid-ai,reviewed,Liquid AI,ai_company,,,2026-10-03
+labs,lab-meituan,reviewed,Meituan,technology_company,,,2026-09-25
+labs,lab-meta,reviewed,Meta,technology_company,,,2026-09-25
+labs,lab-microsoft,reviewed,Microsoft,technology_company,,,2026-10-03
+labs,lab-minimax,reviewed,MiniMax,ai_company,,,2026-09-25
+labs,lab-mistral-ai,reviewed,Mistral AI,ai_company,,,2026-09-25
+labs,lab-mixedbread-ai,reviewed,Mixedbread,ai_company,,,2026-10-03
+labs,lab-moonshot-ai,reviewed,Moonshot AI,ai_company,,,2026-09-25
+labs,lab-motif-technologies,reviewed,Motif Technologies,ai_company,,,2026-09-25
+labs,lab-nvidia,reviewed,NVIDIA,technology_company,,,2026-09-25
+labs,lab-one-x-technologies,reviewed,1X Technologies,ai_company,,,2026-10-03
+labs,lab-openai,reviewed,OpenAI,ai_company,,,2026-09-25
+labs,lab-openbmb,reviewed,OpenBMB,ai_company,,,2026-09-25
+labs,lab-ornith-ai,reviewed,Ornith AI (DeepReinforce),ai_company,,,2026-09-25
+labs,lab-perplexity,reviewed,Perplexity,ai_company,,,2026-09-25
+labs,lab-pollen-robotics,reviewed,Pollen Robotics,ai_company,,,2026-10-07
+labs,lab-poolside,reviewed,Poolside,ai_company,,,2026-09-25
+labs,lab-prism-ml,reviewed,Prism ML,ai_company,,,2026-10-06
+labs,lab-reflection-ai,reviewed,Reflection AI,ai_company,,,2026-10-07
+labs,lab-safe-superintelligence,reviewed,Safe Superintelligence,ai_company,,,2026-10-03
+labs,lab-sakana-ai,reviewed,Sakana AI,ai_company,,,2026-09-28
+labs,lab-stanford-nlp,reviewed,Stanford NLP Group,public_research,,,2026-09-29
+labs,lab-stepfun,reviewed,StepFun,ai_company,,,2026-10-03
+labs,lab-swiss-ai-initiative,reviewed,Swiss AI Initiative,public_research,,,2026-09-25
+labs,lab-tencent,reviewed,Tencent,technology_company,,,2026-09-25
+labs,lab-thinking-machines-lab,reviewed,Thinking Machines Lab,ai_company,,,2026-09-25
+labs,lab-trendyol,reviewed,Trendyol,technology_company,,,2026-09-25
+labs,lab-trossen-robotics,reviewed,Trossen Robotics,ai_company,,,2026-10-10
+labs,lab-typesafe-ai,reviewed,TypeSafe AI,ai_company,,,2026-09-25
+labs,lab-unitree-robotics,reviewed,Unitree Robotics,ai_company,,,2026-10-03
+labs,lab-upstage,reviewed,Upstage,ai_company,,,2026-10-03
+labs,lab-vispark,reviewed,Vispark,technology_company,,,2026-09-25
+labs,lab-vivgrid,reviewed,Vivgrid,ai_company,,,2026-09-25
+labs,lab-writer,reviewed,Writer,ai_company,,,2026-10-03
+labs,lab-xai,reviewed,SpaceXAI (xAI),ai_company,,,2026-09-25
+labs,lab-xiaomi,reviewed,Xiaomi,technology_company,,,2026-09-25
+labs,lab-z-ai,reviewed,Z.ai,ai_company,,,2026-09-25
+models,model-ai21-jamba-large,reviewed,Jamba Large 1.6,language_model,,ai21/jamba-large,2026-09-22
+models,model-ai21-jamba-mini,reviewed,Jamba Mini 1.6,language_model,,ai21/jamba-mini,2026-09-22
+models,model-aikido-altar-1,reviewed,Altar-1,language_model,,,2026-09-22
+models,model-aisingapore-gemma-sea-lion-v4-27b-it,reviewed,Gemma-SEA-LION-v4-27B-IT,multimodal_language_model,,aisingapore/gemma-sea-lion-v4-27b-it,2026-09-22
+models,model-aleph-alpha-kolibri-1,reviewed,Kolibri 1,language_model,,,2026-10-03
+models,model-alibaba-qwen-flash,imported_source,Qwen Flash,,,alibaba/qwen-flash,
+models,model-alibaba-qwen-image-2-1,reviewed,Qwen-Image-2.1,image_generation_model,,alibaba/qwen-image-2.1,2026-10-06
+models,model-alibaba-qwen-max,imported_source,Qwen Max,,,alibaba/qwen-max,
+models,model-alibaba-qwen-omni-turbo,imported_source,Qwen-Omni Turbo,,,alibaba/qwen-omni-turbo,
+models,model-alibaba-qwen-plus,imported_source,Qwen Plus,,,alibaba/qwen-plus,
+models,model-alibaba-qwen-plus-2025-12-01,reviewed,Qwen Plus 2025-12-01,language_model,,,2026-09-28
+models,model-alibaba-qwen-turbo,imported_source,Qwen Turbo,,,alibaba/qwen-turbo,
+models,model-alibaba-qwen-vl-max,imported_source,Qwen-VL Max,,,alibaba/qwen-vl-max,
+models,model-alibaba-qwen-vl-plus,imported_source,Qwen-VL Plus,,,alibaba/qwen-vl-plus,
+models,model-alibaba-qwen2-5-72b-instruct,reviewed,Qwen2.5 72B Instruct,language_model,,,2026-10-06
+models,model-alibaba-qwen2-5-7b-instruct,reviewed,Qwen2.5 7B Instruct,language_model,,,2026-10-06
+models,model-alibaba-qwen2-5-coder-0-5b,reviewed,Qwen2.5-Coder-0.5B,language_model,,alibaba/qwen2.5-coder-0.5b,2026-09-04
+models,model-alibaba-qwen2-5-coder-32b-instruct,reviewed,Qwen2.5-Coder-32B-Instruct,language_model,,alibaba/qwen2.5-coder-32b-instruct,2026-09-16
+models,model-alibaba-qwen2-5-vl-72b-instruct,reviewed,Qwen2.5-VL 72B Instruct,multimodal_language_model,,alibaba/qwen2-5-vl-72b-instruct,2026-09-16
+models,model-alibaba-qwen3-14b,reviewed,Qwen3 14B,language_model,,,2026-10-06
+models,model-alibaba-qwen3-235b-a22b,reviewed,Qwen3 235B-A22B,language_model,,alibaba/qwen3-235b-a22b,2026-09-16
+models,model-alibaba-qwen3-235b-a22b-instruct-2507,reviewed,Qwen3 235B-A22B Instruct 2507,language_model,,alibaba/qwen3-235b-a22b-instruct-2507,2026-09-11
+models,model-alibaba-qwen3-235b-a22b-thinking-2507,reviewed,Qwen3 235B A22B Thinking 2507,language_model,,,2026-10-06
+models,model-alibaba-qwen3-30b-a3b,reviewed,Qwen3 30B A3B,language_model,,alibaba/qwen3-30b-a3b,2026-09-16
+models,model-alibaba-qwen3-30b-a3b-instruct-2507,reviewed,Qwen3 30B A3B Instruct 2507,language_model,,,2026-10-06
+models,model-alibaba-qwen3-30b-a3b-thinking-2507,reviewed,Qwen3 30B A3B Thinking 2507,language_model,,,2026-10-06
+models,model-alibaba-qwen3-32b,reviewed,Qwen3 32B,language_model,,alibaba/qwen3-32b,2026-09-16
+models,model-alibaba-qwen3-5-122b-a10b,reviewed,Qwen3.5 122B-A10B,multimodal_language_model,,alibaba/qwen3.5-122b-a10b,2026-09-16
+models,model-alibaba-qwen3-5-27b,reviewed,Qwen3.5 27B,multimodal_language_model,,alibaba/qwen3.5-27b,2026-09-16
+models,model-alibaba-qwen3-5-35b-a3b,reviewed,Qwen3.5 35B-A3B,multimodal_language_model,,alibaba/qwen3.5-35b-a3b,2026-09-16
+models,model-alibaba-qwen3-5-397b-a17b,reviewed,Qwen3.5 397B-A17B,multimodal_language_model,,alibaba/qwen3.5-397b-a17b,2026-09-16
+models,model-alibaba-qwen3-5-9b,reviewed,Qwen3.5 9B,multimodal_language_model,,alibaba/qwen3.5-9b,2026-09-16
+models,model-alibaba-qwen3-5-flash,imported_source,Qwen3.5 Flash,,,alibaba/qwen3.5-flash,
+models,model-alibaba-qwen3-5-flash-2026-02-23,reviewed,Qwen3.5 Flash 2026-02-23,multimodal_language_model,,,2026-09-28
+models,model-alibaba-qwen3-5-plus,imported_source,Qwen3.5 Plus,,,alibaba/qwen3.5-plus,
+models,model-alibaba-qwen3-5-plus-2026-04-20,reviewed,Qwen3.5 Plus 2026-04-20,multimodal_language_model,,,2026-09-28
+models,model-alibaba-qwen3-6-27b,reviewed,Qwen3.6 27B,multimodal_language_model,,alibaba/qwen3.6-27b,2026-09-16
+models,model-alibaba-qwen3-6-35b-a3b,reviewed,Qwen3.6 35B-A3B,multimodal_language_model,,alibaba/qwen3.6-35b-a3b,2026-09-16
+models,model-alibaba-qwen3-6-flash,imported_source,Qwen3.6 Flash,,,alibaba/qwen3.6-flash,
+models,model-alibaba-qwen3-6-max-preview,imported_source,Qwen3.6 Max Preview,,,alibaba/qwen3.6-max-preview,
+models,model-alibaba-qwen3-6-plus,imported_source,Qwen3.6 Plus,,,alibaba/qwen3.6-plus,
+models,model-alibaba-qwen3-7-flash,imported_source,Qwen3.7 Flash,,,alibaba/qwen3.7-flash,
+models,model-alibaba-qwen3-7-max,imported_source,Qwen3.7 Max,,,alibaba/qwen3.7-max,
+models,model-alibaba-qwen3-7-plus,imported_source,Qwen3.7 Plus,,,alibaba/qwen3.7-plus,
+models,model-alibaba-qwen3-8-2-4t-a95b,imported_source,Qwen3.8 2.4T A95B,,,alibaba/qwen3.8-2.4t-a95b,
+models,model-alibaba-qwen3-8-27b,reviewed,Qwen3.8 27B,multimodal_language_model,,alibaba/qwen3.8-27b,2026-09-12
+models,model-alibaba-qwen3-8-flash,reviewed,Qwen3.8 Flash,multimodal_language_model,,alibaba/qwen3.8-flash,2026-09-16
+models,model-alibaba-qwen3-8-flash-next,reviewed,Qwen3.8 Flash Next,multimodal_language_model,,alibaba/qwen3.8-flash-next,2026-09-12
+models,model-alibaba-qwen3-8-max,reviewed,Qwen3.8 Max,multimodal_language_model,,alibaba/qwen3.8-max,2026-09-12
+models,model-alibaba-qwen3-8-max-0902,imported_source,Qwen3.8 Max 0902,,,alibaba/qwen3.8-max-0902,
+models,model-alibaba-qwen3-8-max-preview,imported_source,Qwen3.8 Max Preview,,,alibaba/qwen3.8-max-preview,
+models,model-alibaba-qwen3-8-max-prime,imported_source,Qwen 3.8 Max Prime,,,alibaba/qwen3.8-max-prime,
+models,model-alibaba-qwen3-8-omni-flash,reviewed,Qwen3.8 Omni Flash,multimodal_language_model,,alibaba/qwen3.8-omni-flash,2026-09-22
+models,model-alibaba-qwen3-8b,reviewed,Qwen3 8B,language_model,,,2026-10-06
+models,model-alibaba-qwen3-coder-30b-a3b-instruct,reviewed,Qwen3-Coder 30B-A3B Instruct,language_model,,alibaba/qwen3-coder-30b-a3b-instruct,2026-09-16
+models,model-alibaba-qwen3-coder-480b-a35b-instruct,reviewed,Qwen3-Coder 480B-A35B Instruct,language_model,,alibaba/qwen3-coder-480b-a35b-instruct,2026-09-16
+models,model-alibaba-qwen3-coder-flash,imported_source,Qwen3 Coder Flash,,,alibaba/qwen3-coder-flash,
+models,model-alibaba-qwen3-coder-next,reviewed,Qwen3-Coder-Next,language_model,,alibaba/qwen3-coder-next,2026-09-22
+models,model-alibaba-qwen3-coder-plus,imported_source,Qwen3 Coder Plus,,,alibaba/qwen3-coder-plus,
+models,model-alibaba-qwen3-max,imported_source,Qwen3 Max,,,alibaba/qwen3-max,
+models,model-alibaba-qwen3-max-2026-01-23,reviewed,Qwen3 Max 2026-01-23,language_model,,,2026-09-28
+models,model-alibaba-qwen3-next-80b-a3b-instruct,reviewed,Qwen3-Next 80B-A3B Instruct,language_model,,alibaba/qwen3-next-80b-a3b-instruct,2026-09-16
+models,model-alibaba-qwen3-next-80b-a3b-thinking,reviewed,Qwen3-Next 80B-A3B (Thinking),language_model,,alibaba/qwen3-next-80b-a3b-thinking,2026-09-16
+models,model-alibaba-qwen3-vl-235b-a22b-instruct,imported_source,Qwen3 VL 235B A22B Instruct,,,alibaba/qwen3-vl-235b-a22b-instruct,
+models,model-alibaba-qwen3-vl-235b-a22b-thinking,imported_source,Qwen3 VL 235B A22B Thinking,,,alibaba/qwen3-vl-235b-a22b-thinking,
+models,model-alibaba-qwen3-vl-plus,imported_source,Qwen3-VL Plus,,,alibaba/qwen3-vl-plus,
+models,model-alibaba-qwq-32b,reviewed,QwQ 32B,language_model,,alibaba/qwq-32b,2026-09-16
+models,model-alibaba-qwq-plus,reviewed,QwQ-Plus,language_model,,alibaba/qwq-plus,2026-09-22
+models,model-amazon-nova-2-lite,reviewed,Nova 2 Lite,multimodal_language_model,,amazon/nova-2-lite,2026-09-18
+models,model-amazon-nova-lite,reviewed,Nova Lite,multimodal_language_model,,amazon/nova-lite,2026-09-18
+models,model-amazon-nova-micro,reviewed,Nova Micro,language_model,,amazon/nova-micro,2026-09-18
+models,model-amazon-nova-premier,imported_source,Nova Premier,,,amazon/nova-premier,
+models,model-amazon-nova-pro,reviewed,Nova Pro,multimodal_language_model,,amazon/nova-pro,2026-09-18
+models,model-anthropic-claude-3-5-haiku-20241022,imported_source,Claude Haiku 3.5,,,anthropic/claude-3-5-haiku-20241022,
+models,model-anthropic-claude-3-5-sonnet-20241022,imported_source,Claude Sonnet 3.5 v2,,,anthropic/claude-3-5-sonnet-20241022,
+models,model-anthropic-claude-3-7-sonnet-20250219,imported_source,Claude Sonnet 3.7,,,anthropic/claude-3-7-sonnet-20250219,
+models,model-anthropic-claude-3-haiku-20240307,imported_source,Claude Haiku 3,,,anthropic/claude-3-haiku-20240307,
+models,model-anthropic-claude-fable-5,reviewed,Claude Fable 5,multimodal_language_model,,anthropic/claude-fable-5,2026-09-18
+models,model-anthropic-claude-fable-5-1,reviewed,Claude Fable 5.1,multimodal_language_model,,anthropic/claude-fable-5-1,2026-09-18
+models,model-anthropic-claude-haiku-4-5,reviewed,Claude Haiku 4.5,multimodal_language_model,,anthropic/claude-haiku-4-5,2026-09-11
+models,model-anthropic-claude-haiku-4-5-20251001,imported_source,Claude Haiku 4.5,,,anthropic/claude-haiku-4-5-20251001,
+models,model-anthropic-claude-mythos-5,reviewed,Claude Mythos 5,multimodal_language_model,,anthropic/claude-mythos-5,2026-09-18
+models,model-anthropic-claude-mythos-5-1,reviewed,Claude Mythos 5.1,multimodal_language_model,,,2026-09-20
+models,model-anthropic-claude-opus-4-0,imported_source,Claude Opus 4 (latest),,,anthropic/claude-opus-4-0,
+models,model-anthropic-claude-opus-4-1,imported_source,Claude Opus 4.1 (latest),,,anthropic/claude-opus-4-1,
+models,model-anthropic-claude-opus-4-1-20250805,imported_source,Claude Opus 4.1,,,anthropic/claude-opus-4-1-20250805,
+models,model-anthropic-claude-opus-4-20250514,imported_source,Claude Opus 4,,,anthropic/claude-opus-4-20250514,
+models,model-anthropic-claude-opus-4-5,imported_source,Claude Opus 4.5 (latest),,,anthropic/claude-opus-4-5,
+models,model-anthropic-claude-opus-4-5-20251101,reviewed,Claude Opus 4.5,multimodal_language_model,,anthropic/claude-opus-4-5-20251101,2026-09-18
+models,model-anthropic-claude-opus-4-6,reviewed,Claude Opus 4.6,multimodal_language_model,,anthropic/claude-opus-4-6,2026-09-18
+models,model-anthropic-claude-opus-4-7,reviewed,Claude Opus 4.7,multimodal_language_model,,anthropic/claude-opus-4-7,2026-09-18
+models,model-anthropic-claude-opus-4-8,reviewed,Claude Opus 4.8,multimodal_language_model,,anthropic/claude-opus-4-8,2026-09-11
+models,model-anthropic-claude-opus-5,reviewed,Claude Opus 5,multimodal_language_model,,anthropic/claude-opus-5,2026-09-11
+models,model-anthropic-claude-opus-5-5,reviewed,Claude Opus 5.5,multimodal_language_model,,anthropic/claude-opus-5-5,2026-09-22
+models,model-anthropic-claude-sonnet-4-0,imported_source,Claude Sonnet 4 (latest),,,anthropic/claude-sonnet-4-0,
+models,model-anthropic-claude-sonnet-4-20250514,imported_source,Claude Sonnet 4,,,anthropic/claude-sonnet-4-20250514,
+models,model-anthropic-claude-sonnet-4-5,reviewed,Claude Sonnet 4.5,multimodal_language_model,,anthropic/claude-sonnet-4-5,2026-09-11
+models,model-anthropic-claude-sonnet-4-5-20250929,imported_source,Claude Sonnet 4.5,,,anthropic/claude-sonnet-4-5-20250929,
+models,model-anthropic-claude-sonnet-4-6,reviewed,Claude Sonnet 4.6,multimodal_language_model,,anthropic/claude-sonnet-4-6,2026-09-04
+models,model-anthropic-claude-sonnet-5,reviewed,Claude Sonnet 5,multimodal_language_model,,anthropic/claude-sonnet-5,2026-09-11
+models,model-anthropic-claude-sonnet-5-5,reviewed,Claude Sonnet 5.5,multimodal_language_model,,anthropic/claude-sonnet-5-5,2026-09-30
+models,model-apodex-apodex-1-1-mini,reviewed,Apodex 1.1 Mini,multimodal_language_model,,,2026-10-01
+models,model-arcee-ai-trinity-large-preview,reviewed,Trinity Large Preview,language_model,,arcee-ai/trinity-large-preview,2026-09-18
+models,model-arcee-ai-trinity-large-thinking,reviewed,Trinity Large Thinking,language_model,,arcee-ai/trinity-large-thinking,2026-09-18
+models,model-arcee-ai-trinity-mini,reviewed,Trinity Mini,language_model,,arcee-ai/trinity-mini,2026-09-18
+models,model-arcee-ai-trinity-nano-preview,reviewed,Trinity Nano Preview,language_model,,arcee-ai/trinity-nano-preview,2026-09-18
+models,model-bfl-flux-2-dev,reviewed,FLUX.2 [dev],image_generation_model,,,2026-10-01
+models,model-bytedance-seed-seed-1-6,reviewed,Seed 1.6,multimodal_language_model,,bytedance-seed/seed-1-6,2026-09-18
+models,model-bytedance-seed-seed-1-6-flash,reviewed,Seed 1.6 Flash,multimodal_language_model,,bytedance-seed/seed-1-6-flash,2026-09-18
+models,model-bytedance-seed-seed-1-6-vision,reviewed,Seed 1.6 Vision,multimodal_language_model,,bytedance-seed/seed-1-6-vision,2026-09-18
+models,model-bytedance-seed-seed-1-8,reviewed,Seed 1.8,multimodal_language_model,,bytedance-seed/seed-1-8,2026-09-18
+models,model-bytedance-seed-seed-2-0-code,reviewed,Seed 2.0 Code,language_model,,bytedance-seed/seed-2.0-code,2026-09-18
+models,model-bytedance-seed-seed-2-0-lite,reviewed,Seed 2.0 Lite,multimodal_language_model,,bytedance-seed/seed-2.0-lite,2026-09-18
+models,model-bytedance-seed-seed-2-0-mini,reviewed,Seed 2.0 Mini,multimodal_language_model,,bytedance-seed/seed-2.0-mini,2026-09-18
+models,model-bytedance-seed-seed-2-0-pro,reviewed,Seed 2.0 Pro,multimodal_language_model,,bytedance-seed/seed-2.0-pro,2026-09-18
+models,model-bytedance-seed-seed-2-1-pro,reviewed,Seed 2.1 Pro,multimodal_language_model,,bytedance-seed/seed-2.1-pro,2026-09-18
+models,model-bytedance-seed-seed-2-1-turbo,reviewed,Seed 2.1 Turbo,multimodal_language_model,,bytedance-seed/seed-2.1-turbo,2026-09-18
+models,model-bytedance-seed-seed-character,imported_source,Seed Character,,,bytedance-seed/seed-character,
+models,model-bytedance-seed-seed-evolving,imported_source,Seed Evolving,,,bytedance-seed/seed-evolving,
+models,model-bytedance-seed-seedance-2-0,imported_source,Seedance 2.0,,,bytedance-seed/seedance-2.0,
+models,model-bytedance-seed-seedance-2-5,imported_source,Seedance 2.5,,,bytedance-seed/seedance-2.5,
+models,model-bytedance-seed-ui-tars-1-5-7b,reviewed,UI-TARS-1.5-7B,multimodal_language_model,,,2026-10-06
+models,model-cohere-c4ai-aya-expanse-32b,reviewed,Aya Expanse 32B,language_model,,cohere/c4ai-aya-expanse-32b,2026-09-16
+models,model-cohere-c4ai-aya-expanse-8b,reviewed,Aya Expanse 8B,language_model,,cohere/c4ai-aya-expanse-8b,2026-09-04
+models,model-cohere-c4ai-aya-vision-32b,reviewed,Aya Vision 32B,multimodal_language_model,,cohere/c4ai-aya-vision-32b,2026-09-16
+models,model-cohere-c4ai-aya-vision-8b,reviewed,Aya Vision 8B,multimodal_language_model,,cohere/c4ai-aya-vision-8b,2026-09-16
+models,model-cohere-command-a-03-2025,reviewed,Command A,language_model,,cohere/command-a-03-2025,2026-09-11
+models,model-cohere-command-a-plus-05-2026,reviewed,Command A Plus,multimodal_language_model,,cohere/command-a-plus-05-2026,2026-09-16
+models,model-cohere-command-a-reasoning-08-2025,reviewed,Command A Reasoning,language_model,,cohere/command-a-reasoning-08-2025,2026-09-16
+models,model-cohere-command-a-translate-08-2025,reviewed,Command A Translate,language_model,,cohere/command-a-translate-08-2025,2026-09-16
+models,model-cohere-command-a-vision-07-2025,reviewed,Command A Vision,multimodal_language_model,,cohere/command-a-vision-07-2025,2026-09-16
+models,model-cohere-command-r-08-2024,reviewed,Command R,language_model,,cohere/command-r-08-2024,2026-09-16
+models,model-cohere-command-r-plus-08-2024,reviewed,Command R+,language_model,,cohere/command-r-plus-08-2024,2026-09-16
+models,model-cohere-command-r7b-12-2024,reviewed,Command R7B,language_model,,cohere/command-r7b-12-2024,2026-09-16
+models,model-cohere-command-r7b-arabic-02-2025,reviewed,Command R7B Arabic,language_model,,cohere/command-r7b-arabic-02-2025,2026-09-16
+models,model-cohere-north-mini-code-1-0,reviewed,North Mini Code,language_model,,cohere/north-mini-code-1-0,2026-09-16
+models,model-cohere-north-small-translate-1-0,imported_source,North Small Translate,,,cohere/north-small-translate-1-0,
+models,model-cohere-tiny-aya-earth,imported_source,Tiny Aya Earth,,,cohere/tiny-aya-earth,
+models,model-cohere-tiny-aya-fire,imported_source,Tiny Aya Fire,,,cohere/tiny-aya-fire,
+models,model-cohere-tiny-aya-global,imported_source,Tiny Aya Global,,,cohere/tiny-aya-global,
+models,model-cohere-tiny-aya-water,imported_source,Tiny Aya Water,,,cohere/tiny-aya-water,
+models,model-deepreinforce-ornith-1-0-31b,imported_source,Ornith 1.0 31B,,,deepreinforce/ornith-1.0-31b,
+models,model-deepreinforce-ornith-1-0-35b,reviewed,Ornith 1.0 35B,language_model,,deepreinforce/ornith-1.0-35b,2026-09-18
+models,model-deepreinforce-ornith-1-0-397b,reviewed,Ornith 1.0 397B,language_model,,deepreinforce/ornith-1.0-397b,2026-09-18
+models,model-deepreinforce-ornith-1-0-9b,reviewed,Ornith 1.0 9B,language_model,,deepreinforce/ornith-1.0-9b,2026-09-18
+models,model-deepreinforce-ornith-1-5-35b-a3b,reviewed,Ornith 1.5 35B A3B,language_model,,deepreinforce/ornith-1.5-35b-a3b,2026-09-18
+models,model-deepseek-deepseek-chat,imported_source,DeepSeek Chat,,,deepseek/deepseek-chat,
+models,model-deepseek-deepseek-ocr-2,reviewed,DeepSeek OCR 2,multimodal_language_model,,deepseek/deepseek-ocr-2,2026-09-18
+models,model-deepseek-deepseek-r1,reviewed,DeepSeek-R1,language_model,,deepseek/deepseek-r1,2026-09-11
+models,model-deepseek-deepseek-r1-0528,reviewed,DeepSeek-R1-0528,language_model,,,2026-10-06
+models,model-deepseek-deepseek-r1-distill-qwen-32b,reviewed,DeepSeek-R1-Distill-Qwen-32B,language_model,,deepseek/deepseek-r1-distill-qwen-32b,2026-09-18
+models,model-deepseek-deepseek-reasoner,imported_source,DeepSeek Reasoner,,,deepseek/deepseek-reasoner,
+models,model-deepseek-deepseek-v3,reviewed,DeepSeek-V3,language_model,,deepseek/deepseek-v3,2026-09-04
+models,model-deepseek-deepseek-v3-0324,imported_source,DeepSeek V3 0324,,,deepseek/deepseek-v3-0324,
+models,model-deepseek-deepseek-v3-1,imported_source,DeepSeek-V3.1,,,deepseek/deepseek-v3.1,
+models,model-deepseek-deepseek-v3-2,reviewed,DeepSeek V3.2,language_model,,deepseek/deepseek-v3.2,2026-09-11
+models,model-deepseek-deepseek-v4-1-flash,reviewed,DeepSeek V4.1 Flash,multimodal_language_model,,deepseek/deepseek-v4.1-flash,2026-09-22
+models,model-deepseek-deepseek-v4-flash,imported_source,DeepSeek V4 Flash,,,deepseek/deepseek-v4-flash,
+models,model-deepseek-deepseek-v4-flash-0423,reviewed,DeepSeek V4 Flash 0423,language_model,,deepseek/deepseek-v4-flash-0423,2026-09-22
+models,model-deepseek-deepseek-v4-flash-0731,reviewed,DeepSeek V4 Flash 0731,language_model,,deepseek/deepseek-v4-flash-0731,2026-09-12
+models,model-deepseek-deepseek-v4-flash-vision-exp,reviewed,DeepSeek V4 Flash Vision Exp,multimodal_language_model,,deepseek/deepseek-v4-flash-vision-exp,2026-09-18
+models,model-deepseek-deepseek-v4-pro,reviewed,DeepSeek V4 Pro,language_model,,deepseek/deepseek-v4-pro,2026-09-12
+models,model-deepseek-deepseek-v4-pro-0423,imported_source,DeepSeek V4 Pro 0423,,,deepseek/deepseek-v4-pro-0423,
+models,model-deepseek-deepseek-v4-pro-0813,imported_source,DeepSeek V4 Pro 0813,,,deepseek/deepseek-v4-pro-0813,
+models,model-google-deep-research-max-preview-04-2026,reviewed,Deep Research Max Preview,multimodal_language_model,,google/deep-research-max-preview-04-2026,2026-09-18
+models,model-google-deep-research-preview-04-2026,reviewed,Gemini Deep Research Preview,multimodal_language_model,,google/deep-research-preview-04-2026,2026-09-18
+models,model-google-diffusiongemma-26b-a4b-it,reviewed,DiffusionGemma 26B A4B IT,multimodal_language_model,,google/diffusiongemma-26b-a4b-it,2026-10-01
+models,model-google-gemini-2-0-flash,reviewed,Gemini 2.0 Flash,multimodal_language_model,,google/gemini-2.0-flash,2026-09-18
+models,model-google-gemini-2-0-flash-lite,reviewed,Gemini 2.0 Flash-Lite,multimodal_language_model,,google/gemini-2.0-flash-lite,2026-09-18
+models,model-google-gemini-2-5-computer-use-preview-10-2025,reviewed,Gemini 2.5 Computer Use Preview,multimodal_language_model,,google/gemini-2.5-computer-use-preview-10-2025,2026-09-18
+models,model-google-gemini-2-5-flash,reviewed,Gemini 2.5 Flash,multimodal_language_model,,google/gemini-2.5-flash,2026-09-11
+models,model-google-gemini-2-5-flash-image,reviewed,Gemini 2.5 Flash Image,multimodal_language_model,,google/gemini-2.5-flash-image,2026-09-18
+models,model-google-gemini-2-5-flash-lite,reviewed,Gemini 2.5 Flash-Lite,multimodal_language_model,,google/gemini-2.5-flash-lite,2026-09-18
+models,model-google-gemini-2-5-flash-tts,reviewed,Gemini 2.5 Flash TTS,audio_generation_model,,google/gemini-2.5-flash-tts,2026-10-06
+models,model-google-gemini-2-5-pro,reviewed,Gemini 2.5 Pro,multimodal_language_model,,google/gemini-2.5-pro,2026-09-11
+models,model-google-gemini-2-5-pro-tts,reviewed,Gemini 2.5 Pro TTS,audio_generation_model,,google/gemini-2.5-pro-tts,2026-10-06
+models,model-google-gemini-3-1-flash-image,reviewed,Nano Banana 2,multimodal_language_model,,google/gemini-3.1-flash-image,2026-09-18
+models,model-google-gemini-3-1-flash-image-preview,reviewed,Nano Banana 2 Preview,multimodal_language_model,,google/gemini-3.1-flash-image-preview,2026-09-18
+models,model-google-gemini-3-1-flash-lite,reviewed,Gemini 3.1 Flash Lite,multimodal_language_model,,google/gemini-3.1-flash-lite,2026-09-18
+models,model-google-gemini-3-1-flash-lite-image,reviewed,Nano Banana 2 Lite,multimodal_language_model,,google/gemini-3.1-flash-lite-image,2026-09-18
+models,model-google-gemini-3-1-flash-lite-preview,reviewed,Gemini 3.1 Flash Lite Preview,multimodal_language_model,,google/gemini-3.1-flash-lite-preview,2026-09-18
+models,model-google-gemini-3-1-flash-live-preview,reviewed,Gemini 3.1 Flash Live Preview,multimodal_language_model,,google/gemini-3.1-flash-live-preview,2026-09-18
+models,model-google-gemini-3-1-flash-tts-preview,reviewed,Gemini 3.1 Flash TTS Preview,audio_generation_model,,google/gemini-3.1-flash-tts-preview,2026-10-06
+models,model-google-gemini-3-1-pro-preview,reviewed,Gemini 3.1 Pro Preview,multimodal_language_model,,google/gemini-3.1-pro-preview,2026-09-12
+models,model-google-gemini-3-1-pro-preview-customtools,imported_source,Gemini 3.1 Pro Preview Custom Tools,,,google/gemini-3.1-pro-preview-customtools,
+models,model-google-gemini-3-5-flash,reviewed,Gemini 3.5 Flash,multimodal_language_model,,google/gemini-3.5-flash,2026-09-18
+models,model-google-gemini-3-5-flash-lite,reviewed,Gemini 3.5 Flash Lite,multimodal_language_model,,google/gemini-3.5-flash-lite,2026-09-18
+models,model-google-gemini-3-5-live-translate-preview,reviewed,Gemini 3.5 Live Translate Preview,multimodal_language_model,,google/gemini-3.5-live-translate-preview,2026-09-18
+models,model-google-gemini-3-5-transcribe-live,reviewed,Gemini 3.5 Transcribe Live,multimodal_language_model,,google/gemini-3.5-transcribe-live,2026-09-18
+models,model-google-gemini-3-6-flash,reviewed,Gemini 3.6 Flash,multimodal_language_model,,google/gemini-3.6-flash,2026-09-18
+models,model-google-gemini-3-7-flash,reviewed,Gemini 3.7 Flash,multimodal_language_model,,google/gemini-3.7-flash,2026-09-18
+models,model-google-gemini-3-8-flash,reviewed,Gemini 3.8 Flash,multimodal_language_model,,google/gemini-3.8-flash,2026-09-12
+models,model-google-gemini-3-flash-preview,reviewed,Gemini 3 Flash Preview,multimodal_language_model,,google/gemini-3-flash-preview,2026-09-11
+models,model-google-gemini-3-pro-image,reviewed,Nano Banana Pro,multimodal_language_model,,google/gemini-3-pro-image,2026-09-18
+models,model-google-gemini-3-pro-image-preview,reviewed,Nano Banana Pro Preview,multimodal_language_model,,google/gemini-3-pro-image-preview,2026-09-18
+models,model-google-gemini-3-pro-preview,reviewed,Gemini 3 Pro Preview,multimodal_language_model,,google/gemini-3-pro-preview,2026-09-11
+models,model-google-gemini-4-argon,reviewed,Gemini 4 Argon,multimodal_language_model,,,2026-09-30
+models,model-google-gemini-embedding-001,imported_source,Gemini Embedding 001,,,google/gemini-embedding-001,
+models,model-google-gemini-embedding-2,imported_source,Gemini Embedding 2,,,google/gemini-embedding-2,
+models,model-google-gemini-flash-latest,imported_source,Gemini Flash Latest,,,google/gemini-flash-latest,
+models,model-google-gemini-flash-lite-latest,imported_source,Gemini Flash-Lite Latest,,,google/gemini-flash-lite-latest,
+models,model-google-gemini-omni-flash-preview,imported_source,Gemini Omni Flash Preview,,,google/gemini-omni-flash-preview,
+models,model-google-gemini-robotics-er-1-6-preview,reviewed,Gemini Robotics-ER 1.6 Preview,multimodal_language_model,,google/gemini-robotics-er-1.6-preview,2026-09-18
+models,model-google-gemma-2-27b-it,reviewed,Gemma 2 27B IT,language_model,,,2026-10-06
+models,model-google-gemma-3-12b-it,reviewed,Gemma 3 12B IT,multimodal_language_model,,google/gemma-3-12b-it,2026-09-18
+models,model-google-gemma-3-27b-it,reviewed,Gemma 3 27B IT,multimodal_language_model,,google/gemma-3-27b-it,2026-09-18
+models,model-google-gemma-3-4b-it,reviewed,Gemma 3 4B IT,multimodal_language_model,,google/gemma-3-4b-it,2026-09-18
+models,model-google-gemma-4-12b-it,reviewed,Gemma 4 12B IT,multimodal_language_model,,google/gemma-4-12b-it,2026-09-22
+models,model-google-gemma-4-26b-a4b-it,reviewed,Gemma 4 26B A4B IT,multimodal_language_model,,google/gemma-4-26b-a4b-it,2026-09-18
+models,model-google-gemma-4-31b-it,reviewed,Gemma 4 31B IT,multimodal_language_model,,google/gemma-4-31b-it,2026-09-11
+models,model-google-gemma-4-e2b-it,reviewed,Gemma 4 E2B IT,multimodal_language_model,,google/gemma-4-E2B-it,2026-09-18
+models,model-google-gemma-4-e4b-it,reviewed,Gemma 4 E4B IT,multimodal_language_model,,google/gemma-4-E4B-it,2026-09-18
+models,model-google-lyria-3-clip-preview,reviewed,Lyria 3 Clip Preview,audio_generation_model,,google/lyria-3-clip-preview,2026-10-06
+models,model-google-lyria-3-pro-preview,reviewed,Lyria 3 Pro Preview,audio_generation_model,,google/lyria-3-pro-preview,2026-10-06
+models,model-google-veo-3-1-fast-generate-preview,imported_source,Veo 3.1 Fast Preview,,,google/veo-3.1-fast-generate-preview,
+models,model-google-veo-3-1-generate-preview,reviewed,Veo 3.1 Preview,video_generation_model,,google/veo-3.1-generate-preview,2026-10-06
+models,model-google-veo-3-1-lite-generate-preview,reviewed,Veo 3.1 Lite Preview,video_generation_model,,google/veo-3.1-lite-generate-preview,2026-10-06
+models,model-ibm-granite-4-2-8b,reviewed,Granite-4.2-8B,language_model,,,2026-10-06
+models,model-ibm-granite-4-h-micro,reviewed,Granite-4.0-H-Micro,language_model,,ibm/granite-4-h-micro,2026-09-22
+models,model-ibm-granite-4-h-small,reviewed,Granite-4.0-H-Small,language_model,,ibm/granite-4-h-small,2026-09-11
+models,model-inclusionai-ling-3-0-flash,reviewed,Ling-3.0-flash,language_model,,,2026-10-06
+models,model-inclusionai-ling-3-0-flash-fin,reviewed,Ling-3.0-flash-Fin,language_model,,inclusionai/ling-3.0-flash-fin,2026-09-22
+models,model-inclusionai-ling-3-0-flash-vl,reviewed,Ling-3.0-flash-VL,multimodal_language_model,,,2026-10-06
+models,model-inclusionai-ling-3-1-flash,imported_source,Ling 3.1 Flash,,,inclusionai/ling-3.1-flash,
+models,model-liquid-d1,imported_source,Liquid d1,,,liquid/d1,
+models,model-liquidai-lfm2-5-2-6b,reviewed,LFM2.5-2.6B,language_model,,,2026-09-28
+models,model-meituan-longcat-2-0,reviewed,LongCat-2.0,language_model,,meituan/longcat-2.0,2026-09-22
+models,model-meituan-longcat-2-5-preview,reviewed,LongCat-2.5-Preview,multimodal_language_model,,meituan/longcat-2.5-preview,2026-10-06
+models,model-meta-llama-3-1-70b-instruct,reviewed,Llama-3.1-70B-Instruct,language_model,,meta/llama-3.1-70b-instruct,2026-09-18
+models,model-meta-llama-3-1-8b-instruct,reviewed,Llama-3.1-8B-Instruct,language_model,,meta/llama-3.1-8b-instruct,2026-09-18
+models,model-meta-llama-3-2-11b-vision-instruct,reviewed,Llama 3.2 11B Vision Instruct,multimodal_language_model,,meta/llama-3.2-11b-vision-instruct,2026-09-04
+models,model-meta-llama-3-2-1b,reviewed,Llama-3.2-1B,language_model,,meta/llama-3.2-1b,2026-09-18
+models,model-meta-llama-3-2-1b-instruct,reviewed,Llama-3.2-1B-Instruct,language_model,,,2026-10-06
+models,model-meta-llama-3-2-3b,reviewed,Llama-3.2-3B,language_model,,meta/llama-3.2-3b,2026-09-18
+models,model-meta-llama-3-2-3b-instruct,reviewed,Llama-3.2-3B-Instruct,language_model,,,2026-10-06
+models,model-meta-llama-3-3-70b-instruct,reviewed,Llama-3.3-70B-Instruct,language_model,,meta/llama-3.3-70b-instruct,2026-09-11
+models,model-meta-llama-4-maverick-17b-instruct,reviewed,Llama 4 Maverick 17B Instruct,multimodal_language_model,,meta/llama-4-maverick-17b-instruct,2026-09-11
+models,model-meta-llama-4-scout-17b-instruct,reviewed,Llama 4 Scout 17B Instruct,multimodal_language_model,,meta/llama-4-scout-17b-instruct,2026-09-11
+models,model-meta-llama-guard-3-8b,reviewed,Llama-Guard-3-8B,language_model,,meta/llama-guard-3-8b,2026-09-18
+models,model-meta-llama-guard-4-12b,reviewed,Llama-Guard-4-12B,multimodal_language_model,,,2026-10-06
+models,model-meta-muse-glimmer-30b,reviewed,Muse Glimmer 30B,multimodal_language_model,,meta/muse-glimmer-30b,2026-09-18
+models,model-meta-muse-spark-1-1,reviewed,Muse Spark 1.1,multimodal_language_model,,meta/muse-spark-1.1,2026-09-18
+models,model-meta-muse-spark-1-2,reviewed,Muse Spark 1.2,multimodal_language_model,,meta/muse-spark-1.2,2026-09-18
+models,model-meta-muse-spark-1-3,reviewed,Muse Spark 1.3,multimodal_language_model,,meta/muse-spark-1.3,2026-09-18
+models,model-microsoft-mai-code-1-1-flash,reviewed,MAI-Code-1.1-Flash,multimodal_language_model,,microsoft/mai-code-1.1-flash,2026-09-22
+models,model-microsoft-mai-code-1-flash,reviewed,MAI-Code-1-Flash,language_model,,microsoft/mai-code-1-flash,2026-09-22
+models,model-microsoft-phi-4,reviewed,Phi-4,language_model,,,2026-10-06
+models,model-microsoft-phi-4-mini,reviewed,Phi-4-mini,language_model,,microsoft/phi-4-mini,2026-09-11
+models,model-minimax-image-01,reviewed,MiniMax image-01,image_generation_model,,minimax/image-01,2026-10-06
+models,model-minimax-minimax-01,reviewed,MiniMax-Text-01,language_model,,,2026-10-06
+models,model-minimax-minimax-h3,imported_source,MiniMax H3,,,minimax/MiniMax-H3,
+models,model-minimax-minimax-m1,reviewed,MiniMax-M1,language_model,,,2026-10-06
+models,model-minimax-minimax-m2,reviewed,MiniMax-M2,language_model,,minimax/MiniMax-M2,2026-09-11
+models,model-minimax-minimax-m2-1,reviewed,MiniMax-M2.1,language_model,,minimax/MiniMax-M2.1,2026-09-16
+models,model-minimax-minimax-m2-5,reviewed,MiniMax-M2.5,language_model,,minimax/MiniMax-M2.5,2026-09-16
+models,model-minimax-minimax-m2-5-highspeed,imported_source,MiniMax-M2.5-highspeed,,,minimax/MiniMax-M2.5-highspeed,
+models,model-minimax-minimax-m2-7,reviewed,MiniMax-M2.7,language_model,,minimax/MiniMax-M2.7,2026-09-16
+models,model-minimax-minimax-m2-7-highspeed,imported_source,MiniMax-M2.7-highspeed,,,minimax/MiniMax-M2.7-highspeed,
+models,model-minimax-minimax-m2-her,imported_source,MiniMax-M2 Her,,,minimax/MiniMax-M2-Her,
+models,model-minimax-minimax-m3,reviewed,MiniMax-M3,multimodal_language_model,,minimax/MiniMax-M3,2026-09-16
+models,model-minimax-minimax-m3-1-flash-preview,imported_source,MiniMax-M3.1-Flash-Preview,,,minimax/MiniMax-M3.1-Flash-Preview,
+models,model-mistral-codestral-22b-v0-1,reviewed,Codestral-22B-v0.1,language_model,,mistral/codestral-22b-v0.1,2026-09-18
+models,model-mistral-codestral-2508,reviewed,Codestral 25.08,language_model,,,2026-10-06
+models,model-mistral-codestral-latest,imported_source,Codestral (latest),,,mistral/codestral-latest,
+models,model-mistral-devstral-2512,reviewed,Devstral 2,language_model,,mistral/devstral-2512,2026-09-18
+models,model-mistral-devstral-medium-2507,reviewed,Devstral Medium,language_model,,mistral/devstral-medium-2507,2026-09-18
+models,model-mistral-devstral-medium-latest,imported_source,Devstral 2 (latest),,,mistral/devstral-medium-latest,
+models,model-mistral-devstral-small-2,reviewed,Devstral Small 2,multimodal_language_model,,mistral/devstral-small-2,2026-09-18
+models,model-mistral-devstral-small-2507,reviewed,Devstral Small,language_model,,mistral/devstral-small-2507,2026-09-11
+models,model-mistral-magistral-medium-latest,imported_source,Magistral Medium (latest),,,mistral/magistral-medium-latest,
+models,model-mistral-magistral-small-2506,reviewed,Magistral Small,language_model,,mistral/magistral-small-2506,2026-09-11
+models,model-mistral-magistral-small-2509,reviewed,Magistral Small 2509,multimodal_language_model,,mistral/magistral-small-2509,2026-09-18
+models,model-mistral-ministral-14b,imported_source,Ministral 14B,,,mistral/ministral-14b,
+models,model-mistral-ministral-3-14b-instruct-2512,reviewed,Ministral 3 14B Instruct,multimodal_language_model,,mistral/ministral-3-14b-instruct-2512,2026-09-18
+models,model-mistral-ministral-3-3b-instruct-2512,reviewed,Ministral 3 3B Instruct,multimodal_language_model,,mistral/ministral-3-3b-instruct-2512,2026-09-18
+models,model-mistral-ministral-3-8b-instruct-2512,reviewed,Ministral 3 8B Instruct,multimodal_language_model,,mistral/ministral-3-8b-instruct-2512,2026-09-18
+models,model-mistral-ministral-3b,imported_source,Ministral 3B,,,mistral/ministral-3b,
+models,model-mistral-ministral-8b-instruct-2410,reviewed,Ministral 8B Instruct,language_model,,mistral/ministral-8b-instruct-2410,2026-09-16
+models,model-mistral-mistral-embed,imported_source,Mistral Embed,,,mistral/mistral-embed,
+models,model-mistral-mistral-large-2407,reviewed,Mistral Large 2,language_model,,,2026-10-06
+models,model-mistral-mistral-large-2411,reviewed,Mistral Large 2.1,language_model,,mistral/mistral-large-2411,2026-09-16
+models,model-mistral-mistral-large-2512,reviewed,Mistral Large 3,multimodal_language_model,,mistral/mistral-large-2512,2026-09-16
+models,model-mistral-mistral-large-4,reviewed,Mistral Large 4,multimodal_language_model,,mistral/mistral-large-4,2026-10-07
+models,model-mistral-mistral-large-latest,imported_source,Mistral Large (latest),,,mistral/mistral-large-latest,
+models,model-mistral-mistral-medium-2505,reviewed,Mistral Medium 3,multimodal_language_model,,mistral/mistral-medium-2505,2026-09-16
+models,model-mistral-mistral-medium-2604,reviewed,Mistral Medium 3.5,multimodal_language_model,,mistral/mistral-medium-2604,2026-09-11
+models,model-mistral-mistral-medium-3-1,reviewed,Mistral Medium 3.1,multimodal_language_model,,,2026-10-06
+models,model-mistral-mistral-medium-latest,imported_source,Mistral Medium (latest),,,mistral/mistral-medium-latest,
+models,model-mistral-mistral-nemo,reviewed,Mistral Nemo,language_model,,mistral/mistral-nemo,2026-09-18
+models,model-mistral-mistral-small-24b-instruct-2501,reviewed,Mistral Small 3,language_model,,,2026-10-06
+models,model-mistral-mistral-small-2506,reviewed,Mistral Small 3.2,multimodal_language_model,,mistral/mistral-small-2506,2026-09-16
+models,model-mistral-mistral-small-2603,reviewed,Mistral Small 4,multimodal_language_model,,mistral/mistral-small-2603,2026-09-11
+models,model-mistral-mistral-small-3-1-24b-instruct-2503,reviewed,Mistral Small 3.1 24B,multimodal_language_model,,mistral/mistral-small-3-1-24b-instruct-2503,2026-09-16
+models,model-mistral-mistral-small-latest,imported_source,Mistral Small (latest),,,mistral/mistral-small-latest,
+models,model-mistral-mixtral-8x22b-instruct,reviewed,Mixtral 8x22B Instruct,language_model,,,2026-10-06
+models,model-mistral-pixtral-12b,reviewed,Pixtral 12B,multimodal_language_model,,mistral/pixtral-12b,2026-09-04
+models,model-mistral-pixtral-large-2502,imported_source,Pixtral Large (25.02),,,mistral/pixtral-large-2502,
+models,model-mistral-pixtral-large-latest,imported_source,Pixtral Large (latest),,,mistral/pixtral-large-latest,
+models,model-mistral-voxtral-mini-3b-2507,reviewed,Voxtral Mini 3B 2507,multimodal_language_model,,mistral/voxtral-mini-3b-2507,2026-09-18
+models,model-mistral-voxtral-small-24b-2507,reviewed,Voxtral Small 24B 2507,multimodal_language_model,,mistral/voxtral-small-24b-2507,2026-09-18
+models,model-mistral-voxtral-small-latest,imported_source,Voxtral Small (latest),,,mistral/voxtral-small-latest,
+models,model-mixedbread-toast-1,reviewed,Toast 1,language_model,,mixedbread/toast-1,2026-09-22
+models,model-moonshotai-kimi-k2,reviewed,Kimi K2 Instruct,language_model,,,2026-10-06
+models,model-moonshotai-kimi-k2-0905,reviewed,Kimi K2 Instruct 0905,language_model,,,2026-10-06
+models,model-moonshotai-kimi-k2-5,reviewed,Kimi K2.5,multimodal_language_model,,moonshotai/kimi-k2.5,2026-09-16
+models,model-moonshotai-kimi-k2-6,reviewed,Kimi K2.6,multimodal_language_model,,moonshotai/kimi-k2.6,2026-09-16
+models,model-moonshotai-kimi-k2-7-code,reviewed,Kimi K2.7 Code,multimodal_language_model,,moonshotai/kimi-k2.7-code,2026-09-16
+models,model-moonshotai-kimi-k2-7-code-highspeed,imported_source,Kimi K2.7 Code Highspeed,,,moonshotai/kimi-k2.7-code-highspeed,
+models,model-moonshotai-kimi-k2-8-preview,reviewed,Kimi K2.8 Preview,multimodal_language_model,,moonshotai/kimi-k2.8-preview,2026-09-22
+models,model-moonshotai-kimi-k2-thinking,reviewed,Kimi K2 Thinking,language_model,,moonshotai/kimi-k2-thinking,2026-09-11
+models,model-moonshotai-kimi-k2-thinking-turbo,imported_source,Kimi K2 Thinking Turbo,,,moonshotai/kimi-k2-thinking-turbo,
+models,model-moonshotai-kimi-k3,reviewed,Kimi K3,multimodal_language_model,,moonshotai/kimi-k3,2026-09-11
+models,model-motif-technologies-motif-3,reviewed,Motif 3,language_model,,motif-technologies/motif-3,2026-09-22
+models,model-nace-ai-drex-v1-5,imported_source,Drex 1.5,,,nace-ai/drex-v1.5,
+models,model-nex-agi-nex-n2-pro,imported_source,Nex-N2-Pro,,,nex-agi/nex-n2-pro,
+models,model-nvidia-llama-3-1-nemotron-70b-instruct,reviewed,Llama 3.1 Nemotron 70B Instruct,language_model,,nvidia/llama-3.1-nemotron-70b-instruct,2026-09-18
+models,model-nvidia-llama-3-1-nemotron-safety-guard-8b-v3,reviewed,Llama 3.1 Nemotron Safety Guard 8B v3,language_model,,nvidia/llama-3.1-nemotron-safety-guard-8b-v3,2026-09-18
+models,model-nvidia-llama-3-1-nemotron-ultra-253b,reviewed,Llama 3.1 Nemotron Ultra 253B,language_model,,nvidia/llama-3.1-nemotron-ultra-253b,2026-09-18
+models,model-nvidia-llama-3-3-nemotron-super-49b-v1,reviewed,Llama 3.3 Nemotron Super 49B v1,language_model,,nvidia/llama-3.3-nemotron-super-49b-v1,2026-09-18
+models,model-nvidia-llama-3-3-nemotron-super-49b-v1-5,reviewed,Llama 3.3 Nemotron Super 49B v1.5,language_model,,nvidia/llama-3.3-nemotron-super-49b-v1.5,2026-09-18
+models,model-nvidia-llama-nemotron-embed-vl-1b-v2,imported_source,Llama Nemotron Embed VL 1B v2,,,nvidia/llama-nemotron-embed-vl-1b-v2,
+models,model-nvidia-llama-nemotron-rerank-vl-1b-v2,imported_source,Llama Nemotron Rerank VL 1B v2,,,nvidia/llama-nemotron-rerank-vl-1b-v2,
+models,model-nvidia-mistral-nemotron,imported_source,Mistral Nemotron,,,nvidia/mistral-nemotron,
+models,model-nvidia-nemotron-3-5-content-safety,reviewed,Nemotron 3.5 Content Safety,multimodal_language_model,,nvidia/nemotron-3.5-content-safety,2026-09-18
+models,model-nvidia-nemotron-3-5-lightning,reviewed,Nemotron 3.5 Lightning 30B A3B,language_model,,nvidia/nemotron-3.5-lightning,2026-09-18
+models,model-nvidia-nemotron-3-content-safety,reviewed,Nemotron 3 Content Safety,multimodal_language_model,,nvidia/nemotron-3-content-safety,2026-09-18
+models,model-nvidia-nemotron-3-nano-30b-a3b,reviewed,Nemotron 3 Nano 30B A3B,language_model,,nvidia/nemotron-3-nano-30b-a3b,2026-09-11
+models,model-nvidia-nemotron-3-nano-omni-30b-a3b-reasoning,reviewed,Nemotron 3 Nano Omni 30B A3B Reasoning,multimodal_language_model,,nvidia/nemotron-3-nano-omni-30b-a3b-reasoning,2026-09-18
+models,model-nvidia-nemotron-3-super-120b-a12b,reviewed,Nemotron 3 Super 120B A12B,language_model,,nvidia/nemotron-3-super-120b-a12b,2026-09-18
+models,model-nvidia-nemotron-3-ultra-550b-a55b,reviewed,Nemotron 3 Ultra 550B A55B,language_model,,nvidia/nemotron-3-ultra-550b-a55b,2026-09-18
+models,model-nvidia-nemotron-cascade-2-30b-a3b,reviewed,Nemotron Cascade 2 30B A3B,language_model,,nvidia/nemotron-cascade-2-30b-a3b,2026-09-18
+models,model-nvidia-nemotron-content-safety-reasoning-4b,reviewed,Nemotron Content Safety Reasoning 4B,language_model,,nvidia/nemotron-content-safety-reasoning-4b,2026-09-18
+models,model-nvidia-nemotron-mini-4b-instruct,reviewed,Nemotron Mini 4B Instruct,language_model,,nvidia/nemotron-mini-4b-instruct,2026-09-18
+models,model-nvidia-nemotron-nano-12b-v2-vl,reviewed,Nemotron Nano 12B v2 VL,multimodal_language_model,,nvidia/nemotron-nano-12b-v2-vl,2026-09-18
+models,model-nvidia-nemotron-nano-9b-v2,reviewed,Nemotron Nano 9B v2,language_model,,nvidia/nemotron-nano-9b-v2,2026-09-18
+models,model-nvidia-nemotron-voicechat,imported_source,Nemotron VoiceChat,,,nvidia/nemotron-voicechat,
+models,model-openai-gpt-3-5-turbo,reviewed,GPT-3.5 Turbo,language_model,,openai/gpt-3.5-turbo,2026-09-22
+models,model-openai-gpt-4,reviewed,GPT-4,language_model,,openai/gpt-4,2026-09-22
+models,model-openai-gpt-4-1,reviewed,GPT-4.1,multimodal_language_model,,openai/gpt-4.1,2026-09-04
+models,model-openai-gpt-4-1-mini,reviewed,GPT-4.1 mini,multimodal_language_model,,openai/gpt-4.1-mini,2026-09-16
+models,model-openai-gpt-4-1-nano,reviewed,GPT-4.1 nano,multimodal_language_model,,openai/gpt-4.1-nano,2026-09-16
+models,model-openai-gpt-4-turbo,reviewed,GPT-4 Turbo,multimodal_language_model,,openai/gpt-4-turbo,2026-09-22
+models,model-openai-gpt-4o,reviewed,GPT-4o,multimodal_language_model,,openai/gpt-4o,2026-09-11
+models,model-openai-gpt-4o-2024-05-13,imported_source,GPT-4o (2024-05-13),,,openai/gpt-4o-2024-05-13,
+models,model-openai-gpt-4o-2024-08-06,imported_source,GPT-4o (2024-08-06),,,openai/gpt-4o-2024-08-06,
+models,model-openai-gpt-4o-2024-11-20,imported_source,GPT-4o (2024-11-20),,,openai/gpt-4o-2024-11-20,
+models,model-openai-gpt-4o-mini,reviewed,GPT-4o mini,multimodal_language_model,,openai/gpt-4o-mini,2026-09-16
+models,model-openai-gpt-5,reviewed,GPT-5,multimodal_language_model,,openai/gpt-5,2026-09-11
+models,model-openai-gpt-5-1,reviewed,GPT-5.1,multimodal_language_model,,openai/gpt-5.1,2026-09-16
+models,model-openai-gpt-5-1-chat-latest,imported_source,GPT-5.1 Chat,,,openai/gpt-5.1-chat-latest,
+models,model-openai-gpt-5-1-codex,reviewed,GPT-5.1 Codex,multimodal_language_model,,openai/gpt-5.1-codex,2026-09-16
+models,model-openai-gpt-5-1-codex-max,reviewed,GPT-5.1 Codex Max,multimodal_language_model,,openai/gpt-5.1-codex-max,2026-09-16
+models,model-openai-gpt-5-1-codex-mini,reviewed,GPT-5.1 Codex mini,multimodal_language_model,,openai/gpt-5.1-codex-mini,2026-09-16
+models,model-openai-gpt-5-2,reviewed,GPT-5.2,multimodal_language_model,,openai/gpt-5.2,2026-09-16
+models,model-openai-gpt-5-2-chat-latest,imported_source,GPT-5.2 Chat,,,openai/gpt-5.2-chat-latest,
+models,model-openai-gpt-5-2-codex,reviewed,GPT-5.2 Codex,multimodal_language_model,,openai/gpt-5.2-codex,2026-09-16
+models,model-openai-gpt-5-2-pro,reviewed,GPT-5.2 Pro,multimodal_language_model,,openai/gpt-5.2-pro,2026-09-18
+models,model-openai-gpt-5-3-chat-latest,imported_source,GPT-5.3 Chat (latest),,,openai/gpt-5.3-chat-latest,
+models,model-openai-gpt-5-3-codex,reviewed,GPT-5.3 Codex,multimodal_language_model,,openai/gpt-5.3-codex,2026-09-16
+models,model-openai-gpt-5-3-codex-spark,imported_source,GPT-5.3 Codex Spark,,,openai/gpt-5.3-codex-spark,
+models,model-openai-gpt-5-4,reviewed,GPT-5.4,multimodal_language_model,,openai/gpt-5.4,2026-09-16
+models,model-openai-gpt-5-4-mini,reviewed,GPT-5.4 mini,multimodal_language_model,,openai/gpt-5.4-mini,2026-09-16
+models,model-openai-gpt-5-4-nano,reviewed,GPT-5.4 nano,multimodal_language_model,,openai/gpt-5.4-nano,2026-09-16
+models,model-openai-gpt-5-4-pro,reviewed,GPT-5.4 Pro,multimodal_language_model,,openai/gpt-5.4-pro,2026-09-16
+models,model-openai-gpt-5-5,reviewed,GPT-5.5,multimodal_language_model,,openai/gpt-5.5,2026-09-11
+models,model-openai-gpt-5-5-instant,reviewed,GPT-5.5 Instant,multimodal_language_model,,openai/gpt-5.5-instant,2026-09-12
+models,model-openai-gpt-5-5-pro,reviewed,GPT-5.5 Pro,multimodal_language_model,,openai/gpt-5.5-pro,2026-09-12
+models,model-openai-gpt-5-6-cyber,imported_source,GPT-5.6 Cyber,,,openai/gpt-5.6-cyber,
+models,model-openai-gpt-5-6-luna,reviewed,GPT-5.6 Luna,multimodal_language_model,,openai/gpt-5.6-luna,2026-09-16
+models,model-openai-gpt-5-6-sol,reviewed,GPT-5.6 Sol,multimodal_language_model,,openai/gpt-5.6-sol,2026-09-16
+models,model-openai-gpt-5-6-terra,reviewed,GPT-5.6 Terra,multimodal_language_model,,openai/gpt-5.6-terra,2026-09-16
+models,model-openai-gpt-5-chat-latest,imported_source,GPT-5 Chat (latest),,,openai/gpt-5-chat-latest,
+models,model-openai-gpt-5-codex,reviewed,GPT-5-Codex,multimodal_language_model,,openai/gpt-5-codex,2026-09-16
+models,model-openai-gpt-5-mini,reviewed,GPT-5 Mini,multimodal_language_model,,openai/gpt-5-mini,2026-09-16
+models,model-openai-gpt-5-nano,reviewed,GPT-5 Nano,multimodal_language_model,,openai/gpt-5-nano,2026-09-16
+models,model-openai-gpt-5-pro,reviewed,GPT-5 Pro,multimodal_language_model,,openai/gpt-5-pro,2026-09-16
+models,model-openai-gpt-6-1-sol,reviewed,GPT-6.1 Sol,multimodal_language_model,,openai/gpt-6.1-sol,2026-10-06
+models,model-openai-gpt-6-astra,reviewed,GPT-6 Astra,multimodal_language_model,,openai/gpt-6-astra,2026-09-11
+models,model-openai-gpt-6-astra-fast,imported_source,GPT-6 Astra (Fast),,,openai/gpt-6-astra-fast,
+models,model-openai-gpt-6-luna,reviewed,GPT-6 Luna,multimodal_language_model,,openai/gpt-6-luna,2026-10-06
+models,model-openai-gpt-6-sol,reviewed,GPT-6 Sol,multimodal_language_model,,openai/gpt-6-sol,2026-10-06
+models,model-openai-gpt-audio,reviewed,GPT-Audio,multimodal_language_model,,,2026-10-06
+models,model-openai-gpt-image-1,imported_source,GPT-Image-1,,,openai/gpt-image-1,
+models,model-openai-gpt-image-1-5,imported_source,GPT-Image-1.5,,,openai/gpt-image-1.5,
+models,model-openai-gpt-image-2,reviewed,GPT-Image-2,image_generation_model,,openai/gpt-image-2,2026-10-06
+models,model-openai-gpt-image-2-5-flare,reviewed,GPT Image 2.5 Flare,image_generation_model,,openai/gpt-image-2.5-flare,2026-10-06
+models,model-openai-gpt-image-2-5-sunburst,reviewed,GPT Image 2.5 Sunburst,image_generation_model,,openai/gpt-image-2.5-sunburst,2026-10-06
+models,model-openai-gpt-oss-120b,reviewed,gpt-oss-120b,language_model,,openai/gpt-oss-120b,2026-09-11
+models,model-openai-gpt-oss-20b,reviewed,GPT OSS 20B,language_model,,openai/gpt-oss-20b,2026-09-16
+models,model-openai-gpt-oss-safeguard-120b,reviewed,GPT OSS Safeguard 120B,language_model,,openai/gpt-oss-safeguard-120b,2026-09-18
+models,model-openai-gpt-oss-safeguard-20b,reviewed,GPT OSS Safeguard 20B,language_model,,openai/gpt-oss-safeguard-20b,2026-09-18
+models,model-openai-gpt-realtime-2-1,reviewed,GPT-Realtime-2.1,multimodal_language_model,,openai/gpt-realtime-2.1,2026-09-18
+models,model-openai-gpt-realtime-whisper,reviewed,GPT-Realtime-Whisper,multimodal_language_model,,openai/gpt-realtime-whisper,2026-09-18
+models,model-openai-o1,reviewed,o1,multimodal_language_model,,openai/o1,2026-09-22
+models,model-openai-o1-pro,reviewed,o1-pro,multimodal_language_model,,openai/o1-pro,2026-09-22
+models,model-openai-o3,reviewed,o3,multimodal_language_model,,openai/o3,2026-09-22
+models,model-openai-o3-deep-research,imported_source,o3-deep-research,,,openai/o3-deep-research,
+models,model-openai-o3-mini,reviewed,o3-mini,language_model,,openai/o3-mini,2026-09-22
+models,model-openai-o3-pro,reviewed,o3-pro,multimodal_language_model,,openai/o3-pro,2026-09-22
+models,model-openai-o4-mini,reviewed,o4-mini,multimodal_language_model,,openai/o4-mini,2026-09-22
+models,model-openai-o4-mini-deep-research,imported_source,o4-mini-deep-research,,,openai/o4-mini-deep-research,
+models,model-openai-whisper-large-v3,imported_source,Whisper 3 Large,,,openai/whisper-large-v3,
+models,model-openai-whisper-large-v3-turbo,imported_source,Whisper Large v3 Turbo,,,openai/whisper-large-v3-turbo,
+models,model-openbmb-minicpm5-1b,reviewed,MiniCPM5-1B,language_model,,openbmb/minicpm5-1b,2026-09-22
+models,model-openbmb-minicpm5-2b,reviewed,MiniCPM5-2B,language_model,,openbmb/minicpm5-2b,2026-09-22
+models,model-perplexity-sonar,reviewed,Sonar,language_model,,perplexity/sonar,2026-09-28
+models,model-perplexity-sonar-deep-research,reviewed,Sonar Deep Research,language_model,,perplexity/sonar-deep-research,2026-09-28
+models,model-perplexity-sonar-pro,reviewed,Sonar Pro,language_model,,perplexity/sonar-pro,2026-09-28
+models,model-perplexity-sonar-reasoning-pro,reviewed,Sonar Reasoning Pro,language_model,,perplexity/sonar-reasoning-pro,2026-09-28
+models,model-poolside-laguna-m-1,reviewed,Laguna M.1,language_model,,poolside/laguna-m.1,2026-09-18
+models,model-poolside-laguna-s-2-1,reviewed,Laguna S 2.1,language_model,,poolside/laguna-s-2.1,2026-09-18
+models,model-poolside-laguna-xs-2,reviewed,Laguna XS.2,language_model,,poolside/laguna-xs.2,2026-09-18
+models,model-poolside-laguna-xs-2-1,reviewed,Laguna XS 2.1,language_model,,poolside/laguna-xs-2.1,2026-09-18
+models,model-prism-ml-ternary-bonsai-2-27b,reviewed,Ternary Bonsai 2 27B,multimodal_language_model,,,2026-10-06
+models,model-quiverai-arrow-2,imported_source,Arrow 2,,,quiverai/arrow-2,
+models,model-quiverai-arrow-2-telos,imported_source,Arrow 2 Telos,,,quiverai/arrow-2-telos,
+models,model-reflection-beam,reviewed,Beam,language_model,,,2026-10-07
+models,model-sakana-fugu,imported_source,Fugu,,,sakana/fugu,
+models,model-sakana-fugu-ultra,imported_source,Fugu Ultra,,,sakana/fugu-ultra,
+models,model-sakana-sakana-namazu,imported_source,Sakana Namazu,,,sakana/sakana-namazu,
+models,model-sakana-sakana-namazu-v1-0,reviewed,Sakana Namazu v1.0,multimodal_language_model,,,2026-09-28
+models,model-sarvam-sarvam-105b,imported_source,Sarvam 105B,,,sarvam/sarvam-105b,
+models,model-sarvam-sarvam-30b,imported_source,Sarvam 30B,,,sarvam/sarvam-30b,
+models,model-sdaia-allam-2-7b,imported_source,ALLaM-2-7b,,,sdaia/allam-2-7b,
+models,model-stepfun-step-3-5-flash,reviewed,Step 3.5 Flash,language_model,,stepfun/step-3.5-flash,2026-09-18
+models,model-stepfun-step-3-5-flash-2603,imported_source,Step 3.5 Flash 2603,,,stepfun/step-3.5-flash-2603,
+models,model-stepfun-step-3-7-flash,reviewed,Step 3.7 Flash,multimodal_language_model,,stepfun/step-3.7-flash,2026-09-18
+models,model-stepfun-step-5-preview,reviewed,Step 5 Preview,multimodal_language_model,,stepfun/step-5-preview,2026-09-22
+models,model-swiss-ai-apertus-70b,reviewed,Apertus 70B,language_model,,swiss-ai/apertus-70b,2026-09-18
+models,model-swiss-ai-apertus-8b,reviewed,Apertus 8B,language_model,,swiss-ai/apertus-8b,2026-09-18
+models,model-tencent-hunyuan-a13b-instruct,reviewed,Hunyuan-A13B-Instruct,language_model,,,2026-10-06
+models,model-tencent-hy-mt2-1-8b,reviewed,Hy-MT2-1.8B,language_model,,,2026-10-06
+models,model-tencent-hy-mt2-30b-a3b,reviewed,Hy-MT2-30B-A3B,language_model,,,2026-10-06
+models,model-tencent-hy-mt2-7b,reviewed,Hy-MT2-7B,language_model,,,2026-10-06
+models,model-tencent-hy3,reviewed,Hy3,language_model,,tencent/hy3,2026-09-18
+models,model-tencent-hy3-preview,reviewed,Hy3 preview,language_model,,tencent/hy3-preview,2026-09-18
+models,model-tencent-hy4-preview,reviewed,Hy4 preview,language_model,,tencent/hy4-preview,2026-09-18
+models,model-thinkingmachines-inkling,reviewed,Inkling,multimodal_language_model,,thinkingmachines/inkling,2026-09-22
+models,model-thinkingmachines-inkling-small,reviewed,Inkling-Small,multimodal_language_model,,thinkingmachines/inkling-small,2026-09-22
+models,model-trendyol-asure-12b,reviewed,Trendyol-LLM-Asure-12B,multimodal_language_model,,trendyol/asure-12b,2026-09-22
+models,model-typesafe-jev-1-13-0,reviewed,Jev 1.13,language_model,,,2026-09-20
+models,model-typesafe-jev-latest,imported_source,Jev,,,typesafe/jev-latest,
+models,model-unbiased-pareto,imported_source,Pareto,,,unbiased/pareto,
+models,model-upstage-solar-mini4,reviewed,Solar Mini 4,language_model,,,2026-09-28
+models,model-upstage-solar-open2-250b,reviewed,Solar Open 2,language_model,,,2026-09-27
+models,model-upstage-solar-pro2,reviewed,Solar Pro 2,language_model,,upstage/solar-pro2,2026-09-18
+models,model-upstage-solar-pro3,reviewed,Solar Pro 3,language_model,,upstage/solar-pro3,2026-09-18
+models,model-upstage-solar-pro4,reviewed,Solar Pro 4,language_model,,upstage/solar-pro4,2026-09-18
+models,model-vispark-vision-large,reviewed,Vision Large,multimodal_language_model,,vispark/vision-large,2026-09-22
+models,model-vispark-vision-medium,reviewed,Vision Medium,multimodal_language_model,,vispark/vision-medium,2026-09-22
+models,model-vispark-vision-small,reviewed,Vision Small,multimodal_language_model,,vispark/vision-small,2026-09-22
+models,model-vivgrid-viv-fast,reviewed,Viv Fast,multimodal_language_model,,vivgrid/viv-fast,2026-09-22
+models,model-writer-palmyra-x4,reviewed,Palmyra X4,language_model,,writer/palmyra-x4,2026-10-03
+models,model-writer-palmyra-x5,reviewed,Palmyra X5,multimodal_language_model,,writer/palmyra-x5,2026-10-03
+models,model-writer-palmyra-x6,reviewed,Palmyra X6,language_model,,,2026-10-03
+models,model-xai-grok-4-1-fast,imported_source,Grok 4.1 Fast,,,xai/grok-4.1-fast,
+models,model-xai-grok-4-1-fast-reasoning,imported_source,Grok 4.1 Fast (Reasoning),,,xai/grok-4.1-fast-reasoning,
+models,model-xai-grok-4-20-0309-non-reasoning,reviewed,Grok 4.20 (Non-Reasoning),multimodal_language_model,,xai/grok-4.20-0309-non-reasoning,2026-09-18
+models,model-xai-grok-4-20-0309-reasoning,reviewed,Grok 4.20 (Reasoning),multimodal_language_model,,xai/grok-4.20-0309-reasoning,2026-09-18
+models,model-xai-grok-4-20-multi-agent,reviewed,Grok 4.20 Multi-Agent,multimodal_language_model,,,2026-10-06
+models,model-xai-grok-4-3,reviewed,Grok 4.3,multimodal_language_model,,xai/grok-4.3,2026-09-18
+models,model-xai-grok-4-5,reviewed,Grok 4.5,multimodal_language_model,,xai/grok-4.5,2026-09-18
+models,model-xai-grok-4-6,reviewed,Grok 4.6,multimodal_language_model,,xai/grok-4.6,2026-09-11
+models,model-xai-grok-4-7,reviewed,Grok 4.7,multimodal_language_model,,xai/grok-4.7,2026-09-22
+models,model-xai-grok-build-0-1,reviewed,Grok Build 0.1,multimodal_language_model,,xai/grok-build-0.1,2026-09-18
+models,model-xai-grok-imagine-image-2-0,reviewed,Grok Imagine Image 2.0,image_generation_model,,xai/grok-imagine-image-2.0,2026-10-06
+models,model-xai-grok-imagine-image-quality,reviewed,Grok Imagine Image Quality,image_generation_model,,xai/grok-imagine-image-quality,2026-10-06
+models,model-xai-grok-imagine-video-1-5,reviewed,Grok Imagine Video 1.5,video_generation_model,,xai/grok-imagine-video-1.5,2026-10-06
+models,model-xai-grok-imagine-video-1-5-lite,imported_source,Grok Imagine Video 1.5 Lite,,,xai/grok-imagine-video-1.5-lite,
+models,model-xai-grok-voice-stt-1-0,reviewed,Grok Voice Transcribe 1.0,multimodal_language_model,,xai/grok-voice-stt-1.0,2026-09-22
+models,model-xai-grok-voice-tts-1-0,imported_source,Grok Voice TTS 1.0,,,xai/grok-voice-tts-1.0,
+models,model-xiaomi-mimo-v2-5,reviewed,MiMo-V2.5,multimodal_language_model,,xiaomi/mimo-v2.5,2026-09-18
+models,model-xiaomi-mimo-v2-5-pro,reviewed,MiMo-V2.5-Pro,language_model,,xiaomi/mimo-v2.5-pro,2026-09-18
+models,model-xiaomi-mimo-v2-5-pro-ultraspeed,imported_source,MiMo-V2.5-Pro-UltraSpeed,,,xiaomi/mimo-v2.5-pro-ultraspeed,
+models,model-xiaomi-mimo-v2-6-flash,reviewed,MiMo-V2.6-Flash,multimodal_language_model,,xiaomi/mimo-v2.6-flash,2026-09-22
+models,model-xiaomi-mimo-v2-6-pro,reviewed,MiMo-V2.6-Pro,multimodal_language_model,,xiaomi/mimo-v2.6-pro,2026-09-22
+models,model-xiaomi-mimo-v2-6-pro-ultraspeed,imported_source,MiMo-V2.6-Pro-UltraSpeed,,,xiaomi/mimo-v2.6-pro-ultraspeed,
+models,model-xiaomi-mimo-v2-flash,reviewed,MiMo-V2-Flash,language_model,,xiaomi/mimo-v2-flash,2026-09-18
+models,model-xiaomi-mimo-v2-omni,reviewed,MiMo-V2-Omni,multimodal_language_model,,xiaomi/mimo-v2-omni,2026-09-18
+models,model-xiaomi-mimo-v2-pro,reviewed,MiMo-V2-Pro,language_model,,xiaomi/mimo-v2-pro,2026-09-18
+models,model-zhipuai-glm-4-5,reviewed,GLM-4.5,language_model,,zhipuai/glm-4.5,2026-09-11
+models,model-zhipuai-glm-4-5-air,reviewed,GLM-4.5-Air,language_model,,zhipuai/glm-4.5-air,2026-09-18
+models,model-zhipuai-glm-4-5-flash,imported_source,GLM-4.5-Flash,,,zhipuai/glm-4.5-flash,
+models,model-zhipuai-glm-4-5v,reviewed,GLM-4.5V,multimodal_language_model,,zhipuai/glm-4.5v,2026-09-18
+models,model-zhipuai-glm-4-6,reviewed,GLM-4.6,language_model,,zhipuai/glm-4.6,2026-09-18
+models,model-zhipuai-glm-4-6v,reviewed,GLM-4.6V,multimodal_language_model,,zhipuai/glm-4.6v,2026-09-18
+models,model-zhipuai-glm-4-6v-flash,reviewed,GLM-4.6V-Flash,multimodal_language_model,,zhipuai/glm-4.6v-flash,2026-09-18
+models,model-zhipuai-glm-4-7,reviewed,GLM-4.7,language_model,,zhipuai/glm-4.7,2026-09-18
+models,model-zhipuai-glm-4-7-flash,reviewed,GLM-4.7-Flash,language_model,,zhipuai/glm-4.7-flash,2026-09-18
+models,model-zhipuai-glm-4-7-flashx,imported_source,GLM-4.7-FlashX,,,zhipuai/glm-4.7-flashx,
+models,model-zhipuai-glm-5,reviewed,GLM-5,language_model,,zhipuai/glm-5,2026-09-11
+models,model-zhipuai-glm-5-1,reviewed,GLM-5.1,language_model,,zhipuai/glm-5.1,2026-09-18
+models,model-zhipuai-glm-5-2,reviewed,GLM-5.2,language_model,,zhipuai/glm-5.2,2026-09-18
+models,model-zhipuai-glm-5-3,reviewed,GLM-5.3,language_model,,zhipuai/glm-5.3,2026-09-12
+models,model-zhipuai-glm-5-3-flash,reviewed,GLM-5.3-Flash,multimodal_language_model,,zhipuai/glm-5.3-flash,2026-09-12
+models,model-zhipuai-glm-5-turbo,reviewed,GLM-5-Turbo,language_model,,zhipuai/glm-5-turbo,2026-09-18
+models,model-zhipuai-glm-5v-turbo,reviewed,GLM-5V-Turbo,multimodal_language_model,,zhipuai/glm-5v-turbo,2026-09-18
+models,model-zhipuai-glm-image,reviewed,GLM-Image,image_generation_model,,zhipuai/glm-image,2026-10-06
+packs,agent-toolkit,reviewed,agent-toolkit,marketplace,active,,2026-09-17
+packs,agentic-project-management,reviewed,Agentic Project Management,process_kit,active,,2026-10-07
+packs,ai-berkshire,reviewed,AI Berkshire,skills_bundle,active,,2026-09-25
+packs,buildwithclaude,reviewed,Build with Claude,marketplace,active,,2026-09-16
+packs,claude-code-tresor,reviewed,claude-code-tresor,process_kit,active,,2026-09-16
+packs,second-brain-llm-wiki,reviewed,Second Brain LLM Wiki,skills_bundle,active,,2026-09-17
+packs,second-brain-starter,reviewed,Second Brain Starter,vault_bundle,active,,2026-09-16
+packs,typesafe-agent-skills,reviewed,TypeSafe Agent Skills,skills_bundle,active,,2026-09-20
+packs,unity-skills,reviewed,Unity Skills,skills_bundle,active,,2026-09-25
+robots,agibot-a2,reviewed,AgiBot A2,humanoid,active,,2026-10-03
+robots,booster-t1,reviewed,Booster T1,humanoid,active,,2026-10-07
+robots,deep-robotics-lite3,reviewed,DEEP Robotics Lite3,quadruped,active,,2026-10-07
+robots,engineered-arts-ameca,reviewed,Ameca,humanoid,active,,2026-10-07
+robots,figure-03,reviewed,Figure 03,humanoid,active,,2026-09-24
+robots,galbot-g1,reviewed,Galbot G1,humanoid,active,,2026-10-07
+robots,hello-robot-stretch-4,reviewed,Stretch 4,mobile_manipulator,active,,2026-09-30
+robots,limx-tron-1,reviewed,LimX TRON 1,other,active,,2026-10-07
+robots,neo,reviewed,NEO,humanoid,active,,2026-09-24
+robots,reachy-mini,reviewed,Reachy Mini,other,active,,2026-10-07
+robots,spot,reviewed,Spot,quadruped,active,,2026-09-24
+robots,trossen-stationary-ai,reviewed,Trossen Stationary AI,arm,active,,2026-10-10
+robots,unitree-g1,reviewed,Unitree G1,humanoid,active,,2026-09-24
+robots,unitree-go2,reviewed,Unitree Go2,quadruped,active,,2026-09-30
+robots,unitree-h1,reviewed,Unitree H1,humanoid,active,,2026-09-30
+robots,unitree-h2,reviewed,Unitree H2,humanoid,active,,2026-10-01
+robots,unitree-r1,reviewed,Unitree R1,humanoid,active,,2026-10-01
+runtimes,exo,reviewed,exo,desktop_runner,,,2026-09-18
+runtimes,geniex,reviewed,GenieX,desktop_runner,,,2026-08-30
+runtimes,llama-cpp,reviewed,llama.cpp,embedded_library,,,2026-08-29
+runtimes,lm-studio,reviewed,LM Studio,desktop_runner,,,2026-08-29
+runtimes,localai,reviewed,LocalAI,compatibility_gateway,,,2026-08-29
+runtimes,mlc-llm,reviewed,MLC LLM,embedded_library,,,2026-09-03
+runtimes,mlx-lm,reviewed,MLX LM,embedded_library,,,2026-08-29
+runtimes,ollama,reviewed,Ollama,desktop_runner,,,2026-08-29
+runtimes,onnxruntime-genai,reviewed,ONNX Runtime GenAI,embedded_library,,,2026-08-29
+runtimes,openvino-model-server,reviewed,OpenVINO Model Server,server_engine,,,2026-08-29
+runtimes,sglang,reviewed,SGLang,server_engine,,,2026-08-29
+runtimes,tensorflow-serving,reviewed,TensorFlow Serving,server_engine,,,2026-08-30
+runtimes,tensorrt-llm,reviewed,TensorRT LLM,server_engine,,,2026-08-30
+runtimes,text-embeddings-inference,reviewed,Text Embeddings Inference,server_engine,,,2026-09-02
+runtimes,vllm,reviewed,vLLM,server_engine,,,2026-08-29
+runtimes,web-llm,reviewed,WebLLM,embedded_library,,,2026-09-03
+runtimes,xinference,reviewed,Xinference,compatibility_gateway,,,2026-08-29
+specifications,a2a,reviewed,Agent2Agent Protocol,protocol,published,,2026-08-25
+specifications,acp,reviewed,Agent Client Protocol,protocol,evolving,,2026-08-25
+specifications,ag-ui,reviewed,Agent–User Interaction Protocol,protocol,evolving,,2026-08-25
+specifications,agent-plugins,reviewed,Agent Plugins,package_format,published,,2026-08-25
+specifications,agent-skills,reviewed,Agent Skills,capability_format,evolving,,2026-08-25
+specifications,agentic-commerce-protocol,reviewed,Agentic Commerce Protocol,protocol,published,,2026-08-28
+specifications,agents-md,reviewed,AGENTS.md,instruction_convention,evolving,,2026-08-25
+specifications,anp,reviewed,Agent Network Protocol,protocol,published,,2026-08-28
+specifications,ap2,reviewed,Agent Payments Protocol,protocol,evolving,,2026-08-28
+specifications,claude-code-plugins,reviewed,Claude Code Plugins,package_format,vendor_specific,,2026-09-15
+specifications,claude-md,reviewed,CLAUDE.md,instruction_convention,vendor_specific,,2026-09-12
+specifications,cline-rules,reviewed,Cline Rules,instruction_convention,vendor_specific,,2026-08-25
+specifications,continue-rules,reviewed,Continue Rules,instruction_convention,vendor_specific,,2026-08-25
+specifications,cursor-rules,reviewed,Cursor Project Rules,instruction_convention,vendor_specific,,2026-08-25
+specifications,devin-desktop-rules,reviewed,Devin Desktop Rules,instruction_convention,vendor_specific,,2026-08-25
+specifications,gemini-md,reviewed,GEMINI.md,instruction_convention,vendor_specific,,2026-08-25
+specifications,github-copilot-instructions,reviewed,GitHub Copilot repository instructions,instruction_convention,vendor_specific,,2026-08-25
+specifications,mcp,reviewed,Model Context Protocol,protocol,published,,2026-08-25
+specifications,oasf,reviewed,Open Agentic Schema Framework,metadata_schema,published,,2026-08-28
+specifications,roo-code-rules,reviewed,Roo Code Rules,instruction_convention,vendor_specific,,2026-08-25
+specifications,ucp,reviewed,Universal Commerce Protocol,protocol,published,,2026-08-28
+specifications,webmcp,reviewed,WebMCP,protocol,evolving,,2026-08-28
+systems,a-mem,reviewed,A-MEM,memory_system,active,,2026-09-14
+systems,activitywatch,reviewed,ActivityWatch,memory_system,active,,2026-08-23
+systems,adalflow,reviewed,AdalFlow,agent_system,active,,2026-09-13
+systems,aden-hive,reviewed,Hive,agent_system,active,,2026-10-06
+systems,affine,reviewed,AFFiNE,memory_system,active,,2026-09-01
+systems,agency-swarm,reviewed,Agency Swarm,agent_system,active,,2026-10-07
+systems,agent-memory,reviewed,agent-memory,memory_system,active,,2026-09-27
+systems,agent-orchestrator,reviewed,Agent Orchestrator,agent_system,active,,2026-10-06
+systems,agentic-flow,reviewed,Agentic-Flow,agent_system,active,,2026-10-07
+systems,agenticseek,reviewed,agenticSeek,agent_system,active,,2026-09-02
+systems,agentmemory,reviewed,agentmemory,memory_system,active,,2026-08-31
+systems,agents-deep-research,reviewed,Agentic Deep Research,agent_system,active,,2026-10-07
+systems,agentuniverse,reviewed,agentUniverse,agent_system,active,,2026-10-06
+systems,agno,reviewed,Agno,agent_system,active,,2026-08-25
+systems,aider,reviewed,Aider,agent_system,active,,2026-08-23
+systems,aihawk,reviewed,AIHawk,agent_system,active,,2026-09-30
+systems,aionui,reviewed,AionUi,agent_system,active,,2026-09-02
+systems,amazon-quick,reviewed,Amazon Quick,assistant_system,active,,2026-08-26
+systems,antigravity,reviewed,Google Antigravity,agent_system,active,,2026-09-14
+systems,antigravity-sdk,reviewed,Google Antigravity SDK,agent_system,active,,2026-09-12
+systems,anythingllm,reviewed,AnythingLLM,memory_system,active,,2026-09-13
+systems,appflowy,reviewed,AppFlowy,memory_system,active,,2026-09-13
+systems,artemis,reviewed,ARTEMIS,agent_system,active,,2026-10-06
+systems,autogen,reviewed,AutoGen,agent_system,superseded,,2026-08-29
+systems,babyagi,reviewed,BabyAGI,agent_system,archived,,2026-09-02
+systems,basic-memory,reviewed,Basic Memory,memory_system,active,,2026-08-23
+systems,bedrock-agentcore,reviewed,Amazon Bedrock AgentCore,agent_system,active,,2026-08-30
+systems,beeai-framework,reviewed,BeeAI Framework,agent_system,active,,2026-09-02
+systems,boop-agent,reviewed,Boop,agent_system,active,,2026-10-07
+systems,botpress-cloud,reviewed,Botpress Cloud,agent_system,active,,2026-08-31
+systems,botsharp,reviewed,BotSharp,agent_system,active,,2026-10-07
+systems,browser-use,reviewed,Browser Use,agent_system,active,,2026-08-23
+systems,cain-agent,reviewed,Cain,agent_system,active,,2026-10-10
+systems,cairn,reviewed,Cairn,agent_system,active,,2026-10-10
+systems,camel,reviewed,CAMEL,agent_system,active,,2026-09-02
+systems,chatgpt,reviewed,ChatGPT,assistant_system,active,,2026-08-26
+systems,chroma,reviewed,Chroma,memory_system,active,,2026-08-23
+systems,claudable,reviewed,Claudable,agent_system,active,,2026-09-12
+systems,claude,reviewed,Claude,assistant_system,active,,2026-08-26
+systems,claude-agent-acp,reviewed,Claude Agent ACP,agent_system,active,,2026-09-30
+systems,claude-agent-sdk,reviewed,Claude Agent SDK,agent_system,active,,2026-09-14
+systems,claude-code,reviewed,Claude Code,agent_system,active,,2026-08-25
+systems,claude-cowork,reviewed,Claude Cowork,agent_system,active,,2026-08-28
+systems,claude-mem,reviewed,claude-mem,memory_system,active,,2026-09-13
+systems,claude-obsidian,reviewed,claude-obsidian,memory_system,active,,2026-09-18
+systems,claw-code,reviewed,Claw Code,agent_system,active,,2026-08-31
+systems,cline,reviewed,Cline,agent_system,active,,2026-08-23
+systems,codegraph,reviewed,CodeGraph,memory_system,active,,2026-09-01
+systems,codewhale,reviewed,Codewhale,agent_system,active,,2026-09-01
+systems,codex,reviewed,Codex,agent_system,active,,2026-08-23
+systems,cognee,reviewed,Cognee,memory_system,active,,2026-08-23
+systems,compartment,reviewed,Compartment,memory_system,active,,2026-09-12
+systems,continue,reviewed,Continue,agent_system,archived,,2026-09-01
+systems,cowagent,reviewed,CowAgent,agent_system,active,,2026-09-02
+systems,crewai,reviewed,CrewAI,agent_system,active,,2026-08-23
+systems,crush,reviewed,Crush,agent_system,active,,2026-09-01
+systems,cua,reviewed,Cua,agent_system,active,,2026-08-28
+systems,cuawright,reviewed,CUAWright,agent_system,active,,2026-10-06
+systems,cursor,reviewed,Cursor,agent_system,active,,2026-09-03
+systems,darwin-godel-machine,reviewed,Darwin Gödel Machine,agent_system,active,,2026-09-28
+systems,db-gpt,reviewed,DB-GPT,agent_system,active,,2026-08-25
+systems,deep-research-agent,reviewed,DeepResearchAgent,agent_system,active,,2026-10-07
+systems,deepagents,reviewed,deepagents,agent_system,active,,2026-09-13
+systems,deepcode,reviewed,DeepCode,agent_system,active,,2026-10-06
+systems,deepseek,reviewed,DeepSeek,assistant_system,active,,2026-08-26
+systems,deepseek-harness,reviewed,DeepSeek Harness,agent_system,active,,2026-08-25
+systems,deer-flow,reviewed,DeerFlow,agent_system,active,,2026-09-01
+systems,dendron,reviewed,Dendron,memory_system,archived,,2026-09-02
+systems,desloppify,reviewed,Desloppify,agent_system,active,,2026-10-07
+systems,devin,reviewed,Devin,agent_system,active,,2026-08-25
+systems,devin-desktop,reviewed,Devin Desktop,agent_system,active,,2026-09-14
+systems,devspace,reviewed,DevSpace,agent_system,active,,2026-10-07
+systems,dexter,reviewed,dexter,agent_system,active,,2026-09-01
+systems,dify,reviewed,Dify,agent_system,active,,2026-08-31
+systems,docsgpt,reviewed,DocsGPT,memory_system,active,,2026-09-02
+systems,dspy,reviewed,DSPy,agent_system,active,,2026-08-25
+systems,ecc,reviewed,ECC,agent_system,active,,2026-09-18
+systems,emdash,reviewed,emdash,agent_system,active,,2026-09-02
+systems,engram,reviewed,Engram,memory_system,active,,2026-09-15
+systems,exo-harness,reviewed,Exo Harness,agent_system,active,,2026-09-02
+systems,fastclaw,reviewed,FastClaw,agent_system,active,,2026-10-06
+systems,flowise,reviewed,Flowise,agent_system,archived,,2026-08-31
+systems,flue,reviewed,Flue,agent_system,active,,2026-09-20
+systems,foam,reviewed,Foam,memory_system,active,,2026-08-23
+systems,fx,reviewed,fx,agent_system,active,,2026-09-17
+systems,gajae-code,reviewed,Gajae-Code,agent_system,active,,2026-08-31
+systems,gbrain,reviewed,GBrain,memory_system,active,,2026-08-25
+systems,gemini-apps,reviewed,Gemini Apps,assistant_system,active,,2026-08-26
+systems,gemini-cli,reviewed,Gemini CLI,agent_system,active,,2026-09-03
+systems,gemini-enterprise-agent-platform,reviewed,Gemini Enterprise Agent Platform,agent_system,active,,2026-08-30
+systems,genkit,reviewed,Genkit,agent_system,active,,2026-08-29
+systems,gentle-ai,reviewed,Gentle-AI,agent_system,active,,2026-09-18
+systems,gitnexus,reviewed,GitNexus,memory_system,active,,2026-09-01
+systems,go-micro,reviewed,Go Micro,agent_system,active,,2026-10-06
+systems,google-adk,reviewed,Google Agent Development Kit,agent_system,active,,2026-08-25
+systems,goose,reviewed,Goose,agent_system,active,,2026-08-23
+systems,gpt-researcher,reviewed,GPT Researcher,agent_system,active,,2026-08-23
+systems,gptme,reviewed,gptme,agent_system,active,,2026-10-06
+systems,graphiti,reviewed,Graphiti,memory_system,active,,2026-08-23
+systems,grok,reviewed,Grok,assistant_system,active,,2026-08-26
+systems,grok-bot,reviewed,Grok Bot,agent_system,active,,2026-09-01
+systems,grok-build,reviewed,Grok Build,agent_system,active,,2026-10-07
+systems,grok-cli,reviewed,grok-cli,agent_system,active,,2026-09-02
+systems,gstack,reviewed,GStack,agent_system,active,,2026-09-20
+systems,haystack,reviewed,Haystack,agent_system,active,,2026-08-25
+systems,hermes-agent,reviewed,Hermes Agent,agent_system,active,,2026-08-28
+systems,higgsfield-supercomputer,reviewed,Higgsfield Supercomputer,agent_system,active,,2026-08-28
+systems,hindsight,reviewed,Hindsight,memory_system,active,,2026-09-02
+systems,holaos,reviewed,holaOS,agent_system,active,,2026-10-06
+systems,hyperresearch,reviewed,Hyperresearch,agent_system,active,,2026-09-18
+systems,jan,reviewed,Jan,assistant_system,active,,2026-09-02
+systems,joplin,reviewed,Joplin,memory_system,active,,2026-08-23
+systems,kaibanjs,reviewed,KaibanJS,agent_system,active,,2026-10-06
+systems,khoj,reviewed,Khoj,memory_system,active,,2026-09-13
+systems,kilo-code,reviewed,Kilo Code,agent_system,active,,2026-08-28
+systems,kiro,reviewed,Kiro,agent_system,active,,2026-08-25
+systems,koog,reviewed,Koog,agent_system,active,,2026-09-29
+systems,kosmos,reviewed,Kosmos,agent_system,active,,2026-09-03
+systems,langchain,reviewed,LangChain,agent_system,active,,2026-08-25
+systems,langflow,reviewed,Langflow,agent_system,active,,2026-08-31
+systems,langgraph,reviewed,LangGraph,agent_system,active,,2026-08-23
+systems,langmem,reviewed,LangMem,memory_system,active,,2026-08-23
+systems,lerobot,reviewed,LeRobot,agent_system,active,,2026-09-28
+systems,letta-code,reviewed,Letta Code,agent_system,active,,2026-09-13
+systems,librechat,reviewed,LibreChat,assistant_system,active,,2026-09-01
+systems,llamaindex,reviewed,LlamaIndex,agent_system,active,,2026-08-25
+systems,llmstack,reviewed,LLMStack,agent_system,active,,2026-10-07
+systems,logseq,reviewed,Logseq,memory_system,active,,2026-08-23
+systems,lurnby,reviewed,Lurnby,memory_system,active,,2026-09-13
+systems,magentic-ui,reviewed,MagenticLite,agent_system,active,,2026-09-02
+systems,magnitude,reviewed,Magnitude,agent_system,active,,2026-10-06
+systems,mastra,reviewed,Mastra,agent_system,active,,2026-08-25
+systems,mateclaw,reviewed,MateClaw,agent_system,active,,2026-09-12
+systems,mem0,reviewed,Mem0,memory_system,active,,2026-08-23
+systems,memobase,reviewed,Memobase,memory_system,active,,2026-09-02
+systems,memoir,reviewed,Memoir,memory_system,active,,2026-09-12
+systems,memoria,reviewed,Memoria,memory_system,active,,2026-09-12
+systems,memorix,reviewed,Memorix,memory_system,active,,2026-09-12
+systems,memos,reviewed,Memos,memory_system,active,,2026-08-23
+systems,memtensor-memos,reviewed,MemOS,memory_system,active,,2026-09-02
+systems,memu,reviewed,memU,memory_system,active,,2026-08-31
+systems,meta-ai,reviewed,Meta AI,assistant_system,active,,2026-08-30
+systems,meta-business-agent-platform,reviewed,Meta Business Agent Platform,agent_system,active,,2026-08-31
+systems,metagpt,reviewed,MetaGPT,agent_system,active,,2026-10-06
+systems,microsoft-365-copilot,reviewed,Microsoft 365 Copilot,assistant_system,active,,2026-08-26
+systems,microsoft-agent-framework,reviewed,Microsoft Agent Framework,agent_system,active,,2026-08-23
+systems,microsoft-copilot,reviewed,Microsoft Copilot,assistant_system,active,,2026-08-26
+systems,microsoft-copilot-studio,reviewed,Microsoft Copilot Studio,agent_system,active,,2026-08-31
+systems,microsoft-foundry-agent-service,reviewed,Microsoft Foundry Agent Service,agent_system,active,,2026-08-30
+systems,milvus,reviewed,Milvus,memory_system,active,,2026-08-23
+systems,mindsearch,reviewed,MindSearch,agent_system,active,,2026-10-06
+systems,mindshub,reviewed,MindsHub,agent_system,active,,2026-09-12
+systems,mini-swe-agent,reviewed,mini-SWE-agent,agent_system,active,,2026-09-02
+systems,mistral-vibe,reviewed,Mistral Vibe,assistant_system,active,,2026-08-29
+systems,mobile-use,reviewed,mobile-use,agent_system,active,,2026-10-06
+systems,munder-difflin,reviewed,Munder Difflin,agent_system,active,,2026-10-06
+systems,muse-code,reviewed,Muse Code,agent_system,active,,2026-08-30
+systems,n8n,reviewed,n8n,agent_system,active,,2026-10-06
+systems,nagaagent,reviewed,NagaAgent,assistant_system,active,,2026-10-07
+systems,nanobot,reviewed,nanobot,agent_system,active,,2026-09-02
+systems,nanobrowser,reviewed,Nanobrowser,agent_system,active,,2026-09-12
+systems,nanoclaw,reviewed,NanoClaw,agent_system,active,,2026-10-06
+systems,neo4j-agent-memory,reviewed,agent-memory,memory_system,active,,2026-09-28
+systems,nerve,reviewed,Nerve,agent_system,active,,2026-09-12
+systems,nia,reviewed,Nia,memory_system,active,,2026-09-02
+systems,notabase,reviewed,Notabase,memory_system,active,,2026-09-12
+systems,ntm,reviewed,NTM (Named Tmux Manager),agent_system,active,,2026-10-06
+systems,obsidian-llm-wiki,reviewed,Obsidian LLM Wiki,memory_system,active,,2026-09-30
+systems,obsidian-second-brain,reviewed,Obsidian Second Brain,memory_system,active,,2026-09-18
+systems,oh-my-claudecode,reviewed,oh-my-claudecode,agent_system,active,,2026-09-01
+systems,oh-my-openagent,reviewed,oh-my-openagent,agent_system,active,,2026-09-18
+systems,oh-my-pi,reviewed,oh-my-pi,agent_system,active,,2026-09-01
+systems,okf-agent-memory,reviewed,okf-agent-memory,memory_system,active,,2026-09-28
+systems,om1,reviewed,OM1,agent_system,active,,2026-09-28
+systems,omnigent,reviewed,Omnigent,agent_system,active,,2026-09-02
+systems,onecli,reviewed,OneCLI,agent_system,active,,2026-10-06
+systems,onyx,reviewed,Onyx,memory_system,active,,2026-09-01
+systems,open-deep-research,reviewed,Open Deep Research,agent_system,active,,2026-10-06
+systems,open-design,reviewed,Open Design,agent_system,active,,2026-09-02
+systems,open-grok,reviewed,Open Grok,agent_system,active,,2026-08-28
+systems,open-notebook,reviewed,Open Notebook,memory_system,active,,2026-08-23
+systems,open-swe,reviewed,Open SWE,agent_system,active,,2026-09-02
+systems,openagent,reviewed,OpenAgent,assistant_system,active,,2026-10-07
+systems,openai-agents-api,reviewed,OpenAI Agents API,agent_system,active,,2026-09-25
+systems,openai-agents-js,reviewed,OpenAI Agents SDK for JavaScript,agent_system,active,,2026-09-29
+systems,openai-agents-sdk,reviewed,OpenAI Agents SDK,agent_system,active,,2026-08-25
+systems,openai-dots,reviewed,dots,agent_system,active,,2026-09-30
+systems,openclaw,reviewed,OpenClaw,agent_system,active,,2026-08-25
+systems,opencode,reviewed,OpenCode,agent_system,active,,2026-08-23
+systems,opencursor,reviewed,OpenCursor,agent_system,active,,2026-09-12
+systems,openevolve,reviewed,OpenEvolve,agent_system,active,,2026-09-12
+systems,openhands,reviewed,OpenHands,agent_system,active,,2026-08-25
+systems,openhands-software-agent-sdk,reviewed,OpenHands Software Agent SDK,agent_system,active,,2026-10-07
+systems,openharness,reviewed,OpenHarness,agent_system,active,,2026-10-06
+systems,openhuman,reviewed,OpenHuman,memory_system,active,,2026-09-11
+systems,openinterpreter,reviewed,Open Interpreter,agent_system,active,,2026-08-23
+systems,openrecall,reviewed,OpenRecall,memory_system,active,,2026-08-23
+systems,openrig,reviewed,OpenRig,agent_system,active,,2026-10-06
+systems,openviking,reviewed,OpenViking,memory_system,active,,2026-09-01
+systems,orca,reviewed,Orca,agent_system,active,,2026-09-01
+systems,ozbrain,reviewed,OzBrain,memory_system,active,,2026-09-02
+systems,paper-qa,reviewed,PaperQA,memory_system,active,,2026-10-10
+systems,paper2agent,reviewed,Paper2Agent,agent_system,active,,2026-09-18
+systems,paperclip,reviewed,Paperclip,agent_system,active,,2026-10-06
+systems,perplexity,reviewed,Perplexity,assistant_system,active,,2026-08-28
+systems,perplexity-computer,reviewed,Perplexity Computer,agent_system,active,,2026-08-28
+systems,pgvector,reviewed,pgvector,memory_system,active,,2026-10-03
+systems,phantom,reviewed,Phantom,agent_system,active,,2026-10-06
+systems,pi,reviewed,Pi,agent_system,active,,2026-08-25
+systems,pi-desktop,reviewed,PI-Desktop,agent_system,active,,2026-10-07
+systems,plandex,reviewed,Plandex,agent_system,active,,2026-09-12
+systems,pool,reviewed,pool,agent_system,active,,2026-09-02
+systems,poolside-assistant,reviewed,Poolside Assistant,agent_system,active,,2026-09-02
+systems,poolside-chat,reviewed,Poolside Chat,assistant_system,active,,2026-09-02
+systems,praxist,reviewed,PRAXIST Beta,agent_system,active,,2026-08-28
+systems,prime-agent,reviewed,Prime Agent,agent_system,active,,2026-08-25
+systems,private-gpt,reviewed,PrivateGPT,agent_system,active,,2026-10-03
+systems,projectmem,reviewed,projectmem,memory_system,active,,2026-09-28
+systems,pydantic-ai,reviewed,Pydantic AI,agent_system,active,,2026-08-23
+systems,qdrant,reviewed,Qdrant,memory_system,active,,2026-08-23
+systems,qm,reviewed,QM,agent_system,active,,2026-10-07
+systems,quivr,reviewed,Quivr,memory_system,active,,2026-08-23
+systems,qwen-code,reviewed,Qwen Code,agent_system,active,,2026-09-01
+systems,ragflow,reviewed,RAGFlow,agent_system,active,,2026-10-03
+systems,reasonix,reviewed,Reasonix,agent_system,active,,2026-09-01
+systems,reor,reviewed,Reor,memory_system,archived,,2026-08-23
+systems,replit-agent,reviewed,Replit Agent,agent_system,active,,2026-08-28
+systems,roma,reviewed,ROMA,agent_system,active,,2026-10-07
+systems,roo-code,reviewed,Roo Code,agent_system,archived,,2026-09-01
+systems,ruflo,reviewed,ruflo,agent_system,active,,2026-09-01
+systems,ruoyi-ai,reviewed,RuoYi AI,agent_system,active,,2026-10-06
+systems,salesforce-agentforce,reviewed,Salesforce Agentforce,agent_system,active,,2026-08-31
+systems,sandbase-harness,reviewed,SandBase Harness,agent_system,active,,2026-09-03
+systems,screenpipe,reviewed,screenpipe,memory_system,active,,2026-09-02
+systems,second-brain,reviewed,Second Brain,agent_system,active,,2026-09-12
+systems,seekrflow,reviewed,SeekrFlow,agent_system,active,,2026-09-02
+systems,semantic-kernel,reviewed,Semantic Kernel,agent_system,superseded,,2026-08-29
+systems,shannon,reviewed,Shannon,agent_system,active,,2026-10-06
+systems,shinkaevolve,reviewed,ShinkaEvolve,agent_system,active,,2026-09-03
+systems,silverbullet,reviewed,SilverBullet,memory_system,active,,2026-08-23
+systems,siyuan,reviewed,SiYuan,memory_system,active,,2026-08-23
+systems,skyvern,reviewed,Skyvern,agent_system,active,,2026-09-02
+systems,slite,reviewed,Slite,memory_system,active,,2026-08-28
+systems,smart-second-brain,reviewed,Smart Second Brain,memory_system,active,,2026-09-12
+systems,smolagents,reviewed,smolagents,agent_system,active,,2026-09-14
+systems,solace-agent-mesh,reviewed,Solace Agent Mesh,agent_system,archived,,2026-10-07
+systems,sqlbot,reviewed,SQLBot,agent_system,active,,2026-09-30
+systems,stagewise,reviewed,stagewise,agent_system,active,,2026-09-02
+systems,strands-agents-sdk,reviewed,Strands Agents SDK,agent_system,active,,2026-08-29
+systems,supermemory,reviewed,Supermemory,memory_system,active,,2026-09-01
+systems,superpowers,reviewed,Superpowers,agent_system,active,,2026-09-18
+systems,swarmclaw,reviewed,SwarmClaw,agent_system,active,,2026-09-12
+systems,swarms,reviewed,Swarms,agent_system,active,,2026-09-02
+systems,swarmvault,reviewed,SwarmVault,memory_system,active,,2026-09-12
+systems,swe-agent,reviewed,SWE-agent,agent_system,superseded,,2026-09-02
+systems,t3-chat,reviewed,T3 Chat,assistant_system,active,,2026-08-26
+systems,taskweaver,reviewed,TaskWeaver,agent_system,archived,,2026-09-02
+systems,tencentdb-agent-memory,reviewed,TencentDB-Agent-Memory,memory_system,active,,2026-09-28
+systems,tradingagents,reviewed,TradingAgents,agent_system,active,,2026-10-07
+systems,tradingagents-astock,reviewed,TradingAgents-Astock,agent_system,active,,2026-10-07
+systems,trellis,reviewed,Trellis,agent_system,active,,2026-10-06
+systems,trilium,reviewed,Trilium,memory_system,active,,2026-08-23
+systems,trueforge,reviewed,TrueForge,agent_system,active,,2026-10-07
+systems,txtai,reviewed,txtai,agent_system,active,,2026-10-03
+systems,unreal-agent,reviewed,Unreal Agent,agent_system,active,,2026-10-07
+systems,vane,reviewed,Vane,agent_system,active,,2026-09-01
+systems,vanna,reviewed,Vanna,agent_system,archived,,2026-08-25
+systems,venice-ai,reviewed,Venice.ai,assistant_system,active,,2026-08-28
+systems,vercel-ai-sdk,reviewed,Vercel AI SDK,agent_system,active,,2026-09-20
+systems,vespa,reviewed,Vespa,memory_system,active,,2026-10-03
+systems,vibe-kanban,reviewed,Vibe Kanban,agent_system,archived,,2026-09-02
+systems,vibecode-pro-max-kit,reviewed,Vibecode Pro Max Kit,agent_system,active,,2026-09-18
+systems,warp,reviewed,Warp,agent_system,active,,2026-08-28
+systems,watsonx-orchestrate,reviewed,IBM watsonx Orchestrate,agent_system,active,,2026-08-30
+systems,weaviate,reviewed,Weaviate,memory_system,active,,2026-08-23
+systems,wrenai,reviewed,WrenAI,agent_system,active,,2026-08-25
+systems,xerj,reviewed,xerj,memory_system,active,,2026-09-13
+systems,z-ai,reviewed,Z.ai,assistant_system,active,,2026-08-26
+systems,zcode,reviewed,ZCode,agent_system,active,,2026-09-18
+systems,zep-cloud,reviewed,Zep Cloud,memory_system,active,,2026-08-28
