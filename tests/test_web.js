@@ -4,7 +4,7 @@ const { relative, sep } = require("node:path");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionEmblem, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesProject, mergePackScopeEntries, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FILTER_GROUPS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, buildLabMembership, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionEmblem, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterGroupCounts, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, joinedLabs, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesFamilyAndRoles, matchesFilterGroups, matchesProject, mergePackScopeEntries, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -1074,9 +1074,10 @@ test("lab filters combine type, headquarters, and release distribution, sorted b
   assert.deepEqual(filterLabs(labs, { sort: "score" }).map(item => item.id), ["lab-alpha", "lab-beta"]);
   assert.deepEqual(filterLabs(labs, { type: "technology_company" }).map(item => item.id), ["lab-beta"]);
   assert.deepEqual(filterLabs(labs, { headquarters: "us" }).map(item => item.id), ["lab-alpha"]);
-  assert.deepEqual(filterLabs(labs, { distribution: "downloadable_weights", models: labCatalog.models }).map(item => item.id), ["lab-alpha", "lab-beta"]);
-  assert.deepEqual(filterLabs(labs, { distribution: "third_party_hosting", models: labCatalog.models }).map(item => item.id), ["lab-alpha"]);
-  assert.deepEqual(filterLabs(labs, { distribution: "developer_api" }), [], "without models no lab has a release");
+  const labMembership = buildLabMembership(labs, labCatalog);
+  assert.deepEqual(filterLabs(labs, { distribution: "downloadable_weights", labMembership }).map(item => item.id), ["lab-alpha", "lab-beta"]);
+  assert.deepEqual(filterLabs(labs, { distribution: "third_party_hosting", labMembership }).map(item => item.id), ["lab-alpha"]);
+  assert.deepEqual(filterLabs(labs, { distribution: "developer_api" }), [], "without lab membership no lab has a release");
 });
 
 test("lab search covers names, units, and parent organizations", () => {
@@ -1157,10 +1158,12 @@ test("more-from-lab lists same-lab systems besides the record itself", () => {
   assert.equal(moreFromLabSystems(projects[2], { index, projects }), null);
 });
 
-test("the models lab filter narrows to the ids it is given", () => {
-  const ids = new Set(["model-vision"]);
-  assert.deepEqual(filterModels(models, { ids }).map(item => item.id), ["model-vision"]);
-  assert.equal(filterModels(models, {}).length, models.length);
+test("the models lab filter narrows to the releases its lab joins", () => {
+  const acme = { id: "lab-acme", name: "Acme", catalog_names: ["Acme"], systems: [] };
+  const catalog = [...models, importedModel];
+  const labMembership = buildLabMembership([acme], { models: catalog });
+  assert.deepEqual(filterModels(catalog, { lab: "lab-acme", labMembership }).map(item => item.id), ["model-acme-audio", "model-vision"], "its reviewed release and the pending row in that release's namespace");
+  assert.equal(filterModels(catalog, { labMembership }).length, catalog.length);
 });
 
 // Rover sorts last by name but carries a stray score higher than any tie
@@ -3087,6 +3090,99 @@ test("collection symbols have their own explanations independent of shared glyph
   assert.match(COLLECTIONS.find(entry => entry.id === "packs").meaning, /own type badges/);
 });
 
+test("every filter group reads a URL key, and every facet key has a group", () => {
+  for (const [collection, groups] of Object.entries(FILTER_GROUPS)) {
+    const keys = Object.keys(SCOPE_URL_PARAMS[collection]).filter(key => !["q", "sort", "browseSort", "family", "layout"].includes(key));
+    assert.deepEqual(groups.map(group => group.key).sort(), keys.sort(), collection);
+  }
+  assert.equal(FILTER_GROUPS.systems[0].key, "role", "Role leads in Systems; Family is the strip's row");
+  assert.deepEqual(FILTER_GROUPS.all, []);
+});
+
+test("a filter group matches what a record carries for it", () => {
+  const groups = FILTER_GROUPS.systems;
+  const project = { primary_role: "coding_agent", licenses: ["MIT"], deployment: ["local_cli"], status: "active", local_first: null };
+  assert.equal(matchesFilterGroups(project, { license: "MIT" }, groups), true);
+  assert.equal(matchesFilterGroups(project, { license: "Apache-2.0" }, groups), false);
+  assert.equal(matchesFilterGroups(project, { localOnly: "unknown" }, groups), true);
+  assert.equal(matchesFilterGroups(project, { localOnly: "1" }, groups), false);
+  assert.equal(matchesFilterGroups(project, { localOnly: false, status: "" }, groups), true, "false and empty choose nothing");
+  assert.equal(matchesFilterGroups({ ...project, local_first: true }, { localOnly: true }, groups), true, "the legacy true reads as 1");
+  assert.equal(matchesFilterGroups(project, { status: "archived", license: "MIT" }, groups, {}, "status"), true, "except leaves a group aside");
+});
+
+test("a group's counts leave its own choice aside and read every other one", () => {
+  const groups = FILTER_GROUPS.inference;
+  const services = [
+    { service_type: "direct_model_api", delivery_modes: ["api"], model_sources: [], api_styles: ["openai"] },
+    { service_type: "direct_model_api", delivery_modes: ["api"], model_sources: [], api_styles: ["native"] },
+    { service_type: "routing_aggregator", delivery_modes: ["api"], model_sources: [], api_styles: ["openai"] },
+  ];
+  const counts = filterGroupCounts(services, { type: "direct_model_api", apiStyle: "openai" }, groups);
+  assert.equal(counts.type.get("direct_model_api"), 1);
+  assert.equal(counts.type.get("routing_aggregator"), 1, "the type group ignores its own choice");
+  assert.equal(counts.apiStyle.get("openai"), 1);
+  assert.equal(counts.apiStyle.get("native"), 1);
+  assert.equal(counts.apiStyle.get("missing"), undefined, "a value no record carries has no count");
+});
+
+test("lab membership follows labRelations for every collection", () => {
+  const lab = { id: "lab-acme", name: "Acme", catalog_names: ["Acme"], systems: ["s1"] };
+  const catalog = {
+    projects: [{ id: "s1" }, { id: "s2" }],
+    services: [{ id: "i1", operator: "Acme" }],
+    runtimes: [{ id: "r1", maintainer: "Other" }],
+    models: [{ id: "m1", developer: "Acme", review_status: "reviewed", source_id: "acme/m1", distribution_modes: ["open_weights"] }],
+    specifications: [{ id: "sp1", stewards: ["Acme"] }],
+    packs: [],
+  };
+  const { labsOf, distributionsOf } = buildLabMembership([lab], catalog);
+  assert.deepEqual(labsOf.get(catalog.projects[0]), ["lab-acme"]);
+  assert.equal(labsOf.get(catalog.projects[1]), undefined);
+  assert.deepEqual(labsOf.get(catalog.services[0]), ["lab-acme"]);
+  assert.deepEqual(labsOf.get(catalog.specifications[0]), ["lab-acme"]);
+  assert.deepEqual(distributionsOf.get("lab-acme"), ["open_weights"]);
+  const ctx = { labs: { labsOf, distributionsOf } };
+  assert.equal(matchesFilterGroups(catalog.services[0], { lab: "lab-acme" }, FILTER_GROUPS.inference, ctx), true);
+  assert.equal(matchesFilterGroups(catalog.runtimes[0], { lab: "lab-acme" }, FILTER_GROUPS.runtimes, ctx), false);
+});
+
+test("on the real catalog, every rail count equals what choosing its value lists", () => {
+  const read = name => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "web", "app", `${name}.json`), "utf8"))[name];
+  const payloads = {
+    projects: read("systems"), services: read("inference"), runtimes: read("runtimes"), models: read("models"),
+    packs: read("packs"), robots: read("robots"), labs: read("labs"), specifications: read("specifications"),
+  };
+  const labMembership = buildLabMembership(payloads.labs, payloads);
+  const ctx = { labs: labMembership };
+  const lists = {
+    systems: filters => filterAndSortProjects(payloads.projects, { ...filters, sort: "name", labMembership }),
+    inference: filters => filterInferenceServices(payloads.services, { ...filters, sort: "name", labMembership }),
+    runtimes: filters => filterLocalRuntimes(payloads.runtimes, { ...filters, sort: "name", labMembership }),
+    models: filters => filterModels(payloads.models, { ...filters, sort: "name", labMembership }),
+    packs: filters => filterPacks(payloads.packs, { ...filters, labMembership }),
+    robots: filters => filterRobots(payloads.robots, { ...filters, labMembership }),
+    labs: filters => filterLabs(payloads.labs, { ...filters, labMembership }),
+    specifications: filters => filterSpecifications(payloads.specifications, { ...filters, labMembership }),
+  };
+  const records = { systems: payloads.projects, inference: payloads.services, runtimes: payloads.runtimes, models: payloads.models, packs: payloads.packs, robots: payloads.robots, labs: payloads.labs, specifications: payloads.specifications };
+  for (const [collection, list] of Object.entries(lists)) {
+    const base = collection === "systems" ? { status: "" } : {};
+    const counts = filterGroupCounts(records[collection], base, FILTER_GROUPS[collection], ctx);
+    for (const [key, values] of Object.entries(counts)) {
+      for (const [value, count] of values) {
+        assert.equal(list({ ...base, [key]: value }).length, count, `${collection} ${key}=${value}`);
+      }
+    }
+  }
+});
+
+test("Models name the source-model filter in the artifact-scoped wording", () => {
+  // ADR 047: filters, like cards and dialogs, speak of a model's release artifacts.
+  assert.equal(FILTER_GROUPS.models.find(group => group.key === "sourceModel").name, "Artifact licensing");
+  assert.equal(FILTER_GROUPS.systems.find(group => group.key === "sourceModel").name, "Source model");
+});
+
 // The Finder's screen is one counted map of its goal tables, so the counts it
 // prints are the numbers a reader trusts before choosing anything. These read
 // the real payloads, not fixtures: a tile that shows 0 for a job the directory
@@ -3313,4 +3409,49 @@ test("every reviewed flag is a taxonomy flag kind of the same name, allowed on m
     assert.deepEqual(kind.collections, ["models"]);
     assert.equal(flag.family, FLAG_FAMILY);
   }
+});
+
+// Ruling R-T3-7: each collection's Lab filter lists the labs that join at
+// least one of its records, Models included, A–Z and never by size (ADR 041).
+// The join is checked against labRelations, the rule each lab's record uses.
+test("on the real catalog, every collection's Lab filter lists, A–Z, exactly the labs that join its records", () => {
+  const read = name => JSON.parse(fs.readFileSync(path.join(__dirname, "..", "web", "app", `${name}.json`), "utf8"))[name];
+  const payloads = {
+    projects: read("systems"), services: read("inference"), runtimes: read("runtimes"), models: read("models"),
+    packs: read("packs"), robots: read("robots"), labs: read("labs"), specifications: read("specifications"),
+  };
+  const labMembership = buildLabMembership(payloads.labs, payloads);
+  const joins = {
+    systems: [payloads.projects, relations => relations.systems],
+    inference: [payloads.services, relations => relations.services],
+    runtimes: [payloads.runtimes, relations => relations.runtimes],
+    models: [payloads.models, relations => [...relations.models, ...relations.sourceRows]],
+    specifications: [payloads.specifications, relations => relations.specifications],
+  };
+  for (const [collection, [records, joined]] of Object.entries(joins)) {
+    const listed = joinedLabs(payloads.labs, records, labMembership);
+    const joining = payloads.labs.filter(lab => joined(labRelations(lab, payloads)).length > 0);
+    assert.deepEqual(listed.map(lab => lab.id).sort(), joining.map(lab => lab.id).sort(), `${collection} lists exactly the labs that join its records`);
+    assert.deepEqual(listed.map(lab => lab.name), listed.map(lab => lab.name).sort((a, b) => a.localeCompare(b)), `${collection} lists its labs A–Z`);
+  }
+});
+
+// Review M5: the family and the Finder's role set are the two Systems
+// constraints no rail group holds; the results and the rail's counts read
+// them through this one predicate, as they read the groups.
+test("Systems' family and Finder role set narrow outside the rail's groups, in one predicate", () => {
+  const agent = projects[3];
+  assert.equal(matchesFamilyAndRoles(agent, {}), true, "neither narrows by default");
+  assert.equal(matchesFamilyAndRoles(agent, { family: "agent_system" }), true);
+  assert.equal(matchesFamilyAndRoles(agent, { family: "memory_system" }), false);
+  assert.equal(matchesFamilyAndRoles(agent, { roles: ["coding_agent", "research_agent"] }), true);
+  assert.equal(matchesFamilyAndRoles(agent, { roles: ["research_agent"] }), false);
+  assert.equal(matchesFamilyAndRoles(agent, { family: "agent_system", roles: [] }), true, "an empty role set narrows nothing");
+  assert.equal(matchesFamilyAndRoles(agent, { family: "agent_system", roles: null }), true, "nor does a missing one");
+  const filters = { family: "memory_system", roles: ["memory_bridge", "agent_memory_service"] };
+  assert.deepEqual(
+    filterAndSortProjects(projects, filters).map(project => project.name).sort(),
+    projects.filter(project => matchesFamilyAndRoles(project, filters)).map(project => project.name).sort(),
+    "the results list exactly what the predicate keeps",
+  );
 });

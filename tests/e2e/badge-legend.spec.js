@@ -28,9 +28,8 @@ test("the legend lists the active scope's badges and follows the scope", async (
   await openFamily(page, "memory_system");
   await expect(items(page)).toHaveText(names(badgeLegend("systems", "memory_system")));
 
-  // The family select widens back out to every system family, as the All
-  // families entry does. This exercises the family filter's input listener's
-  // syncBadgeLegend() call.
+  // The All families entry widens back out to every system family, and the
+  // legend follows it (setDirectoryCollection's syncBadgeLegend() call).
   await setFilter(page, "systems", "family", "");
   await expect(items(page)).toHaveText(names(badgeLegend("systems")));
 });

@@ -237,21 +237,121 @@
     };
   }
 
+  // The rail's filter groups per collection, in rail order (Phase 3 spec,
+  // section 3). Each reads one URL key; `values(record, ctx)` lists what a
+  // record carries for it, and a record matches a chosen value when that
+  // list holds it. The results and the rail's counts both read these, so
+  // they never disagree. `ctx.labs` is buildLabMembership's result; Family
+  // is the strip's row, so Systems has no family group.
+  const listOf = value => (Array.isArray(value) ? value : value === undefined || value === null || value === "" ? [] : [value]);
+  const fieldValues = field => record => listOf(record[field]).map(String);
+  const labValues = (record, ctx = {}) => ctx.labs?.labsOf.get(record) || [];
+  const FILTER_GROUPS = {
+    all: [],
+    systems: [
+      { key: "role", name: "Role", values: fieldValues("primary_role") },
+      { key: "sourceModel", name: "Source model", values: fieldValues("source_model") },
+      { key: "license", name: "License", values: fieldValues("licenses") },
+      { key: "agent", name: "AI relationship", values: fieldValues("agent_relation") },
+      { key: "architecture", name: "Architecture", values: fieldValues("architectures") },
+      { key: "deployment", name: "Deployment", values: fieldValues("deployment") },
+      { key: "agentInterface", name: "Interface", values: fieldValues("agent_interfaces") },
+      { key: "capability", name: "Capability", values: fieldValues("agent_capabilities") },
+      { key: "retrieval", name: "Retrieval", values: fieldValues("retrieval_modes") },
+      { key: "status", name: "Status", values: fieldValues("status") },
+      { key: "localOnly", name: "Local-first", values: project => [project.local_first === true ? "1" : project.local_first === false ? "0" : "unknown"] },
+      { key: "lab", name: "Lab", values: labValues },
+    ],
+    inference: [
+      { key: "type", name: "Type", values: fieldValues("service_type") },
+      { key: "delivery", name: "Delivery", values: fieldValues("delivery_modes") },
+      { key: "modelSource", name: "Model source", values: fieldValues("model_sources") },
+      { key: "apiStyle", name: "API style", values: fieldValues("api_styles") },
+      { key: "lab", name: "Lab", values: labValues },
+    ],
+    runtimes: [
+      { key: "type", name: "Type", values: fieldValues("runtime_type") },
+      { key: "accelerator", name: "Accelerator", values: fieldValues("accelerators") },
+      { key: "modelFormat", name: "Model format", values: fieldValues("model_formats") },
+      { key: "apiStyle", name: "API style", values: fieldValues("api_styles") },
+      { key: "lab", name: "Lab", values: labValues },
+    ],
+    models: [
+      { key: "type", name: "Type", values: fieldValues("model_type") },
+      { key: "distribution", name: "Distribution", values: fieldValues("distribution_modes") },
+      { key: "modality", name: "Modality", values: model => [...new Set([...(model.source_metadata?.modalities?.input || []), ...(model.source_metadata?.modalities?.output || [])])] },
+      // A model's licensing speaks of its release artifacts (ADR 047).
+      { key: "sourceModel", name: "Artifact licensing", values: fieldValues("source_model") },
+      { key: "license", name: "License", values: fieldValues("licenses") },
+      { key: "lab", name: "Lab", values: labValues },
+      // Atlas-reviewed or imported from models.dev: two states, of which the
+      // filter offers the reviewed one (#471, the door's Models entry).
+      { key: "reviewed", name: "Review", values: model => [model.review_status === "reviewed" ? "1" : "0"] },
+    ],
+    packs: [
+      { key: "type", name: "Type", values: fieldValues("pack_type") },
+      { key: "host", name: "Host", values: fieldValues("hosts") },
+      { key: "install", name: "Install", values: fieldValues("install_mechanism") },
+      { key: "license", name: "License", values: fieldValues("licenses") },
+    ],
+    robots: [
+      { key: "formFactor", name: "Form", values: fieldValues("form_factor") },
+      { key: "aiBasis", name: "AI", values: fieldValues("ai_basis") },
+      { key: "availability", name: "Availability", values: fieldValues("availability") },
+      { key: "status", name: "Status", values: fieldValues("status") },
+    ],
+    labs: [
+      { key: "type", name: "Type", values: fieldValues("lab_type") },
+      { key: "headquarters", name: "Headquarters", values: fieldValues("headquarters") },
+      { key: "distribution", name: "Releases", values: (lab, ctx = {}) => ctx.labs?.distributionsOf.get(lab.id) || [] },
+    ],
+    specifications: [
+      { key: "type", name: "Type", values: fieldValues("specification_type") },
+      { key: "scope", name: "Scope", values: fieldValues("scope") },
+      { key: "status", name: "Status", values: fieldValues("status") },
+      { key: "license", name: "License", values: fieldValues("licenses") },
+      { key: "lab", name: "Lab", values: labValues },
+    ],
+  };
+
+  // Whether a record passes every chosen group. `except` leaves one group
+  // aside, as that group's own counts need. An empty choice, and the legacy
+  // `localOnly: false`, choose nothing; `localOnly: true` reads as "1".
+  function matchesFilterGroups(record, filters = {}, groups = [], ctx = {}, except = null) {
+    return groups.every(group => {
+      if (group.key === except) return true;
+      const chosen = filters[group.key];
+      if (chosen === undefined || chosen === null || chosen === "" || chosen === false) return true;
+      return group.values(record, ctx).includes(chosen === true ? "1" : String(chosen));
+    });
+  }
+
+  // For each group, how many records each value would list given every other
+  // group's choice: a group's own choice aside, so the reader sees what each
+  // alternative gives (Phase 3 spec, section 3). A value no record carries
+  // has no entry.
+  function filterGroupCounts(records, filters = {}, groups = [], ctx = {}) {
+    return Object.fromEntries(groups.map(group => {
+      const counts = new Map();
+      for (const record of records) {
+        if (!matchesFilterGroups(record, filters, groups, ctx, group.key)) continue;
+        for (const value of new Set(group.values(record, ctx))) counts.set(value, (counts.get(value) || 0) + 1);
+      }
+      return [group.key, counts];
+    }));
+  }
+
+  // Systems' constraints that no rail group holds: the family, which the
+  // strip's second row chooses, and the Finder's role set. The results and
+  // the rail's counts both read this, as they read the groups.
+  function matchesFamilyAndRoles(project, { family = "", roles = [] } = {}) {
+    const set = roles || [];
+    return (!family || project.system_family === family) && (!set.length || set.includes(project.primary_role));
+  }
+
   function matchesProjectFacets(project, filters) {
-    const roles = filters.roles || [];
-    return (!filters.family || project.system_family === filters.family) &&
-      (!filters.role || project.primary_role === filters.role) &&
-      (!roles.length || roles.includes(project.primary_role)) &&
-      (!filters.agent || project.agent_relation === filters.agent) &&
-      (!filters.architecture || traitList(project, "architectures").includes(filters.architecture)) &&
-      (!filters.deployment || traitList(project, "deployment").includes(filters.deployment)) &&
-      (!filters.agentInterface || traitList(project, "agent_interfaces").includes(filters.agentInterface)) &&
-      (!filters.capability || traitList(project, "agent_capabilities").includes(filters.capability)) &&
-      (!filters.retrieval || traitList(project, "retrieval_modes").includes(filters.retrieval)) &&
-      (!filters.sourceModel || project.source_model === filters.sourceModel) &&
-      (!filters.license || project.licenses.includes(filters.license)) &&
-      (!filters.status || project.status === filters.status) &&
-      matchesLocalFirst(project, filters.localOnly);
+    return matchesFamilyAndRoles(project, filters) &&
+      matchesFilterGroups(project, filters, FILTER_GROUPS.systems, { labs: filters.labMembership });
   }
 
   function matchesProject(project, filters) {
@@ -283,10 +383,7 @@
 
   function filterSpecifications(specifications, filters = {}) {
     const faceted = specifications.filter(specification =>
-      (!filters.type || specification.specification_type === filters.type) &&
-      (!filters.scope || specification.scope === filters.scope) &&
-      (!filters.status || specification.status === filters.status) &&
-      (!filters.license || specification.licenses.includes(filters.license)));
+      matchesFilterGroups(specification, filters, FILTER_GROUPS.specifications, { labs: filters.labMembership }));
     return orderBySearch(
       faceted,
       parseSearchQuery(filters.term),
@@ -297,13 +394,10 @@
   }
 
   function filterScoredCollection(records, filters = {}, options = {}) {
-    const facets = options.facets || {};
-    const faceted = records.filter(record => Object.entries(facets).every(([key, field]) => {
-      const selected = filters[key];
-      if (!selected) return true;
-      const value = record[field];
-      return Array.isArray(value) ? value.includes(selected) : value === selected;
-    }));
+    const groups = options.collection
+      ? FILTER_GROUPS[options.collection]
+      : Object.entries(options.facets || {}).map(([key, field]) => ({ key, values: fieldValues(field) }));
+    const faceted = records.filter(record => matchesFilterGroups(record, filters, groups, { labs: filters.labMembership }));
     const byScore = (a, b) => (b.score?.overall ?? -1) - (a.score?.overall ?? -1) || a.name.localeCompare(b.name);
     const byName = (a, b) => a.name.localeCompare(b.name);
     return orderBySearch(
@@ -321,12 +415,7 @@
       "id", "name", "operator", "description", "service_boundary", "regional_controls",
       "retention_controls", "routing", "customization", "strengths", "tradeoffs",
     ],
-    facets: {
-      type: "service_type",
-      delivery: "delivery_modes",
-      modelSource: "model_sources",
-      apiStyle: "api_styles",
-    },
+    collection: "inference",
   };
 
   const LOCAL_RUNTIME_VIEW = {
@@ -335,12 +424,7 @@
       "id", "name", "maintainer", "description", "runtime_boundary", "model_management",
       "hardware_requirements", "operational_controls", "strengths", "tradeoffs",
     ],
-    facets: {
-      type: "runtime_type",
-      accelerator: "accelerators",
-      modelFormat: "model_formats",
-      apiStyle: "api_styles",
-    },
+    collection: "runtimes",
   };
 
   const MODEL_VIEW = {
@@ -349,12 +433,7 @@
       "id", "source_id", "name", "developer", "description", "access_boundary",
       "strengths", "tradeoffs",
     ],
-    facets: {
-      type: "model_type",
-      distribution: "distribution_modes",
-      sourceModel: "source_model",
-      license: "licenses",
-    },
+    collection: "models",
   };
 
   // Packs are unscored (ADR 032): the shared collection filter is reused for its
@@ -363,12 +442,7 @@
   const PACK_VIEW = {
     kind: "pack",
     searchFields: ["id", "name", "short_name", "steward", "repo", "description", "installs"],
-    facets: {
-      type: "pack_type",
-      host: "hosts",
-      install: "install_mechanism",
-      license: "licenses",
-    },
+    collection: "packs",
   };
 
   // Unscored collections are A–Z while browsing and ordered by match while
@@ -387,10 +461,7 @@
   const LAB_VIEW = {
     kind: "lab",
     searchFields: ["id", "name", "description", "catalog_names", "parent_organization"],
-    facets: {
-      type: "lab_type",
-      headquarters: "headquarters",
-    },
+    collection: "labs",
   };
 
   function sourceNamespace(sourceId) {
@@ -420,6 +491,33 @@
     };
   }
 
+  // Which labs join each record, by labRelations' rules, and the release
+  // distributions of each lab's reviewed releases: the Lab filter's values
+  // and Labs' "Releases" filter. Built once, since the joins read every
+  // collection; labs go A–Z, never by size (ADR 041).
+  function buildLabMembership(labs = [], catalog = {}) {
+    const labsOf = new Map();
+    const distributionsOf = new Map();
+    for (const lab of [...labs].sort((a, b) => a.name.localeCompare(b.name))) {
+      const relations = labRelations(lab, catalog);
+      const joined = [...relations.models, ...relations.sourceRows, ...relations.services, ...relations.runtimes, ...relations.specifications, ...relations.packs, ...relations.systems];
+      for (const record of joined) {
+        if (!labsOf.has(record)) labsOf.set(record, []);
+        labsOf.get(record).push(lab.id);
+      }
+      distributionsOf.set(lab.id, [...new Set(relations.models.flatMap(model => model.distribution_modes || []))]);
+    }
+    return { labsOf, distributionsOf };
+  }
+
+  // The labs a collection's Lab filter offers: those that join at least one
+  // of its records by buildLabMembership's joins, A–Z, never by size
+  // (ADR 041). A lab that joins none would only ever list nothing.
+  function joinedLabs(labs = [], records = [], labMembership) {
+    const ids = new Set(records.flatMap(record => labMembership?.labsOf.get(record) || []));
+    return labs.filter(lab => ids.has(lab.id)).sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   // Release dates are models.dev metadata (or Atlas-authored for a release it
   // does not list), partial as YYYY-MM or full as YYYY-MM-DD; both sort as text.
   function releaseDate(model) {
@@ -444,13 +542,11 @@
     return [...order.filter(mode => present.has(mode)), ...[...present].filter(mode => !order.includes(mode)).sort()];
   }
 
-  // Labs sort as the other unscored collections do; the distribution facet keeps
-  // a lab with at least one reviewed release distributed that way, so it needs
-  // the catalog's models.
+  // Labs sort as the other unscored collections do; the distribution filter
+  // keeps a lab with at least one reviewed release distributed that way, so
+  // it needs `labMembership` (buildLabMembership).
   function filterLabs(labs, filters = {}) {
-    return filterScoredCollection(labs, { ...filters, sort: unscoredSort(filters) }, LAB_VIEW).filter(lab =>
-      !filters.distribution || labRelations(lab, { models: filters.models || [] }).models
-        .some(model => (model.distribution_modes || []).includes(filters.distribution)));
+    return filterScoredCollection(labs, { ...filters, sort: unscoredSort(filters) }, LAB_VIEW);
   }
 
   // Related navigation inside a system dialog, from data the boot payload
@@ -562,12 +658,7 @@
   const ROBOT_VIEW = {
     kind: "robot",
     searchFields: ["id", "name", "short_name", "manufacturer", "description"],
-    facets: {
-      formFactor: "form_factor",
-      aiBasis: "ai_basis",
-      availability: "availability",
-      status: "status",
-    },
+    collection: "robots",
   };
 
   // The fields each collection searches until its index arrives, so a missing
@@ -765,19 +856,12 @@
     return filterScoredCollection(runtimes, filters, LOCAL_RUNTIME_VIEW);
   }
 
-  // `ids`, when present, narrows to one lab's releases: its reviewed rows and the
-  // imported rows in its namespaces, which the caller resolves with labRelations.
-  // The "release" sort orders reviewed and imported rows together, newest first:
+  // The Lab filter narrows to one lab's releases: its reviewed rows and the
+  // imported rows in its namespaces, as `labMembership` joins them. The
+  // "release" sort orders reviewed and imported rows together, newest first:
   // the release date is models.dev metadata both carry, not a score.
   function filterModels(models, filters = {}) {
-    const matches = filterScoredCollection(models, filters, MODEL_VIEW).filter(model =>
-      (!filters.modality || [
-        ...(model.source_metadata?.modalities?.input || []),
-        ...(model.source_metadata?.modalities?.output || []),
-      ].includes(filters.modality)) &&
-      (!filters.ids || filters.ids.has(model.id)) &&
-      (filters.reviewed !== "1" || model.review_status === "reviewed")
-    );
+    const matches = filterScoredCollection(models, filters, MODEL_VIEW);
     return filters.sort === "release" ? releasesNewestFirst(matches) : matches;
   }
 
@@ -1083,21 +1167,21 @@
   }
 
   // Every URL parameter a scope writes, with its default. The keys are the
-  // ones the scope's filter already reads — directoryDefaults() for Systems,
-  // the view descriptors' facets elsewhere — so a parameter means the same in
-  // the URL and in the code; `q` is the scope's query. A value equal to its
-  // default is never written, and while a query is present a sort's default
-  // is Best match (scopeURLParams).
+  // ones the scope's filter already reads — its FILTER_GROUPS, and Systems'
+  // family — so a parameter means the same in the URL and in the code; `q`
+  // is the scope's query. A value equal to its default is never written,
+  // and while a query is present a sort's default is Best match
+  // (scopeURLParams).
   const SCOPE_URL_PARAMS = {
     all: { q: "", layout: "cards" },
-    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", retrieval: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name", browseSort: "", layout: "cards" },
-    inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", sort: "score", browseSort: "", layout: "cards" },
-    runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", sort: "score", browseSort: "", layout: "cards" },
+    systems: { q: "", family: "", role: "", agent: "", architecture: "", deployment: "", agentInterface: "", capability: "", retrieval: "", lab: "", sourceModel: "", license: "", status: "active", localOnly: "", sort: "name", browseSort: "", layout: "cards" },
+    inference: { q: "", type: "", delivery: "", modelSource: "", apiStyle: "", lab: "", sort: "score", browseSort: "", layout: "cards" },
+    runtimes: { q: "", type: "", accelerator: "", modelFormat: "", apiStyle: "", lab: "", sort: "score", browseSort: "", layout: "cards" },
     packs: { q: "", type: "", host: "", install: "", license: "", layout: "cards" },
     robots: { q: "", formFactor: "", aiBasis: "", availability: "", status: "", layout: "cards" },
     models: { q: "", type: "", distribution: "", modality: "", sourceModel: "", license: "", lab: "", reviewed: "", sort: "score", browseSort: "", layout: "cards" },
     labs: { q: "", type: "", headquarters: "", distribution: "", layout: "cards" },
-    specifications: { q: "", type: "", scope: "", status: "", license: "", layout: "cards" },
+    specifications: { q: "", type: "", scope: "", status: "", license: "", lab: "", layout: "cards" },
   };
   const SCOPE_URL_KEYS = [...new Set(Object.values(SCOPE_URL_PARAMS).flatMap(Object.keys)), "page"];
 
@@ -2202,6 +2286,7 @@
     COLLECTIONS,
     COMPARISON_COLLECTIONS,
     FAMILY_SHORT_NAMES,
+    FILTER_GROUPS,
     FINDER_DETAIL_KINDS,
     FINDER_DIRECTIONS,
     FINDER_DIRECTION_NAMES,
@@ -2216,6 +2301,7 @@
     badgeEmblem,
     badgeLegend,
     buildLabIndex,
+    buildLabMembership,
     cardBadgeGlossary,
     cardBadges,
     cardFlags,
@@ -2238,6 +2324,7 @@
     familyMatchCounts,
     filterAndSortProjects,
     filterDirectoryEntries,
+    filterGroupCounts,
     filterInferenceServices,
     filterLabs,
     filterLocalRuntimes,
@@ -2251,12 +2338,15 @@
     finderGoalRecords,
     flagEmblemText,
     holdsPhrase,
+    joinedLabs,
     labDistributionModes,
     labRelations,
     labsForRecord,
     markMonogramName,
     markRecordId,
     matchFinderGoal,
+    matchesFamilyAndRoles,
+    matchesFilterGroups,
     modelCardDeveloperLabel,
     matchesProject,
     mergePackScopeEntries,

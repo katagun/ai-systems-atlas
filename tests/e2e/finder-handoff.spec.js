@@ -205,10 +205,14 @@ test("Browse matches lands on the results and shows the Finder's role set as a r
   await shortlist(page);
   await page.locator("[data-finder-directory]").click();
 
-  const { top: panelTop, stickyBottom: sb } = await settle(page, "#systems-directory-panel");
-  expect(panelTop).toBeLessThan(900);
-  expect(panelTop).toBeGreaterThanOrEqual(sb - 1);
-  expect(panelTop).toBeLessThanOrEqual(sb + 13);
+  // The results begin with the chips row, which holds the Finder chip, so
+  // revealDirectoryResults lands the row's top within the same 12px margin
+  // under the sticky stack that keepFinderInView uses. Landing on the panel
+  // below it would leave the row under the bar.
+  const { top: chipsTop, stickyBottom: sb } = await settle(page, "#filter-chips");
+  expect(chipsTop).toBeLessThan(900);
+  expect(chipsTop).toBeGreaterThanOrEqual(sb - 1);
+  expect(chipsTop).toBeLessThanOrEqual(sb + 13);
   const chip = page.getByRole("button", { name: /Finder: Write and maintain software/ });
   await expect(chip).toBeVisible();
   await expect(page.locator("#result-count")).toContainText("Finder match");
@@ -222,6 +226,18 @@ test("Browse matches lands on the results and shows the Finder's role set as a r
   // "hidden" regardless of whether the element itself was ever hidden.
   await expect(page.locator("#finder-roles-chip")).toBeHidden();
   await expect(page.locator("#result-count")).not.toContainText("Finder match");
+});
+
+// The Finder chip is the only sign that the Finder's roles narrow the list,
+// so the handoff never leaves it under the sticky strip and bar (ruling R-T3-4).
+test("after Browse matches the Finder chip sits below the sticky strip and bar", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/?view=finder");
+  await shortlist(page);
+  await page.locator("[data-finder-directory]").click();
+  const { top, stickyBottom } = await settle(page, "#finder-roles-chip");
+  expect(top, `chip top ${top}, sticky bottom ${stickyBottom}`).toBeGreaterThanOrEqual(stickyBottom);
+  await expect(page.locator("#result-count")).toBeFocused();
 });
 
 test("removing the Finder chip by keyboard moves focus to the result count", async ({ page }) => {
@@ -261,7 +277,7 @@ test("Browse matches opens its matches on their first page", async ({ page }) =>
   await expect(page).not.toHaveURL(/page=/);
 });
 
-test("the Finder chip sits beside the result count, and its × glyph never wraps alone", async ({ page }) => {
+test("the Finder chip sits in the chips row above the result count, and its × glyph never wraps alone", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/?view=finder");
   await shortlist(page);
@@ -271,9 +287,10 @@ test("the Finder chip sits beside the result count, and its × glyph never wraps
     const chip = page.locator("#finder-roles-chip");
     const chipBox = await chip.boundingBox();
     const countBox = await page.locator("#result-count").boundingBox();
-    // space-between with no gap centers the count between the chip and Clear
-    // filters (hundreds of px away); beside the chip, the gap is a few px.
-    expect(countBox.x - (chipBox.x + chipBox.width)).toBeLessThan(40);
+    // Every active constraint is a chip in the row above the results
+    // (Phase 3 task 3), so the chip ends before the count begins.
+    await expect(page.locator("#filter-chips #finder-roles-chip")).toBeVisible();
+    expect(chipBox.y + chipBox.height).toBeLessThanOrEqual(countBox.y);
     // A Range over the label text node reports one client rect per wrapped
     // line; the × marker sharing the last line's bottom edge means it wrapped
     // together with the label rather than landing alone on its own line.

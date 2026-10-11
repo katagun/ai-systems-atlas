@@ -108,7 +108,7 @@
       <nav id="scope-strip" class="scope-strip" aria-label="Directory collections" hidden></nav>
       <div id="results-bar" class="results-bar" hidden>
         <label class="search-field results-search"><span class="visually-hidden">Search</span><input id="results-search" type="search" placeholder="Search systems, models, services, runtimes, packs, robots, labs, and specifications" autocomplete="off"><span class="search-count" aria-hidden="true"></span></label>
-        <button type="button" id="filters-toggle" class="filters-toggle" hidden aria-expanded="false" aria-controls="filters-drawer">Filters</button>
+        <button id="filters-button" class="ghost-button filters-button" type="button" aria-haspopup="dialog" aria-controls="filter-sheet">Filters <span class="filters-count"></span></button>
         <div class="results-sort">
           <label id="sort-label" hidden><span class="visually-hidden">Sort</span><select id="sort-filter"></select></label>
         </div>
@@ -119,14 +119,23 @@
         </div>
       </div>
 
-      <div id="filters-drawer" class="filters-drawer">
-        <div data-filters="systems" hidden>
-        <section class="control-panel" id="directory-controls" aria-label="System filters">
-          <label><span>Family</span><select id="family-filter"><option value="">All families</option></select></label>
-          <label><span>Role</span><select id="role-filter"><option value="">All roles</option></select></label>
-          <details class="advanced-filter-shell">
-            <summary>More filters</summary>
-            <div class="advanced-filters">
+      <div id="results-frame" class="results-frame">
+        <aside id="filter-rail" class="filter-rail" aria-labelledby="filter-rail-title" hidden>
+          <button id="skip-to-results" class="rail-skip" type="button">Skip to results</button>
+          <h2 id="filter-rail-title" class="visually-hidden">Filters</h2>
+          <div class="filter-groups"></div>
+        </aside>
+        <div class="results-main">
+          <div id="filter-chips" class="filter-chips" hidden>
+            <span class="filter-chip-list"></span>
+            <button id="finder-roles-chip" class="filter-chip" type="button" hidden></button>
+            <button id="clear-filters" class="link-button" type="button">Clear filters</button>
+          </div>
+
+          <div id="all-directory-panel" class="collection-panel" hidden>
+            <div data-filters="systems" class="filter-state" hidden>
+              <label><span>Family</span><select id="family-filter"><option value="">All families</option></select></label>
+              <label><span>Role</span><select id="role-filter"><option value="">All roles</option></select></label>
               <label><span>Source model</span><select id="source-model-filter"><option value="">All source models</option></select></label>
               <label><span>License</span><select id="license-filter"><option value="">All licenses</option></select></label>
               <label><span>AI relationship</span><select id="agent-filter"><option value="">All relationships</option></select></label>
@@ -137,83 +146,70 @@
               <label><span>Retrieval</span><select id="retrieval-filter"><option value="">All retrieval modes</option></select></label>
               <label><span>Status</span><select id="status-filter"><option value="active">Active</option><option value="">All</option><option value="archived">Archived</option><option value="superseded">Superseded</option><option value="removed">Unavailable</option></select></label>
               <label><span>Local-first</span><select id="local-filter"><option value="">Any</option><option value="1">Yes</option><option value="0">No</option><option value="unknown">Not recorded</option></select></label>
+              <label><span>Lab</span><select id="system-lab-filter"><option value="">All labs</option></select></label>
             </div>
-          </details>
-        </section>
+            <div data-filters="inference" class="filter-state" hidden>
+              <label><span>Type</span><select id="inference-type-filter"><option value="">All types</option></select></label>
+              <label><span>Delivery</span><select id="inference-delivery-filter"><option value="">All delivery modes</option></select></label>
+              <label><span>Model source</span><select id="inference-model-source-filter"><option value="">All model sources</option></select></label>
+              <label><span>API style</span><select id="inference-api-filter"><option value="">All API styles</option></select></label>
+              <label><span>Lab</span><select id="inference-lab-filter"><option value="">All labs</option></select></label>
+            </div>
+            <div data-filters="runtimes" class="filter-state" hidden>
+              <label><span>Type</span><select id="runtime-type-filter"><option value="">All types</option></select></label>
+              <label><span>Accelerator</span><select id="runtime-accelerator-filter"><option value="">All accelerators</option></select></label>
+              <label><span>Model format</span><select id="runtime-format-filter"><option value="">All formats</option></select></label>
+              <label><span>API style</span><select id="runtime-api-filter"><option value="">All API styles</option></select></label>
+              <label><span>Lab</span><select id="runtime-lab-filter"><option value="">All labs</option></select></label>
+            </div>
+            <div data-filters="packs" class="filter-state" hidden>
+              <label><span>Type</span><select id="pack-type-filter"><option value="">All types</option></select></label>
+              <label><span>Host</span><select id="pack-host-filter"><option value="">All hosts</option></select></label>
+              <label><span>Install</span><select id="pack-install-filter"><option value="">All install mechanisms</option></select></label>
+              <label><span>License</span><select id="pack-license-filter"><option value="">All licenses</option></select></label>
+            </div>
+            <div data-filters="robots" class="filter-state" hidden>
+              <label><span>Form</span><select id="robot-form-factor-filter"><option value="">All forms</option></select></label>
+              <label><span>AI</span><select id="robot-ai-basis-filter"><option value="">Any</option></select></label>
+              <label><span>Availability</span><select id="robot-availability-filter"><option value="">Any availability</option></select></label>
+              <label><span>Status</span><select id="robot-status-filter"><option value="">Any status</option></select></label>
+            </div>
+            <div data-filters="models" class="filter-state" hidden>
+              <label><span>Type</span><select id="model-type-filter"><option value="">All types</option></select></label>
+              <label><span>Distribution</span><select id="model-distribution-filter"><option value="">All distribution modes</option></select></label>
+              <label><span>Modality</span><select id="model-modality-filter"><option value="">All modalities</option></select></label>
+              <label><span>Artifact licensing</span><select id="model-source-filter"><option value="">All artifact terms</option></select></label>
+              <label><span>License</span><select id="model-license-filter"><option value="">All licenses</option></select></label>
+              <label><span>Lab</span><select id="model-lab-filter"><option value="">All labs</option></select></label>
+              <label><span>Review</span><select id="reviewed-filter"><option value="">All records</option><option value="1">Atlas reviewed</option></select></label>
+            </div>
+            <div data-filters="labs" class="filter-state" hidden>
+              <label><span>Type</span><select id="lab-type-filter"><option value="">All types</option></select></label>
+              <label><span>Headquarters</span><select id="lab-country-filter"><option value="">All countries</option></select></label>
+              <label><span>Releases</span><select id="lab-distribution-filter"><option value="">Any distribution</option></select></label>
+            </div>
+            <div data-filters="specifications" class="filter-state" hidden>
+              <label><span>Type</span><select id="specification-type-filter"><option value="">All types</option></select></label>
+              <label><span>Scope</span><select id="specification-scope-filter"><option value="">All scopes</option></select></label>
+              <label><span>Status</span><select id="specification-status-filter"><option value="">All statuses</option></select></label>
+              <label><span>License</span><select id="specification-license-filter"><option value="">All licenses</option></select></label>
+              <label><span>Lab</span><select id="specification-lab-filter"><option value="">All labs</option></select></label>
+            </div>
+            <div class="result-row"><p id="all-directory-result-count" class="result-count" aria-live="polite" tabindex="-1"></p></div>
+            <p class="scope-note" data-scope-note="all">The whole directory in one list: A–Z, or best match first while you search. Scores stay hidden here, since a score only compares like with like. Choose a collection for its own filters, and its scores where it has them. <button data-open-tab="taxonomy">How comparisons work →</button></p>
+            <p class="scope-note" data-scope-note="systems" hidden><span data-family-score="needed">Choose one family to compare editorial scores. </span><span data-family-score="ready" hidden>Scores compare systems in this family. </span>All-family browsing is unscored. <button data-open-tab="taxonomy">How comparisons work →</button></p>
+            <p class="scope-note" data-scope-note="inference" hidden>Scores compare stable service operations across types. Filter for workload fit before treating overall as a shortlist. <button data-open-tab="taxonomy">How scoring works →</button></p>
+            <p class="scope-note" data-scope-note="runtimes" hidden>Scores compare documented execution capability on hardware you operate. They exclude throughput, latency, and benchmark rank, so filter for hardware and format fit first. <button data-open-tab="taxonomy">How scoring works →</button></p>
+            <p class="scope-note" data-scope-note="packs" hidden>Packs are documents a host agent installs and reads. They are recorded for what they install, never scored, and never compared. A pack that runs its own code is reviewed as a system instead. <button data-open-tab="taxonomy">How packs are classified →</button></p>
+            <p class="scope-note" data-scope-note="robots" hidden>Robots are listed for what their makers document: the models they name or the way they let you run your own, the hardware, how to get one, and the terms. The Atlas does not test robots, so nothing here is scored or compared. <button data-open-tab="taxonomy">How robots are classified →</button></p>
+            <p class="scope-note" data-scope-note="models" hidden><span id="models-kicker" class="scope-note-facts">models.dev source catalog and Atlas reviews</span> Artifact licensing describes reviewed release artifacts and mandatory terms, not training code or training data openness. Imported source records have no Atlas score. Reviewed scores compare access and deployability only; they exclude output quality, benchmarks, parameter count, current price, latency, and throughput. <button data-open-tab="taxonomy">How scoring works →</button></p>
+            <p class="scope-note" data-scope-note="labs" hidden><span id="labs-kicker" class="scope-note-facts">The organizations behind the models</span> A lab is listed once the Atlas has reviewed a model release, a system, or a robot it made, or once it says on its own pages that it is building frontier models. Releases keeps a lab with at least one reviewed release distributed that way; each release keeps its own licence and score in Models. <button data-open-tab="taxonomy">How labs are classified →</button></p>
+            <p class="scope-note" data-scope-note="specifications" hidden><span id="specifications-kicker" class="scope-note-facts">Interoperability artifacts</span> Protocols, instruction conventions, and package formats, classified by what they connect, with no cross-purpose score.</p>
+            <div class="job-hint" id="job-hint" data-job-hint="all" hidden></div>
+            <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems, model releases, inference services, local runtimes, agent packs, robots, labs, and specifications"></section>
+            <nav id="all-directory-pager" class="pager" aria-label="All-directory pagination"></nav>
+          </div>
         </div>
-        <div data-filters="inference" hidden>
-        <section class="control-panel inference-controls" aria-label="Inference service filters">
-          <label><span>Type</span><select id="inference-type-filter"><option value="">All types</option></select></label>
-          <label><span>Delivery</span><select id="inference-delivery-filter"><option value="">All delivery modes</option></select></label>
-          <label><span>Model source</span><select id="inference-model-source-filter"><option value="">All model sources</option></select></label>
-          <label><span>API style</span><select id="inference-api-filter"><option value="">All API styles</option></select></label>
-        </section>
-        </div>
-        <div data-filters="runtimes" hidden>
-        <section class="control-panel inference-controls" aria-label="Local runtime filters">
-          <label><span>Type</span><select id="runtime-type-filter"><option value="">All types</option></select></label>
-          <label><span>Accelerator</span><select id="runtime-accelerator-filter"><option value="">All accelerators</option></select></label>
-          <label><span>Model format</span><select id="runtime-format-filter"><option value="">All formats</option></select></label>
-          <label><span>API style</span><select id="runtime-api-filter"><option value="">All API styles</option></select></label>
-        </section>
-        </div>
-        <div data-filters="packs" hidden>
-        <section class="control-panel inference-controls" aria-label="Agent pack filters">
-          <label><span>Type</span><select id="pack-type-filter"><option value="">All types</option></select></label>
-          <label><span>Host</span><select id="pack-host-filter"><option value="">All hosts</option></select></label>
-          <label><span>Install</span><select id="pack-install-filter"><option value="">All install mechanisms</option></select></label>
-          <label><span>License</span><select id="pack-license-filter"><option value="">All licenses</option></select></label>
-        </section>
-        </div>
-        <div data-filters="robots" hidden>
-        <section class="control-panel inference-controls" aria-label="Robot filters">
-          <label><span>Form</span><select id="robot-form-factor-filter"><option value="">All forms</option></select></label>
-          <label><span>AI</span><select id="robot-ai-basis-filter"><option value="">Any</option></select></label>
-          <label><span>Availability</span><select id="robot-availability-filter"><option value="">Any availability</option></select></label>
-          <label><span>Status</span><select id="robot-status-filter"><option value="">Any status</option></select></label>
-        </section>
-        </div>
-        <div data-filters="models" hidden>
-        <section class="control-panel inference-controls" aria-label="Model filters">
-          <label><span>Type</span><select id="model-type-filter"><option value="">All types</option></select></label>
-          <label><span>Distribution</span><select id="model-distribution-filter"><option value="">All distribution modes</option></select></label>
-          <label><span>Modality</span><select id="model-modality-filter"><option value="">All modalities</option></select></label>
-          <label><span>Artifact licensing</span><select id="model-source-filter"><option value="">All artifact terms</option></select></label>
-          <label><span>License</span><select id="model-license-filter"><option value="">All licenses</option></select></label>
-          <label><span>Lab</span><select id="model-lab-filter"><option value="">All labs</option></select></label>
-          <label><span>Review</span><select id="reviewed-filter"><option value="">All records</option><option value="1">Atlas reviewed</option></select></label>
-        </section>
-        </div>
-        <div data-filters="labs" hidden>
-        <section class="control-panel specification-controls" aria-label="Lab filters">
-          <label><span>Type</span><select id="lab-type-filter"><option value="">All types</option></select></label>
-          <label><span>Headquarters</span><select id="lab-country-filter"><option value="">All countries</option></select></label>
-          <label><span>Releases</span><select id="lab-distribution-filter"><option value="">Any distribution</option></select></label>
-        </section>
-        </div>
-        <div data-filters="specifications" hidden>
-        <section class="control-panel specification-controls" aria-label="Specification filters">
-          <label><span>Type</span><select id="specification-type-filter"><option value="">All types</option></select></label>
-          <label><span>Scope</span><select id="specification-scope-filter"><option value="">All scopes</option></select></label>
-          <label><span>Status</span><select id="specification-status-filter"><option value="">All statuses</option></select></label>
-          <label><span>License</span><select id="specification-license-filter"><option value="">All licenses</option></select></label>
-        </section>
-        </div>
-      </div>
-      <div id="all-directory-panel" class="collection-panel" hidden>
-        <div class="result-row"><div id="filter-chips" class="filter-chips"></div><button id="finder-roles-chip" class="filter-chip" type="button" hidden></button><p id="all-directory-result-count" class="result-count" aria-live="polite" tabindex="-1"></p><button id="reset-all-directory" class="ghost-button results-clear">Clear filters</button></div>
-        <p class="scope-note" data-scope-note="all">The whole directory in one list: A–Z, or best match first while you search. Scores stay hidden here, since a score only compares like with like. Choose a collection for its own filters, and its scores where it has them. <button data-open-tab="taxonomy">How comparisons work →</button></p>
-        <p class="scope-note" data-scope-note="systems" hidden><span data-family-score="needed">Choose one family to compare editorial scores. </span><span data-family-score="ready" hidden>Scores compare systems in this family. </span>All-family browsing is unscored. <button data-open-tab="taxonomy">How comparisons work →</button></p>
-        <p class="scope-note" data-scope-note="inference" hidden>Scores compare stable service operations across types. Filter for workload fit before treating overall as a shortlist. <button data-open-tab="taxonomy">How scoring works →</button></p>
-        <p class="scope-note" data-scope-note="runtimes" hidden>Scores compare documented execution capability on hardware you operate. They exclude throughput, latency, and benchmark rank, so filter for hardware and format fit first. <button data-open-tab="taxonomy">How scoring works →</button></p>
-        <p class="scope-note" data-scope-note="packs" hidden>Packs are documents a host agent installs and reads. They are recorded for what they install, never scored, and never compared. A pack that runs its own code is reviewed as a system instead. <button data-open-tab="taxonomy">How packs are classified →</button></p>
-        <p class="scope-note" data-scope-note="robots" hidden>Robots are listed for what their makers document: the models they name or the way they let you run your own, the hardware, how to get one, and the terms. The Atlas does not test robots, so nothing here is scored or compared. <button data-open-tab="taxonomy">How robots are classified →</button></p>
-        <p class="scope-note" data-scope-note="models" hidden><span id="models-kicker" class="scope-note-facts">models.dev source catalog and Atlas reviews</span> Artifact licensing describes reviewed release artifacts and mandatory terms, not training code or training data openness. Imported source records have no Atlas score. Reviewed scores compare access and deployability only; they exclude output quality, benchmarks, parameter count, current price, latency, and throughput. <button data-open-tab="taxonomy">How scoring works →</button></p>
-        <p class="scope-note" data-scope-note="labs" hidden><span id="labs-kicker" class="scope-note-facts">The organizations behind the models</span> A lab is listed once the Atlas has reviewed a model release, a system, or a robot it made, or once it says on its own pages that it is building frontier models. Releases keeps a lab with at least one reviewed release distributed that way; each release keeps its own licence and score in Models. <button data-open-tab="taxonomy">How labs are classified →</button></p>
-        <p class="scope-note" data-scope-note="specifications" hidden><span id="specifications-kicker" class="scope-note-facts">Interoperability artifacts</span> Protocols, instruction conventions, and package formats, classified by what they connect, with no cross-purpose score.</p>
-        <div class="job-hint" id="job-hint" data-job-hint="all" hidden></div>
-        <section id="all-directory-grid" class="project-grid" aria-label="Reviewed systems, model releases, inference services, local runtimes, agent packs, robots, labs, and specifications"></section>
-        <nav id="all-directory-pager" class="pager" aria-label="All-directory pagination"></nav>
       </div>
     </section>
 
@@ -430,6 +426,13 @@
   <dialog id="comparison-dialog" class="comparison-dialog">
     <button class="dialog-close" aria-label="Close comparison">×</button>
     <div id="comparison-dialog-content"></div>
+  </dialog>
+
+  <dialog id="filter-sheet" class="filter-sheet" aria-labelledby="filter-sheet-title">
+    <h2 id="filter-sheet-title">Filters</h2>
+    <div class="filter-groups"></div>
+    <p id="filter-sheet-status" class="visually-hidden" role="status" aria-live="polite"></p>
+    <button id="filter-sheet-done" class="primary-button" type="button">Show results</button>
   </dialog>
 
   <footer><div class="footer-actions"><nav class="footer-nav" aria-label="Site map"><a href="./">Catalog</a><a href="?view=finder">Finder</a><a href="?view=explore">Explore</a><a href="?view=taxonomy">Concepts</a><a href="?view=api">Published data</a><a href="blog/">Blog</a></nav><a class="suggest-link" href="https://github.com/katagun/ai-systems-atlas/issues/new?template=system-suggestion.yml" target="_blank" rel="noreferrer">Suggest a system</a></div><span>Systems score within families. Reviewed models, inference services, and local runtimes each use a separate score; source imports and specifications are unscored.</span><span>Product marks identify their owners' products and imply no affiliation or endorsement.</span><span>Atlas-authored data is <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer">CC BY 4.0</a>; models.dev source metadata is MIT-attributed; site software is Apache-2.0.</span><span id="data-date"></span></footer>

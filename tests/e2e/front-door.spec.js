@@ -834,11 +834,16 @@ test("a list Compare label stays inside its button", async ({ page }) => {
   await expect(page.locator('[data-scope-note="systems"] [data-family-score="ready"]')).toBeVisible();
   await expect(page.locator('[data-scope-note="systems"] [data-family-score="needed"]')).toBeHidden();
   await page.evaluate(() => window.scrollTo({ top: 700, behavior: "instant" }));
-  const [barBottom, rowTop] = await page.evaluate(() => [
+  // Task 3's chips row pins under the bar, and the count's row under the
+  // chips (ruling R-T3-13), so both stay in view after the scroll.
+  const [barBottom, chipsTop, chipsBottom, rowTop] = await page.evaluate(() => [
     document.querySelector("#results-bar").getBoundingClientRect().bottom,
+    document.querySelector("#filter-chips").getBoundingClientRect().top,
+    document.querySelector("#filter-chips").getBoundingClientRect().bottom,
     document.querySelector(".result-row").getBoundingClientRect().top,
   ]);
-  expect(Math.abs(rowTop - barBottom), `count row ${rowTop}, bar bottom ${barBottom}`).toBeLessThan(1);
+  expect(Math.abs(chipsTop - barBottom), `chips row ${chipsTop}, bar bottom ${barBottom}`).toBeLessThan(1);
+  expect(Math.abs(rowTop - chipsBottom), `count row ${rowTop}, chips bottom ${chipsBottom}`).toBeLessThan(1);
   await expect(page.locator("#result-count")).toContainText("12 projects");
   await expect(page.locator("#filter-chips")).toContainText("Role: Research agent");
   const button = page.locator("#project-grid .compare-toggle").first();
