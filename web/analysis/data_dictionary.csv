@@ -1,0 +1,32 @@
+table,column,type,description
+records,collection,string,Published collection the row belongs to.
+records,record_id,string,Stable record id; the join key with every other table.
+records,record_kind,string,"reviewed for a human-reviewed record, imported_source for an unmatched models.dev source row."
+records,name,string,Record display name; empty for imported source rows without one.
+records,type_value,string,"The collection's classifying value: system_family, service_type, runtime_type, model_type, specification_type, pack_type, lab_type, or robot form_factor."
+records,status,string,Lifecycle status where the collection carries one; empty otherwise.
+records,source_id,string,models.dev source id for reviewed models that have one; empty otherwise.
+records,verified_at,string,Editorial review date; the review provenance of the row. Empty for imported source rows.
+model_distributions,record_id,string,Reviewed model id; joins records.
+model_distributions,distribution_mode,string,One distribution mode the release is reviewed as using.
+material_licenses,collection,string,Published collection the record belongs to.
+material_licenses,record_id,string,Record id; joins records.
+material_licenses,license_id,string,One reviewed material license identifier on the record.
+score_dimensions,collection,string,Published collection the record belongs to.
+score_dimensions,record_id,string,Scored record id; joins records.
+score_dimensions,score_profile,string,Score profile the dimensions belong to.
+score_dimensions,dimension,string,"Score dimension, including overall."
+score_dimensions,value,string,Dimension value as stored in the published record.
+evidence,collection,string,Published collection the record belongs to.
+evidence,record_id,string,Record id; joins records.
+evidence,license_id,string,License identifier the evidence item covers.
+evidence,scope,string,"Component, path, documentation, assets, or product terms covered."
+evidence,kind,string,git_blob or web_terms.
+evidence,url,string,Authoritative URL of the evidence.
+evidence,path,string,Repository path for git_blob evidence; empty otherwise.
+evidence,blob_sha,string,Git blob SHA for git_blob evidence; empty otherwise.
+evidence,verified_at,string,Evidence verification date where the item carries one; empty otherwise.
+data_dictionary,table,string,Export table the column belongs to.
+data_dictionary,column,string,Column name as it appears in the CSV header.
+data_dictionary,type,string,Value type.
+data_dictionary,description,string,"What the column carries, including the grain of its table."
