@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import contextlib
 import io
+import os
 import subprocess
 import tempfile
 import unittest
@@ -20,10 +21,31 @@ from scripts import routine_guards, run_hn_sweep
 
 QUEUE = run_hn_sweep.QUEUE
 
+# Pushing with `git -c remote.origin.pushurl=... push` exports
+# GIT_CONFIG_PARAMETERS into the pre-push hook, which would otherwise redirect
+# these throwaway clones' pushes at the caller's real remote. Every git call
+# here runs with the inherited config overrides stripped.
+_LEAKED_GIT_CONFIG_KEYS = ("GIT_CONFIG_PARAMETERS", "GIT_CONFIG_COUNT")
+_LEAKED_GIT_CONFIG_PREFIXES = ("GIT_CONFIG_KEY_", "GIT_CONFIG_VALUE_")
+
+
+def _scrubbed_git_env() -> dict[str, str]:
+    return {
+        key: value
+        for key, value in os.environ.items()
+        if key not in _LEAKED_GIT_CONFIG_KEYS
+        and not key.startswith(_LEAKED_GIT_CONFIG_PREFIXES)
+    }
+
 
 def git(cwd: Path, *args: str) -> str:
     finished = subprocess.run(
-        ["git", *args], cwd=cwd, capture_output=True, text=True, check=True
+        ["git", *args],
+        cwd=cwd,
+        capture_output=True,
+        text=True,
+        check=True,
+        env=_scrubbed_git_env(),
     )
     return finished.stdout.strip()
 
@@ -140,6 +162,27 @@ class SweepRunnerTests(unittest.TestCase):
     def test_extra_arguments_reach_the_sweep(self) -> None:
         self.run_sweep(sweep_args=["--lag-days", "3"])
         self.assertEqual(["--lag-days", "3"], self.sweep_args)
+
+    # --- caller-environment isolation ------------------------------------------------
+
+    def test_a_leaked_pushurl_from_the_caller_does_not_escape_the_sandbox(
+        self,
+    ) -> None:
+        """Pushing with `git -c remote.origin.pushurl=... push` exports
+        GIT_CONFIG_PARAMETERS into the pre-push hook. The temp clones must not
+        let it redirect their pushes at the caller's remote."""
+        leaked = os.environ.get("GIT_CONFIG_PARAMETERS")
+        os.environ["GIT_CONFIG_PARAMETERS"] = (
+            "'remote.origin.pushurl=https://example.invalid/push-target'"
+        )
+        try:
+            tip = self.advance_main("isolation-probe.txt")
+        finally:
+            if leaked is None:
+                del os.environ["GIT_CONFIG_PARAMETERS"]
+            else:
+                os.environ["GIT_CONFIG_PARAMETERS"] = leaked
+        self.assertEqual(tip, git(self.origin, "rev-parse", "main"))
 
     # --- refusals that touch nothing -------------------------------------------------
 
