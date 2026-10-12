@@ -2072,6 +2072,49 @@
     };
   }
 
+  // Exact distribution combinations: every reviewed release belongs to
+  // exactly one group, so the groups sum to the reviewed total — unlike the
+  // overlapping bars, where one release counts once per mode it carries.
+  // Groups cover every nonempty combination of the taxonomy modes, observed
+  // or not, so the table keeps its shape as data changes; releases with no
+  // recorded mode are reported separately as missing, never folded in.
+  function modelAccessCombinations(models, distributionModes) {
+    const reviewed = models.filter(model => model.review_status === "reviewed");
+    const order = new Map(distributionModes.map((mode, index) => [mode.id, index]));
+    const nameOf = id => distributionModes[order.get(id)].name;
+    const keyOf = model => [...new Set(model.distribution_modes || [])]
+      .filter(id => order.has(id))
+      .sort((a, b) => order.get(a) - order.get(b))
+      .join("+");
+    const membersOf = new Map();
+    for (const model of reviewed) {
+      const key = keyOf(model);
+      if (!membersOf.has(key)) membersOf.set(key, []);
+      membersOf.get(key).push(model);
+    }
+    const combos = [];
+    for (let mask = 1; mask < (1 << distributionModes.length); mask++) {
+      const ids = distributionModes.map(mode => mode.id).filter((_id, index) => mask & (1 << index));
+      const key = ids.join("+");
+      const members = (membersOf.get(key) || [])
+        .map(model => ({ id: model.id, name: model.name }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      combos.push({
+        key,
+        modes: ids,
+        label: ids.length === 1 ? `${nameOf(ids[0])} only` : ids.map(nameOf).join(" + "),
+        count: members.length,
+        members,
+      });
+    }
+    combos.sort((a, b) => b.count - a.count || (a.key < b.key ? -1 : 1));
+    return {
+      total: reviewed.length,
+      groups: combos,
+      missing: (membersOf.get("") || []).length,
+    };
+  }
+
   const FINDER_DIRECTIONS = [
     { id: "memory_system", label: "Preserve and use knowledge", description: "Notes, documents, recall, personal knowledge, or durable memory for agents.", cue: "I need a memory system" },
     { id: "agent_system", label: "Plan and take action", description: "Coding, research, data analysis, browser work, or a framework for building tool-using agents.", cue: "I need an agent system" },
@@ -2351,6 +2394,7 @@
     matchesProject,
     mergePackScopeEntries,
     modelAccessSummary,
+    modelAccessCombinations,
     moreFromLabSystems,
     predecessorSystems,
     relatedSystems,

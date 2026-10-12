@@ -56,6 +56,53 @@ test("distribution links, record dialogs, reload and Back preserve the explorati
   await expect(page.locator("#explore-title")).toBeVisible();
 });
 
+test("exact combinations sum to the reviewed population with one row per release", async ({ page }) => {
+  const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/?view=explore");
+  const note = await page.locator("#explore-data-note").textContent();
+  const total = Number(note.match(/(\d+) reviewed releases/)[1]);
+  const names = Object.fromEntries(taxonomy.model_distribution_modes.map(mode => [mode.name, mode.id]));
+  const rows = await page.locator(".access-combos-section tbody tr").evaluateAll(items => items.map(item => ({
+    label: item.querySelector("th").textContent,
+    count: Number(item.querySelector("strong").textContent),
+  })));
+  expect(rows.length).toBe(2 ** taxonomy.model_distribution_modes.length);
+  let sum = 0;
+  for (const { label, count } of rows) {
+    const modes = label === "No recorded distribution" ? null : label.endsWith(" only")
+      ? [names[label.replace(/ only$/, "")]]
+      : label.split(" + ").map(name => names[name]);
+    const expected = models.filter(model => {
+      const actual = [...new Set(model.distribution_modes || [])].sort();
+      return modes === null ? actual.length === 0 : actual.join("+") === [...modes].sort().join("+");
+    });
+    expect(count).toBe(expected.length);
+    sum += count;
+  }
+  expect(sum).toBe(total);
+  expect(errors).toEqual([]);
+});
+
+test("combination members disclose and open record dialogs with Back restoring Explore", async ({ page }) => {
+  await page.goto("/?view=explore");
+  const toggle = page.locator(".access-combos-section [data-combo-members]").first();
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await toggle.focus();
+  await page.keyboard.press("Enter");
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  const list = page.locator(".access-combos-section .access-combo-members").first();
+  await expect(list).toBeVisible();
+  const member = list.locator("button").first();
+  const name = await member.textContent();
+  await member.click();
+  await expect(recordView(page, "model")).toBeVisible();
+  await expect(recordHeading(page, "model")).toHaveText(name);
+  await page.goBack();
+  await expect(recordView(page, "model")).not.toBeVisible();
+  await expect(page.locator("#explore")).toBeVisible();
+});
+
 for (const theme of ["light", "dark"]) {
   test(`Explore fits desktop and phones in ${theme} without additional payloads`, async ({ page, baseURL }) => {
     const external = [];
@@ -68,7 +115,7 @@ for (const theme of ["light", "dark"]) {
     await page.goto("/?view=explore", { waitUntil: "networkidle" });
     for (const width of [1440, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });
-      await expect(page.locator(".access-matrix")).toBeVisible();
+      await expect(page.locator(".access-matrix")).toHaveCount(2);
       const main = await page.locator("main").boundingBox();
       const explore = await page.locator("#explore").boundingBox();
       expect(explore.x).toBe(main.x);

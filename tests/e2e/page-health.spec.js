@@ -54,7 +54,7 @@ test("no view overflows the page horizontally at 390px", async ({ page }) => {
   await openCollection(page, "models");
   // Narrow first: high-scoring new records sort above older ones.
   await search(page, "Qwen2.5-Coder-0.5B");
-  await page.locator('[data-model="model-alibaba-qwen2-5-coder-0-5b"]').click();
+  await page.locator('#model-grid [data-model="model-alibaba-qwen2-5-coder-0-5b"]').click();
   const modelDialogOverflow = await recordView(page, "model").evaluate(dialog => dialog.scrollWidth - dialog.clientWidth);
   expect(modelDialogOverflow).toBeLessThanOrEqual(0);
 });

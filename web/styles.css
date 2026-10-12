@@ -357,6 +357,9 @@ a.deployment-cell:hover { text-decoration: underline; outline: 1px solid var(--c
 .access-route-list a:hover .access-route-label { text-decoration: underline; text-underline-offset: .2em; }
 .access-scale { display: flex; justify-content: space-between; margin-top: .6rem; color: var(--muted); font: .7rem var(--font-mono); }
 .access-matrix-section { margin-top: 3rem; }
+.access-combos-section { margin-top: 3rem; }
+.access-combo-members { margin: .5rem 0 0; padding-left: 1.1rem; max-height: 16rem; overflow: auto; }
+.access-combo-members li { margin: 0 0 .3rem; }
 .access-matrix { width: 100%; border-collapse: collapse; table-layout: fixed; }
 .access-matrix caption { text-align: left; color: var(--muted); font-size: .85rem; padding-bottom: 1rem; }
 .access-matrix th, .access-matrix td { padding: .8rem .5rem; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; overflow-wrap: anywhere; }

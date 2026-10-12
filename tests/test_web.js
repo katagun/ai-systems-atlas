@@ -4,7 +4,7 @@ const { relative, sep } = require("node:path");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FILTER_GROUPS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, buildLabMembership, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionEmblem, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterGroupCounts, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, joinedLabs, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesFamilyAndRoles, matchesFilterGroups, matchesProject, mergePackScopeEntries, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FILTER_GROUPS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, buildLabMembership, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionEmblem, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterGroupCounts, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, joinedLabs, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesFamilyAndRoles, matchesFilterGroups, matchesProject, mergePackScopeEntries, modelAccessSummary, modelAccessCombinations, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -178,6 +178,48 @@ test("model access boot aggregates agree with the canonical reviewed catalog", (
       assert.equal(mode.count, expected.length);
       assert.deepEqual(filterModels(boot, { sourceModel: row.id, distribution: mode.id }).map(model => model.id).sort(), expected.map(model => model.id).sort());
     }
+  }
+});
+
+test("model access combinations are exact, exclusive, and sum to the reviewed total", () => {
+  const modes = [{ id: "weights", name: "Weights" }, { id: "api", name: "API" }];
+  const reviewed = { review_status: "reviewed" };
+  const combos = modelAccessCombinations([
+    { ...reviewed, id: "both", name: "Both", distribution_modes: ["api", "weights", "api"] },
+    { ...reviewed, id: "weights", name: "Weights", distribution_modes: ["weights"] },
+    { ...reviewed, id: "none", name: "None", distribution_modes: [] },
+    { ...reviewed, review_status: "imported", id: "imported", name: "Imported", distribution_modes: ["weights"] },
+  ], modes);
+  assert.equal(combos.total, 3);
+  assert.equal(combos.missing, 1);
+  assert.deepEqual(combos.groups.map(group => [group.key, group.count]), [["weights", 1], ["weights+api", 1], ["api", 0]]);
+  const both = combos.groups.find(group => group.key === "weights+api");
+  assert.equal(both.label, "Weights + API");
+  assert.deepEqual(both.members, [{ id: "both", name: "Both" }]);
+  const single = combos.groups.find(group => group.key === "weights");
+  assert.equal(single.label, "Weights only");
+  assert.equal(combos.groups.reduce((total, group) => total + group.count, 0) + combos.missing, combos.total);
+});
+
+test("model access combinations agree with the canonical reviewed catalog", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const boot = readWebJSON("app/models.json").models;
+  const canonical = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "directory", "models.json"), "utf8")).models;
+  const combos = modelAccessCombinations(boot, taxonomy.model_distribution_modes);
+  assert.equal(combos.total, canonical.length);
+  const seen = new Map();
+  for (const group of combos.groups) {
+    for (const member of group.members) {
+      assert.ok(!seen.has(member.id), member.id);
+      seen.set(member.id, group.key);
+    }
+  }
+  assert.equal(seen.size + combos.missing, canonical.length);
+  for (const model of canonical) {
+    const modes = [...new Set(model.distribution_modes || [])].sort();
+    if (!modes.length) continue;
+    const key = modes.slice().sort((a, b) => taxonomy.model_distribution_modes.findIndex(mode => mode.id === a) - taxonomy.model_distribution_modes.findIndex(mode => mode.id === b)).join("+");
+    assert.equal(seen.get(model.id), key, model.id);
   }
 });
 

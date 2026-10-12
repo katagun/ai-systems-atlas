@@ -2612,11 +2612,29 @@ function renderModelAccess() {
     return `<li>${mode.count ? `<a href="${escapeHTML(modelAccessURL(mode.id))}" aria-label="${escapeHTML(name)}">${contents}</a>` : `<div>${contents}</div>`}</li>`;
   }).join("");
   const rows = summary.rows.map(row => `<tr><th scope="row">${escapeHTML(row.name)}<small>${row.count} ${row.count === 1 ? "release" : "releases"}</small></th>${row.modes.map(mode => modelAccessCell(mode, row)).join("")}</tr>`).join("");
+  const combos = AppCore.modelAccessCombinations(state.models, state.taxonomy.model_distribution_modes);
+  const comboRows = combos.groups.map(group => {
+    const share = accessPercent(group.count, combos.total);
+    const members = group.members.map(member => `<li><button type="button" class="link-button" data-model="${escapeHTML(member.id)}">${escapeHTML(member.name)}</button></li>`).join("");
+    const disclosure = group.count
+      ? `<button type="button" class="link-button" aria-expanded="false" data-combo-members="${escapeHTML(group.key)}">Show ${group.count} ${group.count === 1 ? "release" : "releases"}</button><ul class="access-combo-members" hidden>${members}</ul>`
+      : "<span>None</span>";
+    return `<tr><th scope="row">${escapeHTML(group.label)}</th><td><strong>${group.count}</strong></td><td>${share}%</td><td>${disclosure}</td></tr>`;
+  }).join("");
+  const missingRow = `<tr><th scope="row">No recorded distribution</th><td><strong>${combos.missing}</strong></td><td>${accessPercent(combos.missing, combos.total)}%</td><td><span>Not classified</span></td></tr>`;
   $("#model-access-content").innerHTML = `
     <section class="access-routes" aria-labelledby="access-routes-title">
       <div class="explore-section-heading"><h2 id="access-routes-title">Three ways in</h2><p>A release can offer more than one route. Select a bar to browse its models.</p></div>
       <ul class="access-route-list">${bars}</ul>
       <div class="access-scale" aria-hidden="true"><span>0%</span><span>100% of reviewed releases</span></div>
+    </section>
+    <section class="access-combos-section" aria-labelledby="access-combos-title">
+      <div class="explore-section-heading"><h2 id="access-combos-title">Exact combinations</h2><p>Each reviewed release appears in exactly one row, so the rows sum to ${combos.total} reviewed releases. The bars above overlap instead.</p></div>
+      <table class="access-matrix">
+        <caption>Reviewed releases by exact distribution combination. Each release appears in exactly one row; rows sum to ${combos.total}.</caption>
+        <thead><tr><th scope="col">Combination</th><th scope="col">Releases</th><th scope="col">Share</th><th scope="col">Members</th></tr></thead>
+        <tbody>${comboRows}${missingRow}</tbody>
+      </table>
     </section>
     <section class="access-matrix-section" aria-labelledby="access-matrix-title">
       <div class="explore-section-heading"><h2 id="access-matrix-title">Access meets licensing</h2><p>Artifact licensing does not assess training code or training data openness. Downloadable weights alone do not establish open-source AI. Select a count to inspect the matching releases and their terms.</p></div>
@@ -2627,6 +2645,16 @@ function renderModelAccess() {
       </table>
     </section>
     ${summary.missingDistribution ? `<p class="notice">${summary.missingDistribution} reviewed releases have no recorded distribution mode; they remain in the denominators.</p>` : ""}`;
+  const content = $("#model-access-content");
+  content.querySelectorAll("[data-combo-members]").forEach(toggle => toggle.addEventListener("click", () => {
+    const list = toggle.nextElementSibling;
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!open));
+    list.hidden = open;
+    const total = list.querySelectorAll("li").length;
+    toggle.textContent = `${open ? "Show" : "Hide"} ${total} ${total === 1 ? "release" : "releases"}`;
+  }));
+  content.querySelectorAll('[data-model]').forEach(button => button.addEventListener("click", () => openModel(button.dataset.model)));
 }
 
 // One grid of installables: unscored packs beside scored host-installed
