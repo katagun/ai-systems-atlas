@@ -4,7 +4,7 @@ const { relative, sep } = require("node:path");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FILTER_GROUPS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, buildLabMembership, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionEmblem, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterGroupCounts, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, joinedLabs, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesFamilyAndRoles, matchesFilterGroups, matchesProject, mergePackScopeEntries, modelAccessSummary, modelAccessCombinations, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FILTER_GROUPS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, buildLabMembership, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionEmblem, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterGroupCounts, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, joinedLabs, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesFamilyAndRoles, matchesFilterGroups, matchesProject, mergePackScopeEntries, modelAccessCombinations, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, systemTraitCooccurrence, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -220,6 +220,69 @@ test("model access combinations agree with the canonical reviewed catalog", () =
     if (!modes.length) continue;
     const key = modes.slice().sort((a, b) => taxonomy.model_distribution_modes.findIndex(mode => mode.id === a) - taxonomy.model_distribution_modes.findIndex(mode => mode.id === b)).join("+");
     assert.equal(seen.get(model.id), key, model.id);
+  }
+});
+
+test("trait co-occurrence keeps provider rows exclusive and deployment columns overlapping", () => {
+  const taxonomy = {
+    system_families: [{ id: "agent_system", name: "Agent systems" }],
+    provider_relationships: [{ id: "provider_native", name: "Provider-native" }],
+    deployment_modes: [{ id: "self_hosted", name: "Self-hosted service" }, { id: "library", name: "Embedded library" }],
+  };
+  const active = { status: "active", system_family: "agent_system" };
+  const cooccur = systemTraitCooccurrence([
+    { ...active, id: "a", name: "A", local_first: true, deployment: ["self_hosted", "library"], provider_relationship: "provider_native" },
+    { ...active, id: "b", name: "B", local_first: false, deployment: ["library"] },
+    { ...active, id: "c", name: "C", deployment: ["self_hosted"], provider_relationship: "provider_native" },
+    { ...active, id: "archived", name: "Old", status: "archived", local_first: true, deployment: ["library"] },
+  ], taxonomy);
+  assert.equal(cooccur.total, 3);
+  assert.equal(cooccur.excluded, 1);
+  const [family] = cooccur.families;
+  assert.equal(family.count, 3);
+  assert.deepEqual(family.providers.map(group => [group.id, group.count]), [["provider_native", 2], ["", 1]]);
+  const localYes = family.localDeployment.find(row => row.id === "1");
+  assert.deepEqual(localYes.cells.map(cell => cell.count), [1, 1]);
+  const native = family.providerLocal.find(row => row.id === "provider_native");
+  assert.deepEqual(native.cells.map(cell => cell.count), [1, 0, 1]);
+  assert.deepEqual(native.cells[0].members, [{ id: "a", name: "A" }]);
+  const unrecorded = family.providerDeployment.find(row => row.id === "");
+  assert.deepEqual(unrecorded.cells.map(cell => cell.count), [0, 1]);
+  assert.deepEqual(family.providers.reduce((total, group) => total + group.count, 0), family.count);
+});
+
+test("trait co-occurrence agrees with the canonical active catalog", () => {
+  const taxonomy = readWebJSON("taxonomy.json");
+  const boot = readWebJSON("app/systems.json").systems;
+  const canonical = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "directory", "projects.json"), "utf8")).projects;
+  const active = canonical.filter(project => project.status === "active");
+  const cooccur = systemTraitCooccurrence(boot, taxonomy);
+  assert.equal(cooccur.total, active.length);
+  assert.equal(cooccur.families.reduce((total, family) => total + family.count, 0), active.length);
+  for (const family of cooccur.families) {
+    const records = active.filter(project => project.system_family === family.id);
+    assert.equal(family.providers.reduce((total, group) => total + group.count, 0), records.length);
+    const known = new Set(taxonomy.provider_relationships.map(item => item.id));
+    for (const group of family.providerLocal) {
+      const expected = records.filter(project => (known.has(project.provider_relationship) ? project.provider_relationship : "") === group.id);
+      for (const state of ["1", "0", "unknown"]) {
+        const cell = group.cells[["1", "0", "unknown"].indexOf(state)];
+        const matches = expected.filter(project => {
+          if (state === "1") return project.local_first === true;
+          if (state === "0") return project.local_first === false;
+          return typeof project.local_first !== "boolean";
+        });
+        assert.equal(cell.count, matches.length, `${family.id}/${group.id}/${state}`);
+        assert.deepEqual(cell.members.map(member => member.id).sort(), matches.map(project => project.id).sort());
+      }
+    }
+    for (const row of family.localDeployment) {
+      for (const [index, mode] of taxonomy.deployment_modes.map(mode => mode.id).entries()) {
+        const matches = records.filter(project => (project.local_first === true ? "1" : project.local_first === false ? "0" : "unknown") === row.id
+          && (project.deployment || []).includes(mode));
+        assert.equal(row.cells[index].count, matches.length, `${family.id}/${row.id}/${mode}`);
+      }
+    }
   }
 });
 

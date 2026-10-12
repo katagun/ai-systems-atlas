@@ -237,6 +237,62 @@
     };
   }
 
+  // Trait co-occurrence within system families: local-first, deployment, and
+  // provider relationships, pairwise. Provider states are exclusive — a
+  // record carries at most one reviewed relationship, and records without
+  // one stay visible as Not recorded rather than being inferred into a
+  // group. Local-first states are exclusive. Deployment modes overlap: one
+  // record counts once per mode it carries, as in the deployment heatmap.
+  // Every percentage below divides by the family's active total.
+  function systemTraitCooccurrence(projects, taxonomy) {
+    const active = projects.filter(project => project.status === "active");
+    const knownProviders = new Set(taxonomy.provider_relationships.map(item => item.id));
+    const providerStates = [...taxonomy.provider_relationships, { id: "", name: "Not recorded" }];
+    const localStates = [{ id: "1", name: "Yes" }, { id: "0", name: "No" }, { id: "unknown", name: "Not recorded" }];
+    const memberOf = project => ({ id: project.id, name: project.name });
+    const providerOf = project => (knownProviders.has(project.provider_relationship) ? project.provider_relationship : "");
+    const cell = records => ({
+      count: records.length,
+      members: records.map(memberOf).sort((a, b) => a.name.localeCompare(b.name)),
+    });
+    const families = taxonomy.system_families.map(family => {
+      const records = active.filter(project => project.system_family === family.id);
+      const byProvider = providerStates.map(state => ({
+        ...state, records: records.filter(project => providerOf(project) === state.id),
+      })).filter(group => group.records.length);
+      const byLocal = localStates.map(state => ({
+        ...state, records: records.filter(project => matchesLocalFirst(project, state.id)),
+      })).filter(group => group.records.length);
+      const localDeployment = byLocal.map(row => ({
+        ...row,
+        cells: taxonomy.deployment_modes.map(mode => cell(row.records.filter(project => traitList(project, "deployment").includes(mode.id)))),
+      }));
+      const providerLocal = byProvider.map(row => ({
+        ...row,
+        cells: localStates.map(state => cell(row.records.filter(project => matchesLocalFirst(project, state.id)))),
+      }));
+      const providerDeployment = byProvider.map(row => ({
+        ...row,
+        cells: taxonomy.deployment_modes.map(mode => cell(row.records.filter(project => traitList(project, "deployment").includes(mode.id)))),
+      }));
+      return {
+        ...family,
+        count: records.length,
+        providers: byProvider.map(group => ({ id: group.id, name: group.name, count: group.records.length })),
+        localDeployment,
+        providerLocal,
+        providerDeployment,
+      };
+    }).filter(family => family.count);
+    return {
+      total: active.length,
+      excluded: projects.length - active.length,
+      deployments: taxonomy.deployment_modes,
+      localStates,
+      families,
+    };
+  }
+
   // The rail's filter groups per collection, in rail order (Phase 3 spec,
   // section 3). Each reads one URL key; `values(record, ctx)` lists what a
   // record carries for it, and a record matches a chosen value when that
@@ -2399,6 +2455,7 @@
     predecessorSystems,
     relatedSystems,
     systemDeploymentSummary,
+    systemTraitCooccurrence,
     systemElements,
     modelMetadataAttribution,
     modelSourceLabel,
