@@ -352,7 +352,9 @@
           "immutable_url": "https://api.github.com/repos/gatewai-dev/gitframes/git/blobs/d8fe78a8f62dec25b1ff0cacef7d225eda428e39"
         }
       ],
-      "verified_at": "2026-10-12"
+      "verified_at": "2026-10-12",
+      "stars": 390,
+      "stars_verified_at": "2026-10-12"
     },
     {
       "id": "second-brain-llm-wiki",
