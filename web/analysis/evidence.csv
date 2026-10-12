@@ -445,6 +445,7 @@ packs,agentic-project-management,MPL-2.0,"Whole repository from version 0.4.0 on
 packs,ai-berkshire,MIT,Entire repository under the MIT licence (LICENSE),git_blob,https://github.com/xbtlin/ai-berkshire/blob/main/LICENSE,LICENSE,99190759ce42f15f7ab6ede217e4b88f4924e67e,
 packs,buildwithclaude,MIT,Repository-wide license file,git_blob,https://github.com/davepoon/buildwithclaude/blob/main/LICENSE,LICENSE,715e02c14fb418382ca11675ee0a1bd3f9b950b9,
 packs,claude-code-tresor,MIT,Repository-wide license file,git_blob,https://github.com/alirezarezvani/claude-code-tresor/blob/main/LICENSE,LICENSE,36fe4ffb06270d5e201481240cf0173dff01a194,
+packs,framefields,Apache-2.0,"Repository LICENCE file, duplicated unchanged inside the plugin directory",git_blob,https://github.com/gatewai-dev/gitframes/blob/main/LICENCE,LICENCE,c77b4278fce034c8294372e49569fdfe3e6d9e5e,
 packs,second-brain-llm-wiki,LicenseRef-Unclear,"Repository README, which states no licence; no licence file at any usual path",web_terms,https://github.com/NicholasSpisak/second-brain,,,2026-09-17
 packs,second-brain-starter,LicenseRef-Unclear,"Repository README, which states no licence; no licence file at any usual path",web_terms,https://github.com/coleam00/second-brain-starter,,,2026-09-16
 packs,typesafe-agent-skills,MIT,"Repository-wide license file, duplicated unchanged inside the skill directory",git_blob,https://github.com/typesafe-ai/skills/blob/main/LICENSE,LICENSE,8c73b41b89d9a76ddf0fdb0edfaafdda800d36e8,

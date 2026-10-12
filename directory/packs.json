@@ -280,6 +280,83 @@
       "stars_verified_at": "2026-10-07"
     },
     {
+      "id": "framefields",
+      "name": "Framefields",
+      "steward": "Gatewai (gatewai-dev)",
+      "repo": "gatewai-dev/gitframes",
+      "url": "https://github.com/gatewai-dev/gitframes",
+      "description": "Four Agent Skills documents that teach a coding agent to author, render, and verify video compositions with the framefields WebGPU SDK in the user's own project, shipped with Claude Code marketplace and plugin manifests. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "pack_type": "skills_bundle",
+      "hosts": [
+        "claude_code",
+        "codex",
+        "cursor",
+        "gemini_cli",
+        "github_copilot"
+      ],
+      "packaging_formats": [
+        "agent-skills",
+        "claude-code-plugins"
+      ],
+      "install_mechanism": "skills_cli",
+      "installs": "Four skill directories under plugins/framefields/skills/, each holding one SKILL.md: framefields (setup and first render), framefields-compose, framefields-effects (with an effects-catalog reference), and framefields-render. Two manifests wrap them for Claude Code: the root .claude-plugin/marketplace.json names one plugin, framefields, sourced at ./plugins/framefields, and plugins/framefields/.claude-plugin/plugin.json versions it 2.0.11 and also carries an OpenAI extensions block. The README installs with /plugin install framefields for Claude Code and, while plugin review is slow, directs every other agent to npx skills add gatewai-dev/framefields, naming Codex, Cursor, Hermes, Gemini CLI, and Copilot; Hermes has no host value in the taxonomy so it is not recorded. The installed tree holds no program: no hooks, servers, scripts, or state.",
+      "distribution_machinery": "None. The installed tree holds four SKILL.md documents, one reference file, two JSON manifests, and two copies of one licence file; there is no install script, hook, server, or other program.",
+      "not_a_system": "Owns no state it reads back and does no enforced work: everything the skills cause — scaffolding, composing, rendering, QA — is done by the host agent and the SDK in the user's own project following documents, and the five-step verification ladder is advisory process, not a blocking gate. The framefields npm SDK and WebGPU renderer the documents drive are product code outside the installed pack, not pack-owned state.",
+      "status": "active",
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "license_note": "Repository LICENCE file, duplicated byte-identical inside the plugin directory; head, tail, and a scan for revenue, attribution-gate, and separate-agreement terms show the unmodified Apache-2.0 text with no addenda.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository LICENCE file, duplicated unchanged inside the plugin directory",
+          "kind": "git_blob",
+          "path": "LICENCE",
+          "url": "https://github.com/gatewai-dev/gitframes/blob/main/LICENCE",
+          "blob_sha": "c77b4278fce034c8294372e49569fdfe3e6d9e5e",
+          "immutable_url": "https://api.github.com/repos/gatewai-dev/gitframes/git/blobs/c77b4278fce034c8294372e49569fdfe3e6d9e5e"
+        }
+      ],
+      "evidence": [
+        {
+          "kind": "git_blob",
+          "label": "Skill document",
+          "path": "plugins/framefields/skills/framefields/SKILL.md",
+          "url": "https://github.com/gatewai-dev/gitframes/blob/main/plugins/framefields/skills/framefields/SKILL.md",
+          "blob_sha": "4ed5169173ec497d742f1b49cfc2db222b3835f4",
+          "immutable_url": "https://api.github.com/repos/gatewai-dev/gitframes/git/blobs/4ed5169173ec497d742f1b49cfc2db222b3835f4"
+        },
+        {
+          "kind": "git_blob",
+          "label": "Plugin manifest",
+          "path": "plugins/framefields/plugin.json",
+          "url": "https://github.com/gatewai-dev/gitframes/blob/main/plugins/framefields/plugin.json",
+          "blob_sha": "391450727313101998121074504886cca6a7f7e0",
+          "immutable_url": "https://api.github.com/repos/gatewai-dev/gitframes/git/blobs/391450727313101998121074504886cca6a7f7e0"
+        },
+        {
+          "kind": "git_blob",
+          "label": "Marketplace manifest",
+          "path": ".claude-plugin/marketplace.json",
+          "url": "https://github.com/gatewai-dev/gitframes/blob/main/.claude-plugin/marketplace.json",
+          "blob_sha": "0e6901b19ec70e3df7f230c0536d16f3810d5d71",
+          "immutable_url": "https://api.github.com/repos/gatewai-dev/gitframes/git/blobs/0e6901b19ec70e3df7f230c0536d16f3810d5d71"
+        },
+        {
+          "kind": "git_blob",
+          "label": "README install documentation",
+          "path": "README.md",
+          "url": "https://github.com/gatewai-dev/gitframes/blob/main/README.md",
+          "blob_sha": "d8fe78a8f62dec25b1ff0cacef7d225eda428e39",
+          "immutable_url": "https://api.github.com/repos/gatewai-dev/gitframes/git/blobs/d8fe78a8f62dec25b1ff0cacef7d225eda428e39"
+        }
+      ],
+      "verified_at": "2026-10-12",
+      "stars": 390,
+      "stars_verified_at": "2026-10-12"
+    },
+    {
       "id": "second-brain-llm-wiki",
       "name": "Second Brain LLM Wiki",
       "steward": "Nicholas Spisak (NicholasSpisak)",
