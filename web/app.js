@@ -2576,7 +2576,63 @@ function renderSystemDeployment(dates) {
     + `<p class="runtime-scroll-hint">Scroll horizontally for every deployment mode. ${summary.missingDeployment} active systems have no recorded deployment mode.</p>
     <div class="explore-section-heading access-matrix-section"><h3>Is local-first tied to licensing?</h3><p>Each system belongs to exactly one local-first column. Percentages use the license classification’s total.</p></div>`
     + systemAnalysisTable("local-license-table", "Local-first by license classification. Counts and percentages of each row; Yes, No, and Not recorded sum to the row total.",
-      "License classification", summary.licensing, summary.localStates, "localOnly", "sourceModel");
+      "License classification", summary.licensing, summary.localStates, "localOnly", "sourceModel")
+    + renderTraitCooccurrence();
+  const deployment = $("#system-deployment-content");
+  deployment.querySelectorAll("[data-cooccur-members]").forEach(toggle => toggle.addEventListener("click", () => {
+    const list = toggle.nextElementSibling;
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    toggle.setAttribute("aria-expanded", String(!open));
+    list.hidden = open;
+    const total = list.querySelectorAll("li").length;
+    toggle.textContent = `${open ? "Show" : "Hide"} ${total} ${total === 1 ? "system" : "systems"}`;
+  }));
+  deployment.querySelectorAll("[data-project]").forEach(button => button.addEventListener("click", () => openProject(button.dataset.project)));
+}
+
+// Trait co-occurrence within each system family: local-first by deployment
+// links to the exact filtered Systems list, while provider cells disclose
+// their member systems in place — provider relationships have no catalog
+// facet, so no filter link could name exactly the cell's records.
+function renderTraitCooccurrence() {
+  const cooccur = AppCore.systemTraitCooccurrence(state.projects, state.taxonomy);
+  const linkedCell = (count, total, params, name) => {
+    const share = accessPercent(count, total);
+    const contents = `<strong>${count}</strong><span>${share}%</span>`;
+    const style = `--access-share: ${share}%`;
+    if (!count) return `<td><span class="deployment-cell" style="${style}">${contents}</span></td>`;
+    return `<td><a class="deployment-cell" style="${style}" href="?${escapeHTML(params.toString())}" aria-label="${escapeHTML(name)}">${contents}</a></td>`;
+  };
+  const memberCell = (cell, total) => {
+    const share = accessPercent(cell.count, total);
+    const contents = `<strong>${cell.count}</strong><span>${share}%</span>`;
+    const style = `--access-share: ${share}%`;
+    if (!cell.count) return `<td><span class="deployment-cell" style="${style}">${contents}</span></td>`;
+    const members = cell.members.map(member => `<li><button type="button" class="link-button" data-project="${escapeHTML(member.id)}">${escapeHTML(member.name)}</button></li>`).join("");
+    return `<td><span class="deployment-cell" style="${style}">${contents}<br><button type="button" class="link-button" aria-expanded="false" data-cooccur-members>Show ${cell.count} ${cell.count === 1 ? "system" : "systems"}</button><ul class="access-combo-members" hidden>${members}</ul></span></td>`;
+  };
+  const table = (id, caption, heading, rows, columns) => `<div class="deployment-scroll" role="region" aria-label="${escapeHTML(heading)} table, scroll horizontally for more columns" tabindex="0">
+    <table id="${id}" class="deployment-table"><caption>${escapeHTML(caption)}</caption>
+    <thead><tr><th scope="col">${escapeHTML(heading)}</th>${columns.map(column => `<th scope="col">${escapeHTML(column.name)}</th>`).join("")}</tr></thead>
+    <tbody>${rows}</tbody></table></div>`;
+  const sections = cooccur.families.map(family => {
+    const params = values => new URLSearchParams({ collection: "systems", family: family.id, sort: "name", ...values });
+    const ldRows = family.localDeployment.map(row => `<tr><th scope="row">${escapeHTML(row.name)}<small>${row.records.length} active systems</small></th>${row.cells.map((cell, index) => {
+      const mode = cooccur.deployments[index];
+      return linkedCell(cell.count, family.count, params({ localOnly: row.id, deployment: mode.id }),
+        `${family.name}, local-first ${row.name}, ${mode.name}: ${cell.count} of ${family.count} active systems. Browse systems`);
+    }).join("")}</tr>`).join("");
+    const plRows = family.providerLocal.map(row => `<tr><th scope="row">${escapeHTML(row.name)}<small>${row.records.length} active systems</small></th>${row.cells.map(cell => memberCell(cell, family.count)).join("")}</tr>`).join("");
+    const pdRows = family.providerDeployment.map(row => `<tr><th scope="row">${escapeHTML(row.name)}<small>${row.records.length} active systems</small></th>${row.cells.map(cell => memberCell(cell, family.count)).join("")}</tr>`).join("");
+    return `<h4>${escapeHTML(family.name)}: trait co-occurrence</h4>`
+      + table(`cooccur-local-deployment-${family.id}`, `Local-first by deployment for ${family.name}. Counts and percentages of the family's ${family.count} active systems; deployment columns overlap.`,
+        "Local-first", ldRows, cooccur.deployments)
+      + table(`cooccur-provider-local-${family.id}`, `Provider relationship by local-first for ${family.name}. Counts and percentages of the family's ${family.count} active systems; each system appears in exactly one row.`,
+        "Provider relationship", plRows, cooccur.localStates)
+      + table(`cooccur-provider-deployment-${family.id}`, `Provider relationship by deployment for ${family.name}. Counts and percentages of the family's ${family.count} active systems; deployment columns overlap. Systems without a reviewed relationship stay in Not recorded and are never inferred into a group.`,
+        "Provider relationship", pdRows, cooccur.deployments);
+  }).join("");
+  return `<div class="explore-section-heading access-matrix-section"><h3>How traits combine within families</h3><p>Counts and percentages of each family's active systems, with unknown coverage beside every percentage. Local-first and provider rows are exclusive; deployment columns overlap. Local-first and deployment counts link to the exact Systems list; provider members disclose in place and open record dialogs.</p></div>${sections}`;
 }
 
 function modelAccessURL(distribution, sourceModel = "") {

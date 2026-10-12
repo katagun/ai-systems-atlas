@@ -50,6 +50,8 @@ BOOT_FIELDS = {
         "license_review_status",
         "description",
         "agent_relation",
+        # Trait co-occurrence in Explore groups by reviewed provider relationship.
+        "provider_relationship",
         "architectures",
         "repo",
         "url",
