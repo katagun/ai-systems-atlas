@@ -7,7 +7,7 @@ This is the ordered source of truth for actionable repository work. Policy and f
 Keep this section to five independently verifiable outcomes that can start without an unresolved product or taxonomy decision.
 
 - [x] Review the `gatewai-dev/gitframes` HN signal. Done 2026-10-12: published as the `framefields` skills-bundle pack (first automation-authored record under [ADR 055](docs/adr/055-automation-authors-reviewed-records-with-disclosure.md), with disclosure in the record) after the tree showed no owned state or enforced work — four skill documents, two manifests, no hooks, servers, scripts, or state.
-- [ ] Review the `ghuntley/jiti` HN signal. Acceptance: queued by hand, excluded with a reason, or held on a named condition — agent outcome owned versus conversational development environment settled.
+- [x] Review the `ghuntley/jiti` HN signal. Done 2026-10-12: published as the `jiti` coding-agent system (agent score 6.75, second automation-authored record under [ADR 055](docs/adr/055-automation-authors-reviewed-records-with-disclosure.md), with disclosure in the record) — model-driven develop/execute/preview/repair loop over managed Lisp state with goals, safety invariants, checkpoints, and rollback settled the agent question; single MIT LICENSE file.
 
 ## Next
 

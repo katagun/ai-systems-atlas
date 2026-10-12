@@ -4258,6 +4258,15 @@ systems,jan,assistant,overall,7.66
 systems,jan,assistant,task_reliability,7.2
 systems,jan,assistant,tools_integrations,8.0
 systems,jan,assistant,usability_access,8.2
+systems,jiti,agent,autonomy,6.0
+systems,jiti,agent,data_sovereignty,6.4
+systems,jiti,agent,human_control,7.8
+systems,jiti,agent,interoperability,5.8
+systems,jiti,agent,maturity,5.0
+systems,jiti,agent,observability_recovery,7.6
+systems,jiti,agent,overall,6.75
+systems,jiti,agent,task_reliability,7.0
+systems,jiti,agent,tool_use,7.2
 systems,joplin,memory,data_sovereignty,9.5
 systems,joplin,memory,interoperability,8
 systems,joplin,memory,maturity,9.5

@@ -4710,6 +4710,21 @@
           "url": "https://github.com/Future-House/paper-qa/blob/57e89f7223b0/packages/paper-qa-pymupdf/LICENSE"
         }
       ]
+    },
+    {
+      "project_id": "jiti",
+      "repo": "ghuntley/jiti",
+      "items": [
+        {
+          "blob_sha": "e32b71a180ca4a9eeb56e0d2b0cbb10cea75cf36",
+          "immutable_url": "https://api.github.com/repos/ghuntley/jiti/git/blobs/e32b71a180ca4a9eeb56e0d2b0cbb10cea75cf36",
+          "kind": "git_blob",
+          "license_id": "MIT",
+          "path": "LICENSE",
+          "scope": "Whole repository: the single LICENSE file, MIT (c) 2026 Geoffrey Huntley; no NOTICE file and no component-level license scopes.",
+          "url": "https://github.com/ghuntley/jiti/blob/70146a2/LICENSE"
+        }
+      ]
     }
   ],
   "generated_at": "2026-10-10"
