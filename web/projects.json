@@ -25212,6 +25212,85 @@
         "The hosted Edison Scientific and FutureHouse literature agents are separate products outside this record, which covers only the self-hosted library and CLI"
       ],
       "why_it_matters": "High-accuracy cited question-answering over the scientific literature with a persistent local corpus index and an agentic evidence loop."
+    },
+    {
+      "id": "jiti",
+      "name": "Jiti",
+      "repo": "ghuntley/jiti",
+      "url": "https://github.com/ghuntley/jiti",
+      "description": "Conversational CLI that grows a running Common Lisp application by talking to it: a model-driven tool loop develops, executes, previews, and repairs live definitions against managed state with checkpoints, revision history, and rollback. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "system_family": "agent_system",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "persistent_state"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "deployment": [
+        "local_cli"
+      ],
+      "architectures": [
+        "plain_files"
+      ],
+      "canonical_data": "a Lisp workspace per directory holding accepted definitions, managed state, revision history, and checkpoints, recoverable on reopen",
+      "memory_lifecycle": [
+        "versioned",
+        "append_only"
+      ],
+      "retrieval_modes": [
+        "agentic"
+      ],
+      "capture_modes": [
+        "conversation"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "source_model": "open_source",
+      "licenses": [
+        "MIT"
+      ],
+      "github_detected_license": "MIT",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 63,
+      "stars_verified_at": "2026-10-12",
+      "historical_stars": null,
+      "research_confidence": "medium",
+      "provenance": "moderate",
+      "score_profile": "agent",
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 7.2,
+        "autonomy": 6.0,
+        "human_control": 7.8,
+        "observability_recovery": 7.6,
+        "data_sovereignty": 6.4,
+        "interoperability": 5.8,
+        "maturity": 5.0,
+        "overall": 6.75
+      },
+      "strengths": [
+        "The model works through a real tool loop — develop, execute, preview, rollback, restart resumption — with each call validated and routed before the next model request sees the actual outcome",
+        "Every attempt takes a checkpoint first, and caller-supplied goals plus safety invariants accept or reject managed state, so unmet goals keep safe progress while failed checks restore",
+        "Revision IDs, history-preserving rollback, evidence-packaging scripts, and architecture diagrams make runs inspectable and recoverable",
+        "Accepted definitions persist per workspace and survive fresh processes, and manual Lisp works with no model credentials at all"
+      ],
+      "weaknesses": [
+        "Chat quality inherits the connected model, and the credential story is bring-your-own OpenAI key or local Underclass configuration",
+        "Single maintainer, 63 stars, and days-old pushes: young, thinly adopted, and likely to churn under review",
+        "Running it means Nix plus devenv with SBCL and a GPU-less CPU path unaddressed, which narrows who can adopt it",
+        "The reference world adapter covers direct defuns and a state table; richer application resources need adapter hooks the reader writes"
+      ],
+      "why_it_matters": "A terminal-native coding agent for live Common Lisp images: model-driven development with executable acceptance checks and checkpointed rollback instead of blind code generation.",
+      "current_repo_note": "Reviewed at HEAD 70146a2 (2026-10-12); the single LICENSE file is the canonical MIT text. README claims verified against the tree: controller tool loop, checkpoint engine, Lisp and Python test suites, and fourteen design ADRs.",
+      "verified_at": "2026-10-12"
     }
   ],
   "verified_at": "2026-09-28"

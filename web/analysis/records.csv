@@ -627,6 +627,7 @@ packs,agentic-project-management,reviewed,Agentic Project Management,process_kit
 packs,ai-berkshire,reviewed,AI Berkshire,skills_bundle,active,,2026-09-25
 packs,buildwithclaude,reviewed,Build with Claude,marketplace,active,,2026-09-16
 packs,claude-code-tresor,reviewed,claude-code-tresor,process_kit,active,,2026-09-16
+packs,framefields,reviewed,Framefields,skills_bundle,active,,2026-10-12
 packs,second-brain-llm-wiki,reviewed,Second Brain LLM Wiki,skills_bundle,active,,2026-09-17
 packs,second-brain-starter,reviewed,Second Brain Starter,vault_bundle,active,,2026-09-16
 packs,typesafe-agent-skills,reviewed,TypeSafe Agent Skills,skills_bundle,active,,2026-09-20
@@ -798,6 +799,7 @@ systems,hindsight,reviewed,Hindsight,memory_system,active,,2026-09-02
 systems,holaos,reviewed,holaOS,agent_system,active,,2026-10-06
 systems,hyperresearch,reviewed,Hyperresearch,agent_system,active,,2026-09-18
 systems,jan,reviewed,Jan,assistant_system,active,,2026-09-02
+systems,jiti,reviewed,Jiti,agent_system,active,,2026-10-12
 systems,joplin,reviewed,Joplin,memory_system,active,,2026-08-23
 systems,kaibanjs,reviewed,KaibanJS,agent_system,active,,2026-10-06
 systems,khoj,reviewed,Khoj,memory_system,active,,2026-09-13
