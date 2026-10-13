@@ -19083,7 +19083,7 @@
       "developer": "Meta",
       "url": "https://huggingface.co/meta-llama/Llama-Guard-3-8B",
       "description": "A gated downloadable 8B safety classifier fine-tuned from Llama 3.1 8B that emits safe/unsafe verdicts as generated text, governed by the Llama 3.1 Community License.",
-      "model_type": "language_model",
+      "model_type": "judgment_model",
       "distribution_modes": [
         "downloadable_weights"
       ],
@@ -19202,7 +19202,7 @@
       "developer": "Meta",
       "url": "https://huggingface.co/meta-llama/Llama-Guard-4-12B",
       "description": "A gated downloadable 12B natively multimodal safety classifier pruned from Llama 4 Scout that emits safe/unsafe verdicts as generated text, governed by the Llama 4 Community License.",
-      "model_type": "multimodal_language_model",
+      "model_type": "judgment_model",
       "distribution_modes": [
         "downloadable_weights"
       ],
@@ -25267,7 +25267,7 @@
       "developer": "NVIDIA",
       "url": "https://huggingface.co/nvidia/Llama-3.1-Nemotron-Safety-Guard-8B-v3",
       "description": "An ungated 8B content-safety guard model over the Llama 3.1 8B base that emits safe/unsafe verdicts as generated text, governed by the NVIDIA Open Model License.",
-      "model_type": "language_model",
+      "model_type": "judgment_model",
       "distribution_modes": [
         "downloadable_weights",
         "developer_api"
@@ -37097,7 +37097,7 @@
       "developer": "TypeSafe AI",
       "url": "https://docs.typesafe.ai/models",
       "description": "A closed text-input model served through TypeSafe's own API under the pinned ID jev-1.13.0 and listed on Vercel AI Gateway; it answers typed questions about supplied text with a selected option, a score, or a yes-probability instead of free-form prose, and no weights are published. The Atlas's own Hacker News signals routine calls this model, so this review rests on published documentation and terms only.",
-      "model_type": "language_model",
+      "model_type": "judgment_model",
       "distribution_modes": [
         "developer_api",
         "third_party_hosting"

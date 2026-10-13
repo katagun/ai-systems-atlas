@@ -268,6 +268,21 @@
       "id": "audio_generation_model",
       "name": "Audio generation model",
       "definition": "A model whose documented primary output is audio."
+    },
+    {
+      "id": "embedding_model",
+      "name": "Embedding model",
+      "definition": "A model whose documented primary output is dense vector representations."
+    },
+    {
+      "id": "rerank_model",
+      "name": "Rerank model",
+      "definition": "A model whose documented primary output is relevance scores or rankings expressed as text."
+    },
+    {
+      "id": "judgment_model",
+      "name": "Judgment model",
+      "definition": "A model whose documented primary output is safety, quality, or decision labels expressed as text."
     }
   ],
   "model_modalities": [
@@ -295,6 +310,11 @@
       "id": "pdf",
       "name": "PDF",
       "definition": "PDF document input handled as a documented model modality."
+    },
+    {
+      "id": "embedding",
+      "name": "Embedding",
+      "definition": "Dense vector output produced by an embedding model."
     }
   ],
   "model_distribution_modes": [
