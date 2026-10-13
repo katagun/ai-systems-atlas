@@ -4,7 +4,7 @@ const { relative, sep } = require("node:path");
 const fs = require("node:fs");
 const path = require("node:path");
 const assert = require("node:assert/strict");
-const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FILTER_GROUPS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, buildLabMembership, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionEmblem, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterGroupCounts, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, joinedLabs, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesFamilyAndRoles, matchesFilterGroups, matchesProject, mergePackScopeEntries, modelAccessCombinations, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, systemTraitCooccurrence, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
+const { MAX_CARD_BADGES, modelLicenseCategories, BADGE_FAMILIES, CARD_BADGES, CARD_BADGE_SETS, COLLECTIONS, FILTER_GROUPS, FINDER_DETAIL_KINDS, FINDER_DIRECTIONS, FINDER_DIRECTION_NAMES, FINDER_GOALS, FINDER_PRIORITIES, FLAG_FAMILY, INACTIVE_STATUSES, REVIEWED_FLAGS, SCOPE_URL_KEYS, SCOPE_URL_PARAMS, SEARCH_SYNONYMS, UNLISTED_MODEL_LABEL, badgeEmblem, badgeLegend, buildLabIndex, buildLabMembership, cardBadgeGlossary, cardBadges, cardFlags, collectionCategories, collectionCount, collectionEmblem, collectionHidden, collectionMatchCounts, collectionState, cycleThemePreference, datasetAttribute, directoryDefaults, directoryStageFromURL, editDistance, elementLabs, familyEmblem, familyMatchCounts, filterAndSortProjects, filterDirectoryEntries, filterGroupCounts, filterInferenceServices, filterLabs, filterLocalRuntimes, filterModels, filterPacks, filterRobots, filterScoredCollection, filterSpecifications, finderDirectionTotal, finderGoalEntries, finderGoalRecords, flagEmblemText, holdsPhrase, joinedLabs, labDeveloperSummary, labDistributionModes, labRelations, labsForRecord, markMonogramName, markRecordId, matchFinderGoal, matchesFamilyAndRoles, matchesFilterGroups, matchesProject, mergePackScopeEntries, modelAccessCombinations, modelAccessSummary, modelCardDeveloperLabel, modelMetadataAttribution, modelSourceLabel, modelsKickerText, moreFromLabSystems, normalizeSearchText, packShapedSystems, paginate, parseRecordReference, parseSearchQuery, parseViewAlias, parseViewId, predecessorSystems, priorityBoost, queryMatches, readScopeURLParams, recommendationReasons, recordMatch, relatedSystems, releaseDate, releasesNewestFirst, riskStatementView, scopeFromURL, scopeURLParams, scoreDimension, searchFields, searchWords, shareRecordPath, sourceNamespace, stemQueryWord, successorSystem, suggestNames, systemDeploymentSummary, systemElements, systemTraitCooccurrence, tokenHit, updateComparisonSelection } = require("../web/app-core.js");
 
 const projects = [
   { name: "PKM", primary_role: "human_pkm", system_family: "memory_system", agent_relation: "none", architectures: ["plain_files"], deployment: ["desktop", "cloud_optional"], agent_interfaces: ["web_app"], source_model: "proprietary", licenses: ["LicenseRef-Proprietary"], status: "active", local_first: true, stars: 5, score: { overall: 9 } },
@@ -284,6 +284,57 @@ test("trait co-occurrence agrees with the canonical active catalog", () => {
       }
     }
   }
+});
+
+test("lab developer summary attributes every reviewed release to exactly one lab", () => {
+  const labs = [
+    { id: "a", name: "A Lab", catalog_names: ["A"] },
+    { id: "b", name: "B Lab", catalog_names: ["B", "Bee"] },
+    { id: "empty", name: "Empty Lab", catalog_names: ["Nobody"] },
+  ];
+  const models = [
+    { id: "m1", name: "M1", review_status: "reviewed", developer: "A", source_id: "a/x" },
+    { id: "m2", name: "M2", review_status: "reviewed", developer: "B", source_id: "b/y" },
+    { id: "m3", name: "M3", review_status: "reviewed", developer: "Ghost", source_id: "g/z" },
+    { id: "m4", name: "M4", review_status: "reviewed", developer: "A", source_id: null },
+    { id: "m5", name: "M5", review_status: "imported", developer: "A", source_id: "a/w" },
+  ];
+  const summary = labDeveloperSummary(labs, models);
+  assert.equal(summary.total, 4);
+  assert.deepEqual(summary.rows.map(row => [row.name, row.count]), [["A Lab", 2], ["B Lab", 1], ["Empty Lab", 0]]);
+  assert.deepEqual(summary.rows[0].namespaces, ["a"]);
+  assert.deepEqual(summary.labless.map(row => row.id), ["empty"]);
+  assert.deepEqual(summary.unmatched, ["Ghost"]);
+  assert.deepEqual(summary.shared, []);
+});
+
+test("lab developer summary flags developer strings claimed by several labs", () => {
+  const labs = [
+    { id: "a", name: "A Lab", catalog_names: ["Same"] },
+    { id: "b", name: "B Lab", catalog_names: ["Same"] },
+  ];
+  const summary = labDeveloperSummary(labs, []);
+  assert.equal(summary.total, 0);
+  assert.deepEqual(summary.shared, ["Same"]);
+  assert.equal(summary.rows.length, 2);
+});
+
+test("lab developer summary agrees with the canonical catalog", () => {
+  const bootModels = readWebJSON("app/models.json").models;
+  const canonicalModels = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "directory", "models.json"), "utf8")).models;
+  const canonicalLabs = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "directory", "labs.json"), "utf8")).labs;
+  const summary = labDeveloperSummary(canonicalLabs, bootModels);
+  assert.equal(summary.total, canonicalModels.length);
+  assert.equal(summary.rows.length, canonicalLabs.length);
+  assert.equal(summary.rows.reduce((total, row) => total + row.count, 0), canonicalModels.length);
+  const names = new Map(canonicalLabs.flatMap(lab => (lab.catalog_names || []).map(name => [name, lab.id])));
+  for (const row of summary.rows) {
+    const lab = canonicalLabs.find(entry => entry.id === row.id);
+    const expected = canonicalModels.filter(model => (lab.catalog_names || []).includes(model.developer));
+    assert.equal(row.count, expected.length, row.id);
+  }
+  const unmatched = [...new Set(canonicalModels.map(model => model.developer).filter(name => !names.has(name)))].sort();
+  assert.deepEqual(summary.unmatched, unmatched);
 });
 
 test("finder role sets exclude unrelated projects without imposing a local-only threshold", () => {

@@ -125,6 +125,7 @@ async function bootstrap() {
   renderTaxonomy();
   renderModelAccess();
   renderSystemDeployment(systems.active_review_dates);
+  renderLabRelationships();
   bindEvents();
   restoreFromURL({ boot: true });
   // Text typed on the front door before its listener was bound is still a
@@ -2711,6 +2712,42 @@ function renderModelAccess() {
     toggle.textContent = `${open ? "Show" : "Hide"} ${total} ${total === 1 ? "release" : "releases"}`;
   }));
   content.querySelectorAll('[data-model]').forEach(button => button.addEventListener("click", () => openModel(button.dataset.model)));
+}
+
+// Labs as developers: every lab A–Z with its reviewed releases, plus the
+// developer strings matching no lab or several kept visible as unknown
+// coverage. Counts link to the lab's Models list; labs with no releases
+// disclose in place and open record dialogs.
+function renderLabRelationships() {
+  if (!state.labs.length) {
+    $("#lab-relationships-content").innerHTML = '<p class="notice">No labs are available for this view.</p>';
+    return;
+  }
+  const summary = AppCore.labDeveloperSummary(state.labs, state.models);
+  $("#lab-relationships-data-note").textContent = `${summary.total} reviewed releases across ${summary.rows.length} labs.`;
+  const rows = summary.rows.map(row => {
+    const contents = `<strong>${row.count}</strong>`;
+    const cell = row.count
+      ? `<td><a class="access-cell" href="?collection=models&lab=${escapeHTML(row.id)}&sort=name" aria-label="${escapeHTML(row.name)}: ${row.count} reviewed releases. Browse models">${contents}</a></td>`
+      : `<td><span class="access-cell">${contents}</span></td>`;
+    const namespaces = row.namespaces.length ? escapeHTML(row.namespaces.join(", ")) : "None recorded";
+    return `<tr><th scope="row">${escapeHTML(row.name)}</th>${cell}<td>${namespaces}</td></tr>`;
+  }).join("");
+  const labless = summary.labless.length
+    ? `<p>${summary.labless.length} labs have no reviewed releases: ${summary.labless.map(row => `<button type="button" class="link-button" data-open-lab="${escapeHTML(row.id)}">${escapeHTML(row.name)}</button>`).join(" · ")}</p>`
+    : "";
+  const unmatched = summary.unmatched.length
+    ? `<p>Developer strings matching no lab: ${summary.unmatched.map(escapeHTML).join(", ")}.</p>`
+    : "<p>Every reviewed developer string matches exactly one lab.</p>";
+  const shared = summary.shared.length
+    ? `<p>Developer strings matching several labs: ${summary.shared.map(escapeHTML).join(", ")}.</p>`
+    : "";
+  $("#lab-relationships-content").innerHTML = `
+    <table class="access-matrix">
+      <caption>Reviewed releases by developing lab. Each release appears in exactly one row; rows sum to ${summary.total}.</caption>
+      <thead><tr><th scope="col">Lab</th><th scope="col">Reviewed releases</th><th scope="col">Models.dev namespaces</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>${labless}${unmatched}${shared}`;
 }
 
 // One grid of installables: unscored packs beside scored host-installed
