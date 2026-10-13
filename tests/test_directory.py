@@ -775,6 +775,7 @@ class DirectoryTests(unittest.TestCase):
             "stepfun-open-platform-global",
             "poolside-api",
             "sakana-fugu",
+            "typesafe-api",
         }
         self.assertEqual(expected, {record["id"] for record in records})
         self.assertEqual(

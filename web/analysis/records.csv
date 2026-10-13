@@ -52,6 +52,7 @@ inference,stepfun-open-platform-global,reviewed,StepFun Open Platform (internati
 inference,tencent-cloud-tokenhub,reviewed,Tencent Cloud TokenHub,cloud_model_platform,,,2026-08-28
 inference,together-ai,reviewed,Together AI,managed_inference_host,,,2026-08-28
 inference,trustedrouter,reviewed,TrustedRouter,routing_aggregator,,,2026-08-31
+inference,typesafe-api,reviewed,TypeSafe API,direct_model_api,,,2026-10-12
 inference,venice-api,reviewed,Venice API,routing_aggregator,,,2026-08-28
 inference,vercel-ai-gateway,reviewed,Vercel AI Gateway,routing_aggregator,,,2026-08-31
 inference,vertex-ai-generative-ai,reviewed,Gemini Enterprise Agent Platform Generative AI,cloud_model_platform,,,2026-09-12
