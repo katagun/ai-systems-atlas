@@ -44,6 +44,7 @@ inference,replicate,reviewed,Replicate,managed_inference_host,,,2026-09-12
 inference,requesty,reviewed,Requesty,routing_aggregator,,,2026-08-31
 inference,sakana-fugu,reviewed,Sakana Fugu,direct_model_api,,,2026-09-28
 inference,sambanova-cloud,reviewed,SambaNova Cloud,managed_inference_host,,,2026-08-28
+inference,seekrflow-api,reviewed,SeekrFlow API,direct_model_api,,,2026-10-12
 inference,siliconflow-cn,reviewed,SiliconFlow (mainland China),managed_inference_host,,,2026-08-31
 inference,siliconflow-international,reviewed,SiliconFlow (international),managed_inference_host,,,2026-08-31
 inference,stability-ai-developer-platform,reviewed,Stability AI Developer Platform,direct_model_api,,,2026-08-28
@@ -109,6 +110,7 @@ labs,lab-prism-ml,reviewed,Prism ML,ai_company,,,2026-10-06
 labs,lab-reflection-ai,reviewed,Reflection AI,ai_company,,,2026-10-07
 labs,lab-safe-superintelligence,reviewed,Safe Superintelligence,ai_company,,,2026-10-03
 labs,lab-sakana-ai,reviewed,Sakana AI,ai_company,,,2026-09-28
+labs,lab-seekr-technologies,reviewed,Seekr Technologies,ai_company,,,2026-10-12
 labs,lab-stanford-nlp,reviewed,Stanford NLP Group,public_research,,,2026-09-29
 labs,lab-stepfun,reviewed,StepFun,ai_company,,,2026-10-03
 labs,lab-swiss-ai-initiative,reviewed,Swiss AI Initiative,public_research,,,2026-09-25

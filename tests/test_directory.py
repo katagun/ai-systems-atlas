@@ -776,6 +776,7 @@ class DirectoryTests(unittest.TestCase):
             "poolside-api",
             "sakana-fugu",
             "typesafe-api",
+            "seekrflow-api",
         }
         self.assertEqual(expected, {record["id"] for record in records})
         self.assertEqual(
