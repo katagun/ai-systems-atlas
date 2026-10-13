@@ -1,7 +1,7 @@
 {
   "generator": "scripts/build_analysis_exports.py",
   "inputs": {
-    "inference-services.json": "3adcbc44ceca7a7ebf8c5aec6f47531a0d887db0a2d35c70c30c7b5a4ed5ae1f",
+    "inference-services.json": "488d88c2db10227ca5ca9016e497e07d3c18fa01c9e6bb8cbd51ee06784ed920",
     "labs.json": "79ad0ca72a97e82e8a39a4c3873d208d752daeb7f6d5eedc9290aa47020a2a69",
     "license-evidence.json": "1c79fcf281d2de9dddc57f7d67aed7a1ffd08cab27856c451a2f9e75c7489084",
     "local-runtimes.json": "466aca0780371f8d81035a7eb163a3ce7d902b0bc89daf179fea2239b9907b1d",
@@ -12,7 +12,7 @@
     "robots.json": "d7858d3bf67ba762628c46b8fc335e870471efe10fd1cc227dec8f656e65432d",
     "specifications.json": "c0e675916d58de2583822c4b2637ba9fbc927a0b654c3a650c842959ad09b9d8"
   },
-  "source_revision": "5a5a82cbdb07e60c5877bd494306e07ff88efc56",
+  "source_revision": "63281bb680ddbabde18fecf8a77ff0974233c372",
   "tables": {
     "data_dictionary": {
       "rows": 31,
@@ -31,12 +31,12 @@
       "sha256": "5dd6a5bc31e7b620b7bed40569807fcddc477efd14478a268e2feb496685ed69"
     },
     "records": {
-      "rows": 970,
-      "sha256": "1a6726dae443a89f7fb5b579a4d5c2be1ad4fe4dda85be726584b35ce2cfba13"
+      "rows": 971,
+      "sha256": "8d6273e07cd612d8d0e3b4679b551ff464e6bfb29eacf274233f403e341ad4cd"
     },
     "score_dimensions": {
-      "rows": 5699,
-      "sha256": "6526753fcf2223772d2d1611f3845d941295572277f5ef75dc56ed0b32fbd9cb"
+      "rows": 5708,
+      "sha256": "44cefdda0c168c57e25e3f71f98f6aff53dc5273ab4750deb8581d60103ff266"
     }
   }
 }

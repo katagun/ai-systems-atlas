@@ -27,7 +27,7 @@ systems: 281
   agent_system 195, assistant_system 19, memory_system 67
   active-choice 268 (archived 10, superseded 3)
 specifications: 22
-inference_services: 60
+inference_services: 61
 local_runtimes: 17
 model_releases: 373
 models_dev_source_records: 448

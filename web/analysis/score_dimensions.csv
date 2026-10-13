@@ -476,6 +476,15 @@ inference,trustedrouter,inference_service,overall,6.81
 inference,trustedrouter,inference_service,regional_deployment_control,6.6
 inference,trustedrouter,inference_service,serving_flexibility,5.2
 inference,trustedrouter,inference_service,traffic_resilience,7.4
+inference,typesafe-api,inference_service,api_interoperability,6.5
+inference,typesafe-api,inference_service,customization_lifecycle,5.0
+inference,typesafe-api,inference_service,data_governance,7.5
+inference,typesafe-api,inference_service,documentation_transparency,8.0
+inference,typesafe-api,inference_service,operational_maturity,7.0
+inference,typesafe-api,inference_service,overall,5.94
+inference,typesafe-api,inference_service,regional_deployment_control,3.0
+inference,typesafe-api,inference_service,serving_flexibility,4.5
+inference,typesafe-api,inference_service,traffic_resilience,6.0
 inference,venice-api,inference_service,api_interoperability,8.5
 inference,venice-api,inference_service,customization_lifecycle,4.5
 inference,venice-api,inference_service,data_governance,9.0
