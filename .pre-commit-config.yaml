@@ -4,10 +4,14 @@
 # Run every local check:  pre-commit run --all-files --hook-stage pre-push
 #
 # Every hook runs on `git commit` except unit tests under coverage and browser
-# e2e, which run on `git push` instead (`stages: [pre-push]`). `pre-commit install`
-# installs both hook types through default_install_hook_types below. GitHub CI
-# scopes lint and Python tests to affected files and never runs browser tests;
-# see verify.yml. The full local command above remains available for any change.
+# e2e, which run on `git push` instead (`stages: [pre-push]`) and only when the
+# pushed commits touch what they test: the Python suite runs for the same change
+# classes scripts/ci_changes.py selects in CI, and the browser suite for the web
+# tree, the catalog it renders, and its own tests. A docs-only push runs neither.
+# tests/test_precommit_config.py holds the two `files` patterns to that contract.
+# `pre-commit install` installs both hook types through default_install_hook_types
+# below. GitHub CI scopes lint and Python tests to affected files and never runs
+# browser tests; see verify.yml. The full local command above still runs everything.
 # Complexity is enforced through ruff C901 (Python, max 50) and the eslint
 # complexity rule (JS, max 40); both are ratchets documented in
 # pyproject.toml and eslint.config.mjs, tightened by refactor, never by noqa.
@@ -161,11 +165,13 @@ repos:
         args: [--no-progress, --format, plain]
         files: ^\.github/workflows/
 
-  # Project verification: local hooks keep the full checks, while CI selects
-  # its Python suite from the change scope. always_run keeps these checks on each
-  # local commit or push; pass_filenames keeps the commands intact. Unit tests
-  # and e2e carry `stages: [pre-push]` and run on push. Browser tests are local
-  # only; GitHub verification does not install or run Chromium.
+  # Project verification. The sub-two-second checks (catalog validation, Node
+  # behavior tests, content contracts, freshness) carry always_run and cost nothing
+  # to leave on every commit and push. The two slow suites carry `stages: [pre-push]`
+  # and a `files` pattern instead of always_run, so pre-commit runs them only when
+  # a pushed commit touches a matching path; pass_filenames stays false so the
+  # commands run whole. Browser tests are local only; GitHub verification does not
+  # install or run Chromium.
   # Bypass one check with SKIP=<hook-id>. To skip only the browser suite on a push, use
   # SKIP=e2e-browser-tests preserves the other checks, including freshness.
   #
@@ -185,13 +191,28 @@ repos:
 
       # The runner clears git's hook-specific environment so the suite's
       # scratch git repos (RealGit tests) resolve on their own.
+      # Mirrors scripts/ci_changes.py classify(): the suite runs for Python, tool
+      # configuration, workflows, and anything unrecognised, and skips for docs,
+      # catalog data, the web tree, blog sources, skills, and JavaScript, whose
+      # contracts the content-checks hook below and the Node tests cover. pre-commit
+      # does not list deleted paths, so a push that only deletes Python skips too.
       - id: python-tests-coverage
         language: system
         name: python tests under coverage
         entry: uv run python scripts/run_python_tests.py
-        always_run: true
+        files: '^(?!(docs|directory|web|blog|skills)/)(?!.*\.md$)(?!(scripts|tests)/.*\.(js|mjs)$)'
         pass_filenames: false
         stages: [pre-push]
+
+      # The documentation, catalog, and web contracts are Python tests that content
+      # edits can break with no Python change. CI runs this on every change; locally
+      # it is the check that stays on when the suite above is skipped. ~4 seconds.
+      - id: content-checks
+        language: system
+        name: documentation, catalog and web contracts
+        entry: uv run python scripts/run_content_checks.py
+        always_run: true
+        pass_filenames: false
 
       # python-compileall and node-syntax-check were removed on 2026-09-28 (CR-24).
       # Neither could catch anything the linters do not: pyproject selects ruff's E9
@@ -243,10 +264,13 @@ repos:
 
       # Local only. Install Chromium once: npx playwright install chromium.
       # Starts its own server per checkout; GitHub CI never runs this hook.
+      # Runs for the web tree (generated output included, so a generator change
+      # shows up here through its output), the catalog the pages render and the
+      # specs read directly, the specs themselves, and the server and runner config.
       - id: e2e-browser-tests
         language: system
         name: browser end-to-end tests
         entry: npm run test:e2e
-        always_run: true
+        files: '^(web|directory|tests/e2e)/|^(playwright\.config\.js|package(-lock)?\.json|scripts/serve_web\.py)$'
         pass_filenames: false
         stages: [pre-push]
