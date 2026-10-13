@@ -601,6 +601,9 @@ MODEL_TYPE_OUTPUT_MODALITY = {
     "image_generation_model": "image",
     "video_generation_model": "video",
     "audio_generation_model": "audio",
+    "embedding_model": "embedding",
+    "rerank_model": "text",
+    "judgment_model": "text",
 }
 
 

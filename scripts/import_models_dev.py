@@ -51,7 +51,7 @@ PARTIAL_DATE = re.compile(r"\d{4}-\d{2}(?:-\d{2})?")
 # ADR 051 widened eligibility past text output. A robot action is not in this
 # set: no model_type names one, so an action-emitting policy stays a source
 # record rather than becoming a review candidate it can never be typed as.
-ELIGIBLE_OUTPUT_MODALITIES = {"text", "image", "video", "audio"}
+ELIGIBLE_OUTPUT_MODALITIES = {"text", "image", "video", "audio", "embedding"}
 
 JsonGetter = Callable[[str, str | None], tuple[Any, bytes]]
 BytesGetter = Callable[[str, str | None], bytes]

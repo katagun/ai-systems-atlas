@@ -365,8 +365,8 @@ models,model-meta-llama-3-2-3b-instruct,reviewed,Llama-3.2-3B-Instruct,language_
 models,model-meta-llama-3-3-70b-instruct,reviewed,Llama-3.3-70B-Instruct,language_model,,meta/llama-3.3-70b-instruct,2026-09-11
 models,model-meta-llama-4-maverick-17b-instruct,reviewed,Llama 4 Maverick 17B Instruct,multimodal_language_model,,meta/llama-4-maverick-17b-instruct,2026-09-11
 models,model-meta-llama-4-scout-17b-instruct,reviewed,Llama 4 Scout 17B Instruct,multimodal_language_model,,meta/llama-4-scout-17b-instruct,2026-09-11
-models,model-meta-llama-guard-3-8b,reviewed,Llama-Guard-3-8B,language_model,,meta/llama-guard-3-8b,2026-09-18
-models,model-meta-llama-guard-4-12b,reviewed,Llama-Guard-4-12B,multimodal_language_model,,,2026-10-06
+models,model-meta-llama-guard-3-8b,reviewed,Llama-Guard-3-8B,judgment_model,,meta/llama-guard-3-8b,2026-09-18
+models,model-meta-llama-guard-4-12b,reviewed,Llama-Guard-4-12B,judgment_model,,,2026-10-06
 models,model-meta-muse-glimmer-30b,reviewed,Muse Glimmer 30B,multimodal_language_model,,meta/muse-glimmer-30b,2026-09-18
 models,model-meta-muse-spark-1-1,reviewed,Muse Spark 1.1,multimodal_language_model,,meta/muse-spark-1.1,2026-09-18
 models,model-meta-muse-spark-1-2,reviewed,Muse Spark 1.2,multimodal_language_model,,meta/muse-spark-1.2,2026-09-18
@@ -443,7 +443,7 @@ models,model-motif-technologies-motif-3,reviewed,Motif 3,language_model,,motif-t
 models,model-nace-ai-drex-v1-5,imported_source,Drex 1.5,,,nace-ai/drex-v1.5,
 models,model-nex-agi-nex-n2-pro,imported_source,Nex-N2-Pro,,,nex-agi/nex-n2-pro,
 models,model-nvidia-llama-3-1-nemotron-70b-instruct,reviewed,Llama 3.1 Nemotron 70B Instruct,language_model,,nvidia/llama-3.1-nemotron-70b-instruct,2026-09-18
-models,model-nvidia-llama-3-1-nemotron-safety-guard-8b-v3,reviewed,Llama 3.1 Nemotron Safety Guard 8B v3,language_model,,nvidia/llama-3.1-nemotron-safety-guard-8b-v3,2026-09-18
+models,model-nvidia-llama-3-1-nemotron-safety-guard-8b-v3,reviewed,Llama 3.1 Nemotron Safety Guard 8B v3,judgment_model,,nvidia/llama-3.1-nemotron-safety-guard-8b-v3,2026-09-18
 models,model-nvidia-llama-3-1-nemotron-ultra-253b,reviewed,Llama 3.1 Nemotron Ultra 253B,language_model,,nvidia/llama-3.1-nemotron-ultra-253b,2026-09-18
 models,model-nvidia-llama-3-3-nemotron-super-49b-v1,reviewed,Llama 3.3 Nemotron Super 49B v1,language_model,,nvidia/llama-3.3-nemotron-super-49b-v1,2026-09-18
 models,model-nvidia-llama-3-3-nemotron-super-49b-v1-5,reviewed,Llama 3.3 Nemotron Super 49B v1.5,language_model,,nvidia/llama-3.3-nemotron-super-49b-v1.5,2026-09-18
@@ -567,7 +567,7 @@ models,model-tencent-hy4-preview,reviewed,Hy4 preview,language_model,,tencent/hy
 models,model-thinkingmachines-inkling,reviewed,Inkling,multimodal_language_model,,thinkingmachines/inkling,2026-09-22
 models,model-thinkingmachines-inkling-small,reviewed,Inkling-Small,multimodal_language_model,,thinkingmachines/inkling-small,2026-09-22
 models,model-trendyol-asure-12b,reviewed,Trendyol-LLM-Asure-12B,multimodal_language_model,,trendyol/asure-12b,2026-09-22
-models,model-typesafe-jev-1-13-0,reviewed,Jev 1.13,language_model,,,2026-09-20
+models,model-typesafe-jev-1-13-0,reviewed,Jev 1.13,judgment_model,,,2026-09-20
 models,model-typesafe-jev-latest,imported_source,Jev,,,typesafe/jev-latest,
 models,model-unbiased-pareto,imported_source,Pareto,,,unbiased/pareto,
 models,model-upstage-solar-mini4,reviewed,Solar Mini 4,language_model,,,2026-09-28
