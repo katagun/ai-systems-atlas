@@ -566,6 +566,42 @@
     return { labsOf, distributionsOf };
   }
 
+  // Labs as developers: each lab with the reviewed releases naming it,
+  // A–Z, never by size (ADR 041). Developer strings matching no lab and
+  // strings matching several labs stay visible as unknown coverage, even
+  // when both are empty today; the joins themselves come from labRelations,
+  // the one statement of the lab rules.
+  function labDeveloperSummary(labs = [], models = []) {
+    const reviewed = models.filter(model => model.review_status === "reviewed");
+    const namesOf = new Map();
+    for (const lab of labs) {
+      for (const name of lab.catalog_names || []) {
+        if (!namesOf.has(name)) namesOf.set(name, []);
+        namesOf.get(name).push(lab.id);
+      }
+    }
+    const unmatched = [...new Set(reviewed.map(model => model.developer).filter(name => !namesOf.has(name)))].sort();
+    const shared = [...namesOf].filter(([_name, ids]) => ids.length > 1).map(([name]) => name).sort();
+    const rows = [...labs]
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .map(lab => {
+        const relations = labRelations(lab, { models });
+        return {
+          id: lab.id,
+          name: lab.name,
+          count: relations.models.length,
+          namespaces: relations.namespaces,
+        };
+      });
+    return {
+      total: reviewed.length,
+      rows,
+      labless: rows.filter(row => !row.count),
+      unmatched,
+      shared,
+    };
+  }
+
   // The labs a collection's Lab filter offers: those that join at least one
   // of its records by buildLabMembership's joins, A–Z, never by size
   // (ADR 041). A lab that joins none would only ever list nothing.
@@ -2438,6 +2474,7 @@
     flagEmblemText,
     holdsPhrase,
     joinedLabs,
+    labDeveloperSummary,
     labDistributionModes,
     labRelations,
     labsForRecord,

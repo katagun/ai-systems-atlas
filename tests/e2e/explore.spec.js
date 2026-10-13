@@ -16,7 +16,7 @@ test("Explore counts reviewed releases and every matrix link matches its catalog
   await expect(page.locator(".docs-button")).toHaveAttribute("aria-current", "page");
   await expect(page.locator("#badge-legend")).not.toBeVisible();
   await expect(page.locator("#explore .score-ring, #explore .compare-toggle")).toHaveCount(0);
-  const links = await page.locator(".access-matrix a").evaluateAll(items => items.map(item => ({
+  const links = await page.locator("#model-access-content .access-matrix a").evaluateAll(items => items.map(item => ({
     href: item.getAttribute("href"), count: Number(item.querySelector("strong").textContent),
   })));
   expect(links.length).toBeGreaterThan(0);
@@ -157,6 +157,51 @@ test("co-occurrence drill-downs reach exact systems and dialogs with Back restor
   }
 });
 
+test("lab relationships attribute every reviewed release to exactly one lab", async ({ page }) => {
+  const labs = require("../../directory/labs.json").labs;
+  const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/?view=explore");
+  await expect(page.locator("#lab-relationships")).toBeVisible();
+  await expect(page.locator("#lab-relationships-data-note")).toContainText(`${models.length} reviewed releases across ${labs.length} labs.`);
+  const rows = await page.locator("#lab-relationships-content tbody tr").evaluateAll(items => items.map(item => ({
+    name: item.querySelector("th").textContent,
+    count: Number(item.querySelector("strong").textContent),
+  })));
+  expect(rows.length).toBe(labs.length);
+  expect(rows.reduce((total, row) => total + row.count, 0)).toBe(models.length);
+  for (const row of rows) {
+    const lab = labs.find(entry => entry.name === row.name);
+    const expected = models.filter(model => (lab.catalog_names || []).includes(model.developer)).length;
+    expect(row.count).toBe(expected);
+  }
+  expect(errors).toEqual([]);
+});
+
+test("lab relationship drill-downs reach exact releases and dialogs with Back restoring Explore", async ({ page }) => {
+  await page.goto("/?view=explore");
+  const link = page.locator("#lab-relationships-content tbody a").first();
+  const params = new URLSearchParams((await link.getAttribute("href")).slice(1));
+  const row = link.locator("xpath=ancestor::tr");
+  const count = Number(await row.locator("strong").textContent());
+  await link.click();
+  await expect(page).toHaveURL(/collection=models/);
+  await expectFilter(page, "models", "lab", params.get("lab"));
+  await expect(page.locator("#model-result-count")).toContainText(`${count} ${count === 1 ? "model" : "models"} ·`);
+  await page.goBack();
+  await expect(page.locator("#explore")).toBeVisible();
+  const labless = page.locator("#lab-relationships-content [data-open-lab]").first();
+  if (await labless.count()) {
+    const name = await labless.textContent();
+    await labless.click();
+    await expect(recordView(page, "lab")).toBeVisible();
+    await expect(recordHeading(page, "lab")).toHaveText(name);
+    await page.goBack();
+    await expect(recordView(page, "lab")).not.toBeVisible();
+    await expect(page.locator("#explore")).toBeVisible();
+  }
+});
+
 for (const theme of ["light", "dark"]) {
   test(`Explore fits desktop and phones in ${theme} without additional payloads`, async ({ page, baseURL }) => {
     const external = [];
@@ -169,7 +214,7 @@ for (const theme of ["light", "dark"]) {
     await page.goto("/?view=explore", { waitUntil: "networkidle" });
     for (const width of [1440, 390, 320]) {
       await page.setViewportSize({ width, height: 900 });
-      await expect(page.locator(".access-matrix")).toHaveCount(2);
+      await expect(page.locator(".access-matrix")).toHaveCount(3);
       const main = await page.locator("main").boundingBox();
       const explore = await page.locator("#explore").boundingBox();
       expect(explore.x).toBe(main.x);

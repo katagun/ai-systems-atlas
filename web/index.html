@@ -214,7 +214,7 @@
     </section>
 
     <section id="explore" class="view" aria-labelledby="explore-title">
-      <nav class="explore-sections" aria-label="Explore topics"><a href="#explore-title">Model access</a><a href="#runtime-matrix-title">Local runtimes</a><a href="#deployment-title">System deployment</a></nav>
+      <nav class="explore-sections" aria-label="Explore topics"><a href="#explore-title">Model access</a><a href="#runtime-matrix-title">Local runtimes</a><a href="#deployment-title">System deployment</a><a href="#lab-relationships-title">Lab relationships</a></nav>
       <div class="section-heading explore-heading">
         <p class="eyebrow">Explore the data · Models</p>
         <h1 id="explore-title" tabindex="-1">How can you access a model?</h1>
@@ -263,6 +263,20 @@
           <p>Local-first describes where a system keeps its working content by default and whether its vendor retains it. It does not mean all model execution happens locally. “No” includes libraries that keep no content of their own; “Not recorded” is separate from false. License classification does not imply local-first behavior.</p>
           <p>These are catalog counts, not market share, quality rankings, or tests of the products. Editorial review dates describe recorded reviews, not release dates or a new verification today.</p>
           <p><a href="projects.json">Reviewed system data (JSON)</a> · <a href="?view=taxonomy">Trait and classification definitions</a></p>
+        </details>
+      </section>
+      <section id="lab-relationships" class="runtime-features" aria-labelledby="lab-relationships-title">
+        <div class="explore-section-heading">
+          <p class="eyebrow">Explore the data · Labs</p>
+          <h2 id="lab-relationships-title" tabindex="-1">Which labs develop the reviewed releases?</h2>
+          <p>Every reviewed release names one developer. See each lab's releases, and the developer strings matching no lab or several.</p>
+          <p id="lab-relationships-data-note" class="explore-data-note"></p>
+        </div>
+        <div id="lab-relationships-content"></div>
+        <details class="deployment-method">
+          <summary>How to read this table</summary>
+          <p>Only reviewed releases count. A release joins the lab its developer string names; developer strings matching no lab or several labs stay visible beside the table instead of being assigned. Select a count to browse the lab's releases. These are catalog counts, not market share or model quality.</p>
+          <p><a href="models.json">Reviewed model data (JSON)</a> · <a href="?view=taxonomy">Trait and classification definitions</a></p>
         </details>
       </section>
     </section>
