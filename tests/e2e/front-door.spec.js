@@ -273,7 +273,8 @@ test("tiles carry the three most recently reviewed marks and no example ranking"
   const logos = require("../../web/logos.json");
   const recent = ["systems", "inference", "runtimes", "specifications", "models", "packs", "labs", "robots"]
     .flatMap(name => require(`../../web/app/${name}.json`).recent || []);
-  const vendored = recent.filter(record => logos.records[record.id] && logos.icons[logos.records[record.id]]).length;
+  // Each payload lists its recent records by id, not as objects.
+  const vendored = recent.filter(id => logos.records[id] && logos.icons[logos.records[id]]).length;
   const logosLanded = page.waitForResponse(response => response.url().includes("logos.json"));
   await page.goto("/");
   await expect(page.locator('[data-tile="inference"] .tile-marks .card-mark')).toHaveCount(3);
