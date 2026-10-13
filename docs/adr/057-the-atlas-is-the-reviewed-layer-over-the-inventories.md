@@ -1,6 +1,6 @@
 # ADR 057: The Atlas is the reviewed layer over the inventories
 
-**Status:** Proposed 2026-10-13, draft for owner review. Amends [ADR 055](055-automation-authors-reviewed-records-with-disclosure.md) (withdraws the scale goal in its context; its operating mode stands). Extends [ADR 039](039-openrouter-is-an-unpublished-cross-check-for-models-dev-gaps.md) (the terms gate now also governs Hugging Face). Leaves [ADR 027](027-complete-models-dev-source-catalog-is-published.md), [ADR 051](051-generative-media-releases-join-the-reviewed-models-collection.md), and [ADR 056](056-embedding-reranking-judgment-releases-are-reviewed-models.md) in force.
+**Status:** Accepted 2026-10-13, owner-directed. Amends [ADR 055](055-automation-authors-reviewed-records-with-disclosure.md) (withdraws the scale goal in its context; its operating mode stands). Extends [ADR 039](039-openrouter-is-an-unpublished-cross-check-for-models-dev-gaps.md) (the terms gate now also governs Hugging Face). Leaves [ADR 027](027-complete-models-dev-source-catalog-is-published.md), [ADR 051](051-generative-media-releases-join-the-reviewed-models-collection.md), and [ADR 056](056-embedding-reranking-judgment-releases-are-reviewed-models.md) in force.
 
 ## Context
 
