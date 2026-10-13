@@ -67,6 +67,7 @@ models,model-arcee-ai-trinity-large-preview,LicenseRef-OpenMDW-1.1
 models,model-arcee-ai-trinity-large-thinking,LicenseRef-OpenMDW-1.1
 models,model-arcee-ai-trinity-mini,LicenseRef-OpenMDW-1.1
 models,model-arcee-ai-trinity-nano-preview,LicenseRef-OpenMDW-1.1
+models,model-baidu-ernie-4-5-21b-a3b,Apache-2.0
 models,model-bfl-flux-2-dev,LicenseRef-FLUX-Dev-Non-Commercial-2.0
 models,model-bytedance-seed-seed-1-6,LicenseRef-Proprietary
 models,model-bytedance-seed-seed-1-6-flash,LicenseRef-Proprietary
@@ -259,6 +260,8 @@ models,model-moonshotai-kimi-k2-8-preview,LicenseRef-Proprietary
 models,model-moonshotai-kimi-k2-thinking,LicenseRef-Kimi-K2-Modified-MIT
 models,model-moonshotai-kimi-k3,LicenseRef-Kimi-K3-License
 models,model-motif-technologies-motif-3,MIT
+models,model-nousresearch-hermes-4-405b,LicenseRef-Llama-3.1-AUP
+models,model-nousresearch-hermes-4-405b,LicenseRef-Llama-3.1-Community
 models,model-nvidia-llama-3-1-nemotron-70b-instruct,LicenseRef-Llama-3.1-AUP
 models,model-nvidia-llama-3-1-nemotron-70b-instruct,LicenseRef-Llama-3.1-Community
 models,model-nvidia-llama-3-1-nemotron-70b-instruct,LicenseRef-NVIDIA-Open-Model

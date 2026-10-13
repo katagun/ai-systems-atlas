@@ -816,6 +816,52 @@
       "research_locations": []
     },
     {
+      "id": "lab-baidu",
+      "name": "Baidu",
+      "url": "https://home.baidu.com/",
+      "description": "Technology company headquartered in Beijing whose ERNIE 4.5 model family includes the reviewed open-weight release ERNIE 4.5 21B A3B. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "lab_type": "technology_company",
+      "headquarters": "cn",
+      "admission_basis": "reviewed_release",
+      "catalog_names": [
+        "Baidu"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/PaddlePaddle"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/baidu"
+        }
+      ],
+      "organization_note": "Baidu's contact page gives Baidu Campus, No. 10 Shangdi 10th Street, Haidian District, Beijing, China as its address, so the record takes China as the headquarters country; no parent organization is named on the pages read. It is recorded on the reviewed release model-baidu-ernie-4-5-21b-a3b. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Contact page: Baidu Campus address in Beijing, China",
+          "url": "https://home.baidu.com/home/index/contact_us",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Baidu home: global high-tech company mission and vision",
+          "url": "https://home.baidu.com/",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Baidu ERNIE 4.5 open-source announcement, the reviewed release's family",
+          "url": "https://ernie.baidu.com/blog/posts/ernie4.5/",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "verified_at": "2026-10-13",
+      "display_order": 780
+    },
+    {
       "id": "lab-bytedance",
       "name": "ByteDance",
       "url": "https://www.bytedance.com/en/",
@@ -2272,6 +2318,54 @@
       "verified_at": "2026-09-25",
       "admission_basis": "reviewed_release",
       "display_order": 90
+    },
+    {
+      "id": "lab-nous-research",
+      "name": "Nous Research",
+      "url": "https://nousresearch.com/",
+      "description": "Open-source AI lab behind the Hermes model family and the Hermes Agent harness, working in the American open-source movement with no city named on its pages; its reviewed release is Hermes 4 405B. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_release",
+      "catalog_names": [
+        "Nous Research"
+      ],
+      "systems": [
+        "hermes-agent"
+      ],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/NousResearch"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/NousResearch"
+        }
+      ],
+      "organization_note": "The homepage frames the work as leading the American open-source movement and names no city, so the record takes the United States as the headquarters country without a city; no parent organization is named on the pages read. It is recorded on the reviewed release model-nousresearch-hermes-4-405b and on the reviewed system hermes-agent, whose repository sits in the lab's GitHub organization. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Homepage: open-source AI training mission and Hermes Agent",
+          "url": "https://nousresearch.com/",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "GitHub organization: Nous Research, home of hermes-agent",
+          "url": "https://github.com/NousResearch",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "NousResearch Hermes-4-405B weight repository, the reviewed release",
+          "url": "https://huggingface.co/NousResearch/Hermes-4-405B",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "verified_at": "2026-10-13",
+      "display_order": 790
     },
     {
       "id": "lab-one-x-technologies",

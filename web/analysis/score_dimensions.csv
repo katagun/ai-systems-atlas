@@ -1026,6 +1026,13 @@ models,model-arcee-ai-trinity-nano-preview,model_access,license_clarity,6
 models,model-arcee-ai-trinity-nano-preview,model_access,lifecycle_transparency,5
 models,model-arcee-ai-trinity-nano-preview,model_access,overall,6.88
 models,model-arcee-ai-trinity-nano-preview,model_access,serving_reach,4
+models,model-baidu-ernie-4-5-21b-a3b,model_access,artifact_availability,9
+models,model-baidu-ernie-4-5-21b-a3b,model_access,deployment_portability,8
+models,model-baidu-ernie-4-5-21b-a3b,model_access,documentation_provenance,8
+models,model-baidu-ernie-4-5-21b-a3b,model_access,license_clarity,9
+models,model-baidu-ernie-4-5-21b-a3b,model_access,lifecycle_transparency,7
+models,model-baidu-ernie-4-5-21b-a3b,model_access,overall,7.44
+models,model-baidu-ernie-4-5-21b-a3b,model_access,serving_reach,2
 models,model-bfl-flux-2-dev,model_access,artifact_availability,6
 models,model-bfl-flux-2-dev,model_access,deployment_portability,8
 models,model-bfl-flux-2-dev,model_access,documentation_provenance,9
@@ -2160,6 +2167,13 @@ models,model-motif-technologies-motif-3,model_access,license_clarity,10
 models,model-motif-technologies-motif-3,model_access,lifecycle_transparency,7
 models,model-motif-technologies-motif-3,model_access,overall,7.26
 models,model-motif-technologies-motif-3,model_access,serving_reach,3
+models,model-nousresearch-hermes-4-405b,model_access,artifact_availability,7
+models,model-nousresearch-hermes-4-405b,model_access,deployment_portability,4
+models,model-nousresearch-hermes-4-405b,model_access,documentation_provenance,8
+models,model-nousresearch-hermes-4-405b,model_access,license_clarity,5
+models,model-nousresearch-hermes-4-405b,model_access,lifecycle_transparency,6
+models,model-nousresearch-hermes-4-405b,model_access,overall,5.28
+models,model-nousresearch-hermes-4-405b,model_access,serving_reach,2
 models,model-nvidia-llama-3-1-nemotron-70b-instruct,model_access,artifact_availability,7
 models,model-nvidia-llama-3-1-nemotron-70b-instruct,model_access,deployment_portability,6
 models,model-nvidia-llama-3-1-nemotron-70b-instruct,model_access,documentation_provenance,7

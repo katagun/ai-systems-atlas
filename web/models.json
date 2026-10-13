@@ -1,11 +1,11 @@
 {
   "version": "1.0",
-  "verified_at": "2026-10-07",
+  "verified_at": "2026-10-13",
   "source": {
     "id": "models-dev",
     "name": "models.dev",
     "repo": "anomalyco/models.dev",
-    "commit": "195b940bc687ae56cf2f2e68d42bc830d9cf653f",
+    "commit": "59aa52dbc09727fa6ead433b0285970ebc05ba82",
     "url": "https://github.com/anomalyco/models.dev",
     "license": "MIT"
   },
@@ -7468,6 +7468,120 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-baidu-ernie-4-5-21b-a3b",
+      "source_id": "baidu/ernie-4.5-21b-a3b",
+      "name": "ERNIE 4.5 21B A3B",
+      "developer": "Baidu",
+      "url": "https://huggingface.co/baidu/ERNIE-4.5-21B-A3B-PT",
+      "description": "Baidu's June 30, 2025 open release of ERNIE 4.5 as a 21B-total, 3B-active mixture-of-experts text checkpoint with 131K context and tool calling, published under Apache 2.0 with safetensors weights on Baidu's Hugging Face organization alongside a technical report. No developer API or managed host is documented for this exact checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "ERNIE 4.5 21B A3B",
+        "description": "Open ERNIE text MoE with 21B total and 3B active parameters",
+        "family": "ernie",
+        "release_date": "2025-06-30",
+        "last_updated": "2025-06-30",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 8000
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/baidu/ERNIE-4.5-21B-A3B-PT"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "Baidu's ERNIE 4.5 announcement states that all ten family models are publicly accessible under Apache 2.0, and the baidu/ERNIE-4.5-21B-A3B-PT repository carries an Apache License, Version 2.0 LICENSE file and declares license apache-2.0. The grant covers the published weights; no separate model-use terms were found on the pages read.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "ERNIE-4.5-21B-A3B-PT weights published in Baidu's Hugging Face repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/baidu/ERNIE-4.5-21B-A3B-PT/blob/87db95487941cb39592ee0abca3b9155a6d19c5c/LICENSE",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the ERNIE-4.5-21B-A3B-PT post-trained checkpoint of the ERNIE 4.5 family. The Base-PT and Thinking variants, the 0.3B, 30B, 300B, and 424B siblings, the VL multimodal variants, the Qianfan ernie-4.5-turbo API models, and the ERNIE Bot product are separate boundaries.",
+      "strengths": [
+        "Apache 2.0 grant stated both in Baidu's release announcement and in a LICENSE file inside the weight repository, with the repository metadata declaring the same licence",
+        "Versioned post-trained checkpoint with safetensors weights, a model card, and a dated technical report, loadable through standard transformers and vLLM tooling"
+      ],
+      "tradeoffs": [
+        "No developer API or managed host is documented for this exact checkpoint, so serving it is entirely self-operated",
+        "The 21B mixture-of-experts checkpoint still needs accelerator-class hardware despite only 3B active parameters per token"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 9,
+        "deployment_portability": 8,
+        "serving_reach": 2,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 8,
+        "overall": 7.44
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/59aa52dbc09727fa6ead433b0285970ebc05ba82/models/baidu/ernie-4.5-21b-a3b.toml",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Baidu ERNIE 4.5 open-source announcement: June 30, 2025, ten variants, Apache 2.0",
+          "url": "https://ernie.baidu.com/blog/posts/ernie4.5/",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Baidu ERNIE-4.5-21B-A3B-PT weight repository: apache-2.0 licence, safetensors, text generation",
+          "url": "https://huggingface.co/baidu/ERNIE-4.5-21B-A3B-PT",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/baidu/ERNIE-4.5-21B-A3B-PT",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
     },
     {
       "id": "model-bfl-flux-2-dev",
@@ -25142,6 +25256,129 @@
       ],
       "metadata_verified_at": "2026-09-22",
       "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-nousresearch-hermes-4-405b",
+      "source_id": "nousresearch/hermes-4-405b",
+      "name": "Hermes 4 405B",
+      "developer": "Nous Research",
+      "url": "https://huggingface.co/NousResearch/Hermes-4-405B",
+      "description": "Nous Research's August 2025 Hermes 4 hybrid-reasoning release at 405B parameters, fine-tuned from Llama-3.1-405B with toggleable think chains, tool use, and 131K context, published as open weights under the Llama 3.1 Community License with its acceptable-use policy. No developer API serves this exact model. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Hermes 4 405B",
+        "description": "Reasoning model for deliberate analysis, multi-step problem solving, and tool use",
+        "family": "hermes",
+        "release_date": "2025-08-26",
+        "last_updated": "2025-08-26",
+        "knowledge_cutoff": "2024-08-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 117964
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Llama-3.1-Community",
+        "LicenseRef-Llama-3.1-AUP"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The NousResearch/Hermes-4-405B repository declares license llama3 in its model metadata and ships no LICENSE file of its own, so the grant is Meta's Llama 3.1 Community License with its incorporated acceptable-use policy: attribution and redistribution duties, a Built with Llama display requirement, a 700 million monthly-active-user commercial threshold, and prohibited-use categories, making the release source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Llama-3.1-Community",
+          "scope": "Hermes-4-405B weights derived from Llama-3.1-405B, licensed under Meta's Llama 3.1 Community License as declared by the repository metadata",
+          "kind": "web_terms",
+          "url": "https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/LICENSE",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.1-AUP",
+          "scope": "Acceptable-use policy incorporated by reference into the Llama 3.1 Community License",
+          "kind": "web_terms",
+          "url": "https://github.com/meta-llama/llama-models/blob/main/models/llama3_1/USE_POLICY.md",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the Hermes-4-405B flagship of the Hermes 4 family. The 14B and 70B siblings, the Hermes 4.3 line, the Hermes 3 line, the base Llama-3.1-405B weights, the Hermes Agent system, and Portal-hosted agents are separate boundaries.",
+      "strengths": [
+        "Hybrid reasoning with toggleable think chains, tool use, and structured outputs documented in the model card and a dedicated technical report",
+        "Versioned 405B open weights with safetensors manifests on the developer's own Hugging Face organization"
+      ],
+      "tradeoffs": [
+        "The Llama 3.1 grant bars use above the monthly-active-user threshold without Meta's permission and names prohibited uses, so commercial reuse needs legal review",
+        "The 405B dense checkpoint needs multi-accelerator serving hardware, and no developer API serves it, so running it is entirely self-operated"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 4,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 5.28
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/59aa52dbc09727fa6ead433b0285970ebc05ba82/models/nousresearch/hermes-4-405b.toml",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "NousResearch Hermes-4-405B weight repository: llama3 licence, text generation, hybrid reasoning",
+          "url": "https://huggingface.co/NousResearch/Hermes-4-405B",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Hermes 4 Technical Report on arXiv",
+          "url": "https://arxiv.org/abs/2508.18255",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Meta Llama downloads page: canonical Llama 3.1 licence and use-policy source",
+          "url": "https://www.llama.com/llama-downloads/",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/NousResearch/Hermes-4-405B",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
     },
     {
       "id": "model-nvidia-llama-3-1-nemotron-70b-instruct",

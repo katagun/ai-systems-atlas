@@ -1,16 +1,16 @@
 {
   "version": "1.0",
-  "updated_at": "2026-10-07",
-  "source_record_count": 448,
+  "updated_at": "2026-10-13",
+  "source_record_count": 550,
   "source": {
     "repo": "anomalyco/models.dev",
     "ref": "dev",
-    "commit": "195b940bc687ae56cf2f2e68d42bc830d9cf653f",
+    "commit": "59aa52dbc09727fa6ead433b0285970ebc05ba82",
     "url": "https://github.com/anomalyco/models.dev",
-    "immutable_url": "https://codeload.github.com/anomalyco/models.dev/tar.gz/195b940bc687ae56cf2f2e68d42bc830d9cf653f",
+    "immutable_url": "https://codeload.github.com/anomalyco/models.dev/tar.gz/59aa52dbc09727fa6ead433b0285970ebc05ba82",
     "path": "models/**/*.toml",
     "license": "MIT",
-    "sha256": "ed4e9e48b40207a8a71432ffeb42c39900086b67fe4e576b9f73a9ea7e3fa3c9"
+    "sha256": "31b92e3490e9970651be1e7d6efd7d012e9e5954694015e830f5dd0734598bae"
   },
   "models": [
     {
@@ -93,6 +93,150 @@
             "url": "https://huggingface.co/ai21labs/AI21-Jamba-Mini-1.6"
           }
         ]
+      }
+    },
+    {
+      "id": "model-aion-labs-aion-2-0",
+      "source_id": "aion-labs/aion-2.0",
+      "source_metadata": {
+        "name": "Aion-2.0",
+        "description": "Reasoning model for deliberate analysis, multi-step problem solving, and tool use",
+        "family": null,
+        "release_date": "2026-02-23",
+        "last_updated": "2026-02-23",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-aion-labs-aion-3-0",
+      "source_id": "aion-labs/aion-3.0",
+      "source_metadata": {
+        "name": "Aion-3.0",
+        "description": "Reasoning model for deliberate analysis, multi-step problem solving, and tool use",
+        "family": null,
+        "release_date": "2026-07-07",
+        "last_updated": "2026-07-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-aion-labs-aion-3-0-mini",
+      "source_id": "aion-labs/aion-3.0-mini",
+      "source_metadata": {
+        "name": "Aion-3.0-Mini",
+        "description": "Efficient model for low-latency assistance, extraction, and routine automation",
+        "family": null,
+        "release_date": "2026-07-07",
+        "last_updated": "2026-07-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-aion-labs-aion-rp-llama-3-1-8b",
+      "source_id": "aion-labs/aion-rp-llama-3.1-8b",
+      "source_metadata": {
+        "name": "Aion-RP 1.0 (8B)",
+        "description": "Open Llama instruction model for multilingual chat, reasoning, and coding",
+        "family": "llama",
+        "release_date": "2025-02-04",
+        "last_updated": "2025-02-04",
+        "knowledge_cutoff": "2023-12-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 29491
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
       }
     },
     {
@@ -252,6 +396,42 @@
         },
         "limits": {
           "context": 32768,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-alibaba-qwen-mt-plus",
+      "source_id": "alibaba/qwen-mt-plus",
+      "source_metadata": {
+        "name": "Qwen MT Plus",
+        "description": "Flagship Qwen translation model with terminology control and support for 92 languages",
+        "family": "qwen",
+        "release_date": "2025-07-24",
+        "last_updated": "2025-07-24",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 16384,
           "input": null,
           "output": 8192
         },
@@ -931,6 +1111,47 @@
       }
     },
     {
+      "id": "model-alibaba-qwen3-embedding-8b",
+      "source_id": "alibaba/qwen3-embedding-8b",
+      "source_metadata": {
+        "name": "Qwen3 Embedding 8B",
+        "description": "Multilingual text embedding model for retrieval, code search, classification, and clustering",
+        "family": "qwen",
+        "release_date": "2025-06-05",
+        "last_updated": "2025-06-05",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3-Embedding-8B"
+          }
+        ]
+      }
+    },
+    {
       "id": "model-alibaba-qwen3-max",
       "source_id": "alibaba/qwen3-max",
       "source_metadata": {
@@ -959,6 +1180,42 @@
           "context": 262144,
           "input": null,
           "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-alibaba-qwen3-max-preview",
+      "source_id": "alibaba/qwen3-max-preview",
+      "source_metadata": {
+        "name": "Qwen3 Max Preview",
+        "description": "Flagship Qwen model for complex reasoning, coding, and agentic workflows",
+        "family": "qwen",
+        "release_date": "2025-09-05",
+        "last_updated": "2025-09-23",
+        "knowledge_cutoff": "2025-04",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
         },
         "reported_open_weights": false,
         "reported_license": null,
@@ -1049,6 +1306,91 @@
       }
     },
     {
+      "id": "model-alibaba-qwen3-omni-30b-a3b-thinking",
+      "source_id": "alibaba/qwen3-omni-30b-a3b-thinking",
+      "source_metadata": {
+        "name": "Qwen3 Omni 30B A3B Thinking",
+        "description": "Multimodal reasoning model accepting text, images, video, and audio with text output",
+        "family": "qwen",
+        "release_date": "2025-09-22",
+        "last_updated": "2025-09-22",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 65536,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3-Omni-30B-A3B-Thinking"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-alibaba-qwen3-reranker-8b",
+      "source_id": "alibaba/qwen3-reranker-8b",
+      "source_metadata": {
+        "name": "Qwen3 Reranker 8B",
+        "description": "Multilingual query-document reranking model supporting more than 100 languages",
+        "family": "qwen",
+        "release_date": "2025-06-05",
+        "last_updated": "2025-06-05",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3-Reranker-8B"
+          }
+        ]
+      }
+    },
+    {
       "id": "model-alibaba-qwen3-vl-235b-a22b-instruct",
       "source_id": "alibaba/qwen3-vl-235b-a22b-instruct",
       "source_metadata": {
@@ -1130,6 +1472,86 @@
             "url": "https://huggingface.co/Qwen/Qwen3-VL-235B-A22B-Thinking"
           }
         ]
+      }
+    },
+    {
+      "id": "model-alibaba-qwen3-vl-30b-a3b-instruct",
+      "source_id": "alibaba/qwen3-vl-30b-a3b-instruct",
+      "source_metadata": {
+        "name": "Qwen3 VL 30B A3B Instruct",
+        "description": "Open vision-language MoE model for image and video understanding, documents, and visual agents",
+        "family": "qwen",
+        "release_date": "2025-10-04",
+        "last_updated": "2025-10-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3-VL-30B-A3B-Instruct"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-alibaba-qwen3-vl-flash",
+      "source_id": "alibaba/qwen3-vl-flash",
+      "source_metadata": {
+        "name": "Qwen3 VL Flash (Alibaba Cloud)",
+        "description": "Qwen vision-language model for visual reasoning, documents, and agent tasks",
+        "family": null,
+        "release_date": "2025-10-15",
+        "last_updated": "2025-10-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
       }
     },
     {
@@ -2251,6 +2673,45 @@
       }
     },
     {
+      "id": "model-amazon-nova-2-lite-v1",
+      "source_id": "amazon/nova-2-lite-v1",
+      "source_metadata": {
+        "name": "Nova 2 Lite",
+        "description": "Multimodal reasoning model for visual analysis, planning, and tool use",
+        "family": "nova",
+        "release_date": "2025-12-02",
+        "last_updated": "2025-12-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 65535
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-amazon-nova-lite",
       "source_id": "amazon/nova-lite",
       "source_metadata": {
@@ -2290,6 +2751,43 @@
       }
     },
     {
+      "id": "model-amazon-nova-lite-v1",
+      "source_id": "amazon/nova-lite-v1",
+      "source_metadata": {
+        "name": "Nova Lite 1.0",
+        "description": "Efficient model for low-latency assistance, extraction, and routine automation",
+        "family": "nova-lite",
+        "release_date": "2024-12-05",
+        "last_updated": "2024-12-05",
+        "knowledge_cutoff": "2024-10-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 300000,
+          "input": null,
+          "output": 5120
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-amazon-nova-micro",
       "source_id": "amazon/nova-micro",
       "source_metadata": {
@@ -2318,6 +2816,42 @@
           "context": 128000,
           "input": null,
           "output": 10000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-amazon-nova-micro-v1",
+      "source_id": "amazon/nova-micro-v1",
+      "source_metadata": {
+        "name": "Nova Micro 1.0",
+        "description": "Efficient model for low-latency assistance, extraction, and routine automation",
+        "family": "nova-micro",
+        "release_date": "2024-12-05",
+        "last_updated": "2024-12-05",
+        "knowledge_cutoff": "2024-10-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 5120
         },
         "reported_open_weights": false,
         "reported_license": null,
@@ -2398,6 +2932,79 @@
           "output": 10000
         },
         "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-amazon-nova-pro-v1",
+      "source_id": "amazon/nova-pro-v1",
+      "source_metadata": {
+        "name": "Nova Pro 1.0",
+        "description": "Flagship model for demanding analysis, coding, and production agent workflows",
+        "family": "nova-pro",
+        "release_date": "2024-12-05",
+        "last_updated": "2024-12-05",
+        "knowledge_cutoff": "2024-10-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 300000,
+          "input": null,
+          "output": 5120
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-anthracite-org-magnum-v4-72b",
+      "source_id": "anthracite-org/magnum-v4-72b",
+      "source_metadata": {
+        "name": "Magnum v4 72B",
+        "description": "Open-weight instruction model for adaptable chat and self-hosted production workloads",
+        "family": null,
+        "release_date": "2024-10-22",
+        "last_updated": "2024-10-22",
+        "knowledge_cutoff": "2024-06-30",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
         "reported_license": null,
         "links": [],
         "weights": []
@@ -2700,6 +3307,44 @@
           "context": 200000,
           "input": null,
           "output": 64000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-anthropic-claude-haiku-5-5",
+      "source_id": "anthropic/claude-haiku-5-5",
+      "source_metadata": {
+        "name": "Claude Haiku 5.5",
+        "description": "Fast Claude model for responsive assistance, classification, and lightweight agents",
+        "family": "claude-haiku",
+        "release_date": "2026-10-07",
+        "last_updated": "2026-10-07",
+        "knowledge_cutoff": "2026-06",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
         },
         "reported_open_weights": false,
         "reported_license": null,
@@ -3430,6 +4075,47 @@
       }
     },
     {
+      "id": "model-apodex-apodex-1-1-mini",
+      "source_id": "apodex/apodex-1.1-mini",
+      "source_metadata": {
+        "name": "Apodex 1.1 Mini",
+        "description": "Open-weight 35B MoE model for long-horizon research, forecasting, and tool-assisted work",
+        "family": null,
+        "release_date": "2026-08-24",
+        "last_updated": "2026-08-24",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 262144
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/apodex/Apodex-1.1-mini"
+          }
+        ]
+      }
+    },
+    {
       "id": "model-arcee-ai-trinity-large-preview",
       "source_id": "arcee-ai/trinity-large-preview",
       "source_metadata": {
@@ -3659,6 +4345,243 @@
             "format": "safetensors"
           }
         ]
+      }
+    },
+    {
+      "id": "model-baai-bge-m3",
+      "source_id": "baai/bge-m3",
+      "source_metadata": {
+        "name": "BGE M3",
+        "description": "Multilingual embedding model combining dense, sparse, and multi-vector retrieval",
+        "family": "bge",
+        "release_date": "2024-01-30",
+        "last_updated": "2024-01-30",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/BAAI/bge-m3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-baai-bge-reranker-v2-m3",
+      "source_id": "baai/bge-reranker-v2-m3",
+      "source_metadata": {
+        "name": "BGE Reranker V2 M3",
+        "description": "Lightweight multilingual cross-encoder that scores query-document relevance",
+        "family": "bge",
+        "release_date": "2024-03-15",
+        "last_updated": "2024-03-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/BAAI/bge-reranker-v2-m3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-baichuan-baichuan-m2-32b",
+      "source_id": "baichuan/baichuan-m2-32b",
+      "source_metadata": {
+        "name": "Baichuan M2 32B",
+        "description": "Open medical model trained for clinical reasoning and patient interaction with on, off, and auto thinking modes",
+        "family": "baichuan",
+        "release_date": "2025-08-13",
+        "last_updated": "2025-08-13",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/baichuan-inc/Baichuan-M2-32B"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-baidu-cobuddy",
+      "source_id": "baidu/cobuddy",
+      "source_metadata": {
+        "name": "CoBuddy",
+        "description": "Baidu Qianfan model optimized for code generation and tool-using coding agents",
+        "family": null,
+        "release_date": "2026-05-06",
+        "last_updated": "2026-05-06",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-baidu-ernie-4-5-21b-a3b",
+      "source_id": "baidu/ernie-4.5-21b-a3b",
+      "source_metadata": {
+        "name": "ERNIE 4.5 21B A3B",
+        "description": "Open ERNIE text MoE with 21B total and 3B active parameters",
+        "family": "ernie",
+        "release_date": "2025-06-30",
+        "last_updated": "2025-06-30",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 8000
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/baidu/ERNIE-4.5-21B-A3B-PT"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-baidu-ernie-4-5-vl-424b-a47b",
+      "source_id": "baidu/ernie-4.5-vl-424b-a47b",
+      "source_metadata": {
+        "name": "ERNIE 4.5 VL 424B A47B ",
+        "description": "Multimodal reasoning model for visual analysis, planning, and tool use",
+        "family": "ernie",
+        "release_date": "2025-06-30",
+        "last_updated": "2025-06-30",
+        "knowledge_cutoff": "2025-03-31",
+        "modalities": {
+          "input": [
+            "image",
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 123000,
+          "input": null,
+          "output": 16000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
       }
     },
     {
@@ -4203,6 +5126,42 @@
       }
     },
     {
+      "id": "model-cognitivecomputations-dolphin-mistral-24b-venice-edition",
+      "source_id": "cognitivecomputations/dolphin-mistral-24b-venice-edition",
+      "source_metadata": {
+        "name": "Uncensored",
+        "description": "Mistral model for multilingual chat, reasoning, and tool-assisted workflows",
+        "family": "mistral",
+        "release_date": "2025-07-09",
+        "last_updated": "2025-07-09",
+        "knowledge_cutoff": "2024-04-30",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-cohere-c4ai-aya-expanse-32b",
       "source_id": "cohere/c4ai-aya-expanse-32b",
       "source_metadata": {
@@ -4366,6 +5325,42 @@
             "url": "https://huggingface.co/CohereLabs/aya-vision-8b"
           }
         ]
+      }
+    },
+    {
+      "id": "model-cohere-command-a",
+      "source_id": "cohere/command-a",
+      "source_metadata": {
+        "name": "Command A",
+        "description": "Cohere command model for multilingual enterprise agents, tools, and chat",
+        "family": "command-a",
+        "release_date": "2025-03-13",
+        "last_updated": "2025-03-13",
+        "knowledge_cutoff": "2024-08-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
       }
     },
     {
@@ -5272,6 +6267,78 @@
       }
     },
     {
+      "id": "model-deepseek-deepseek-chat-v3-0324",
+      "source_id": "deepseek/deepseek-chat-v3-0324",
+      "source_metadata": {
+        "name": "DeepSeek V3 0324",
+        "description": "DeepSeek chat model for instruction following, coding, and analysis",
+        "family": "deepseek",
+        "release_date": "2025-03-24",
+        "last_updated": "2025-03-24",
+        "knowledge_cutoff": "2024-07-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 163840,
+          "input": null,
+          "output": 147456
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-deepseek-deepseek-chat-v3-1",
+      "source_id": "deepseek/deepseek-chat-v3.1",
+      "source_metadata": {
+        "name": "DeepSeek V3.1",
+        "description": "DeepSeek chat model for instruction following, coding, and analysis",
+        "family": "deepseek",
+        "release_date": "2025-08-21",
+        "last_updated": "2025-08-21",
+        "knowledge_cutoff": "2025-03-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 163840,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-deepseek-deepseek-ocr-2",
       "source_id": "deepseek/deepseek-ocr-2",
       "source_metadata": {
@@ -5345,6 +6412,88 @@
           {
             "label": "Hugging Face",
             "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-deepseek-deepseek-r1-0528",
+      "source_id": "deepseek/deepseek-r1-0528",
+      "source_metadata": {
+        "name": "DeepSeek R1 0528",
+        "description": "May 2025 DeepSeek R1 update with improved mathematics, coding, and reasoning",
+        "family": "deepseek-thinking",
+        "release_date": "2025-05-28",
+        "last_updated": "2025-05-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 163840,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-0528"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-deepseek-deepseek-r1-0528-qwen3-8b",
+      "source_id": "deepseek/deepseek-r1-0528-qwen3-8b",
+      "source_metadata": {
+        "name": "DeepSeek R1 0528 Qwen3 8B",
+        "description": "DeepSeek R1 0528 distilled into Qwen3 8B for mathematics, coding, and reasoning",
+        "family": "deepseek-thinking",
+        "release_date": "2025-05-29",
+        "last_updated": "2025-05-29",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 32000
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
           }
         ]
       }
@@ -6357,6 +7506,45 @@
       }
     },
     {
+      "id": "model-google-gemini-2-5-pro-preview",
+      "source_id": "google/gemini-2.5-pro-preview",
+      "source_metadata": {
+        "name": "Gemini 2.5 Pro Preview 06-05",
+        "description": "Advanced Gemini model for complex reasoning, coding, and multimodal analysis",
+        "family": "gemini",
+        "release_date": "2025-06-05",
+        "last_updated": "2025-06-05",
+        "knowledge_cutoff": "2025-01-31",
+        "modalities": {
+          "input": [
+            "pdf",
+            "image",
+            "text",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-google-gemini-2-5-pro-tts",
       "source_id": "google/gemini-2.5-pro-tts",
       "source_metadata": {
@@ -7331,6 +8519,45 @@
       }
     },
     {
+      "id": "model-google-gemini-nano-banana-2-1",
+      "source_id": "google/gemini-nano-banana-2.1",
+      "source_metadata": {
+        "name": "Nano Banana 2.1",
+        "description": "Image model for prompt-driven generation, multi-turn editing, and visual design workflows",
+        "family": "gemini-flash",
+        "release_date": "2026-10-06",
+        "last_updated": "2026-10-06",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text",
+            "image"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": false,
+          "temperature": false
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-google-gemini-omni-flash-preview",
       "source_id": "google/gemini-omni-flash-preview",
       "source_metadata": {
@@ -7402,6 +8629,42 @@
           "output": 65536
         },
         "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-google-gemma-2-27b-it",
+      "source_id": "google/gemma-2-27b-it",
+      "source_metadata": {
+        "name": "Gemma 2 27B",
+        "description": "Open Gemma instruction model for efficient chat and self-hosted deployments",
+        "family": "gemma",
+        "release_date": "2024-07-13",
+        "last_updated": "2024-07-13",
+        "knowledge_cutoff": "2024-06-30",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 2048
+        },
+        "reported_open_weights": true,
         "reported_license": null,
         "links": [],
         "weights": []
@@ -7934,6 +9197,47 @@
       }
     },
     {
+      "id": "model-gryphe-mythomax-l2-13b",
+      "source_id": "gryphe/mythomax-l2-13b",
+      "source_metadata": {
+        "name": "MythoMax L2 13B",
+        "description": "Llama 2 merge combining MythoLogic and Huginn for creative writing and roleplay",
+        "family": null,
+        "release_date": "2023-08-10",
+        "last_updated": "2023-08-10",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 4096,
+          "input": null,
+          "output": 3200
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Gryphe/MythoMax-L2-13b"
+          }
+        ]
+      }
+    },
+    {
       "id": "model-ibm-granite-4-h-micro",
       "source_id": "ibm/granite-4-h-micro",
       "source_metadata": {
@@ -8016,6 +9320,155 @@
       }
     },
     {
+      "id": "model-ibm-granite-4-2-8b",
+      "source_id": "ibm/granite-4.2-8b",
+      "source_metadata": {
+        "name": "Granite 4.2 8B",
+        "description": "Reasoning model for deliberate analysis, multi-step problem solving, and tool use",
+        "family": "granite",
+        "release_date": "2026-08-31",
+        "last_updated": "2026-08-31",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 117964
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-inception-mercury-2",
+      "source_id": "inception/mercury-2",
+      "source_metadata": {
+        "name": "Mercury 2",
+        "description": "Reasoning model for deliberate analysis, multi-step problem solving, and tool use",
+        "family": "mercury",
+        "release_date": "2026-03-04",
+        "last_updated": "2026-03-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 50000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-inception-mercury-2-5",
+      "source_id": "inception/mercury-2.5",
+      "source_metadata": {
+        "name": "Mercury 2.5",
+        "description": "Reasoning model for deliberate analysis, multi-step problem solving, and tool use",
+        "family": "mercury",
+        "release_date": "2026-09-08",
+        "last_updated": "2026-09-08",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 260000,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-inclusionai-ling-3-0-flash",
+      "source_id": "inclusionai/ling-3.0-flash",
+      "source_metadata": {
+        "name": "Ling 3.0 Flash",
+        "description": "Hybrid-linear MoE reasoning model with 124B total and 5.1B active parameters for efficient agents",
+        "family": "ling",
+        "release_date": "2026-07-23",
+        "last_updated": "2026-07-23",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash"
+          }
+        ]
+      }
+    },
+    {
       "id": "model-inclusionai-ling-3-0-flash-fin",
       "source_id": "inclusionai/ling-3.0-flash-fin",
       "source_metadata": {
@@ -8023,7 +9476,7 @@
         "description": "Finance-enhanced model for financial research, multi-step investment workflows, and long-horizon planning and execution",
         "family": "ling",
         "release_date": "2026-08-27",
-        "last_updated": "2026-08-27",
+        "last_updated": "2026-09-03",
         "knowledge_cutoff": null,
         "modalities": {
           "input": [
@@ -8045,10 +9498,94 @@
           "input": null,
           "output": 32768
         },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash-Fin"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-inclusionai-ling-3-0-flash-sante",
+      "source_id": "inclusionai/ling-3.0-flash-sante",
+      "source_metadata": {
+        "name": "Ling 3.0 Flash Sante",
+        "description": "Health and medicine specialization of Ling 3.0 Flash for medical reasoning and evidence-based retrieval",
+        "family": "ling",
+        "release_date": "2026-09-04",
+        "last_updated": "2026-09-04",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
         "reported_open_weights": false,
         "reported_license": null,
         "links": [],
         "weights": []
+      }
+    },
+    {
+      "id": "model-inclusionai-ling-3-0-flash-vl",
+      "source_id": "inclusionai/ling-3.0-flash-vl",
+      "source_metadata": {
+        "name": "Ling 3.0 Flash VL",
+        "description": "Native multimodal hybrid MoE model for image and video understanding, reasoning, and visual agents",
+        "family": "ling",
+        "release_date": "2026-09-10",
+        "last_updated": "2026-09-10",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash-VL"
+          }
+        ]
       }
     },
     {
@@ -8088,6 +9625,78 @@
       }
     },
     {
+      "id": "model-inference-net-schematron-v2-small",
+      "source_id": "inference-net/schematron-v2-small",
+      "source_metadata": {
+        "name": "Schematron V2 Small",
+        "description": "Efficient model for low-latency assistance, extraction, and routine automation",
+        "family": null,
+        "release_date": "2026-09-12",
+        "last_updated": "2026-09-12",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-inference-net-schematron-v2-turbo",
+      "source_id": "inference-net/schematron-v2-turbo",
+      "source_metadata": {
+        "name": "Schematron V2 Turbo",
+        "description": "Efficient model for low-latency assistance, extraction, and routine automation",
+        "family": null,
+        "release_date": "2026-09-12",
+        "last_updated": "2026-09-12",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-liquid-d1",
       "source_id": "liquid/d1",
       "source_metadata": {
@@ -8116,6 +9725,42 @@
           "context": 65536,
           "input": null,
           "output": 0
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-mancer-weaver",
+      "source_id": "mancer/weaver",
+      "source_metadata": {
+        "name": "Weaver (alpha)",
+        "description": "General-purpose chat model for instruction following, writing, and analysis",
+        "family": "alpha",
+        "release_date": "2023-08-02",
+        "last_updated": "2023-08-02",
+        "knowledge_cutoff": "2023-06-30",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8000,
+          "input": null,
+          "output": 6000
         },
         "reported_open_weights": false,
         "reported_license": null,
@@ -8357,6 +10002,47 @@
           {
             "label": "Hugging Face",
             "url": "https://huggingface.co/meta-llama/Llama-3.2-1B"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-meta-llama-3-2-1b-instruct",
+      "source_id": "meta/llama-3.2-1b-instruct",
+      "source_metadata": {
+        "name": "Llama 3.2 1B Instruct",
+        "description": "Compact instruction-tuned Llama model for multilingual dialogue and on-device assistants",
+        "family": "llama",
+        "release_date": "2024-09-25",
+        "last_updated": "2024-09-25",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 32000
+        },
+        "reported_open_weights": true,
+        "reported_license": "Llama 3.2 Community License",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/meta-llama/Llama-3.2-1B-Instruct"
           }
         ]
       }
@@ -8746,6 +10432,107 @@
       }
     },
     {
+      "id": "model-meta-muse-wonder-1-0",
+      "source_id": "meta/muse-wonder-1.0",
+      "source_metadata": {
+        "name": "Muse Wonder",
+        "description": "Muse Wonder is a frontier multimodal reasoning model from Meta for personal and professional agents, long-horizon coding, and computer use. It combines Active Memory, which carries relevant context across conversations, with Active Focus, which keeps it working through blockers toward a goal.",
+        "family": "muse",
+        "release_date": "2026-10-12",
+        "last_updated": "2026-10-12",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "pdf",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [
+          {
+            "label": "Announcement",
+            "url": "https://research.meta.ai/blog/muse-wonder",
+            "type": "announcement"
+          },
+          {
+            "label": "Model card",
+            "url": "https://research.meta.ai/static/muse-wonder-model-card",
+            "type": "model_card"
+          }
+        ],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-meta-muse-wonder-full",
+      "source_id": "meta/muse-wonder-full",
+      "source_metadata": {
+        "name": "Muse Wonder Full",
+        "description": "Muse Wonder Full is the most capable model in Meta's Muse Wonder series, built for long-running professional agents and ultra-long-horizon software engineering. It shares Muse Wonder's Active Memory and Active Focus capabilities and generally scores higher on Meta's agentic and coding evaluations.",
+        "family": "muse",
+        "release_date": "2026-10-12",
+        "last_updated": "2026-10-12",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video",
+            "audio"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [
+          {
+            "label": "Announcement",
+            "url": "https://research.meta.ai/blog/muse-wonder",
+            "type": "announcement"
+          },
+          {
+            "label": "Model card",
+            "url": "https://research.meta.ai/static/muse-wonder-model-card",
+            "type": "model_card"
+          }
+        ],
+        "weights": []
+      }
+    },
+    {
       "id": "model-microsoft-mai-code-1-flash",
       "source_id": "microsoft/mai-code-1-flash",
       "source_metadata": {
@@ -8875,6 +10662,129 @@
           }
         ],
         "weights": []
+      }
+    },
+    {
+      "id": "model-microsoft-wizardlm-2-8x22b",
+      "source_id": "microsoft/wizardlm-2-8x22b",
+      "source_metadata": {
+        "name": "WizardLM 2 8x22B",
+        "description": "Microsoft WizardLM instruction-tuned Mixtral MoE for multilingual dialogue and complex tasks",
+        "family": null,
+        "release_date": "2024-04-15",
+        "last_updated": "2024-04-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 65536,
+          "input": null,
+          "output": 8000
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face archive",
+            "url": "https://huggingface.co/alpindale/WizardLM-2-8x22B"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-mindlab-macaron-v1-tall",
+      "source_id": "mindlab/macaron-v1-tall",
+      "source_metadata": {
+        "name": "Macaron V1 Tall",
+        "description": "Qwen3.6-based Mixture-of-LoRA model with specialists for chat, personal agents, coding, and generative UI",
+        "family": null,
+        "release_date": "2026-07-21",
+        "last_updated": "2026-07-21",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mindlab-research/Macaron-V1-Tall"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-mindlab-macaron-v1-venti",
+      "source_id": "mindlab/macaron-v1-venti",
+      "source_metadata": {
+        "name": "Macaron V1 Venti",
+        "description": "GLM-5.2-based Mixture-of-LoRA model with specialists for chat, personal agents, coding, and generative UI",
+        "family": null,
+        "release_date": "2026-07-21",
+        "last_updated": "2026-07-21",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1048576,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/mindlab-research/Macaron-V1-Venti"
+          }
+        ]
       }
     },
     {
@@ -9304,6 +11214,42 @@
       }
     },
     {
+      "id": "model-minimax-minimax-text-01",
+      "source_id": "minimax/MiniMax-Text-01",
+      "source_metadata": {
+        "name": "MiniMax Text 01 (MiniMax)",
+        "description": "MiniMax model for chat, coding, office work, and agentic tasks",
+        "family": "minimax",
+        "release_date": "2025-01-15",
+        "last_updated": "2025-01-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-minimax-image-01",
       "source_id": "minimax/image-01",
       "source_metadata": {
@@ -9338,6 +11284,47 @@
         "reported_license": null,
         "links": [],
         "weights": []
+      }
+    },
+    {
+      "id": "model-minimax-minimax-m1-80k",
+      "source_id": "minimax/minimax-m1-80k",
+      "source_metadata": {
+        "name": "MiniMax M1 80K",
+        "description": "Open hybrid-attention MoE reasoning model with a million-token context and an 80K thinking budget",
+        "family": "minimax",
+        "release_date": "2025-06-17",
+        "last_updated": "2025-06-17",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 80000
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/MiniMaxAI/MiniMax-M1-80k"
+          }
+        ]
       }
     },
     {
@@ -9379,6 +11366,42 @@
             "url": "https://huggingface.co/mistralai/Codestral-22B-v0.1"
           }
         ]
+      }
+    },
+    {
+      "id": "model-mistral-codestral-2508",
+      "source_id": "mistral/codestral-2508",
+      "source_metadata": {
+        "name": "Codestral 25.08",
+        "description": "Mistral code model for low-latency completion, fill-in-the-middle, and code generation",
+        "family": "codestral",
+        "release_date": "2025-07-30",
+        "last_updated": "2025-07-30",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
       }
     },
     {
@@ -9785,6 +11808,43 @@
       }
     },
     {
+      "id": "model-mistral-ministral-14b-2512",
+      "source_id": "mistral/ministral-14b-2512",
+      "source_metadata": {
+        "name": "Ministral 3 14B 2512",
+        "description": "Compact Mistral model for edge, latency-sensitive, and cost-efficient workloads",
+        "family": "ministral",
+        "release_date": "2025-12-02",
+        "last_updated": "2025-12-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 209715
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-mistral-ministral-3-14b-instruct-2512",
       "source_id": "mistral/ministral-3-14b-instruct-2512",
       "source_metadata": {
@@ -9947,6 +12007,80 @@
       }
     },
     {
+      "id": "model-mistral-ministral-3b-2512",
+      "source_id": "mistral/ministral-3b-2512",
+      "source_metadata": {
+        "name": "Ministral 3 3B 2512",
+        "description": "Compact Mistral model for edge, latency-sensitive, and cost-efficient workloads",
+        "family": "ministral",
+        "release_date": "2025-12-02",
+        "last_updated": "2025-12-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 104857
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-mistral-ministral-8b-2512",
+      "source_id": "mistral/ministral-8b-2512",
+      "source_metadata": {
+        "name": "Ministral 3 8B 2512",
+        "description": "Compact Mistral model for edge, latency-sensitive, and cost-efficient workloads",
+        "family": "ministral",
+        "release_date": "2025-12-02",
+        "last_updated": "2025-12-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 209715
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-mistral-ministral-8b-instruct-2410",
       "source_id": "mistral/ministral-8b-instruct-2410",
       "source_metadata": {
@@ -10016,6 +12150,80 @@
           "context": 8000,
           "input": null,
           "output": 3072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-mistral-mistral-large",
+      "source_id": "mistral/mistral-large",
+      "source_metadata": {
+        "name": "Mistral Large",
+        "description": "Flagship Mistral model for advanced reasoning, coding, and multilingual work",
+        "family": "mistral-large",
+        "release_date": "2024-02-26",
+        "last_updated": "2024-02-26",
+        "knowledge_cutoff": "2024-11-30",
+        "modalities": {
+          "input": [
+            "text",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 102400
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-mistral-mistral-large-2407",
+      "source_id": "mistral/mistral-large-2407",
+      "source_metadata": {
+        "name": "Mistral Large 2407",
+        "description": "Flagship Mistral model for advanced reasoning, coding, and multilingual work",
+        "family": "mistral-large",
+        "release_date": "2024-11-19",
+        "last_updated": "2024-11-19",
+        "knowledge_cutoff": "2024-03-31",
+        "modalities": {
+          "input": [
+            "text",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 104857
         },
         "reported_open_weights": false,
         "reported_license": null,
@@ -10265,6 +12473,120 @@
       }
     },
     {
+      "id": "model-mistral-mistral-medium-3",
+      "source_id": "mistral/mistral-medium-3",
+      "source_metadata": {
+        "name": "Mistral Medium 3",
+        "description": "Mistral model for multilingual chat, reasoning, and tool-assisted workflows",
+        "family": "mistral-medium",
+        "release_date": "2025-05-07",
+        "last_updated": "2025-05-07",
+        "knowledge_cutoff": "2025-03-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 104857
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-mistral-mistral-medium-3-5",
+      "source_id": "mistral/mistral-medium-3-5",
+      "source_metadata": {
+        "name": "Mistral Medium 3.5",
+        "description": "Mistral model for multilingual chat, reasoning, and tool-assisted workflows",
+        "family": "mistral-medium",
+        "release_date": "2026-04-30",
+        "last_updated": "2026-04-30",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 209715
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-mistral-mistral-medium-3-1",
+      "source_id": "mistral/mistral-medium-3.1",
+      "source_metadata": {
+        "name": "Mistral Medium 3.1",
+        "description": "Mistral model for multilingual chat, reasoning, and tool-assisted workflows",
+        "family": "mistral-medium",
+        "release_date": "2025-08-13",
+        "last_updated": "2025-08-13",
+        "knowledge_cutoff": "2025-06-30",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 104857
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-mistral-mistral-medium-latest",
       "source_id": "mistral/mistral-medium-latest",
       "source_metadata": {
@@ -10345,6 +12667,79 @@
             "url": "https://huggingface.co/mistralai/Mistral-Nemo-Instruct-2407"
           }
         ]
+      }
+    },
+    {
+      "id": "model-mistral-mistral-saba",
+      "source_id": "mistral/mistral-saba",
+      "source_metadata": {
+        "name": "Saba",
+        "description": "Mistral model for multilingual chat, reasoning, and tool-assisted workflows",
+        "family": "mistral",
+        "release_date": "2025-02-17",
+        "last_updated": "2025-02-17",
+        "knowledge_cutoff": "2024-09-30",
+        "modalities": {
+          "input": [
+            "text",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 26214
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-mistral-mistral-small-24b-instruct-2501",
+      "source_id": "mistral/mistral-small-24b-instruct-2501",
+      "source_metadata": {
+        "name": "Mistral Small 3",
+        "description": "Efficient Mistral model for fast chat, extraction, and production assistants",
+        "family": "mistral-small",
+        "release_date": "2025-01-30",
+        "last_updated": "2025-01-30",
+        "knowledge_cutoff": "2023-10-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
       }
     },
     {
@@ -10474,6 +12869,80 @@
       }
     },
     {
+      "id": "model-mistral-mistral-small-3-1-24b-instruct",
+      "source_id": "mistral/mistral-small-3.1-24b-instruct",
+      "source_metadata": {
+        "name": "Mistral Small 3.1 24B",
+        "description": "Efficient Mistral model for fast chat, extraction, and production assistants",
+        "family": "mistral-small",
+        "release_date": "2025-03-17",
+        "last_updated": "2025-03-17",
+        "knowledge_cutoff": "2023-10-31",
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 128000,
+          "input": null,
+          "output": 102400
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-mistral-mistral-small-3-2-24b-instruct",
+      "source_id": "mistral/mistral-small-3.2-24b-instruct",
+      "source_metadata": {
+        "name": "Mistral Small 3.2 24B",
+        "description": "Efficient Mistral model for fast chat, extraction, and production assistants",
+        "family": "mistral-small",
+        "release_date": "2025-06-20",
+        "last_updated": "2025-06-20",
+        "knowledge_cutoff": "2023-10-31",
+        "modalities": {
+          "input": [
+            "image",
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-mistral-mistral-small-latest",
       "source_id": "mistral/mistral-small-latest",
       "source_metadata": {
@@ -10513,6 +12982,43 @@
             "url": "https://huggingface.co/mistralai/Mistral-Small-4-119B-2603"
           }
         ]
+      }
+    },
+    {
+      "id": "model-mistral-mixtral-8x22b-instruct",
+      "source_id": "mistral/mixtral-8x22b-instruct",
+      "source_metadata": {
+        "name": "Mixtral 8x22B Instruct",
+        "description": "Mistral model for multilingual chat, reasoning, and tool-assisted workflows",
+        "family": "mistral",
+        "release_date": "2024-04-17",
+        "last_updated": "2024-04-17",
+        "knowledge_cutoff": "2024-01-31",
+        "modalities": {
+          "input": [
+            "text",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 65536,
+          "input": null,
+          "output": 52428
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
       }
     },
     {
@@ -10791,6 +13297,124 @@
         "reported_license": null,
         "links": [],
         "weights": []
+      }
+    },
+    {
+      "id": "model-moonshotai-kimi-k2",
+      "source_id": "moonshotai/kimi-k2",
+      "source_metadata": {
+        "name": "Kimi K2 0711",
+        "description": "Kimi model for long-context chat, coding, and agentic reasoning",
+        "family": "kimi-k2",
+        "release_date": "2025-07-11",
+        "last_updated": "2025-07-11",
+        "knowledge_cutoff": "2024-12-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 98304
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-moonshotai-kimi-k2-0905",
+      "source_id": "moonshotai/kimi-k2-0905",
+      "source_metadata": {
+        "name": "Kimi K2 Instruct 0905",
+        "description": "September 2025 Kimi K2 instruction update with a 256K context and improved agentic coding",
+        "family": "kimi-k2",
+        "release_date": "2025-09-05",
+        "last_updated": "2025-09-05",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 98304
+        },
+        "reported_open_weights": true,
+        "reported_license": "Modified MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/moonshotai/Kimi-K2-Instruct-0905"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-moonshotai-kimi-k2-instruct",
+      "source_id": "moonshotai/kimi-k2-instruct",
+      "source_metadata": {
+        "name": "Kimi K2 Instruct",
+        "description": "Non-thinking Kimi K2 MoE instruction model for coding and tool-using agents",
+        "family": "kimi-k2",
+        "release_date": "2025-07-11",
+        "last_updated": "2025-07-11",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 32768
+        },
+        "reported_open_weights": true,
+        "reported_license": "Modified MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/moonshotai/Kimi-K2-Instruct"
+          }
+        ]
       }
     },
     {
@@ -11124,6 +13748,78 @@
       }
     },
     {
+      "id": "model-morph-morph-v3-fast",
+      "source_id": "morph/morph-v3-fast",
+      "source_metadata": {
+        "name": "Morph V3 Fast",
+        "description": "Efficient model for low-latency assistance, extraction, and routine automation",
+        "family": "morph",
+        "release_date": "2025-07-07",
+        "last_updated": "2025-07-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 81920,
+          "input": null,
+          "output": 38000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-morph-morph-v3-large",
+      "source_id": "morph/morph-v3-large",
+      "source_metadata": {
+        "name": "Morph V3 Large",
+        "description": "Flagship model for demanding analysis, coding, and production agent workflows",
+        "family": "morph",
+        "release_date": "2025-07-07",
+        "last_updated": "2025-07-07",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": 131072
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-motif-technologies-motif-3",
       "source_id": "motif-technologies/motif-3",
       "source_metadata": {
@@ -11247,6 +13943,155 @@
             "url": "https://huggingface.co/nex-agi/Nex-N2-Pro"
           }
         ]
+      }
+    },
+    {
+      "id": "model-nousresearch-hermes-2-pro-llama-3-8b",
+      "source_id": "nousresearch/hermes-2-pro-llama-3-8b",
+      "source_metadata": {
+        "name": "Hermes 2 Pro Llama 3 8B",
+        "description": "Llama 3 fine-tune optimized for function calling, structured JSON responses, and dialogue",
+        "family": null,
+        "release_date": "2024-04-30",
+        "last_updated": "2024-04-30",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": true,
+        "reported_license": "Llama 3 Community License",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/NousResearch/Hermes-2-Pro-Llama-3-8B"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-nousresearch-hermes-3-llama-3-1-405b",
+      "source_id": "nousresearch/hermes-3-llama-3.1-405b",
+      "source_metadata": {
+        "name": "Hermes 3 405B Instruct",
+        "description": "Open Llama instruction model for multilingual chat, reasoning, and coding",
+        "family": "nousresearch",
+        "release_date": "2024-08-16",
+        "last_updated": "2024-08-16",
+        "knowledge_cutoff": "2023-12-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-nousresearch-hermes-3-llama-3-1-70b",
+      "source_id": "nousresearch/hermes-3-llama-3.1-70b",
+      "source_metadata": {
+        "name": "Hermes 3 70B Instruct",
+        "description": "Open Llama instruction model for multilingual chat, reasoning, and coding",
+        "family": "nousresearch",
+        "release_date": "2024-08-18",
+        "last_updated": "2024-08-18",
+        "knowledge_cutoff": "2023-12-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-nousresearch-hermes-4-405b",
+      "source_id": "nousresearch/hermes-4-405b",
+      "source_metadata": {
+        "name": "Hermes 4 405B",
+        "description": "Reasoning model for deliberate analysis, multi-step problem solving, and tool use",
+        "family": "hermes",
+        "release_date": "2025-08-26",
+        "last_updated": "2025-08-26",
+        "knowledge_cutoff": "2024-08-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 117964
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
       }
     },
     {
@@ -11427,6 +14272,47 @@
         "reported_license": null,
         "links": [],
         "weights": []
+      }
+    },
+    {
+      "id": "model-nvidia-llama-nemotron-embed-1b-v2",
+      "source_id": "nvidia/llama-nemotron-embed-1b-v2",
+      "source_metadata": {
+        "name": "Llama Nemotron Embed 1B v2",
+        "description": "Multilingual text embedding model for retrieval and question answering pipelines",
+        "family": "nemotron",
+        "release_date": "2025-10-16",
+        "last_updated": "2025-10-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 2048
+        },
+        "reported_open_weights": true,
+        "reported_license": "nvidia-open-model-license",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/nvidia/llama-nemotron-embed-1b-v2"
+          }
+        ]
       }
     },
     {
@@ -12535,6 +15421,84 @@
       }
     },
     {
+      "id": "model-openai-gpt-5-image",
+      "source_id": "openai/gpt-5-image",
+      "source_metadata": {
+        "name": "GPT-5 Image",
+        "description": "Image model for prompt-driven generation, editing, and visual design workflows",
+        "family": "gpt",
+        "release_date": "2025-10-14",
+        "last_updated": "2025-10-14",
+        "knowledge_cutoff": "2024-10-01",
+        "modalities": {
+          "input": [
+            "image",
+            "text",
+            "pdf"
+          ],
+          "output": [
+            "image",
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 400000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-openai-gpt-5-image-mini",
+      "source_id": "openai/gpt-5-image-mini",
+      "source_metadata": {
+        "name": "GPT-5 Image Mini",
+        "description": "Image model for prompt-driven generation, editing, and visual design workflows",
+        "family": "gpt",
+        "release_date": "2025-10-16",
+        "last_updated": "2025-10-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "pdf",
+            "image",
+            "text"
+          ],
+          "output": [
+            "image",
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 400000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-openai-gpt-5-mini",
       "source_id": "openai/gpt-5-mini",
       "source_metadata": {
@@ -13122,6 +16086,45 @@
         "limits": {
           "context": 1050000,
           "input": 922000,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-openai-gpt-5-4-image-2",
+      "source_id": "openai/gpt-5.4-image-2",
+      "source_metadata": {
+        "name": "GPT-5.4 Image 2",
+        "description": "Image model for prompt-driven generation, editing, and visual design workflows",
+        "family": "gpt",
+        "release_date": "2026-04-21",
+        "last_updated": "2026-04-21",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "image",
+            "text",
+            "pdf"
+          ],
+          "output": [
+            "image",
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 272000,
+          "input": null,
           "output": 128000
         },
         "reported_open_weights": false,
@@ -14573,6 +17576,86 @@
       }
     },
     {
+      "id": "model-paddlepaddle-paddleocr-vl",
+      "source_id": "paddlepaddle/paddleocr-vl",
+      "source_metadata": {
+        "name": "PaddleOCR VL",
+        "description": "Compact vision-language model for multilingual document parsing, OCR, tables, formulas, and charts",
+        "family": null,
+        "release_date": "2025-10-16",
+        "last_updated": "2025-10-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/PaddlePaddle/PaddleOCR-VL"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-perceptron-perceptron-mk1",
+      "source_id": "perceptron/perceptron-mk1",
+      "source_metadata": {
+        "name": "Perceptron Mk1",
+        "description": "Multimodal reasoning model for visual analysis, planning, and tool use",
+        "family": null,
+        "release_date": "2026-05-12",
+        "last_updated": "2026-05-12",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 8192
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-perplexity-sonar",
       "source_id": "perplexity/sonar",
       "source_metadata": {
@@ -14716,6 +17799,53 @@
         "reported_license": null,
         "links": [],
         "weights": []
+      }
+    },
+    {
+      "id": "model-phocinae-phocinae-largha-150m-v1",
+      "source_id": "phocinae/phocinae-largha-150m-v1",
+      "source_metadata": {
+        "name": "Phocinae Largha 150M v1",
+        "description": "Encoder decision model that answers typed questions (noul, choice, score) over text with calibrated probabilities, on CPU and GPU",
+        "family": null,
+        "release_date": "2026-10-08",
+        "last_updated": "2026-10-09",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [
+          {
+            "label": "Model card",
+            "url": "https://huggingface.co/Phocinae/Phocinae-Largha-150M-v1",
+            "type": "model_card"
+          }
+        ],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Phocinae/Phocinae-Largha-150M-v1"
+          }
+        ]
       }
     },
     {
@@ -14939,6 +18069,152 @@
       }
     },
     {
+      "id": "model-rekaai-reka-edge",
+      "source_id": "rekaai/reka-edge",
+      "source_metadata": {
+        "name": "Reka Edge",
+        "description": "Multimodal model for analyzing text, images, documents, and rich media",
+        "family": "reka",
+        "release_date": "2026-03-20",
+        "last_updated": "2026-03-20",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "image",
+            "text",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 16384,
+          "input": null,
+          "output": 14745
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-rekaai-reka-flash-3",
+      "source_id": "rekaai/reka-flash-3",
+      "source_metadata": {
+        "name": "Reka Flash 3",
+        "description": "Efficient model for low-latency assistance, extraction, and routine automation",
+        "family": "reka",
+        "release_date": "2025-03-12",
+        "last_updated": "2025-03-12",
+        "knowledge_cutoff": "2025-01-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 65536,
+          "input": null,
+          "output": 58982
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-relace-relace-apply-3",
+      "source_id": "relace/relace-apply-3",
+      "source_metadata": {
+        "name": "Relace Apply 3",
+        "description": "General-purpose chat model for instruction following, writing, and analysis",
+        "family": null,
+        "release_date": "2025-09-26",
+        "last_updated": "2025-09-26",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": false,
+          "temperature": false
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-relace-relace-search",
+      "source_id": "relace/relace-search",
+      "source_metadata": {
+        "name": "Relace Search",
+        "description": "Tool-capable chat model for instruction following and agentic application workflows",
+        "family": null,
+        "release_date": "2025-12-08",
+        "last_updated": "2025-12-08",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-sakana-fugu",
       "source_id": "sakana/fugu",
       "source_metadata": {
@@ -14982,6 +18258,44 @@
       }
     },
     {
+      "id": "model-sakana-fugu-max",
+      "source_id": "sakana/fugu-max",
+      "source_metadata": {
+        "name": "Fugu Max",
+        "description": "Multi-agent model for routing expert agents across complex analytical tasks",
+        "family": "fugu",
+        "release_date": "2026-09-11",
+        "last_updated": "2026-09-11",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-sakana-fugu-ultra",
       "source_id": "sakana/fugu-ultra",
       "source_metadata": {
@@ -15021,6 +18335,44 @@
             "type": "docs"
           }
         ],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-sakana-fugu-ultra-v2",
+      "source_id": "sakana/fugu-ultra-v2",
+      "source_metadata": {
+        "name": "Fugu Ultra v2",
+        "description": "Quality-first multi-agent model for hard research, analysis, and competitions",
+        "family": "fugu",
+        "release_date": "2026-09-11",
+        "last_updated": "2026-09-11",
+        "knowledge_cutoff": "2026-08-28",
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": false
+        },
+        "limits": {
+          "context": 1000000,
+          "input": null,
+          "output": 128000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
         "weights": []
       }
     },
@@ -15070,6 +18422,114 @@
             "type": "docs"
           }
         ],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-sao10k-l3-lunaris-8b",
+      "source_id": "sao10k/l3-lunaris-8b",
+      "source_metadata": {
+        "name": "Llama 3 8B Lunaris",
+        "description": "Open Llama instruction model for multilingual chat, reasoning, and coding",
+        "family": "llama",
+        "release_date": "2024-08-13",
+        "last_updated": "2024-08-13",
+        "knowledge_cutoff": "2023-12-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 7372
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-sao10k-l3-1-euryale-70b",
+      "source_id": "sao10k/l3.1-euryale-70b",
+      "source_metadata": {
+        "name": "Llama 3.1 Euryale 70B v2.2",
+        "description": "Open Llama instruction model for multilingual chat, reasoning, and coding",
+        "family": "llama",
+        "release_date": "2024-08-28",
+        "last_updated": "2024-08-28",
+        "knowledge_cutoff": "2023-12-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-sao10k-l3-3-euryale-70b",
+      "source_id": "sao10k/l3.3-euryale-70b",
+      "source_metadata": {
+        "name": "Llama 3.3 Euryale 70B",
+        "description": "Open Llama instruction model for multilingual chat, reasoning, and coding",
+        "family": "llama",
+        "release_date": "2024-12-18",
+        "last_updated": "2024-12-18",
+        "knowledge_cutoff": "2023-12-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 16384
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
         "weights": []
       }
     },
@@ -15444,6 +18904,114 @@
       }
     },
     {
+      "id": "model-tencent-hy-mt2-1-8b",
+      "source_id": "tencent/hy-mt2-1.8b",
+      "source_metadata": {
+        "name": "Hy-MT2-1.8B",
+        "description": "Tencent Hy reasoning model for coding, instruction following, and agent tasks",
+        "family": "Hy",
+        "release_date": "2026-08-20",
+        "last_updated": "2026-08-20",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-tencent-hy-mt2-30b-a3b",
+      "source_id": "tencent/hy-mt2-30b-a3b",
+      "source_metadata": {
+        "name": "Hy-MT2-30B-A3B",
+        "description": "Tencent Hy reasoning model for coding, instruction following, and agent tasks",
+        "family": "Hy",
+        "release_date": "2026-08-20",
+        "last_updated": "2026-08-20",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-tencent-hy-mt2-7b",
+      "source_id": "tencent/hy-mt2-7b",
+      "source_metadata": {
+        "name": "Hy-MT2-7B",
+        "description": "Tencent Hy reasoning model for coding, instruction following, and agent tasks",
+        "family": "Hy",
+        "release_date": "2026-08-19",
+        "last_updated": "2026-08-19",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 4096
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-tencent-hy3",
       "source_id": "tencent/hy3",
       "source_metadata": {
@@ -15554,6 +19122,114 @@
           "context": 1024000,
           "input": null,
           "output": 64000
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-thedrummer-cydonia-24b-v4-1",
+      "source_id": "thedrummer/cydonia-24b-v4.1",
+      "source_metadata": {
+        "name": "Cydonia 24B V4.1",
+        "description": "Open-weight instruction model for adaptable chat and self-hosted production workloads",
+        "family": null,
+        "release_date": "2025-09-27",
+        "last_updated": "2025-09-27",
+        "knowledge_cutoff": "2024-04-30",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 131072,
+          "input": null,
+          "output": 117964
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-thedrummer-skyfall-36b-v2",
+      "source_id": "thedrummer/skyfall-36b-v2",
+      "source_metadata": {
+        "name": "Skyfall 36B V2",
+        "description": "Open-weight instruction model for adaptable chat and self-hosted production workloads",
+        "family": null,
+        "release_date": "2025-03-10",
+        "last_updated": "2025-03-10",
+        "knowledge_cutoff": "2024-06-30",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 29491
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-thedrummer-unslopnemo-12b",
+      "source_id": "thedrummer/unslopnemo-12b",
+      "source_metadata": {
+        "name": "UnslopNemo 12B",
+        "description": "Open-weight instruction model for adaptable chat and self-hosted production workloads",
+        "family": null,
+        "release_date": "2024-11-08",
+        "last_updated": "2024-11-08",
+        "knowledge_cutoff": "2024-04-30",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 1024000,
+          "input": null,
+          "output": 819200
         },
         "reported_open_weights": true,
         "reported_license": null,
@@ -15757,6 +19433,42 @@
           "output": 131072
         },
         "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-undi95-remm-slerp-l2-13b",
+      "source_id": "undi95/remm-slerp-l2-13b",
+      "source_metadata": {
+        "name": "ReMM SLERP 13B",
+        "description": "Open-weight instruction model for adaptable chat and self-hosted production workloads",
+        "family": null,
+        "release_date": "2023-07-22",
+        "last_updated": "2023-07-22",
+        "knowledge_cutoff": "2023-06-30",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 6144,
+          "input": null,
+          "output": 5529
+        },
+        "reported_open_weights": true,
         "reported_license": null,
         "links": [],
         "weights": []
@@ -16106,6 +19818,84 @@
       }
     },
     {
+      "id": "model-xai-grok-4-fast-non-reasoning",
+      "source_id": "xai/grok-4-fast-non-reasoning",
+      "source_metadata": {
+        "name": "X-Ai/Grok-4-Fast-Non-Reasoning",
+        "description": "Fast Grok model for responsive chat, reasoning, and tool-assisted work",
+        "family": null,
+        "release_date": "2025-12-18",
+        "last_updated": "2025-12-18",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 2000000,
+          "input": null,
+          "output": 2000000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-xai-grok-4-fast-reasoning",
+      "source_id": "xai/grok-4-fast-reasoning",
+      "source_metadata": {
+        "name": "X-Ai/Grok-4-Fast-Reasoning",
+        "description": "Fast Grok model for responsive chat, reasoning, and tool-assisted work",
+        "family": null,
+        "release_date": "2025-12-18",
+        "last_updated": "2025-12-18",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "audio",
+            "video"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 2000000,
+          "input": null,
+          "output": 2000000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
       "id": "model-xai-grok-4-1-fast",
       "source_id": "xai/grok-4.1-fast",
       "source_metadata": {
@@ -16436,6 +20226,81 @@
           "context": 256000,
           "input": null,
           "output": 256000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-xai-grok-code-fast-1",
+      "source_id": "xai/grok-code-fast-1",
+      "source_metadata": {
+        "name": "x-AI/Grok-Code-Fast 1",
+        "description": "Fast Grok model for responsive chat, reasoning, and tool-assisted work",
+        "family": null,
+        "release_date": "2025-09-02",
+        "last_updated": "2025-09-02",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": false,
+          "temperature": true
+        },
+        "limits": {
+          "context": 256000,
+          "input": null,
+          "output": 10000
+        },
+        "reported_open_weights": false,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      }
+    },
+    {
+      "id": "model-xai-grok-imagine-image",
+      "source_id": "xai/grok-imagine-image",
+      "source_metadata": {
+        "name": "Grok Imagine Image",
+        "description": "Image model for prompt-driven generation, editing, and visual design workflows",
+        "family": "grok",
+        "release_date": "2026-01-28",
+        "last_updated": "2026-01-28",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image",
+            "pdf"
+          ],
+          "output": [
+            "image",
+            "pdf"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 16000,
+          "input": null,
+          "output": 0
         },
         "reported_open_weights": false,
         "reported_license": null,
@@ -17035,6 +20900,48 @@
           {
             "label": "Hugging Face",
             "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL"
+          }
+        ]
+      }
+    },
+    {
+      "id": "model-zhipuai-autoglm-phone-9b-multilingual",
+      "source_id": "zhipuai/autoglm-phone-9b-multilingual",
+      "source_metadata": {
+        "name": "AutoGLM Phone 9B Multilingual",
+        "description": "Multilingual visual model for operating smartphone interfaces and mobile agents",
+        "family": "glm",
+        "release_date": "2025-12-10",
+        "last_updated": "2025-12-10",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text",
+            "image"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": true,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 65536,
+          "input": null,
+          "output": 65536
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/zai-org/AutoGLM-Phone-9B-Multilingual"
           }
         ]
       }
