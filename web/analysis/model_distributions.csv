@@ -115,6 +115,7 @@ model-arcee-ai-trinity-mini,developer_api
 model-arcee-ai-trinity-mini,downloadable_weights
 model-arcee-ai-trinity-mini,third_party_hosting
 model-arcee-ai-trinity-nano-preview,downloadable_weights
+model-baidu-ernie-4-5-21b-a3b,downloadable_weights
 model-bfl-flux-2-dev,downloadable_weights
 model-bfl-flux-2-dev,third_party_hosting
 model-bytedance-seed-seed-1-6,developer_api
@@ -337,6 +338,7 @@ model-moonshotai-kimi-k3,developer_api
 model-moonshotai-kimi-k3,downloadable_weights
 model-moonshotai-kimi-k3,third_party_hosting
 model-motif-technologies-motif-3,downloadable_weights
+model-nousresearch-hermes-4-405b,downloadable_weights
 model-nvidia-llama-3-1-nemotron-70b-instruct,developer_api
 model-nvidia-llama-3-1-nemotron-70b-instruct,downloadable_weights
 model-nvidia-llama-3-1-nemotron-safety-guard-8b-v3,developer_api

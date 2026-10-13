@@ -72,6 +72,7 @@ labs,lab-ant-group,reviewed,Ant Group,technology_company,,,2026-09-25
 labs,lab-anthropic,reviewed,Anthropic,ai_company,,,2026-10-03
 labs,lab-apodex-ai,reviewed,Apodex AI,ai_company,,,2026-10-01
 labs,lab-arcee-ai,reviewed,Arcee AI,ai_company,,,2026-09-25
+labs,lab-baidu,reviewed,Baidu,technology_company,,,2026-10-13
 labs,lab-black-forest-labs,reviewed,Black Forest Labs,ai_company,,,2026-10-01
 labs,lab-booster-robotics,reviewed,Booster Robotics,ai_company,,,2026-10-07
 labs,lab-boston-dynamics,reviewed,Boston Dynamics,technology_company,,,2026-10-03
@@ -98,6 +99,7 @@ labs,lab-mistral-ai,reviewed,Mistral AI,ai_company,,,2026-09-25
 labs,lab-mixedbread-ai,reviewed,Mixedbread,ai_company,,,2026-10-03
 labs,lab-moonshot-ai,reviewed,Moonshot AI,ai_company,,,2026-09-25
 labs,lab-motif-technologies,reviewed,Motif Technologies,ai_company,,,2026-09-25
+labs,lab-nous-research,reviewed,Nous Research,ai_company,,,2026-10-13
 labs,lab-nvidia,reviewed,NVIDIA,technology_company,,,2026-09-25
 labs,lab-one-x-technologies,reviewed,1X Technologies,ai_company,,,2026-10-03
 labs,lab-openai,reviewed,OpenAI,ai_company,,,2026-09-25
@@ -130,11 +132,16 @@ labs,lab-z-ai,reviewed,Z.ai,ai_company,,,2026-09-25
 models,model-ai21-jamba-large,reviewed,Jamba Large 1.6,language_model,,ai21/jamba-large,2026-09-22
 models,model-ai21-jamba-mini,reviewed,Jamba Mini 1.6,language_model,,ai21/jamba-mini,2026-09-22
 models,model-aikido-altar-1,reviewed,Altar-1,language_model,,,2026-09-22
+models,model-aion-labs-aion-2-0,imported_source,Aion-2.0,,,aion-labs/aion-2.0,
+models,model-aion-labs-aion-3-0,imported_source,Aion-3.0,,,aion-labs/aion-3.0,
+models,model-aion-labs-aion-3-0-mini,imported_source,Aion-3.0-Mini,,,aion-labs/aion-3.0-mini,
+models,model-aion-labs-aion-rp-llama-3-1-8b,imported_source,Aion-RP 1.0 (8B),,,aion-labs/aion-rp-llama-3.1-8b,
 models,model-aisingapore-gemma-sea-lion-v4-27b-it,reviewed,Gemma-SEA-LION-v4-27B-IT,multimodal_language_model,,aisingapore/gemma-sea-lion-v4-27b-it,2026-09-22
 models,model-aleph-alpha-kolibri-1,reviewed,Kolibri 1,language_model,,,2026-10-03
 models,model-alibaba-qwen-flash,imported_source,Qwen Flash,,,alibaba/qwen-flash,
 models,model-alibaba-qwen-image-2-1,reviewed,Qwen-Image-2.1,image_generation_model,,alibaba/qwen-image-2.1,2026-10-06
 models,model-alibaba-qwen-max,imported_source,Qwen Max,,,alibaba/qwen-max,
+models,model-alibaba-qwen-mt-plus,imported_source,Qwen MT Plus,,,alibaba/qwen-mt-plus,
 models,model-alibaba-qwen-omni-turbo,imported_source,Qwen-Omni Turbo,,,alibaba/qwen-omni-turbo,
 models,model-alibaba-qwen-plus,imported_source,Qwen Plus,,,alibaba/qwen-plus,
 models,model-alibaba-qwen-plus-2025-12-01,reviewed,Qwen Plus 2025-12-01,language_model,,,2026-09-28
@@ -186,20 +193,31 @@ models,model-alibaba-qwen3-coder-480b-a35b-instruct,reviewed,Qwen3-Coder 480B-A3
 models,model-alibaba-qwen3-coder-flash,imported_source,Qwen3 Coder Flash,,,alibaba/qwen3-coder-flash,
 models,model-alibaba-qwen3-coder-next,reviewed,Qwen3-Coder-Next,language_model,,alibaba/qwen3-coder-next,2026-09-22
 models,model-alibaba-qwen3-coder-plus,imported_source,Qwen3 Coder Plus,,,alibaba/qwen3-coder-plus,
+models,model-alibaba-qwen3-embedding-8b,imported_source,Qwen3 Embedding 8B,,,alibaba/qwen3-embedding-8b,
 models,model-alibaba-qwen3-max,imported_source,Qwen3 Max,,,alibaba/qwen3-max,
 models,model-alibaba-qwen3-max-2026-01-23,reviewed,Qwen3 Max 2026-01-23,language_model,,,2026-09-28
+models,model-alibaba-qwen3-max-preview,imported_source,Qwen3 Max Preview,,,alibaba/qwen3-max-preview,
 models,model-alibaba-qwen3-next-80b-a3b-instruct,reviewed,Qwen3-Next 80B-A3B Instruct,language_model,,alibaba/qwen3-next-80b-a3b-instruct,2026-09-16
 models,model-alibaba-qwen3-next-80b-a3b-thinking,reviewed,Qwen3-Next 80B-A3B (Thinking),language_model,,alibaba/qwen3-next-80b-a3b-thinking,2026-09-16
+models,model-alibaba-qwen3-omni-30b-a3b-thinking,imported_source,Qwen3 Omni 30B A3B Thinking,,,alibaba/qwen3-omni-30b-a3b-thinking,
+models,model-alibaba-qwen3-reranker-8b,imported_source,Qwen3 Reranker 8B,,,alibaba/qwen3-reranker-8b,
 models,model-alibaba-qwen3-vl-235b-a22b-instruct,imported_source,Qwen3 VL 235B A22B Instruct,,,alibaba/qwen3-vl-235b-a22b-instruct,
 models,model-alibaba-qwen3-vl-235b-a22b-thinking,imported_source,Qwen3 VL 235B A22B Thinking,,,alibaba/qwen3-vl-235b-a22b-thinking,
+models,model-alibaba-qwen3-vl-30b-a3b-instruct,imported_source,Qwen3 VL 30B A3B Instruct,,,alibaba/qwen3-vl-30b-a3b-instruct,
+models,model-alibaba-qwen3-vl-flash,imported_source,Qwen3 VL Flash (Alibaba Cloud),,,alibaba/qwen3-vl-flash,
 models,model-alibaba-qwen3-vl-plus,imported_source,Qwen3-VL Plus,,,alibaba/qwen3-vl-plus,
 models,model-alibaba-qwq-32b,reviewed,QwQ 32B,language_model,,alibaba/qwq-32b,2026-09-16
 models,model-alibaba-qwq-plus,reviewed,QwQ-Plus,language_model,,alibaba/qwq-plus,2026-09-22
 models,model-amazon-nova-2-lite,reviewed,Nova 2 Lite,multimodal_language_model,,amazon/nova-2-lite,2026-09-18
+models,model-amazon-nova-2-lite-v1,imported_source,Nova 2 Lite,,,amazon/nova-2-lite-v1,
 models,model-amazon-nova-lite,reviewed,Nova Lite,multimodal_language_model,,amazon/nova-lite,2026-09-18
+models,model-amazon-nova-lite-v1,imported_source,Nova Lite 1.0,,,amazon/nova-lite-v1,
 models,model-amazon-nova-micro,reviewed,Nova Micro,language_model,,amazon/nova-micro,2026-09-18
+models,model-amazon-nova-micro-v1,imported_source,Nova Micro 1.0,,,amazon/nova-micro-v1,
 models,model-amazon-nova-premier,imported_source,Nova Premier,,,amazon/nova-premier,
 models,model-amazon-nova-pro,reviewed,Nova Pro,multimodal_language_model,,amazon/nova-pro,2026-09-18
+models,model-amazon-nova-pro-v1,imported_source,Nova Pro 1.0,,,amazon/nova-pro-v1,
+models,model-anthracite-org-magnum-v4-72b,imported_source,Magnum v4 72B,,,anthracite-org/magnum-v4-72b,
 models,model-anthropic-claude-3-5-haiku-20241022,imported_source,Claude Haiku 3.5,,,anthropic/claude-3-5-haiku-20241022,
 models,model-anthropic-claude-3-5-sonnet-20241022,imported_source,Claude Sonnet 3.5 v2,,,anthropic/claude-3-5-sonnet-20241022,
 models,model-anthropic-claude-3-7-sonnet-20250219,imported_source,Claude Sonnet 3.7,,,anthropic/claude-3-7-sonnet-20250219,
@@ -208,6 +226,7 @@ models,model-anthropic-claude-fable-5,reviewed,Claude Fable 5,multimodal_languag
 models,model-anthropic-claude-fable-5-1,reviewed,Claude Fable 5.1,multimodal_language_model,,anthropic/claude-fable-5-1,2026-09-18
 models,model-anthropic-claude-haiku-4-5,reviewed,Claude Haiku 4.5,multimodal_language_model,,anthropic/claude-haiku-4-5,2026-09-11
 models,model-anthropic-claude-haiku-4-5-20251001,imported_source,Claude Haiku 4.5,,,anthropic/claude-haiku-4-5-20251001,
+models,model-anthropic-claude-haiku-5-5,imported_source,Claude Haiku 5.5,,,anthropic/claude-haiku-5-5,
 models,model-anthropic-claude-mythos-5,reviewed,Claude Mythos 5,multimodal_language_model,,anthropic/claude-mythos-5,2026-09-18
 models,model-anthropic-claude-mythos-5-1,reviewed,Claude Mythos 5.1,multimodal_language_model,,,2026-09-20
 models,model-anthropic-claude-opus-4-0,imported_source,Claude Opus 4 (latest),,,anthropic/claude-opus-4-0,
@@ -233,6 +252,12 @@ models,model-arcee-ai-trinity-large-preview,reviewed,Trinity Large Preview,langu
 models,model-arcee-ai-trinity-large-thinking,reviewed,Trinity Large Thinking,language_model,,arcee-ai/trinity-large-thinking,2026-09-18
 models,model-arcee-ai-trinity-mini,reviewed,Trinity Mini,language_model,,arcee-ai/trinity-mini,2026-09-18
 models,model-arcee-ai-trinity-nano-preview,reviewed,Trinity Nano Preview,language_model,,arcee-ai/trinity-nano-preview,2026-09-18
+models,model-baai-bge-m3,imported_source,BGE M3,,,baai/bge-m3,
+models,model-baai-bge-reranker-v2-m3,imported_source,BGE Reranker V2 M3,,,baai/bge-reranker-v2-m3,
+models,model-baichuan-baichuan-m2-32b,imported_source,Baichuan M2 32B,,,baichuan/baichuan-m2-32b,
+models,model-baidu-cobuddy,imported_source,CoBuddy,,,baidu/cobuddy,
+models,model-baidu-ernie-4-5-21b-a3b,reviewed,ERNIE 4.5 21B A3B,language_model,,baidu/ernie-4.5-21b-a3b,2026-10-13
+models,model-baidu-ernie-4-5-vl-424b-a47b,imported_source,ERNIE 4.5 VL 424B A47B ,,,baidu/ernie-4.5-vl-424b-a47b,
 models,model-bfl-flux-2-dev,reviewed,FLUX.2 [dev],image_generation_model,,,2026-10-01
 models,model-bytedance-seed-seed-1-6,reviewed,Seed 1.6,multimodal_language_model,,bytedance-seed/seed-1-6,2026-09-18
 models,model-bytedance-seed-seed-1-6-flash,reviewed,Seed 1.6 Flash,multimodal_language_model,,bytedance-seed/seed-1-6-flash,2026-09-18
@@ -249,10 +274,12 @@ models,model-bytedance-seed-seed-evolving,imported_source,Seed Evolving,,,byteda
 models,model-bytedance-seed-seedance-2-0,imported_source,Seedance 2.0,,,bytedance-seed/seedance-2.0,
 models,model-bytedance-seed-seedance-2-5,imported_source,Seedance 2.5,,,bytedance-seed/seedance-2.5,
 models,model-bytedance-seed-ui-tars-1-5-7b,reviewed,UI-TARS-1.5-7B,multimodal_language_model,,,2026-10-06
+models,model-cognitivecomputations-dolphin-mistral-24b-venice-edition,imported_source,Uncensored,,,cognitivecomputations/dolphin-mistral-24b-venice-edition,
 models,model-cohere-c4ai-aya-expanse-32b,reviewed,Aya Expanse 32B,language_model,,cohere/c4ai-aya-expanse-32b,2026-09-16
 models,model-cohere-c4ai-aya-expanse-8b,reviewed,Aya Expanse 8B,language_model,,cohere/c4ai-aya-expanse-8b,2026-09-04
 models,model-cohere-c4ai-aya-vision-32b,reviewed,Aya Vision 32B,multimodal_language_model,,cohere/c4ai-aya-vision-32b,2026-09-16
 models,model-cohere-c4ai-aya-vision-8b,reviewed,Aya Vision 8B,multimodal_language_model,,cohere/c4ai-aya-vision-8b,2026-09-16
+models,model-cohere-command-a,imported_source,Command A,,,cohere/command-a,
 models,model-cohere-command-a-03-2025,reviewed,Command A,language_model,,cohere/command-a-03-2025,2026-09-11
 models,model-cohere-command-a-plus-05-2026,reviewed,Command A Plus,multimodal_language_model,,cohere/command-a-plus-05-2026,2026-09-16
 models,model-cohere-command-a-reasoning-08-2025,reviewed,Command A Reasoning,language_model,,cohere/command-a-reasoning-08-2025,2026-09-16
@@ -274,9 +301,12 @@ models,model-deepreinforce-ornith-1-0-397b,reviewed,Ornith 1.0 397B,language_mod
 models,model-deepreinforce-ornith-1-0-9b,reviewed,Ornith 1.0 9B,language_model,,deepreinforce/ornith-1.0-9b,2026-09-18
 models,model-deepreinforce-ornith-1-5-35b-a3b,reviewed,Ornith 1.5 35B A3B,language_model,,deepreinforce/ornith-1.5-35b-a3b,2026-09-18
 models,model-deepseek-deepseek-chat,imported_source,DeepSeek Chat,,,deepseek/deepseek-chat,
+models,model-deepseek-deepseek-chat-v3-0324,imported_source,DeepSeek V3 0324,,,deepseek/deepseek-chat-v3-0324,
+models,model-deepseek-deepseek-chat-v3-1,imported_source,DeepSeek V3.1,,,deepseek/deepseek-chat-v3.1,
 models,model-deepseek-deepseek-ocr-2,reviewed,DeepSeek OCR 2,multimodal_language_model,,deepseek/deepseek-ocr-2,2026-09-18
 models,model-deepseek-deepseek-r1,reviewed,DeepSeek-R1,language_model,,deepseek/deepseek-r1,2026-09-11
 models,model-deepseek-deepseek-r1-0528,reviewed,DeepSeek-R1-0528,language_model,,,2026-10-06
+models,model-deepseek-deepseek-r1-0528-qwen3-8b,imported_source,DeepSeek R1 0528 Qwen3 8B,,,deepseek/deepseek-r1-0528-qwen3-8b,
 models,model-deepseek-deepseek-r1-distill-qwen-32b,reviewed,DeepSeek-R1-Distill-Qwen-32B,language_model,,deepseek/deepseek-r1-distill-qwen-32b,2026-09-18
 models,model-deepseek-deepseek-reasoner,imported_source,DeepSeek Reasoner,,,deepseek/deepseek-reasoner,
 models,model-deepseek-deepseek-v3,reviewed,DeepSeek-V3,language_model,,deepseek/deepseek-v3,2026-09-04
@@ -302,6 +332,7 @@ models,model-google-gemini-2-5-flash-image,reviewed,Gemini 2.5 Flash Image,multi
 models,model-google-gemini-2-5-flash-lite,reviewed,Gemini 2.5 Flash-Lite,multimodal_language_model,,google/gemini-2.5-flash-lite,2026-09-18
 models,model-google-gemini-2-5-flash-tts,reviewed,Gemini 2.5 Flash TTS,audio_generation_model,,google/gemini-2.5-flash-tts,2026-10-06
 models,model-google-gemini-2-5-pro,reviewed,Gemini 2.5 Pro,multimodal_language_model,,google/gemini-2.5-pro,2026-09-11
+models,model-google-gemini-2-5-pro-preview,imported_source,Gemini 2.5 Pro Preview 06-05,,,google/gemini-2.5-pro-preview,
 models,model-google-gemini-2-5-pro-tts,reviewed,Gemini 2.5 Pro TTS,audio_generation_model,,google/gemini-2.5-pro-tts,2026-10-06
 models,model-google-gemini-3-1-flash-image,reviewed,Nano Banana 2,multimodal_language_model,,google/gemini-3.1-flash-image,2026-09-18
 models,model-google-gemini-3-1-flash-image-preview,reviewed,Nano Banana 2 Preview,multimodal_language_model,,google/gemini-3.1-flash-image-preview,2026-09-18
@@ -328,6 +359,7 @@ models,model-google-gemini-embedding-001,imported_source,Gemini Embedding 001,,,
 models,model-google-gemini-embedding-2,imported_source,Gemini Embedding 2,,,google/gemini-embedding-2,
 models,model-google-gemini-flash-latest,imported_source,Gemini Flash Latest,,,google/gemini-flash-latest,
 models,model-google-gemini-flash-lite-latest,imported_source,Gemini Flash-Lite Latest,,,google/gemini-flash-lite-latest,
+models,model-google-gemini-nano-banana-2-1,imported_source,Nano Banana 2.1,,,google/gemini-nano-banana-2.1,
 models,model-google-gemini-omni-flash-preview,imported_source,Gemini Omni Flash Preview,,,google/gemini-omni-flash-preview,
 models,model-google-gemini-robotics-er-1-6-preview,reviewed,Gemini Robotics-ER 1.6 Preview,multimodal_language_model,,google/gemini-robotics-er-1.6-preview,2026-09-18
 models,model-google-gemma-2-27b-it,reviewed,Gemma 2 27B IT,language_model,,,2026-10-06
@@ -344,15 +376,22 @@ models,model-google-lyria-3-pro-preview,reviewed,Lyria 3 Pro Preview,audio_gener
 models,model-google-veo-3-1-fast-generate-preview,imported_source,Veo 3.1 Fast Preview,,,google/veo-3.1-fast-generate-preview,
 models,model-google-veo-3-1-generate-preview,reviewed,Veo 3.1 Preview,video_generation_model,,google/veo-3.1-generate-preview,2026-10-06
 models,model-google-veo-3-1-lite-generate-preview,reviewed,Veo 3.1 Lite Preview,video_generation_model,,google/veo-3.1-lite-generate-preview,2026-10-06
+models,model-gryphe-mythomax-l2-13b,imported_source,MythoMax L2 13B,,,gryphe/mythomax-l2-13b,
 models,model-ibm-granite-4-2-8b,reviewed,Granite-4.2-8B,language_model,,,2026-10-06
 models,model-ibm-granite-4-h-micro,reviewed,Granite-4.0-H-Micro,language_model,,ibm/granite-4-h-micro,2026-09-22
 models,model-ibm-granite-4-h-small,reviewed,Granite-4.0-H-Small,language_model,,ibm/granite-4-h-small,2026-09-11
+models,model-inception-mercury-2,imported_source,Mercury 2,,,inception/mercury-2,
+models,model-inception-mercury-2-5,imported_source,Mercury 2.5,,,inception/mercury-2.5,
 models,model-inclusionai-ling-3-0-flash,reviewed,Ling-3.0-flash,language_model,,,2026-10-06
 models,model-inclusionai-ling-3-0-flash-fin,reviewed,Ling-3.0-flash-Fin,language_model,,inclusionai/ling-3.0-flash-fin,2026-09-22
+models,model-inclusionai-ling-3-0-flash-sante,imported_source,Ling 3.0 Flash Sante,,,inclusionai/ling-3.0-flash-sante,
 models,model-inclusionai-ling-3-0-flash-vl,reviewed,Ling-3.0-flash-VL,multimodal_language_model,,,2026-10-06
 models,model-inclusionai-ling-3-1-flash,imported_source,Ling 3.1 Flash,,,inclusionai/ling-3.1-flash,
+models,model-inference-net-schematron-v2-small,imported_source,Schematron V2 Small,,,inference-net/schematron-v2-small,
+models,model-inference-net-schematron-v2-turbo,imported_source,Schematron V2 Turbo,,,inference-net/schematron-v2-turbo,
 models,model-liquid-d1,imported_source,Liquid d1,,,liquid/d1,
 models,model-liquidai-lfm2-5-2-6b,reviewed,LFM2.5-2.6B,language_model,,,2026-09-28
+models,model-mancer-weaver,imported_source,Weaver (alpha),,,mancer/weaver,
 models,model-meituan-longcat-2-0,reviewed,LongCat-2.0,language_model,,meituan/longcat-2.0,2026-09-22
 models,model-meituan-longcat-2-5-preview,reviewed,LongCat-2.5-Preview,multimodal_language_model,,meituan/longcat-2.5-preview,2026-10-06
 models,model-meta-llama-3-1-70b-instruct,reviewed,Llama-3.1-70B-Instruct,language_model,,meta/llama-3.1-70b-instruct,2026-09-18
@@ -371,14 +410,20 @@ models,model-meta-muse-glimmer-30b,reviewed,Muse Glimmer 30B,multimodal_language
 models,model-meta-muse-spark-1-1,reviewed,Muse Spark 1.1,multimodal_language_model,,meta/muse-spark-1.1,2026-09-18
 models,model-meta-muse-spark-1-2,reviewed,Muse Spark 1.2,multimodal_language_model,,meta/muse-spark-1.2,2026-09-18
 models,model-meta-muse-spark-1-3,reviewed,Muse Spark 1.3,multimodal_language_model,,meta/muse-spark-1.3,2026-09-18
+models,model-meta-muse-wonder-1-0,imported_source,Muse Wonder,,,meta/muse-wonder-1.0,
+models,model-meta-muse-wonder-full,imported_source,Muse Wonder Full,,,meta/muse-wonder-full,
 models,model-microsoft-mai-code-1-1-flash,reviewed,MAI-Code-1.1-Flash,multimodal_language_model,,microsoft/mai-code-1.1-flash,2026-09-22
 models,model-microsoft-mai-code-1-flash,reviewed,MAI-Code-1-Flash,language_model,,microsoft/mai-code-1-flash,2026-09-22
 models,model-microsoft-phi-4,reviewed,Phi-4,language_model,,,2026-10-06
 models,model-microsoft-phi-4-mini,reviewed,Phi-4-mini,language_model,,microsoft/phi-4-mini,2026-09-11
+models,model-microsoft-wizardlm-2-8x22b,imported_source,WizardLM 2 8x22B,,,microsoft/wizardlm-2-8x22b,
+models,model-mindlab-macaron-v1-tall,imported_source,Macaron V1 Tall,,,mindlab/macaron-v1-tall,
+models,model-mindlab-macaron-v1-venti,imported_source,Macaron V1 Venti,,,mindlab/macaron-v1-venti,
 models,model-minimax-image-01,reviewed,MiniMax image-01,image_generation_model,,minimax/image-01,2026-10-06
 models,model-minimax-minimax-01,reviewed,MiniMax-Text-01,language_model,,,2026-10-06
 models,model-minimax-minimax-h3,imported_source,MiniMax H3,,,minimax/MiniMax-H3,
 models,model-minimax-minimax-m1,reviewed,MiniMax-M1,language_model,,,2026-10-06
+models,model-minimax-minimax-m1-80k,imported_source,MiniMax M1 80K,,,minimax/minimax-m1-80k,
 models,model-minimax-minimax-m2,reviewed,MiniMax-M2,language_model,,minimax/MiniMax-M2,2026-09-11
 models,model-minimax-minimax-m2-1,reviewed,MiniMax-M2.1,language_model,,minimax/MiniMax-M2.1,2026-09-16
 models,model-minimax-minimax-m2-5,reviewed,MiniMax-M2.5,language_model,,minimax/MiniMax-M2.5,2026-09-16
@@ -388,6 +433,7 @@ models,model-minimax-minimax-m2-7-highspeed,imported_source,MiniMax-M2.7-highspe
 models,model-minimax-minimax-m2-her,imported_source,MiniMax-M2 Her,,,minimax/MiniMax-M2-Her,
 models,model-minimax-minimax-m3,reviewed,MiniMax-M3,multimodal_language_model,,minimax/MiniMax-M3,2026-09-16
 models,model-minimax-minimax-m3-1-flash-preview,imported_source,MiniMax-M3.1-Flash-Preview,,,minimax/MiniMax-M3.1-Flash-Preview,
+models,model-minimax-minimax-text-01,imported_source,MiniMax Text 01 (MiniMax),,,minimax/MiniMax-Text-01,
 models,model-mistral-codestral-22b-v0-1,reviewed,Codestral-22B-v0.1,language_model,,mistral/codestral-22b-v0.1,2026-09-18
 models,model-mistral-codestral-2508,reviewed,Codestral 25.08,language_model,,,2026-10-06
 models,model-mistral-codestral-latest,imported_source,Codestral (latest),,,mistral/codestral-latest,
@@ -400,12 +446,16 @@ models,model-mistral-magistral-medium-latest,imported_source,Magistral Medium (l
 models,model-mistral-magistral-small-2506,reviewed,Magistral Small,language_model,,mistral/magistral-small-2506,2026-09-11
 models,model-mistral-magistral-small-2509,reviewed,Magistral Small 2509,multimodal_language_model,,mistral/magistral-small-2509,2026-09-18
 models,model-mistral-ministral-14b,imported_source,Ministral 14B,,,mistral/ministral-14b,
+models,model-mistral-ministral-14b-2512,imported_source,Ministral 3 14B 2512,,,mistral/ministral-14b-2512,
 models,model-mistral-ministral-3-14b-instruct-2512,reviewed,Ministral 3 14B Instruct,multimodal_language_model,,mistral/ministral-3-14b-instruct-2512,2026-09-18
 models,model-mistral-ministral-3-3b-instruct-2512,reviewed,Ministral 3 3B Instruct,multimodal_language_model,,mistral/ministral-3-3b-instruct-2512,2026-09-18
 models,model-mistral-ministral-3-8b-instruct-2512,reviewed,Ministral 3 8B Instruct,multimodal_language_model,,mistral/ministral-3-8b-instruct-2512,2026-09-18
 models,model-mistral-ministral-3b,imported_source,Ministral 3B,,,mistral/ministral-3b,
+models,model-mistral-ministral-3b-2512,imported_source,Ministral 3 3B 2512,,,mistral/ministral-3b-2512,
+models,model-mistral-ministral-8b-2512,imported_source,Ministral 3 8B 2512,,,mistral/ministral-8b-2512,
 models,model-mistral-ministral-8b-instruct-2410,reviewed,Ministral 8B Instruct,language_model,,mistral/ministral-8b-instruct-2410,2026-09-16
 models,model-mistral-mistral-embed,imported_source,Mistral Embed,,,mistral/mistral-embed,
+models,model-mistral-mistral-large,imported_source,Mistral Large,,,mistral/mistral-large,
 models,model-mistral-mistral-large-2407,reviewed,Mistral Large 2,language_model,,,2026-10-06
 models,model-mistral-mistral-large-2411,reviewed,Mistral Large 2.1,language_model,,mistral/mistral-large-2411,2026-09-16
 models,model-mistral-mistral-large-2512,reviewed,Mistral Large 3,multimodal_language_model,,mistral/mistral-large-2512,2026-09-16
@@ -413,13 +463,18 @@ models,model-mistral-mistral-large-4,reviewed,Mistral Large 4,multimodal_languag
 models,model-mistral-mistral-large-latest,imported_source,Mistral Large (latest),,,mistral/mistral-large-latest,
 models,model-mistral-mistral-medium-2505,reviewed,Mistral Medium 3,multimodal_language_model,,mistral/mistral-medium-2505,2026-09-16
 models,model-mistral-mistral-medium-2604,reviewed,Mistral Medium 3.5,multimodal_language_model,,mistral/mistral-medium-2604,2026-09-11
+models,model-mistral-mistral-medium-3,imported_source,Mistral Medium 3,,,mistral/mistral-medium-3,
 models,model-mistral-mistral-medium-3-1,reviewed,Mistral Medium 3.1,multimodal_language_model,,,2026-10-06
+models,model-mistral-mistral-medium-3-5,imported_source,Mistral Medium 3.5,,,mistral/mistral-medium-3-5,
 models,model-mistral-mistral-medium-latest,imported_source,Mistral Medium (latest),,,mistral/mistral-medium-latest,
 models,model-mistral-mistral-nemo,reviewed,Mistral Nemo,language_model,,mistral/mistral-nemo,2026-09-18
+models,model-mistral-mistral-saba,imported_source,Saba,,,mistral/mistral-saba,
 models,model-mistral-mistral-small-24b-instruct-2501,reviewed,Mistral Small 3,language_model,,,2026-10-06
 models,model-mistral-mistral-small-2506,reviewed,Mistral Small 3.2,multimodal_language_model,,mistral/mistral-small-2506,2026-09-16
 models,model-mistral-mistral-small-2603,reviewed,Mistral Small 4,multimodal_language_model,,mistral/mistral-small-2603,2026-09-11
+models,model-mistral-mistral-small-3-1-24b-instruct,imported_source,Mistral Small 3.1 24B,,,mistral/mistral-small-3.1-24b-instruct,
 models,model-mistral-mistral-small-3-1-24b-instruct-2503,reviewed,Mistral Small 3.1 24B,multimodal_language_model,,mistral/mistral-small-3-1-24b-instruct-2503,2026-09-16
+models,model-mistral-mistral-small-3-2-24b-instruct,imported_source,Mistral Small 3.2 24B,,,mistral/mistral-small-3.2-24b-instruct,
 models,model-mistral-mistral-small-latest,imported_source,Mistral Small (latest),,,mistral/mistral-small-latest,
 models,model-mistral-mixtral-8x22b-instruct,reviewed,Mixtral 8x22B Instruct,language_model,,,2026-10-06
 models,model-mistral-pixtral-12b,reviewed,Pixtral 12B,multimodal_language_model,,mistral/pixtral-12b,2026-09-04
@@ -436,17 +491,25 @@ models,model-moonshotai-kimi-k2-6,reviewed,Kimi K2.6,multimodal_language_model,,
 models,model-moonshotai-kimi-k2-7-code,reviewed,Kimi K2.7 Code,multimodal_language_model,,moonshotai/kimi-k2.7-code,2026-09-16
 models,model-moonshotai-kimi-k2-7-code-highspeed,imported_source,Kimi K2.7 Code Highspeed,,,moonshotai/kimi-k2.7-code-highspeed,
 models,model-moonshotai-kimi-k2-8-preview,reviewed,Kimi K2.8 Preview,multimodal_language_model,,moonshotai/kimi-k2.8-preview,2026-09-22
+models,model-moonshotai-kimi-k2-instruct,imported_source,Kimi K2 Instruct,,,moonshotai/kimi-k2-instruct,
 models,model-moonshotai-kimi-k2-thinking,reviewed,Kimi K2 Thinking,language_model,,moonshotai/kimi-k2-thinking,2026-09-11
 models,model-moonshotai-kimi-k2-thinking-turbo,imported_source,Kimi K2 Thinking Turbo,,,moonshotai/kimi-k2-thinking-turbo,
 models,model-moonshotai-kimi-k3,reviewed,Kimi K3,multimodal_language_model,,moonshotai/kimi-k3,2026-09-11
+models,model-morph-morph-v3-fast,imported_source,Morph V3 Fast,,,morph/morph-v3-fast,
+models,model-morph-morph-v3-large,imported_source,Morph V3 Large,,,morph/morph-v3-large,
 models,model-motif-technologies-motif-3,reviewed,Motif 3,language_model,,motif-technologies/motif-3,2026-09-22
 models,model-nace-ai-drex-v1-5,imported_source,Drex 1.5,,,nace-ai/drex-v1.5,
 models,model-nex-agi-nex-n2-pro,imported_source,Nex-N2-Pro,,,nex-agi/nex-n2-pro,
+models,model-nousresearch-hermes-2-pro-llama-3-8b,imported_source,Hermes 2 Pro Llama 3 8B,,,nousresearch/hermes-2-pro-llama-3-8b,
+models,model-nousresearch-hermes-3-llama-3-1-405b,imported_source,Hermes 3 405B Instruct,,,nousresearch/hermes-3-llama-3.1-405b,
+models,model-nousresearch-hermes-3-llama-3-1-70b,imported_source,Hermes 3 70B Instruct,,,nousresearch/hermes-3-llama-3.1-70b,
+models,model-nousresearch-hermes-4-405b,reviewed,Hermes 4 405B,language_model,,nousresearch/hermes-4-405b,2026-10-13
 models,model-nvidia-llama-3-1-nemotron-70b-instruct,reviewed,Llama 3.1 Nemotron 70B Instruct,language_model,,nvidia/llama-3.1-nemotron-70b-instruct,2026-09-18
 models,model-nvidia-llama-3-1-nemotron-safety-guard-8b-v3,reviewed,Llama 3.1 Nemotron Safety Guard 8B v3,judgment_model,,nvidia/llama-3.1-nemotron-safety-guard-8b-v3,2026-09-18
 models,model-nvidia-llama-3-1-nemotron-ultra-253b,reviewed,Llama 3.1 Nemotron Ultra 253B,language_model,,nvidia/llama-3.1-nemotron-ultra-253b,2026-09-18
 models,model-nvidia-llama-3-3-nemotron-super-49b-v1,reviewed,Llama 3.3 Nemotron Super 49B v1,language_model,,nvidia/llama-3.3-nemotron-super-49b-v1,2026-09-18
 models,model-nvidia-llama-3-3-nemotron-super-49b-v1-5,reviewed,Llama 3.3 Nemotron Super 49B v1.5,language_model,,nvidia/llama-3.3-nemotron-super-49b-v1.5,2026-09-18
+models,model-nvidia-llama-nemotron-embed-1b-v2,imported_source,Llama Nemotron Embed 1B v2,,,nvidia/llama-nemotron-embed-1b-v2,
 models,model-nvidia-llama-nemotron-embed-vl-1b-v2,imported_source,Llama Nemotron Embed VL 1B v2,,,nvidia/llama-nemotron-embed-vl-1b-v2,
 models,model-nvidia-llama-nemotron-rerank-vl-1b-v2,imported_source,Llama Nemotron Rerank VL 1B v2,,,nvidia/llama-nemotron-rerank-vl-1b-v2,
 models,model-nvidia-mistral-nemotron,imported_source,Mistral Nemotron,,,nvidia/mistral-nemotron,
@@ -488,6 +551,7 @@ models,model-openai-gpt-5-3-chat-latest,imported_source,GPT-5.3 Chat (latest),,,
 models,model-openai-gpt-5-3-codex,reviewed,GPT-5.3 Codex,multimodal_language_model,,openai/gpt-5.3-codex,2026-09-16
 models,model-openai-gpt-5-3-codex-spark,imported_source,GPT-5.3 Codex Spark,,,openai/gpt-5.3-codex-spark,
 models,model-openai-gpt-5-4,reviewed,GPT-5.4,multimodal_language_model,,openai/gpt-5.4,2026-09-16
+models,model-openai-gpt-5-4-image-2,imported_source,GPT-5.4 Image 2,,,openai/gpt-5.4-image-2,
 models,model-openai-gpt-5-4-mini,reviewed,GPT-5.4 mini,multimodal_language_model,,openai/gpt-5.4-mini,2026-09-16
 models,model-openai-gpt-5-4-nano,reviewed,GPT-5.4 nano,multimodal_language_model,,openai/gpt-5.4-nano,2026-09-16
 models,model-openai-gpt-5-4-pro,reviewed,GPT-5.4 Pro,multimodal_language_model,,openai/gpt-5.4-pro,2026-09-16
@@ -500,6 +564,8 @@ models,model-openai-gpt-5-6-sol,reviewed,GPT-5.6 Sol,multimodal_language_model,,
 models,model-openai-gpt-5-6-terra,reviewed,GPT-5.6 Terra,multimodal_language_model,,openai/gpt-5.6-terra,2026-09-16
 models,model-openai-gpt-5-chat-latest,imported_source,GPT-5 Chat (latest),,,openai/gpt-5-chat-latest,
 models,model-openai-gpt-5-codex,reviewed,GPT-5-Codex,multimodal_language_model,,openai/gpt-5-codex,2026-09-16
+models,model-openai-gpt-5-image,imported_source,GPT-5 Image,,,openai/gpt-5-image,
+models,model-openai-gpt-5-image-mini,imported_source,GPT-5 Image Mini,,,openai/gpt-5-image-mini,
 models,model-openai-gpt-5-mini,reviewed,GPT-5 Mini,multimodal_language_model,,openai/gpt-5-mini,2026-09-16
 models,model-openai-gpt-5-nano,reviewed,GPT-5 Nano,multimodal_language_model,,openai/gpt-5-nano,2026-09-16
 models,model-openai-gpt-5-pro,reviewed,GPT-5 Pro,multimodal_language_model,,openai/gpt-5-pro,2026-09-16
@@ -532,10 +598,13 @@ models,model-openai-whisper-large-v3,imported_source,Whisper 3 Large,,,openai/wh
 models,model-openai-whisper-large-v3-turbo,imported_source,Whisper Large v3 Turbo,,,openai/whisper-large-v3-turbo,
 models,model-openbmb-minicpm5-1b,reviewed,MiniCPM5-1B,language_model,,openbmb/minicpm5-1b,2026-09-22
 models,model-openbmb-minicpm5-2b,reviewed,MiniCPM5-2B,language_model,,openbmb/minicpm5-2b,2026-09-22
+models,model-paddlepaddle-paddleocr-vl,imported_source,PaddleOCR VL,,,paddlepaddle/paddleocr-vl,
+models,model-perceptron-perceptron-mk1,imported_source,Perceptron Mk1,,,perceptron/perceptron-mk1,
 models,model-perplexity-sonar,reviewed,Sonar,language_model,,perplexity/sonar,2026-09-28
 models,model-perplexity-sonar-deep-research,reviewed,Sonar Deep Research,language_model,,perplexity/sonar-deep-research,2026-09-28
 models,model-perplexity-sonar-pro,reviewed,Sonar Pro,language_model,,perplexity/sonar-pro,2026-09-28
 models,model-perplexity-sonar-reasoning-pro,reviewed,Sonar Reasoning Pro,language_model,,perplexity/sonar-reasoning-pro,2026-09-28
+models,model-phocinae-phocinae-largha-150m-v1,imported_source,Phocinae Largha 150M v1,,,phocinae/phocinae-largha-150m-v1,
 models,model-poolside-laguna-m-1,reviewed,Laguna M.1,language_model,,poolside/laguna-m.1,2026-09-18
 models,model-poolside-laguna-s-2-1,reviewed,Laguna S 2.1,language_model,,poolside/laguna-s-2.1,2026-09-18
 models,model-poolside-laguna-xs-2,reviewed,Laguna XS.2,language_model,,poolside/laguna-xs.2,2026-09-18
@@ -544,10 +613,19 @@ models,model-prism-ml-ternary-bonsai-2-27b,reviewed,Ternary Bonsai 2 27B,multimo
 models,model-quiverai-arrow-2,imported_source,Arrow 2,,,quiverai/arrow-2,
 models,model-quiverai-arrow-2-telos,imported_source,Arrow 2 Telos,,,quiverai/arrow-2-telos,
 models,model-reflection-beam,reviewed,Beam,language_model,,,2026-10-07
+models,model-rekaai-reka-edge,imported_source,Reka Edge,,,rekaai/reka-edge,
+models,model-rekaai-reka-flash-3,imported_source,Reka Flash 3,,,rekaai/reka-flash-3,
+models,model-relace-relace-apply-3,imported_source,Relace Apply 3,,,relace/relace-apply-3,
+models,model-relace-relace-search,imported_source,Relace Search,,,relace/relace-search,
 models,model-sakana-fugu,imported_source,Fugu,,,sakana/fugu,
+models,model-sakana-fugu-max,imported_source,Fugu Max,,,sakana/fugu-max,
 models,model-sakana-fugu-ultra,imported_source,Fugu Ultra,,,sakana/fugu-ultra,
+models,model-sakana-fugu-ultra-v2,imported_source,Fugu Ultra v2,,,sakana/fugu-ultra-v2,
 models,model-sakana-sakana-namazu,imported_source,Sakana Namazu,,,sakana/sakana-namazu,
 models,model-sakana-sakana-namazu-v1-0,reviewed,Sakana Namazu v1.0,multimodal_language_model,,,2026-09-28
+models,model-sao10k-l3-1-euryale-70b,imported_source,Llama 3.1 Euryale 70B v2.2,,,sao10k/l3.1-euryale-70b,
+models,model-sao10k-l3-3-euryale-70b,imported_source,Llama 3.3 Euryale 70B,,,sao10k/l3.3-euryale-70b,
+models,model-sao10k-l3-lunaris-8b,imported_source,Llama 3 8B Lunaris,,,sao10k/l3-lunaris-8b,
 models,model-sarvam-sarvam-105b,imported_source,Sarvam 105B,,,sarvam/sarvam-105b,
 models,model-sarvam-sarvam-30b,imported_source,Sarvam 30B,,,sarvam/sarvam-30b,
 models,model-sdaia-allam-2-7b,imported_source,ALLaM-2-7b,,,sdaia/allam-2-7b,
@@ -564,12 +642,16 @@ models,model-tencent-hy-mt2-7b,reviewed,Hy-MT2-7B,language_model,,,2026-10-06
 models,model-tencent-hy3,reviewed,Hy3,language_model,,tencent/hy3,2026-09-18
 models,model-tencent-hy3-preview,reviewed,Hy3 preview,language_model,,tencent/hy3-preview,2026-09-18
 models,model-tencent-hy4-preview,reviewed,Hy4 preview,language_model,,tencent/hy4-preview,2026-09-18
+models,model-thedrummer-cydonia-24b-v4-1,imported_source,Cydonia 24B V4.1,,,thedrummer/cydonia-24b-v4.1,
+models,model-thedrummer-skyfall-36b-v2,imported_source,Skyfall 36B V2,,,thedrummer/skyfall-36b-v2,
+models,model-thedrummer-unslopnemo-12b,imported_source,UnslopNemo 12B,,,thedrummer/unslopnemo-12b,
 models,model-thinkingmachines-inkling,reviewed,Inkling,multimodal_language_model,,thinkingmachines/inkling,2026-09-22
 models,model-thinkingmachines-inkling-small,reviewed,Inkling-Small,multimodal_language_model,,thinkingmachines/inkling-small,2026-09-22
 models,model-trendyol-asure-12b,reviewed,Trendyol-LLM-Asure-12B,multimodal_language_model,,trendyol/asure-12b,2026-09-22
 models,model-typesafe-jev-1-13-0,reviewed,Jev 1.13,judgment_model,,,2026-09-20
 models,model-typesafe-jev-latest,imported_source,Jev,,,typesafe/jev-latest,
 models,model-unbiased-pareto,imported_source,Pareto,,,unbiased/pareto,
+models,model-undi95-remm-slerp-l2-13b,imported_source,ReMM SLERP 13B,,,undi95/remm-slerp-l2-13b,
 models,model-upstage-solar-mini4,reviewed,Solar Mini 4,language_model,,,2026-09-28
 models,model-upstage-solar-open2-250b,reviewed,Solar Open 2,language_model,,,2026-09-27
 models,model-upstage-solar-pro2,reviewed,Solar Pro 2,language_model,,upstage/solar-pro2,2026-09-18
@@ -591,7 +673,11 @@ models,model-xai-grok-4-3,reviewed,Grok 4.3,multimodal_language_model,,xai/grok-
 models,model-xai-grok-4-5,reviewed,Grok 4.5,multimodal_language_model,,xai/grok-4.5,2026-09-18
 models,model-xai-grok-4-6,reviewed,Grok 4.6,multimodal_language_model,,xai/grok-4.6,2026-09-11
 models,model-xai-grok-4-7,reviewed,Grok 4.7,multimodal_language_model,,xai/grok-4.7,2026-09-22
+models,model-xai-grok-4-fast-non-reasoning,imported_source,X-Ai/Grok-4-Fast-Non-Reasoning,,,xai/grok-4-fast-non-reasoning,
+models,model-xai-grok-4-fast-reasoning,imported_source,X-Ai/Grok-4-Fast-Reasoning,,,xai/grok-4-fast-reasoning,
 models,model-xai-grok-build-0-1,reviewed,Grok Build 0.1,multimodal_language_model,,xai/grok-build-0.1,2026-09-18
+models,model-xai-grok-code-fast-1,imported_source,x-AI/Grok-Code-Fast 1,,,xai/grok-code-fast-1,
+models,model-xai-grok-imagine-image,imported_source,Grok Imagine Image,,,xai/grok-imagine-image,
 models,model-xai-grok-imagine-image-2-0,reviewed,Grok Imagine Image 2.0,image_generation_model,,xai/grok-imagine-image-2.0,2026-10-06
 models,model-xai-grok-imagine-image-quality,reviewed,Grok Imagine Image Quality,image_generation_model,,xai/grok-imagine-image-quality,2026-10-06
 models,model-xai-grok-imagine-video-1-5,reviewed,Grok Imagine Video 1.5,video_generation_model,,xai/grok-imagine-video-1.5,2026-10-06
@@ -607,6 +693,7 @@ models,model-xiaomi-mimo-v2-6-pro-ultraspeed,imported_source,MiMo-V2.6-Pro-Ultra
 models,model-xiaomi-mimo-v2-flash,reviewed,MiMo-V2-Flash,language_model,,xiaomi/mimo-v2-flash,2026-09-18
 models,model-xiaomi-mimo-v2-omni,reviewed,MiMo-V2-Omni,multimodal_language_model,,xiaomi/mimo-v2-omni,2026-09-18
 models,model-xiaomi-mimo-v2-pro,reviewed,MiMo-V2-Pro,language_model,,xiaomi/mimo-v2-pro,2026-09-18
+models,model-zhipuai-autoglm-phone-9b-multilingual,imported_source,AutoGLM Phone 9B Multilingual,,,zhipuai/autoglm-phone-9b-multilingual,
 models,model-zhipuai-glm-4-5,reviewed,GLM-4.5,language_model,,zhipuai/glm-4.5,2026-09-11
 models,model-zhipuai-glm-4-5-air,reviewed,GLM-4.5-Air,language_model,,zhipuai/glm-4.5-air,2026-09-18
 models,model-zhipuai-glm-4-5-flash,imported_source,GLM-4.5-Flash,,,zhipuai/glm-4.5-flash,
