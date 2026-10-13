@@ -2,6 +2,7 @@ const { test, expect } = require("@playwright/test");
 const { openView } = require("./helpers/landing");
 const { expectFilter, recordHeading, recordView } = require("./helpers/results");
 const { models } = require("../../directory/models.json");
+const { projects } = require("../../directory/projects.json");
 const taxonomy = require("../../directory/taxonomy.json");
 const { runtimes } = require("../../directory/local-runtimes.json");
 
@@ -101,6 +102,59 @@ test("combination members disclose and open record dialogs with Back restoring E
   await page.goBack();
   await expect(recordView(page, "model")).not.toBeVisible();
   await expect(page.locator("#explore")).toBeVisible();
+});
+
+test("trait co-occurrence rows sum to each family's active systems", async ({ page }) => {
+  const errors = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/?view=explore");
+  const active = projects.filter(project => project.status === "active");
+  const families = await page.locator("#system-deployment-content h4").evaluateAll(items => items.map(item => item.textContent));
+  expect(families.length).toBe(3);
+  const tables = page.locator("#system-deployment-content table[id^='cooccur-']");
+  expect(await tables.count()).toBeGreaterThan(0);
+  for (const table of await tables.all()) {
+    const id = await table.getAttribute("id");
+    const familyId = id.split("-").pop();
+    const expected = active.filter(project => project.system_family === familyId);
+    const counts = await table.locator("tbody th small").evaluateAll(items => items.map(item => Number(item.textContent.split(" ")[0])));
+    expect(counts.reduce((a, b) => a + b, 0)).toBe(expected.length);
+  }
+  expect(errors).toEqual([]);
+});
+
+test("co-occurrence drill-downs reach exact systems and dialogs with Back restoring Explore", async ({ page }) => {
+  await page.goto("/?view=explore");
+  const link = page.locator("#cooccur-local-deployment-agent_system a").first();
+  const params = new URLSearchParams((await link.getAttribute("href")).slice(1));
+  await link.click();
+  await expect(page).toHaveURL(/collection=systems/);
+  await expect(page).toHaveURL(new RegExp(`family=${params.get("family")}`));
+  await expectFilter(page, "systems", "deployment", params.get("deployment"));
+  await expectFilter(page, "systems", "localOnly", params.get("localOnly"));
+  const expected = projects.filter(project => project.status === "active"
+    && project.system_family === params.get("family")
+    && String(project.local_first === true ? "1" : project.local_first === false ? "0" : "unknown") === params.get("localOnly")
+    && (project.deployment || []).includes(params.get("deployment")));
+  await expect(page.locator("#result-count")).toContainText(`${expected.length} projects ·`);
+  await page.goBack();
+  await expect(page.locator("#explore")).toBeVisible();
+  const toggle = page.locator("#cooccur-provider-local-agent_system [data-cooccur-members]").first();
+  await toggle.focus();
+  await page.keyboard.press("Enter");
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  const member = page.locator("#cooccur-provider-local-agent_system .access-combo-members").first().locator("button").first();
+  const name = await member.textContent();
+  await member.click();
+  await expect(recordView(page, "system")).toBeVisible();
+  await expect(recordHeading(page, "system")).toHaveText(name);
+  await page.goBack();
+  await expect(recordView(page, "system")).not.toBeVisible();
+  await expect(page.locator("#explore")).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  for (const cell of await page.locator("#system-deployment-content .deployment-table a:visible, #system-deployment-content .deployment-table button:visible").all()) {
+    expect(await cell.evaluate(element => element.scrollWidth - element.clientWidth)).toBeLessThanOrEqual(0);
+  }
 });
 
 for (const theme of ["light", "dark"]) {

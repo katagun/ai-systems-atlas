@@ -1,6 +1,8 @@
 const { test, expect } = require("@playwright/test");
 const { collectionDot, openCollection, openView, searchAll } = require("./helpers/landing");
 const { closeRecord, recordView } = require("./helpers/results");
+const { FINDER_GOALS, finderGoalRecords } = require("../../web/app-core.js");
+const { projects } = require("../../directory/projects.json");
 
 // Reads where an element sits once the page stops scrolling. It first waits
 // until scrollY holds still for five animation frames, then measures in the
@@ -98,12 +100,13 @@ test("a goal's count matches the records the shortlist is drawn from", async ({ 
   await page.goto("/?view=finder");
   await shortlist(page);
 
-  // "51 active records match" for a goal drawn from two roles. The tile count
-  // and the candidate set come from one predicate, so they cannot drift apart;
-  // this is the reader-visible half of that. The number moves with each
-  // coding-agent or coding-workflow record the catalog publishes.
-  await expect(page.locator("#finder-status")).toContainText("Write and maintain software: 57 active records match");
-  await expect(page.locator(".finder-result-heading")).toContainText("3 of 57 active records");
+  // The expected count comes from the catalog and the goal predicate, never a
+  // hardcoded number: it moves with each coding-agent or coding-workflow
+  // record the catalog publishes.
+  const goal = FINDER_GOALS.agent_system.find(entry => entry.id === "coding");
+  const expected = finderGoalRecords("agent_system", goal, { projects }).length;
+  await expect(page.locator("#finder-status")).toContainText(`Write and maintain software: ${expected} active records match`);
+  await expect(page.locator(".finder-result-heading")).toContainText(`3 of ${expected} active records`);
 });
 
 test("choosing a job presses its tile and writes the URL", async ({ page }) => {
