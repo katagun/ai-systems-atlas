@@ -264,14 +264,25 @@ test("a Finder job opens the Finder at its priority question", async ({ page }) 
 });
 
 test("tiles carry the three most recently reviewed marks and no example ranking", async ({ page }) => {
+  // logos.json lands after first paint and fills each mark that has an icon; a
+  // record with no mark keeps its monogram. Which of the newest records carry a
+  // vendored mark changes with every promotion, and on 2026-10-13 none of the
+  // twenty-four did, so the expectation is read from the files the page loads
+  // instead of assumed. Models may also borrow a joined lab's mark, so the
+  // vendored count is a floor, and every mark renders one way or the other.
+  const logos = require("../../web/logos.json");
+  const recent = ["systems", "inference", "runtimes", "specifications", "models", "packs", "labs", "robots"]
+    .flatMap(name => require(`../../web/app/${name}.json`).recent || []);
+  const vendored = recent.filter(record => logos.records[record.id] && logos.icons[logos.records[record.id]]).length;
+  const logosLanded = page.waitForResponse(response => response.url().includes("logos.json"));
   await page.goto("/");
-  const marks = page.locator('[data-tile="inference"] .tile-marks .card-mark');
-  await expect(marks).toHaveCount(3);
-  // logos.json lands after first paint and fills each mark that has an icon.
-  // Poll the whole front door rather than one tile: which collections' three
-  // newest records carry a vendored mark changes with every promotion, and a
-  // record with no mark is meant to keep its monogram.
-  await expect.poll(async () => page.locator("#collection-index .tile-marks .card-mark svg").count()).toBeGreaterThan(0);
+  await expect(page.locator('[data-tile="inference"] .tile-marks .card-mark')).toHaveCount(3);
+  await logosLanded;
+  const marks = page.locator("#collection-index .tile-marks .card-mark");
+  await expect(marks).toHaveCount(recent.length);
+  await expect.poll(async () => page.locator("#collection-index .tile-marks .card-mark svg").count()).toBeGreaterThanOrEqual(vendored);
+  const icons = await page.locator("#collection-index .tile-marks .card-mark svg").count();
+  await expect(page.locator("#collection-index .tile-marks .card-monogram")).toHaveCount(recent.length - icons);
 });
 
 test("the Directory tab and the brand mark return to the front door", async ({ page }) => {
