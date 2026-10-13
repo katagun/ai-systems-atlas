@@ -367,7 +367,35 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "rule": "docs/PACKS.md inclusion boundary test 4: \"Its contents are documents, not running code. Open the tree before deciding.\"",
+        "finding": "Docker-authored knowledge skills for Docker-related tasks, under the Apache License 2.0. The README states: \"Docker-authored knowledge skills that improve AI coding agent output for Docker-related tasks. Skills are authored once as portable `SKILL.md` directories and discovered automatically by any compliant agent through standard skill paths.\" Skills are grouped by Docker product (Dockerfile and Build, Compose, Sandboxes) with a catalog-generated table. The boundary question is whether the tree holds documents only, which would place it among the reviewed packs, or ships running code the host executes, which would send it to a scored review instead. The README mentions self-contained installation steps and a catalog generator, and the tree itself was not opened here, so that question is undecided.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/docker/skills/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "3bb33f65872155f0801efc9f6732e2868eb338c5ed6a81eec5c775c1382761cb",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "34f4d2496fa7340441d0b70900bcae0646a0a643",
+            "immutable_url": "https://api.github.com/repos/docker/skills/git/blobs/34f4d2496fa7340441d0b70900bcae0646a0a643"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/docker/skills/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "f2406d3f6512586103ae8ebfa8534aa9b5b812cea8726495eb94f3103aca50d8",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "710f66db9ba0bada6eb8e35a328f9038fef4fda4",
+            "immutable_url": "https://api.github.com/repos/docker/skills/git/blobs/710f66db9ba0bada6eb8e35a328f9038fef4fda4"
+          }
+        ],
+        "held_by": "ADR 031 (skill-packs-earn-records-by-owned-state-or-enforced-work): needs a tree inspection deciding PACKS.md boundary test 4 before routing to packs or to a scored review",
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "FailproofAI/failproofai",
@@ -635,7 +663,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md: \"A repository appears in at most one of `projects.json`, `packs.json`, `robots.json`, and `exclusions.json`.\"",
+        "finding": "Already published as catalog record munder-difflin (verified 2026-10-06, MIT license with a scoped carve-out for bundled pixel-art tilesets). The LICENSE quoted here is the MIT License, copyright 2026 Chaitanya Giri, and its blob matches the published record's pinned license evidence, confirming the chaitanyagiri/munder-difflin to HarnessMD/munder-difflin move is a repository transfer of the same project. The README describes it as \"Free, open source and performant. A multi-agent harness that works with the subscriptions you already pay for\" and \"Agent harness to run an office of your clones\". It duplicates a record already in the systems collection, so the queue entry should be retired, not reviewed again.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/HarnessMD/munder-difflin/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "3fe5c1c9c922a77cd084e7671223589606b1f926c15e2751fc602b8dc6fc0181",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "69073fc3d4afe3a681f675e3543b534b608f37e3",
+            "immutable_url": "https://api.github.com/repos/HarnessMD/munder-difflin/git/blobs/69073fc3d4afe3a681f675e3543b534b608f37e3"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/HarnessMD/munder-difflin/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "756581d803b75c9de1cff8798aa509baf7bc561f1a25c006fcb46e71003c907c",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "fc1e934b7ece17e52d3a8fc9db5b2323eff44a79",
+            "immutable_url": "https://api.github.com/repos/HarnessMD/munder-difflin/git/blobs/fc1e934b7ece17e52d3a8fc9db5b2323eff44a79"
+          }
+        ],
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "HarnessRouter/harnessrouter",
