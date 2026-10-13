@@ -3700,6 +3700,50 @@
         "url": "https://reflection.ai/safety",
         "verified_at": "2026-10-07"
       }
+    },
+    {
+      "id": "lab-seekr-technologies",
+      "name": "Seekr Technologies",
+      "url": "https://www.seekr.com/about/",
+      "description": "Enterprise AI company building the SeekrFlow development platform and serving the SeekrFlow inference API from a Reston, Virginia headquarters. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_system",
+      "catalog_names": [
+        "Seekr Technologies"
+      ],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/Seekr-Technologies"
+        }
+      ],
+      "organization_note": "The Terms and Conditions name Seekr Technologies, Inc., and the about page places the headquarters in Reston, Virginia, so the record takes the United States as the headquarters country; no parent organization is named on the pages read. It is recorded on the reviewed system seekrflow alongside the new seekrflow-api service. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "systems": [
+        "seekrflow"
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "About page: Reston headquarters",
+          "url": "https://www.seekr.com/about/",
+          "verified_at": "2026-10-12"
+        },
+        {
+          "kind": "web",
+          "label": "Terms & Conditions: Seekr Technologies, Inc.",
+          "url": "https://www.seekr.com/terms-conditions/",
+          "verified_at": "2026-10-12"
+        },
+        {
+          "kind": "web",
+          "label": "SeekrFlow platform overview, the reviewed system record seekrflow",
+          "url": "https://docs.seekr.com/flow/what-is-seekrflow",
+          "verified_at": "2026-10-12"
+        }
+      ],
+      "verified_at": "2026-10-12",
+      "display_order": 770
     }
   ],
   "updated_at": "2026-10-10"

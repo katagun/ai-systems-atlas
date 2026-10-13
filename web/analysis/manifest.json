@@ -1,8 +1,8 @@
 {
   "generator": "scripts/build_analysis_exports.py",
   "inputs": {
-    "inference-services.json": "488d88c2db10227ca5ca9016e497e07d3c18fa01c9e6bb8cbd51ee06784ed920",
-    "labs.json": "79ad0ca72a97e82e8a39a4c3873d208d752daeb7f6d5eedc9290aa47020a2a69",
+    "inference-services.json": "b733983af0fa0579e1ae1add8a00b8252c52ec0fa663b99b871d19a9a4222f7f",
+    "labs.json": "f5359ea7eb4d14b689ef532498ea9faf3c0bf2a654d322f129bcb3bcfc700fb5",
     "license-evidence.json": "1c79fcf281d2de9dddc57f7d67aed7a1ffd08cab27856c451a2f9e75c7489084",
     "local-runtimes.json": "466aca0780371f8d81035a7eb163a3ce7d902b0bc89daf179fea2239b9907b1d",
     "models-dev.json": "f80b29aad1f7a82e6b86d96cd5fe41c8f5812aa2f8edf8ce2e74e7fd7b67ebd0",
@@ -12,7 +12,7 @@
     "robots.json": "d7858d3bf67ba762628c46b8fc335e870471efe10fd1cc227dec8f656e65432d",
     "specifications.json": "c0e675916d58de2583822c4b2637ba9fbc927a0b654c3a650c842959ad09b9d8"
   },
-  "source_revision": "28bb063d072ad8dcd216714ee523fd81d68f307d",
+  "source_revision": "6b91885b85276dea8d54f93fc560082a1c313150",
   "tables": {
     "data_dictionary": {
       "rows": 31,
@@ -31,12 +31,12 @@
       "sha256": "5dd6a5bc31e7b620b7bed40569807fcddc477efd14478a268e2feb496685ed69"
     },
     "records": {
-      "rows": 971,
-      "sha256": "8d6273e07cd612d8d0e3b4679b551ff464e6bfb29eacf274233f403e341ad4cd"
+      "rows": 973,
+      "sha256": "09655b7fc61ad1bd2ba03221eabd421da602e13133e1cc2fb376f1657a4eebba"
     },
     "score_dimensions": {
-      "rows": 5708,
-      "sha256": "44cefdda0c168c57e25e3f71f98f6aff53dc5273ab4750deb8581d60103ff266"
+      "rows": 5717,
+      "sha256": "b2dff3f4eca6341ac09cae5582a7731cb6f8a00fcc7fdfabaafc87a292476d95"
     }
   }
 }

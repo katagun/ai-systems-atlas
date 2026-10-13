@@ -404,6 +404,15 @@ inference,sambanova-cloud,inference_service,overall,6.21
 inference,sambanova-cloud,inference_service,regional_deployment_control,4.0
 inference,sambanova-cloud,inference_service,serving_flexibility,7.0
 inference,sambanova-cloud,inference_service,traffic_resilience,5.0
+inference,seekrflow-api,inference_service,api_interoperability,6.0
+inference,seekrflow-api,inference_service,customization_lifecycle,7.5
+inference,seekrflow-api,inference_service,data_governance,5.0
+inference,seekrflow-api,inference_service,documentation_transparency,8.0
+inference,seekrflow-api,inference_service,operational_maturity,7.5
+inference,seekrflow-api,inference_service,overall,6.04
+inference,seekrflow-api,inference_service,regional_deployment_control,3.0
+inference,seekrflow-api,inference_service,serving_flexibility,6.5
+inference,seekrflow-api,inference_service,traffic_resilience,6.5
 inference,siliconflow-cn,inference_service,api_interoperability,8.4
 inference,siliconflow-cn,inference_service,customization_lifecycle,7.0
 inference,siliconflow-cn,inference_service,data_governance,8.6
