@@ -33,7 +33,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/routines/candidate-triage.md review_ready: nothing blocks a human review.",
+        "finding": "Terminal harness for running coding agents, under the MIT License, copyright 2025 Jeremy Huang. The README bills it as \"The most RAM efficient harness\" and \"The most intelligent harness\", with sampled memory and boot-time comparisons against other terminal tools. Documented capabilities include headless sessions described as swarm workers, agent memory, side panels and diagrams in the terminal interface, OAuth and provider login flows plus config-file setup for self-hosted endpoints and MCP, browser automation, and an iOS application. No cross-collection hit was reported and no duplicate record exists. The one boundary question the record turns on is whether the reviewed product is the single-session terminal agent or the multi-session swarm orchestration it advertises.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/1jehuang/jcode/blob/master/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "720443eee2efeda8f9f93a7a6a6f62763c17171106f60df58a35b8ea638fdf60",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "e921bccf34499d0c806a2131c2faa95d375c1c96",
+            "immutable_url": "https://api.github.com/repos/1jehuang/jcode/git/blobs/e921bccf34499d0c806a2131c2faa95d375c1c96"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/1jehuang/jcode/blob/master/README.md",
+            "kind": "git_blob",
+            "content_sha256": "795bda4954fbbcecd8161b97da38aeb85387e46d7239af28dd4f43b418505ee0",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "db91db6755787fea064cde5c30dcda71acd066bc",
+            "immutable_url": "https://api.github.com/repos/1jehuang/jcode/git/blobs/db91db6755787fea064cde5c30dcda71acd066bc"
+          }
+        ],
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "AFK-surf/open-agent",
@@ -108,7 +135,35 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "rule": "docs/PACKS.md inclusion boundary test 4: \"Its contents are documents, not running code. Open the tree before deciding.\"",
+        "finding": "Skill-installed memory loop for agents, under the MIT License, copyright 2026 AgentMemoryRepo. The README states \"your agent saves what it learns from you in real time, and that memory is live across sessions\", with memories linking \"like a wiki\" in a separate repository, installed via \"Install the skill\" with Devin CLI named, and a published spec beside the repository covering the memory loop, a repository layout, and a MEMORY.md format. The boundary question is whether the repository only distributes skill documents the host reads or ships code doing work of its own, which decides the collection it belongs in. The tree itself was not opened here, so that question is undecided.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/AgentMemoryRepo/agentmemoryrepo/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "33f6da382138be1d2afd00260bf019982e11c2fb9b0827f089883d1b9012bddb",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "fda0f24843b81c519d0736b252e29ebc925eafdc",
+            "immutable_url": "https://api.github.com/repos/AgentMemoryRepo/agentmemoryrepo/git/blobs/fda0f24843b81c519d0736b252e29ebc925eafdc"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/AgentMemoryRepo/agentmemoryrepo/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "9b1ae9d657371375d743d68366ce793f9ce5cf8d8665c313f8a7a5ad48c1504f",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "9f5788b32d9e99792b3b976ad226f51619b56948",
+            "immutable_url": "https://api.github.com/repos/AgentMemoryRepo/agentmemoryrepo/git/blobs/9f5788b32d9e99792b3b976ad226f51619b56948"
+          }
+        ],
+        "held_by": "ADR 031 (skill-packs-earn-records-by-owned-state-or-enforced-work): needs a tree inspection deciding PACKS.md boundary test 4 before routing to packs or to a scored review",
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "browser-use/video-use",
@@ -248,7 +303,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "out_of_scope",
+        "rule": "docs/CURATION.md: \"A repository appears in at most one of `projects.json`, `packs.json`, `robots.json`, and `exclusions.json`.\"",
+        "finding": "Already published as catalog record codewhale (verified 2026-09-01, MIT license). The platform resolves the record's Hmbown/CodeWhale location to codewhale-hq/Codewhale, confirming the move is a repository transfer of the same project. The LICENSE quoted here is the MIT License naming the DeepSeek-TUI Contributors, and the README describes it as \"The open-source coding agent that works with any model\", which \"reads your project, edits files, runs commands, and checks its own work - in your terminal, with a hosted or local model you choose\". It duplicates a record already in the systems collection, so the queue entry should be retired, not reviewed again.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/codewhale-hq/Codewhale/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "25b5d5a7553af7604772f65aac936540d7e9f5562a9e6a8ca9d02e4f628e9d51",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "8a3702b657781e2988a0c9381b2e25c8cbbc955c",
+            "immutable_url": "https://api.github.com/repos/codewhale-hq/Codewhale/git/blobs/8a3702b657781e2988a0c9381b2e25c8cbbc955c"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/codewhale-hq/Codewhale/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "75bb6a506af538493511ed460ed1253dfbf9d8928e35cf8f53724200a02df765",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "44ef3071cf937984103b46c49db8251edb184a62",
+            "immutable_url": "https://api.github.com/repos/codewhale-hq/Codewhale/git/blobs/44ef3071cf937984103b46c49db8251edb184a62"
+          }
+        ],
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "coleam00/claude-memory-compiler",
@@ -731,7 +813,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/routines/candidate-triage.md review_ready: nothing blocks a human review.",
+        "finding": "Infrastructure layer that fronts existing terminal harnesses behind one API, under the Apache License 2.0. The README calls it \"The unified interface for agent harnesses\" and states it \"turns existing harnesses like Codex and Claude Code into plug-and-play agent backends, letting your product run tasks, retrieve results, and switch harnesses through one API\", with a console, model-provider connections, a Community Edition with self-hosting, a Cloud path, and a Unified Harness Protocol it claims OpenAI Responses compatibility with. No duplicate record exists. The one boundary question the record turns on is what the router itself owns and operates versus the harnesses it plugs in.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/HarnessRouter/harnessrouter/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "0718ec35489c1c3735eadeea39ddf54daa7f452e749f214bcc08cb27bf56339f",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "5dc6985e08daaf184ffd8ea0da1b5ee40d860914",
+            "immutable_url": "https://api.github.com/repos/HarnessRouter/harnessrouter/git/blobs/5dc6985e08daaf184ffd8ea0da1b5ee40d860914"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/HarnessRouter/harnessrouter/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "b20e6a0d47584a92c10f46a9359bfd5f46edce23c90103d647f4ec74ffa56fd1",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "21636ae18dfdf6fa30817fee5f88b4399462ea54",
+            "immutable_url": "https://api.github.com/repos/HarnessRouter/harnessrouter/git/blobs/21636ae18dfdf6fa30817fee5f88b4399462ea54"
+          }
+        ],
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": null,
@@ -1653,7 +1762,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/routines/candidate-triage.md review_ready: nothing blocks a human review.",
+        "finding": "Git-backed long-term memory for agents, under the MIT License, copyright 2026 MyClaw.ai. The README presents it as \"Plugin-first long-term memory for every agent platform\", \"Git-backed. Auditable. Portable. No vector database required\", installable as an MCP server, as an OpenClaw plugin for ambient memory, or as a file convention, with its own command-line tool, documented hosts, and a protocol section. No duplicate record exists. The one boundary question the record turns on is whether the reviewed product is the memory store and its protocol or one of the plugin and server distributions.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/LeoYeAI/talewell/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "df7fbb01630a1adf18b3ea9539a7d24e7d64adfcd865081f1e69ef674036a023",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "974db8281c187cda90e8bde94264e356b78e9111",
+            "immutable_url": "https://api.github.com/repos/LeoYeAI/talewell/git/blobs/974db8281c187cda90e8bde94264e356b78e9111"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/LeoYeAI/talewell/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "3d7cb22a2d1d089466f7606908ba016ebc5c2ca89248bd581268c92ddfdd6518",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "a3b79d1b98d65a8856097cea75ac3c661e3adce6",
+            "immutable_url": "https://api.github.com/repos/LeoYeAI/talewell/git/blobs/a3b79d1b98d65a8856097cea75ac3c661e3adce6"
+          }
+        ],
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "lintsinghua/claude-code-book",
@@ -1772,7 +1908,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/routines/candidate-triage.md review_ready: nothing blocks a human review.",
+        "finding": "Command-line tool from Moonshot AI for running agents on code tasks, under the MIT License, copyright 2026 Moonshot AI. The README states it \"is an AI coding agent that runs in your terminal - it can read and edit code, run shell commands, search files, fetch web pages, and choose the next step based on the feedback it receives\", working \"out of the box with Moonshot AI's Kimi models\" and configurable for other compatible providers. The catalog's exclusion records already name this repository as the reviewable CLI runtime boundary, and the Moonshot AI lab record exists. The one boundary question the record turns on is which provider configurations count as the reviewed product boundary.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/MoonshotAI/kimi-code/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "23cc68e17992e0b512ae2e80afc5787d7d8e0fbfbdb4fff54ec0245508fa400e",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "6102a1bc7949a169f10d823a86d4ad161c26b960",
+            "immutable_url": "https://api.github.com/repos/MoonshotAI/kimi-code/git/blobs/6102a1bc7949a169f10d823a86d4ad161c26b960"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/MoonshotAI/kimi-code/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "50ea102c7003c746244c69cb78cbd5b1e9158311e5e4e028aee8a2afee698c4c",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "e3e17adb8c3aeb8a566e7c0024d90a06b384baa5",
+            "immutable_url": "https://api.github.com/repos/MoonshotAI/kimi-code/git/blobs/e3e17adb8c3aeb8a566e7c0024d90a06b384baa5"
+          }
+        ],
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "nuster1128/LLM_Agent_Memory_Survey",
@@ -1942,7 +2105,35 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "rule": "docs/PACKS.md inclusion boundary test 4: \"Its contents are documents, not running code. Open the tree before deciding.\"",
+        "finding": "Efficiency extension for an existing terminal agent, under the MIT License, copyright 2026 NVIDIA Corporation and affiliates. The README states it is \"a standalone extension\" that \"installs on top of an unmodified Pi release\", packaging \"four reusable efficiency mechanisms discovered through scaled auto-research loops\", each \"opt-in and disabled by default\": fused tool calls, packed observations, and reduced context replay and log reading. The boundary question is whether the shipped extension code only distributes its own mechanisms or does enforced work inside the host's loop, which decides the collection it belongs in. The tree itself was not opened here, so that question is undecided.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/NVlabs/SoL-Pi/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "3d48837289818b1f3efac782ec22fed30c4656b6c5abecdf5a04f3c0e0cbe7d2",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "7c8f7df0cd5fae3fa3be287c4e250f52cc25d994",
+            "immutable_url": "https://api.github.com/repos/NVlabs/SoL-Pi/git/blobs/7c8f7df0cd5fae3fa3be287c4e250f52cc25d994"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/NVlabs/SoL-Pi/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "9ba1c2397464525caa3a69adfda606f79639330119ef1bd0c3eaa542fc9be04d",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "e4915c4aba14df29408dfb7b96f278ff0aff2911",
+            "immutable_url": "https://api.github.com/repos/NVlabs/SoL-Pi/git/blobs/e4915c4aba14df29408dfb7b96f278ff0aff2911"
+          }
+        ],
+        "held_by": "ADR 031 (skill-packs-earn-records-by-owned-state-or-enforced-work): needs a tree inspection deciding PACKS.md boundary test 4 before routing to packs or to a scored review",
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "octo-models/octo",
@@ -2031,7 +2222,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/routines/candidate-triage.md review_ready: nothing blocks a human review.",
+        "finding": "Self-hostable observability and evaluation platform for agents, under the Apache License 2.0. The README presents it as \"the open-source agent harness engineering platform\" to \"trace, evaluate, guard, and improve AI agents and coding agents with OpenTelemetry\", listing agent observability, evals, guardrails, prompt management, and cost and GPU monitoring. No cross-collection hit was reported and no duplicate record exists. The one boundary question the record turns on is whether the reviewed product is the observability platform, the harness engineering around it, or both together.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/openlit/openlit/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "ff5c9af5dcef9934ca533c0581fe26af59f024f7bc3995fccaa1dac3f5bb7e65",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "1364de8f961c70bc8eb4f6dae45d89a6639d9c4d",
+            "immutable_url": "https://api.github.com/repos/openlit/openlit/git/blobs/1364de8f961c70bc8eb4f6dae45d89a6639d9c4d"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/openlit/openlit/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "5b3ecdcdef1091bbd67fdc37b364a1eddea4edc56f5b22743645d6e31f98eee5",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "e9ba20fcf49f4afe8082594dbaaa778509e2e344",
+            "immutable_url": "https://api.github.com/repos/openlit/openlit/git/blobs/e9ba20fcf49f4afe8082594dbaaa778509e2e344"
+          }
+        ],
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "openvla/openvla",
@@ -2374,7 +2592,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/routines/candidate-triage.md review_ready: nothing blocks a human review.",
+        "finding": "Multi-agent collaboration framework with a server and dashboard, under the GNU Affero General Public License 3.0, copyright 2025 Luis Alejandro Rincon. The README describes it as a \"Multi-Agent Collaboration Protocol for coordinated AI software development\" and as \"a living knowledge graph where multiple AI agents collaborate through shared context, intelligent task management, and real-time visualization\", with Python and Node.js implementations, a quick-start server and dashboard, and an MCP integration guide. No duplicate record exists. The one boundary question the record turns on is whether the reviewed product is the collaboration server and dashboard or the protocol the name claims.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/rinadelph/Agent-MCP/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "b30c341b41a376d841bddd2eff878b28e2c0e5af252006300d6a537130e01037",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "0b114b045091517a3c4dda7fbbd0d92d08845400",
+            "immutable_url": "https://api.github.com/repos/rinadelph/Agent-MCP/git/blobs/0b114b045091517a3c4dda7fbbd0d92d08845400"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/rinadelph/Agent-MCP/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "8c636ac0a836566da5dcd63722daaf11ef6e6f877eb5e5253f931ee456dbe24e",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "48abb2325e79ddd824fc6e2636877ea683a52904",
+            "immutable_url": "https://api.github.com/repos/rinadelph/Agent-MCP/git/blobs/48abb2325e79ddd824fc6e2636877ea683a52904"
+          }
+        ],
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "ros/urdfdom",
@@ -2460,7 +2705,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/routines/candidate-triage.md review_ready: nothing blocks a human review.",
+        "finding": "Rust substrate for local agent memory and decisions, under the MIT License, copyright 2025 rUv. The README states it \"combines local semantic embeddings, persistent vector retrieval, graph relationships, explicit feedback learning, memory lifecycle controls, and optional shared memory\" for \"fast local decisions and agent memory across sessions\", built as part of the ruvnet open-source stack. It also names Cognitum One as the commercial enterprise layer. Two sibling repositories from the same author are already published, and no duplicate of this repository exists. The one boundary question the record turns on is how the open repository and the commercial enterprise layer divide the reviewed product.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/ruvnet/RuVector/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "50fefb93560af4421369c99c93cc214cd835b3181ab7f16323f9e6f2ded870e3",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "2dd524ac380d7e2f68710913b95e3dbd4cce7319",
+            "immutable_url": "https://api.github.com/repos/ruvnet/RuVector/git/blobs/2dd524ac380d7e2f68710913b95e3dbd4cce7319"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/ruvnet/RuVector/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "7ef50964ae9b77d8fdcac9f4ce49faa7eeb7c98c3b972137cadd2c7765787c37",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "ee69762bb7efa11f1bcb24ca856e75ffffd43aa4",
+            "immutable_url": "https://api.github.com/repos/ruvnet/RuVector/git/blobs/ee69762bb7efa11f1bcb24ca856e75ffffd43aa4"
+          }
+        ],
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "Seekr-Technologies/seekr-hatchery",
@@ -2649,7 +2921,35 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "held",
+        "rule": "docs/PACKS.md inclusion boundary test 4: \"Its contents are documents, not running code. Open the tree before deciding.\"",
+        "finding": "Guide plus knowledge-vault template for an agent-maintained personal wiki, under the MIT License with the copyright holder left blank. The README describes \"A knowledge base that an AI agent builds and maintains for you, in plain markdown files you own\", and states the repository holds \"the concepts, the setup, the vault template, the agent skills, the scripts, and the resources\", with a starter vault and 18 skills, requiring nothing beyond Obsidian and an agent. The boundary question is whether the shipped scripts only distribute the template or do work the host reads back, which decides the collection it belongs in. The tree itself was not opened here, so that question is undecided.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/undefined-ui/second-brain-os/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "1126322e2cc8d165adc4c792eeb195717de2bcc7b39be1ce77959d78e87ef685",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "14fac913ccf80234b1848540089a3bbcb6e5283d",
+            "immutable_url": "https://api.github.com/repos/undefined-ui/second-brain-os/git/blobs/14fac913ccf80234b1848540089a3bbcb6e5283d"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/undefined-ui/second-brain-os/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "326d56601c4abdb72d5793b4e2c0a7ce6390f9ebd3ce73a9145ad58093f5f664",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "5dbd54e32c7ba2469a8394233b83cfba5d4e0c56",
+            "immutable_url": "https://api.github.com/repos/undefined-ui/second-brain-os/git/blobs/5dbd54e32c7ba2469a8394233b83cfba5d4e0c56"
+          }
+        ],
+        "held_by": "ADR 031 (skill-packs-earn-records-by-owned-state-or-enforced-work): needs a tree inspection deciding PACKS.md boundary test 4 before routing to packs or to a scored review",
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "VectorSpaceLab/general-agentic-memory",
@@ -2795,7 +3095,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/routines/candidate-triage.md review_ready: nothing blocks a human review.",
+        "finding": "Repository for an AI programming workbench, under the Apache License 2.0. The README states it covers a desktop application, a browser interface, and a terminal agent, and that it holds the client, backend services, shared interface, and agent command-line plus runtime source, with version 3.15.1 dated 2026-10-10. The catalog already carries a reviewed proprietary record for the ZCode product (verified 2026-09-18, no repository), whose note states the desktop client has no operational source repository. The one boundary question the record turns on is whether this repository, which postdates that review, is the newly opened source of the already-reviewed product or a separately scoped companion.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/zai-org/ZCode/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "606c36baf38b973227273df12a74930e4b4137280eea835c5cd623aa4553c13b",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "550d8df4cfc74878663a511caa97852f15fd9592",
+            "immutable_url": "https://api.github.com/repos/zai-org/ZCode/git/blobs/550d8df4cfc74878663a511caa97852f15fd9592"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/zai-org/ZCode/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "71208cc8d744a431df7835109c5e7a018ae4dfcd3db42ce268147c931a31a393",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "34f9ee38eb4457f7917594d54ac10c01fe045aed",
+            "immutable_url": "https://api.github.com/repos/zai-org/ZCode/git/blobs/34f9ee38eb4457f7917594d54ac10c01fe045aed"
+          }
+        ],
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": "ZhengyiLuo/AgentsDock",
@@ -2831,7 +3158,34 @@
         "classification",
         "traits",
         "editorial_score"
-      ]
+      ],
+      "triage": {
+        "verdict": "review_ready",
+        "rule": "docs/routines/candidate-triage.md review_ready: nothing blocks a human review.",
+        "finding": "Desktop environment for agentic AI research, under the Apache License 2.0. The README presents \"an IDE designed for agentic AI research\", with a desktop release at version 1.0.9, a self-hosted backend, and its own website. No cross-collection hit was reported and no duplicate record exists. The one boundary question the record turns on is which surfaces of the product, desktop, backend, or both, the reviewed record should cover.",
+        "evidence": [
+          {
+            "label": "LICENSE",
+            "url": "https://github.com/ZhengyiLuo/AgentsDock/blob/main/LICENSE",
+            "kind": "git_blob",
+            "content_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "d645695673349e3947e8e5ae42332d0ac3164cd7",
+            "immutable_url": "https://api.github.com/repos/ZhengyiLuo/AgentsDock/git/blobs/d645695673349e3947e8e5ae42332d0ac3164cd7"
+          },
+          {
+            "label": "README",
+            "url": "https://github.com/ZhengyiLuo/AgentsDock/blob/main/README.md",
+            "kind": "git_blob",
+            "content_sha256": "3a6b2bc405f19d33eac99b11d8c992552065793bf6fb58d81028922552a5fe59",
+            "fetched_at": "2026-10-13",
+            "blob_sha": "f4ffaa4a5c657046bfb088e017acb9d02a786409",
+            "immutable_url": "https://api.github.com/repos/ZhengyiLuo/AgentsDock/git/blobs/f4ffaa4a5c657046bfb088e017acb9d02a786409"
+          }
+        ],
+        "proposed_at": "2026-10-13",
+        "proposer": "candidate-triage"
+      }
     },
     {
       "repo": null,
