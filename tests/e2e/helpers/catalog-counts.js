@@ -21,7 +21,12 @@ const specifications = read("specifications.json").specifications;
 const reviewedModels = read("models.json").models;
 const sourceModels = read("models-dev.json").models;
 const sourceModelIds = new Set(sourceModels.map(model => model.source_id));
-const models = sourceModels.length + reviewedModels.filter(model => !sourceModelIds.has(model.source_id)).length;
+// A reviewed record with no source row of its own overlays the source row that shares its id
+// once models.dev lists the release (ADR 038), so the payload counts the pair once. The 2026-10-13
+// snapshot refresh listed seventeen such releases and this helper kept counting them twice.
+const sourceRowIds = new Set(sourceModels.map(model => model.id));
+const models = sourceModels.length
+  + reviewedModels.filter(model => !sourceModelIds.has(model.source_id) && !sourceRowIds.has(model.id)).length;
 
 // The All view unions every collection the site publishes: the four scored ones plus
 // the unscored packs, robots, labs, and specifications. This comment used to say
