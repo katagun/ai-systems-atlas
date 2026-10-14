@@ -4740,6 +4740,39 @@
           "immutable_url": "https://api.github.com/repos/1jehuang/jcode/git/blobs/e921bccf34499d0c806a2131c2faa95d375c1c96"
         }
       ]
+    },
+    {
+      "project_id": "kimi-code",
+      "repo": "MoonshotAI/kimi-code",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Repository root under the MIT License, covering the CLI; the VSCode extension and the pi-tui package carry their own licence files",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/MoonshotAI/kimi-code/blob/main/LICENSE",
+          "blob_sha": "6102a1bc7949a169f10d823a86d4ad161c26b960",
+          "immutable_url": "https://api.github.com/repos/MoonshotAI/kimi-code/git/blobs/6102a1bc7949a169f10d823a86d4ad161c26b960"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "VSCode extension under the Apache License 2.0",
+          "kind": "git_blob",
+          "path": "apps/vscode/LICENSE",
+          "url": "https://github.com/MoonshotAI/kimi-code/blob/main/apps/vscode/LICENSE",
+          "blob_sha": "7a4a3ea2424c09fbe48d455aed1eaa94d9124835",
+          "immutable_url": "https://api.github.com/repos/MoonshotAI/kimi-code/git/blobs/7a4a3ea2424c09fbe48d455aed1eaa94d9124835"
+        },
+        {
+          "license_id": "MIT",
+          "scope": "Forked pi-tui package under its upstream MIT notice naming Mario Zechner, synced from earendil-works/pi",
+          "kind": "git_blob",
+          "path": "packages/pi-tui/LICENSE",
+          "url": "https://github.com/MoonshotAI/kimi-code/blob/main/packages/pi-tui/LICENSE",
+          "blob_sha": "b0a8e9b81083294360c69b4ec45d3d39a2b28197",
+          "immutable_url": "https://api.github.com/repos/MoonshotAI/kimi-code/git/blobs/b0a8e9b81083294360c69b4ec45d3d39a2b28197"
+        }
+      ]
     }
   ],
   "generated_at": "2026-10-14"
