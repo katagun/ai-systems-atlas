@@ -2101,6 +2101,11 @@
       "id": "LicenseRef-MIT-OpenAI-Anthropic-Rider",
       "name": "MIT License with OpenAI/Anthropic Rider",
       "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Reka-Terms-of-Use",
+      "name": "Reka Terms of Use",
+      "kind": "proprietary"
     }
   ],
   "source_models": [

@@ -245,58 +245,6 @@
       ]
     },
     {
-      "id": "model-alibaba-qwen3-embedding-8b",
-      "source_id": "alibaba/qwen3-embedding-8b",
-      "source_metadata": {
-        "name": "Qwen3 Embedding 8B",
-        "description": "Multilingual text embedding model for retrieval, code search, classification, and clustering",
-        "family": "qwen",
-        "release_date": "2025-06-05",
-        "last_updated": "2025-06-05",
-        "knowledge_cutoff": null,
-        "modalities": {
-          "input": [
-            "text"
-          ],
-          "output": [
-            "text",
-            "embedding"
-          ]
-        },
-        "capabilities": {
-          "attachment": false,
-          "reasoning": false,
-          "tool_call": false,
-          "structured_output": null,
-          "temperature": false
-        },
-        "limits": {
-          "context": 32768,
-          "input": null,
-          "output": 0
-        },
-        "reported_open_weights": true,
-        "reported_license": "Apache-2.0",
-        "links": [],
-        "weights": [
-          {
-            "label": "Hugging Face",
-            "url": "https://huggingface.co/Qwen/Qwen3-Embedding-8B"
-          }
-        ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-10-13",
-      "last_seen_at": "2026-10-13",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
       "id": "model-alibaba-qwen3-max-preview",
       "source_id": "alibaba/qwen3-max-preview",
       "source_metadata": {
@@ -3938,58 +3886,6 @@
       ]
     },
     {
-      "id": "model-nvidia-llama-nemotron-embed-1b-v2",
-      "source_id": "nvidia/llama-nemotron-embed-1b-v2",
-      "source_metadata": {
-        "name": "Llama Nemotron Embed 1B v2",
-        "description": "Multilingual text embedding model for retrieval and question answering pipelines",
-        "family": "nemotron",
-        "release_date": "2025-10-16",
-        "last_updated": "2025-10-16",
-        "knowledge_cutoff": null,
-        "modalities": {
-          "input": [
-            "text"
-          ],
-          "output": [
-            "text",
-            "embedding"
-          ]
-        },
-        "capabilities": {
-          "attachment": false,
-          "reasoning": false,
-          "tool_call": false,
-          "structured_output": null,
-          "temperature": false
-        },
-        "limits": {
-          "context": 8192,
-          "input": null,
-          "output": 2048
-        },
-        "reported_open_weights": true,
-        "reported_license": "nvidia-open-model-license",
-        "links": [],
-        "weights": [
-          {
-            "label": "Hugging Face",
-            "url": "https://huggingface.co/nvidia/llama-nemotron-embed-1b-v2"
-          }
-        ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-10-13",
-      "last_seen_at": "2026-10-13",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
       "id": "model-openai-gpt-5-image",
       "source_id": "openai/gpt-5-image",
       "source_metadata": {
@@ -4324,52 +4220,6 @@
           "context": 16384,
           "input": null,
           "output": 14745
-        },
-        "reported_open_weights": true,
-        "reported_license": null,
-        "links": [],
-        "weights": []
-      },
-      "status": "provisional",
-      "discovered_at": "2026-10-13",
-      "last_seen_at": "2026-10-13",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
-      "id": "model-rekaai-reka-flash-3",
-      "source_id": "rekaai/reka-flash-3",
-      "source_metadata": {
-        "name": "Reka Flash 3",
-        "description": "Efficient model for low-latency assistance, extraction, and routine automation",
-        "family": "reka",
-        "release_date": "2025-03-12",
-        "last_updated": "2025-03-12",
-        "knowledge_cutoff": "2025-01-31",
-        "modalities": {
-          "input": [
-            "text"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": false,
-          "reasoning": true,
-          "tool_call": false,
-          "structured_output": true,
-          "temperature": true
-        },
-        "limits": {
-          "context": 65536,
-          "input": null,
-          "output": 58982
         },
         "reported_open_weights": true,
         "reported_license": null,

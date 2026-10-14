@@ -2898,6 +2898,90 @@
       ]
     },
     {
+      "id": "lab-kwaipilot",
+      "name": "Kwaipilot",
+      "url": "https://huggingface.co/Kwaipilot",
+      "description": "Coding-model team behind the KAT line with open-weight Dev checkpoints and an API-only flagship on StreamLake; its reviewed release is KAT-Coder-V2.5-Dev. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "lab_type": "ai_company",
+      "headquarters": "none_listed",
+      "admission_basis": "reviewed_release",
+      "catalog_names": [
+        "Kwaipilot"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/Kwaipilot"
+        }
+      ],
+      "organization_note": "The Hugging Face organization presents itself as the company Kwaipilot and owns fourteen model repositories, but no page read states a headquarters, so the record takes none_listed; no parent organization is named on the pages read. It is recorded on the reviewed release model-kwaipilot-kat-coder-v2-5-dev. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Hugging Face organization: company Kwaipilot with fourteen repositories",
+          "url": "https://huggingface.co/Kwaipilot",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "KAT project page: open-source Dev release and API-only flagship split",
+          "url": "https://kwaipilot.github.io/KAT-Coder/",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "Kwaipilot KAT-Coder-V2.5-Dev weight repository, the reviewed release",
+          "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+          "verified_at": "2026-10-14"
+        }
+      ],
+      "verified_at": "2026-10-14",
+      "display_order": 850
+    },
+    {
+      "id": "lab-reka",
+      "name": "Reka AI",
+      "url": "https://reka.ai/",
+      "description": "AI company building multimodal models and physical-AI infrastructure with its own Reka API; its reviewed release is Reka Flash 3. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_release",
+      "catalog_names": [
+        "Reka"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/reka-ai"
+        }
+      ],
+      "organization_note": "The Reka Terms of Use name Reka AI, Inc. with a Sunnyvale, California address and California arbitration, so the record takes the United States as the headquarters country without a city; no parent organization is named on the pages read, and no verifiable acquisition was found on first-party pages, only third-party acquisition rumors. It is recorded on the reviewed release model-rekaai-reka-flash-3. Its site names no frontier-safety or scaling framework, so the field is omitted; the Responsible AI framework page states deployment principles without release-specific risk thresholds.",
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Reka homepage: models and infrastructure for the physical AI era",
+          "url": "https://reka.ai/",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "Reka API model list: reka-flash-3, the reviewed release",
+          "url": "https://docs.reka.ai/chat/models",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "Reka Terms of Use: Reka AI, Inc. with Sunnyvale, California address",
+          "url": "https://reka.ai/legal/terms-of-use",
+          "verified_at": "2026-10-14"
+        }
+      ],
+      "verified_at": "2026-10-14",
+      "display_order": 840
+    },
+    {
       "id": "lab-safe-superintelligence",
       "name": "Safe Superintelligence",
       "url": "https://ssi.inc/",
