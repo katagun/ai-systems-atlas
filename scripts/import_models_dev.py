@@ -231,11 +231,20 @@ def source_metadata(source_id: str, record: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(modalities, dict):
         raise ValueError(f"{source_id}: modalities must be an object")
     inputs, outputs = modalities.get("input"), modalities.get("output")
-    known_modalities = {"text", "image", "audio", "video", "pdf"}
+    known_modalities = {"text", "image", "audio", "video", "pdf", "embedding"}
     if not isinstance(inputs, list) or not isinstance(outputs, list):
         raise ValueError(f"{source_id}: modality input and output must be lists")
     if any(item not in known_modalities for item in [*inputs, *outputs]):
         raise ValueError(f"{source_id}: unknown modality")
+    # ADR 056 amendment 2026-10-13: upstream tomls predate the embedding output
+    # value and declare output text for vector-output releases while naming type
+    # "embedding". The translator records the declared type's modality so the
+    # attributed metadata agrees with the release the toml describes; the type
+    # itself is never stored and classification stays with the reviewer. Only
+    # the embedding value is translated; every other upstream type is ignored.
+    outputs = list(outputs)
+    if record.get("type") == "embedding" and "embedding" not in outputs:
+        outputs.append("embedding")
     limits = record.get("limit")
     if not isinstance(limits, dict):
         raise ValueError(f"{source_id}: limit must be an object")

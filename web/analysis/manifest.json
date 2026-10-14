@@ -2,41 +2,41 @@
   "generator": "scripts/build_analysis_exports.py",
   "inputs": {
     "inference-services.json": "b733983af0fa0579e1ae1add8a00b8252c52ec0fa663b99b871d19a9a4222f7f",
-    "labs.json": "8f655acdc209195fa1eda318e658eb48655b0da2cf10ea672491b387ede6f7a9",
+    "labs.json": "d4efed1293b3d2eb2c15ec3997f30c325556f8a8c6227259e82ce1ffa542312e",
     "license-evidence.json": "1c79fcf281d2de9dddc57f7d67aed7a1ffd08cab27856c451a2f9e75c7489084",
     "local-runtimes.json": "466aca0780371f8d81035a7eb163a3ce7d902b0bc89daf179fea2239b9907b1d",
-    "models-dev.json": "5b7e9c28a9cb5278371607a7aeebbdc1c8b187c820df8cfd1656a945eab6550d",
-    "models.json": "5a2e5827eafd6247c2228d06ad77a1cd11b8d67b2b1e01d204187392c46531b1",
+    "models-dev.json": "7ad6f4165373ff21d60215e92ea4c5b4eb0d3aa86a4c195a5e2a8bb9532a95dc",
+    "models.json": "31400abfac73ed0a9aaa84bebab51cf0c638258701a49bfd301192585347f040",
     "packs.json": "349c4d4431f6b1492dbbb1fa16baae310733728443eca1b374f2f07bbcbf5591",
     "projects.json": "4f585a4551dc5452d40c04988fb43c9b77eb15d887ecee237e030f71e925afed",
     "robots.json": "d7858d3bf67ba762628c46b8fc335e870471efe10fd1cc227dec8f656e65432d",
     "specifications.json": "c0e675916d58de2583822c4b2637ba9fbc927a0b654c3a650c842959ad09b9d8"
   },
-  "source_revision": "b6f6c5e47bbea7725d3ba581d9a36eb5527c1329",
+  "source_revision": "6b057f75ea916b2094b5ebe33889fde055352165",
   "tables": {
     "data_dictionary": {
       "rows": 31,
       "sha256": "eeb1adff0728f3ad81b19e065f010192041c125c2c66efdb8f54906cc4701825"
     },
     "evidence": {
-      "rows": 861,
-      "sha256": "93903884f08d5630b54be89118a769576cdfc0480203343a2f1110de3a7936f4"
+      "rows": 865,
+      "sha256": "d08f16310ede6bf1eae143c50d148a17c5de1e3ba85e236df66f806612fc8d62"
     },
     "material_licenses": {
-      "rows": 816,
-      "sha256": "2fa6a9fde4e9dc556deb66a27159fd3fad3774b374165e39c3d504dfeb66be51"
+      "rows": 820,
+      "sha256": "d46913553d885381d38e409dfd7ea90ad0796cf8b8255d0ca03922069d3f4a2f"
     },
     "model_distributions": {
-      "rows": 563,
-      "sha256": "b6f852bb21c93e5c2866b5cdb48742e2ebb8b327a7dae2af34fcf8a7634be1f4"
+      "rows": 567,
+      "sha256": "266d4b09c979786f7983bf3e1bfbf6d7617a094079920c13accca51f175b5e95"
     },
     "records": {
-      "rows": 1060,
-      "sha256": "cb8f8c257c524811f283b860ec64444d91937752d7d1bcafc608aebe5faa4059"
+      "rows": 1067,
+      "sha256": "596c0c516e743f8ba06b60972a7522bc35f6d565316a63bcf67b4ba7198aeedb"
     },
     "score_dimensions": {
-      "rows": 5731,
-      "sha256": "8a86dc0d4d6e59d8adfe43bcb71bc0b06b90057651aea438e518a1624a3e5204"
+      "rows": 5759,
+      "sha256": "d455c919ad5973983b9fe7e02915eb6a86fc1d32995c452cfd91549cbafc85fc"
     }
   }
 }

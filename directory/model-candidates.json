@@ -259,7 +259,8 @@
             "text"
           ],
           "output": [
-            "text"
+            "text",
+            "embedding"
           ]
         },
         "capabilities": {
@@ -866,57 +867,6 @@
           {
             "label": "Hugging Face",
             "url": "https://huggingface.co/apodex/Apodex-1.1-mini"
-          }
-        ]
-      },
-      "status": "provisional",
-      "discovered_at": "2026-10-13",
-      "last_seen_at": "2026-10-13",
-      "review_required": [
-        "official_identity",
-        "model_boundary",
-        "license_evidence",
-        "source_model",
-        "model_access_score"
-      ]
-    },
-    {
-      "id": "model-baai-bge-m3",
-      "source_id": "baai/bge-m3",
-      "source_metadata": {
-        "name": "BGE M3",
-        "description": "Multilingual embedding model combining dense, sparse, and multi-vector retrieval",
-        "family": "bge",
-        "release_date": "2024-01-30",
-        "last_updated": "2024-01-30",
-        "knowledge_cutoff": null,
-        "modalities": {
-          "input": [
-            "text"
-          ],
-          "output": [
-            "text"
-          ]
-        },
-        "capabilities": {
-          "attachment": false,
-          "reasoning": false,
-          "tool_call": false,
-          "structured_output": null,
-          "temperature": false
-        },
-        "limits": {
-          "context": 8192,
-          "input": null,
-          "output": 0
-        },
-        "reported_open_weights": true,
-        "reported_license": "MIT",
-        "links": [],
-        "weights": [
-          {
-            "label": "Hugging Face",
-            "url": "https://huggingface.co/BAAI/bge-m3"
           }
         ]
       },
@@ -4002,7 +3952,8 @@
             "text"
           ],
           "output": [
-            "text"
+            "text",
+            "embedding"
           ]
         },
         "capabilities": {

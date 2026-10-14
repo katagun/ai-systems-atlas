@@ -1200,6 +1200,11 @@
       "definition": "Where a lab says it is headquartered, or where its reviewed research, engineering, or creative work happens (ISO 3166-1 GB)."
     },
     {
+      "id": "ae",
+      "name": "United Arab Emirates",
+      "definition": "Headquartered in the United Arab Emirates (ISO 3166-1 AE)."
+    },
+    {
       "id": "us",
       "name": "United States",
       "definition": "Headquartered in the United States (ISO 3166-1 US)."
@@ -1770,6 +1775,11 @@
     {
       "id": "LicenseRef-FLUX-Dev-Non-Commercial-2.0",
       "name": "FLUX [dev] Non-Commercial License 2.0",
+      "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Falcon-LLM-License",
+      "name": "Falcon LLM License",
       "kind": "restricted"
     },
     {

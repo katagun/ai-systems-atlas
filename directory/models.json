@@ -119,6 +119,120 @@
       "verified_at": "2026-09-22"
     },
     {
+      "id": "model-ai2-olmo-3-1-32b-think",
+      "source_id": null,
+      "name": "Olmo 3.1 32B Think",
+      "developer": "Ai2",
+      "url": "https://huggingface.co/allenai/Olmo-3.1-32B-Think",
+      "description": "Ai2's December 2025 Olmo 3.1 reasoning flagship at 32B parameters with explicit reasoning chains, published fully open under Apache 2.0 with weights, training data, code, and intermediate checkpoints on Ai2's Hugging Face organization alongside a technical report. No developer API serves this checkpoint; the playground is a demo. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Olmo 3.1 32B Think",
+        "description": "Ai2's most performant 32B reasoning checkpoint, extending the Olmo 3 Think reinforcement-learning run with a longer training schedule",
+        "family": "olmo",
+        "release_date": "2025-12-10",
+        "last_updated": "2025-12-10",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": true,
+          "tool_call": null,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": null,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/allenai/Olmo-3.1-32B-Think"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The allenai/Olmo-3.1-32B-Think model card declares license apache-2.0 in its frontmatter and states the model is licensed under Apache 2.0, intended for research and educational use in accordance with Ai2's Responsible Use Guidelines. The repository ships no LICENSE file of its own, so the grant is the standard Apache 2.0 text plus that accompanying use guidance.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Olmo-3.1-32B-Think weights published in Ai2's Hugging Face repository under the Apache 2.0 licence declared by the model card",
+          "kind": "web_terms",
+          "url": "https://opensource.org/licenses/Apache-2.0",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the Olmo 3 line's 32B reasoning identity at its current Olmo 3.1 Think checkpoint. The Olmo 3.0 Think and Base checkpoints, the 7B variants, Olmo 3.1 Instruct 32B, the Tulu and Molmo lines, and the Ai2 playground demo are separate boundaries.",
+      "strengths": [
+        "Fully open model flow: weights, Dolma training data, training code, and intermediate checkpoints all published under Apache 2.0",
+        "Explicit reasoning chains in the flagship 32B class with a technical report, model card, and developer documentation from the institute"
+      ],
+      "tradeoffs": [
+        "The 32B checkpoint needs accelerator-class serving hardware, and no developer API serves it, so running it is entirely self-operated",
+        "The card steers the model toward research and educational use under Ai2's Responsible Use Guidelines rather than unrestricted deployment"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 9,
+        "deployment_portability": 7,
+        "serving_reach": 2,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 7.16
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Ai2 Olmo 3 announcement: November 20, 2025 family release with the December 3.1 update",
+          "url": "https://allenai.org/blog/olmo3",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Ai2 Olmo-3.1-32B-Think weight repository: apache-2.0 licence, text generation",
+          "url": "https://huggingface.co/allenai/Olmo-3.1-32B-Think",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Olmo 3 technical report",
+          "url": "https://allenai.org/papers/olmo3",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/allenai/Olmo-3.1-32B-Think",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
+    },
+    {
       "id": "model-ai21-jamba-large",
       "source_id": "ai21/jamba-large",
       "name": "Jamba Large 1.6",
@@ -7468,6 +7582,121 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-baai-bge-m3",
+      "source_id": "baai/bge-m3",
+      "name": "BGE M3",
+      "developer": "BAAI",
+      "url": "https://huggingface.co/BAAI/bge-m3",
+      "description": "BAAI's January 2024 multilingual embedding release combining dense, sparse, and multi-vector retrieval in one 568M-parameter checkpoint with 8K context and 100-plus-language coverage, published under the MIT licence with weights on BAAI's Hugging Face organization and documentation on the BGE site. No developer API or managed host serves this checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "embedding_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "BGE M3",
+        "description": "Multilingual embedding model combining dense, sparse, and multi-vector retrieval",
+        "family": "bge",
+        "release_date": "2024-01-30",
+        "last_updated": "2024-01-30",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text",
+            "embedding"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/BAAI/bge-m3"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The BAAI/bge-m3 model card declares license mit in its frontmatter and the repository metadata carries the same MIT tag; the repository ships no LICENSE file of its own, so the grant is the standard MIT text. No separate model-use terms were found on the pages read.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "BGE-M3 weights published in BAAI's Hugging Face repository under the MIT licence declared by the model card",
+          "kind": "web_terms",
+          "url": "https://opensource.org/licenses/MIT",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the BGE-M3 embedding checkpoint. The BGE rerankers, the bge-large/bge-base/bge-small line, the multilingual-Gemma BGE releases, and the FlagEmbedding toolkit repository are separate boundaries.",
+      "strengths": [
+        "One checkpoint serves dense, sparse, and multi-vector retrieval across more than one hundred languages with 8,192-token context",
+        "Permissive MIT grant declared both in the model card and the repository metadata, with weights in PyTorch and ONNX formats"
+      ],
+      "tradeoffs": [
+        "No developer API or managed host serves this checkpoint, so running it is entirely self-operated",
+        "The repository carries no versioned release beyond the single checkpoint, so line updates arrive as new repositories rather than revisions"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.92
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/59aa52dbc09727fa6ead433b0285970ebc05ba82/models/baai/bge-m3.toml",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "BAAI BGE-M3 weight repository: MIT licence, multilingual embedding",
+          "url": "https://huggingface.co/BAAI/bge-m3",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "BGE documentation: BGE is developed by the Beijing Academy of Artificial Intelligence",
+          "url": "https://bge-model.com/",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/BAAI/bge-m3",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
     },
     {
       "id": "model-baidu-ernie-4-5-21b-a3b",
@@ -35109,6 +35338,114 @@
       "verified_at": "2026-09-28"
     },
     {
+      "id": "model-internlm-internlm3-8b-instruct",
+      "source_id": null,
+      "name": "InternLM3 8B Instruct",
+      "developer": "Shanghai AI Laboratory",
+      "url": "https://huggingface.co/internlm/internlm3-8b-instruct",
+      "description": "The Shanghai AI Laboratory's January 2025 InternLM3 instruction release at 8B parameters with deep-thinking and normal modes, 32K context, and tool support, published under Apache 2.0 with weights on the lab's Hugging Face organization. No developer API serves this checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "InternLM3 8B Instruct",
+        "description": "8B instruction model for general-purpose use and advanced reasoning, trained on 4 trillion tokens with deep-thinking and normal response modes",
+        "family": "internlm",
+        "release_date": "2025-01-15",
+        "last_updated": "2025-01-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/internlm/internlm3-8b-instruct"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The internlm/internlm3-8b-instruct model card declares license apache-2.0 and states that code and model weights are licensed under Apache-2.0, and the repository carries an Apache License, Version 2.0 LICENSE.txt file. No separate model-use terms were found on the pages read.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "InternLM3-8B-Instruct code and weights published in the lab's Hugging Face repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/internlm/internlm3-8b-instruct/blob/28c99415adaf61767bd1c619f4f99f308fdfd223/LICENSE.txt",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the InternLM3-8B-Instruct checkpoint of the InternLM line. The base model, the InternLM2 and 2.5 generations, the newer Intern-S and Atria releases, and the LMDeploy serving toolkit are separate boundaries.",
+      "strengths": [
+        "Apache 2.0 grant stated in the model card and carried in a LICENSE.txt file inside the weight repository",
+        "Deep-thinking and normal response modes with tool support in an 8B checkpoint that runs on a single accelerator"
+      ],
+      "tradeoffs": [
+        "No developer API or managed host serves this checkpoint, so running it is entirely self-operated",
+        "The card's limitations section warns the model may produce biased or harmful content and disclaims responsibility for its dissemination"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 8,
+        "deployment_portability": 9,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.34
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "InternLM InternLM3 weight repository: apache-2.0 licence, 8B instruct checkpoint",
+          "url": "https://huggingface.co/internlm/internlm3-8b-instruct",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "InternLM project repository: official InternLM series release with Apache-2.0 licence",
+          "url": "https://github.com/InternLM/InternLM",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/internlm/internlm3-8b-instruct",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
+    },
+    {
       "id": "model-xai-grok-4-20-multi-agent",
       "source_id": null,
       "name": "Grok 4.20 Multi-Agent",
@@ -37225,6 +37562,120 @@
       ],
       "metadata_verified_at": "2026-09-22",
       "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-tiiuae-falcon-h1-7b-instruct",
+      "source_id": null,
+      "name": "Falcon-H1 7B Instruct",
+      "developer": "TII",
+      "url": "https://huggingface.co/tiiuae/Falcon-H1-7B-Instruct",
+      "description": "TII's May 2025 Falcon-H1 instruction release at 7B parameters, a performance-and-portability model unveiled in Abu Dhabi alongside Falcon Arabic, published as open weights under the Apache-based Falcon LLM License with its acceptable-use policy. No developer API serves this checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Falcon-H1 7B Instruct",
+        "description": "7B instruction release of the Falcon-H1 high-performance portable model family",
+        "family": "falcon",
+        "release_date": "2025-05-21",
+        "last_updated": "2025-05-21",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": null,
+          "tool_call": null,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": null,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "Falcon-LLM",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/tiiuae/Falcon-H1-7B-Instruct"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Falcon-LLM-License"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The tiiuae/Falcon-H1-7B-Instruct model card names the Falcon-LLM License and links TII's Falcon terms page, which states the licence is based on Apache License 2.0 with modifications and incorporates an Acceptable Use Policy, hosted on FalconLLM.tii.ae, that users and downstream distributors must follow. The commercial grant plus use-policy duties make the release source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Falcon-LLM-License",
+          "scope": "Falcon-H1-7B-Instruct weights published in TII's Hugging Face repository under the Falcon LLM License named by the model card",
+          "kind": "web_terms",
+          "url": "https://falconllm.tii.ae/falcon-terms-and-conditions.html",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the Falcon-H1-7B-Instruct checkpoint of the Falcon-H1 family. The base model, the 0.5B through 34B siblings, the Falcon 3 and Falcon 2 generations, the Falcon Arabic line, and the Falcon-H1R reasoning releases are separate boundaries.",
+      "strengths": [
+        "Small-to-medium instruction checkpoint TII positions against larger LLaMA and Qwen offerings for on-device and resource-limited use",
+        "Commercially usable Apache-based grant with the use policy published alongside the licence text on TII's own Falcon site"
+      ],
+      "tradeoffs": [
+        "The incorporated acceptable-use policy and licence modifications need legal review before regulated or client-facing use",
+        "No developer API or managed host serves this checkpoint, so running it is entirely self-operated"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 8,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.08
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "TII Falcon-H1 and Falcon Arabic launch announcement: May 21, 2025, Abu Dhabi",
+          "url": "https://www.tii.ae/news/middle-easts-leading-ai-powerhouse-tii-launches-two-new-ai-models-falcon-arabic-first-arabic",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "TII Falcon-H1-7B-Instruct weight repository: Falcon-LLM licence",
+          "url": "https://huggingface.co/tiiuae/Falcon-H1-7B-Instruct",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "TII Falcon terms and conditions: Apache-based licence with acceptable-use duties",
+          "url": "https://falconllm.tii.ae/falcon-terms-and-conditions.html",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/tiiuae/Falcon-H1-7B-Instruct",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
     },
     {
       "id": "model-trendyol-asure-12b",

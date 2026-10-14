@@ -1125,7 +1125,8 @@
             "text"
           ],
           "output": [
-            "text"
+            "text",
+            "embedding"
           ]
         },
         "capabilities": {
@@ -4362,7 +4363,8 @@
             "text"
           ],
           "output": [
-            "text"
+            "text",
+            "embedding"
           ]
         },
         "capabilities": {
@@ -14289,7 +14291,8 @@
             "text"
           ],
           "output": [
-            "text"
+            "text",
+            "embedding"
           ]
         },
         "capabilities": {

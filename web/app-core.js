@@ -35,6 +35,7 @@
   // `none_listed`, which is not a country — gets no flag at all. `research_locations`
   // (ADR 052) names the same vocabulary, so one map serves both fields.
   const COUNTRY_FLAGS = {
+    ae: "🇦🇪",
     be: "🇧🇪",
     br: "🇧🇷",
     ca: "🇨🇦",
