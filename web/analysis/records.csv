@@ -899,6 +899,7 @@ systems,hindsight,reviewed,Hindsight,memory_system,active,,2026-09-02
 systems,holaos,reviewed,holaOS,agent_system,active,,2026-10-06
 systems,hyperresearch,reviewed,Hyperresearch,agent_system,active,,2026-09-18
 systems,jan,reviewed,Jan,assistant_system,active,,2026-09-02
+systems,jcode,reviewed,jcode,agent_system,active,,2026-10-14
 systems,jiti,reviewed,Jiti,agent_system,active,,2026-10-12
 systems,joplin,reviewed,Joplin,memory_system,active,,2026-08-23
 systems,kaibanjs,reviewed,KaibanJS,agent_system,active,,2026-10-06

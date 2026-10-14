@@ -4346,6 +4346,15 @@ systems,jan,assistant,overall,7.66
 systems,jan,assistant,task_reliability,7.2
 systems,jan,assistant,tools_integrations,8.0
 systems,jan,assistant,usability_access,8.2
+systems,jcode,agent,autonomy,7.5
+systems,jcode,agent,data_sovereignty,7.0
+systems,jcode,agent,human_control,7.0
+systems,jcode,agent,interoperability,8.5
+systems,jcode,agent,maturity,6.5
+systems,jcode,agent,observability_recovery,7.5
+systems,jcode,agent,overall,7.33
+systems,jcode,agent,task_reliability,7.0
+systems,jcode,agent,tool_use,8.0
 systems,jiti,agent,autonomy,6.0
 systems,jiti,agent,data_sovereignty,6.4
 systems,jiti,agent,human_control,7.8

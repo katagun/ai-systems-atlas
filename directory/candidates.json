@@ -3,66 +3,6 @@
   "updated_at": "2026-10-07",
   "candidates": [
     {
-      "repo": "1jehuang/jcode",
-      "name": "jcode",
-      "url": "https://github.com/1jehuang/jcode",
-      "description": "High performance coding agent harness written in rust",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.82,
-      "github_detected_license": "MIT",
-      "stars": 20328,
-      "topics": [
-        "ai",
-        "ai-agent",
-        "ai-coding-agent",
-        "claude",
-        "cli",
-        "coding-agent",
-        "llm",
-        "mcp",
-        "openai",
-        "rust",
-        "terminal",
-        "tui"
-      ],
-      "status": "provisional",
-      "discovered_at": "2026-10-07",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/routines/candidate-triage.md review_ready: nothing blocks a human review.",
-        "finding": "Terminal harness for running coding agents, under the MIT License, copyright 2025 Jeremy Huang. The README bills it as \"The most RAM efficient harness\" and \"The most intelligent harness\", with sampled memory and boot-time comparisons against other terminal tools. Documented capabilities include headless sessions described as swarm workers, agent memory, side panels and diagrams in the terminal interface, OAuth and provider login flows plus config-file setup for self-hosted endpoints and MCP, browser automation, and an iOS application. No cross-collection hit was reported and no duplicate record exists. The one boundary question the record turns on is whether the reviewed product is the single-session terminal agent or the multi-session swarm orchestration it advertises.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/1jehuang/jcode/blob/master/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "720443eee2efeda8f9f93a7a6a6f62763c17171106f60df58a35b8ea638fdf60",
-            "fetched_at": "2026-10-13",
-            "blob_sha": "e921bccf34499d0c806a2131c2faa95d375c1c96",
-            "immutable_url": "https://api.github.com/repos/1jehuang/jcode/git/blobs/e921bccf34499d0c806a2131c2faa95d375c1c96"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/1jehuang/jcode/blob/master/README.md",
-            "kind": "git_blob",
-            "content_sha256": "795bda4954fbbcecd8161b97da38aeb85387e46d7239af28dd4f43b418505ee0",
-            "fetched_at": "2026-10-13",
-            "blob_sha": "db91db6755787fea064cde5c30dcda71acd066bc",
-            "immutable_url": "https://api.github.com/repos/1jehuang/jcode/git/blobs/db91db6755787fea064cde5c30dcda71acd066bc"
-          }
-        ],
-        "proposed_at": "2026-10-13",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "AFK-surf/open-agent",
       "name": "open-agent",
       "url": "https://github.com/AFK-surf/open-agent",
