@@ -816,6 +816,98 @@
       "research_locations": []
     },
     {
+      "id": "lab-ai2",
+      "name": "Allen Institute for AI",
+      "url": "https://allenai.org/about",
+      "description": "Seattle-based nonprofit AI research institute behind the fully open Olmo model family; its reviewed release is Olmo 3.1 32B Think. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "lab_type": "public_research",
+      "headquarters": "us",
+      "admission_basis": "reviewed_release",
+      "catalog_names": [
+        "Ai2"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/allenai"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/allenai"
+        }
+      ],
+      "organization_note": "The institute's about page calls it a Seattle based non-profit AI research institute founded in 2014 by Paul Allen, so the record takes the United States as the headquarters country; no parent organization is named on the pages read. It is recorded on the reviewed release model-ai2-olmo-3-1-32b-think. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "About page: Seattle based non-profit institute founded in 2014",
+          "url": "https://allenai.org/about",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Ai2 Olmo 3 announcement, the reviewed release's family",
+          "url": "https://allenai.org/blog/olmo3",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Ai2 Olmo-3.1-32B-Think weight repository, the reviewed release",
+          "url": "https://huggingface.co/allenai/Olmo-3.1-32B-Think",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "verified_at": "2026-10-13",
+      "display_order": 810
+    },
+    {
+      "id": "lab-baai",
+      "name": "Beijing Academy of Artificial Intelligence",
+      "url": "https://bge-model.com/",
+      "description": "Public research institute in Beijing behind the BGE embedding and reranker family through its FlagOpen open-source initiative; its reviewed release is BGE M3. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "lab_type": "public_research",
+      "headquarters": "cn",
+      "admission_basis": "reviewed_release",
+      "catalog_names": [
+        "BAAI"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/FlagOpen"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/BAAI"
+        }
+      ],
+      "organization_note": "FlagOpen's GitHub organization describes itself as an open-source initiative by the Beijing Academy of Artificial Intelligence, and the BGE documentation states BGE is developed by the Academy, so the record takes Beijing, China as the headquarters; no street address and no parent organization are named on the pages read. It is recorded on the reviewed release model-baai-bge-m3. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "FlagOpen organization: open-source initiative by the Beijing Academy of Artificial Intelligence",
+          "url": "https://github.com/FlagOpen",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "BGE documentation: BGE is developed by the Beijing Academy of Artificial Intelligence",
+          "url": "https://bge-model.com/",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "BAAI BGE-M3 weight repository, the reviewed release",
+          "url": "https://huggingface.co/BAAI/bge-m3",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "verified_at": "2026-10-13",
+      "display_order": 800
+    },
+    {
       "id": "lab-baidu",
       "name": "Baidu",
       "url": "https://home.baidu.com/",
@@ -2806,6 +2898,90 @@
       ]
     },
     {
+      "id": "lab-kwaipilot",
+      "name": "Kwaipilot",
+      "url": "https://huggingface.co/Kwaipilot",
+      "description": "Coding-model team behind the KAT line with open-weight Dev checkpoints and an API-only flagship on StreamLake; its reviewed release is KAT-Coder-V2.5-Dev. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "lab_type": "ai_company",
+      "headquarters": "none_listed",
+      "admission_basis": "reviewed_release",
+      "catalog_names": [
+        "Kwaipilot"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/Kwaipilot"
+        }
+      ],
+      "organization_note": "The Hugging Face organization presents itself as the company Kwaipilot and owns fourteen model repositories, but no page read states a headquarters, so the record takes none_listed; no parent organization is named on the pages read. It is recorded on the reviewed release model-kwaipilot-kat-coder-v2-5-dev. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Hugging Face organization: company Kwaipilot with fourteen repositories",
+          "url": "https://huggingface.co/Kwaipilot",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "KAT project page: open-source Dev release and API-only flagship split",
+          "url": "https://kwaipilot.github.io/KAT-Coder/",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "Kwaipilot KAT-Coder-V2.5-Dev weight repository, the reviewed release",
+          "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+          "verified_at": "2026-10-14"
+        }
+      ],
+      "verified_at": "2026-10-14",
+      "display_order": 850
+    },
+    {
+      "id": "lab-reka",
+      "name": "Reka AI",
+      "url": "https://reka.ai/",
+      "description": "AI company building multimodal models and physical-AI infrastructure with its own Reka API; its reviewed release is Reka Flash 3. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_release",
+      "catalog_names": [
+        "Reka"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/reka-ai"
+        }
+      ],
+      "organization_note": "The Reka Terms of Use name Reka AI, Inc. with a Sunnyvale, California address and California arbitration, so the record takes the United States as the headquarters country without a city; no parent organization is named on the pages read, and no verifiable acquisition was found on first-party pages, only third-party acquisition rumors. It is recorded on the reviewed release model-rekaai-reka-flash-3. Its site names no frontier-safety or scaling framework, so the field is omitted; the Responsible AI framework page states deployment principles without release-specific risk thresholds.",
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Reka homepage: models and infrastructure for the physical AI era",
+          "url": "https://reka.ai/",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "Reka API model list: reka-flash-3, the reviewed release",
+          "url": "https://docs.reka.ai/chat/models",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "Reka Terms of Use: Reka AI, Inc. with Sunnyvale, California address",
+          "url": "https://reka.ai/legal/terms-of-use",
+          "verified_at": "2026-10-14"
+        }
+      ],
+      "verified_at": "2026-10-14",
+      "display_order": 840
+    },
+    {
       "id": "lab-safe-superintelligence",
       "name": "Safe Superintelligence",
       "url": "https://ssi.inc/",
@@ -2984,6 +3160,54 @@
       "display_order": 570
     },
     {
+      "id": "lab-shanghai-ai-laboratory",
+      "name": "Shanghai AI Laboratory",
+      "url": "https://www.shlab.org.cn/",
+      "description": "Public research institute in Shanghai behind the InternLM model line; its reviewed release is InternLM3 8B Instruct. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "lab_type": "public_research",
+      "headquarters": "cn",
+      "admission_basis": "reviewed_release",
+      "catalog_names": [
+        "Shanghai AI Laboratory"
+      ],
+      "systems": [
+        "mindsearch"
+      ],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/InternLM"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/internlm"
+        }
+      ],
+      "organization_note": "The laboratory's homepage addresses it at 129 Longwen Road, Xuhui District, Shanghai, so the record takes China as the headquarters country; no parent organization is named on the pages read. It is recorded on the reviewed release model-internlm-internlm3-8b-instruct and on the reviewed system mindsearch, whose repository sits in the lab's GitHub organization. Its site names no frontier-safety or scaling framework, so the field is omitted; the laboratory's ShuAn safety base platform stays a candidate rather than a recorded framework.",
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Laboratory homepage: Shanghai address and InternLM programme",
+          "url": "https://www.shlab.org.cn/",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "InternLM project repository: official series release by the laboratory",
+          "url": "https://github.com/InternLM/InternLM",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "InternLM3-8B-Instruct weight repository, the reviewed release",
+          "url": "https://huggingface.co/internlm/internlm3-8b-instruct",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "verified_at": "2026-10-13",
+      "display_order": 820
+    },
+    {
       "id": "lab-stepfun",
       "name": "StepFun",
       "url": "https://www.stepfun.com/",
@@ -3091,6 +3315,52 @@
       "verified_at": "2026-09-25",
       "admission_basis": "reviewed_release",
       "display_order": 590
+    },
+    {
+      "id": "lab-tii",
+      "name": "Technology Innovation Institute",
+      "url": "https://www.tii.ae/about-us",
+      "description": "Applied-research institute in Abu Dhabi behind the Falcon model family; its reviewed release is Falcon-H1 7B Instruct. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "lab_type": "public_research",
+      "headquarters": "ae",
+      "admission_basis": "reviewed_release",
+      "catalog_names": [
+        "TII"
+      ],
+      "systems": [],
+      "channels": [
+        {
+          "kind": "github",
+          "url": "https://github.com/tiiuae"
+        },
+        {
+          "kind": "hugging_face",
+          "url": "https://huggingface.co/tiiuae"
+        }
+      ],
+      "organization_note": "The institute's GitHub organization places it in Abu Dhabi, UAE, and its about page describes it as part of Abu Dhabi Government's Advanced Technology Research Council, so the record takes the United Arab Emirates as the headquarters country; no parent organization beyond the council is named on the pages read. It is recorded on the reviewed release model-tiiuae-falcon-h1-7b-instruct. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "About page: Abu Dhabi Government research council institute",
+          "url": "https://www.tii.ae/about-us",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "GitHub organization: Technology Innovation Institute, Abu Dhabi, UAE",
+          "url": "https://github.com/tiiuae",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "TII Falcon-H1 launch announcement, the reviewed release's family",
+          "url": "https://www.tii.ae/news/middle-easts-leading-ai-powerhouse-tii-launches-two-new-ai-models-falcon-arabic-first-arabic",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "verified_at": "2026-10-13",
+      "display_order": 830
     },
     {
       "id": "lab-tencent",

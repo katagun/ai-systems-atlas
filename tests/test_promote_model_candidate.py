@@ -378,7 +378,11 @@ class PromoteModelCandidateTests(unittest.TestCase):
 
     def test_gap_draft_refuses_an_id_that_is_already_published(self) -> None:
         models = json.loads((self.root / "directory" / "models.json").read_text())
-        taken = models["models"][0]["source_id"]
+        taken = next(
+            model["source_id"]
+            for model in models["models"]
+            if model["source_id"] is not None
+        )
         source = {"models": []}
         write_json(self.root / "directory" / "models-dev.json", source)
         with self.assertRaisesRegex(PromotionError, "already published"):
@@ -534,7 +538,9 @@ class PromoteModelCandidateTests(unittest.TestCase):
 
     def test_link_refuses_a_record_that_is_already_linked(self) -> None:
         models = json.loads((self.root / "directory" / "models.json").read_text())
-        linked_id = models["models"][0]["id"]
+        linked_id = next(
+            model["id"] for model in models["models"] if model["source_id"] is not None
+        )
         with self.assertRaisesRegex(PromotionError, "already linked"):
             preflight_link(
                 self.root, linked_id, self.candidate["source_id"], "2026-09-20"

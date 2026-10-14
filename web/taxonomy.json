@@ -1200,6 +1200,11 @@
       "definition": "Where a lab says it is headquartered, or where its reviewed research, engineering, or creative work happens (ISO 3166-1 GB)."
     },
     {
+      "id": "ae",
+      "name": "United Arab Emirates",
+      "definition": "Headquartered in the United Arab Emirates (ISO 3166-1 AE)."
+    },
+    {
       "id": "us",
       "name": "United States",
       "definition": "Headquartered in the United States (ISO 3166-1 US)."
@@ -1773,6 +1778,11 @@
       "kind": "restricted"
     },
     {
+      "id": "LicenseRef-Falcon-LLM-License",
+      "name": "Falcon LLM License",
+      "kind": "restricted"
+    },
+    {
       "id": "LicenseRef-GLM-5.3",
       "name": "GLM-5.3 License",
       "kind": "restricted"
@@ -2091,6 +2101,11 @@
       "id": "LicenseRef-MIT-OpenAI-Anthropic-Rider",
       "name": "MIT License with OpenAI/Anthropic Rider",
       "kind": "restricted"
+    },
+    {
+      "id": "LicenseRef-Reka-Terms-of-Use",
+      "name": "Reka Terms of Use",
+      "kind": "proprietary"
     }
   ],
   "source_models": [

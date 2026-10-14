@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-10-13",
+  "verified_at": "2026-10-14",
   "source": {
     "id": "models-dev",
     "name": "models.dev",
@@ -117,6 +117,120 @@
       ],
       "metadata_verified_at": "2026-09-22",
       "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-ai2-olmo-3-1-32b-think",
+      "source_id": null,
+      "name": "Olmo 3.1 32B Think",
+      "developer": "Ai2",
+      "url": "https://huggingface.co/allenai/Olmo-3.1-32B-Think",
+      "description": "Ai2's December 2025 Olmo 3.1 reasoning flagship at 32B parameters with explicit reasoning chains, published fully open under Apache 2.0 with weights, training data, code, and intermediate checkpoints on Ai2's Hugging Face organization alongside a technical report. No developer API serves this checkpoint; the playground is a demo. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Olmo 3.1 32B Think",
+        "description": "Ai2's most performant 32B reasoning checkpoint, extending the Olmo 3 Think reinforcement-learning run with a longer training schedule",
+        "family": "olmo",
+        "release_date": "2025-12-10",
+        "last_updated": "2025-12-10",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": true,
+          "tool_call": null,
+          "structured_output": null,
+          "temperature": null
+        },
+        "limits": {
+          "context": null,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/allenai/Olmo-3.1-32B-Think"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The allenai/Olmo-3.1-32B-Think model card declares license apache-2.0 in its frontmatter and states the model is licensed under Apache 2.0, intended for research and educational use in accordance with Ai2's Responsible Use Guidelines. The repository ships no LICENSE file of its own, so the grant is the standard Apache 2.0 text plus that accompanying use guidance.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Olmo-3.1-32B-Think weights published in Ai2's Hugging Face repository under the Apache 2.0 licence declared by the model card",
+          "kind": "web_terms",
+          "url": "https://opensource.org/licenses/Apache-2.0",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the Olmo 3 line's 32B reasoning identity at its current Olmo 3.1 Think checkpoint. The Olmo 3.0 Think and Base checkpoints, the 7B variants, Olmo 3.1 Instruct 32B, the Tulu and Molmo lines, and the Ai2 playground demo are separate boundaries.",
+      "strengths": [
+        "Fully open model flow: weights, Dolma training data, training code, and intermediate checkpoints all published under Apache 2.0",
+        "Explicit reasoning chains in the flagship 32B class with a technical report, model card, and developer documentation from the institute"
+      ],
+      "tradeoffs": [
+        "The 32B checkpoint needs accelerator-class serving hardware, and no developer API serves it, so running it is entirely self-operated",
+        "The card steers the model toward research and educational use under Ai2's Responsible Use Guidelines rather than unrestricted deployment"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 9,
+        "deployment_portability": 7,
+        "serving_reach": 2,
+        "lifecycle_transparency": 7,
+        "documentation_provenance": 9,
+        "overall": 7.16
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Ai2 Olmo 3 announcement: November 20, 2025 family release with the December 3.1 update",
+          "url": "https://allenai.org/blog/olmo3",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Ai2 Olmo-3.1-32B-Think weight repository: apache-2.0 licence, text generation",
+          "url": "https://huggingface.co/allenai/Olmo-3.1-32B-Think",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Olmo 3 technical report",
+          "url": "https://allenai.org/papers/olmo3",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/allenai/Olmo-3.1-32B-Think",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
     },
     {
       "id": "model-ai21-jamba-large",
@@ -2054,6 +2168,121 @@
       ],
       "metadata_verified_at": "2026-10-06",
       "verified_at": "2026-10-06"
+    },
+    {
+      "id": "model-alibaba-qwen3-embedding-8b",
+      "source_id": "alibaba/qwen3-embedding-8b",
+      "name": "Qwen3 Embedding 8B",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3-Embedding-8B",
+      "description": "Alibaba's June 2025 Qwen3 Embedding release at 8B parameters with 4,096 dimensions, multilingual retrieval across more than one hundred languages, and Matryoshka-style flexible vectors, published under Apache 2.0 with weights on the Qwen Hugging Face organization. No developer API serves this checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "embedding_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Qwen3 Embedding 8B",
+        "description": "Multilingual text embedding model for retrieval, code search, classification, and clustering",
+        "family": "qwen",
+        "release_date": "2025-06-05",
+        "last_updated": "2025-06-05",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text",
+            "embedding"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3-Embedding-8B"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The Qwen team's announcement states the Qwen3 Embedding series is open-sourced under Apache 2.0, and the Qwen/Qwen3-Embedding-8B repository carries an Apache License, Version 2.0 LICENSE file and declares license apache-2.0. No separate model-use terms were found on the pages read.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Qwen3-Embedding-8B weights published in Alibaba's Qwen Hugging Face repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3-Embedding-8B/blob/1d8ad4ca9b3dd8059ad90a75d4983776a23d44af/LICENSE",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen3-Embedding-8B checkpoint. The 0.6B and 4B siblings, the Qwen3-Reranker line, the Qwen3 language models the series is built on, and ModelScope mirror pages are separate boundaries.",
+      "strengths": [
+        "Apache 2.0 grant stated in the release announcement and carried in a LICENSE file inside the weight repository",
+        "Top-ranked multilingual retrieval at release with flexible vector dimensions and user-defined instructions in an 8B checkpoint"
+      ],
+      "tradeoffs": [
+        "No developer API or managed host serves this checkpoint, so running it is entirely self-operated",
+        "The 8B checkpoint needs accelerator-class hardware where the 0.6B sibling runs leaner, so sizing is workload-dependent"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.14
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/59aa52dbc09727fa6ead433b0285970ebc05ba82/models/alibaba/qwen3-embedding-8b.toml",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Qwen3 Embedding announcement: June 5, 2025 series release under Apache 2.0",
+          "url": "https://qwenlm.github.io/blog/qwen3-embedding/",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Qwen Qwen3-Embedding-8B weight repository: apache-2.0 licence",
+          "url": "https://huggingface.co/Qwen/Qwen3-Embedding-8B",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/Qwen/Qwen3-Embedding-8B",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
     },
     {
       "id": "model-alibaba-qwen3-max-2026-01-23",
@@ -7468,6 +7697,121 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-baai-bge-m3",
+      "source_id": "baai/bge-m3",
+      "name": "BGE M3",
+      "developer": "BAAI",
+      "url": "https://huggingface.co/BAAI/bge-m3",
+      "description": "BAAI's January 2024 multilingual embedding release combining dense, sparse, and multi-vector retrieval in one 568M-parameter checkpoint with 8K context and 100-plus-language coverage, published under the MIT licence with weights on BAAI's Hugging Face organization and documentation on the BGE site. No developer API or managed host serves this checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "embedding_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "BGE M3",
+        "description": "Multilingual embedding model combining dense, sparse, and multi-vector retrieval",
+        "family": "bge",
+        "release_date": "2024-01-30",
+        "last_updated": "2024-01-30",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text",
+            "embedding"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": true,
+        "reported_license": "MIT",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/BAAI/bge-m3"
+          }
+        ]
+      },
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The BAAI/bge-m3 model card declares license mit in its frontmatter and the repository metadata carries the same MIT tag; the repository ships no LICENSE file of its own, so the grant is the standard MIT text. No separate model-use terms were found on the pages read.",
+      "license_evidence": [
+        {
+          "license_id": "MIT",
+          "scope": "BGE-M3 weights published in BAAI's Hugging Face repository under the MIT licence declared by the model card",
+          "kind": "web_terms",
+          "url": "https://opensource.org/licenses/MIT",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the BGE-M3 embedding checkpoint. The BGE rerankers, the bge-large/bge-base/bge-small line, the multilingual-Gemma BGE releases, and the FlagEmbedding toolkit repository are separate boundaries.",
+      "strengths": [
+        "One checkpoint serves dense, sparse, and multi-vector retrieval across more than one hundred languages with 8,192-token context",
+        "Permissive MIT grant declared both in the model card and the repository metadata, with weights in PyTorch and ONNX formats"
+      ],
+      "tradeoffs": [
+        "No developer API or managed host serves this checkpoint, so running it is entirely self-operated",
+        "The repository carries no versioned release beyond the single checkpoint, so line updates arrive as new repositories rather than revisions"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.92
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/59aa52dbc09727fa6ead433b0285970ebc05ba82/models/baai/bge-m3.toml",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "BAAI BGE-M3 weight repository: MIT licence, multilingual embedding",
+          "url": "https://huggingface.co/BAAI/bge-m3",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "BGE documentation: BGE is developed by the Beijing Academy of Artificial Intelligence",
+          "url": "https://bge-model.com/",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/BAAI/bge-m3",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
     },
     {
       "id": "model-baidu-ernie-4-5-21b-a3b",
@@ -17675,6 +18019,120 @@
       "verified_at": "2026-10-06"
     },
     {
+      "id": "model-kwaipilot-kat-coder-v2-5-dev",
+      "source_id": null,
+      "name": "KAT-Coder-V2.5-Dev",
+      "developer": "Kwaipilot",
+      "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+      "description": "Kwaipilot's July 2026 open-weight coding release in the KAT line, derived from Qwen3.6-35B-A3B for agentic repository work with 256K context, published under Apache 2.0 with weights on Kwaipilot's Hugging Face organization alongside a technical report. The flagship KAT-Coder stays API-only on StreamLake. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "KAT-Coder-V2.5-Dev",
+        "description": "Open-weight agentic coding release derived from Qwen3.6-35B-A3B, serving 256K context through vLLM on 8 GPUs",
+        "family": "kat",
+        "release_date": "2026-07-23",
+        "last_updated": "2026-07-23",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The Kwaipilot/KAT-Coder-V2.5-Dev repository declares license apache-2.0 in its model metadata and names the Apache-compatible Qwen3.6-35B-A3B base. The repository ships no LICENSE file of its own, so the grant is the standard Apache 2.0 text. No separate model-use terms were found on the pages read.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "KAT-Coder-V2.5-Dev weights published in Kwaipilot's Hugging Face repository under the Apache 2.0 licence declared by the model card",
+          "kind": "web_terms",
+          "url": "https://opensource.org/licenses/Apache-2.0",
+          "verified_at": "2026-10-14"
+        }
+      ],
+      "access_boundary": "This record represents the KAT-Coder-V2.5-Dev open-weight checkpoint. The API-only flagship KAT-Coder on StreamLake, the earlier KAT-Dev line, the base Qwen3.6-35B-A3B weights, and Kwaipilot's HiPO, OASIS, and SRPO lines are separate boundaries.",
+      "strengths": [
+        "Apache 2.0 open weights on the developer's own organization with vLLM and transformers serving commands in the model card",
+        "Agentic coding release with a technical report, benchmark methodology, and 256K context for repository-scale work"
+      ],
+      "tradeoffs": [
+        "The card's reference serving setup needs tensor parallelism across 8 GPUs, so running it is data-center-class self-operation",
+        "The flagship KAT-Coder stays API-only, so this Dev checkpoint trails it and its relative standing needs the report, not the card"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 4,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.12
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Kwaipilot KAT-Coder-V2.5-Dev weight repository: apache-2.0 licence, Qwen3.6 base",
+          "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "KAT project page: open-source Dev release and API-only flagship split",
+          "url": "https://kwaipilot.github.io/KAT-Coder/",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "KAT-Coder-V2.5 Technical Report on arXiv",
+          "url": "https://arxiv.org/abs/2607.05471",
+          "verified_at": "2026-10-14"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+          "verified_at": "2026-10-14",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-14",
+      "verified_at": "2026-10-14"
+    },
+    {
       "id": "model-liquidai-lfm2-5-2-6b",
       "source_id": null,
       "name": "LFM2.5-2.6B",
@@ -25964,6 +26422,131 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-llama-nemotron-embed-1b-v2",
+      "source_id": "nvidia/llama-nemotron-embed-1b-v2",
+      "name": "Llama Nemotron Embed 1B v2",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/llama-nemotron-embed-1b-v2",
+      "description": "NVIDIA's October 2025 second-generation Llama Nemotron embedding release at 1B parameters, trained on a commercial-use dataset blend for passage retrieval, published as open weights with binaries under the NVIDIA Open Model License, code under Apache 2.0, and Llama 3.2 community terms for the base. No developer API serves this checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "embedding_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Llama Nemotron Embed 1B v2",
+        "description": "Multilingual text embedding model for retrieval and question answering pipelines",
+        "family": "nemotron",
+        "release_date": "2025-10-16",
+        "last_updated": "2025-10-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text",
+            "embedding"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 2048
+        },
+        "reported_open_weights": true,
+        "reported_license": "nvidia-open-model-license",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/nvidia/llama-nemotron-embed-1b-v2"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Llama-3.2-Community",
+        "Apache-2.0"
+      ],
+      "source_model": "mixed_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file puts all binary model files under the NVIDIA Open Model License Agreement and all source code files under Apache 2.0, and the model card additionally names the Llama 3.2 Community Model License for the base. All three material licences are recorded; the mix of open and restricted grants makes the release mixed-source rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "scope": "llama-nemotron-embed-1b-v2 binary model files published in NVIDIA's Hugging Face repository",
+          "kind": "web_terms",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.2-Community",
+          "scope": "Llama 3.2 base terms named by the model card as additional governing terms",
+          "kind": "web_terms",
+          "url": "https://github.com/meta-llama/llama-models/blob/main/models/llama3_2/LICENSE",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository source code files under Apache 2.0 per the repository LICENSE file",
+          "kind": "web_terms",
+          "url": "https://opensource.org/licenses/Apache-2.0",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the llama-nemotron-embed-1b-v2 checkpoint. The v1 generation, larger Nemotron embedding sizes, the base Llama 3.2 weights, and NVIDIA NIM or third-party hosted endpoints are separate boundaries.",
+      "strengths": [
+        "Commercial-use training blend built to avoid non-commercial dataset restrictions, documented in the model card",
+        "1B retriever that runs leanly with the licence split stated file-by-file in the repository LICENSE"
+      ],
+      "tradeoffs": [
+        "Three overlapping licences govern weights, base, and code, so commercial reuse needs legal review of each",
+        "No developer API or managed host serves this checkpoint, so running it is entirely self-operated"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 8,
+        "deployment_portability": 9,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.46
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/59aa52dbc09727fa6ead433b0285970ebc05ba82/models/nvidia/llama-nemotron-embed-1b-v2.toml",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA llama-nemotron-embed-1b-v2 weight repository: licence split and commercial dataset blend",
+          "url": "https://huggingface.co/nvidia/llama-nemotron-embed-1b-v2",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/nvidia/llama-nemotron-embed-1b-v2",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
     },
     {
       "id": "model-nvidia-nemotron-3-content-safety",
@@ -34974,6 +35557,115 @@
       "verified_at": "2026-10-07"
     },
     {
+      "id": "model-rekaai-reka-flash-3",
+      "source_id": "rekaai/reka-flash-3",
+      "name": "Reka Flash 3",
+      "developer": "Reka",
+      "url": "https://docs.reka.ai/chat/models",
+      "description": "Reka's March 2025 Flash text release with 64K context, tool use, structured outputs, and reasoning, served on Reka-operated infrastructure through the OpenAI-compatible Reka API under the Reka Terms of Use. No weights are published for this checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Reka Flash 3",
+        "description": "Efficient model for low-latency assistance, extraction, and routine automation",
+        "family": "reka",
+        "release_date": "2025-03-12",
+        "last_updated": "2025-03-12",
+        "knowledge_cutoff": "2025-01-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 65536,
+          "input": null,
+          "output": 58982
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Reka-Terms-of-Use"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "The Reka Terms of Use, last updated September 2026, govern API access to Reka's models: use requires an account with billing details, commercial use runs under the Business Terms, Reka may use customer content to train its models, and disputes go to binding arbitration with class-action waiver. It grants no licence to model weights for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Reka-Terms-of-Use",
+          "scope": "API access to Reka Flash 3 through Reka-operated inference infrastructure",
+          "kind": "web_terms",
+          "url": "https://reka.ai/legal/terms-of-use",
+          "verified_at": "2026-10-14"
+        }
+      ],
+      "access_boundary": "This record represents the reka-flash-3 API release. The Reka Edge and Core lines, the multimodal Vision services, third-party open models served through the same API, and weight checkpoints some other line publishes are separate boundaries.",
+      "strengths": [
+        "First-party API docs name reka-flash-3 with its context, modalities, and feature flags, served on infrastructure Reka operates",
+        "OpenAI-compatible endpoint with structured outputs and tool use, documented with copy-paste client examples"
+      ],
+      "tradeoffs": [
+        "No weights are published, so self-operation is unavailable and the API list can retire the model without a stated notice period",
+        "The terms let Reka train on customer content and send disputes to individual arbitration, which enterprise buyers must weigh"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 8,
+        "overall": 4.16
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/59aa52dbc09727fa6ead433b0285970ebc05ba82/models/rekaai/reka-flash-3.toml",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "Reka API model list: reka-flash-3 with 64K text context on Reka-operated infrastructure",
+          "url": "https://docs.reka.ai/chat/models",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "Reka Terms of Use governing API access to Reka models",
+          "url": "https://reka.ai/legal/terms-of-use",
+          "verified_at": "2026-10-14"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://docs.reka.ai/chat/models",
+          "verified_at": "2026-10-14",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-14",
+      "verified_at": "2026-10-14"
+    },
+    {
       "id": "model-sakana-sakana-namazu-v1-0",
       "source_id": null,
       "name": "Sakana Namazu v1.0",
@@ -35107,6 +35799,114 @@
       ],
       "metadata_verified_at": "2026-09-28",
       "verified_at": "2026-09-28"
+    },
+    {
+      "id": "model-internlm-internlm3-8b-instruct",
+      "source_id": null,
+      "name": "InternLM3 8B Instruct",
+      "developer": "Shanghai AI Laboratory",
+      "url": "https://huggingface.co/internlm/internlm3-8b-instruct",
+      "description": "The Shanghai AI Laboratory's January 2025 InternLM3 instruction release at 8B parameters with deep-thinking and normal modes, 32K context, and tool support, published under Apache 2.0 with weights on the lab's Hugging Face organization. No developer API serves this checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "InternLM3 8B Instruct",
+        "description": "8B instruction model for general-purpose use and advanced reasoning, trained on 4 trillion tokens with deep-thinking and normal response modes",
+        "family": "internlm",
+        "release_date": "2025-01-15",
+        "last_updated": "2025-01-15",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/internlm/internlm3-8b-instruct"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The internlm/internlm3-8b-instruct model card declares license apache-2.0 and states that code and model weights are licensed under Apache-2.0, and the repository carries an Apache License, Version 2.0 LICENSE.txt file. No separate model-use terms were found on the pages read.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "InternLM3-8B-Instruct code and weights published in the lab's Hugging Face repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/internlm/internlm3-8b-instruct/blob/28c99415adaf61767bd1c619f4f99f308fdfd223/LICENSE.txt",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the InternLM3-8B-Instruct checkpoint of the InternLM line. The base model, the InternLM2 and 2.5 generations, the newer Intern-S and Atria releases, and the LMDeploy serving toolkit are separate boundaries.",
+      "strengths": [
+        "Apache 2.0 grant stated in the model card and carried in a LICENSE.txt file inside the weight repository",
+        "Deep-thinking and normal response modes with tool support in an 8B checkpoint that runs on a single accelerator"
+      ],
+      "tradeoffs": [
+        "No developer API or managed host serves this checkpoint, so running it is entirely self-operated",
+        "The card's limitations section warns the model may produce biased or harmful content and disclaims responsibility for its dissemination"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 8,
+        "deployment_portability": 9,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.34
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "InternLM InternLM3 weight repository: apache-2.0 licence, 8B instruct checkpoint",
+          "url": "https://huggingface.co/internlm/internlm3-8b-instruct",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "InternLM project repository: official InternLM series release with Apache-2.0 licence",
+          "url": "https://github.com/InternLM/InternLM",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/internlm/internlm3-8b-instruct",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
     },
     {
       "id": "model-xai-grok-4-20-multi-agent",
@@ -37225,6 +38025,120 @@
       ],
       "metadata_verified_at": "2026-09-22",
       "verified_at": "2026-09-22"
+    },
+    {
+      "id": "model-tiiuae-falcon-h1-7b-instruct",
+      "source_id": null,
+      "name": "Falcon-H1 7B Instruct",
+      "developer": "TII",
+      "url": "https://huggingface.co/tiiuae/Falcon-H1-7B-Instruct",
+      "description": "TII's May 2025 Falcon-H1 instruction release at 7B parameters, a performance-and-portability model unveiled in Abu Dhabi alongside Falcon Arabic, published as open weights under the Apache-based Falcon LLM License with its acceptable-use policy. No developer API serves this checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Falcon-H1 7B Instruct",
+        "description": "7B instruction release of the Falcon-H1 high-performance portable model family",
+        "family": "falcon",
+        "release_date": "2025-05-21",
+        "last_updated": "2025-05-21",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": null,
+          "tool_call": null,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": null,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "Falcon-LLM",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/tiiuae/Falcon-H1-7B-Instruct"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-Falcon-LLM-License"
+      ],
+      "source_model": "source_available",
+      "license_review_status": "verified",
+      "license_note": "The tiiuae/Falcon-H1-7B-Instruct model card names the Falcon-LLM License and links TII's Falcon terms page, which states the licence is based on Apache License 2.0 with modifications and incorporates an Acceptable Use Policy, hosted on FalconLLM.tii.ae, that users and downstream distributors must follow. The commercial grant plus use-policy duties make the release source-available rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Falcon-LLM-License",
+          "scope": "Falcon-H1-7B-Instruct weights published in TII's Hugging Face repository under the Falcon LLM License named by the model card",
+          "kind": "web_terms",
+          "url": "https://falconllm.tii.ae/falcon-terms-and-conditions.html",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the Falcon-H1-7B-Instruct checkpoint of the Falcon-H1 family. The base model, the 0.5B through 34B siblings, the Falcon 3 and Falcon 2 generations, the Falcon Arabic line, and the Falcon-H1R reasoning releases are separate boundaries.",
+      "strengths": [
+        "Small-to-medium instruction checkpoint TII positions against larger LLaMA and Qwen offerings for on-device and resource-limited use",
+        "Commercially usable Apache-based grant with the use policy published alongside the licence text on TII's own Falcon site"
+      ],
+      "tradeoffs": [
+        "The incorporated acceptable-use policy and licence modifications need legal review before regulated or client-facing use",
+        "No developer API or managed host serves this checkpoint, so running it is entirely self-operated"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 7,
+        "deployment_portability": 8,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.08
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "TII Falcon-H1 and Falcon Arabic launch announcement: May 21, 2025, Abu Dhabi",
+          "url": "https://www.tii.ae/news/middle-easts-leading-ai-powerhouse-tii-launches-two-new-ai-models-falcon-arabic-first-arabic",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "TII Falcon-H1-7B-Instruct weight repository: Falcon-LLM licence",
+          "url": "https://huggingface.co/tiiuae/Falcon-H1-7B-Instruct",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "TII Falcon terms and conditions: Apache-based licence with acceptable-use duties",
+          "url": "https://falconllm.tii.ae/falcon-terms-and-conditions.html",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/tiiuae/Falcon-H1-7B-Instruct",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
     },
     {
       "id": "model-trendyol-asure-12b",

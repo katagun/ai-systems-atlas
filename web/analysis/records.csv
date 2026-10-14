@@ -63,6 +63,7 @@ inference,zai-model-api,reviewed,Z.ai Model API,direct_model_api,,,2026-08-28
 inference,zhipu-bigmodel,reviewed,Zhipu AI Open Platform,direct_model_api,,,2026-08-31
 labs,lab-agibot,reviewed,AgiBot,ai_company,,,2026-10-03
 labs,lab-ai-singapore,reviewed,AI Singapore,public_research,,,2026-09-25
+labs,lab-ai2,reviewed,Allen Institute for AI,public_research,,,2026-10-13
 labs,lab-ai21-labs,reviewed,AI21 Labs,ai_company,,,2026-09-25
 labs,lab-aikido-security,reviewed,Aikido Security,technology_company,,,2026-09-25
 labs,lab-aleph-alpha,reviewed,Aleph Alpha,ai_company,,,2026-10-03
@@ -72,6 +73,7 @@ labs,lab-ant-group,reviewed,Ant Group,technology_company,,,2026-09-25
 labs,lab-anthropic,reviewed,Anthropic,ai_company,,,2026-10-03
 labs,lab-apodex-ai,reviewed,Apodex AI,ai_company,,,2026-10-01
 labs,lab-arcee-ai,reviewed,Arcee AI,ai_company,,,2026-09-25
+labs,lab-baai,reviewed,Beijing Academy of Artificial Intelligence,public_research,,,2026-10-13
 labs,lab-baidu,reviewed,Baidu,technology_company,,,2026-10-13
 labs,lab-black-forest-labs,reviewed,Black Forest Labs,ai_company,,,2026-10-01
 labs,lab-booster-robotics,reviewed,Booster Robotics,ai_company,,,2026-10-07
@@ -89,6 +91,7 @@ labs,lab-hello-robot,reviewed,Hello Robot,ai_company,,,2026-10-03
 labs,lab-higgsfield-ai,reviewed,Higgsfield AI,ai_company,,,2026-10-03
 labs,lab-hugging-face,reviewed,Hugging Face,technology_company,,,2026-09-29
 labs,lab-ibm,reviewed,IBM,technology_company,,,2026-10-03
+labs,lab-kwaipilot,reviewed,Kwaipilot,ai_company,,,2026-10-14
 labs,lab-limx-dynamics,reviewed,LimX Dynamics,ai_company,,,2026-10-07
 labs,lab-liquid-ai,reviewed,Liquid AI,ai_company,,,2026-10-03
 labs,lab-meituan,reviewed,Meituan,technology_company,,,2026-09-25
@@ -110,14 +113,17 @@ labs,lab-pollen-robotics,reviewed,Pollen Robotics,ai_company,,,2026-10-07
 labs,lab-poolside,reviewed,Poolside,ai_company,,,2026-09-25
 labs,lab-prism-ml,reviewed,Prism ML,ai_company,,,2026-10-06
 labs,lab-reflection-ai,reviewed,Reflection AI,ai_company,,,2026-10-07
+labs,lab-reka,reviewed,Reka AI,ai_company,,,2026-10-14
 labs,lab-safe-superintelligence,reviewed,Safe Superintelligence,ai_company,,,2026-10-03
 labs,lab-sakana-ai,reviewed,Sakana AI,ai_company,,,2026-09-28
 labs,lab-seekr-technologies,reviewed,Seekr Technologies,ai_company,,,2026-10-12
+labs,lab-shanghai-ai-laboratory,reviewed,Shanghai AI Laboratory,public_research,,,2026-10-13
 labs,lab-stanford-nlp,reviewed,Stanford NLP Group,public_research,,,2026-09-29
 labs,lab-stepfun,reviewed,StepFun,ai_company,,,2026-10-03
 labs,lab-swiss-ai-initiative,reviewed,Swiss AI Initiative,public_research,,,2026-09-25
 labs,lab-tencent,reviewed,Tencent,technology_company,,,2026-09-25
 labs,lab-thinking-machines-lab,reviewed,Thinking Machines Lab,ai_company,,,2026-09-25
+labs,lab-tii,reviewed,Technology Innovation Institute,public_research,,,2026-10-13
 labs,lab-trendyol,reviewed,Trendyol,technology_company,,,2026-09-25
 labs,lab-trossen-robotics,reviewed,Trossen Robotics,ai_company,,,2026-10-10
 labs,lab-typesafe-ai,reviewed,TypeSafe AI,ai_company,,,2026-09-25
@@ -129,6 +135,7 @@ labs,lab-writer,reviewed,Writer,ai_company,,,2026-10-03
 labs,lab-xai,reviewed,SpaceXAI (xAI),ai_company,,,2026-09-25
 labs,lab-xiaomi,reviewed,Xiaomi,technology_company,,,2026-09-25
 labs,lab-z-ai,reviewed,Z.ai,ai_company,,,2026-09-25
+models,model-ai2-olmo-3-1-32b-think,reviewed,Olmo 3.1 32B Think,language_model,,,2026-10-13
 models,model-ai21-jamba-large,reviewed,Jamba Large 1.6,language_model,,ai21/jamba-large,2026-09-22
 models,model-ai21-jamba-mini,reviewed,Jamba Mini 1.6,language_model,,ai21/jamba-mini,2026-09-22
 models,model-aikido-altar-1,reviewed,Altar-1,language_model,,,2026-09-22
@@ -193,7 +200,7 @@ models,model-alibaba-qwen3-coder-480b-a35b-instruct,reviewed,Qwen3-Coder 480B-A3
 models,model-alibaba-qwen3-coder-flash,imported_source,Qwen3 Coder Flash,,,alibaba/qwen3-coder-flash,
 models,model-alibaba-qwen3-coder-next,reviewed,Qwen3-Coder-Next,language_model,,alibaba/qwen3-coder-next,2026-09-22
 models,model-alibaba-qwen3-coder-plus,imported_source,Qwen3 Coder Plus,,,alibaba/qwen3-coder-plus,
-models,model-alibaba-qwen3-embedding-8b,imported_source,Qwen3 Embedding 8B,,,alibaba/qwen3-embedding-8b,
+models,model-alibaba-qwen3-embedding-8b,reviewed,Qwen3 Embedding 8B,embedding_model,,alibaba/qwen3-embedding-8b,2026-10-13
 models,model-alibaba-qwen3-max,imported_source,Qwen3 Max,,,alibaba/qwen3-max,
 models,model-alibaba-qwen3-max-2026-01-23,reviewed,Qwen3 Max 2026-01-23,language_model,,,2026-09-28
 models,model-alibaba-qwen3-max-preview,imported_source,Qwen3 Max Preview,,,alibaba/qwen3-max-preview,
@@ -252,7 +259,7 @@ models,model-arcee-ai-trinity-large-preview,reviewed,Trinity Large Preview,langu
 models,model-arcee-ai-trinity-large-thinking,reviewed,Trinity Large Thinking,language_model,,arcee-ai/trinity-large-thinking,2026-09-18
 models,model-arcee-ai-trinity-mini,reviewed,Trinity Mini,language_model,,arcee-ai/trinity-mini,2026-09-18
 models,model-arcee-ai-trinity-nano-preview,reviewed,Trinity Nano Preview,language_model,,arcee-ai/trinity-nano-preview,2026-09-18
-models,model-baai-bge-m3,imported_source,BGE M3,,,baai/bge-m3,
+models,model-baai-bge-m3,reviewed,BGE M3,embedding_model,,baai/bge-m3,2026-10-13
 models,model-baai-bge-reranker-v2-m3,imported_source,BGE Reranker V2 M3,,,baai/bge-reranker-v2-m3,
 models,model-baichuan-baichuan-m2-32b,imported_source,Baichuan M2 32B,,,baichuan/baichuan-m2-32b,
 models,model-baidu-cobuddy,imported_source,CoBuddy,,,baidu/cobuddy,
@@ -389,6 +396,8 @@ models,model-inclusionai-ling-3-0-flash-vl,reviewed,Ling-3.0-flash-VL,multimodal
 models,model-inclusionai-ling-3-1-flash,imported_source,Ling 3.1 Flash,,,inclusionai/ling-3.1-flash,
 models,model-inference-net-schematron-v2-small,imported_source,Schematron V2 Small,,,inference-net/schematron-v2-small,
 models,model-inference-net-schematron-v2-turbo,imported_source,Schematron V2 Turbo,,,inference-net/schematron-v2-turbo,
+models,model-internlm-internlm3-8b-instruct,reviewed,InternLM3 8B Instruct,language_model,,,2026-10-13
+models,model-kwaipilot-kat-coder-v2-5-dev,reviewed,KAT-Coder-V2.5-Dev,language_model,,,2026-10-14
 models,model-liquid-d1,imported_source,Liquid d1,,,liquid/d1,
 models,model-liquidai-lfm2-5-2-6b,reviewed,LFM2.5-2.6B,language_model,,,2026-09-28
 models,model-mancer-weaver,imported_source,Weaver (alpha),,,mancer/weaver,
@@ -509,7 +518,7 @@ models,model-nvidia-llama-3-1-nemotron-safety-guard-8b-v3,reviewed,Llama 3.1 Nem
 models,model-nvidia-llama-3-1-nemotron-ultra-253b,reviewed,Llama 3.1 Nemotron Ultra 253B,language_model,,nvidia/llama-3.1-nemotron-ultra-253b,2026-09-18
 models,model-nvidia-llama-3-3-nemotron-super-49b-v1,reviewed,Llama 3.3 Nemotron Super 49B v1,language_model,,nvidia/llama-3.3-nemotron-super-49b-v1,2026-09-18
 models,model-nvidia-llama-3-3-nemotron-super-49b-v1-5,reviewed,Llama 3.3 Nemotron Super 49B v1.5,language_model,,nvidia/llama-3.3-nemotron-super-49b-v1.5,2026-09-18
-models,model-nvidia-llama-nemotron-embed-1b-v2,imported_source,Llama Nemotron Embed 1B v2,,,nvidia/llama-nemotron-embed-1b-v2,
+models,model-nvidia-llama-nemotron-embed-1b-v2,reviewed,Llama Nemotron Embed 1B v2,embedding_model,,nvidia/llama-nemotron-embed-1b-v2,2026-10-13
 models,model-nvidia-llama-nemotron-embed-vl-1b-v2,imported_source,Llama Nemotron Embed VL 1B v2,,,nvidia/llama-nemotron-embed-vl-1b-v2,
 models,model-nvidia-llama-nemotron-rerank-vl-1b-v2,imported_source,Llama Nemotron Rerank VL 1B v2,,,nvidia/llama-nemotron-rerank-vl-1b-v2,
 models,model-nvidia-mistral-nemotron,imported_source,Mistral Nemotron,,,nvidia/mistral-nemotron,
@@ -614,7 +623,7 @@ models,model-quiverai-arrow-2,imported_source,Arrow 2,,,quiverai/arrow-2,
 models,model-quiverai-arrow-2-telos,imported_source,Arrow 2 Telos,,,quiverai/arrow-2-telos,
 models,model-reflection-beam,reviewed,Beam,language_model,,,2026-10-07
 models,model-rekaai-reka-edge,imported_source,Reka Edge,,,rekaai/reka-edge,
-models,model-rekaai-reka-flash-3,imported_source,Reka Flash 3,,,rekaai/reka-flash-3,
+models,model-rekaai-reka-flash-3,reviewed,Reka Flash 3,language_model,,rekaai/reka-flash-3,2026-10-14
 models,model-relace-relace-apply-3,imported_source,Relace Apply 3,,,relace/relace-apply-3,
 models,model-relace-relace-search,imported_source,Relace Search,,,relace/relace-search,
 models,model-sakana-fugu,imported_source,Fugu,,,sakana/fugu,
@@ -647,6 +656,7 @@ models,model-thedrummer-skyfall-36b-v2,imported_source,Skyfall 36B V2,,,thedrumm
 models,model-thedrummer-unslopnemo-12b,imported_source,UnslopNemo 12B,,,thedrummer/unslopnemo-12b,
 models,model-thinkingmachines-inkling,reviewed,Inkling,multimodal_language_model,,thinkingmachines/inkling,2026-09-22
 models,model-thinkingmachines-inkling-small,reviewed,Inkling-Small,multimodal_language_model,,thinkingmachines/inkling-small,2026-09-22
+models,model-tiiuae-falcon-h1-7b-instruct,reviewed,Falcon-H1 7B Instruct,language_model,,,2026-10-13
 models,model-trendyol-asure-12b,reviewed,Trendyol-LLM-Asure-12B,multimodal_language_model,,trendyol/asure-12b,2026-09-22
 models,model-typesafe-jev-1-13-0,reviewed,Jev 1.13,judgment_model,,,2026-09-20
 models,model-typesafe-jev-latest,imported_source,Jev,,,typesafe/jev-latest,

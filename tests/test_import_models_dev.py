@@ -23,8 +23,13 @@ from scripts.import_models_dev import (
 COMMIT = "0123456789abcdef0123456789abcdef01234567"
 
 
-def model_record(source_id: str, *, output: list[str] | None = None) -> dict:
-    return {
+def model_record(
+    source_id: str,
+    *,
+    output: list[str] | None = None,
+    record_type: str | None = None,
+) -> dict:
+    record = {
         "id": source_id,
         "name": source_id.rsplit("/", 1)[-1],
         "description": "Provider-independent model metadata.",
@@ -33,6 +38,9 @@ def model_record(source_id: str, *, output: list[str] | None = None) -> dict:
         "attachment": False,
         "tool_call": True,
     }
+    if record_type is not None:
+        record["type"] = record_type
+    return record
 
 
 def model_toml(name: str) -> str:
@@ -310,6 +318,27 @@ class ModelsDevImportTests(unittest.TestCase):
         )
         self.assertEqual(
             ["image"], records[1]["source_metadata"]["modalities"]["output"]
+        )
+
+    def test_embedding_type_gains_the_embedding_output_modality(self) -> None:
+        catalog = {
+            "acme/embed": model_record("acme/embed", record_type="embedding"),
+            "acme/chat": model_record("acme/chat", record_type="chat"),
+            "acme/plain": model_record("acme/plain"),
+        }
+
+        records = normalize_source_catalog(catalog, minimum_records=1)
+
+        by_id = {item["source_id"]: item for item in records}
+        self.assertEqual(
+            ["text", "embedding"],
+            by_id["acme/embed"]["source_metadata"]["modalities"]["output"],
+        )
+        self.assertEqual(
+            ["text"], by_id["acme/chat"]["source_metadata"]["modalities"]["output"]
+        )
+        self.assertEqual(
+            ["text"], by_id["acme/plain"]["source_metadata"]["modalities"]["output"]
         )
 
     def test_source_document_records_the_complete_commit_pinned_catalog(self) -> None:

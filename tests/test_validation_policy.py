@@ -4112,7 +4112,10 @@ class ValidationPolicyTests(unittest.TestCase):
         source = json.loads(
             (root / "directory" / "models-dev.json").read_text(encoding="utf-8")
         )
-        first, second = document["models"][0], document["models"][1]
+        linked = [
+            model for model in document["models"] if model["source_id"] is not None
+        ]
+        first, second = linked[0], linked[1]
         # A wrong-guess link: the record keeps its frozen id but points at another row.
         first_row_id = first["id"]
         first["source_id"], second["source_id"] = (

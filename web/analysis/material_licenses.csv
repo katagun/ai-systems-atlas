@@ -1,4 +1,5 @@
 collection,record_id,license_id
+models,model-ai2-olmo-3-1-32b-think,Apache-2.0
 models,model-ai21-jamba-large,LicenseRef-Jamba-Open-Model-License
 models,model-ai21-jamba-mini,LicenseRef-Jamba-Open-Model-License
 models,model-aikido-altar-1,LicenseRef-GLM-5.3
@@ -38,6 +39,7 @@ models,model-alibaba-qwen3-8b,Apache-2.0
 models,model-alibaba-qwen3-coder-30b-a3b-instruct,Apache-2.0
 models,model-alibaba-qwen3-coder-480b-a35b-instruct,Apache-2.0
 models,model-alibaba-qwen3-coder-next,Apache-2.0
+models,model-alibaba-qwen3-embedding-8b,Apache-2.0
 models,model-alibaba-qwen3-max-2026-01-23,LicenseRef-Alibaba-Model-Studio-Agreement
 models,model-alibaba-qwen3-next-80b-a3b-instruct,Apache-2.0
 models,model-alibaba-qwen3-next-80b-a3b-thinking,Apache-2.0
@@ -67,6 +69,7 @@ models,model-arcee-ai-trinity-large-preview,LicenseRef-OpenMDW-1.1
 models,model-arcee-ai-trinity-large-thinking,LicenseRef-OpenMDW-1.1
 models,model-arcee-ai-trinity-mini,LicenseRef-OpenMDW-1.1
 models,model-arcee-ai-trinity-nano-preview,LicenseRef-OpenMDW-1.1
+models,model-baai-bge-m3,MIT
 models,model-baidu-ernie-4-5-21b-a3b,Apache-2.0
 models,model-bfl-flux-2-dev,LicenseRef-FLUX-Dev-Non-Commercial-2.0
 models,model-bytedance-seed-seed-1-6,LicenseRef-Proprietary
@@ -178,6 +181,8 @@ models,model-ibm-granite-4-h-small,Apache-2.0
 models,model-inclusionai-ling-3-0-flash,MIT
 models,model-inclusionai-ling-3-0-flash-fin,MIT
 models,model-inclusionai-ling-3-0-flash-vl,MIT
+models,model-internlm-internlm3-8b-instruct,Apache-2.0
+models,model-kwaipilot-kat-coder-v2-5-dev,Apache-2.0
 models,model-liquidai-lfm2-5-2-6b,LicenseRef-LFM-Open-License-1.0
 models,model-meituan-longcat-2-0,MIT
 models,model-meituan-longcat-2-5-preview,LicenseRef-LongCat-Platform-Terms
@@ -277,6 +282,9 @@ models,model-nvidia-llama-3-3-nemotron-super-49b-v1,LicenseRef-NVIDIA-Open-Model
 models,model-nvidia-llama-3-3-nemotron-super-49b-v1-5,LicenseRef-Llama-3.3-AUP
 models,model-nvidia-llama-3-3-nemotron-super-49b-v1-5,LicenseRef-Llama-3.3-Community
 models,model-nvidia-llama-3-3-nemotron-super-49b-v1-5,LicenseRef-NVIDIA-Open-Model
+models,model-nvidia-llama-nemotron-embed-1b-v2,Apache-2.0
+models,model-nvidia-llama-nemotron-embed-1b-v2,LicenseRef-Llama-3.2-Community
+models,model-nvidia-llama-nemotron-embed-1b-v2,LicenseRef-NVIDIA-Open-Model
 models,model-nvidia-nemotron-3-5-content-safety,LicenseRef-OpenMDW-1.1
 models,model-nvidia-nemotron-3-5-lightning,LicenseRef-OpenMDW-1.1
 models,model-nvidia-nemotron-3-content-safety,LicenseRef-Gemma-Prohibited-Use-Policy
@@ -356,6 +364,7 @@ models,model-poolside-laguna-xs-2,Apache-2.0
 models,model-poolside-laguna-xs-2-1,LicenseRef-OpenMDW-1.1
 models,model-prism-ml-ternary-bonsai-2-27b,Apache-2.0
 models,model-reflection-beam,LicenseRef-Proprietary
+models,model-rekaai-reka-flash-3,LicenseRef-Reka-Terms-of-Use
 models,model-sakana-sakana-namazu-v1-0,LicenseRef-Sakana-API-ToS
 models,model-stepfun-step-3-5-flash,Apache-2.0
 models,model-stepfun-step-3-7-flash,Apache-2.0
@@ -371,6 +380,7 @@ models,model-tencent-hy3-preview,LicenseRef-Tencent-Hy-Community-License
 models,model-tencent-hy4-preview,Apache-2.0
 models,model-thinkingmachines-inkling,Apache-2.0
 models,model-thinkingmachines-inkling-small,Apache-2.0
+models,model-tiiuae-falcon-h1-7b-instruct,LicenseRef-Falcon-LLM-License
 models,model-trendyol-asure-12b,LicenseRef-Gemma-Terms-of-Use
 models,model-typesafe-jev-1-13-0,LicenseRef-TypeSafe-MCA
 models,model-upstage-solar-mini4,LicenseRef-Proprietary
