@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "verified_at": "2026-10-13",
+  "verified_at": "2026-10-14",
   "source": {
     "id": "models-dev",
     "name": "models.dev",
@@ -2168,6 +2168,121 @@
       ],
       "metadata_verified_at": "2026-10-06",
       "verified_at": "2026-10-06"
+    },
+    {
+      "id": "model-alibaba-qwen3-embedding-8b",
+      "source_id": "alibaba/qwen3-embedding-8b",
+      "name": "Qwen3 Embedding 8B",
+      "developer": "Alibaba",
+      "url": "https://huggingface.co/Qwen/Qwen3-Embedding-8B",
+      "description": "Alibaba's June 2025 Qwen3 Embedding release at 8B parameters with 4,096 dimensions, multilingual retrieval across more than one hundred languages, and Matryoshka-style flexible vectors, published under Apache 2.0 with weights on the Qwen Hugging Face organization. No developer API serves this checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "embedding_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Qwen3 Embedding 8B",
+        "description": "Multilingual text embedding model for retrieval, code search, classification, and clustering",
+        "family": "qwen",
+        "release_date": "2025-06-05",
+        "last_updated": "2025-06-05",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text",
+            "embedding"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 32768,
+          "input": null,
+          "output": 0
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Qwen/Qwen3-Embedding-8B"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The Qwen team's announcement states the Qwen3 Embedding series is open-sourced under Apache 2.0, and the Qwen/Qwen3-Embedding-8B repository carries an Apache License, Version 2.0 LICENSE file and declares license apache-2.0. No separate model-use terms were found on the pages read.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Qwen3-Embedding-8B weights published in Alibaba's Qwen Hugging Face repository",
+          "kind": "web_terms",
+          "url": "https://huggingface.co/Qwen/Qwen3-Embedding-8B/blob/1d8ad4ca9b3dd8059ad90a75d4983776a23d44af/LICENSE",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the Qwen3-Embedding-8B checkpoint. The 0.6B and 4B siblings, the Qwen3-Reranker line, the Qwen3 language models the series is built on, and ModelScope mirror pages are separate boundaries.",
+      "strengths": [
+        "Apache 2.0 grant stated in the release announcement and carried in a LICENSE file inside the weight repository",
+        "Top-ranked multilingual retrieval at release with flexible vector dimensions and user-defined instructions in an 8B checkpoint"
+      ],
+      "tradeoffs": [
+        "No developer API or managed host serves this checkpoint, so running it is entirely self-operated",
+        "The 8B checkpoint needs accelerator-class hardware where the 0.6B sibling runs leaner, so sizing is workload-dependent"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 9,
+        "artifact_availability": 8,
+        "deployment_portability": 8,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 7.14
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/59aa52dbc09727fa6ead433b0285970ebc05ba82/models/alibaba/qwen3-embedding-8b.toml",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Qwen3 Embedding announcement: June 5, 2025 series release under Apache 2.0",
+          "url": "https://qwenlm.github.io/blog/qwen3-embedding/",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "Qwen Qwen3-Embedding-8B weight repository: apache-2.0 licence",
+          "url": "https://huggingface.co/Qwen/Qwen3-Embedding-8B",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/Qwen/Qwen3-Embedding-8B",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
     },
     {
       "id": "model-alibaba-qwen3-max-2026-01-23",
@@ -17904,6 +18019,120 @@
       "verified_at": "2026-10-06"
     },
     {
+      "id": "model-kwaipilot-kat-coder-v2-5-dev",
+      "source_id": null,
+      "name": "KAT-Coder-V2.5-Dev",
+      "developer": "Kwaipilot",
+      "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+      "description": "Kwaipilot's July 2026 open-weight coding release in the KAT line, derived from Qwen3.6-35B-A3B for agentic repository work with 256K context, published under Apache 2.0 with weights on Kwaipilot's Hugging Face organization alongside a technical report. The flagship KAT-Coder stays API-only on StreamLake. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "KAT-Coder-V2.5-Dev",
+        "description": "Open-weight agentic coding release derived from Qwen3.6-35B-A3B, serving 256K context through vLLM on 8 GPUs",
+        "family": "kat",
+        "release_date": "2026-07-23",
+        "last_updated": "2026-07-23",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": null,
+          "reasoning": true,
+          "tool_call": true,
+          "structured_output": null,
+          "temperature": true
+        },
+        "limits": {
+          "context": 262144,
+          "input": null,
+          "output": null
+        },
+        "reported_open_weights": true,
+        "reported_license": "Apache-2.0",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev"
+          }
+        ]
+      },
+      "licenses": [
+        "Apache-2.0"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "license_note": "The Kwaipilot/KAT-Coder-V2.5-Dev repository declares license apache-2.0 in its model metadata and names the Apache-compatible Qwen3.6-35B-A3B base. The repository ships no LICENSE file of its own, so the grant is the standard Apache 2.0 text. No separate model-use terms were found on the pages read.",
+      "license_evidence": [
+        {
+          "license_id": "Apache-2.0",
+          "scope": "KAT-Coder-V2.5-Dev weights published in Kwaipilot's Hugging Face repository under the Apache 2.0 licence declared by the model card",
+          "kind": "web_terms",
+          "url": "https://opensource.org/licenses/Apache-2.0",
+          "verified_at": "2026-10-14"
+        }
+      ],
+      "access_boundary": "This record represents the KAT-Coder-V2.5-Dev open-weight checkpoint. The API-only flagship KAT-Coder on StreamLake, the earlier KAT-Dev line, the base Qwen3.6-35B-A3B weights, and Kwaipilot's HiPO, OASIS, and SRPO lines are separate boundaries.",
+      "strengths": [
+        "Apache 2.0 open weights on the developer's own organization with vLLM and transformers serving commands in the model card",
+        "Agentic coding release with a technical report, benchmark methodology, and 256K context for repository-scale work"
+      ],
+      "tradeoffs": [
+        "The card's reference serving setup needs tensor parallelism across 8 GPUs, so running it is data-center-class self-operation",
+        "The flagship KAT-Coder stays API-only, so this Dev checkpoint trails it and its relative standing needs the report, not the card"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 8,
+        "artifact_availability": 8,
+        "deployment_portability": 4,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.12
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Kwaipilot KAT-Coder-V2.5-Dev weight repository: apache-2.0 licence, Qwen3.6 base",
+          "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "KAT project page: open-source Dev release and API-only flagship split",
+          "url": "https://kwaipilot.github.io/KAT-Coder/",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "KAT-Coder-V2.5 Technical Report on arXiv",
+          "url": "https://arxiv.org/abs/2607.05471",
+          "verified_at": "2026-10-14"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+          "verified_at": "2026-10-14",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-14",
+      "verified_at": "2026-10-14"
+    },
+    {
       "id": "model-liquidai-lfm2-5-2-6b",
       "source_id": null,
       "name": "LFM2.5-2.6B",
@@ -26193,6 +26422,131 @@
       ],
       "metadata_verified_at": "2026-09-18",
       "verified_at": "2026-09-18"
+    },
+    {
+      "id": "model-nvidia-llama-nemotron-embed-1b-v2",
+      "source_id": "nvidia/llama-nemotron-embed-1b-v2",
+      "name": "Llama Nemotron Embed 1B v2",
+      "developer": "NVIDIA",
+      "url": "https://huggingface.co/nvidia/llama-nemotron-embed-1b-v2",
+      "description": "NVIDIA's October 2025 second-generation Llama Nemotron embedding release at 1B parameters, trained on a commercial-use dataset blend for passage retrieval, published as open weights with binaries under the NVIDIA Open Model License, code under Apache 2.0, and Llama 3.2 community terms for the base. No developer API serves this checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "embedding_model",
+      "distribution_modes": [
+        "downloadable_weights"
+      ],
+      "source_metadata": {
+        "name": "Llama Nemotron Embed 1B v2",
+        "description": "Multilingual text embedding model for retrieval and question answering pipelines",
+        "family": "nemotron",
+        "release_date": "2025-10-16",
+        "last_updated": "2025-10-16",
+        "knowledge_cutoff": null,
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text",
+            "embedding"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": false,
+          "tool_call": false,
+          "structured_output": null,
+          "temperature": false
+        },
+        "limits": {
+          "context": 8192,
+          "input": null,
+          "output": 2048
+        },
+        "reported_open_weights": true,
+        "reported_license": "nvidia-open-model-license",
+        "links": [],
+        "weights": [
+          {
+            "label": "Hugging Face",
+            "url": "https://huggingface.co/nvidia/llama-nemotron-embed-1b-v2"
+          }
+        ]
+      },
+      "licenses": [
+        "LicenseRef-NVIDIA-Open-Model",
+        "LicenseRef-Llama-3.2-Community",
+        "Apache-2.0"
+      ],
+      "source_model": "mixed_source",
+      "license_review_status": "verified",
+      "license_note": "The repository LICENSE file puts all binary model files under the NVIDIA Open Model License Agreement and all source code files under Apache 2.0, and the model card additionally names the Llama 3.2 Community Model License for the base. All three material licences are recorded; the mix of open and restricted grants makes the release mixed-source rather than open source.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-NVIDIA-Open-Model",
+          "scope": "llama-nemotron-embed-1b-v2 binary model files published in NVIDIA's Hugging Face repository",
+          "kind": "web_terms",
+          "url": "https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-open-model-license/",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "license_id": "LicenseRef-Llama-3.2-Community",
+          "scope": "Llama 3.2 base terms named by the model card as additional governing terms",
+          "kind": "web_terms",
+          "url": "https://github.com/meta-llama/llama-models/blob/main/models/llama3_2/LICENSE",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "license_id": "Apache-2.0",
+          "scope": "Repository source code files under Apache 2.0 per the repository LICENSE file",
+          "kind": "web_terms",
+          "url": "https://opensource.org/licenses/Apache-2.0",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "access_boundary": "This record represents the llama-nemotron-embed-1b-v2 checkpoint. The v1 generation, larger Nemotron embedding sizes, the base Llama 3.2 weights, and NVIDIA NIM or third-party hosted endpoints are separate boundaries.",
+      "strengths": [
+        "Commercial-use training blend built to avoid non-commercial dataset restrictions, documented in the model card",
+        "1B retriever that runs leanly with the licence split stated file-by-file in the repository LICENSE"
+      ],
+      "tradeoffs": [
+        "Three overlapping licences govern weights, base, and code, so commercial reuse needs legal review of each",
+        "No developer API or managed host serves this checkpoint, so running it is entirely self-operated"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 5,
+        "artifact_availability": 8,
+        "deployment_portability": 9,
+        "serving_reach": 2,
+        "lifecycle_transparency": 6,
+        "documentation_provenance": 8,
+        "overall": 6.46
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/59aa52dbc09727fa6ead433b0285970ebc05ba82/models/nvidia/llama-nemotron-embed-1b-v2.toml",
+          "verified_at": "2026-10-13"
+        },
+        {
+          "kind": "web",
+          "label": "NVIDIA llama-nemotron-embed-1b-v2 weight repository: licence split and commercial dataset blend",
+          "url": "https://huggingface.co/nvidia/llama-nemotron-embed-1b-v2",
+          "verified_at": "2026-10-13"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://huggingface.co/nvidia/llama-nemotron-embed-1b-v2",
+          "verified_at": "2026-10-13",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-13",
+      "verified_at": "2026-10-13"
     },
     {
       "id": "model-nvidia-nemotron-3-content-safety",
@@ -35201,6 +35555,115 @@
       ],
       "metadata_verified_at": "2026-10-07",
       "verified_at": "2026-10-07"
+    },
+    {
+      "id": "model-rekaai-reka-flash-3",
+      "source_id": "rekaai/reka-flash-3",
+      "name": "Reka Flash 3",
+      "developer": "Reka",
+      "url": "https://docs.reka.ai/chat/models",
+      "description": "Reka's March 2025 Flash text release with 64K context, tool use, structured outputs, and reasoning, served on Reka-operated infrastructure through the OpenAI-compatible Reka API under the Reka Terms of Use. No weights are published for this checkpoint. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "model_type": "language_model",
+      "distribution_modes": [
+        "developer_api"
+      ],
+      "source_metadata": {
+        "name": "Reka Flash 3",
+        "description": "Efficient model for low-latency assistance, extraction, and routine automation",
+        "family": "reka",
+        "release_date": "2025-03-12",
+        "last_updated": "2025-03-12",
+        "knowledge_cutoff": "2025-01-31",
+        "modalities": {
+          "input": [
+            "text"
+          ],
+          "output": [
+            "text"
+          ]
+        },
+        "capabilities": {
+          "attachment": false,
+          "reasoning": true,
+          "tool_call": false,
+          "structured_output": true,
+          "temperature": true
+        },
+        "limits": {
+          "context": 65536,
+          "input": null,
+          "output": 58982
+        },
+        "reported_open_weights": true,
+        "reported_license": null,
+        "links": [],
+        "weights": []
+      },
+      "licenses": [
+        "LicenseRef-Reka-Terms-of-Use"
+      ],
+      "source_model": "proprietary",
+      "license_review_status": "verified",
+      "license_note": "The Reka Terms of Use, last updated September 2026, govern API access to Reka's models: use requires an account with billing details, commercial use runs under the Business Terms, Reka may use customer content to train its models, and disputes go to binding arbitration with class-action waiver. It grants no licence to model weights for redistribution or self-operation.",
+      "license_evidence": [
+        {
+          "license_id": "LicenseRef-Reka-Terms-of-Use",
+          "scope": "API access to Reka Flash 3 through Reka-operated inference infrastructure",
+          "kind": "web_terms",
+          "url": "https://reka.ai/legal/terms-of-use",
+          "verified_at": "2026-10-14"
+        }
+      ],
+      "access_boundary": "This record represents the reka-flash-3 API release. The Reka Edge and Core lines, the multimodal Vision services, third-party open models served through the same API, and weight checkpoints some other line publishes are separate boundaries.",
+      "strengths": [
+        "First-party API docs name reka-flash-3 with its context, modalities, and feature flags, served on infrastructure Reka operates",
+        "OpenAI-compatible endpoint with structured outputs and tool use, documented with copy-paste client examples"
+      ],
+      "tradeoffs": [
+        "No weights are published, so self-operation is unavailable and the API list can retire the model without a stated notice period",
+        "The terms let Reka train on customer content and send disputes to individual arbitration, which enterprise buyers must weigh"
+      ],
+      "score_profile": "model_access",
+      "score": {
+        "license_clarity": 4,
+        "artifact_availability": 1,
+        "deployment_portability": 2,
+        "serving_reach": 7,
+        "lifecycle_transparency": 5,
+        "documentation_provenance": 8,
+        "overall": 4.16
+      },
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Pinned models.dev source metadata",
+          "url": "https://github.com/anomalyco/models.dev/blob/59aa52dbc09727fa6ead433b0285970ebc05ba82/models/rekaai/reka-flash-3.toml",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "Reka API model list: reka-flash-3 with 64K text context on Reka-operated infrastructure",
+          "url": "https://docs.reka.ai/chat/models",
+          "verified_at": "2026-10-14"
+        },
+        {
+          "kind": "web",
+          "label": "Reka Terms of Use governing API access to Reka models",
+          "url": "https://reka.ai/legal/terms-of-use",
+          "verified_at": "2026-10-14"
+        }
+      ],
+      "flags": [
+        {
+          "kind": "maker_risk_safeguards",
+          "status": "no_statement_found",
+          "url": "https://docs.reka.ai/chat/models",
+          "verified_at": "2026-10-14",
+          "research_confidence": "high"
+        }
+      ],
+      "metadata_verified_at": "2026-10-14",
+      "verified_at": "2026-10-14"
     },
     {
       "id": "model-sakana-sakana-namazu-v1-0",

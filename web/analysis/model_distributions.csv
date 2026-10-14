@@ -61,6 +61,7 @@ model-alibaba-qwen3-coder-480b-a35b-instruct,developer_api
 model-alibaba-qwen3-coder-480b-a35b-instruct,downloadable_weights
 model-alibaba-qwen3-coder-next,downloadable_weights
 model-alibaba-qwen3-coder-next,third_party_hosting
+model-alibaba-qwen3-embedding-8b,downloadable_weights
 model-alibaba-qwen3-max-2026-01-23,developer_api
 model-alibaba-qwen3-next-80b-a3b-instruct,developer_api
 model-alibaba-qwen3-next-80b-a3b-instruct,downloadable_weights
@@ -242,6 +243,7 @@ model-inclusionai-ling-3-0-flash-fin,downloadable_weights
 model-inclusionai-ling-3-0-flash-fin,third_party_hosting
 model-inclusionai-ling-3-0-flash-vl,downloadable_weights
 model-internlm-internlm3-8b-instruct,downloadable_weights
+model-kwaipilot-kat-coder-v2-5-dev,downloadable_weights
 model-liquidai-lfm2-5-2-6b,downloadable_weights
 model-liquidai-lfm2-5-2-6b,third_party_hosting
 model-meituan-longcat-2-0,downloadable_weights
@@ -352,6 +354,7 @@ model-nvidia-llama-3-3-nemotron-super-49b-v1,developer_api
 model-nvidia-llama-3-3-nemotron-super-49b-v1,downloadable_weights
 model-nvidia-llama-3-3-nemotron-super-49b-v1-5,developer_api
 model-nvidia-llama-3-3-nemotron-super-49b-v1-5,downloadable_weights
+model-nvidia-llama-nemotron-embed-1b-v2,downloadable_weights
 model-nvidia-nemotron-3-5-content-safety,developer_api
 model-nvidia-nemotron-3-5-content-safety,downloadable_weights
 model-nvidia-nemotron-3-5-lightning,developer_api
@@ -463,6 +466,7 @@ model-poolside-laguna-xs-2-1,downloadable_weights
 model-poolside-laguna-xs-2-1,third_party_hosting
 model-prism-ml-ternary-bonsai-2-27b,downloadable_weights
 model-reflection-beam,developer_api
+model-rekaai-reka-flash-3,developer_api
 model-sakana-sakana-namazu-v1-0,developer_api
 model-sakana-sakana-namazu-v1-0,third_party_hosting
 model-stepfun-step-3-5-flash,developer_api
