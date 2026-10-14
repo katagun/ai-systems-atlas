@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-10",
+  "generated_at": "2026-10-14",
   "policy": "Operationally relevant systems are reviewed across open-source, open-core, source-available, and proprietary source models; licensing is a visible classification, not an inclusion gate.",
   "projects": [
     {
@@ -25291,6 +25291,98 @@
       "why_it_matters": "A terminal-native coding agent for live Common Lisp images: model-driven development with executable acceptance checks and checkpointed rollback instead of blind code generation.",
       "current_repo_note": "Reviewed at HEAD 70146a2 (2026-10-12); the single LICENSE file is the canonical MIT text. README claims verified against the tree: controller tool loop, checkpoint engine, Lisp and Python test suites, and fourteen design ADRs.",
       "verified_at": "2026-10-12"
+    },
+    {
+      "id": "jcode",
+      "system_family": "agent_system",
+      "score_profile": "agent",
+      "name": "jcode",
+      "repo": "1jehuang/jcode",
+      "url": "https://github.com/1jehuang/jcode",
+      "description": "Terminal harness for running coding agents solo or as headless swarm workers: reads and edits projects, runs shell commands, automates browsers, and keeps local JSON memory with typed-relevance recall, resuming named sessions against a persistent background server on the user's own machine. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "primary_role": "coding_agent",
+      "secondary_roles": [],
+      "agent_relation": "agent_runtime",
+      "architectures": [
+        "plain_files"
+      ],
+      "retrieval_modes": [
+        "keyword"
+      ],
+      "capture_modes": [
+        "manual",
+        "conversation"
+      ],
+      "memory_lifecycle": [
+        "supersession"
+      ],
+      "agent_interfaces": [
+        "terminal"
+      ],
+      "execution_boundaries": [
+        "host"
+      ],
+      "agent_capabilities": [
+        "code_editing",
+        "shell_execution",
+        "browser_control",
+        "multi_agent",
+        "persistent_state",
+        "mcp"
+      ],
+      "canonical_data": "local project and global memory JSON under ~/.jcode/memory, with tags, relationships, categories, trust, sources, and superseded entries, recalled into named resumable sessions",
+      "deployment": [
+        "local_cli",
+        "mobile"
+      ],
+      "local_first": true,
+      "human_editable": true,
+      "provenance": "strong",
+      "licenses": [
+        "MIT"
+      ],
+      "source_model": "open_source",
+      "license_review_status": "verified",
+      "status": "active",
+      "stars": 20328,
+      "stars_verified_at": "2026-10-14",
+      "historical_stars": null,
+      "current_repo_note": "Reviewed at HEAD 1f612a7 (2026-10-14); the root LICENSE and the sdk/typescript/LICENSE are the same MIT blob. The managed cloud direction is documented as not yet deployed, so no cloud deployment is recorded.",
+      "provider_relationship": "multi_provider",
+      "model_backends": [
+        "anthropic",
+        "openai",
+        "google",
+        "openai_compatible",
+        "local_runtime"
+      ],
+      "score": {
+        "task_reliability": 7.0,
+        "tool_use": 8.0,
+        "autonomy": 7.5,
+        "human_control": 7.0,
+        "observability_recovery": 7.5,
+        "data_sovereignty": 7.0,
+        "interoperability": 8.5,
+        "maturity": 6.5,
+        "overall": 7.33
+      },
+      "strengths": [
+        "Local JSON memory with tags, relationships, and superseded entries stays on the user's machine, ordinary telemetry carries no prompts or code, and transcript sharing is a separate opt-in program",
+        "Typed-relevance recall is tightly bounded: at most 24 memories per batch inside a 64 KiB budget, a 60-second deadline, fail-closed batches with no silent fallback, and credentials that cannot redirect",
+        "Provider breadth is documented per integration: named OAuth logins for Anthropic, OpenAI, and Gemini, OpenAI-compatible endpoints, self-hosted servers, and local models, plus MCP servers",
+        "Named resumable sessions on a persistent background server plus opt-in headless swarm workers give both interactive and background multi-session operation"
+      ],
+      "weaknesses": [
+        "The RAM and boot-time comparisons are vendor-measured against named tools with no independent reproduction, so the efficiency headline is a claim rather than a finding",
+        "Recall depends on external typed-decision endpoints in the default provider order whenever a Jcode login is configured; fully local recall needs explicit BYOK configuration",
+        "Subscription-gated memory decisions run through the vendor gateway with per-account entitlement checks, which the data-sovereignty reading counts against full self-sufficiency",
+        "677 open issues against nine months of history signal lively adoption and a substantial support burden at the same time"
+      ],
+      "why_it_matters": "A performance-obsessed coding harness that pairs a lean terminal agent with local memory and headless swarm sessions across many model providers.",
+      "research_confidence": "high",
+      "verified_at": "2026-10-14",
+      "github_detected_license": "MIT"
     }
   ],
   "verified_at": "2026-09-28"

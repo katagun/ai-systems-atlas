@@ -1,5 +1,5 @@
 {
-  "verified_at": "2026-10-10",
+  "verified_at": "2026-10-14",
   "policy": "Each project records scoped evidence for every declared license or commercial term; repository evidence pins the reviewed Git blob SHA.",
   "entries": [
     {
@@ -4725,7 +4725,22 @@
           "url": "https://github.com/ghuntley/jiti/blob/70146a2/LICENSE"
         }
       ]
+    },
+    {
+      "project_id": "jcode",
+      "repo": "1jehuang/jcode",
+      "items": [
+        {
+          "license_id": "MIT",
+          "scope": "Whole repository under the MIT License; the root LICENSE and the sdk/typescript/LICENSE are the same blob",
+          "kind": "git_blob",
+          "path": "LICENSE",
+          "url": "https://github.com/1jehuang/jcode/blob/master/LICENSE",
+          "blob_sha": "e921bccf34499d0c806a2131c2faa95d375c1c96",
+          "immutable_url": "https://api.github.com/repos/1jehuang/jcode/git/blobs/e921bccf34499d0c806a2131c2faa95d375c1c96"
+        }
+      ]
     }
   ],
-  "generated_at": "2026-10-10"
+  "generated_at": "2026-10-14"
 }
