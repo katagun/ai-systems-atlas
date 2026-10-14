@@ -1831,53 +1831,6 @@
       }
     },
     {
-      "repo": "MoonshotAI/kimi-code",
-      "name": "kimi-code",
-      "url": "https://github.com/MoonshotAI/kimi-code",
-      "description": "Kimi Code CLI, the current Kimi agent runtime CLI that the kimi-agent-sdk thin clients expose; supersedes the archived legacy kimi-cli Python CLI.",
-      "proposed_system_family": "agent_system",
-      "proposed_primary_role": "coding_agent",
-      "classification_confidence": 0.8,
-      "github_detected_license": "MIT",
-      "stars": 7725,
-      "topics": [],
-      "status": "provisional",
-      "discovered_at": "2026-09-29",
-      "review_required": [
-        "licensing",
-        "classification",
-        "traits",
-        "editorial_score"
-      ],
-      "triage": {
-        "verdict": "review_ready",
-        "rule": "docs/routines/candidate-triage.md review_ready: nothing blocks a human review.",
-        "finding": "Command-line tool from Moonshot AI for running agents on code tasks, under the MIT License, copyright 2026 Moonshot AI. The README states it \"is an AI coding agent that runs in your terminal - it can read and edit code, run shell commands, search files, fetch web pages, and choose the next step based on the feedback it receives\", working \"out of the box with Moonshot AI's Kimi models\" and configurable for other compatible providers. The catalog's exclusion records already name this repository as the reviewable CLI runtime boundary, and the Moonshot AI lab record exists. The one boundary question the record turns on is which provider configurations count as the reviewed product boundary.",
-        "evidence": [
-          {
-            "label": "LICENSE",
-            "url": "https://github.com/MoonshotAI/kimi-code/blob/main/LICENSE",
-            "kind": "git_blob",
-            "content_sha256": "23cc68e17992e0b512ae2e80afc5787d7d8e0fbfbdb4fff54ec0245508fa400e",
-            "fetched_at": "2026-10-13",
-            "blob_sha": "6102a1bc7949a169f10d823a86d4ad161c26b960",
-            "immutable_url": "https://api.github.com/repos/MoonshotAI/kimi-code/git/blobs/6102a1bc7949a169f10d823a86d4ad161c26b960"
-          },
-          {
-            "label": "README",
-            "url": "https://github.com/MoonshotAI/kimi-code/blob/main/README.md",
-            "kind": "git_blob",
-            "content_sha256": "50ea102c7003c746244c69cb78cbd5b1e9158311e5e4e028aee8a2afee698c4c",
-            "fetched_at": "2026-10-13",
-            "blob_sha": "e3e17adb8c3aeb8a566e7c0024d90a06b384baa5",
-            "immutable_url": "https://api.github.com/repos/MoonshotAI/kimi-code/git/blobs/e3e17adb8c3aeb8a566e7c0024d90a06b384baa5"
-          }
-        ],
-        "proposed_at": "2026-10-13",
-        "proposer": "candidate-triage"
-      }
-    },
-    {
       "repo": "nuster1128/LLM_Agent_Memory_Survey",
       "name": "LLM_Agent_Memory_Survey",
       "url": "https://github.com/nuster1128/LLM_Agent_Memory_Survey",

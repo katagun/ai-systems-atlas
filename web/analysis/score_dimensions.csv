@@ -4396,6 +4396,15 @@ systems,kilo-code,agent,observability_recovery,7.9
 systems,kilo-code,agent,overall,8.44
 systems,kilo-code,agent,task_reliability,8.1
 systems,kilo-code,agent,tool_use,8.7
+systems,kimi-code,agent,autonomy,7.0
+systems,kimi-code,agent,data_sovereignty,7.0
+systems,kimi-code,agent,human_control,7.5
+systems,kimi-code,agent,interoperability,8.0
+systems,kimi-code,agent,maturity,6.0
+systems,kimi-code,agent,observability_recovery,7.5
+systems,kimi-code,agent,overall,7.31
+systems,kimi-code,agent,task_reliability,7.2
+systems,kimi-code,agent,tool_use,8.0
 systems,kiro,agent,autonomy,8.2
 systems,kiro,agent,data_sovereignty,6.0
 systems,kiro,agent,human_control,8.8
