@@ -1,4 +1,5 @@
 collection,record_id,license_id
+models,model-ai2-olmo-3-1-32b-think,Apache-2.0
 models,model-ai21-jamba-large,LicenseRef-Jamba-Open-Model-License
 models,model-ai21-jamba-mini,LicenseRef-Jamba-Open-Model-License
 models,model-aikido-altar-1,LicenseRef-GLM-5.3
@@ -67,6 +68,7 @@ models,model-arcee-ai-trinity-large-preview,LicenseRef-OpenMDW-1.1
 models,model-arcee-ai-trinity-large-thinking,LicenseRef-OpenMDW-1.1
 models,model-arcee-ai-trinity-mini,LicenseRef-OpenMDW-1.1
 models,model-arcee-ai-trinity-nano-preview,LicenseRef-OpenMDW-1.1
+models,model-baai-bge-m3,MIT
 models,model-baidu-ernie-4-5-21b-a3b,Apache-2.0
 models,model-bfl-flux-2-dev,LicenseRef-FLUX-Dev-Non-Commercial-2.0
 models,model-bytedance-seed-seed-1-6,LicenseRef-Proprietary
@@ -178,6 +180,7 @@ models,model-ibm-granite-4-h-small,Apache-2.0
 models,model-inclusionai-ling-3-0-flash,MIT
 models,model-inclusionai-ling-3-0-flash-fin,MIT
 models,model-inclusionai-ling-3-0-flash-vl,MIT
+models,model-internlm-internlm3-8b-instruct,Apache-2.0
 models,model-liquidai-lfm2-5-2-6b,LicenseRef-LFM-Open-License-1.0
 models,model-meituan-longcat-2-0,MIT
 models,model-meituan-longcat-2-5-preview,LicenseRef-LongCat-Platform-Terms
@@ -371,6 +374,7 @@ models,model-tencent-hy3-preview,LicenseRef-Tencent-Hy-Community-License
 models,model-tencent-hy4-preview,Apache-2.0
 models,model-thinkingmachines-inkling,Apache-2.0
 models,model-thinkingmachines-inkling-small,Apache-2.0
+models,model-tiiuae-falcon-h1-7b-instruct,LicenseRef-Falcon-LLM-License
 models,model-trendyol-asure-12b,LicenseRef-Gemma-Terms-of-Use
 models,model-typesafe-jev-1-13-0,LicenseRef-TypeSafe-MCA
 models,model-upstage-solar-mini4,LicenseRef-Proprietary

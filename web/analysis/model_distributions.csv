@@ -1,4 +1,5 @@
 record_id,distribution_mode
+model-ai2-olmo-3-1-32b-think,downloadable_weights
 model-ai21-jamba-large,downloadable_weights
 model-ai21-jamba-mini,downloadable_weights
 model-aikido-altar-1,downloadable_weights
@@ -115,6 +116,7 @@ model-arcee-ai-trinity-mini,developer_api
 model-arcee-ai-trinity-mini,downloadable_weights
 model-arcee-ai-trinity-mini,third_party_hosting
 model-arcee-ai-trinity-nano-preview,downloadable_weights
+model-baai-bge-m3,downloadable_weights
 model-baidu-ernie-4-5-21b-a3b,downloadable_weights
 model-bfl-flux-2-dev,downloadable_weights
 model-bfl-flux-2-dev,third_party_hosting
@@ -239,6 +241,7 @@ model-inclusionai-ling-3-0-flash,downloadable_weights
 model-inclusionai-ling-3-0-flash-fin,downloadable_weights
 model-inclusionai-ling-3-0-flash-fin,third_party_hosting
 model-inclusionai-ling-3-0-flash-vl,downloadable_weights
+model-internlm-internlm3-8b-instruct,downloadable_weights
 model-liquidai-lfm2-5-2-6b,downloadable_weights
 model-liquidai-lfm2-5-2-6b,third_party_hosting
 model-meituan-longcat-2-0,downloadable_weights
@@ -482,6 +485,7 @@ model-thinkingmachines-inkling,downloadable_weights
 model-thinkingmachines-inkling,third_party_hosting
 model-thinkingmachines-inkling-small,downloadable_weights
 model-thinkingmachines-inkling-small,third_party_hosting
+model-tiiuae-falcon-h1-7b-instruct,downloadable_weights
 model-trendyol-asure-12b,downloadable_weights
 model-trendyol-asure-12b,third_party_hosting
 model-typesafe-jev-1-13-0,developer_api
