@@ -4108,6 +4108,52 @@
       ],
       "verified_at": "2026-10-12",
       "display_order": 770
+    },
+    {
+      "id": "lab-prime-intellect",
+      "name": "Prime Intellect",
+      "url": "https://www.primeintellect.ai/",
+      "description": "AI company building the open superintelligence stack for training, inference, and compute, and developer of the self-improving Prime Agent harness. Reviewed by automation under ADR 055 with human spot-checks; verify against the cited evidence.",
+      "lab_type": "ai_company",
+      "headquarters": "us",
+      "admission_basis": "reviewed_system",
+      "catalog_names": [],
+      "channels": [
+        {
+          "kind": "news",
+          "url": "https://www.primeintellect.ai/blog"
+        },
+        {
+          "kind": "github",
+          "url": "https://github.com/PrimeIntellect-ai"
+        }
+      ],
+      "organization_note": "The Terms of Service name Prime Intellect Inc. and give a Delaware registered office at 1111B S Governors Ave STE 7703, Dover, DE 19904, so the record takes the United States as the headquarters country; no parent organization is named on the pages read. It is recorded on the reviewed system prime-agent, whose repository sits in the PrimeIntellect-ai organization and whose homepage names Prime Agent as its own contribution. Its homepage also names INTELLECT-3, a 100B+ MoE trained on its RL stack, which this catalog has not reviewed, so that line is noted here and not admitted as a model record. Its site names no frontier-safety or scaling framework, so the field is omitted.",
+      "systems": [
+        "prime-agent"
+      ],
+      "evidence": [
+        {
+          "kind": "web",
+          "label": "Homepage: the open superintelligence stack and Prime Agent as its own contribution",
+          "url": "https://www.primeintellect.ai/",
+          "verified_at": "2026-10-17"
+        },
+        {
+          "kind": "web",
+          "label": "Terms of Service: Prime Intellect Inc., Delaware registered office",
+          "url": "https://www.primeintellect.ai/terms-of-service",
+          "verified_at": "2026-10-17"
+        },
+        {
+          "kind": "web",
+          "label": "Blog index, the news channel",
+          "url": "https://www.primeintellect.ai/blog",
+          "verified_at": "2026-10-17"
+        }
+      ],
+      "verified_at": "2026-10-17",
+      "display_order": 290
     }
   ],
   "updated_at": "2026-10-10"

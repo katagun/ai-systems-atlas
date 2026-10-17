@@ -35,7 +35,7 @@ model_candidates: 106
 system_candidates: 81
 exclusions: 117
 packs: 10
-labs: 74 covering 383 releases
+labs: 75 covering 383 releases
 robots: 17
 ```
 
